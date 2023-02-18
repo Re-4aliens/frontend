@@ -7,14 +7,14 @@ import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class LogIn extends StatefulWidget {
-  const LogIn({super.key});
+class LogInPage extends StatefulWidget {
+  const LogInPage({super.key});
 
   @override
-  State<LogIn> createState() => _LogInState();
+  State<LogInPage> createState() => _LogInPageState();
 }
 
-class _LogInState extends State<LogIn> {
+class _LogInPageState extends State<LogInPage> {
   final TextEditingController emailController = new  TextEditingController();
   final TextEditingController passwordController = new  TextEditingController();
   final AuthProvider authProvider = new AuthProvider();
