@@ -25,14 +25,13 @@ class _SettingPageState extends State<SettingPage> {
     var memberDetails = Provider.of<MemberProvider>(context, listen: false);
     return FutureBuilder(
       future: memberDetails.memberInfo(),
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         //데이터를 받아오기 전 보여줄 위젯
-        if (snapshot.hasData == false){
+        if (snapshot.hasData == false) {
           return Text('...');
         }
         //오류가 생기면 보여줄 위젯
-        else if (snapshot.hasError){
+        else if (snapshot.hasError) {
           //오류가 생기면 보여줄 위젯 미정
           return Container();
         }
@@ -48,14 +47,13 @@ class _SettingPageState extends State<SettingPage> {
               ],
             ),
           );
-       }
+        }
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('setting'),
@@ -68,6 +66,8 @@ class _SettingPageState extends State<SettingPage> {
               child: showMemberInfo(),
             ),
             SizedBox(height: 10),
+            TextButton(onPressed: () {}, child: Text('프로필 수정')),
+            TextButton(onPressed: () {}, child: Text('로그아웃')),
           ],
         ),
       ),
