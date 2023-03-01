@@ -11,14 +11,14 @@ import 'package:provider/provider.dart';
   (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: SettingPage()),
 */
 
-class SettingPage extends StatefulWidget {
-  const SettingPage({super.key});
+class SettingEditPage extends StatefulWidget {
+  const SettingEditPage({super.key});
 
   @override
-  State<SettingPage> createState() => _SettingPageState();
+  State<SettingEditPage> createState() => _SettingEditPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _SettingEditPageState extends State<SettingEditPage> {
   Member member = new Member();
 
   Widget showMemberInfo() {
@@ -41,9 +41,9 @@ class _SettingPageState extends State<SettingPage> {
             child: Column(
               children: [
                 //Image.network(memberDetails.member.profileImage.toString()),
-                Text(memberDetails.member.name.toString()),
-                Text(memberDetails.member.birthday.toString()),
-                Text(memberDetails.member.email.toString())
+                Text(memberDetails.member.mbti.toString()),
+                Text(memberDetails.member.gender.toString()),
+                Text(memberDetails.member.nationality.toString())
               ],
             ),
           );
@@ -66,10 +66,6 @@ class _SettingPageState extends State<SettingPage> {
               child: showMemberInfo(),
             ),
             SizedBox(height: 10),
-            TextButton(onPressed: () {
-                Navigator.pushNamed(context, '/setting/edit');
-              }, child: Text('프로필 수정')),
-            TextButton(onPressed: () {}, child: Text('로그아웃')),
           ],
         ),
       ),
