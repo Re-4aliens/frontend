@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:aliens/providers/member_provider.dart';
+import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/member_model.dart';
 
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  final AuthProvider authProvider = new AuthProvider();
   Member member = new Member();
 
   Widget showMemberInfo() {
@@ -66,10 +68,17 @@ class _SettingPageState extends State<SettingPage> {
               child: showMemberInfo(),
             ),
             SizedBox(height: 10),
-            TextButton(onPressed: () {
-                Navigator.pushNamed(context, '/setting/edit');
-              }, child: Text('프로필 수정')),
-            TextButton(onPressed: () {}, child: Text('로그아웃')),
+            TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/setting/edit');
+                },
+                child: Text('프로필 수정')),
+            TextButton(
+                onPressed: () {
+                  authProvider.logout(context);
+                  //Navigator.pushNamedAndRemoveUntil(context, '/login', (route)=>false);
+                },
+                child: Text('로그아웃')),
           ],
         ),
       ),
