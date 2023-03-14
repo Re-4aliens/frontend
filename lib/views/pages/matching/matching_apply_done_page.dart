@@ -79,7 +79,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                   onTap: (){
                     //스택 비우고
                     Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+                        .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false, arguments: (1));
                     //state페이지를 push
                     Navigator.pushNamed(context, '/state');
                   },
