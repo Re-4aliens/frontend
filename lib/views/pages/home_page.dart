@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import './matching/matching_page.dart';
+import './setting/setting_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,21 +28,40 @@ class _HomePageState extends State<HomePage> {
       Text(
           '채팅'
       ),
-      Text(
-          '설정'
-      ),
+      settingWidget(context)
     ];
 
 
-    final tapIndex = ModalRoute.of(context)!.settings.arguments;
-    if(tapIndex != null) {
-      selectedIndex = tapIndex as int;
+    List _pageTitle = [
+      Text('홈',
+      style: TextStyle(
+        color: Colors.black,
+        fontWeight: FontWeight.bold,
+      ),),
+      Text(''),
+      Text('채팅',
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),),
+      Text('설정',
+        style: TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),),
+    ];
+
+    Widget _titleSetting(int index){
+
+      return _pageTitle.elementAt(index);
     }
 
 
+    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        title: _pageTitle.elementAt(selectedIndex),
         elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
@@ -58,7 +78,6 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: _pageWidget.elementAt(selectedIndex),
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
@@ -89,47 +108,9 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
+      body: _pageWidget.elementAt(selectedIndex),
     );
   }
-  Widget buildButton(String _title, String _path){
-    return MaterialButton(
-      minWidth: 165,
-      height: 245,
 
-      elevation: 3.0,
-      highlightElevation: 1.0,
-      onPressed: () {
-        Navigator.pushNamed(context, _path);
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25),
-      ),
-      color: Colors.white,
-      textColor: Colors.black,
-      child: Column(
-        children: [
-          SizedBox(
-            height: 40,
-          ),
-          Container(
-            decoration: BoxDecoration(
-              color: Color(0xFFD9D9D9),
-              borderRadius: BorderRadius.circular(54),
-            ),
-            width: 108,
-            height: 108,
-          ),
-          SizedBox(
-            height: 40,
-          ),
-          Text(_title,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),),
-        ],
-      ),
-    );
-  }
 }
 

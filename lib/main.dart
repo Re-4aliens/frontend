@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:aliens/views/pages/login_page.dart';
+import 'package:provider/provider.dart';
 
 import './views/pages/matching/matching_page.dart';
 import './views/pages/matching/matching_apply_page.dart';
@@ -11,6 +12,8 @@ import './views/pages/matching/matching_info_page.dart';
 import './views/pages/matching/matching_edit_page.dart';
 
 import './views/pages/home_page.dart';
+
+import './providers/member_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,7 +30,8 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       routes: {
         //'/' : (context)=> MatchingPage(),
-        '/home' : (context) => HomePage(),
+
+        '/home' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
         '/apply' : (context) => MatchingApplyPage(),
         '/done' : (context) => MatchingDonePage(),
         '/state' : (context) => MatchingStatePage(),

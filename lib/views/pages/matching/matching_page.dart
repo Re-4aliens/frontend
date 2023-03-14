@@ -1,12 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 Widget matchingWidget(BuildContext context){
   return Stack(
