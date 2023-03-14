@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:aliens/views/pages/login_page.dart';
 
+import './views/pages/matching/matching_page.dart';
+import './views/pages/matching/matching_apply_page.dart';
+import './views/pages/matching/matching_state_page.dart';
+import './views/pages/matching/matching_choose_page.dart';
+import './views/pages/matching/matching_apply_done_page.dart';
+import './views/pages/matching/matching_done_page.dart';
+import './views/pages/matching/matching_info_page.dart';
+import './views/pages/matching/matching_edit_page.dart';
+
+import './views/pages/home_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -8,15 +19,23 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
+      initialRoute: '/home',
       routes: {
-        '/' : (context)=> MyHomePage(),
+        //'/' : (context)=> MatchingPage(),
+        '/home' : (context) => HomePage(),
+        '/apply' : (context) => MatchingApplyPage(),
+        '/done' : (context) => MatchingDonePage(),
+        '/state' : (context) => MatchingStatePage(),
+        '/choose' : (context) => MatchingChoosePage(),
+        '/apply/done' : (context) => MatchingApplyDonePage(),
+        '/info/my' : (conext) => MatchingInfoPage(title: '나의 매칭 정보'),
+        '/info/your' : (context) => MatchingInfoPage(title: '남의 매칭 정보'),
+        '/edit' : (context) => MatchingEditPage(),
       },
     );
   }
