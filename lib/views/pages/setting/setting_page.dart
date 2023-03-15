@@ -8,104 +8,85 @@ import 'package:aliens/models/member_model.dart';
 
 import 'package:provider/provider.dart';
 
-
-Widget settingWidget(BuildContext context) {
-  var memberDetails = Provider.of<MemberProvider>(context, listen: false);
-
-  return FutureBuilder(
-      future: memberDetails.memberInfo(),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        //데이터를 받아오기 전 보여줄 위젯
-        if (snapshot.hasData == false) {
-          //로딩 화면으로 수정
-          return Text('불러오는 중');
-        }
-        //오류가 생기면 보여줄 위젯
-        else if (snapshot.hasError) {
-          //오류가 생기면 보여줄 위젯
-          //미정
-          return Container();
-        }
-        //데이터를 받아오면 보여줄 위젯
-        else {
-          return Column(
-            children: [
-              Expanded(
-                child: Container(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Stack(
-                      children: [
-                        Container(
-                          height: 80,
-                          width: 80,
-                          decoration: BoxDecoration(
-                              color: Color(0xffA8A8A8),
-                              borderRadius: BorderRadius.circular(40)),
-                        ),
-                        Positioned(
-                            bottom: 0,
-                            right: 0,
-                            child: Container(
-                              height: 30,
-                              width: 30,
-                              child: FloatingActionButton(
-                                backgroundColor: Colors.white,
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/setting/edit', arguments: memberDetails);
-                                },
-                                child: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ))
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 4,
-                child: Container(
+Widget settingWidget(BuildContext context, memberDetails) {
+  return Column(
+    children: [
+      Expanded(
+        child: Container(
+          child: Container(
+            alignment: Alignment.center,
+            child: Stack(
+              children: [
+                Container(
+                  height: 80,
+                  width: 80,
                   decoration: BoxDecoration(
-                      //color: Colors.green.shade200
-                      ),
-                  child: ListView(
-                    children: [
-                      for (int i = 0; i < 3; i++) buildSettingList(context, i, memberDetails),
-                      Divider(),
-                      for (int i = 3; i < 6; i++) buildSettingList(context, i, memberDetails),
-                    ],
-                  ),
+                      color: Color(0xffA8A8A8),
+                      borderRadius: BorderRadius.circular(40)),
                 ),
+                Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      child: FloatingActionButton(
+                        backgroundColor: Colors.white,
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/setting/edit',
+                              arguments: memberDetails);
+                        },
+                        child: Icon(
+                          Icons.edit,
+                          size: 20,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ))
+              ],
+            ),
+          ),
+        ),
+      ),
+      Expanded(
+        flex: 4,
+        child: Container(
+          decoration: BoxDecoration(
+              //color: Colors.green.shade200
               ),
-              Expanded(
-                  child: Container(
-                alignment: Alignment.center,
-                child: InkWell(
-                  onTap: () {},
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                          bottom:
-                              BorderSide(width: 1.0, color: Color(0xFF454545))),
-                    ),
-                    child: Text(
-                      '로그아웃',
-                      style: TextStyle(
-                        color: Color(0xFF454545),
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
-                ),
-              )),
+          child: ListView(
+            children: [
+              for (int i = 0; i < 3; i++)
+                buildSettingList(context, i, memberDetails),
+              Divider(),
+              for (int i = 3; i < 6; i++)
+                buildSettingList(context, i, memberDetails),
             ],
-          );
-        }
-      });
+          ),
+        ),
+      ),
+      Expanded(
+          child: Container(
+        alignment: Alignment.center,
+        child: InkWell(
+          onTap: () {},
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                  bottom: BorderSide(width: 1.0, color: Color(0xFF454545))),
+            ),
+            child: Text(
+              '로그아웃',
+              style: TextStyle(
+                color: Color(0xFF454545),
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+      )),
+    ],
+  );
 }
 
 Widget buildSettingList(context, index, memberDetails) {
@@ -156,7 +137,7 @@ Widget buildSettingList(context, index, memberDetails) {
     minVerticalPadding: 23,
     onTap: () {
       if (index > 2)
-        Navigator.pushNamed(context, navigatorList.elementAt(index-3));
+        Navigator.pushNamed(context, navigatorList.elementAt(index - 3));
     },
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
