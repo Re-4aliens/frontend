@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
       Text(
           '홈'
       ),
-      matchingWidget(context),
+      matchingWidget(context, memberDetails),
       Text(
           '채팅'
       ),
