@@ -61,7 +61,7 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
           ),
           ListTile(
             onTap: (){
-              Navigator.pushNamed(context, '/setting/delete/PWcheck');
+              Navigator.pushNamed(context, '/setting/delete');
             },
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

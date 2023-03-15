@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import './matching/matching_page.dart';
 import './setting/setting_page.dart';
 
+import 'package:aliens/providers/member_provider.dart';
+import 'package:provider/provider.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -20,18 +23,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    List _pageWidget = [
-      Text(
-          '홈'
-      ),
-      matchingWidget(context),
-      Text(
-          '채팅'
-      ),
-      settingWidget(context)
-    ];
-
-
     List _pageTitle = [
       '홈',
       '',
@@ -39,13 +30,7 @@ class _HomePageState extends State<HomePage> {
       '설정',
     ];
 
-    Widget _titleSetting(int index){
 
-      return _pageTitle.elementAt(index);
-    }
-
-
-    
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -102,7 +87,44 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-      body: _pageWidget.elementAt(selectedIndex),
+
+      body: _buildBodyWidget(context),
+    );
+  }
+
+  Widget _buildBodyWidget(BuildContext context) {
+    var memberDetails = Provider.of<MemberProvider>(context, listen: false);
+
+    List _pageWidget = [
+      Text(
+          '홈'
+      ),
+      matchingWidget(context),
+      Text(
+          '채팅'
+      ),
+      settingWidget(context, memberDetails)
+    ];
+
+    return FutureBuilder(
+        future: memberDetails.memberInfo(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          //데이터를 받아오기 전 보여줄 위젯
+          if (snapshot.hasData == false) {
+            //로딩 화면으로 수정
+            return Text('불러오는 중');
+          }
+          //오류가 생기면 보여줄 위젯
+          else if (snapshot.hasError) {
+            //오류가 생기면 보여줄 위젯
+            //미정
+            return Container();
+          }
+          //데이터를 받아오면 보여줄 위젯
+          else {
+            return _pageWidget.elementAt(selectedIndex);
+          }
+        }
     );
   }
 
