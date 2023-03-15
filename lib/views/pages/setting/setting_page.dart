@@ -22,7 +22,8 @@ Widget settingWidget(BuildContext context) {
         }
         //오류가 생기면 보여줄 위젯
         else if (snapshot.hasError) {
-          //오류가 생기면 보여줄 위젯 미정
+          //오류가 생기면 보여줄 위젯
+          //미정
           return Container();
         }
         //데이터를 받아오면 보여줄 위젯
@@ -50,7 +51,9 @@ Widget settingWidget(BuildContext context) {
                               width: 30,
                               child: FloatingActionButton(
                                 backgroundColor: Colors.white,
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.pushNamed(context, '/setting/edit', arguments: memberDetails);
+                                },
                                 child: Icon(
                                   Icons.edit,
                                   size: 20,
@@ -71,9 +74,9 @@ Widget settingWidget(BuildContext context) {
                       ),
                   child: ListView(
                     children: [
-                      for (int i = 0; i < 3; i++) buildSettingList(i, memberDetails),
+                      for (int i = 0; i < 3; i++) buildSettingList(context, i, memberDetails),
                       Divider(),
-                      for (int i = 3; i < 6; i++) buildSettingList(i, memberDetails),
+                      for (int i = 3; i < 6; i++) buildSettingList(context, i, memberDetails),
                     ],
                   ),
                 ),
@@ -105,7 +108,7 @@ Widget settingWidget(BuildContext context) {
       });
 }
 
-Widget buildSettingList(index, memberDetails) {
+Widget buildSettingList(context, index, memberDetails) {
   List settingList = [
     '이름',
     '생년월일',
@@ -143,9 +146,18 @@ Widget buildSettingList(index, memberDetails) {
     memberDetails.member.email.toString(),
   ];
 
+  List navigatorList = [
+    '/setting/security',
+    '/setting/notification',
+    '/setting/terms',
+  ];
+
   return ListTile(
     minVerticalPadding: 23,
-    onTap: () {},
+    onTap: () {
+      if (index > 2)
+        Navigator.pushNamed(context, navigatorList.elementAt(index-3));
+    },
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -170,7 +182,7 @@ Widget buildSettingList(index, memberDetails) {
           Icon(
             Icons.arrow_forward_ios,
             size: 20,
-            color: Colors.black,
+            color: Color(0xff4d4d4d),
           ),
       ],
     ),
