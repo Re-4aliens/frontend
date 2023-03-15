@@ -13,6 +13,17 @@ import './views/pages/matching/matching_edit_page.dart';
 
 import './views/pages/home_page.dart';
 
+import './views/pages/setting/setting_edit_page.dart';
+import './views/pages/setting/setting_notification_page.dart';
+import './views/pages/setting/setting_terms_page.dart';
+import './views/pages/setting/setting_security_page.dart';
+import './views/pages/setting/setting_delete_page.dart';
+import './views/pages/setting/setting_edit_PW_done_page.dart';
+import './views/pages/setting/setting_edit_PW_page.dart';
+import './views/pages/setting/setting_find_PW_page.dart';
+
+
+
 import './providers/member_provider.dart';
 
 void main() {
@@ -30,8 +41,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/home',
       routes: {
         //'/' : (context)=> MatchingPage(),
-
         '/home' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
+
+        // matching
         '/apply' : (context) => MatchingApplyPage(),
         '/done' : (context) => MatchingDonePage(),
         '/state' : (context) => MatchingStatePage(),
@@ -40,6 +52,17 @@ class MyApp extends StatelessWidget {
         '/info/my' : (conext) => MatchingInfoPage(title: '나의 매칭 정보'),
         '/info/your' : (context) => MatchingInfoPage(title: '남의 매칭 정보'),
         '/edit' : (context) => MatchingEditPage(),
+
+        //setting
+        '/setting/edit' : (context) => SettingEditPage(),
+        '/setting/notification' : (context) => SettingNotificationPage(),
+        '/setting/terms': (context) => SettingTermsPage(),
+        '/setting/security': (context) => SettingSecurityPage(),
+        '/setting/delete' : (context) => SettingDeletePage(),
+        '/setting/edit/PW' : (context) => SettingEditPWPage(),
+        '/setting/edit/PW/done' : (context) => SettingEditPWDonePage(),
+        '/setting/edit/find' : (context) => SettingFindPWPage(),
+
       },
     );
   }

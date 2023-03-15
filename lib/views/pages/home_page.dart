@@ -33,22 +33,10 @@ class _HomePageState extends State<HomePage> {
 
 
     List _pageTitle = [
-      Text('홈',
-      style: TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.bold,
-      ),),
-      Text(''),
-      Text('채팅',
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),),
-      Text('설정',
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
-        ),),
+      '홈',
+      '',
+      '채팅',
+      '설정',
     ];
 
     Widget _titleSetting(int index){
@@ -61,7 +49,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: _pageTitle.elementAt(selectedIndex),
+        title: Text(
+          _pageTitle.elementAt(selectedIndex),
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
