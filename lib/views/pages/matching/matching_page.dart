@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-Widget matchingWidget(BuildContext context){
+Widget matchingWidget(BuildContext context, memberDetails){
   return Stack(
     children: [
       //배경 디자인
@@ -21,12 +21,12 @@ Widget matchingWidget(BuildContext context){
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildButton('매칭 신청', '/apply', context),
+              buildButton('매칭 신청', '/apply', context, memberDetails),
               SizedBox(
                 width: 20,
               ),
 
-              buildButton('현재 진행 상황', '/done', context),
+              buildButton('현재 진행 상황', '/done', context, memberDetails),
             ],
           ),
         ),
@@ -62,7 +62,7 @@ Widget matchingWidget(BuildContext context){
   );
 }
 
-Widget buildButton(String _title, String _path, BuildContext context){
+Widget buildButton(String _title, String _path, BuildContext context, memberDetails){
   return MaterialButton(
     minWidth: 165,
     height: 245,
@@ -70,7 +70,7 @@ Widget buildButton(String _title, String _path, BuildContext context){
     elevation: 3.0,
     highlightElevation: 1.0,
     onPressed: () {
-      Navigator.pushNamed(context, _path);
+      Navigator.pushNamed(context, _path, arguments: memberDetails);
     },
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(25),

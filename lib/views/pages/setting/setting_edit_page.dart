@@ -3,10 +3,6 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SettingEditPage extends StatefulWidget {
   const SettingEditPage({super.key});
@@ -114,7 +110,7 @@ class _SettingEditPageState extends State<SettingEditPage> {
               child: ListView(
                 children: [
                   for(int i = 0; i <4; i++)
-                    buildInfoList(i, memberDetails)
+                    buildInfoList(i, memberDetails),
                   ],
               ),
             ),
