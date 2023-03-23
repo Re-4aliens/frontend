@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
@@ -10,7 +9,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
     required this.appBar,
     required this.title,
     required this.onPressed,
-    this. center = true}); //: super(key: key);
+    this. center = true
+  }); //: super(key: key);
 
   final AppBar appBar;
   final String title;
