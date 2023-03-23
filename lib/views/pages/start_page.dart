@@ -55,7 +55,7 @@ class _StartPageState extends State<StartPage>{
                             children: [
                               Text('이미 계정이 있나요?'),
                               TextButton(onPressed: (){
-
+                                Navigator.pushNamed(context, '/login');
                               },
                                   child: Text('로그인'))
                             ],
