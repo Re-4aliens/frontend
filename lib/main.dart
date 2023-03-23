@@ -1,3 +1,6 @@
+import 'package:aliens/views/pages/login/login_checkmail_page.dart';
+import 'package:aliens/views/pages/login/login_findpassword_page.dart';
+import 'package:aliens/views/pages/login/login_page.dart';
 import 'package:aliens/views/pages/signup/signup_birthday.dart';
 import 'package:aliens/views/pages/signup/signup_email.dart';
 import 'package:aliens/views/pages/signup/signup_emailverify.dart';
@@ -45,6 +48,12 @@ class MyApp extends StatelessWidget {
         '/finish': (context) => SignUpVerifyFinish(),
         '/password': (context) => SignUpPassword(),
         '/welcome' : (context) => SignUpWelcome(),
+
+        //login
+        '/login': (context) => Login(),
+        '/findpassword' : (context) => LoginFindPassword(),
+        '/checkemail' : (context)=> LoginCheckMail(),
+
 
 
 
