@@ -20,6 +20,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
     //Members members = new Members('','','','','','','','');
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
