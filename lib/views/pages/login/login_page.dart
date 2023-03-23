@@ -99,10 +99,10 @@ class _LoginState extends State<Login>{
                 ),
             ),
             Button(
-                    child: Text('본인 인증하기'),
+                    child: Text('로그인'),
                     onPressed: (){
                       if(_formKey.currentState!.validate()){
-                        Navigator.pushNamed(context,'/verify', /*arguments: members*/);
+
                       }
                     }),
             Row(

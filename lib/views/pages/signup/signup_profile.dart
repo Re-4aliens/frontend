@@ -16,7 +16,6 @@ class SignUpProfile extends StatefulWidget{
 }
 
 class _SignUpProfileState extends State<SignUpProfile>{
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   File? _profileImage;
   final picker = ImagePicker();
@@ -55,7 +54,7 @@ class _SignUpProfileState extends State<SignUpProfile>{
                               shape: BoxShape.circle,
                             image: DecorationImage(
                               fit: BoxFit.fill,
-                              image: FileImage(_profileImage!.path as File)
+                              image: FileImage(_profileImage!)
                             )
                           ),
                         )
