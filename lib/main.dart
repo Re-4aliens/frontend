@@ -1,32 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'package:aliens/views/components/appbar.dart';
 import 'package:aliens/views/pages/login_page.dart';
-import 'package:provider/provider.dart';
-
-import 'views/components/matching_widget.dart';
-import './views/pages/matching/matching_apply_page.dart';
-import './views/pages/matching/matching_state_page.dart';
-import './views/pages/matching/matching_choose_page.dart';
-import './views/pages/matching/matching_apply_done_page.dart';
-import './views/pages/matching/matching_done_page.dart';
-import './views/pages/matching/matching_info_page.dart';
-import './views/pages/matching/matching_edit_page.dart';
-
-import './views/pages/home_page.dart';
-
-import './views/pages/setting/setting_edit_page.dart';
-import './views/pages/setting/setting_notification_page.dart';
-import './views/pages/setting/setting_terms_page.dart';
-import './views/pages/setting/setting_security_page.dart';
-import './views/pages/setting/setting_delete_page.dart';
-import './views/pages/setting/setting_delete_done_page.dart';
-import './views/pages/setting/setting_edit_PW_done_page.dart';
-import './views/pages/setting/setting_edit_PW_page.dart';
-import './views/pages/setting/setting_find_PW_page.dart';
-
-import './views/pages/main_page.dart';
-
-
-import './providers/member_provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -71,6 +46,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+
   const MyHomePage({super.key});
 
   @override
@@ -81,7 +57,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('4aliens'),
