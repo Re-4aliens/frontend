@@ -4,11 +4,10 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import './matching/matching_page.dart';
-import './setting/setting_page.dart';
+import '../components/matching_widget.dart';
+import '../components/setting_widget.dart';
 
-import 'package:aliens/providers/member_provider.dart';
-import 'package:provider/provider.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,10 +18,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  int selectedIndex = 0;
+  int selectedIndex = 1;
 
   @override
   Widget build(BuildContext context) {
+    List<Object?> args = ModalRoute.of(context)?.settings.arguments as List<Object?>;
+    //selectedIndex = args[0] as int;
+
     List _pageTitle = [
       '홈',
       '',
@@ -30,6 +32,14 @@ class _HomePageState extends State<HomePage> {
       '설정',
     ];
 
+    List _pageWidget = [
+      Text('홈'),
+      matchingWidget(context, args[1]),
+      Text(
+          '채팅'
+      ),
+      settingWidget(context, args[1])
+    ];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -44,13 +54,17 @@ class _HomePageState extends State<HomePage> {
         elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: Icon(Icons.arrow_back_ios_new),
           color: Colors.black,
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+
+            },
             //아이콘 수정 필요
             icon: Icon(CupertinoIcons.question_circle),
             color: Colors.black,
@@ -64,6 +78,8 @@ class _HomePageState extends State<HomePage> {
         unselectedItemColor: Color(0xFFBDBDBD),
         onTap: (int index){
           setState(() {
+            if(index == 0)
+              Navigator.pop(context);
             selectedIndex = index;
           });
         },
@@ -88,43 +104,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
 
-      body: _buildBodyWidget(context),
-    );
-  }
-
-  Widget _buildBodyWidget(BuildContext context) {
-    var memberDetails = Provider.of<MemberProvider>(context, listen: false);
-
-    List _pageWidget = [
-      Text(
-          '홈'
-      ),
-      matchingWidget(context, memberDetails),
-      Text(
-          '채팅'
-      ),
-      settingWidget(context, memberDetails)
-    ];
-
-    return FutureBuilder(
-        future: memberDetails.memberInfo(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          //데이터를 받아오기 전 보여줄 위젯
-          if (snapshot.hasData == false) {
-            //로딩 화면으로 수정
-            return Text('불러오는 중');
-          }
-          //오류가 생기면 보여줄 위젯
-          else if (snapshot.hasError) {
-            //오류가 생기면 보여줄 위젯
-            //미정
-            return Container();
-          }
-          //데이터를 받아오면 보여줄 위젯
-          else {
-            return _pageWidget.elementAt(selectedIndex);
-          }
-        }
+      body: _pageWidget.elementAt(selectedIndex),
     );
   }
 

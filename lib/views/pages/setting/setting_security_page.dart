@@ -18,7 +18,7 @@ class SettingSecurityPage extends StatefulWidget {
 class _SettingSecurityPageState extends State<SettingSecurityPage> {
   @override
   Widget build(BuildContext context) {
-
+    var memberDetails = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -61,7 +61,7 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
           ),
           ListTile(
             onTap: (){
-              Navigator.pushNamed(context, '/setting/delete');
+              Navigator.pushNamed(context, '/setting/delete', arguments: memberDetails);
             },
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

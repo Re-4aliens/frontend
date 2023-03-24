@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
+import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -16,9 +16,11 @@ class SettingDeletePage extends StatefulWidget {
 }
 
 class _SettingDeletePageState extends State<SettingDeletePage> {
+  final TextEditingController passwordController = new  TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-
+    var memberDetails = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -54,28 +56,90 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                 ),),
               Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text('영문, 특수기호, 숫자를 포함 10자 이상',
+                  child: Text('비밀번호를 입력하여 주세요.',
                     style: TextStyle(
                       color: Color(0xffb8b8b8),
                     ),)),
               SizedBox(
                 height: 20,
               ),
-              Container(
-                width: 250,
-                child: TextFormField(
-                  decoration: InputDecoration(
-
-                  ),
-                  //입력 값이 비밀번호와 다르면
-
-                  //입력 값이 비밀번호와 같으면
-
-                ),
-              ),
+              _passwordCheck(memberDetails),
             ],
           ),
         )
+    );
+  }
+  Widget _passwordCheck(memberDetails){
+    return Container(
+      width: 250,
+      child: TextFormField(
+        controller: passwordController,
+        decoration: InputDecoration(
+
+        ),
+
+        onEditingComplete: (){
+          FocusScope.of(context).unfocus();
+          if(passwordController.text == memberDetails.member.password) {
+            showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
+
+              title: Text('정말 탈퇴하시겠어요?',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),),
+              content: const Text('채팅내역, 매칭내역 등 이제까지 사용해주신\n데이터들은 복구되지 않아요.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('취소',
+                      style: TextStyle(
+                        color: Colors.black,
+                      )),
+                ),
+                TextButton(
+                  onPressed: () {
+                    //탈퇴
+                    Navigator.pushNamed(context, '/setting/delete/done');
+                  },
+                  child: const Text('탈퇴하기',
+                      style: TextStyle(
+                        color: Colors.black,
+                      )),
+                ),
+              ],
+            ));
+          } else {
+            showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
+
+              title: Text('탈퇴 실패',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+              ),
+              content: const Text('비밀번호 입력 미일치로 인해\n탈퇴에 실패하셨습니다.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('취소',
+                      style: TextStyle(
+                        color: Colors.black,
+                      )),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('다시 입력하기',
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),),
+                ),
+              ],
+            ));
+          }
+        },
+        textInputAction: TextInputAction.done,
+      ),
     );
   }
 }

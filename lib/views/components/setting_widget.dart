@@ -52,8 +52,8 @@ Widget settingWidget(BuildContext context, memberDetails) {
         flex: 4,
         child: Container(
           decoration: BoxDecoration(
-              //color: Colors.green.shade200
-              ),
+            //color: Colors.green.shade200
+          ),
           child: ListView(
             children: [
               for (int i = 0; i < 3; i++)
@@ -67,24 +67,24 @@ Widget settingWidget(BuildContext context, memberDetails) {
       ),
       Expanded(
           child: Container(
-        alignment: Alignment.center,
-        child: InkWell(
-          onTap: () {},
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border(
-                  bottom: BorderSide(width: 1.0, color: Color(0xFF454545))),
-            ),
-            child: Text(
-              '로그아웃',
-              style: TextStyle(
-                color: Color(0xFF454545),
-                fontSize: 16,
+            alignment: Alignment.center,
+            child: InkWell(
+              onTap: () {},
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(width: 1.0, color: Color(0xFF454545))),
+                ),
+                child: Text(
+                  '로그아웃',
+                  style: TextStyle(
+                    color: Color(0xFF454545),
+                    fontSize: 16,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      )),
+          )),
     ],
   );
 }
@@ -137,7 +137,7 @@ Widget buildSettingList(context, index, memberDetails) {
     minVerticalPadding: 23,
     onTap: () {
       if (index > 2)
-        Navigator.pushNamed(context, navigatorList.elementAt(index - 3));
+        Navigator.pushNamed(context, navigatorList.elementAt(index - 3), arguments: memberDetails);
     },
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

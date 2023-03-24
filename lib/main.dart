@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:aliens/views/pages/login_page.dart';
 import 'package:provider/provider.dart';
 
-import './views/pages/matching/matching_page.dart';
+import 'views/components/matching_widget.dart';
 import './views/pages/matching/matching_apply_page.dart';
 import './views/pages/matching/matching_state_page.dart';
 import './views/pages/matching/matching_choose_page.dart';
@@ -18,10 +18,12 @@ import './views/pages/setting/setting_notification_page.dart';
 import './views/pages/setting/setting_terms_page.dart';
 import './views/pages/setting/setting_security_page.dart';
 import './views/pages/setting/setting_delete_page.dart';
+import './views/pages/setting/setting_delete_done_page.dart';
 import './views/pages/setting/setting_edit_PW_done_page.dart';
 import './views/pages/setting/setting_edit_PW_page.dart';
 import './views/pages/setting/setting_find_PW_page.dart';
 
+import './views/pages/main_page.dart';
 
 
 import './providers/member_provider.dart';
@@ -38,10 +40,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
+      initialRoute: '/',
       routes: {
-        //'/' : (context)=> MatchingPage(),
-        '/home' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
+        '/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: MainPage()),
+        '/home' : (context)=> HomePage(),
 
         // matching
         '/apply' : (context) => MatchingApplyPage(),
@@ -59,10 +61,10 @@ class MyApp extends StatelessWidget {
         '/setting/terms': (context) => SettingTermsPage(),
         '/setting/security': (context) => SettingSecurityPage(),
         '/setting/delete' : (context) => SettingDeletePage(),
+        '/setting/delete/done': (context) => SettingDeleteDonePage(),
         '/setting/edit/PW' : (context) => SettingEditPWPage(),
         '/setting/edit/PW/done' : (context) => SettingEditPWDonePage(),
         '/setting/edit/find' : (context) => SettingFindPWPage(),
-
       },
     );
   }
