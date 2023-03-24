@@ -16,14 +16,14 @@ class Button extends StatelessWidget{
     return Container(
       width : double.maxFinite,
       height: 50,
-      margin: EdgeInsets.symmetric(horizontal: 10),
+      //margin: EdgeInsets.symmetric(horizontal: 10),
       child: ElevatedButton(
         onPressed: onPressed,
         child: child,
         style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.pink,// 여기 색 넣으면됩니다
+            backgroundColor: Colors.grey,// 여기 색 넣으면됩니다
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20)
+                borderRadius: BorderRadius.circular(40)
             )
 
         ),
