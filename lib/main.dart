@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+
+import 'package:aliens/views/components/appbar.dart';
 import 'package:aliens/views/pages/login_page.dart';
+import 'package:aliens/views/components/button.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -23,6 +27,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
+
   const MyHomePage({super.key});
 
   @override
@@ -33,7 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: Text('4aliens'),
