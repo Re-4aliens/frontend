@@ -17,6 +17,7 @@ import 'package:flutter/material.dart';
 
 import 'package:aliens/views/components/appbar.dart';
 import 'package:aliens/views/pages/login_page.dart';
+
 import 'package:aliens/views/components/button.dart';
 import 'package:aliens/views/pages/signup/signup_name.dart';
 
@@ -28,7 +29,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,6 +37,31 @@ class MyApp extends StatelessWidget {
 
       initialRoute: '/start',
       routes: {
+
+        '/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: MainPage()),
+        '/home' : (context)=> HomePage(),
+
+        // matching
+        '/apply' : (context) => MatchingApplyPage(),
+        '/done' : (context) => MatchingDonePage(),
+        '/state' : (context) => MatchingStatePage(),
+        '/choose' : (context) => MatchingChoosePage(),
+        '/apply/done' : (context) => MatchingApplyDonePage(),
+        '/info/my' : (conext) => MatchingInfoPage(title: '나의 매칭 정보'),
+        '/info/your' : (context) => MatchingInfoPage(title: '남의 매칭 정보'),
+        '/edit' : (context) => MatchingEditPage(),
+
+        //setting
+        '/setting/edit' : (context) => SettingEditPage(),
+        '/setting/notification' : (context) => SettingNotificationPage(),
+        '/setting/terms': (context) => SettingTermsPage(),
+        '/setting/security': (context) => SettingSecurityPage(),
+        '/setting/delete' : (context) => SettingDeletePage(),
+        '/setting/delete/done': (context) => SettingDeleteDonePage(),
+        '/setting/edit/PW' : (context) => SettingEditPWPage(),
+        '/setting/edit/PW/done' : (context) => SettingEditPWDonePage(),
+        '/setting/edit/find' : (context) => SettingFindPWPage(),
+
        '/' : (context)=> MyHomePage(),
         '/start' : (context)=> StartPage(),
 
@@ -58,9 +83,6 @@ class MyApp extends StatelessWidget {
         '/login': (context) => Login(),
         '/findpassword' : (context) => LoginFindPassword(),
         '/checkemail' : (context)=> LoginCheckMail(),
-
-
-
 
 
 

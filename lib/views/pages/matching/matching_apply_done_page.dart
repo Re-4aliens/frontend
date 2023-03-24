@@ -18,6 +18,7 @@ class MatchingApplyDonePage extends StatefulWidget {
 class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
   @override
   Widget build(BuildContext context) {
+    var memberDetails = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -79,9 +80,10 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                   onTap: (){
                     //스택 비우고
                     Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+                        .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+                    );
                     //state페이지를 push
-                    Navigator.pushNamed(context, '/state');
+                    Navigator.pushNamed(context, '/state', arguments: memberDetails);
                   },
                   child: Container(
                     child: Text('버튼1'),

@@ -18,6 +18,7 @@ class MatchingChoosePage extends StatefulWidget {
 class _MatchingChoosePageState extends State<MatchingChoosePage> {
   @override
   Widget build(BuildContext context) {
+    var memberDetails = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
         backgroundColor: Color(0xFFF4F4F4),
         appBar: AppBar(
@@ -96,7 +97,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, '/apply/done');
+                    Navigator.pushNamed(context, '/apply/done', arguments: memberDetails);
                   },
                   child: Container(
                     child: Text('버튼'),
