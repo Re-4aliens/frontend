@@ -41,7 +41,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword>{
                ),
             Expanded(child: SizedBox()),
             Button(
-                child: Text('임비 비밀번호 발급'),
+                child: Text('임시 비밀번호 발급'),
                 onPressed: (){
                   if(_formKey.currentState!.validate()){
                     Navigator.pushNamed(context,'/checkemail', /*arguments: members*/);
