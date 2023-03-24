@@ -18,6 +18,7 @@ class MatchingStatePage extends StatefulWidget {
 class _MatchingStatePageState extends State<MatchingStatePage> {
   @override
   Widget build(BuildContext context) {
+    var memberDetails = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
         backgroundColor: Color(0xFFF4F4F4),
         appBar: AppBar(
@@ -85,7 +86,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                 ),
                 InkWell(
                   onTap: (){
-                    Navigator.pushNamed(context, '/info/my');
+                    Navigator.pushNamed(context, '/info/my', arguments: memberDetails);
                   },
                   child: Container(
                     child: Text('버튼'),
