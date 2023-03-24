@@ -14,9 +14,12 @@ import 'package:aliens/views/pages/signup/signup_verifyfinish.dart';
 import 'package:aliens/views/pages/signup/signup_welcome.dart';
 import 'package:aliens/views/pages/start_page.dart';
 import 'package:flutter/material.dart';
+
 import 'package:aliens/views/components/appbar.dart';
+import 'package:aliens/views/pages/login_page.dart';
 import 'package:aliens/views/components/button.dart';
 import 'package:aliens/views/pages/signup/signup_name.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -31,8 +34,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
+
       initialRoute: '/start',
       routes: {
+       '/' : (context)=> MyHomePage(),
         '/start' : (context)=> StartPage(),
 
         //SignUp
@@ -58,12 +63,14 @@ class MyApp extends StatelessWidget {
 
 
 
+
       },
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
+
   const MyHomePage({super.key});
 
   @override
@@ -75,16 +82,21 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(appBar: AppBar(), title: 'appbar내용 없으면 공백 ', onPressed: (){}),
+      appBar: AppBar(
+        title: Text('4aliens'),
+      ),
       body: Center(
+
         child: Column(
+
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Button(child: Text('안녕'),onPressed: (){Navigator.pop(context);}),
+            const Text(
+              '',
+            ),
           ],
         ),
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
