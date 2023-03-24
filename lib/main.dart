@@ -15,11 +15,34 @@ import 'package:aliens/views/pages/signup/signup_welcome.dart';
 import 'package:aliens/views/pages/start_page.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/views/components/appbar.dart';
-import 'package:aliens/views/pages/login_page.dart';
-
-import 'package:aliens/views/components/button.dart';
 import 'package:aliens/views/pages/signup/signup_name.dart';
+
+
+import 'package:provider/provider.dart';
+import './views/pages/matching/matching_apply_page.dart';
+import './views/pages/matching/matching_state_page.dart';
+import './views/pages/matching/matching_choose_page.dart';
+import './views/pages/matching/matching_apply_done_page.dart';
+import './views/pages/matching/matching_done_page.dart';
+import './views/pages/matching/matching_info_page.dart';
+import './views/pages/matching/matching_edit_page.dart';
+
+import './views/pages/home_page.dart';
+
+import './views/pages/setting/setting_edit_page.dart';
+import './views/pages/setting/setting_notification_page.dart';
+import './views/pages/setting/setting_terms_page.dart';
+import './views/pages/setting/setting_security_page.dart';
+import './views/pages/setting/setting_delete_page.dart';
+import './views/pages/setting/setting_delete_done_page.dart';
+import './views/pages/setting/setting_edit_PW_done_page.dart';
+import './views/pages/setting/setting_edit_PW_page.dart';
+import './views/pages/setting/setting_find_PW_page.dart';
+
+import './views/pages/main_page.dart';
+
+
+import './providers/member_provider.dart';
 
 
 void main() {
@@ -83,7 +106,6 @@ class MyApp extends StatelessWidget {
         '/login': (context) => Login(),
         '/findpassword' : (context) => LoginFindPassword(),
         '/checkemail' : (context)=> LoginCheckMail(),
-
 
 
       },
