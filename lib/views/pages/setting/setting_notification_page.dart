@@ -16,6 +16,8 @@ class SettingNotificationPage extends StatefulWidget {
 }
 
 class _SettingNotificationPageState extends State<SettingNotificationPage> {
+  bool value = true;
+
   @override
   Widget build(BuildContext context) {
 
@@ -41,53 +43,92 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
       ),
       body: Column(
         children: [
-          for(int i = 0; i <3; i++)
-            buildWidget(),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('알림 수신',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),),
+                CupertinoSwitch(
+                  value: value,
+                  activeColor: Colors.grey,
+                  onChanged:  (value) => setState(() {
+                    this.value = value;
+                  }),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('매칭 알림',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),),
+                CupertinoSwitch(
+                  value: value,
+                  activeColor: Colors.grey,
+                  onChanged:  (value) => setState(() {
+                    this.value = value;
+                  }),
+                ),
+              ],
+            ),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('채팅 알림',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),),
+                CupertinoSwitch(
+                  value: value,
+                  activeColor: Colors.grey,
+                  onChanged:  (value) => setState(() {
+                    this.value = value;
+                  }),
+                ),
+              ],
+            ),
+          ),
           Divider(
             thickness: 15,
             color: Color(0xffEFEFEF),
           ),
-          buildWidget(),
-        ],
-      )
-    );
-  }
-  Widget buildWidget(){
-    return Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text('알림 수신',
-            style: TextStyle(
-              fontSize: 16,
-            ),),
-          ToggleButtons(children: [
-            Container(
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.green,
-              ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('앱 내부 알림',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),),
+                CupertinoSwitch(
+                  value: value,
+                  activeColor: Colors.grey,
+                  onChanged:  (value) => setState(() {
+                    this.value = value;
+                  }),
+                ),
+              ],
             ),
-            Container(
-              height: 20,
-              width: 20,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.white,
-              ),
-            ),
-          ],
-            isSelected: [
-              true,
-              false
-            ],
           )
         ],
-      ),
+      )
     );
   }
 }
