@@ -78,8 +78,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-
-
+  flutter_plugin_android_lifecycle:
+    dependency: transitive
+    description:
+      name: flutter_plugin_android_lifecycle
+      sha256: c224ac897bed083dabf11f238dd11a239809b446740be0c2044608c50029ffdf
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.9"
   flutter_secure_storage:
     dependency: "direct main"
     description:
@@ -133,14 +139,12 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
   http:
-
     dependency: "direct main"
     description:
       name: http
@@ -204,7 +208,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.18.0"
-
   js:
     dependency: transitive
     description:
@@ -245,7 +248,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.0"
-
   nested:
     dependency: transitive
     description:
@@ -262,12 +264,10 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.2"
-
   plugin_platform_interface:
     dependency: transitive
     description:
       name: plugin_platform_interface
-
       sha256: dbf0f707c78beedc9200146ad3cb0ab4d5da13c246336987be6940f026500d3a
       url: "https://pub.dev"
     source: hosted
@@ -349,7 +349,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.4.16"
-
   typed_data:
     dependency: transitive
     description:
@@ -368,5 +367,4 @@ packages:
     version: "2.1.4"
 sdks:
   dart: ">=2.19.2 <3.0.0"
-
-  flutter: ">=2.0.0"
+  flutter: ">=3.3.0"
