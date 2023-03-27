@@ -39,7 +39,6 @@ import './views/pages/setting/setting_edit_PW_done_page.dart';
 import './views/pages/setting/setting_edit_PW_page.dart';
 import './views/pages/setting/setting_find_PW_page.dart';
 
-import './views/pages/main_page.dart';
 
 
 import './providers/member_provider.dart';
@@ -64,8 +63,7 @@ class MyApp extends StatelessWidget {
 
         '/' : (context)=> StartPage(),
 
-        '/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: MainPage()),
-        '/main/home' : (context)=> HomePage(),
+        '/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
 
         // matching
         '/apply' : (context) => MatchingApplyPage(),

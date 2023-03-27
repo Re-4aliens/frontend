@@ -3,6 +3,9 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
+import '../../components/button.dart';
+
 class MatchingApplyPage extends StatefulWidget {
   const MatchingApplyPage({super.key});
 
@@ -143,13 +146,13 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                 SizedBox(
                   height: 60,
                 ),
-                InkWell(
-                  onTap: (){
-                    Navigator.pushNamed(context,'/choose', arguments: memberDetails);
-                  },
-                  child: Container(
-                    child: Text('버튼'),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Button(
+                      child: Text('시작하기'),
+                      onPressed: (){
+                        Navigator.pushNamed(context,'/choose', arguments: memberDetails);
+                      }),
                 )
               ],
             ),

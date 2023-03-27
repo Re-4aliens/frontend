@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/button.dart';
 
 class MatchingApplyDonePage extends StatefulWidget {
   const MatchingApplyDonePage({super.key});
@@ -75,30 +76,28 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                 SizedBox(
                   height: 70,
                 ),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Button(
+                      child: Text('매칭 진행 상황 보기'),
+                      onPressed: (){
+                        //스택 비우고
+                        Navigator.of(context)
+                            .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
+                        );
+                        //state페이지를 push
+                        Navigator.pushNamed(context, '/state', arguments: memberDetails);
 
-                InkWell(
-                  onTap: (){
-                    //스택 비우고
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
-                    );
-                    //state페이지를 push
-                    Navigator.pushNamed(context, '/state', arguments: memberDetails);
-                  },
-                  child: Container(
-                    child: Text('버튼1'),
-                  ),
+                      }),
                 ),
-                InkWell(
-                  onTap: (){
-                    //스택 비우고
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false);
-                  },
-                  child: Container(
-                    child: Text('버튼2'),
-                  ),
-                )
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Button(
+                      child: Text('홈으로 돌아가기'),
+                      onPressed: (){
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                      }),
+                ),
               ],
             ),
             Expanded(flex:2, child: Container()),
