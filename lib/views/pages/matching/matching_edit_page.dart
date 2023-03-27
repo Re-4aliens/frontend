@@ -3,10 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/button.dart';
 
 class MatchingEditPage extends StatefulWidget {
   const MatchingEditPage({super.key});
@@ -161,13 +158,13 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                 SizedBox(
                   height: 200,
                 ),
-                InkWell(
-                  onTap: (){
-                    Navigator.pop(context);
-                  },
-                  child: Container(
-                    child: Text('버튼'),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                  child: Button(
+                      child: Text('확인'),
+                      onPressed: (){
+                        Navigator.pop(context);
+                      }),
                 )
               ],
             ),

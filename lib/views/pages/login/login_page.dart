@@ -118,6 +118,8 @@ class _LoginState extends State<Login> {
                   Navigator.of(context)
                       .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
                   );
+
+
                 }),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

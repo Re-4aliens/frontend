@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/matching/matching_done_page.dart';
 
+
+var changeToChat = false;
 Widget matchingWidget(BuildContext context, memberDetails){
   return Stack(
     children: [
@@ -21,12 +24,12 @@ Widget matchingWidget(BuildContext context, memberDetails){
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildButton('매칭 신청', '/apply', context, memberDetails),
+              buildButton('매칭 신청', 0, context, memberDetails),
               SizedBox(
                 width: 20,
               ),
 
-              buildButton('현재 진행 상황', '/done', context, memberDetails),
+              buildButton('현재 진행 상황', 1, context, memberDetails),
             ],
           ),
         ),
@@ -62,15 +65,22 @@ Widget matchingWidget(BuildContext context, memberDetails){
   );
 }
 
-Widget buildButton(String _title, String _path, BuildContext context, memberDetails){
+Widget buildButton(String _title, int btnIndex, BuildContext context, memberDetails){
   return MaterialButton(
     minWidth: 165,
     height: 245,
 
     elevation: 3.0,
     highlightElevation: 1.0,
-    onPressed: () {
-      Navigator.pushNamed(context, _path, arguments: memberDetails);
+    onPressed: () async {
+      if (btnIndex == 0)
+        Navigator.pushNamed(context, '/apply', arguments: memberDetails);
+      else{
+        changeToChat = await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MatchingDonePage())
+        );
+      }
     },
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(25),

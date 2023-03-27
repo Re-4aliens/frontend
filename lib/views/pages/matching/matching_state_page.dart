@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/button.dart';
 
 class MatchingStatePage extends StatefulWidget {
   const MatchingStatePage({super.key});
@@ -84,13 +85,13 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                 SizedBox(
                   height: 70,
                 ),
-                InkWell(
-                  onTap: (){
-                    Navigator.pushNamed(context, '/info/my', arguments: memberDetails);
-                  },
-                  child: Container(
-                    child: Text('버튼'),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Button(
+                      child: Text('나의 매칭 정보 확인하기'),
+                      onPressed: (){
+                        Navigator.pushNamed(context, '/info/my', arguments: memberDetails);
+                      }),
                 ),
                 SizedBox(
                   height: 40,

@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/button.dart';
 
 class MatchingDonePage extends StatefulWidget {
   const MatchingDonePage({super.key});
@@ -168,11 +169,14 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                                   ),
                                 ),
                               Expanded(flex: 1, child: Container()),
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  child: Text('버튼'),
-                                ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                                child: Button(
+                                   child: Text('채팅하기'),
+                                    onPressed: (){
+                                      Navigator.pop(context);
+                                      Navigator.pop(context, true);
+                                     }),
                               ),
                               Expanded(flex: 2, child: Container()),
                             ],

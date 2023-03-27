@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
+import '../../components/button.dart';
+
+
 class SettingEditPage extends StatefulWidget {
   const SettingEditPage({super.key});
 

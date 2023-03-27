@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/button.dart';
 
 class SettingEditPWPage extends StatefulWidget {
   const SettingEditPWPage({super.key});
@@ -84,13 +85,13 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                 child: Container(
                   alignment: Alignment.bottomCenter,
                   padding: EdgeInsets.only(bottom: 100),
-                  child: InkWell(
-                    onTap: (){
-                      Navigator.pushNamed(context,'/setting/edit/PW/done');
-                    },
-                    child: Container(
-                      child: Text('버튼'),
-                    ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                    child: Button(
+                        child: Text('확인'),
+                        onPressed: (){
+                          Navigator.pushNamed(context,'/setting/edit/PW/done');
+                        }),
                   ),
                 ),
               )
