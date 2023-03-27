@@ -114,12 +114,12 @@ class _MainPageState extends State<MainPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        buildButton('매칭', '/home', 1, context,
+                                        buildButton('매칭', '/main/home', 1, context,
                                             memberDetails),
                                         SizedBox(
                                           width: 20,
                                         ),
-                                        buildButton('채팅', '/home', 2, context,
+                                        buildButton('채팅', '/main/home', 2, context,
                                             memberDetails),
                                       ],
                                     ),
@@ -130,7 +130,7 @@ class _MainPageState extends State<MainPage> {
                                   alignment: Alignment.topRight,
                                   child: IconButton(
                                       onPressed: () {
-                                        Navigator.pushNamed(context, '/home',
+                                        Navigator.pushNamed(context, '/main/home',
                                             arguments: [3, memberDetails]);
                                       },
                                       icon: Icon(Icons.settings)),

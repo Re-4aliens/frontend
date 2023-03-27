@@ -116,7 +116,7 @@ class _LoginState extends State<Login> {
 
                   //스택 비우고
                   Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+                      .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
                   );
                 }),
             Row(
@@ -125,7 +125,7 @@ class _LoginState extends State<Login> {
                 Text('비밀번호를 잊으셨나요?'),
                 TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/findpassword');
+                      Navigator.pushNamed(context, '/login/findpassword');
                     },
                     child: Text(
                       '비밀번호 찾기',
