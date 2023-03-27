@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../components/matching_widget.dart';
 import '../components/setting_widget.dart';
+import '../components/home_widget.dart';
 
 
 
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     List _pageWidget = [
-      Text('홈'),
+      homeWidget(context, args[1]),
       matchingWidget(context, args[1]),
       Text(
           '채팅'
@@ -78,8 +79,6 @@ class _HomePageState extends State<HomePage> {
         unselectedItemColor: Color(0xFFBDBDBD),
         onTap: (int index){
           setState(() {
-            if(index == 0)
-              Navigator.pop(context);
             selectedIndex = index;
           });
         },
@@ -87,7 +86,6 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_filled),
             label: '홈',
-
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.people),

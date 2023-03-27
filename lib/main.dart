@@ -61,6 +61,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/start',
       routes: {
 
+
+        '/start' : (context)=> StartPage(),
+
         '/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: MainPage()),
         '/home' : (context)=> HomePage(),
 
@@ -84,9 +87,6 @@ class MyApp extends StatelessWidget {
         '/setting/edit/PW' : (context) => SettingEditPWPage(),
         '/setting/edit/PW/done' : (context) => SettingEditPWDonePage(),
         '/setting/edit/find' : (context) => SettingFindPWPage(),
-
-       '/' : (context)=> MyHomePage(),
-        '/start' : (context)=> StartPage(),
 
         //SignUp
         '/name' : (context) => SignUpName(),

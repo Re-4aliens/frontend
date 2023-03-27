@@ -161,7 +161,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget buildButton(String _title, String _path, int index,
+  Widget buildButton(String _title, String _path, int pageIndex,
       BuildContext context, memberDetails) {
     return MaterialButton(
       minWidth: 165,
@@ -169,7 +169,7 @@ class _MainPageState extends State<MainPage> {
       elevation: 3.0,
       highlightElevation: 1.0,
       onPressed: () {
-        Navigator.pushNamed(context, _path, arguments: [index, memberDetails]);
+        Navigator.pushNamed(context, _path, arguments: [pageIndex, memberDetails]);
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
