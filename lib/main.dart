@@ -58,14 +58,14 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
 
-      initialRoute: '/start',
+      initialRoute: '/',
       routes: {
 
 
-        '/start' : (context)=> StartPage(),
+        '/' : (context)=> StartPage(),
 
-        '/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: MainPage()),
-        '/home' : (context)=> HomePage(),
+        '/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: MainPage()),
+        '/main/home' : (context)=> HomePage(),
 
         // matching
         '/apply' : (context) => MatchingApplyPage(),
@@ -104,8 +104,8 @@ class MyApp extends StatelessWidget {
 
         //login
         '/login': (context) => Login(),
-        '/findpassword' : (context) => LoginFindPassword(),
-        '/checkemail' : (context)=> LoginCheckMail(),
+        '/login/findpassword' : (context) => LoginFindPassword(),
+        '/login/checkemail' : (context)=> LoginCheckMail(),
 
 
       },

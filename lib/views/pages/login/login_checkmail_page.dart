@@ -49,7 +49,7 @@ class _LoginCheckMailState extends State<LoginCheckMail> {
                   onPressed: () {
                     //스택 비우고
                     Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/start', (Route<dynamic> route) => false
+                        .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
                     );
                     //login페이지를 push
                     Navigator.pushNamed(context, '/login');
@@ -61,7 +61,6 @@ class _LoginCheckMailState extends State<LoginCheckMail> {
                   height: 50,
                   child: ElevatedButton(
                     onPressed: () {
-                      //Navigator.pushNamed(context, '/findpassword');
                       Navigator.pop(context);
                     },
                     child: Text(
