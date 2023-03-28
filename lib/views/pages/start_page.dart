@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../components/button.dart';
+import '../components/button_big.dart';
 
 class StartPage extends StatefulWidget{
   const StartPage({super.key});
@@ -32,10 +33,10 @@ class _StartPageState extends State<StartPage>{
                       decoration: BoxDecoration(color: Colors.grey),
                         ),
                     Text('FRIEND SHIP',
-                      style : TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style : TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     Text('내 손안의 외국인 프렌즈',
-                        style: TextStyle(fontSize: 10)),
+                        style: TextStyle(fontSize: 14),),
                       ],),),),
               Expanded(
                 flex:4,
@@ -46,18 +47,22 @@ class _StartPageState extends State<StartPage>{
                       padding: EdgeInsets.only(right: 20,left: 20),
                       child: Column(
                         children: [
-                          Button(onPressed: () {
+                          BigButton(onPressed: () {
                             Navigator.pushNamed(context, '/name');},
                               child: Text('시작하기')),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('이미 계정이 있나요?'),
+                              Text('이미 계정이 있나요?', style: TextStyle(fontSize: 12),),
                               TextButton(onPressed: (){
                                 Navigator.pushNamed(context, '/login');
                               },
-                                  child: Text('로그인'))
+                                  child: Text('로그인',
+                                      style: TextStyle(color: Color(0xff000000),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      )))
                             ],
                           )
 

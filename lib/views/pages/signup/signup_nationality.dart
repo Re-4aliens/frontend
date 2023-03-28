@@ -29,12 +29,12 @@ class _SignUpNationalityState extends State<SignUpNationality>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('국적을 알려주세요',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
             SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('국적', style: TextStyle(fontSize: 20,),),
+                Text('국적', style: TextStyle(fontSize: 16,),),
                 DropdownButton(
                     hint: Text('국적') ,
                     items: _NationalityList.map((value){

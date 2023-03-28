@@ -24,12 +24,13 @@ class _LoginChangeMailState extends State<LoginChangeMail>{
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.admin_panel_settings, size: 80,),
+              Icon(Icons.admin_panel_settings, size: 80, color: Color(0xffFFB5B5),
+              ),
               SizedBox(height: 50),
               Text('비밀번호를 변경해주세요!',textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
               Text('현재 임시번호~~~~~\n~~~~해주세요', textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13),),
+              style: TextStyle(fontSize: 16),),
               Expanded(child: SizedBox()),
               Button(child: Text('비밀번호 변경하기'),
               onPressed: (){
@@ -42,10 +43,10 @@ class _LoginChangeMailState extends State<LoginChangeMail>{
                   onPressed:(){
                   },
                   child: Text('다음에 변경하기', style: TextStyle(
-                    color: Colors.black
+                    color: Color(0xffA7A7A7)
                   ),),
                   style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white70,
+                  backgroundColor: Color(0xffEBEBEB),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(40)
                   )

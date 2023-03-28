@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  google_fonts: ^4.0.3
   image_picker: ^0.8.7
   syncfusion_flutter_datepicker: ^20.4.51
   flutter:
@@ -80,11 +81,11 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
+  fonts:
+    - family: NotoSans
+      fonts:
+        - asset: assets/font/NotoSans-Bold.ttf
+        - asset: assets/font/NotoSans-Medium.ttf
   #         style: italic
   #   - family: Trajan Pro
   #     fonts:

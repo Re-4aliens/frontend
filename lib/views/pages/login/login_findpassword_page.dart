@@ -25,9 +25,9 @@ class _LoginFindPasswordState extends State<LoginFindPassword>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('비밀번호를 찾기 위해\n가입하신 이메일을 입력해주세요.',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
             SizedBox(height: 10),
-            Text('작성하신 메일로 임시비밀번호를 발급해드려요.'),
+            Text('작성하신 메일로 임시비밀번호를 발급해드려요.', style: TextStyle(fontSize: 14),),
             SizedBox(height: 40),
              Form(
                key: _formKey,
@@ -35,7 +35,11 @@ class _LoginFindPasswordState extends State<LoginFindPassword>{
                      validator : (value) => value!.isEmpty? "Please enter some text" : null,
                      controller: _EmailController,
                      decoration: new InputDecoration(
-                         hintText: '이메일'
+                         hintText: '이메일',
+                       hintStyle: TextStyle(
+                         fontSize: 20,
+                         color: Color(0xffD9D9D9)
+                       )
                      ),
                    ),
                ),

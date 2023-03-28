@@ -23,30 +23,28 @@ class _SignUpVerifyFinishState extends State<SignUpVerifyFinish>{
           children: [
             Expanded(child: SizedBox()),
             MaterialButton(
-              minWidth: 300,
+              minWidth: 280,
               height: 240,
-              elevation: 3.0,
-              highlightElevation: 1.0,
+              //elevation: 3.0,
+              //highlightElevation: 1.0,
               onPressed: () {
                 Navigator.pushNamed(context, '/password');
               },
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ),
-              color: Colors.grey,
+              color: Color(0xffffffff),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Icon(Icons.check_circle, size : 100),
+                  Icon(Icons.check_circle, size : 86, color: Color(0xff7898FF),),
                   SizedBox(height: 10),
-                  Text('인증 완료!', style: TextStyle(fontSize: 20),)
+                  Text('인증 완료!', style: TextStyle(fontSize: 24),)
                 ],
               ),
             ),
             Expanded(child: SizedBox()),
-            Text('본인 인증하기'),
-            SizedBox(height: 40)
 
           ],
         )

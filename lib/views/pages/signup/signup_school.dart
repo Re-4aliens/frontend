@@ -27,9 +27,9 @@ class _SignUpSchoolState extends State<SignUpSchool>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('부경대학교\n학생이신가요?',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
             SizedBox(height: 10),
-            Text('부경대학교 코드를 입력해주세요'),
+            Text('부경대학교 코드를 입력해주세요', style: TextStyle(fontSize: 14, color: Color(0xff888888)),),
             SizedBox(height: 40),
              Form(
                key: _formKey,
@@ -37,8 +37,10 @@ class _SignUpSchoolState extends State<SignUpSchool>{
                      validator : (value) => value!.isEmpty? "Please enter some text" : null,
                      controller: _SchoolController,
                      decoration: new InputDecoration(
-                         hintText: '부경대학교 코드를 입력해주세요'
-                     ),
+                         hintText: '부경대학교 코드를 입력해주세요',
+                         hintStyle: TextStyle(fontSize: 20, color: Color(0xffD9D9D9))
+
+               ),
                    ),
                ),
             Expanded(child: SizedBox()),

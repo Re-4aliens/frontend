@@ -27,7 +27,7 @@ class _SignUpNameState extends State<SignUpName>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('이름을 알려주세요',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
             SizedBox(height: 40),
              Form(
                key: _formKey,
@@ -35,13 +35,14 @@ class _SignUpNameState extends State<SignUpName>{
                      validator : (value) => value!.isEmpty? "Please enter some text" : null,
                      controller: _NameController,
                      decoration: new InputDecoration(
-                         hintText: '이름'
+                         hintText: '이름',
+                       hintStyle: TextStyle(fontSize: 20, color: Color(0xffD9D9D9))
                      ),
                    ),
                ),
             Expanded(child: SizedBox()),
             Button(
-                child: Text('확인'),
+                child: Text('다음'),
                 onPressed: (){
                   if(_formKey.currentState!.validate()){
                     Navigator.pushNamed(context,'/birthday', /*arguments: members*/);

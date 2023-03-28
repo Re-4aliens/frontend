@@ -30,7 +30,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('생년월일을 알려주세요',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
             SizedBox(height: 40),
              Form(
                key: _formKey,
@@ -42,6 +42,11 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
                  child: Column(
                    children: [
                      TextFormField(
+                       decoration: new InputDecoration(
+                           hintText: '생년월일 선택',
+                           suffixIcon: Icon(Icons.arrow_drop_down),
+                           hintStyle: TextStyle(fontSize: 20, color: Color(0xffD9D9D9))
+                       ),
                        validator : (value) => value!.isEmpty? "Please enter some text" : null,
                        enabled: false,
                        controller: _BirthdayController,
