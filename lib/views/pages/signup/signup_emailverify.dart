@@ -20,6 +20,7 @@ class _SignUpVerifyState extends State<SignUpVerify>{
     //Members members = new Members('','','','','','','','');
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
@@ -27,9 +28,10 @@ class _SignUpVerifyState extends State<SignUpVerify>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('메일로 보내드린\n인증코드를 입력해주세요',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
             SizedBox(height: 10),
-            Text('수신하지 못했다면 스팸함 또는 해당 이메일 서비스의\n설정을 확인해주세요.'),
+            Text('수신하지 못했다면 스팸함 또는 해당 이메일 서비스의\n설정을 확인해주세요.',
+            style: TextStyle(fontSize: 14, color: Color(0xff888888)),),
             SizedBox(height: 40),
              Form(
                key: _formKey,
@@ -39,18 +41,24 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                    validator : (value) => value!.isEmpty? "인증코드를 입력해주세요" : null,
                    controller: _VerifyController,
                    decoration: new InputDecoration(
-                       hintText: '인증코드입력'),),
-                   ElevatedButton(
-                       onPressed: (){
+                       hintText: '인증코드입력',
+                       hintStyle: TextStyle(fontSize: 20, color: Color(0xffD9D9D9))
+                   ),),
+                   SizedBox(height: 30),
+                   Container(
+                     height: 30,
+                     child: ElevatedButton(
+                         onPressed: (){
 
-                       },
-                       style:ElevatedButton.styleFrom(
-                           backgroundColor: Colors.grey,// 여기 색 넣으면됩니다
-                           shape: RoundedRectangleBorder(
-                               borderRadius: BorderRadius.circular(40)
-                           )
-                       ),
-                       child: Text('인증코드 재전송')
+                         },
+                         style:ElevatedButton.styleFrom(
+                             backgroundColor: Color(0xffEBEBEB),// 여기 색 넣으면됩니다
+                             shape: RoundedRectangleBorder(
+                                 borderRadius: BorderRadius.circular(40)
+                             )
+                         ),
+                         child: Text('인증코드 재전송', style: TextStyle(fontSize: 14, color: Color(0xff4D4D4D)),)
+                     ),
                    )
                  ],
                )
@@ -58,7 +66,7 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                    ),
             Expanded(child: SizedBox()),
             Button(
-                child: Text('본인 인증하기'),
+                child: Text('본인 인증완료'),
                 onPressed: (){
                   if(_formKey.currentState!.validate()){
                     Navigator.pushNamed(context,'/finish');

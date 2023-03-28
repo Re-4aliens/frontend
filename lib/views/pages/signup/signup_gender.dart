@@ -29,14 +29,14 @@ class _SignUpGenderState extends State<SignUpGender>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('성별을 알려주세요',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
             SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('성별', style: TextStyle(fontSize: 20,),),
+                Text('성별', style: TextStyle(fontSize: 16),),
                 DropdownButton(
-                    hint: Text('성별') ,
+                    hint: Text('성별',style: TextStyle(fontSize: 20),) ,
                     items: _GenderList.map((value){
                       return DropdownMenuItem(
                           child: Text(value,

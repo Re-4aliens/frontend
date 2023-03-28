@@ -17,7 +17,6 @@ class _SignUpPasswordState extends State<SignUpPassword>{
   final TextEditingController _PasswordController = TextEditingController();
 
   Widget build(BuildContext context){
-    //Members members = new Members('','','','','','','','');
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -28,7 +27,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('비밀번호를 설정하시면\n가입이 완료됩니다',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
             SizedBox(height: 40),
              Form(
                key: _formKey,
@@ -36,11 +35,12 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                      validator : (value) => value!.isEmpty? "비밀번호를 입력해주세요" : null,
                      controller: _PasswordController,
                      decoration: new InputDecoration(
-                         hintText: '비밀번호 입력'
+                         hintText: '비밀번호 입력',
+                         hintStyle: TextStyle(fontSize: 20, color: Color(0xffD9D9D9))
                      ),
                    ),
                ),
-            Text('영문,특수기호, 숫자를 포함 10자 이상', style: TextStyle(fontSize: 12),),
+            Text('영문,특수기호, 숫자를 포함 10자 이상', style: TextStyle(fontSize: 14, color: Color(0xffB8B8B8)),),
             Expanded(child: SizedBox()),
             Button(
                 child: Text('가입하기'),

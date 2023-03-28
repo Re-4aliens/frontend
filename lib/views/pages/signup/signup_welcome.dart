@@ -31,20 +31,20 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                    width: 150,
-                    height: 150,
+                    width: 156,
+                    height: 156,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, color: Colors.grey)),
                 SizedBox(height: 30),
                 Text(
                   '환영합니다!\n가입이 완료되었습니다',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   '이제 매칭을 할 수 있어요\n아래 버튼을 통해 매칭 신청을 해보세요!',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 16),
                 ),
                 Expanded(child: SizedBox()),
                 Button(
@@ -67,10 +67,10 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                     },
                     child: Text(
                       '홈으로 가기',
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: Color(0xffA7A7A7)),
                     ),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white70,
+                        backgroundColor: Color(0xffEBEBEB),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40))),
                   ),

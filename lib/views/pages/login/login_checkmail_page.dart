@@ -31,17 +31,18 @@ class _LoginCheckMailState extends State<LoginCheckMail> {
                 Icon(
                   Icons.check_circle,
                   size: 80,
+                  color: Color(0xffFFB5B5),
                 ),
                 SizedBox(height: 50),
                 Text(
                   '메일을 확인해주세요.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   '작성하신 메일로 임시비밀번호를\n발급해드렸어요!\n\n다시 로그인 해주세요.',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 13),
+                  style: TextStyle(fontSize: 16),
                 ),
                 Expanded(child: SizedBox()),
                 Button(
@@ -58,17 +59,17 @@ class _LoginCheckMailState extends State<LoginCheckMail> {
                 SizedBox(height: 10),
                 Container(
                   width: double.maxFinite,
-                  height: 50,
+                  height: 48,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     child: Text(
                       '이메일 재입력하기',
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: Color(0xffA7A7A7), fontSize: 16),
                     ),
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white70,
+                        backgroundColor: Color(0xffEBEBEB),
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40))),
                   ),

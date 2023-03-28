@@ -25,7 +25,7 @@ class _SignUpMbtiState extends State<SignUpMbti>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('ooo님의 MBTI가 궁금해요!',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
             SizedBox(height: 40),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
