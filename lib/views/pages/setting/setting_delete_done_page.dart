@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/button.dart';
 
 class SettingDeleteDonePage extends StatefulWidget {
   const SettingDeleteDonePage({super.key});
@@ -65,16 +66,20 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
               child: Container(
                 alignment: Alignment.bottomCenter,
                 padding: EdgeInsets.only(bottom: 100),
-                child: InkWell(
-                  onTap: () {
-                    //탈퇴 시키고
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Button(
+                      child: Text('확인'),
+                      onPressed: (){
+                        //탈퇴시키고
 
-                    //홈으로 보내기
-                  },
-                  child: Container(
-                    child: Text('버튼'),
-                  ),
+
+                        Navigator.of(context)
+                            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+                        );
+                      }),
                 ),
+
               ),
             )
           ],

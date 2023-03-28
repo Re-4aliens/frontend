@@ -3,10 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/button.dart';
 
 class SettingEditPWDonePage extends StatefulWidget {
   const SettingEditPWDonePage({super.key});
@@ -62,19 +59,20 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                 )),
             Expanded(
               child: Container(
-                alignment: Alignment.bottomCenter,
-                padding: EdgeInsets.only(bottom: 100),
-                child: InkWell(
-                  onTap: () {
-                    //로그아웃 시키고
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.only(bottom: 100),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Button(
+                        child: Text('확인'),
+                        onPressed: () {
+                          //로그아웃시키고
 
-                    //홈으로 보내기
-                  },
-                  child: Container(
-                    child: Text('버튼'),
-                  ),
-                ),
-              ),
+                          //홈으로
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/', (Route<dynamic> route) => false);
+                        }),
+                  )),
             )
           ],
         ));

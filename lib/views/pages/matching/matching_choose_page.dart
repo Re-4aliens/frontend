@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/button.dart';
 
 class MatchingChoosePage extends StatefulWidget {
   const MatchingChoosePage({super.key});
@@ -95,13 +96,13 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                 SizedBox(
                   height: 100,
                 ),
-                InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(context, '/apply/done', arguments: memberDetails);
-                  },
-                  child: Container(
-                    child: Text('버튼'),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Button(
+                      child: Text('확인'),
+                      onPressed: (){
+                        Navigator.pushNamed(context, '/apply/done', arguments: memberDetails);
+                      }),
                 )
               ],
             ),
