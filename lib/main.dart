@@ -15,11 +15,33 @@ import 'package:aliens/views/pages/signup/signup_welcome.dart';
 import 'package:aliens/views/pages/start_page.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/views/components/appbar.dart';
-import 'package:aliens/views/pages/login_page.dart';
-
-import 'package:aliens/views/components/button.dart';
 import 'package:aliens/views/pages/signup/signup_name.dart';
+
+
+import 'package:provider/provider.dart';
+import './views/pages/matching/matching_apply_page.dart';
+import './views/pages/matching/matching_state_page.dart';
+import './views/pages/matching/matching_choose_page.dart';
+import './views/pages/matching/matching_apply_done_page.dart';
+import './views/pages/matching/matching_done_page.dart';
+import './views/pages/matching/matching_info_page.dart';
+import './views/pages/matching/matching_edit_page.dart';
+
+import './views/pages/home_page.dart';
+
+import './views/pages/setting/setting_edit_page.dart';
+import './views/pages/setting/setting_notification_page.dart';
+import './views/pages/setting/setting_terms_page.dart';
+import './views/pages/setting/setting_security_page.dart';
+import './views/pages/setting/setting_delete_page.dart';
+import './views/pages/setting/setting_delete_done_page.dart';
+import './views/pages/setting/setting_edit_PW_done_page.dart';
+import './views/pages/setting/setting_edit_PW_page.dart';
+import './views/pages/setting/setting_find_PW_page.dart';
+
+
+
+import './providers/member_provider.dart';
 
 
 void main() {
@@ -35,11 +57,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
 
-      initialRoute: '/start',
+      initialRoute: '/',
       routes: {
 
-        '/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: MainPage()),
-        '/home' : (context)=> HomePage(),
+
+        '/' : (context)=> StartPage(),
+
+        '/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
 
         // matching
         '/apply' : (context) => MatchingApplyPage(),
@@ -62,9 +86,6 @@ class MyApp extends StatelessWidget {
         '/setting/edit/PW/done' : (context) => SettingEditPWDonePage(),
         '/setting/edit/find' : (context) => SettingFindPWPage(),
 
-       '/' : (context)=> MyHomePage(),
-        '/start' : (context)=> StartPage(),
-
         //SignUp
         '/name' : (context) => SignUpName(),
         '/birthday': (context) => SignUpBirthday(),
@@ -81,9 +102,8 @@ class MyApp extends StatelessWidget {
 
         //login
         '/login': (context) => Login(),
-        '/findpassword' : (context) => LoginFindPassword(),
-        '/checkemail' : (context)=> LoginCheckMail(),
-
+        '/login/findpassword' : (context) => LoginFindPassword(),
+        '/login/checkemail' : (context)=> LoginCheckMail(),
 
 
       },
