@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/appbar.dart';
 import '../../components/button.dart';
 
 class MatchingChoosePage extends StatefulWidget {
@@ -22,32 +23,14 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
     var memberDetails = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
         backgroundColor: Color(0xFFF4F4F4),
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Color(0xFFF4F4F4),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back_ios_new),
-            color: Colors.black,
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              //아이콘 수정 필요
-              icon: Icon(CupertinoIcons.question_circle),
-              color: Colors.black,
-            )
-          ],
-        ),
+        appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
         body: Column(
           children: [
             Expanded(flex: 1,child: Container()),
             Column(
               children: [
                 Text(
-                  '매칭 선호 언어 선택',
+                  '선호 언어 선택',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -57,9 +40,9 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                   height: 10,
                 ),
                 Text(
-                  '상대방과 원하는 언어로 대화할 수 있어요.\n선호도에 따라 두가지 언어로 선택 가능합니다.',
+                  '상대방과 원하는 언어로 대화할 수 있어요.\n선호도에 따라 4가지 언어 중 선택 가능합니다.',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -113,15 +96,15 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
 
   Widget languageButton() {
     return MaterialButton(
-        height: 117,
-        minWidth: 165,
+        height: 116,
+        minWidth: 158,
         elevation: 3.0,
         highlightElevation: 1.0,
         onPressed: () {
           changeWidget();
           },
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(20),
         ),
         color: Colors.white,
         textColor: Colors.black,
@@ -130,15 +113,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
             Column(
               children: [
                 SizedBox(
-                  height: 20,
-                ),
-                Container(
-                  height: 30,
-                  width: 45,
-                  margin: EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9),
-                  ),
+                  height: 50,
                 ),
                 Text(
                   '한국어',

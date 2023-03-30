@@ -51,7 +51,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                   child: Text('매칭 신청하러 가기'),
                   onPressed: () {
                     Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
+                        .pushNamedAndRemoveUntil('/apply', (Route<dynamic> route) => false
                     );
                   },
                 ),
