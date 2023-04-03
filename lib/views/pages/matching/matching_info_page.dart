@@ -3,10 +3,21 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
+import '../../../models/member_model.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+class MemberDetails {
+  Member member = new Member(
+    email: 'email@naver.com',
+    password: 'example_password',
+    mbti: 'ENFJ',
+    gender: 'MALE',
+    nationality: 'Korea',
+    birthday: '2000-01-01',
+    name: 'RYAN',
+    profileImage: 'url',
+    age: 26,
+  );
+}
 
 class MatchingInfoPage extends StatefulWidget {
   const MatchingInfoPage({super.key, required this.title});
@@ -18,10 +29,10 @@ class MatchingInfoPage extends StatefulWidget {
 }
 
 class _MatchingInfoPageState extends State<MatchingInfoPage> {
-
   @override
   Widget build(BuildContext context) {
-    var memberDetails = ModalRoute.of(context)!.settings.arguments;
+    //var memberDetails = ModalRoute.of(context)!.settings.arguments;
+    MemberDetails memberDetails = new MemberDetails();
     return Scaffold(
       backgroundColor: Color(0xFFF4F4F4),
       appBar: AppBar(
@@ -54,7 +65,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
     );
   }
 
-  Widget _buildBody(memberDetails){
+  Widget _buildBody(memberDetails) {
     return Center(
       child: Column(
         children: [
@@ -143,7 +154,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                   height: 20,
                                   width: 30,
                                   decoration:
-                                  BoxDecoration(color: Color(0xffD9D9D9)),
+                                      BoxDecoration(color: Color(0xffD9D9D9)),
                                   margin: EdgeInsets.only(right: 5),
                                 ),
                                 Text(
@@ -187,8 +198,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                //color: Colors.blue.shade300,
-              ),
+                  //color: Colors.blue.shade300,
+                  ),
               child: Column(
                 children: [
                   Container(
@@ -197,8 +208,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                     alignment: Alignment.centerLeft,
                     margin: EdgeInsets.symmetric(vertical: 20),
                     decoration: BoxDecoration(
-                      //color: Colors.blue,
-                    ),
+                        //color: Colors.blue,
+                        ),
                     child: Text(
                       '매칭 선호 언어',
                       style: TextStyle(
@@ -214,7 +225,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                       Container(
                         height: 117,
                         width: 165,
-                        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 25),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 18, horizontal: 25),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
                             color: Colors.white,
@@ -228,7 +240,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            if(true)
+                            if (true)
                               Container(
                                 height: 30,
                                 width: 45,
@@ -269,7 +281,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                       Container(
                         height: 117,
                         width: 165,
-                        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 25),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 18, horizontal: 25),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
                             color: Colors.white,
@@ -322,8 +335,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                     Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        //color: Colors.blue,
-                      ),
+                          //color: Colors.blue,
+                          ),
                       child: InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, '/edit');

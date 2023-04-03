@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../components/matching_widget.dart' as matching;
 import '../components/setting_widget.dart';
+import '../components/chatting_widget.dart';
 import '../components/home_widget.dart';
 
 
@@ -24,8 +25,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var memberDetails = Provider.of<MemberProvider>(context, listen: false);
-
-
 
     List _pageTitle = [
       '',
@@ -130,7 +129,7 @@ class _HomePageState extends State<HomePage> {
         ]),
       ),
       matching.matchingWidget(context, memberDetails),
-      Text('채팅'),
+      chattingWidget(context),
       settingWidget(context, memberDetails)
     ];
 

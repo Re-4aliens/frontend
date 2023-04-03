@@ -39,6 +39,7 @@ import './views/pages/setting/setting_edit_PW_done_page.dart';
 import './views/pages/setting/setting_edit_PW_page.dart';
 import './views/pages/setting/setting_find_PW_page.dart';
 
+import './views/pages/chatting/chatting_page.dart';
 
 
 import './providers/member_provider.dart';
@@ -105,6 +106,9 @@ class MyApp extends StatelessWidget {
         '/login/findpassword' : (context) => LoginFindPassword(),
         '/login/checkemail' : (context)=> LoginCheckMail(),
 
+        //chatting
+        '/chatting': (context) => ChattingPage(),
+        //'/chatting' : (context)=> ChangeNotifierProvider(create: (context) => RedisProvider(), child: ChattingPage()),
 
       },
     );
