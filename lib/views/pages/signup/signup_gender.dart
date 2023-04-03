@@ -19,7 +19,7 @@ class _SignUpGenderState extends State<SignUpGender>{
   var _selectedGender = '남성';
 
   Widget build(BuildContext context){
-    //var members = ModalRoute.of(context)!.settings.arguments;
+    dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
@@ -61,7 +61,9 @@ class _SignUpGenderState extends State<SignUpGender>{
             Button(
                 child: Text('확인'),
                 onPressed: (){
-                  Navigator.pushNamed(context,'/nationality', /*arguments: members*/);
+                  member.gender = _GenderController.text;
+                  print(member.toJson());
+                  Navigator.pushNamed(context,'/nationality', arguments: member);
                 })
 
           ],

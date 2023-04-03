@@ -4,11 +4,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:aliens/providers/member_provider.dart';
 import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/member_model.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:provider/provider.dart';
 
 Widget settingWidget(BuildContext context, memberDetails) {
+  final AuthProvider authProvider = new AuthProvider();
+  final storage = FlutterSecureStorage();
+
   return Column(
     children: [
       Expanded(
@@ -69,7 +72,10 @@ Widget settingWidget(BuildContext context, memberDetails) {
           child: Container(
             alignment: Alignment.center,
             child: InkWell(
-              onTap: () {},
+              onTap: () async {
+                //http 로그아웃 요청
+                authProvider.logout(context);
+              },
               child: Container(
                 decoration: BoxDecoration(
                   border: Border(
