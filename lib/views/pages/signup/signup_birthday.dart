@@ -20,7 +20,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
   DateTime _selectedDate = DateTime.now();
 
   Widget build(BuildContext context){
-    //var members = ModalRoute.of(context)!.settings.arguments;
+    dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
@@ -55,7 +55,9 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
                 child: Text('확인'),
                 onPressed: (){
                   if(_formKey.currentState!.validate()){
-                    Navigator.pushNamed(context,'/gender', /*arguments: members*/);
+                    member.birthday = _BirthdayController.text;
+                    print(member.toJson());
+                    Navigator.pushNamed(context,'/gender', arguments: member);
                   }
                 })
           ],

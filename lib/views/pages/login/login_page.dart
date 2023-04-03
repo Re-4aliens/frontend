@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 
-import '../../../models/members.dart';
+
 import '../../components/button.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../providers/auth_provider.dart';
+import 'package:aliens/models/auth_model.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -13,9 +18,16 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _EmailController = TextEditingController();
-  final TextEditingController _PasswordController = TextEditingController();
+  final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _pwFormKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthProvider authProvider = new AuthProvider();
+  static final storage = FlutterSecureStorage();
+
+
+  //storage에 작성할 모델
+  final Auth auth = new Auth();
 
   Widget build(BuildContext context) {
     //Members members = new Members('','','','','','','','');
@@ -58,6 +70,7 @@ class _LoginState extends State<Login> {
               child: Column(
                   children: [
                     Form(
+                      key: _emailFormKey,
                       child: Material(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -65,7 +78,7 @@ class _LoginState extends State<Login> {
                         elevation: 3.0,
                         child: TextFormField(
                           validator : (value) => value!.isEmpty? "Please enter some text" : null,
-                          controller: _EmailController,
+                          controller: _emailController,
                           decoration: new InputDecoration(
                             contentPadding: EdgeInsets.all(25),
                               hintText: '이메일주소',
@@ -81,6 +94,7 @@ class _LoginState extends State<Login> {
                     ),
                     SizedBox(height: 20),
                     Form(
+                      key: _pwFormKey,
                       child: Material(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -88,7 +102,7 @@ class _LoginState extends State<Login> {
                         elevation: 3.0,
                         child: TextFormField(
                           validator : (value) => value!.isEmpty? "Please enter some text" : null,
-                          controller: _PasswordController,
+                          controller: _passwordController,
                           decoration: new InputDecoration(
                               contentPadding: EdgeInsets.all(25),
                               hintText: '비밀번호',
@@ -107,17 +121,21 @@ class _LoginState extends State<Login> {
             ),
             Button(
                 child: Text('로그인'),
-                onPressed: () {
-                  /*
-                  해당 코드 오류가 생깁니다!!..
-                  if (_formKey.currentState!.validate()) {
-                  }
-                  */
+                onPressed: () async {
 
-                  //스택 비우고
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
-                  );
+                  if (_emailFormKey.currentState!.validate() && _pwFormKey.currentState!.validate()) {
+                    auth.email = _emailController.text;
+                    auth.password = _passwordController.text;
+
+                    //로그인 정보 저장
+                    await storage.write(
+                      key: 'auth',
+                      value: jsonEncode(auth),
+                    );
+
+                    //http 요청
+                    authProvider.login(auth, context);
+                  }
 
 
                 }),

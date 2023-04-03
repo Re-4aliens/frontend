@@ -5,12 +5,14 @@ class mbtiButton extends StatelessWidget{
   final text;
   final explain;
   final mbti;
+  final isSelected;
 
   const mbtiButton({
     Key? key,
     required this.text,
     required this.explain,
     required this.mbti,
+    required this.isSelected,
   }) : super(key:key);
 
   @override
