@@ -49,7 +49,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                       print('Select country: ${country.displayName}');
                       setState(() {
                         var countryName = country.displayName.toString();
-                        countryName = countryName.substring(0, countryName.indexOf(' '));
+                        countryName = countryName.substring(0, countryName.indexOf('('));
                         _selectedNationality = countryName;
                       });
                     });

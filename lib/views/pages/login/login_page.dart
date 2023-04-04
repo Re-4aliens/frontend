@@ -135,6 +135,11 @@ class _LoginState extends State<Login> {
 
                     //http 요청
                     authProvider.login(auth, context);
+                    //스택 비우고 화면 이동
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
+                    );
+
                   }
 
 

@@ -13,8 +13,6 @@ class SignUpGender extends StatefulWidget{
 }
 
 class _SignUpGenderState extends State<SignUpGender>{
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _GenderController = new TextEditingController();
   final _GenderList = ['남성', '여성'];
   var _selectedGender = '남성';
 
@@ -45,7 +43,6 @@ class _SignUpGenderState extends State<SignUpGender>{
                     }).toList(),
                     value: _selectedGender,
                     onChanged: (value){
-                    _GenderController.text = value!;
                       print(value);
                       setState(() {
                         _selectedGender = value!;
@@ -61,7 +58,7 @@ class _SignUpGenderState extends State<SignUpGender>{
             Button(
                 child: Text('확인'),
                 onPressed: (){
-                  member.gender = _GenderController.text;
+                  member.gender = _selectedGender;
                   print(member.toJson());
                   Navigator.pushNamed(context,'/nationality', arguments: member);
                 })

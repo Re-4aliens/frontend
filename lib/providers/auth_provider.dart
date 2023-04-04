@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/widgets.dart';
 import 'package:aliens/models/auth_model.dart';
+import 'package:aliens/models/member_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -28,11 +29,6 @@ class AuthProvider with ChangeNotifier {
         value: response.body,
       );
       print('로그인 성공');
-
-      //스택 비우고 화면 이동
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
-      );
 
       //fail
     } else {
@@ -70,4 +66,34 @@ class AuthProvider with ChangeNotifier {
 
     }
   }
+
+  Future<void> signUp(Member member, BuildContext context) async {
+    print('회원가입 시도');
+
+    const url =
+        '';
+
+    var response = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "email" : member.email,
+          "password" : member.password,
+          "mbti": member.mbti,
+          "gender": member.gender,
+          "nationality": member.nationality,
+          "birthday": member.birthday,
+          "name": member.name,
+          "profileImage": member.profileImage,
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(response.body));
+
+      //fail
+    } else {
+
+    }
+  }
+
+
 }

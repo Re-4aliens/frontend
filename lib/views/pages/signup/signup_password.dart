@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-
-import '../../../models/members.dart';
 import '../../components/button.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../providers/auth_provider.dart';
+import 'package:aliens/models/auth_model.dart';
 
 class SignUpPassword extends StatefulWidget{
   const SignUpPassword({super.key});
@@ -16,8 +19,13 @@ class _SignUpPasswordState extends State<SignUpPassword>{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _PasswordController = TextEditingController();
 
+  //storage에 작성할 모델
+  final Auth auth = new Auth();
+  final AuthProvider authProvider = new AuthProvider();
+  static final storage = FlutterSecureStorage();
+
   Widget build(BuildContext context){
-    //Members members = new Members('','','','','','','','');
+    dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -44,9 +52,29 @@ class _SignUpPasswordState extends State<SignUpPassword>{
             Expanded(child: SizedBox()),
             Button(
                 child: Text('가입하기'),
-                onPressed: (){
+                onPressed: () async {
                   if(_formKey.currentState!.validate()){
-                    Navigator.pushNamed(context,'/welcome', /*arguments: members*/);
+                    member.password = _PasswordController.text;
+                    print(member.toJson());
+
+                    //------ 회원가입 api 요청
+                    authProvider.signUp(member, context);
+
+                    //------ 로그인 api 요청
+                    auth.email = member.email;
+                    auth.password = member.password;
+
+                    //로그인 정보 저장
+                    await storage.write(
+                      key: 'auth',
+                      value: jsonEncode(auth),
+                    );
+
+                    //http 요청
+                    authProvider.login(auth, context);
+
+
+                    Navigator.pushNamed(context,'/welcome', arguments: member);
                   }
                 })
 
