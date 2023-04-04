@@ -17,7 +17,7 @@ class _SignUpVerifyState extends State<SignUpVerify>{
   final TextEditingController _VerifyController = TextEditingController();
 
   Widget build(BuildContext context){
-    //Members members = new Members('','','','','','','','');
+    dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
@@ -61,7 +61,7 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                 child: Text('본인 인증하기'),
                 onPressed: (){
                   if(_formKey.currentState!.validate()){
-                    Navigator.pushNamed(context,'/finish');
+                    Navigator.pushNamed(context,'/finish', arguments: member);
                   }
                 })
 

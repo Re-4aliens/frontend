@@ -8,23 +8,29 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MemberProvider with ChangeNotifier {
   Member member = new Member();
-
+  static final storage = FlutterSecureStorage();
 
   Future<Member?> memberInfo() async {
-    try{
-      const url = 'https://ac14b376-0180-4ad0-aa45-948bbb7d12df.mock.pstmn.io';//mocksever
+    try {
+      const url =
+          'https://ac14b376-0180-4ad0-aa45-948bbb7d12df.mock.pstmn.io'; //mocksever
       var response = await http.get(Uri.parse(url));
+      var jwtToken = await storage.read(key: 'token');
+      //print('토큰: '+jwtToken.toString());
+      Map<String, String> headers = {"Authorization": "Bearer $jwtToken"};
 
       //success
       if (response.statusCode == 200) {
-
         //코드 200 확인 후 재요청
-        var _response = await http.get(Uri.parse(url+'/member'));
+        //Auth 실어서 보내기
+        var _response =
+            await http.get(Uri.parse(url + '/member'),
+                // headers: headers
+            );
 
-        if (_response.statusCode == 200){
+        if (_response.statusCode == 200) {
           member = Member.fromJson(json.decode(_response.body));
-        }
-        else {
+        } else {
           //오류 생기면 바디 확인
           print(_response.body);
         }
@@ -34,12 +40,11 @@ class MemberProvider with ChangeNotifier {
         //오류 생기면 바디 확인
         print(response.body);
       }
-    }catch(error){
+    } catch (error) {
       return null;
     }
     //변경되었다고 알리기
     notifyListeners();
     return member;
   }
-
 }

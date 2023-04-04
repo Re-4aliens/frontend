@@ -40,11 +40,12 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   async: ^2.10.0
-<<<<<<< HEAD
-  redis: ^3.1.0
+
+# <<<<<<< HEAD
+  # redis: ^3.1.0
   country_picker: ^2.0.20
-=======
->>>>>>> parent of dfdf35b (feat: 채팅 페이지 추가)
+# =======
+# >>>>>>> parent of dfdf35b (feat: 채팅 페이지 추가)
 
 
 dev_dependencies:
