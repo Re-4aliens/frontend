@@ -1,6 +1,7 @@
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../models/members.dart';
 import '../../components/button.dart';
@@ -35,22 +36,31 @@ class _SignUpNationalityState extends State<SignUpNationality>{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('국적', style: TextStyle(fontSize: 16,),),
-                DropdownButton(
-                    hint: Text('국적') ,
-                    items: _NationalityList.map((value){
-                      return DropdownMenuItem(
-                          child: Text(value,
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                          value: value);
-                    }).toList(),
-                    value: _selectedNationality,
-                    onChanged: (value){
-                      _NationalityController.text = value!;
-                      print(value);
-                      setState(() {
-                        _selectedNationality = value!;
-                      });
-                    }),
+                ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButton(
+                      underline: SizedBox.shrink(),
+                      icon: SvgPicture.asset(
+                        'assets/icon/icon_dropdown.svg',
+                        width: 14.3,
+                        height: 8.98,
+                      ),
+                      hint: Text('국적') ,
+                      items: _NationalityList.map((value){
+                        return DropdownMenuItem(
+                            child: Text(value,
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                            value: value);
+                      }).toList(),
+                      value: _selectedNationality,
+                      onChanged: (value){
+                        _NationalityController.text = value!;
+                        print(value);
+                        setState(() {
+                          _selectedNationality = value!;
+                        });
+                      }),
+                ),
               ],
             ),
             Divider(
@@ -70,3 +80,4 @@ class _SignUpNationalityState extends State<SignUpNationality>{
     );
   }
 }
+

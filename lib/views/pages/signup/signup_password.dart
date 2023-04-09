@@ -15,6 +15,7 @@ class SignUpPassword extends StatefulWidget{
 class _SignUpPasswordState extends State<SignUpPassword>{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _PasswordController = TextEditingController();
+  FocusNode _passwordFocus = new FocusNode();
 
   Widget build(BuildContext context){
 
@@ -32,7 +33,9 @@ class _SignUpPasswordState extends State<SignUpPassword>{
              Form(
                key: _formKey,
                child: TextFormField(
-                     validator : (value) => value!.isEmpty? "비밀번호를 입력해주세요" : null,
+                 keyboardType: TextInputType.visiblePassword,
+                 focusNode: _passwordFocus,
+                     validator : (value) => CheckValidate().validatePassword(_passwordFocus, value!),
                      controller: _PasswordController,
                      decoration: new InputDecoration(
                          hintText: '비밀번호 입력',
@@ -54,5 +57,23 @@ class _SignUpPasswordState extends State<SignUpPassword>{
         ),
       ),
     );
+  }
+}
+
+class CheckValidate {
+  String? validatePassword(FocusNode focusNode, String value) {
+    if (value.isEmpty) {
+      focusNode.requestFocus();
+      return '비밀번호를 입력하세요.';
+    } else {
+      String pattern = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{10,100}$';
+      RegExp regExp = new RegExp(pattern);
+      if (!regExp.hasMatch(value)) {
+        focusNode.requestFocus();
+        return '영문, 특수문자, 숫자를 포함 10자 이상';
+      } else {
+        return null;
+      }
+    }
   }
 }

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../components/button.dart';
 
 class MatchingApplyDonePage extends StatefulWidget {
@@ -29,17 +29,11 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios_new),
+            icon: SvgPicture.asset(
+              'assets/icon/icon_back.svg'
+            ),
             color: Colors.black,
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              //아이콘 수정 필요
-              icon: Icon(CupertinoIcons.question_circle),
-              color: Colors.black,
-            )
-          ],
         ),
         body: Column(
           children: [
@@ -70,6 +64,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                   '아래 버튼을 클릭하면\n매칭 진행 상황을 알 수 있어요.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    color: Color(0xff616161),
                     fontSize: 16,
                   ),
                 ),
