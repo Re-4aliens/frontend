@@ -4,6 +4,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -46,10 +47,18 @@ class _SignUpProfileState extends State<SignUpProfile>{
                 children: [
                   Container(
                     child:_profileImage == null?
-                    Icon(Icons.account_circle, size : 200, color: Color(0xffE3E3E3),):
                         Container(
-                          width: 200,
-                          height: 200,
+                          child: SvgPicture.asset(
+                              'assets/icon/icon_profile.svg',
+                            width: 130,
+                            height: 135,
+                            color: Color(0xffE3E3E3),
+                          ),
+                        )
+                    /*Icon(Icons.account_circle, size : 200, color: Color(0xffE3E3E3),)*/:
+                        Container(
+                          width: 130,
+                          height: 130,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             image: DecorationImage(
@@ -61,8 +70,8 @@ class _SignUpProfileState extends State<SignUpProfile>{
 
                   ),
                   Positioned(
-                    bottom: 20,
-                    right: 20,
+                    bottom: 0,
+                    right: 0,
                       child:
                       IconButton(
                         color: Color(0xff808080),
@@ -88,11 +97,17 @@ class _SignUpProfileState extends State<SignUpProfile>{
                               }
                             );
                           } ,
-                          icon: Icon(Icons.photo_camera, size: 50)),
+                          icon: SvgPicture.asset(
+                            'assets/icon/icon_album.svg',
+                            width: 24.57,
+                            height: 22.72,
+                          )
+                      ),
                   )
                 ],
               ),
             ),
+            SizedBox(height: 10,),
             Center(
               child:Text('프로필 사진을 선택하여\n본인을 나타내주세요\n상대방과 더 가까워질 수 있어요!',
                 style: TextStyle(fontSize: 14 ),

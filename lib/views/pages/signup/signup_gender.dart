@@ -1,6 +1,7 @@
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../models/members.dart';
 import '../../components/button.dart';
@@ -35,22 +36,31 @@ class _SignUpGenderState extends State<SignUpGender>{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('성별', style: TextStyle(fontSize: 16),),
-                DropdownButton(
-                    hint: Text('성별',style: TextStyle(fontSize: 20),) ,
-                    items: _GenderList.map((value){
-                      return DropdownMenuItem(
-                          child: Text(value,
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                          value: value);
-                    }).toList(),
-                    value: _selectedGender,
-                    onChanged: (value){
-                    _GenderController.text = value!;
-                      print(value);
-                      setState(() {
-                        _selectedGender = value!;
-                      });
-                    }),
+                ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButton(
+                    underline: SizedBox.shrink(),
+                    icon: SvgPicture.asset(
+                      'assets/icon/icon_dropdown.svg',
+                      width: 14.3,
+                      height: 8.98,
+                    ),
+                      hint: Text('성별',style: TextStyle(fontSize: 20),) ,
+                      items: _GenderList.map((value){
+                        return DropdownMenuItem(
+                            child: Text(value,
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                            value: value);
+                      }).toList(),
+                      value: _selectedGender,
+                      onChanged: (value){
+                      _GenderController.text = value!;
+                        print(value);
+                        setState(() {
+                          _selectedGender = value!;
+                        });
+                      }),
+                ),
               ],
             ),
             Divider(

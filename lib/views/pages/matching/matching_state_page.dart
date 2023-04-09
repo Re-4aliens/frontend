@@ -32,14 +32,6 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
             icon: Icon(Icons.arrow_back_ios_new),
             color: Colors.black,
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              //아이콘 수정 필요
-              icon: Icon(CupertinoIcons.question_circle),
-              color: Colors.black,
-            )
-          ],
         ),
         body: Column(
           children: [
@@ -78,6 +70,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                 Text(
                   '조금만 기다려주세요.\n내 성향과 스타일에 꼭 맞는\n친구를 찾고 있어요!',
                   style: TextStyle(
+                    color: Color(0xff616161),
                     fontSize: 16,
                   ),
                   textAlign: TextAlign.center,
@@ -86,14 +79,14 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                   height: 70,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.only(right: 20,left: 20,bottom: 40),
                   child: Button(
-                      child: Text('나의 매칭 정보 확인하기'),
+                      child: Text('나의 신청 확인하기'),
                       onPressed: (){
                         Navigator.pushNamed(context, '/info/my', arguments: memberDetails);
                       }),
                 ),
-                SizedBox(
+                /*SizedBox(
                   height: 40,
                 ),
                 Text('위 버튼을 누르면 나의 접수 정보를 확인하고\n언어를 수정할 수 있어요.',
@@ -102,7 +95,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                     color: Color(0xFFB1B1B1),
                   ),
                   textAlign: TextAlign.center,
-                ),
+                ),*/
               ],
             ),
             Expanded(flex: 3,child: Container()),

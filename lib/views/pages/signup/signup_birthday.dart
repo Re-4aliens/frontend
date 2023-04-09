@@ -2,6 +2,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../components/button.dart';
 import 'package:intl/intl.dart';
@@ -44,7 +45,13 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
                      TextFormField(
                        decoration: new InputDecoration(
                            hintText: '생년월일 선택',
-                           suffixIcon: Icon(Icons.arrow_drop_down),
+                           suffixIcon: IconButton(
+                             icon: SvgPicture.asset(
+                               'assets/icon/icon_dropdown.svg',
+                               width: 14.3,
+                               height: 8.98,
+                             ), onPressed: () {},
+                           ),
                            hintStyle: TextStyle(fontSize: 20, color: Color(0xffD9D9D9))
                        ),
                        validator : (value) => value!.isEmpty? "Please enter some text" : null,

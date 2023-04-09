@@ -12,7 +12,7 @@ class MemberProvider with ChangeNotifier {
 
   Future<Member?> memberInfo() async {
     try{
-      const url = '';//mocksever
+      const url = 'https://ac14b376-0180-4ad0-aa45-948bbb7d12df.mock.pstmn.io';//mocksever
       var response = await http.get(Uri.parse(url));
 
       //success

@@ -15,11 +15,13 @@ class SignUpEmail extends StatefulWidget{
 class _SignUpEmailState extends State<SignUpEmail>{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _EmailController = TextEditingController();
+  FocusNode _emailFocus = new FocusNode();
 
   Widget build(BuildContext context){
     //Members members = new Members('','','','','','','','');
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
@@ -37,8 +39,10 @@ class _SignUpEmailState extends State<SignUpEmail>{
                  children: [
                    Flexible(
                       child:TextFormField(
-                              validator : (value) => value!.isEmpty? "유효한 이메일 주소가 아닙니다" : null,
-                              controller: _EmailController,
+                        keyboardType: TextInputType.emailAddress,
+                        focusNode: _emailFocus,
+                        validator : (value) => CheckValidate().validateEmail(_emailFocus, value!),
+                        controller: _EmailController,
                               decoration: new InputDecoration(
                                   border: InputBorder.none,
                                   hintText: '이메일 주소를 입력해주세요',
@@ -126,5 +130,24 @@ class _SignUpEmailState extends State<SignUpEmail>{
         ),
       ),
     );
+  }
+}
+
+
+class CheckValidate {
+  String? validateEmail(FocusNode focusNode, String value) {
+    if (value.isEmpty) {
+      focusNode.requestFocus();
+      return '이메일 주소를 입력하세요.';
+    } else {
+      String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regExp = new RegExp(pattern);
+      if (!regExp.hasMatch(value)) {
+        focusNode.requestFocus();
+        return '잘못된 이메일 형식입니다.';
+      } else {
+        return null;
+      }
+    }
   }
 }

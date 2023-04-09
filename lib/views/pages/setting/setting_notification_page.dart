@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SettingNotificationPage extends StatefulWidget {
   const SettingNotificationPage({super.key});
@@ -24,13 +25,14 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
         elevation: 0,
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new),
+          icon: SvgPicture.asset('assets/icon/icon_back.svg', width: 24,height: 24,),
           color: Colors.black,
         ),
         title: Text(
