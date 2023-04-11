@@ -28,7 +28,7 @@ class _LoginState extends State<Login> {
         onPressed: () {},
       ),*/
       body: Padding(
-        padding: EdgeInsets.only(right: 20, left: 20, top: 180, bottom: 70),
+        padding: EdgeInsets.only(right: 20, left: 20, top: MediaQuery.of(context).size.height * 0.2, bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -36,10 +36,10 @@ class _LoginState extends State<Login> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.0005),
                   Container(
                     width: 100,
-                    height: 50,
+                    height: MediaQuery.of(context).size.height * 0.1,
                     decoration: BoxDecoration(color: Colors.grey),
                   ),
                   Text(
@@ -48,9 +48,8 @@ class _LoginState extends State<Login> {
                   ),
                   Text(
                     '프렌즈쉽에 오신것을 환영합니다.',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026),
                   ),
-                  SizedBox(height: 20),
                 ],
               ),
             ),
@@ -70,7 +69,7 @@ class _LoginState extends State<Login> {
                             contentPadding: EdgeInsets.all(25),
                               hintText: '이메일주소',
                               hintStyle: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: MediaQuery.of(context).size.height * 0.026,
                                 color: Color(0xffA0A0A0)
                               ),
                               enabledBorder: InputBorder.none,
@@ -83,7 +82,7 @@ class _LoginState extends State<Login> {
                       ) ,
 
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.001),
                     Form(
                       child: Material(
                         shape: RoundedRectangleBorder(
@@ -97,7 +96,7 @@ class _LoginState extends State<Login> {
                               contentPadding: EdgeInsets.all(25),
                               hintText: '비밀번호',
                               hintStyle: TextStyle(
-                                fontSize: 16,
+                                  fontSize: MediaQuery.of(context).size.height * 0.026,
                                   color: Color(0xffA0A0A0)
                               ),
                               enabledBorder: InputBorder.none,

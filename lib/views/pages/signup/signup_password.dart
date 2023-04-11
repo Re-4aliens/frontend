@@ -23,13 +23,13 @@ class _SignUpPasswordState extends State<SignUpPassword>{
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('비밀번호를 설정하시면\n가입이 완료됩니다',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            SizedBox(height: 40),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
                child: TextFormField(
@@ -39,11 +39,11 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                      controller: _PasswordController,
                      decoration: new InputDecoration(
                          hintText: '비밀번호 입력',
-                         hintStyle: TextStyle(fontSize: 20, color: Color(0xffD9D9D9))
+                         hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
                      ),
                    ),
                ),
-            Text('영문,특수기호, 숫자를 포함 10자 이상', style: TextStyle(fontSize: 14, color: Color(0xffB8B8B8)),),
+            Text('영문,특수기호, 숫자를 포함 10자 이상', style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, color: Color(0xffB8B8B8)),),
             Expanded(child: SizedBox()),
             Button(
                 child: Text('가입하기'),

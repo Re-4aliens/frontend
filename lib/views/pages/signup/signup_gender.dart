@@ -25,13 +25,13 @@ class _SignUpGenderState extends State<SignUpGender>{
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('성별을 알려주세요',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            SizedBox(height: 40),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -42,14 +42,14 @@ class _SignUpGenderState extends State<SignUpGender>{
                     underline: SizedBox.shrink(),
                     icon: SvgPicture.asset(
                       'assets/icon/icon_dropdown.svg',
-                      width: 14.3,
-                      height: 8.98,
+                      width: MediaQuery.of(context).size.width * 0.037,
+                      height: MediaQuery.of(context).size.height * 0.011,
                     ),
-                      hint: Text('성별',style: TextStyle(fontSize: 20),) ,
+                      hint: Text('성별',style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.019, color: Color(0xffD9D9D9)),) ,
                       items: _GenderList.map((value){
                         return DropdownMenuItem(
                             child: Text(value,
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, fontWeight: FontWeight.bold),),
                             value: value);
                       }).toList(),
                       value: _selectedGender,

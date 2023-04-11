@@ -35,13 +35,13 @@ class _SignUpProfileState extends State<SignUpProfile>{
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('나의 프로필 이미지를\n선택해 주세요',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-            SizedBox(height: 40),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Center(
               child: Stack(
                 children: [
@@ -50,15 +50,15 @@ class _SignUpProfileState extends State<SignUpProfile>{
                         Container(
                           child: SvgPicture.asset(
                               'assets/icon/icon_profile.svg',
-                            width: 130,
-                            height: 135,
+                            width: MediaQuery.of(context).size.width * 0.33,
+                            height: MediaQuery.of(context).size.height * 0.16,
                             color: Color(0xffE3E3E3),
                           ),
                         )
                     /*Icon(Icons.account_circle, size : 200, color: Color(0xffE3E3E3),)*/:
                         Container(
-                          width: 130,
-                          height: 130,
+                          width: MediaQuery.of(context).size.width * 0.33,
+                          height: MediaQuery.of(context).size.height * 0.33,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             image: DecorationImage(
@@ -99,8 +99,8 @@ class _SignUpProfileState extends State<SignUpProfile>{
                           } ,
                           icon: SvgPicture.asset(
                             'assets/icon/icon_album.svg',
-                            width: 24.57,
-                            height: 22.72,
+                            width: MediaQuery.of(context).size.width * 0.063,
+                            height: MediaQuery.of(context).size.height * 0.027,
                           )
                       ),
                   )
@@ -110,12 +110,12 @@ class _SignUpProfileState extends State<SignUpProfile>{
             SizedBox(height: 10,),
             Center(
               child:Text('프로필 사진을 선택하여\n본인을 나타내주세요\n상대방과 더 가까워질 수 있어요!',
-                style: TextStyle(fontSize: 14 ),
+                style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023 ),
                 textAlign: TextAlign.center,
               ),
             ),
             Expanded(child: SizedBox()),
-            SizedBox(height: 10),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.025),
             Button(
                 child: Text('완료'),
                 onPressed: (){
@@ -128,8 +128,7 @@ class _SignUpProfileState extends State<SignUpProfile>{
                 },
                 child: Text('다음에 변경할래요!',
                   style: TextStyle(decoration: TextDecoration.underline,
-                  fontSize: 14,
-                  color: Color(0xff626262)),),),
+                      fontSize: MediaQuery.of(context).size.height * 0.023,                  color: Color(0xff626262)),),),
             ),
           ],
         ),

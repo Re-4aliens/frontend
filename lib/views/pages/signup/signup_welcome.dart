@@ -23,28 +23,28 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
           onPressed: () {},
         ),
         body: Padding(
-          padding:
-              const EdgeInsets.only(right: 20, left: 20, bottom: 50, top: 120),
+          padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(height:MediaQuery.of(context).size.height * 0.1),
                 Container(
-                    width: 156,
-                    height: 156,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.186,
                     decoration: BoxDecoration(
                         shape: BoxShape.circle, color: Colors.grey)),
-                SizedBox(height: 30),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.036),
                 Text(
                   '환영합니다!\n가입이 완료되었습니다',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   '이제 매칭을 할 수 있어요\n아래 버튼을 통해 매칭 신청을 해보세요!',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026),
                 ),
                 Expanded(child: SizedBox()),
                 Button(
@@ -58,7 +58,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                 SizedBox(height: 10),
                 Container(
                   width: double.maxFinite,
-                  height: 50,
+                  height: MediaQuery.of(context).size.height * 0.057,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context)

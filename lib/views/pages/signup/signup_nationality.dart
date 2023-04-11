@@ -25,31 +25,31 @@ class _SignUpNationalityState extends State<SignUpNationality>{
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('국적을 알려주세요',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            SizedBox(height: 40),
+            Text('국적을 선택해주세요',
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('국적', style: TextStyle(fontSize: 16,),),
+                Text('국적', style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026,),),
                 ButtonTheme(
                   alignedDropdown: true,
                   child: DropdownButton(
                       underline: SizedBox.shrink(),
                       icon: SvgPicture.asset(
                         'assets/icon/icon_dropdown.svg',
-                        width: 14.3,
-                        height: 8.98,
+                        width: MediaQuery.of(context).size.width * 0.037,
+                        height: MediaQuery.of(context).size.height * 0.011,
                       ),
                       hint: Text('국적') ,
                       items: _NationalityList.map((value){
                         return DropdownMenuItem(
                             child: Text(value,
-                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, fontWeight: FontWeight.bold),),
                             value: value);
                       }).toList(),
                       value: _selectedNationality,

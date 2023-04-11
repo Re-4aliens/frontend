@@ -36,7 +36,7 @@ class _StartPageState extends State<StartPage>{
                       style : TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     Text('내 손안의 외국인 프렌즈',
-                        style: TextStyle(fontSize: 14),),
+                        style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.022),),
                       ],),),),
               Expanded(
                 flex:4,
@@ -54,13 +54,13 @@ class _StartPageState extends State<StartPage>{
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('이미 계정이 있나요?', style: TextStyle(fontSize: 12),),
+                              Text('이미 계정이 있나요?', style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.019),),
                               TextButton(onPressed: (){
                                 Navigator.pushNamed(context, '/login');
                               },
                                   child: Text('로그인',
                                       style: TextStyle(color: Color(0xff000000),
-                                      fontSize: 12,
+                                      fontSize: MediaQuery.of(context).size.height * 0.019,
                                       fontWeight: FontWeight.bold,
                                       )))
                             ],

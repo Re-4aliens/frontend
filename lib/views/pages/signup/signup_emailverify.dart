@@ -23,16 +23,16 @@ class _SignUpVerifyState extends State<SignUpVerify>{
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('메일로 보내드린\n인증코드를 입력해주세요',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            SizedBox(height: 10),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.013),
             Text('수신하지 못했다면 스팸함 또는 해당 이메일 서비스의\n설정을 확인해주세요.',
-            style: TextStyle(fontSize: 14, color: Color(0xff888888)),),
-            SizedBox(height: 40),
+            style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, color: Color(0xff888888)),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
                child: Column(
@@ -42,11 +42,11 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                    controller: _VerifyController,
                    decoration: new InputDecoration(
                        hintText: '인증코드입력',
-                       hintStyle: TextStyle(fontSize: 20, color: Color(0xffD9D9D9))
+                       hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026, color: Color(0xffD9D9D9))
                    ),),
-                   SizedBox(height: 30),
+                   SizedBox(height: MediaQuery.of(context).size.height * 0.036),
                    Container(
-                     height: 30,
+                     height: MediaQuery.of(context).size.height * 0.036,
                      child: ElevatedButton(
                          onPressed: (){
 
@@ -57,7 +57,7 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                                  borderRadius: BorderRadius.circular(40)
                              )
                          ),
-                         child: Text('인증코드 재전송', style: TextStyle(fontSize: 14, color: Color(0xff4D4D4D)),)
+                         child: Text('인증코드 재전송', style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, color: Color(0xff4D4D4D)),)
                      ),
                    )
                  ],

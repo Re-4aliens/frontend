@@ -24,15 +24,15 @@ class _SignUpEmailState extends State<SignUpEmail>{
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('본인 인증을 위해\n이메일을 입력해주세요',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            SizedBox(height: 10),
-            Text('작성하신 메일로 보내드린 코드를 통해 인증이 진행됩니다.',style: TextStyle(fontSize: 14, color: Color(0xff888888)),),
-            SizedBox(height: 40),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.013),
+            Text('작성하신 메일로 보내드린 코드를 통해 인증이 진행됩니다.',style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, color: Color(0xff888888)),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
                child: Row(
@@ -46,7 +46,7 @@ class _SignUpEmailState extends State<SignUpEmail>{
                               decoration: new InputDecoration(
                                   border: InputBorder.none,
                                   hintText: '이메일 주소를 입력해주세요',
-                                  hintStyle: TextStyle(fontSize: 12, color: Color(0xffD9D9D9))
+                                  hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026, color: Color(0xffD9D9D9))
                               ),)
                    ),
                    Container(
@@ -57,7 +57,9 @@ class _SignUpEmailState extends State<SignUpEmail>{
                                  borderRadius: BorderRadius.circular(40)
                              )
                          ),
-                       child: Text('중복확인', style: TextStyle(color: Color(0xffC4C4C4)),),
+                       child: Text('중복확인', style: TextStyle(
+                           fontSize: MediaQuery.of(context).size.height * 0.023,
+                           color: Color(0xffC4C4C4)),),
                        onPressed: (){
                          showDialog(
                              context: context,

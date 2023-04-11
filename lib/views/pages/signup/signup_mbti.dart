@@ -20,13 +20,13 @@ class _SignUpMbtiState extends State<SignUpMbti>{
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('ooo님의 MBTI가 궁금해요!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            SizedBox(height: 40),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

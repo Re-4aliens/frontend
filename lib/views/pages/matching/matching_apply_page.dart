@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 
 import '../../components/appbar.dart';
@@ -26,13 +27,18 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
           backgroundColor: Colors.transparent,
           elevation: 0.0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+            icon: SvgPicture.asset(
+              'assets/icon/icon_back.svg',
+              width: 24,
+              height: MediaQuery.of(context).size.height * 0.029,
+
+            ),
             onPressed: (){
               Navigator.of(context).pop();
             },
           ),
         ),
-
+        extendBodyBehindAppBar: true,
         body: _buildBody(memberDetails)
     );
   }
@@ -41,15 +47,17 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
     return Stack(
           children: [
             Padding(
-              padding: const EdgeInsets.only(bottom: 60),
+              padding: EdgeInsets.only(top : MediaQuery.of(context).size.height * 0.07, bottom: 60, right: 0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Expanded(
-                    flex: 3,
+                    flex : 3,
                     child: SizedBox(),
                   ),
                   Expanded(
-                   flex: 10,
+                    flex : 5,
                     child: CustomPaint(
                         painter: HalfCircle(),
                       child: Container(),
@@ -58,6 +66,14 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                 ],
               ),
             ),
+            Positioned(
+                top: MediaQuery.of(context).size.height * 0.48, right: MediaQuery.of(context).size.width * 0.51,
+                child: Container(
+                    width: MediaQuery.of(context).size.width * 0.77,
+                    height: 300,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xffF3F6FF))
+                )),
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Column(
@@ -65,7 +81,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('매칭신청을 시작합니다!',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.039, fontWeight: FontWeight.bold),),
                   RichText(
                       text: TextSpan(
                           children: [
@@ -85,14 +101,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                 ],
               ),
             ),
-            Positioned(
-              top: 400, right: 200,
-                child: Container(
-                    width: 300,
-                    height: 300,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Color(0xffF3F6FF))
-                )),
+
             Padding(
               padding: const EdgeInsets.only(right: 20,left: 20,bottom: 40,top: 500),
               child: Positioned(
