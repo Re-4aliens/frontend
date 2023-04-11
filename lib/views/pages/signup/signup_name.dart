@@ -22,13 +22,13 @@ class _SignUpNameState extends State<SignUpName>{
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('이름을 알려주세요',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            SizedBox(height: 40),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
                child: TextFormField(
@@ -36,7 +36,7 @@ class _SignUpNameState extends State<SignUpName>{
                      controller: _NameController,
                      decoration: new InputDecoration(
                          hintText: '이름',
-                       hintStyle: TextStyle(fontSize: 20, color: Color(0xffD9D9D9))
+                       hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
                      ),
                    ),
                ),

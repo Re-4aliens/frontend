@@ -21,14 +21,11 @@ class _SignUpVerifyFinishState extends State<SignUpVerifyFinish>{
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(child: SizedBox()),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.2  ,),
             MaterialButton(
-              minWidth: 280,
-              height: 240,
-
-
+              minWidth: MediaQuery.of(context).size.width* 0.72,
+              height: MediaQuery.of(context).size.height * 0.29,
               //elevation: 3.0,
               //highlightElevation: 1.0,
               onPressed: () {
@@ -38,7 +35,7 @@ class _SignUpVerifyFinishState extends State<SignUpVerifyFinish>{
                 side: BorderSide.none,
                 borderRadius: BorderRadius.circular(25),
               ),
-              color: Color(0xffffffff),
+              color: Color(0xffF5F7FF),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,13 +43,13 @@ class _SignUpVerifyFinishState extends State<SignUpVerifyFinish>{
                   Container(
                     child: SvgPicture.asset(
                       'assets/icon/icon_check.svg',
-                      width: 86,
-                      height: 86,
+                      width: MediaQuery.of(context).size.width * 0.22,
+                      height: MediaQuery.of(context).size.height * 0.10,
                       color: Color(0xff7898FF),
                     ),
                   ),
                   SizedBox(height: 10),
-                  Text('인증 완료!', style: TextStyle(fontSize: 24),)
+                  Text('인증 완료!', style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04),)
                 ],
               ),
             ),

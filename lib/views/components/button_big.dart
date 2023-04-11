@@ -15,13 +15,13 @@ class BigButton extends StatelessWidget{
   Widget build(BuildContext context){
     return Container(
       width : double.maxFinite,
-      height: 56,
+      height: MediaQuery.of(context).size.height * 0.066 ,
       //margin: EdgeInsets.symmetric(horizontal: 10),
       child: ElevatedButton(
         onPressed: onPressed,
         child: child,
         style: ElevatedButton.styleFrom(
-          textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          textStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026, fontWeight: FontWeight.bold),
             backgroundColor: Color(0xff7898FF),// 여기 색 넣으면됩니다
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40)

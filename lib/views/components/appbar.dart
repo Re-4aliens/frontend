@@ -30,7 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
         icon: SvgPicture.asset(
           'assets/icon/icon_back.svg',
           width: 24,
-          height: 24,
+          height: MediaQuery.of(context).size.height * 0.029,
           
         ),
         onPressed: (){
@@ -42,8 +42,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
           onPressed: onPressed,
           icon: SvgPicture.asset(
             'assets/icon/icon_info.svg',
-            width: 24,
-            height: 24,
+            width: MediaQuery.of(context).size.width * 0.062,
+            height: MediaQuery.of(context).size.height * 0.029,
             color: Color(0xff7898FF),),)
       ]);
 
