@@ -1,50 +1,52 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/widgets.dart';
 import 'package:aliens/models/member_model.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MemberProvider with ChangeNotifier {
   Member member = new Member();
   static final storage = FlutterSecureStorage();
+  var response;
 
-  Future<Member?> memberInfo() async {
+  Future<Map<String, dynamic>> memberInfo() async {
+    print('멤버 정보 요청');
     try {
       const url =
-          'https://ac14b376-0180-4ad0-aa45-948bbb7d12df.mock.pstmn.io'; //mocksever
-      var response = await http.get(Uri.parse(url));
+          'http://13.125.205.59:8080/api/v1/member'; //mocksever
+
+      //토큰 읽어오기
       var jwtToken = await storage.read(key: 'token');
-      //print('토큰: '+jwtToken.toString());
-      Map<String, String> headers = {"Authorization": "Bearer $jwtToken"};
+
+      //accessToken만 보내기
+      jwtToken = json.decode(jwtToken!)['accessToken'];
+
+
+      response = await http.get(Uri.parse(url),
+        headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'},
+      );
 
       //success
       if (response.statusCode == 200) {
-        //코드 200 확인 후 재요청
-        //Auth 실어서 보내기
-        var _response =
-            await http.get(Uri.parse(url + '/member'),
-                // headers: headers
-            );
+        print('멤버 정보 요청 성공');
+        member = Member.fromJson(json.decode(utf8.decode(response.bodyBytes))['response']);
 
-        if (_response.statusCode == 200) {
-          member = Member.fromJson(json.decode(_response.body));
-        } else {
-          //오류 생기면 바디 확인
-          print(_response.body);
-        }
 
         //fail
       } else {
         //오류 생기면 바디 확인
-        print(response.body);
+        print("요청 오류: " + response.statusCode.toString());
       }
     } catch (error) {
-      return null;
+      print(error);
+      throw error;
     }
     //변경되었다고 알리기
     notifyListeners();
-    return member;
+    return json.decode(utf8.decode(response.bodyBytes))['response'];
   }
 }

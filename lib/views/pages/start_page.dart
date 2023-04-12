@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import '../components/button.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../../../providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
+
+
+import 'package:aliens/providers/member_provider.dart';
+import 'package:provider/provider.dart';
 
 
 class StartPage extends StatefulWidget{
@@ -21,7 +23,7 @@ class _StartPageState extends State<StartPage>{
 
   //storage로부터 읽을 모델
   dynamic userInfo = null;
-
+/*
   @override
   void initState(){
     super.initState();
@@ -30,16 +32,21 @@ class _StartPageState extends State<StartPage>{
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
     });
-  }
 
+
+  }
+*/
   //비동기로 storage 정보 확인
   _asyncMethod() async{
     //auth값 읽어서 userInfo에 저장
     userInfo = await storage.read(key:'auth');
-
+    //Navigator.pushNamedAndRemoveUntil(context, '/loading', (route)=>false);
     //user 정보가 있다면 로그인된 것이므로 메인 페이지로 넘어가게 한다.
     if (userInfo != null){
-      Navigator.pushNamedAndRemoveUntil(context, '/main', (route)=>false);
+      //여기서 유저 정보 요청하기
+
+      //var memberDetails = Provider.of<MemberProvider>(context, listen: false);
+      Navigator.pushNamedAndRemoveUntil(context, '/loading', (route)=>false);
     } else {
       print('로그인 필요');  //정보가 없으면 로그인 필요
     }

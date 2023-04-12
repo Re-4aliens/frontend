@@ -45,7 +45,7 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
           SizedBox(height: 20,),
           ListTile(
             onTap: (){
-              Navigator.pushNamed(context, '/setting/edit/find');
+              Navigator.pushNamed(context, '/setting/edit/find', arguments: memberDetails);
             },
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

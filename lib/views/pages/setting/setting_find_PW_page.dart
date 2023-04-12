@@ -3,11 +3,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../components/button.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SettingFindPWPage extends StatefulWidget {
   const SettingFindPWPage({super.key});
@@ -17,8 +14,13 @@ class SettingFindPWPage extends StatefulWidget {
 }
 
 class _SettingFindPWPageState extends State<SettingFindPWPage> {
+  static final storage = FlutterSecureStorage();
+
+
   @override
   Widget build(BuildContext context) {
+    var memberDetails = ModalRoute.of(context)!.settings.arguments;
+    final TextEditingController _passwordController = TextEditingController();
 
     return Scaffold(
         backgroundColor: Colors.white,
@@ -57,6 +59,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                 height: 20,
               ),
               TextFormField(
+                controller: _passwordController,
                 decoration: InputDecoration(
                   hintText: '비밀번호 입력',
                   hintStyle: TextStyle(
@@ -79,8 +82,30 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
                         child: Text('확인'),
-                        onPressed: (){
-                          Navigator.pushNamed(context,'/setting/edit/PW');
+                        onPressed: ()async {
+                          //if 지금 비밀번호랑 입력한 거랑 같으면
+                          var userInfo = await storage.read(key:'auth');
+                          if(_passwordController.text == json.decode(userInfo!)['password'])
+                            Navigator.pushNamed(context,'/setting/edit/PW', arguments: _passwordController.text);
+                          else
+                            showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
+
+                              title: Text('비밀번호 미일치',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              content: const Text('비밀번호를 확인해주세요.'),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  child: const Text('확인',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                      )),
+                                ),
+                              ],
+                            ));
                         }),
                   ),
                 ),

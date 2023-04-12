@@ -101,6 +101,9 @@ class _SignUpProfileState extends State<SignUpProfile>{
               child: TextButton(
                       onPressed: () {
                         Navigator.pushNamed(context, '/school', arguments: member);
+                        member.profileImage = 'g.jpg';
+                        print(member.toJson());
+                        Navigator.pushNamed(context,'/school', arguments: member);
                       },
                       child: Text('다음에 변경할래요!',
                               style: TextStyle(decoration: TextDecoration.underline),),),
@@ -110,7 +113,8 @@ class _SignUpProfileState extends State<SignUpProfile>{
                 child: Text('완료'),
                 onPressed: (){
                   if(_profileImage != null){
-                    member.profileImage = _profileImage!.path.toString();
+                    //member.profileImage = _profileImage!.path.toString();
+                    member.profileImage = 'g.jpg';
                     print(member.toJson());
                     Navigator.pushNamed(context,'/school', arguments: member);
                   }

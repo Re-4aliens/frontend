@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:provider/provider.dart';
 Widget settingWidget(BuildContext context, memberDetails) {
   final AuthProvider authProvider = new AuthProvider();
   final storage = FlutterSecureStorage();
+
+  File imageFile = File(memberDetails['profileImage']);
 
   return Column(
     children: [
@@ -26,6 +29,7 @@ Widget settingWidget(BuildContext context, memberDetails) {
                   decoration: BoxDecoration(
                       color: Color(0xffA8A8A8),
                       borderRadius: BorderRadius.circular(40)),
+                  child: Image.file(imageFile),
                 ),
                 Positioned(
                     bottom: 0,
@@ -127,10 +131,10 @@ Widget buildSettingList(context, index, memberDetails) {
   ];
 
   List memberInfo = [
-    memberDetails.member.name.toString(),
+    memberDetails['name'].toString(),
     //birthday 값 추후 가공
-    memberDetails.member.birthday.toString(),
-    memberDetails.member.email.toString(),
+    memberDetails['birthday'].toString(),
+    memberDetails['email'].toString(),
   ];
 
   List navigatorList = [

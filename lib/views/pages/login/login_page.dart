@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 
 import '../../components/button.dart';
@@ -127,19 +128,40 @@ class _LoginState extends State<Login> {
                     auth.email = _emailController.text;
                     auth.password = _passwordController.text;
 
-                    //로그인 정보 저장
-                    await storage.write(
-                      key: 'auth',
-                      value: jsonEncode(auth),
-                    );
+
+
 
                     //http 요청
-                    authProvider.login(auth, context);
-                    //스택 비우고 화면 이동
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
-                    );
+                    //await 키워드로 authprovider.login이 완료될 때까지 잠시 대기
+                    var loginSuccess = await authProvider.login(auth, context);
+                    print('시도');
 
+                    if(loginSuccess){
+                      //스택 비우고 화면 이동
+                      Navigator.of(context)
+                          .pushNamedAndRemoveUntil('/loading', (Route<dynamic> route) => false
+                      );
+                    }
+                    else {
+                      showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
+
+                        title: Text('로그인 실패',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        content: const Text('이메일과 비밀번호를 확인해주세요.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('확인',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                )),
+                          ),
+                        ],
+                      ));
+                    }
                   }
 
 
