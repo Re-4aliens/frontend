@@ -2,6 +2,7 @@
 import '../../models/screenArgument.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../components/matching_widget.dart' as matching;
 import '../components/setting_widget.dart';
@@ -33,7 +34,7 @@ print(args.applicant);
     List _pageWidget = [
       Container(
         decoration: BoxDecoration(
-          color: Colors.grey.shade100,
+          color: Color(0xffF2F5FF),
         ),
         child: Stack(children: [
           Column(
@@ -41,20 +42,31 @@ print(args.applicant);
               Expanded(
                   child: Container(
                     padding: EdgeInsets.symmetric(
-                      vertical: 30,
+                      vertical: 70,
                       horizontal: 20,
                     ),
                     alignment: Alignment.topLeft,
-                    child: Text(
-                      '로고 또는 어플 이름',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                    child: RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text:'어서오세요!\n', style: TextStyle( fontSize: 20, color: Colors.black),),
+                            TextSpan(text: '프렌드쉽', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.black)),
+                            TextSpan(text:'에 온 걸 환영해요.\n', style: TextStyle(fontSize: 24, color: Colors.black)),
+                            TextSpan(text: '오늘의 내 기분은 해피!\n', style: TextStyle(fontSize: 12, color: Colors.black)),
+                            TextSpan(text: '#파워긍정왕', style: TextStyle(fontSize: 12, color: Colors.black)),
+                            TextSpan(text: 'ENFP', style: TextStyle(fontSize: 12, color: Color(0xff7898ff))),
+                            TextSpan(text: '와 어울리는', style: TextStyle(fontSize: 12, color: Colors.black)),
+                            TextSpan(text: 'MBTI', style: TextStyle(fontSize: 12, color: Color(0xff7898ff))),
+                            TextSpan(text: '는?', style: TextStyle(fontSize: 12, color: Colors.black))
+                          ]
                       ),
                     ),
-                  )),
+
+
+                    ),
+                  ),
               Expanded(
-                  flex: 4,
+                  flex: 2,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Color(0xffefefef),
@@ -73,13 +85,13 @@ print(args.applicant);
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'HI, ${args.memberDetails['name']}',
+                              '설레는 새학기의 시작!, ${args.memberDetails['name']}',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Text('어플 메인 문구'),
+                            Text('새로운 친구를 만나보세요.', style: TextStyle(fontSize: 16),),
                           ],
                         ),
                         Center(
@@ -101,7 +113,7 @@ print(args.applicant);
                           ),
                         ),
                         Container(
-                          height: 100,
+                          height: 60,
                           alignment: Alignment.topRight,
                         ),
                       ],
@@ -110,7 +122,7 @@ print(args.applicant);
             ],
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height / 15,
+            top: MediaQuery.of(context).size.height / 5,
             right: 0,
             child: Container(
               height: 150,
@@ -141,7 +153,7 @@ print(args.applicant);
                   ),
                 ),
                 elevation: 0,
-                backgroundColor: Colors.white,
+                backgroundColor: Colors.transparent,
                 leading: Column(
                   children: [
                     if (selectedIndex != 0)
@@ -162,11 +174,17 @@ print(args.applicant);
                   IconButton(
                     onPressed: () {},
                     //아이콘 수정 필요
-                    icon: Icon(CupertinoIcons.question_circle),
-                    color: Colors.black,
+                    icon: SvgPicture.asset(
+                      'assets/icon/icon_info.svg',
+                      width: 24,
+                      height: 24,
+                      color: Color(0xff7898ff),
+                    ),
+
                   )
                 ],
               ),
+              extendBodyBehindAppBar: true,
               bottomNavigationBar: BottomNavigationBar(
                 currentIndex: selectedIndex,
                 selectedItemColor: Color(0xFF737373),
@@ -178,19 +196,35 @@ print(args.applicant);
                 },
                 items: [
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.home_filled),
+                    icon: SvgPicture.asset(
+                      'assets/icon/icon_home.svg',
+                      width: 32.9,
+                      height: 32.9,
+                    ),
                     label: '홈',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.people),
+                    icon: SvgPicture.asset(
+                      'assets/icon/icon_matching.svg',
+                      width: 32.9,
+                      height: 32.9,
+                    ),
                     label: '매칭',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.chat_rounded),
+                    icon: SvgPicture.asset(
+                      'assets/icon/icon_chatting.svg',
+                      width: 32.9,
+                      height: 32.9,
+                    ),
                     label: '채팅',
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(Icons.settings),
+                    icon: SvgPicture.asset(
+                      'assets/icon/icon_setting.svg',
+                      width: 32.9,
+                      height: 32.9,
+                    ),
                     label: '설정',
                   )
                 ],

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/appbar.dart';
 import '../../components/button.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,24 +26,14 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back_ios_new),
-            color: Colors.black,
-          ),
-        ),
+        appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 100,
+                height: 50,
               ),
               Text(
                 '새로운 비밀번호를 입력하시면\n비밀번호 변경이 완료됩니다.',
@@ -92,7 +83,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
               Expanded(
                 child: Container(
                   alignment: Alignment.bottomCenter,
-                  padding: EdgeInsets.only(bottom: 100),
+                  padding: EdgeInsets.only(bottom: 50),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
@@ -106,7 +97,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                               //비밀번호 수정 요청
                               var url =
                                  'http://13.125.205.59:8080/api/v1/member/password'; //mocksever
-//토큰 읽어오기
+                            //토큰 읽어오기
                               var jwtToken = await storage.read(key: 'token');
 
                               //accessToken만 보내기
@@ -177,8 +168,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                                         ],
                                       ));
                             }
-
-                        }),
+),
                   ),
                 ),
               )

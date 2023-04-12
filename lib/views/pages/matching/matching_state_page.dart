@@ -8,6 +8,8 @@ import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../models/screenArgument.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../components/button.dart';
 
 class MatchingStatePage extends StatefulWidget {
@@ -22,56 +24,58 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     return Scaffold(
-        backgroundColor: Color(0xFFF4F4F4),
+       // backgroundColor: Color(0xFFF4F4F4),
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Color(0xFFF4F4F4),
+          backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios_new),
+            icon: SvgPicture.asset(
+              'assets/icon/icon_back.svg',
+              width: MediaQuery.of(context).size.width * 0.062,
+              height: MediaQuery.of(context).size.height * 0.029,            ),
             color: Colors.black,
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              //아이콘 수정 필요
-              icon: Icon(CupertinoIcons.question_circle),
-              color: Colors.black,
-            )
-          ],
         ),
         body: Column(
           children: [
-            Expanded(flex: 1,child: Container()),
             Column(
               children: [
+                Expanded(flex:1, child: Container()),
+
                 Text(
                   '매칭 대기중...',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: MediaQuery.of(context).size.height * 0.039,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Container(
-                  height: 8,
-                  width: 200,
-                  decoration: BoxDecoration(color: Colors.white),
+                Center(
+                    child:  LinearPercentIndicator(
+                  width: MediaQuery.of(context).size.width * 0.513,
+                  animation: true,
+                  lineHeight: MediaQuery.of(context).size.height * 0.009,
+                  animationDuration: 2000,
+                  percent: 0.9,
+                  linearStrokeCap: LinearStrokeCap.roundAll,
+                  progressColor: Color(0xff7898FF),
+                ),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: MediaQuery.of(context).size.height * 0.059,
                 ),
                 Container(
                   decoration: BoxDecoration(
                     color: Color(0xFFD9D9D9),
                     borderRadius: BorderRadius.circular(90),
                   ),
-                  width: 180,
-                  height: 180,
+                  width: MediaQuery.of(context).size.width * 0.361,
+                  height: MediaQuery.of(context).size.height * 0.21,
                 ),
                 SizedBox(
                   height: 70,
@@ -79,6 +83,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                 Text(
                   '조금만 기다려주세요.\n내 성향과 스타일에 꼭 맞는\n친구를 찾고 있어요!',
                   style: TextStyle(
+                    color: Color(0xff616161),
                     fontSize: 16,
                   ),
                   textAlign: TextAlign.center,
@@ -87,14 +92,14 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                   height: 70,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  padding: const EdgeInsets.only(right: 20,left: 20,bottom: 40),
                   child: Button(
-                      child: Text('나의 매칭 정보 확인하기'),
+                      child: Text('나의 신청 확인하기'),
                       onPressed: (){
                         Navigator.pushNamed(context, '/info/my', arguments: args);
                       }),
                 ),
-                SizedBox(
+                /*SizedBox(
                   height: 40,
                 ),
                 Text('위 버튼을 누르면 나의 접수 정보를 확인하고\n언어를 수정할 수 있어요.',
@@ -103,7 +108,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                     color: Color(0xFFB1B1B1),
                   ),
                   textAlign: TextAlign.center,
-                ),
+                ),*/
               ],
             ),
             Expanded(flex: 3,child: Container()),

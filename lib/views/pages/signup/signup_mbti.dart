@@ -131,15 +131,14 @@ class _SignUpMbtiState extends State<SignUpMbti> {
         onPressed: () {},
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.only(right: 20, left: 20, top: 50, bottom: 50),
+        
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'ooo님의 MBTI가 궁금해요!',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 40),
+            Text('ooo님의 MBTI가 궁금해요!',
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
               child: Column(
@@ -176,7 +175,6 @@ class _SignUpMbtiState extends State<SignUpMbti> {
                     )
                 ],
               ),
-            ),
             SizedBox(height: 20),
             Button(
                 child: Text('확인'),

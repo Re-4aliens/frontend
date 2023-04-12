@@ -1,10 +1,12 @@
 import 'dart:convert';
-
+import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 
 import '../../../models/screenArgument.dart';
+import '../../components/appbar.dart';
 import '../../components/button.dart';
 
 class MatchingApplyPage extends StatefulWidget {
@@ -22,146 +24,124 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
     return Scaffold(
         backgroundColor: Color(0xFFF4F4F4),
         appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Color(0xFFF4F4F4),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
           leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
+            icon: SvgPicture.asset(
+              'assets/icon/icon_back.svg',
+              width: 24,
+              height: MediaQuery.of(context).size.height * 0.029,
 
+            ),
+            onPressed: (){
+              Navigator.of(context).pop();
             },
-            icon: Icon(Icons.arrow_back_ios_new),
-            color: Colors.black,
           ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              //아이콘 수정 필요
-              icon: Icon(CupertinoIcons.question_circle),
-              color: Colors.black,
-            )
-          ],
         ),
-        body: _buildBody(args),
+        extendBodyBehindAppBar: true,
+        body: _buildBody(args)
     );
   }
 
-  Widget _buildBody(args){
-    return Container(
-        child: Column(
+  Widget _buildBody(memberDetails){
+    return Stack(
           children: [
-            Expanded(
-              flex: 1,
-              child: Container(
-              ),),
-            Column(
-              children: [
-                Text(
-                  '매칭신청',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+            Padding(
+              padding: EdgeInsets.only(top : MediaQuery.of(context).size.height * 0.07, bottom: 60, right: 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                    flex : 3,
+                    child: SizedBox(),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text(
-                  '맞춤 매칭을 위해\n2단계 질문을 완성해주세요',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9),
-                    borderRadius: BorderRadius.circular(70),
-                  ),
-                  width: 140,
-                  height: 140,
-                ),
-                SizedBox(
-                  height: 40,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '1단계',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+                  Expanded(
+                    flex : 5,
+                    child: CustomPaint(
+                        painter: HalfCircle(),
+                      child: Container(),
                       ),
                     ),
-                    Text('사용 언어 선택',style: TextStyle(
-                      fontSize: 16,
-                    ),),
-                  ],
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Text('어플 사용시  표시되는 언어입니다.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFFB1B1B1),
-                  ),
-                ),
-                Text('사용하기 가장 편한 언어를 선택해주세요',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFFB1B1B1),
-                  ),),
-                SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      '2단계',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text('매칭 언어 선택',style: TextStyle(
-                      fontSize: 16,
-                    ),),
-                  ],
-                ),
-                Text('어떤 언어로 대화하고 싶으신가요?',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFFB1B1B1),
-                  ),),
-                Text('2순위까지 선호하는 언어를 선택할 수 있어요.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFFB1B1B1),
-                  ),),
-                SizedBox(
-                  height: 60,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Button(
-                      child: Text('시작하기'),
-                      onPressed: (){
-                        Navigator.pushNamed(context,'/choose', arguments: args);
-                      }),
-                )
-              ],
+                ],
+              ),
             ),
-            Expanded(
-              flex: 3,
-              child: Container(
-              ),),
+            Positioned(
+                top: MediaQuery.of(context).size.height * 0.48, right: MediaQuery.of(context).size.width * 0.51,
+                child: Container(
+                    width: MediaQuery.of(context).size.width * 0.77,
+                    height: 300,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: Color(0xffF3F6FF))
+                )),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('매칭신청을 시작합니다!',
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.039, fontWeight: FontWeight.bold),),
+                  RichText(
+                      text: TextSpan(
+                          children: [
+                            TextSpan(text:'\n선호언어', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black),),
+                            TextSpan(text: '에 따라 매칭이 되며,', style: TextStyle(fontSize: 16,color: Colors.black)),
+                                ]
+                            ),
+                      ),
+                  RichText(
+                    text: TextSpan(
+                        children: [
+                          TextSpan(text:'랜덤 선호언어 친구(SF)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16,color: Colors.black),),
+                          TextSpan(text: '가 추가됩니다', style: TextStyle(fontSize: 16,color: Colors.black)),
+                        ]
+                    ),
+
+                  ),
+                ],
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.only(right: 20,left: 20,bottom: 40,top: 500),
+              child: Positioned(
+                child: Button(
+                  child: Text('매칭 시작하기'),
+                  onPressed: (){
+                    Navigator.pushNamed(context,'/choose', arguments: args);
+                  },
+
+                ),
+
+              ),
+            )
+
+
+
           ],
-        )
     );
+  }
+}
+
+class HalfCircle extends CustomPainter{
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Color(0xffD8E1FF)
+      ..style = PaintingStyle.fill;
+
+    final radius = size.height / 2;
+    final center = Offset(radius, size.height / 2);
+    final startAngle = math.pi / 2; // 시작 각도 조정
+    final sweepAngle = math.pi; // 반원 그리기
+
+    canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius), startAngle, sweepAngle, true, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
   }
 }
