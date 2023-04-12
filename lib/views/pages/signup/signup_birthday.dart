@@ -2,6 +2,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../components/button.dart';
 import 'package:intl/intl.dart';
@@ -25,13 +26,13 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('생년월일을 알려주세요',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-            SizedBox(height: 40),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
                child: GestureDetector(
@@ -42,6 +43,17 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
                  child: Column(
                    children: [
                      TextFormField(
+                       decoration: new InputDecoration(
+                           hintText: '생년월일 선택',
+                           suffixIcon: IconButton(
+                             icon: SvgPicture.asset(
+                               'assets/icon/icon_dropdown.svg',
+                               width: MediaQuery.of(context).size.width * 0.037,
+                               height: MediaQuery.of(context).size.height * 0.011,
+                             ), onPressed: () {},
+                           ),
+                           hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
+                       ),
                        validator : (value) => value!.isEmpty? "Please enter some text" : null,
                        enabled: false,
                        controller: _BirthdayController,

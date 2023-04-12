@@ -19,6 +19,8 @@ class LoginFindPassword extends StatefulWidget {
 class _LoginFindPasswordState extends State<LoginFindPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController _NameController = TextEditingController();
+  final TextEditingController _EmailController = TextEditingController();
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,24 +31,37 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
         onPressed: () {},
       ),
       body: Padding(
-        padding: EdgeInsets.only(right: 20, left: 20, top: 50, bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '비밀번호를 찾기 위해\n가입하신 이메일을 입력해주세요.',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 10),
-            Text('작성하신 메일로 임시비밀번호를 발급해드려요.'),
-            SizedBox(height: 40),
+            Text('가입하신 이메일과\n이름정보를 입력해주세요.',
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            Text('비밀번호를 찾기 위해 작성하신 메일로\n임시비밀번호를 발급해드려요.',
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, color: Color(0xff888888)),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Form(
               key: _formKey,
-              child: TextFormField(
-                validator: (value) =>
-                    value!.isEmpty ? "Please enter some text" : null,
-                controller: emailController,
-                decoration: new InputDecoration(hintText: '이메일'),
+              child: Column(
+                children: [
+                  TextFormField(
+                    validator : (value) => value!.isEmpty? "Please enter some text" : null,
+                    controller: _NameController,
+                    decoration: new InputDecoration(
+                        hintText: '이름',
+                        hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
+                    ),
+                  ),
+                  TextFormField(
+                    validator : (value) => value!.isEmpty? "Please enter some text" : null,
+                    controller: _EmailController,
+                    decoration: new InputDecoration(
+                        hintText: '이메일',
+                        hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
+                    ),
+                  )
+
+                ],
               ),
             ),
             Expanded(child: SizedBox()),

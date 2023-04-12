@@ -3,6 +3,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:aliens/providers/auth_provider.dart';
+import 'package:aliens/models/auth_model.dart';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../components/appbar.dart';
 import '../../components/button.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -24,31 +29,15 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(Icons.arrow_back_ios_new),
-            color: Colors.black,
-          ),
-          title: Text(
-            '이용약관',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
+
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
-                height: 100,
+                height: 50,
               ),
               Text('비밀번호를 변경하기 위해\n기존 비밀번호를 입력해주세요.',
                 style: TextStyle(
@@ -77,7 +66,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
               Expanded(
                 child: Container(
                   alignment: Alignment.bottomCenter,
-                  padding: EdgeInsets.only(bottom: 100),
+                  padding: EdgeInsets.only(bottom: 50),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
@@ -106,7 +95,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                                 ),
                               ],
                             ));
-                        }),
+                        ),
                   ),
                 ),
               )
