@@ -1,15 +1,14 @@
 
+import '../../models/screenArgument.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../components/matching_widget.dart' as matching;
 import '../components/setting_widget.dart';
-import '../components/home_widget.dart';
+import '../components/chatting_widget.dart';
+import '../components/matching_chatting_widget.dart';
 
-
-import 'package:aliens/providers/member_provider.dart';
-import 'package:provider/provider.dart';
 
 int selectedIndex = 0;
 
@@ -24,17 +23,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var memberDetails = Provider.of<MemberProvider>(context, listen: false);
-
-
-
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+print(args.applicant);
     List _pageTitle = [
       '',
       '',
       '채팅',
       '설정',
     ];
-
     List _pageWidget = [
       Container(
         decoration: BoxDecoration(
@@ -89,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '설레는 새학기의 시작!'/*${memberDetails.member.name}*/,
+                              '설레는 새학기의 시작!, ${args.memberDetails['name']}',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -106,12 +102,12 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 buildButton(
-                                    '매칭', 1, context, memberDetails),
+                                    '매칭', 1, context, args.memberDetails),
                                 SizedBox(
                                   width: 20,
                                 ),
                                 buildButton(
-                                    '채팅', 2, context, memberDetails),
+                                    '채팅', 2, context, args.memberDetails),
                               ],
                             ),
                           ),
@@ -141,26 +137,12 @@ class _HomePageState extends State<HomePage> {
           ),
         ]),
       ),
-      matching.matchingWidget(context, memberDetails),
-      Text('채팅'),
-      settingWidget(context, memberDetails)
+      matching.matchingWidget(context, args),
+      args.status['status'] == 'MATCHED'? matchingChattingWidget(context, args.partners):chattingWidget(context, args.partners),
+      settingWidget(context, args.memberDetails)
     ];
 
-    return FutureBuilder(
-        future: memberDetails.memberInfo(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          //데이터를 받아오기 전 보여줄 위젯
-          if (snapshot.hasData == false) {
-            //로딩 화면으로 수정
-            return Center(child: CircularProgressIndicator());
-          }
-          //오류가 생기면 보여줄 위젯
-          else if (snapshot.hasError) {
-            //오류가 생기면 보여줄 위젯
-            //미정
-            return Container();
-          } else {
-            return Scaffold(
+    return Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
                 title: Text(
@@ -249,8 +231,6 @@ class _HomePageState extends State<HomePage> {
               ),
               body: _pageWidget.elementAt(selectedIndex),
             );
-          }
-        });
   }
 
   Widget buildButton(String _title, int index,
@@ -296,6 +276,9 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
     );
+  }
+  Future<void> future()async {
+
   }
 }
 
