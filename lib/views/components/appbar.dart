@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   final VoidCallback onPressed;
@@ -26,18 +27,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
       elevation: 0.0,
       centerTitle: center,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back_ios, color: Colors.black),
+        icon: SvgPicture.asset(
+          'assets/icon/icon_back.svg',
+          width: 24,
+          height: MediaQuery.of(context).size.height * 0.029,
+          
+        ),
         onPressed: (){
           Navigator.of(context).pop();
         },
       ),
       actions: [
         IconButton(
-            onPressed: onPressed,
-            icon: Icon(Icons.info, color: Colors.black)
-        )
-      ],
-    );
+          onPressed: onPressed,
+          icon: SvgPicture.asset(
+            'assets/icon/icon_info.svg',
+            width: MediaQuery.of(context).size.width * 0.062,
+            height: MediaQuery.of(context).size.height * 0.029,
+            color: Color(0xff7898FF),),)
+      ]);
+
   }
   @override
   Size get preferredSize => Size.fromHeight(appBar.preferredSize.height);

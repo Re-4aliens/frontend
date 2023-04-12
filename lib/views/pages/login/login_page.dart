@@ -1,4 +1,5 @@
 import 'package:aliens/views/components/appbar.dart';
+import 'package:aliens/views/components/button_big.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
@@ -18,17 +19,16 @@ class _LoginState extends State<Login> {
   final TextEditingController _PasswordController = TextEditingController();
 
   Widget build(BuildContext context) {
-    //Members members = new Members('','','','','','','','');
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
+     /* appBar: CustomAppBar(
         appBar: AppBar(),
         title: '',
         onPressed: () {},
-      ),
+      ),*/
       body: Padding(
-        padding: EdgeInsets.only(right: 20, left: 20, top: 50, bottom: 70),
+        padding: EdgeInsets.only(right: 20, left: 20, top: MediaQuery.of(context).size.height * 0.2, bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -36,21 +36,20 @@ class _LoginState extends State<Login> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 20),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.0005),
                   Container(
-                    width: 100,
-                    height: 50,
+                    width: MediaQuery.of(context).size.width * 0.26,
+                    height: MediaQuery.of(context).size.height * 0.1,
                     decoration: BoxDecoration(color: Colors.grey),
                   ),
                   Text(
                     'FRIEND SHIP',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '프렌즈쉽에 오신것을 환영합니다.',
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026),
                   ),
-                  SizedBox(height: 20),
                 ],
               ),
             ),
@@ -69,6 +68,10 @@ class _LoginState extends State<Login> {
                           decoration: new InputDecoration(
                             contentPadding: EdgeInsets.all(25),
                               hintText: '이메일주소',
+                              hintStyle: TextStyle(
+                                  fontSize: MediaQuery.of(context).size.height * 0.026,
+                                color: Color(0xffA0A0A0)
+                              ),
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               errorBorder: OutlineInputBorder(
@@ -79,7 +82,7 @@ class _LoginState extends State<Login> {
                       ) ,
 
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.024),
                     Form(
                       child: Material(
                         shape: RoundedRectangleBorder(
@@ -92,6 +95,10 @@ class _LoginState extends State<Login> {
                           decoration: new InputDecoration(
                               contentPadding: EdgeInsets.all(25),
                               hintText: '비밀번호',
+                              hintStyle: TextStyle(
+                                  fontSize: MediaQuery.of(context).size.height * 0.026,
+                                  color: Color(0xffA0A0A0)
+                              ),
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               errorBorder: OutlineInputBorder(
@@ -105,22 +112,14 @@ class _LoginState extends State<Login> {
                   ],
                 ),
             ),
-            Button(
-                child: Text('로그인'),
-                onPressed: () {
-                  /*
-                  해당 코드 오류가 생깁니다!!..
-                  if (_formKey.currentState!.validate()) {
-                  }
-                  */
-
-                  //스택 비우고
-                  Navigator.of(context)
-                      .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
-                  );
-
-
-                }),
+        BigButton(
+          child: Text('로그인'),
+            onPressed: () {
+              //스택 비우고
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
+              );
+            },),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
