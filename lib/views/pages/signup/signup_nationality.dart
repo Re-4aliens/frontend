@@ -1,6 +1,7 @@
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../models/members.dart';
 import '../../components/button.dart';
@@ -24,33 +25,42 @@ class _SignUpNationalityState extends State<SignUpNationality>{
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('국적을 알려주세요',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-            SizedBox(height: 40),
+            Text('국적을 선택해주세요',
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('국적', style: TextStyle(fontSize: 20,),),
-                DropdownButton(
-                    hint: Text('국적') ,
-                    items: _NationalityList.map((value){
-                      return DropdownMenuItem(
-                          child: Text(value,
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                          value: value);
-                    }).toList(),
-                    value: _selectedNationality,
-                    onChanged: (value){
-                      _NationalityController.text = value!;
-                      print(value);
-                      setState(() {
-                        _selectedNationality = value!;
-                      });
-                    }),
+                Text('국적', style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026,),),
+                ButtonTheme(
+                  alignedDropdown: true,
+                  child: DropdownButton(
+                      underline: SizedBox.shrink(),
+                      icon: SvgPicture.asset(
+                        'assets/icon/icon_dropdown.svg',
+                        width: MediaQuery.of(context).size.width * 0.037,
+                        height: MediaQuery.of(context).size.height * 0.011,
+                      ),
+                      hint: Text('국적') ,
+                      items: _NationalityList.map((value){
+                        return DropdownMenuItem(
+                            child: Text(value,
+                              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, fontWeight: FontWeight.bold),),
+                            value: value);
+                      }).toList(),
+                      value: _selectedNationality,
+                      onChanged: (value){
+                        _NationalityController.text = value!;
+                        print(value);
+                        setState(() {
+                          _selectedNationality = value!;
+                        });
+                      }),
+                ),
               ],
             ),
             Divider(
@@ -70,3 +80,4 @@ class _SignUpNationalityState extends State<SignUpNationality>{
     );
   }
 }
+

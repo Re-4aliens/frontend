@@ -4,6 +4,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,22 +35,30 @@ class _SignUpProfileState extends State<SignUpProfile>{
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: 50,bottom: 50),
+        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('나의 프로필 이미지를\n선택해 주세요',
-              style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-            SizedBox(height: 40),
+              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Center(
               child: Stack(
                 children: [
                   Container(
                     child:_profileImage == null?
-                    Icon(Icons.account_circle, size : 200):
                         Container(
-                          width: 200,
-                          height: 200,
+                          child: SvgPicture.asset(
+                              'assets/icon/icon_profile.svg',
+                            width: MediaQuery.of(context).size.width * 0.33,
+                            height: MediaQuery.of(context).size.height * 0.16,
+                            color: Color(0xffE3E3E3),
+                          ),
+                        )
+                    /*Icon(Icons.account_circle, size : 200, color: Color(0xffE3E3E3),)*/:
+                        Container(
+                          width: MediaQuery.of(context).size.width * 0.33,
+                          height: MediaQuery.of(context).size.height * 0.33,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             image: DecorationImage(
@@ -61,10 +70,11 @@ class _SignUpProfileState extends State<SignUpProfile>{
 
                   ),
                   Positioned(
-                    bottom: 20,
-                    right: 20,
+                    bottom: 0,
+                    right: 0,
                       child:
                       IconButton(
+                        color: Color(0xff808080),
                           onPressed:(){
                             showDialog(
                               context: context,
@@ -87,31 +97,39 @@ class _SignUpProfileState extends State<SignUpProfile>{
                               }
                             );
                           } ,
-                          icon: Icon(Icons.photo_camera, size: 50)),
+                          icon: SvgPicture.asset(
+                            'assets/icon/icon_album.svg',
+                            width: MediaQuery.of(context).size.width * 0.063,
+                            height: MediaQuery.of(context).size.height * 0.027,
+                          )
+                      ),
                   )
                 ],
               ),
             ),
+            SizedBox(height: 10,),
             Center(
               child:Text('프로필 사진을 선택하여\n본인을 나타내주세요\n상대방과 더 가까워질 수 있어요!',
-                textAlign: TextAlign.center,),
+                style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023 ),
+                textAlign: TextAlign.center,
+              ),
             ),
             Expanded(child: SizedBox()),
-            Center(
-              child: TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/school');
-                      },
-                      child: Text('다음에 변경할래요!',
-                              style: TextStyle(decoration: TextDecoration.underline),),),
-            ), 
-            SizedBox(height: 10),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.025),
             Button(
                 child: Text('완료'),
                 onPressed: (){
                   Navigator.pushNamed(context,'/school', /*arguments: members*/);
-                })
-
+                }),
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/school');
+                },
+                child: Text('다음에 변경할래요!',
+                  style: TextStyle(decoration: TextDecoration.underline,
+                      fontSize: MediaQuery.of(context).size.height * 0.023,                  color: Color(0xff626262)),),),
+            ),
           ],
         ),
       ),
