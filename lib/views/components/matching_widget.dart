@@ -1,17 +1,17 @@
+import 'package:aliens/views/pages/loading_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../pages/matching/matching_done_page.dart';
 
 
-var changeToChat = false;
-Widget matchingWidget(BuildContext context, memberDetails){
+Widget matchingWidget(BuildContext context, args){
   return Stack(
     children: [
       //배경 디자인
       /*
           Expanded(child: Container(
-            decoration: BoxDecoration(color: Colors.white),
+            decoration: BoxDecoration( color: Colors.white),
           ),),
            */
 
@@ -24,12 +24,12 @@ Widget matchingWidget(BuildContext context, memberDetails){
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildButton('매칭 신청', 0, context, memberDetails),
+              buildButton('매칭 신청', 0, context, args),
               SizedBox(
                 width: 20,
               ),
 
-              buildButton('현재 진행 상황', 1, context, memberDetails),
+              buildButton('현재 진행 상황', 1, context, args),
             ],
           ),
         ),
@@ -65,7 +65,7 @@ Widget matchingWidget(BuildContext context, memberDetails){
   );
 }
 
-Widget buildButton(String _title, int btnIndex, BuildContext context, memberDetails){
+Widget buildButton(String _title, int btnIndex, BuildContext context, args){
   return MaterialButton(
     minWidth: 165,
     height: 245,
@@ -74,12 +74,10 @@ Widget buildButton(String _title, int btnIndex, BuildContext context, memberDeta
     highlightElevation: 1.0,
     onPressed: () async {
       if (btnIndex == 0)
-        Navigator.pushNamed(context, '/apply', arguments: memberDetails);
+        Navigator.pushNamed(context, '/apply', arguments: args);
       else{
-        changeToChat = await Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MatchingDonePage())
-        );
+        print(partners);
+        Navigator.pushNamed(context, '/done', arguments: args.partners);
       }
     },
     shape: RoundedRectangleBorder(

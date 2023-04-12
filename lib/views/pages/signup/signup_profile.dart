@@ -30,7 +30,7 @@ class _SignUpProfileState extends State<SignUpProfile>{
 
 
   Widget build(BuildContext context){
-    //Members members = new Members('','','','','','','','');
+    dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
@@ -119,12 +119,20 @@ class _SignUpProfileState extends State<SignUpProfile>{
             Button(
                 child: Text('완료'),
                 onPressed: (){
-                  Navigator.pushNamed(context,'/school', /*arguments: members*/);
+                  if(_profileImage != null){
+                    //member.profileImage = _profileImage!.path.toString();
+                    member.profileImage = 'g.jpg';
+                    print(member.toJson());
+                    Navigator.pushNamed(context,'/school', arguments: member);
+                  }
                 }),
             Center(
               child: TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/school');
+                  Navigator.pushNamed(context, '/school', arguments: member);
+                        member.profileImage = 'g.jpg';
+                        print(member.toJson());
+                        Navigator.pushNamed(context,'/school', arguments: member);
                 },
                 child: Text('다음에 변경할래요!',
                   style: TextStyle(decoration: TextDecoration.underline,

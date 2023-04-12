@@ -5,19 +5,19 @@ import 'package:flutter/material.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 
-class SignUpSchool extends StatefulWidget{
+class SignUpSchool extends StatefulWidget {
   const SignUpSchool({super.key});
 
   @override
   State<SignUpSchool> createState() => _SignUpSchoolState();
 }
 
-class _SignUpSchoolState extends State<SignUpSchool>{
+class _SignUpSchoolState extends State<SignUpSchool> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _SchoolController = TextEditingController();
 
-  Widget build(BuildContext context){
-    //Members members = new Members('','','','','','','','');
+  Widget build(BuildContext context) {
+    dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -47,12 +47,12 @@ class _SignUpSchoolState extends State<SignUpSchool>{
             Expanded(child: SizedBox()),
             Button(
                 child: Text('다음'),
-                onPressed: (){
-                  if(_formKey.currentState!.validate()){
-                    Navigator.pushNamed(context,'/email', /*arguments: members*/);
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    print(member.toJson());
+                    Navigator.pushNamed(context, '/email', arguments: member);
                   }
                 })
-
           ],
         ),
       ),

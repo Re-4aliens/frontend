@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../components/button.dart';
+import 'package:aliens/providers/auth_provider.dart';
 
 class SettingEditPWDonePage extends StatefulWidget {
   const SettingEditPWDonePage({super.key});
@@ -17,6 +18,7 @@ class SettingEditPWDonePage extends StatefulWidget {
 class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
   @override
   Widget build(BuildContext context) {
+    final AuthProvider authProvider = new AuthProvider();
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: CustomAppBar(
@@ -61,17 +63,14 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                 child: Container(
                     alignment: Alignment.bottomCenter,
                     child: Button(
-                    child: Text('확인'),
-                    onPressed: () {
-                      //로그아웃시키고
-
-                      //홈으로
-                      Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/', (Route<dynamic> route) => false);
-                    }),
-                    ),
-              )
-            ],
+                        child: Text('확인'),
+                        onPressed: () {
+                          //로그아웃시키고
+                          authProvider.logout(context);
+                        }),
+                  )),
+            )
+          ],
           ),
         ));
   }

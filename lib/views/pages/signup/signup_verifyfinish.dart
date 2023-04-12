@@ -4,21 +4,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 
-class SignUpVerifyFinish extends StatefulWidget{
+class SignUpVerifyFinish extends StatefulWidget {
   const SignUpVerifyFinish({super.key});
 
   @override
   State<SignUpVerifyFinish> createState() => _SignUpVerifyFinishState();
 }
 
-class _SignUpVerifyFinishState extends State<SignUpVerifyFinish>{
-
-  Widget build(BuildContext context){
-    //Members members = new Members('','','','','','','','');
+class _SignUpVerifyFinishState extends State<SignUpVerifyFinish> {
+  Widget build(BuildContext context) {
+    dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Center(
         child: Column(
           children: [
@@ -29,7 +26,7 @@ class _SignUpVerifyFinishState extends State<SignUpVerifyFinish>{
               //elevation: 3.0,
               //highlightElevation: 1.0,
               onPressed: () {
-                Navigator.pushNamed(context, '/password');
+                Navigator.pushNamed(context, '/password', arguments: member);
               },
               shape: RoundedRectangleBorder(
                 side: BorderSide.none,

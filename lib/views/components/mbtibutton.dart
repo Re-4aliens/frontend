@@ -30,37 +30,33 @@ class mbtiButton extends StatelessWidget{
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(25),
       ),
-      color: selected? Color(0xff7898FF):Colors.white  ,
+      color: selected? Color(0xff7898FF):Colors.white,
       textColor: Colors.black,
       child: Column(
-        children: [
-          Positioned(
+          children: [
+            selected? Icon(Icons.check_circle, color: Colors.white) : Icon(Icons.check_circle_outline),
 
-            child: selected? Icon(Icons.check_circle, color: Colors.white) : Icon(Icons.check_circle_outline),
-          ),
+            Text(text, textAlign: TextAlign.center,style: TextStyle(
+                color: selected ? Colors.white: Colors.black,
+                fontSize: 15, fontWeight: FontWeight.bold),),
+            Text(explain,textAlign: TextAlign.center,style: TextStyle(
+                color: selected ? Colors.white: Colors.black,
+                fontSize: 13),),
+            Container(
+              width: 60,height: 60,
+              decoration: BoxDecoration(shape: BoxShape.circle,
+                  color: selected? Color(0xffFFB5B5): Colors.grey),
+            ),
+            Text(mbti, textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,
+                color:selected? Colors.white : Colors.black ),),
 
-          Text(text, textAlign: TextAlign.center,style: TextStyle(
-              color: selected ? Colors.white: Colors.black,
-              fontSize: 15, fontWeight: FontWeight.bold),),
-          Text(explain,textAlign: TextAlign.center,style: TextStyle(
-              color: selected ? Colors.white: Colors.black,
-              fontSize: 13),),
-          Container(
-            width: 60,height: 60,
-            decoration: BoxDecoration(shape: BoxShape.circle,
-                color: selected? Color(0xffFFB5B5): Colors.grey),
-          ),
-          Text(mbti, textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,
-          color:selected? Colors.white : Colors.black ),),
-
-        ]
+          ]
       ),
 
     );
 
   }
 
-  void changeWidget() {}
 }
 
 

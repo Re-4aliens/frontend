@@ -2,7 +2,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/members.dart';
+import '../../../models/member_model.dart';
 import '../../components/button.dart';
 
 class SignUpName extends StatefulWidget{
@@ -14,10 +14,19 @@ class SignUpName extends StatefulWidget{
 
 class _SignUpNameState extends State<SignUpName>{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _NameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
 
   Widget build(BuildContext context){
-    //Members members = new Members('','','','','','','','');
+    Member member = new Member(
+      email: '',
+      password: '',
+      mbti: '',
+      gender: '',
+      nationality: '',
+      birthday: '',
+      name: '',
+      profileImage: '',
+    );
 
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
@@ -33,7 +42,7 @@ class _SignUpNameState extends State<SignUpName>{
                key: _formKey,
                child: TextFormField(
                      validator : (value) => value!.isEmpty? "Please enter some text" : null,
-                     controller: _NameController,
+                     controller: _nameController,
                      decoration: new InputDecoration(
                          hintText: '이름',
                        hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
@@ -45,7 +54,9 @@ class _SignUpNameState extends State<SignUpName>{
                 child: Text('다음'),
                 onPressed: (){
                   if(_formKey.currentState!.validate()){
-                    Navigator.pushNamed(context,'/birthday', /*arguments: members*/);
+                    member.name = _nameController.text;
+                    print(member.toJson());
+                    Navigator.pushNamed(context,'/birthday', arguments: member);
                   }
                 })
 

@@ -19,6 +19,7 @@ class MatchingDonePage extends StatefulWidget {
 class _MatchingDonePageState extends State<MatchingDonePage> {
   @override
   Widget build(BuildContext context) {
+    dynamic partners = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -114,6 +115,7 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                 flex: 2,
                 child: InkWell(
                   onTap: () {
+                    print(partners);
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -154,15 +156,14 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                                   ),),
                                 alignment: Alignment.center,
                               ),
-                              for(int i = 0; i < 4; i++)
+                              for(int i = 0; i < partners['partners'].length; i++)
                                 Expanded(
                                   flex: 3,
                                   child: Container(
                                     width: 350,
                                     child: Column(
                                       children: [
-                                        matchingList(),
-
+                                        matchingListWidget(context, partners['partners'][i]),
                                       ],
                                       mainAxisAlignment: MainAxisAlignment.center,
                                     ),
@@ -218,77 +219,79 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
           ),
         ));
   }
+}
 
-  Widget matchingList() {
-    return Container(
-      child: MaterialButton(
-        minWidth: 350,
-        height: 77,
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        elevation: 3.0,
-        highlightElevation: 1.0,
-        onPressed: () {
-        },
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
-        color: Colors.white,
+Widget matchingListWidget(context, partners){
+  return Container(
+    child: MaterialButton(
+      minWidth: 350,
+      height: 77,
+      padding: EdgeInsets.symmetric(horizontal: 15),
+      elevation: 3.0,
+      highlightElevation: 1.0,
+      onPressed: () {
+        Navigator.pushNamed(context, '/info/my', arguments: partners);
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      color: Colors.white,
 
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: Color(0xffD9D9D9),
-                borderRadius: BorderRadius.circular(25),
-              ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            height: 50,
+            width: 50,
+            decoration: BoxDecoration(
+              color: Color(0xffD9D9D9),
+              borderRadius: BorderRadius.circular(25),
             ),
-            Expanded(child: Container(
-              margin: EdgeInsets.all(15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text('Mila',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),),
-                      SizedBox(
-                        width: 3,
+          ),
+          Expanded(child: Container(
+            margin: EdgeInsets.all(15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text('${partners['name']}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),),
+                    SizedBox(
+                      width: 3,
+                    ),
+                    Container(
+                      height: 18,
+                      width: 18,
+                      child: partners['gender'] == 'male'?Icon(Icons.male, size: 18,):Icon(Icons.female, size: 18,),
+                      decoration: BoxDecoration(
+                        color: Color(0xffD9D9D9),
+                        borderRadius: BorderRadius.circular(9),
                       ),
-                      Container(
-                        height: 18,
-                        width: 18,
-                        child: Icon(Icons.female, size: 18,),
-                        decoration: BoxDecoration(
-                          color: Color(0xffD9D9D9),
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                      )
-                    ],
-                  ),
-                  Text('ISFP',
+                    )
+                  ],
+                ),
+                Text('${partners['mbti']}',
                   style: TextStyle(
                     fontSize: 16,
                     color: Color(0xffA4A4A4),
                   ),),
-                ],
-              ),
-            )),
-            Container(
-              height: 30,
-              width: 50,
-              decoration: BoxDecoration(
-                color: Color(0xffD9D9D9),
-              ),
-            )
-          ],
-        ),
+              ],
+            ),
+          )),
+          Container(
+            height: 30,
+            width: 50,
+            decoration: BoxDecoration(
+              color: Color(0xffD9D9D9),
+            ),
+          )
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
+

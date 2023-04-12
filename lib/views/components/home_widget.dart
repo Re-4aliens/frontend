@@ -47,7 +47,7 @@ Widget homeWidget(BuildContext context, memberDetails, selectedIndex) {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'HI, ${memberDetails.member.name}',
+                          'HI, ${memberDetails['name']}',
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
