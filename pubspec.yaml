@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  dio: ^5.0.1
   image_picker: ^0.8.7
   syncfusion_flutter_datepicker: ^20.4.51
   flutter:
@@ -44,6 +45,7 @@ dependencies:
 # <<<<<<< HEAD
   # redis: ^3.1.0
   country_picker: ^2.0.20
+  web_socket_channel: ^2.3.0
 # =======
 # >>>>>>> parent of dfdf35b (feat: 채팅 페이지 추가)
 

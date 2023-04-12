@@ -80,6 +80,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
 
         onEditingComplete: (){
           FocusScope.of(context).unfocus();
+          //auth에서 불러오기
           if(passwordController.text == memberDetails.member.password) {
             showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
 
@@ -99,6 +100,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                 TextButton(
                   onPressed: () {
                     //탈퇴
+
                     Navigator.pushNamed(context, '/setting/delete/done');
                   },
                   child: const Text('탈퇴하기',
@@ -110,7 +112,6 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
             ));
           } else {
             showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
-
               title: Text('탈퇴 실패',
               style: TextStyle(
                 fontWeight: FontWeight.bold,

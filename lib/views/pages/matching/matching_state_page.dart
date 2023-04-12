@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
 
 class MatchingStatePage extends StatefulWidget {
@@ -19,7 +20,7 @@ class MatchingStatePage extends StatefulWidget {
 class _MatchingStatePageState extends State<MatchingStatePage> {
   @override
   Widget build(BuildContext context) {
-    var memberDetails = ModalRoute.of(context)!.settings.arguments;
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     return Scaffold(
         backgroundColor: Color(0xFFF4F4F4),
         appBar: AppBar(
@@ -90,7 +91,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                   child: Button(
                       child: Text('나의 매칭 정보 확인하기'),
                       onPressed: (){
-                        Navigator.pushNamed(context, '/info/my', arguments: memberDetails);
+                        Navigator.pushNamed(context, '/info/my', arguments: args);
                       }),
                 ),
                 SizedBox(

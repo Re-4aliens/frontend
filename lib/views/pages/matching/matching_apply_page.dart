@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
+import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
 
 class MatchingApplyPage extends StatefulWidget {
@@ -16,8 +17,7 @@ class MatchingApplyPage extends StatefulWidget {
 class _MatchingApplyPageState extends State<MatchingApplyPage> {
   @override
   Widget build(BuildContext context) {
-    var memberDetails = ModalRoute.of(context)!.settings.arguments;
-
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
 
     return Scaffold(
         backgroundColor: Color(0xFFF4F4F4),
@@ -41,11 +41,11 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
             )
           ],
         ),
-        body: _buildBody(memberDetails)
+        body: _buildBody(args),
     );
   }
 
-  Widget _buildBody(memberDetails){
+  Widget _buildBody(args){
     return Container(
         child: Column(
           children: [
@@ -151,7 +151,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                   child: Button(
                       child: Text('시작하기'),
                       onPressed: (){
-                        Navigator.pushNamed(context,'/choose', arguments: memberDetails);
+                        Navigator.pushNamed(context,'/choose', arguments: args);
                       }),
                 )
               ],

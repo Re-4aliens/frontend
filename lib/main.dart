@@ -1,3 +1,4 @@
+import 'package:aliens/views/pages/loading_page.dart';
 import 'package:aliens/views/pages/login/login_checkmail_page.dart';
 import 'package:aliens/views/pages/login/login_findpassword_page.dart';
 import 'package:aliens/views/pages/login/login_page.dart';
@@ -39,7 +40,8 @@ import './views/pages/setting/setting_edit_PW_done_page.dart';
 import './views/pages/setting/setting_edit_PW_page.dart';
 import './views/pages/setting/setting_find_PW_page.dart';
 
-
+import './views/pages/chatting/chatting_page.dart';
+import './views/pages/splash_page.dart';
 
 import './providers/member_provider.dart';
 
@@ -61,9 +63,11 @@ class MyApp extends StatelessWidget {
       routes: {
 
 
-        '/' : (context)=> StartPage(),
+        //'/' : (context)=> StartPage(),
+        '/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: StartPage()),
 
-        '/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
+        //'/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
+        '/main': (context)=> HomePage(),
 
         // matching
         '/apply' : (context) => MatchingApplyPage(),
@@ -72,7 +76,7 @@ class MyApp extends StatelessWidget {
         '/choose' : (context) => MatchingChoosePage(),
         '/apply/done' : (context) => MatchingApplyDonePage(),
         '/info/my' : (conext) => MatchingInfoPage(title: '나의 매칭 정보'),
-        '/info/your' : (context) => MatchingInfoPage(title: '남의 매칭 정보'),
+        '/info/your' : (context) => MatchingInfoPage(title: ''),
         '/edit' : (context) => MatchingEditPage(),
 
         //setting
@@ -104,6 +108,12 @@ class MyApp extends StatelessWidget {
         '/login': (context) => Login(),
         '/login/findpassword' : (context) => LoginFindPassword(),
         '/login/checkemail' : (context)=> LoginCheckMail(),
+
+        //chatting
+        '/chatting': (context) => ChattingPage(),
+
+        //loading
+        '/loading' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: LoadingPage()),
 
 
       },

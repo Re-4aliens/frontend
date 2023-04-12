@@ -3,10 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../models/screenArgument.dart';
 
 class MatchingInfoPage extends StatefulWidget {
   const MatchingInfoPage({super.key, required this.title});
@@ -21,7 +18,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    var memberDetails = ModalRoute.of(context)!.settings.arguments;
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     return Scaffold(
       backgroundColor: Color(0xFFF4F4F4),
       appBar: AppBar(
@@ -50,11 +47,11 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
           )
         ],
       ),
-      body: _buildBody(memberDetails),
+      body: _buildBody(args.applicant),
     );
   }
 
-  Widget _buildBody(memberDetails){
+  Widget _buildBody(applicant){
     return Center(
       child: Column(
         children: [
@@ -82,7 +79,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        memberDetails.member.name.toString(),
+                        applicant['member']['name'].toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 24),
                       ),
@@ -115,7 +112,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                     ),
                   ),
                   Text(
-                    '${memberDetails.member.age}세',
+                    '${applicant['member']['age']}세',
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -147,7 +144,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                   margin: EdgeInsets.only(right: 5),
                                 ),
                                 Text(
-                                  memberDetails.member.nationality.toString(),
+                                  applicant['member']['nationality'].toString(),
                                   style: TextStyle(
                                     fontSize: 20,
                                   ),
@@ -167,7 +164,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                               ),
                             ),
                             Text(
-                              memberDetails.member.mbti.toString(),
+                              applicant['member']['mbti'].toString(),
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -253,7 +250,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                               height: 2,
                             ),
                             Text(
-                              '한국어',
+                              applicant['preferLanguages']['firstPreferLanguage'].toString(),
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -294,7 +291,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                               height: 3,
                             ),
                             Text(
-                              '1순위',
+                              '2순위',
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -305,7 +302,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                               height: 2,
                             ),
                             Text(
-                              '한국어',
+                              applicant['preferLanguages']['secondPreferLanguage'].toString(),
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,

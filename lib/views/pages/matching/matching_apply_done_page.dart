@@ -7,6 +7,7 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
 
 class MatchingApplyDonePage extends StatefulWidget {
@@ -19,7 +20,7 @@ class MatchingApplyDonePage extends StatefulWidget {
 class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
   @override
   Widget build(BuildContext context) {
-    var memberDetails = ModalRoute.of(context)!.settings.arguments;
+    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -83,10 +84,10 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                       onPressed: (){
                         //스택 비우고
                         Navigator.of(context)
-                            .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
+                            .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false, arguments: args
                         );
                         //state페이지를 push
-                        Navigator.pushNamed(context, '/state', arguments: memberDetails);
+                        Navigator.pushNamed(context, '/state', arguments: args);
 
                       }),
                 ),

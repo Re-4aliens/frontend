@@ -58,7 +58,10 @@ class _SignUpGenderState extends State<SignUpGender>{
             Button(
                 child: Text('확인'),
                 onPressed: (){
-                  member.gender = _selectedGender;
+                  if(_selectedGender == '여성')
+                    member.gender = 'FEMALE';
+                  else
+                    member.gender = 'MALE';
                   print(member.toJson());
                   Navigator.pushNamed(context,'/nationality', arguments: member);
                 })

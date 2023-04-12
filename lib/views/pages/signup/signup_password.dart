@@ -19,8 +19,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _PasswordController = TextEditingController();
 
-  //storage에 작성할 모델
-  final Auth auth = new Auth();
+
   final AuthProvider authProvider = new AuthProvider();
   static final storage = FlutterSecureStorage();
 
@@ -60,18 +59,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                     //------ 회원가입 api 요청
                     authProvider.signUp(member, context);
 
-                    //------ 로그인 api 요청
-                    auth.email = member.email;
-                    auth.password = member.password;
-
-                    //로그인 정보 저장
-                    await storage.write(
-                      key: 'auth',
-                      value: jsonEncode(auth),
-                    );
-
-                    //http 요청
-                    authProvider.login(auth, context);
+                    //회원가입 성공하면 로그인 요청
 
 
                     Navigator.pushNamed(context,'/welcome', arguments: member);

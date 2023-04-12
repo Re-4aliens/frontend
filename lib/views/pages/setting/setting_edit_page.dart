@@ -4,8 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 
-import '../../components/button.dart';
-
 
 class SettingEditPage extends StatefulWidget {
   const SettingEditPage({super.key});
@@ -132,9 +130,9 @@ class _SettingEditPageState extends State<SettingEditPage> {
     ];
 
     List memberInfo = [
-      memberDetails.member.mbti.toString(),
-      memberDetails.member.gender.toString(),
-      memberDetails.member.nationality.toString(),
+      memberDetails['mbti'].toString(),
+      memberDetails['gender'].toString(),
+      memberDetails['nationality'].toString(),
     ];
 
     List navigatorList = [

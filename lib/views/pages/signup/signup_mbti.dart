@@ -4,104 +4,103 @@ import '../../../models/members.dart';
 import '../../components/button.dart';
 import 'package:aliens/views/components/mbtibutton.dart';
 
-var selected = '';
-dynamic btnColor = Colors.grey;
+int selectedStack = -1;
 final List<Map<String, dynamic>> mbtiList = [
   {
     'mbti': 'INTJ',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '1',
   },
   {
     'mbti': 'INTP',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '2'
   },
   {
     'mbti': 'INFJ',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '3'
   },
   {
     'mbti': 'INFP',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '4'
   },
   {
     'mbti': 'ISTJ',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '5'
   },
   {
     'mbti': 'ISTP',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '6'
   },
   {
     'mbti': 'ISFJ',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '7'
   },
   {
     'mbti': 'ISFP',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '8'
   },
   {
     'mbti': 'ENTJ',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '9'
   },
   {
     'mbti': 'ENTP',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '10'
   },
   {
     'mbti': 'ENFJ',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '11'
   },
   {
     'mbti': 'ENFP',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '12'
   },
   {
     'mbti': 'ESTJ',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '13'
   },
   {
     'mbti': 'ESTP',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '14'
   },
   {
     'mbti': 'ESFJ',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '15'
   },
   {
     'mbti': 'ESFP',
-    'mbtiType': '분석가형',
-    'mbtiType_2': '전락가',
-    'color': btnColor
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '16'
   },
 ];
 
@@ -115,42 +114,16 @@ class SignUpMbti extends StatefulWidget {
 class _SignUpMbtiState extends State<SignUpMbti> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    selectedStack = -1;
+  }
 
   Widget build(BuildContext context) {
     dynamic member = ModalRoute.of(context)!.settings.arguments;
 
-    Widget makeButton (){
-      setState(() {
-
-      });
-      return Column(
-        children: [
-          for (int i = 0; i < 8; i++)
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    mbtiButton(
-                      text: (mbtiList[2 * i]['mbtiType']),
-                      explain: (mbtiList[2 * i]['mbtiType_2']),
-                      mbti: (mbtiList[2 * i]['mbti']),
-                      color: mbtiList[2 * i]['color'],
-                    ),
-                    mbtiButton(
-                      text: (mbtiList[(2 * i + 1)]['mbtiType']),
-                      explain: (mbtiList[(2 * i + 1)]['mbtiType_2']),
-                      mbti: (mbtiList[(2 * i + 1)]['mbti']),
-                      color: mbtiList[2 * i]['color'],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-              ],
-            ),
-        ],
-      );
-    }
     return Scaffold(
       appBar: CustomAppBar(
         appBar: AppBar(),
@@ -167,12 +140,49 @@ class _SignUpMbtiState extends State<SignUpMbti> {
               style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 40),
-            makeButton(),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                children: [
+                  for (int i = 0; i < 8; i++)
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            mbtiButton(
+                              text: mbtiList[2 * i]['text'],
+                              explain: mbtiList[2 * i]['explain'],
+                              mbti: (mbtiList[2 * i]['mbti']),
+                              selected: selectedStack == (2 * i),
+                              step: mbtiList[2 * i]['step'],
+                              onPressed: () => setState(() => selectedStack = 2 * i),
+                            ),
+                            mbtiButton(
+                              text: mbtiList[(2 * i + 1)]['text'],
+                              explain: mbtiList[(2 * i + 1)]['explain'],
+                              mbti: (mbtiList[(2 * i + 1)]['mbti']),
+                              selected: selectedStack == (2 * i + 1),
+                              step: mbtiList[(2 * i + 1)]['step'],
+                              onPressed: () =>
+                                  setState(() => selectedStack = (2 * i + 1)),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    )
+                ],
+              ),
+            ),
+            SizedBox(height: 20),
             Button(
                 child: Text('확인'),
                 onPressed: () {
-                  if (selected != '') {
-                    member.mbti = selected;
+                  if (selectedStack != -1) {
+                    member.mbti = mbtiList[selectedStack]['mbti'];
                     print(member.toJson());
                     Navigator.pushNamed(context, '/profile', arguments: member);
                   }
