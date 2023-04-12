@@ -7,6 +7,8 @@ import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../components/button.dart';
 
 class MatchingStatePage extends StatefulWidget {
@@ -21,48 +23,58 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
   Widget build(BuildContext context) {
     var memberDetails = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
-        backgroundColor: Color(0xFFF4F4F4),
+       // backgroundColor: Color(0xFFF4F4F4),
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Color(0xFFF4F4F4),
+          backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios_new),
+            icon: SvgPicture.asset(
+              'assets/icon/icon_back.svg',
+              width: MediaQuery.of(context).size.width * 0.062,
+              height: MediaQuery.of(context).size.height * 0.029,            ),
             color: Colors.black,
           ),
         ),
         body: Column(
           children: [
-            Expanded(flex: 1,child: Container()),
             Column(
               children: [
+                Expanded(flex:1, child: Container()),
+
                 Text(
                   '매칭 대기중...',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: MediaQuery.of(context).size.height * 0.039,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                Container(
-                  height: 8,
-                  width: 200,
-                  decoration: BoxDecoration(color: Colors.white),
+                Center(
+                    child:  LinearPercentIndicator(
+                  width: MediaQuery.of(context).size.width * 0.513,
+                  animation: true,
+                  lineHeight: MediaQuery.of(context).size.height * 0.009,
+                  animationDuration: 2000,
+                  percent: 0.9,
+                  linearStrokeCap: LinearStrokeCap.roundAll,
+                  progressColor: Color(0xff7898FF),
+                ),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: MediaQuery.of(context).size.height * 0.059,
                 ),
                 Container(
                   decoration: BoxDecoration(
                     color: Color(0xFFD9D9D9),
                     borderRadius: BorderRadius.circular(90),
                   ),
-                  width: 180,
-                  height: 180,
+                  width: MediaQuery.of(context).size.width * 0.361,
+                  height: MediaQuery.of(context).size.height * 0.21,
                 ),
                 SizedBox(
                   height: 70,

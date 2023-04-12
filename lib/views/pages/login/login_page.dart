@@ -38,13 +38,13 @@ class _LoginState extends State<Login> {
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.0005),
                   Container(
-                    width: 100,
+                    width: MediaQuery.of(context).size.width * 0.26,
                     height: MediaQuery.of(context).size.height * 0.1,
                     decoration: BoxDecoration(color: Colors.grey),
                   ),
                   Text(
                     'FRIEND SHIP',
-                    style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, fontWeight: FontWeight.bold),
                   ),
                   Text(
                     '프렌즈쉽에 오신것을 환영합니다.',
@@ -82,7 +82,7 @@ class _LoginState extends State<Login> {
                       ) ,
 
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.001),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.024),
                     Form(
                       child: Material(
                         shape: RoundedRectangleBorder(

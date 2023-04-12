@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class languageButton extends StatelessWidget{
   final language;
@@ -13,8 +14,8 @@ class languageButton extends StatelessWidget{
   @override
   Widget build(BuildContext context){
     return MaterialButton(
-        height: 116,
-        minWidth: 158,
+        height: MediaQuery.of(context).size.height * 0.14,
+        minWidth: MediaQuery.of(context).size.width * 0.4,
         elevation: 3.0,
         highlightElevation: 1.0,
         onPressed: () {
@@ -35,25 +36,29 @@ class languageButton extends StatelessWidget{
                   Column(
                     children: [
                       SizedBox(
-                        height: 50,
+                        height: MediaQuery.of(context).size.height * 0.06,
                       ),
                       Text(
                         language,
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.height * 0.032,
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(width: 25,)
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.064)
                 ],
               ),
             ),
             Container(
               child: Container(
-                    child: Icon(Icons.check_circle, size: 30,),
+                width: MediaQuery.of(context).size.width * 0.072,
+                    height: MediaQuery.of(context).size.height * 0.033,
+                    child: SvgPicture.asset(
+                      'assets/icon/icon_check.svg',
+                    ),
                 ),
             ),
               ],
