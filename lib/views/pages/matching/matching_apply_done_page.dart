@@ -30,8 +30,9 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
               Navigator.pop(context);
             },
             icon: SvgPicture.asset(
-              'assets/icon/icon_back.svg'
-            ),
+              'assets/icon/icon_back.svg',
+              width: MediaQuery.of(context).size.width * 0.062,
+              height: MediaQuery.of(context).size.height * 0.029,            ),
             color: Colors.black,
           ),
         ),
@@ -45,31 +46,31 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                     color: Color(0xFFD9D9D9),
                     borderRadius: BorderRadius.circular(78),
                   ),
-                  width: 156,
-                  height: 156,
+                  width: MediaQuery.of(context).size.width * 0.4,
+                  height: MediaQuery.of(context).size.height * 0.186,
                 ),
                 SizedBox(
-                  height: 80,
+                  height: MediaQuery.of(context).size.height * 0.09,
                 ),Text(
                   '매칭 신청 완료!',
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: MediaQuery.of(context).size.height * 0.039,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
-                  height: 10,
+                  height: MediaQuery.of(context).size.height * 0.012,
                 ),
                 Text(
                   '아래 버튼을 클릭하면\n매칭 진행 상황을 알 수 있어요.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xff616161),
-                    fontSize: 16,
+                    fontSize: MediaQuery.of(context).size.height * 0.026,
                   ),
                 ),
                 SizedBox(
-                  height: 70,
+                  height: MediaQuery.of(context).size.height * 0.0833,
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
