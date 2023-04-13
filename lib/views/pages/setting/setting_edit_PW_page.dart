@@ -167,8 +167,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                                           ),
                                         ],
                                       ));
-                            }
-),
+                            }})
                   ),
                 ),
               )

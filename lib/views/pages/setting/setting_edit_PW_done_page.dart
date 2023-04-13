@@ -69,7 +69,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                           authProvider.logout(context);
                         }),
                   )),
-            )
+
           ],
           ),
         ));

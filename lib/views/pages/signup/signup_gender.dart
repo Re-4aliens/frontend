@@ -36,7 +36,7 @@ class _SignUpGenderState extends State<SignUpGender>{
                 Text('성별', style: TextStyle(fontSize: 20,),),
                 ButtonTheme(
                   alignedDropdown: true,
-                DropdownButton(
+                child: DropdownButton(
                 underline: SizedBox.shrink(),
                     icon: SvgPicture.asset(
                       'assets/icon/icon_dropdown.svg',

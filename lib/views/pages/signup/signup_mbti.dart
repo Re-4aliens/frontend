@@ -175,6 +175,7 @@ class _SignUpMbtiState extends State<SignUpMbti> {
                     )
                 ],
               ),
+            ),
             SizedBox(height: 20),
             Button(
                 child: Text('확인'),
