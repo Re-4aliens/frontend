@@ -43,7 +43,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
     );
   }
 
-  Widget _buildBody(memberDetails){
+  Widget _buildBody(args){
     return Stack(
           children: [
             Padding(
