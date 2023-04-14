@@ -73,28 +73,34 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                         child: Text('확인'),
                         onPressed: ()async {
                           //if 지금 비밀번호랑 입력한 거랑 같으면
-                          var userInfo = await storage.read(key:'auth');
-                          if(_passwordController.text == json.decode(userInfo!)['password'])
-                            Navigator.pushNamed(context,'/setting/edit/PW', arguments: _passwordController.text);
+                          var userInfo = await storage.read(key: 'auth');
+                          if (_passwordController.text ==
+                              json.decode(userInfo!)['password'])
+                            Navigator.pushNamed(context, '/setting/edit/PW',
+                                arguments: _passwordController.text);
                           else
-                            showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
+                            showDialog(context: context,
+                                builder: (BuildContext context) =>
+                                    CupertinoAlertDialog(
 
-                              title: Text('비밀번호 미일치',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              content: const Text('비밀번호를 확인해주세요.'),
-                              actions: <Widget>[
-                                TextButton(
-                                  onPressed: () => Navigator.of(context).pop(),
-                                  child: const Text('확인',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                      )),
-                                ),
-                              ],
-                            ));
+                                      title: Text('비밀번호 미일치',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      content: const Text('비밀번호를 확인해주세요.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(),
+                                          child: const Text('확인',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              )),
+                                        ),
+                                      ],
+                                    ));
+                        }
                         ),
                   ),
                 ),

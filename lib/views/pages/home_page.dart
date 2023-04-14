@@ -184,7 +184,7 @@ print(args.applicant);
                   )
                 ],
               ),
-              extendBodyBehindAppBar: true,
+              //extendBodyBehindAppBar: true,
               bottomNavigationBar: BottomNavigationBar(
                 currentIndex: selectedIndex,
                 selectedItemColor: Color(0xFF737373),
