@@ -15,37 +15,37 @@ final List<Map<String, dynamic>> mbtiList = [
   {
     'mbti': 'INTP',
     'text': '분석가형',
-    'explain': '전락가',
+    'explain': '논리술사',
     'step': '2'
   },
   {
     'mbti': 'INFJ',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '외교관형',
+    'explain': '옹호자',
     'step': '3'
   },
   {
     'mbti': 'INFP',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '외교관형',
+    'explain': '중재자',
     'step': '4'
   },
   {
     'mbti': 'ISTJ',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '관리자형',
+    'explain': '현실주의자',
     'step': '5'
   },
   {
     'mbti': 'ISTP',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '탐험가형',
+    'explain': '장인',
     'step': '6'
   },
   {
     'mbti': 'ISFJ',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '관리자형',
+    'explain': '수호자',
     'step': '7'
   },
   {
@@ -57,49 +57,49 @@ final List<Map<String, dynamic>> mbtiList = [
   {
     'mbti': 'ENTJ',
     'text': '분석가형',
-    'explain': '전락가',
+    'explain': '통솔가',
     'step': '9'
   },
   {
     'mbti': 'ENTP',
     'text': '분석가형',
-    'explain': '전락가',
+    'explain': '변론가',
     'step': '10'
   },
   {
     'mbti': 'ENFJ',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '외교관형',
+    'explain': '선도자',
     'step': '11'
   },
   {
     'mbti': 'ENFP',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '외교관형',
+    'explain': '활동가',
     'step': '12'
   },
   {
     'mbti': 'ESTJ',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '관리자형',
+    'explain': '경영자',
     'step': '13'
   },
   {
     'mbti': 'ESTP',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '탐험가형',
+    'explain': '사업가',
     'step': '14'
   },
   {
     'mbti': 'ESFJ',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '관리자형',
+    'explain': '집정관',
     'step': '15'
   },
   {
     'mbti': 'ESFP',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': '탐험가형',
+    'explain': '연예인',
     'step': '16'
   },
 ];
@@ -136,7 +136,7 @@ class _SignUpMbtiState extends State<SignUpMbti> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('ooo님의 MBTI가 궁금해요!',
+            Text('${member.name}님의 MBTI가 궁금해요!',
               style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Padding(
