@@ -19,7 +19,7 @@ class _SignUpVerifyFinishState extends State<SignUpVerifyFinish> {
       body: Center(
         child: Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).size.height * 0.2  ,),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.3),
             MaterialButton(
               minWidth: MediaQuery.of(context).size.width* 0.72,
               height: MediaQuery.of(context).size.height * 0.29,
