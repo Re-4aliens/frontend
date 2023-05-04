@@ -5,11 +5,14 @@ import 'package:aliens/views/components/button_big.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
+
+import '../../../mockdatas/mockdata_model.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -90,11 +93,11 @@ class _LoginState extends State<Login> {
                             ]),
                         child: TextFormField(
                           validator: (value) =>
-                          value!.isEmpty ? "Please enter some text" : null,
+                              value!.isEmpty ? "Please enter some text" : null,
                           controller: _emailController,
                           decoration: new InputDecoration(
-
-                            contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 30),
                             hintText: '이메일 주소',
                             hintStyle: TextStyle(
                                 fontSize: fontSize, color: Color(0xffA0A0A0)),
@@ -127,10 +130,11 @@ class _LoginState extends State<Login> {
                             ]),
                         child: TextFormField(
                           validator: (value) =>
-                          value!.isEmpty ? "Please enter some text" : null,
+                              value!.isEmpty ? "Please enter some text" : null,
                           controller: _passwordController,
                           decoration: new InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 30),
                               hintText: '비밀번호',
                               hintStyle: TextStyle(
                                   fontSize: fontSize, color: Color(0xffA0A0A0)),
@@ -153,16 +157,97 @@ class _LoginState extends State<Login> {
                           auth.email = _emailController.text;
                           auth.password = _passwordController.text;
 
-                          //http 요청
+                          /* api 추후에 활성화 시킬 부분
                           //await 키워드로 authprovider.login이 완료될 때까지 잠시 대기
                           var loginSuccess =
                           await authProvider.login(auth, context);
-                          print('시도');
+                          */
+
+                          var loginSuccess = true; //임의 값. 값을 수정하면서 사용
 
                           if (loginSuccess) {
-                            //스택 비우고 화면 이동
+                            print('로그인시도');
+                            /* 추후에 활성화 시킬 부분
+                           //스택 비우고 화면 이동
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/loading', (Route<dynamic> route) => false);
+                            */
+                            var screenArgument = new ScreenArguments(
+                                {
+                                  "email": "exaple_user@exaple.com",
+                                  "mbti": "ENFJ",
+                                  "gender": "MALE",
+                                  "nationality": "Korea",
+                                  "birthday": "2000-01-01",
+                                  "name": "RYAN",
+                                  "profileImage": "url",
+                                  "age": 26
+                                },
+                                /*
+                                경우에 따라
+                                MATCHED, PENDING, NOT_APPLIED 입력
+                                 */
+                                {
+                                  "status": "PENDING"
+                                },
+                                {
+                                  "member": {
+                                    "name": "Jenny",
+                                    "gender": "Female",
+                                    "mbti": "INTJ",
+                                    "nationality": "Korea",
+                                    "age": 26,
+                                    "profileImage": "url/example",
+                                    "countryImage": "url/example"
+                                  },
+                                  "preferLanguages": {
+                                    "firstPreferLanguage": "string",
+                                    "secondPreferLanguage": "string"
+                                  }
+                                },
+                                {
+                                  "partners": [
+                                    {
+                                      "memberId": 1,
+                                      "name": "Jenny",
+                                      "mbti": "ENTJ",
+                                      "gender": "FEMALE",
+                                      "nationality": "Korean",
+                                      "profileImage": "url",
+                                      "countryImage": "url"
+                                    },
+                                    {
+                                      "memberId": 1,
+                                      "name": "Jenny",
+                                      "mbti": "ENTJ",
+                                      "gender": "FEMALE",
+                                      "nationality": "Korean",
+                                      "profileImage": "url",
+                                      "countryImage": "url"
+                                    },
+                                    {
+                                      "memberId": 1,
+                                      "name": "Jenny",
+                                      "mbti": "ENTJ",
+                                      "gender": "FEMALE",
+                                      "nationality": "Korean",
+                                      "profileImage": "url",
+                                      "countryImage": "url"
+                                    },
+                                    {
+                                      "memberId": 1,
+                                      "name": "Jenny",
+                                      "mbti": "ENTJ",
+                                      "gender": "FEMALE",
+                                      "nationality": "Korean",
+                                      "profileImage": "url",
+                                      "countryImage": "url"
+                                    },
+                                  ]
+                                });
+
+                            Navigator.popAndPushNamed(context, '/main',
+                                arguments: screenArgument);
                           } else {
                             showDialog(
                                 context: context,
