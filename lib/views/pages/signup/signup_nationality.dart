@@ -120,9 +120,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                                     child: Text(
                                       value,
                                       style: TextStyle(
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
+                                          fontSize: MediaQuery.of(context).size.height *
                                               0.032,
                                           fontWeight: FontWeight.bold),
                                     ),
