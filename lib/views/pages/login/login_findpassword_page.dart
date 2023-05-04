@@ -52,6 +52,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                         hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
                     ),
                   ),
+                  SizedBox(height: 10,),
                   TextFormField(
                     validator : (value) => value!.isEmpty? "Please enter some text" : null,
                     controller: _EmailController,
