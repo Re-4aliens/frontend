@@ -25,6 +25,7 @@ Future<Map<String, dynamic>> applicantInfo() async {
   var response;
   print('매칭 상태 요청');
   try {
+
     const url =
         'http://13.125.205.59:8080/api/v1/matching/applicant'; //mocksever
 
@@ -151,7 +152,6 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getData();
   }
@@ -167,7 +167,6 @@ class _LoadingPageState extends State<LoadingPage> {
 
   @override
   Widget build(BuildContext context) {
-    //var memberDetails = Provider.of<MemberProvider>(context, listen: false);
     return FutureBuilder(
         future: getData(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
