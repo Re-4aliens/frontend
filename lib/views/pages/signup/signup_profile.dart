@@ -33,6 +33,7 @@ class _SignUpProfileState extends State<SignUpProfile>{
     dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
       body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
@@ -58,7 +59,7 @@ class _SignUpProfileState extends State<SignUpProfile>{
                     /*Icon(Icons.account_circle, size : 200, color: Color(0xffE3E3E3),)*/:
                         Container(
                           width: MediaQuery.of(context).size.width * 0.33,
-                          height: MediaQuery.of(context).size.height * 0.33,
+                          height: MediaQuery.of(context).size.height * 0.26,
                           decoration: BoxDecoration(
                               shape: BoxShape.circle,
                             image: DecorationImage(
@@ -73,35 +74,36 @@ class _SignUpProfileState extends State<SignUpProfile>{
                     bottom: 0,
                     right: 0,
                       child:
-                      IconButton(
-                        color: Color(0xff808080),
-                          onPressed:(){
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context){
-                                return SimpleDialog(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0),
+                      FloatingActionButton(
+                        mini: true,
+                        backgroundColor: Color(0xffFFFFFF),
+                        onPressed:(){
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context){
+                              return SimpleDialog(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20.0),
+                                ),
+                                children: [
+                                  SimpleDialogOption(
+                                    child: Text('사진 찍기',),
+                                    onPressed: (){getImage(ImageSource.camera);},
                                   ),
-                                  children: [
-                                    SimpleDialogOption(
-                                      child: Text('사진 찍기',),
-                                      onPressed: (){getImage(ImageSource.camera);},
-                                    ),
-                                    SimpleDialogOption(
-                                      child: Text('사진첩에서 가져오기'),
-                                      onPressed: (){getImage(ImageSource.gallery);},
-                                    ),
-                                  ],
-                                );
-                              }
-                            );
-                          } ,
-                          icon: SvgPicture.asset(
-                            'assets/icon/icon_album.svg',
-                            width: MediaQuery.of(context).size.width * 0.063,
-                            height: MediaQuery.of(context).size.height * 0.027,
-                          )
+                                  SimpleDialogOption(
+                                    child: Text('사진첩에서 가져오기'),
+                                    onPressed: (){getImage(ImageSource.gallery);},
+                                  ),
+                                ],
+                              );
+                            }
+                        );
+                      },
+                        child: SvgPicture.asset(
+                          'assets/icon/icon_album.svg',
+                          width: MediaQuery.of(context).size.width * 0.063,
+                          height: MediaQuery.of(context).size.height * 0.027,
+                        )
                       ),
                   )
                 ],
