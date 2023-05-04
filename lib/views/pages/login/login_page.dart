@@ -5,7 +5,6 @@ import 'package:aliens/views/components/button_big.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-
 import '../../components/button.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -27,169 +26,190 @@ class _LoginState extends State<Login> {
   final AuthProvider authProvider = new AuthProvider();
   static final storage = FlutterSecureStorage();
 
-
   //storage에 작성할 모델
   final Auth auth = new Auth();
 
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final bool isSmallScreen = screenWidth <= 600;
+    final double fontSize = isSmallScreen ? 16.0 : 20.0;
+    final double heightSize = isSmallScreen ? 70 : 90;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-     /* appBar: CustomAppBar(
-        appBar: AppBar(),
-        title: '',
-        onPressed: () {},
-      ),*/
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.only(right: 20, left: 20, top: MediaQuery.of(context).size.height * 0.2, bottom: MediaQuery.of(context).size.height * 0.06),
+        padding: EdgeInsets.only(
+          right: 24,
+          left: 24,
+        ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.0005),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.26,
-                    height: MediaQuery.of(context).size.height * 0.1,
-                    decoration: BoxDecoration(color: Colors.grey),
+                flex: 5,
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Container(
+                        width: 155,
+                        height: 100,
+                        decoration: BoxDecoration(color: Colors.grey),
+                      ),
+                      Text(
+                        '프렌즈쉽에 오신것을 환영합니다.',
+                        style: TextStyle(
+                            fontSize: fontSize, color: Color(0xff616161)),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'FRIEND SHIP',
-                    style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '프렌즈쉽에 오신것을 환영합니다.',
-                    style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026),
-                  ),
-                ],
-              ),
-            ),
+                )),
+            Expanded(flex: 1, child: Container()),
             Expanded(
-              child: Column(
+                flex: 7,
+                child: Column(
                   children: [
                     Form(
                       key: _emailFormKey,
-                      child: Material(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        elevation: 3.0,
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: heightSize,
+                        decoration: BoxDecoration(
+                            color: Color(0xffF8F8F8),
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 5,
+                                spreadRadius: 0.2,
+                                color: Colors.grey.shade300,
+                                offset: const Offset(0, 4),
+                              )
+                            ]),
                         child: TextFormField(
-                          validator : (value) => value!.isEmpty? "Please enter some text" : null,
+                          validator: (value) =>
+                          value!.isEmpty ? "Please enter some text" : null,
                           controller: _emailController,
                           decoration: new InputDecoration(
-                            contentPadding: EdgeInsets.all(25),
-                              hintText: '이메일주소',
-                              hintStyle: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.height * 0.026,
-                                color: Color(0xffA0A0A0)
-                              ),
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
+
+                            contentPadding: EdgeInsets.symmetric(horizontal: 30),
+                            hintText: '이메일 주소',
+                            hintStyle: TextStyle(
+                                fontSize: fontSize, color: Color(0xffA0A0A0)),
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            /*
                               errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25)
-                              )
+                                  borderRadius: BorderRadius.circular(25))),
+                                  */
                           ),
                         ),
-                      ) ,
-
+                      ),
                     ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.024),
+                    SizedBox(height: 30),
                     Form(
                       key: _pwFormKey,
-                      child: Material(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        elevation: 3.0,
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: heightSize,
+                        decoration: BoxDecoration(
+                            color: Color(0xffF8F8F8),
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                blurRadius: 5,
+                                spreadRadius: 0.2,
+                                color: Colors.grey.shade300,
+                                offset: const Offset(0, 4),
+                              )
+                            ]),
                         child: TextFormField(
-                          validator : (value) => value!.isEmpty? "Please enter some text" : null,
+                          validator: (value) =>
+                          value!.isEmpty ? "Please enter some text" : null,
                           controller: _passwordController,
                           decoration: new InputDecoration(
-                              contentPadding: EdgeInsets.all(25),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 30),
                               hintText: '비밀번호',
                               hintStyle: TextStyle(
-                                  fontSize: MediaQuery.of(context).size.height * 0.026,
-                                  color: Color(0xffA0A0A0)
-                              ),
+                                  fontSize: fontSize, color: Color(0xffA0A0A0)),
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25)
-                              )
-                          ),
+                                  borderRadius: BorderRadius.circular(25))),
                         ),
-                      ) ,
-
+                      ),
                     ),
-                  ],
-                ),
-            ),
-        BigButton(
-          child: Text('로그인'),
-            onPressed: () async {
+                    SizedBox(height: 30),
+                    BigButton(
+                      child: Text(
+                        '로그인',
+                        style: TextStyle(fontSize: fontSize),
+                      ),
+                      onPressed: () async {
+                        if (_emailFormKey.currentState!.validate() &&
+                            _pwFormKey.currentState!.validate()) {
+                          auth.email = _emailController.text;
+                          auth.password = _passwordController.text;
 
-                  if (_emailFormKey.currentState!.validate() && _pwFormKey.currentState!.validate()) {
-                    auth.email = _emailController.text;
-                    auth.password = _passwordController.text;
+                          //http 요청
+                          //await 키워드로 authprovider.login이 완료될 때까지 잠시 대기
+                          var loginSuccess =
+                          await authProvider.login(auth, context);
+                          print('시도');
 
-
-
-
-                    //http 요청
-                    //await 키워드로 authprovider.login이 완료될 때까지 잠시 대기
-                    var loginSuccess = await authProvider.login(auth, context);
-                    print('시도');
-
-                    if(loginSuccess){
-                      //스택 비우고 화면 이동
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil('/loading', (Route<dynamic> route) => false
-                      );
-                    }
-                    else {
-                      showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
-
-                        title: Text('로그인 실패',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        content: const Text('이메일과 비밀번호를 확인해주세요.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text('확인',
-                                style: TextStyle(
+                          if (loginSuccess) {
+                            //스택 비우고 화면 이동
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/loading', (Route<dynamic> route) => false);
+                          } else {
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) =>
+                                    CupertinoAlertDialog(
+                                      title: Text(
+                                        '로그인 실패',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      content: const Text('이메일과 비밀번호를 확인해주세요.'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(),
+                                          child: const Text('확인',
+                                              style: TextStyle(
+                                                color: Colors.black,
+                                              )),
+                                        ),
+                                      ],
+                                    ));
+                          }
+                        }
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('비밀번호를 잊으셨나요?'),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(
+                                  context, '/login/findpassword');
+                            },
+                            child: Text(
+                              '비밀번호 찾기',
+                              style: TextStyle(
+                                  decoration: TextDecoration.underline,
                                   color: Colors.black,
-                                )),
-                          ),
-                        ],
-                      ));
-                    }
-                  }
-
-
-                },),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text('비밀번호를 잊으셨나요?'),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/login/findpassword');
-                    },
-                    child: Text(
-                      '비밀번호 찾기',
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ))
-              ],
-            )
+                                  fontWeight: FontWeight.bold),
+                            ))
+                      ],
+                    )
+                  ],
+                ))
           ],
         ),
       ),
