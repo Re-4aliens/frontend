@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
 
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
 
 
@@ -69,6 +69,8 @@ class MyApp extends StatelessWidget {
 
         //'/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
         '/main': (context)=> HomePage(),
+
+        '/splash': (context)=> SplashPage(),
 
         // matching
         '/apply' : (context) => MatchingApplyPage(),
