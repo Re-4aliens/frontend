@@ -20,6 +20,7 @@ class _LoginChangeMailState extends State<LoginChangeMail> {
           appBar: AppBar(),
           title: '',
           onPressed: () {},
+          backgroundColor: Colors.transparent,
         ),
         body: Padding(
           padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),

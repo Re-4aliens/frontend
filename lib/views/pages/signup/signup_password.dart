@@ -28,7 +28,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
     dynamic member = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
+      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {}, backgroundColor: Colors.white,),
       body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(

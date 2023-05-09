@@ -20,6 +20,7 @@ class _LoginCheckMailState extends State<LoginCheckMail> {
           appBar: AppBar(),
           title: '',
           onPressed: () {},
+          backgroundColor: Colors.transparent,
         ),
         body: Padding(
           padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),

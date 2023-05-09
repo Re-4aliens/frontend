@@ -34,7 +34,7 @@ class _SignUpProfileState extends State<SignUpProfile>{
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
+      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {}, backgroundColor: Colors.transparent,),
       body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
@@ -47,6 +47,17 @@ class _SignUpProfileState extends State<SignUpProfile>{
               child: Stack(
                 children: [
                   Container(
+                      /*decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),*/
                     child:_profileImage == null?
                         Container(
                           child: SvgPicture.asset(
@@ -55,8 +66,7 @@ class _SignUpProfileState extends State<SignUpProfile>{
                             height: MediaQuery.of(context).size.height * 0.16,
                             color: Color(0xffE3E3E3),
                           ),
-                        )
-                    /*Icon(Icons.account_circle, size : 200, color: Color(0xffE3E3E3),)*/:
+                        ) :
                         Container(
                           width: MediaQuery.of(context).size.width * 0.33,
                           height: MediaQuery.of(context).size.height * 0.26,
