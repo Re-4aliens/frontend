@@ -21,7 +21,7 @@ class Button extends StatelessWidget{
         onPressed: onPressed,
         child: child,
         style: ElevatedButton.styleFrom(
-          textStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026),
+          textStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.02),
             backgroundColor: Color(0xff7898FF),// 여기 색 넣으면됩니다
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40)

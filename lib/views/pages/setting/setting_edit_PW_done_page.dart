@@ -22,6 +22,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: CustomAppBar(
+          backgroundColor: Colors.transparent,
           appBar: AppBar(), title: '', onPressed: (){},
         ),
         body: Padding(

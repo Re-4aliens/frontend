@@ -26,7 +26,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
+        appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},backgroundColor: Colors.transparent,),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(

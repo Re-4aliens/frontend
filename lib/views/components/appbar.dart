@@ -10,12 +10,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
     required this.appBar,
     required this.title,
     required this.onPressed,
+    required this.backgroundColor,
+   // required this.info,
     this. center = true
   }); //: super(key: key);
 
   final AppBar appBar;
   final String title;
   final bool center;
+  final Color backgroundColor;
+ // final bool info;
   final GlobalKey<ScaffoldState> _scaffold = GlobalKey();
 
   @override
@@ -23,7 +27,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
     return AppBar(
       //key: _scaffold,
       title: Text("${title}", style: TextStyle(color : Colors.black)),
-      backgroundColor: Colors.transparent,
+      backgroundColor: backgroundColor,
       elevation: 0.0,
       centerTitle: center,
       leading: IconButton(
@@ -31,7 +35,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
           'assets/icon/icon_back.svg',
           width: 24,
           height: MediaQuery.of(context).size.height * 0.029,
-          
         ),
         onPressed: (){
           Navigator.of(context).pop();
