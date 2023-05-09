@@ -13,6 +13,10 @@ class BigButton extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
+    final double fontSize = isSmallScreen ? 14.0 : 16.0;
+
     return Container(
       width : double.maxFinite,
       height: MediaQuery.of(context).size.height * 0.066 ,
@@ -26,12 +30,8 @@ class BigButton extends StatelessWidget{
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40)
             )
-
         ),
       ),
-
-
     );
-
   }
 }
