@@ -7,7 +7,7 @@ Widget chattingWidget(BuildContext context, partners) {
       color: Colors.grey.shade100,
     ),
     alignment: Alignment.center,
-    child: Text('매칭기간이 아니라서 보여줄 채팅이 없습니다......')
+    child: Text('매칭이 완료되면 채팅이 활성화됩니다.\n조금만 기다려주세요!')
   );
 }
 Widget chatList(context, name, lastMassage, time){
