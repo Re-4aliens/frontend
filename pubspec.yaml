@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_neumorphic: ^3.0.3
   dio: ^5.0.1
   percent_indicator: ^4.2.3
   flutter_svg: ^2.0.4
