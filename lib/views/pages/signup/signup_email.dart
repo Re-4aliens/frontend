@@ -1,9 +1,7 @@
 import 'dart:convert';
-
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
 import '../../../models/members.dart';
 import '../../components/button.dart';
 
@@ -22,6 +20,9 @@ class _SignUpEmailState extends State<SignUpEmail> {
   FocusNode _emailFocus = new FocusNode();
 
   var existence = true;
+  bool _isContinueButtonPressed = false;
+  bool _isVerified = false;
+
 
   Widget build(BuildContext context) {
     dynamic member = ModalRoute
@@ -31,7 +32,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
+      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {}, backgroundColor: Colors.white,),
       body: Padding(
 
         padding: EdgeInsets.only(right: 20, left: 20, top: MediaQuery
@@ -188,6 +189,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                           style: TextStyle(fontSize: 14),),
                                         SizedBox(height: 10),
                                         Divider(
+                                          color: Color(0xff7898FF),
                                           height: 0,
                                           thickness: 1,
                                           endIndent: 0,
@@ -205,9 +207,10 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                                 Navigator.pop(context);
                                               },
                                             ),
-                                            VerticalDivider(
+                                            Divider(
+                                              color: Color(0xff7898FF),
                                               thickness: 1,
-                                              width: 1,
+                                              //height: 10,
                                             ),
                                             SimpleDialogOption(
                                                 child: Text('계속하기',
@@ -215,7 +218,11 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                                       fontWeight: FontWeight
                                                           .bold),),
                                                 onPressed: () {
-                                                  Navigator.pushNamed(context, '/verify', arguments: member);
+                                                  setState(() {
+                                                    _isContinueButtonPressed = true;
+                                                    _isVerified = true;
+                                                  });
+                                                  Navigator.pop(context);
                                                 }
                                             )
                                           ],
@@ -234,29 +241,38 @@ class _SignUpEmailState extends State<SignUpEmail> {
               thickness: 1,
             ),
             Expanded(child: SizedBox()),
-            Button(
-                child: Text('본인 인증하기'),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate() && existence == false) {
+          Container(
+            width : double.maxFinite,
+            height: MediaQuery.of(context).size.height * 0.057 ,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  textStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026,
+                  color: _isVerified?Color(0xffFFFFFF) : Color(0xff888888)),
+                  backgroundColor: _isVerified?Color(0xff7898FF): Color(0xffEBEBEB),// 여기 색 넣으면됩니다
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(40)
+                  )
+              ),
+              child: Text('인증번호 요청'),
+              onPressed:_isVerified?
+                  () async {
+                 /* if (_formKey.currentState!.validate() && existence == false) {
                     member.email = _EmailController!.text;
-                    print(member.toJson());
-                    // 이메일 인증 코드 보내기
+                    print(member.toJson()); // 이메일 인증 코드 보내기
+
                     const url = 'http://13.125.205.59:8080/api/v1/email/';
-                    var response =
-                    await http.post(
-                      Uri.parse(url + _EmailController.text + '/verification'),
-                    );
+                    var response = await http.post(Uri.parse(url + _EmailController.text + '/verification'),);
 
                     if (response.statusCode == 200) {
                       print(response.body);
                     } else {
-                      //오류 생기면 바디 확인
+    //오류 생기면 바디 확인
                       print(response.body);
-                    }
-
-                    Navigator.pushNamed(context, '/verify', arguments: member);
-                  }
-                })
+                    }*/
+                    Navigator.pushNamed(context, '/verify', arguments: member);}
+              :null
+              )
+          )
           ],
         ),
       ),
@@ -278,24 +294,6 @@ class _SignUpEmailState extends State<SignUpEmail> {
           _isButtonEnabled = true;
         });
       }
-
-/*  String? validateEmail(FocusNode focusNode, String value) {
-    if (value.isEmpty) {
-      focusNode.requestFocus();
-      return '이메일 주소를 입력하세요.';
-    } else {
-      String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-      RegExp regExp = new RegExp(pattern);
-      if (!regExp.hasMatch(value)) {
-        focusNode.requestFocus();
-        return '잘못된 이메일 형식입니다.';
-      } else {
-        setState((){
-          _isButtonEnabled = true;
-        });
-      }
-    }
-  }*/
     }
   }
 }

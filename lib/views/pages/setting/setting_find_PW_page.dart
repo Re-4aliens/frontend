@@ -29,7 +29,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},),
+        appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},backgroundColor: Colors.transparent,),
 
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),

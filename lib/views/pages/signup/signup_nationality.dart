@@ -67,7 +67,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
       appBar: CustomAppBar(
         appBar: AppBar(),
         title: '',
-        onPressed: () {},
+        onPressed: () {}, backgroundColor: Colors.white,
       ),
       body: FutureBuilder(
           future: getNationList(),

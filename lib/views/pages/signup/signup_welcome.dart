@@ -18,6 +18,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
 
     return Scaffold(
         appBar: CustomAppBar(
+          backgroundColor: Colors.transparent,
           appBar: AppBar(),
           title: '',
           onPressed: () {},
@@ -44,7 +45,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                 Text(
                   '이제 매칭을 할 수 있어요\n아래 버튼을 통해 매칭 신청을 해보세요!',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.026),
+                  style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.022, color: Color(0xff414141)),
                 ),
                 Expanded(child: SizedBox()),
                 Button(
