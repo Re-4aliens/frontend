@@ -50,15 +50,6 @@ class _SignUpNameState extends State<SignUpName>{
                    ),
                ),
             Expanded(child: SizedBox()),
-            Button(
-                child: Text('다음'),
-                onPressed: (){
-                  if(_formKey.currentState!.validate()){
-                    member.name = _nameController.text;
-                    print(member.toJson());
-                    Navigator.pushNamed(context,'/birthday', arguments: member);
-                  }
-                })
 
           ],
         ),
