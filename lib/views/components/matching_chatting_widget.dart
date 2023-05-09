@@ -12,17 +12,17 @@ Widget matchingChattingWidget(BuildContext context, partners) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 20,),
-            chatList(context, '${partners['partners'][0]['name']}', '마지막 메세지', '22:20pm'),
-            chatList(context, '${partners['partners'][1]['name']}', '안녕하세요.', '22:20pm'),
-            chatList(context, '${partners['partners'][2]['name']}', 'Hello! what is your major?', '22:20pm'),
-            chatList(context, '${partners['partners'][3]['name']}', '어떤 과목을 전공하고 계신가요?', '22:20pm'),
+            chatList(context, partners['partners'][0], '마지막 메세지', '22:20pm'),
+            chatList(context, partners['partners'][1], '안녕하세요.', '22:20pm'),
+            chatList(context, partners['partners'][2], 'Hello! what is your major?', '22:20pm'),
+            chatList(context, partners['partners'][3], '어떤 과목을 전공하고 계신가요?', '22:20pm'),
           ],
         ),
       ],
     ),
   );
 }
-Widget chatList(context, name, lastMassage, time){
+Widget chatList(context, partner, lastMassage, time){
   return Padding(
     padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
     child: MaterialButton(
@@ -31,7 +31,8 @@ Widget chatList(context, name, lastMassage, time){
       padding: EdgeInsets.symmetric(horizontal: 15),
       elevation: 5.0,
       onPressed: () {
-        Navigator.pushNamed(context, '/chatting', arguments: name);
+        print(partner);
+        Navigator.pushNamed(context, '/chatting', arguments: partner);
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
@@ -61,7 +62,7 @@ Widget chatList(context, name, lastMassage, time){
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(name,
+                    Text(partner['name'],
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
