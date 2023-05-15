@@ -7,6 +7,9 @@ import 'package:aliens/models/auth_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/svg.dart';
+
+import '../../components/appbar.dart';
 
 class SettingDeletePage extends StatefulWidget {
   const SettingDeletePage({super.key});
@@ -20,18 +23,23 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     var memberDetails = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           leading: IconButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios_new),
-            color: Colors.black,
+            icon: SvgPicture.asset('assets/icon/icon_back.svg',
+              width: MediaQuery.of(context).size.width * 0.062,
+              height: MediaQuery.of(context).size.height * 0.029,),
+            color: Color(0xff7898FF),
           ),
           title: Text(
             '회원탈퇴',
@@ -42,22 +50,20 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
           ),
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: EdgeInsets.only(right: 20, left:20, top: MediaQuery.of(context).size.height * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 100,
-              ),
               Text('탈퇴하기',
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: isSmallScreen?22:24,
                     fontWeight: FontWeight.bold
                 ),),
               Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text('비밀번호를 입력하여 주세요.',
                     style: TextStyle(
+                      fontSize: isSmallScreen?12:14,
                       color: Color(0xffb8b8b8),
                     ),)),
               SizedBox(

@@ -24,6 +24,8 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     var memberDetails = ModalRoute.of(context)!.settings.arguments;
     final TextEditingController _passwordController = TextEditingController();
 
@@ -41,7 +43,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
               ),
               Text('비밀번호를 변경하기 위해\n기존 비밀번호를 입력해주세요.',
                 style: TextStyle(
-                    fontSize: 24,
+                    fontSize: isSmallScreen?22:24,
                     fontWeight: FontWeight.bold
                 ),),
               SizedBox(
@@ -52,7 +54,8 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                 decoration: InputDecoration(
                   hintText: '비밀번호 입력',
                   hintStyle: TextStyle(
-                    color: Color(0xffb8b8b8),
+                    fontSize: isSmallScreen?18:20,
+                    color: Color(0xffD9D9D9),
                   ),
 
                 ),
@@ -61,6 +64,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text('영문, 특수기호, 숫자를 포함 10자 이상',
                     style: TextStyle(
+                      fontSize: isSmallScreen?12:14,
                       color: Color(0xffb8b8b8),
                     ),)),
               Expanded(
@@ -70,9 +74,11 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
-                        child: Text('확인'),
+                        child: Text('인증완료'),
                         onPressed: ()async {
-                          //if 지금 비밀번호랑 입력한 거랑 같으면
+                          Navigator.pushNamed(context, '/setting/edit/PW',
+                              arguments: _passwordController.text);
+                        /*  //if 지금 비밀번호랑 입력한 거랑 같으면
                           var userInfo = await storage.read(key: 'auth');
                           if (_passwordController.text ==
                               json.decode(userInfo!)['password'])
@@ -99,7 +105,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                                               )),
                                         ),
                                       ],
-                                    ));
+                                    ));*/
                         }
                         ),
                   ),

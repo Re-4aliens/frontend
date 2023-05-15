@@ -21,13 +21,13 @@ List<dynamic> nationList = [];
 
 class _SignUpNationalityState extends State<SignUpNationality> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _NationalityController =
-      new TextEditingController();
+  final TextEditingController _NationalityController = new TextEditingController();
   var _selectedNationality;
 
   Widget build(BuildContext context) {
     dynamic member = ModalRoute.of(context)!.settings.arguments;
-
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     //값 불러오는 함수
     Future<List?> getNationList() async {
       List<String> nationTextList = [];
@@ -89,7 +89,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                     Text(
                       '국적을 선택해주세요',
                       style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.height * 0.04,
+                          fontSize: isSmallScreen?22:24,
                           fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: MediaQuery.of(context).size.height * 0.05),

@@ -18,6 +18,8 @@ class _SignUpSchoolState extends State<SignUpSchool> {
 
   Widget build(BuildContext context) {
     dynamic member = ModalRoute.of(context)!.settings.arguments;
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -28,9 +30,9 @@ class _SignUpSchoolState extends State<SignUpSchool> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('부경대학교\n학생이신가요?',
-              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.013),
-            Text('부경대학교 코드를 입력해주세요', style: TextStyle(fontSize: 14, color: Color(0xff888888)),),
+            Text('부경대학교 코드를 입력해주세요', style: TextStyle(fontSize: isSmallScreen?12:14, color: Color(0xff888888)),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
@@ -39,7 +41,7 @@ class _SignUpSchoolState extends State<SignUpSchool> {
                      controller: _SchoolController,
                      decoration: new InputDecoration(
                          hintText: '부경대학교 코드를 입력해주세요',
-                         hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
+                         hintStyle: TextStyle(fontSize: isSmallScreen?18:20, color: Color(0xffD9D9D9))
 
                ),
                    ),

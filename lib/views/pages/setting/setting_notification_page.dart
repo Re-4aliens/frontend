@@ -17,23 +17,30 @@ class SettingNotificationPage extends StatefulWidget {
 }
 
 class _SettingNotificationPageState extends State<SettingNotificationPage> {
-  bool value = true;
+  bool switchValue1 = false;
+  bool switchValue2 = false;
+  bool switchValue3 = false;
+  bool switchValue4 = false;
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: SvgPicture.asset('assets/icon/icon_back.svg', width: 24,height: 24,),
-          color: Colors.black,
+          icon: SvgPicture.asset('assets/icon/icon_back.svg',
+            width: MediaQuery.of(context).size.width * 0.062,
+            height: MediaQuery.of(context).size.height * 0.029,),
+          color: Color(0xff7898FF),
         ),
         title: Text(
           '알림',
@@ -53,13 +60,14 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
               children: [
                 Text('알림 수신',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: isSmallScreen?14:16,
                   ),),
                 CupertinoSwitch(
-                  value: value,
-                  activeColor: Colors.grey,
+                  value: switchValue1,
+                  activeColor: Color(0xff7898FF),
+                  trackColor: Color(0xffC1C1C1),
                   onChanged:  (value) => setState(() {
-                    this.value = value;
+                    this.switchValue1 = value;
                   }),
                 ),
               ],
@@ -73,13 +81,14 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
               children: [
                 Text('매칭 알림',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: isSmallScreen?14:16,
                   ),),
                 CupertinoSwitch(
-                  value: value,
-                  activeColor: Colors.grey,
+                  value: switchValue2,
+                  activeColor: Color(0xff7898FF),
+                  trackColor: Color(0xffC1C1C1),
                   onChanged:  (value) => setState(() {
-                    this.value = value;
+                    this.switchValue2 = value;
                   }),
                 ),
               ],
@@ -93,13 +102,14 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
               children: [
                 Text('채팅 알림',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: isSmallScreen?14:16,
                   ),),
                 CupertinoSwitch(
-                  value: value,
-                  activeColor: Colors.grey,
+                  value: switchValue3,
+                  activeColor: Color(0xff7898FF),
+                  trackColor: Color(0xffC1C1C1),
                   onChanged:  (value) => setState(() {
-                    this.value = value;
+                    this.switchValue3 = value;
                   }),
                 ),
               ],
@@ -117,13 +127,14 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
               children: [
                 Text('앱 내부 알림',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: isSmallScreen?14:16,
                   ),),
                 CupertinoSwitch(
-                  value: value,
-                  activeColor: Colors.grey,
+                  value: switchValue4,
+                  activeColor: Color(0xff7898FF),
+                  trackColor: Color(0xffC1C1C1),
                   onChanged:  (value) => setState(() {
-                    this.value = value;
+                    this.switchValue4 = value;
                   }),
                 ),
               ],
