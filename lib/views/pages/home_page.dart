@@ -1,3 +1,4 @@
+import '../../main.dart';
 import '../../models/screenArgument.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +26,10 @@ class _HomePageState extends State<HomePage> {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     final double fontSize = isSmallScreen ? 16.0 : 20.0;
-    bool isClick = false;
 
     List _pageTitle = [
       '',
-      '채팅',
+      '',
       '설정',
     ];
 
@@ -146,12 +146,12 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 buildButton(
-                                    '매칭', 1, context, args, isSmallScreen),
+                                    true, 0, context, args, isSmallScreen),
                                 SizedBox(
                                   width: 20,
                                 ),
                                 buildButton(
-                                    '채팅', 2, context, args, isSmallScreen),
+                                    true, 1, context, args, isSmallScreen),
                               ],
                             ),
                           ),
@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
               child: Text('캐릭터/일러스트'),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                color: Color(0xffFFB5B5),
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
@@ -194,39 +194,60 @@ class _HomePageState extends State<HomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor:
-            selectedIndex == 0 ? Color(0xffF2F5FF) : Colors.transparent,
+        toolbarHeight: selectedIndex == 1 ? 90 : 56,
+        elevation: selectedIndex == 1 ? 7 : 0,
+        shadowColor: Colors.black26,
+        backgroundColor: selectedIndex == 0 ? Color(0xffF2F5FF) : Colors.white,
+        leadingWidth: 100,
         leading: Column(
           children: [
-            if (selectedIndex != 0)
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    selectedIndex = 0;
-                  });
-                },
-                icon: Icon(Icons.arrow_back_ios_new),
-                color: Colors.black,
+            if (selectedIndex == 2)
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        selectedIndex = 0;
+                      });
+                    },
+                    icon: SvgPicture.asset(
+                      'assets/icon/icon_back.svg',
+                      height: 16,
+                    ),
+                    color: Colors.black,
+                  ),
+                ],
+              )
+            else if(selectedIndex == 1)
+              Container(
+                alignment: Alignment.center,
+                height: 90,
+                child: Text(
+                  '채팅',
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 24,
+                  ),
+                ),
               )
             else
               Container(),
           ],
         ),
         actions: [
-          IconButton(
-            onPressed: () {
-              print(screenWidth);
-            },
-            //아이콘 수정 필요
-            icon: SvgPicture.asset(
-              'assets/icon/icon_info.svg',
-              width: 24,
-              height: 24,
-              color: Color(0xff7898ff),
-            ),
-          )
+          if (selectedIndex == 0)
+            IconButton(
+              onPressed: () {},
+              icon: SvgPicture.asset(
+                'assets/icon/icon_info.svg',
+                width: 24,
+                height: 24,
+                color: Color(0xff7898ff),
+              ),
+            )
+          else
+            Container(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -246,6 +267,7 @@ class _HomePageState extends State<HomePage> {
                 'assets/icon/icon_home.svg',
                 width: 25,
                 height: 25,
+                color: selectedIndex == 0 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
             label: '홈',
@@ -257,6 +279,7 @@ class _HomePageState extends State<HomePage> {
                 'assets/icon/icon_chatting.svg',
                 width: 25,
                 height: 25,
+                color: selectedIndex == 1 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
             label: '채팅',
@@ -268,6 +291,7 @@ class _HomePageState extends State<HomePage> {
                 'assets/icon/icon_setting.svg',
                 width: 25,
                 height: 25,
+                color: selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
             label: '설정',
@@ -278,8 +302,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget buildButton(String _title, int index, BuildContext context, args,
-      bool isSmallScreen) {
+  Widget buildButton(
+      bool clicked, int index, BuildContext context, args, bool isSmallScreen) {
     bool isClick = false;
     return Container(
       decoration:
@@ -298,14 +322,17 @@ class _HomePageState extends State<HomePage> {
         child: Ink(
           width: isSmallScreen ? 140 : 160,
           decoration: BoxDecoration(
-            color: index == 1 ? Color(0xffAEC1FF) : Color(0xffFFB5B5),
+            color: index == 0 ? Color(0xffAEC1FF) : Color(0xffFFB5B5),
             borderRadius: BorderRadius.all(
               Radius.circular(30),
             ),
           ),
           child: InkWell(
               onTap: () {
-                if (args.status['status'] == 'NOT_APPLIED' && index == 2) {
+                print(clicked);
+                if (args.status['status'] == 'NOT_APPLIED' &&
+                    index == 1 &&
+                    clicked) {
                   showDialog(
                       context: context,
                       builder: (_) => Stack(
@@ -319,7 +346,7 @@ class _HomePageState extends State<HomePage> {
                                   width: isSmallScreen ? 130 : 150,
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Colors.grey.shade300,
+                                    color: Color(0xffFFB5B5),
                                     borderRadius: BorderRadius.circular(100),
                                   ),
                                 ),
@@ -445,8 +472,8 @@ class _HomePageState extends State<HomePage> {
                                                             .center,
                                                     children: [
                                                       buildButton(
-                                                          '매칭',
-                                                          1,
+                                                          false,
+                                                          0,
                                                           context,
                                                           args,
                                                           isSmallScreen),
@@ -468,205 +495,209 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ));
-                } else if (args.status['status'] == 'PENDING' && index == 1){
+                } else if (args.status['status'] == 'PENDING' &&
+                    index == 0 &&
+                    clicked) {
                   showDialog(
                       context: context,
                       builder: (_) => Stack(
-                        children: [
-                          Positioned(
-                            top: MediaQuery.of(context).size.height / 10 +
-                                AppBar().preferredSize.height,
-                            right: 0,
-                            child: Container(
-                              height: isSmallScreen ? 130 : 150,
-                              width: isSmallScreen ? 130 : 150,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(100),
+                            children: [
+                              Positioned(
+                                top: MediaQuery.of(context).size.height / 10 +
+                                    AppBar().preferredSize.height,
+                                right: 0,
+                                child: Container(
+                                  height: isSmallScreen ? 130 : 150,
+                                  width: isSmallScreen ? 130 : 150,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffFFB5B5),
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          Positioned(
-                            top: MediaQuery.of(context).size.height / 10 -
-                                30,
-                            left: 25,
-                            child: Container(
-                              height: isSmallScreen ? 50 : 60,
-                              width: isSmallScreen ? 270 : 320,
-                              child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                    children: [
-                                  TextSpan(
-                                      text: "${args.memberDetails['name']}님! 이미 매칭신청을 완료해 진행 중이에요:)\n아래의 ",
-                                      style: TextStyle(
-                                          fontSize: isSmallScreen ? 12 : 13,
-                                          color: Color(0xff5c5c5c),
-                                          fontWeight: FontWeight.bold)),
-                                  TextSpan(
-                                      text: "매칭 진행 중 ",
-                                      style: TextStyle(
-                                          fontSize: isSmallScreen ? 12 : 13,
-                                          color: Color(0xffFF8282),
-                                          fontWeight: FontWeight.bold,
-                                      height: 1.5)),
-                                  TextSpan(
-                                      text: "버튼을 눌러 확인해보세요!",
-                                      style: TextStyle(
-                                          fontSize: isSmallScreen ? 12 : 13,
-                                          color: Color(0xff5c5c5c),
-                                          fontWeight: FontWeight.bold,
-                                      )),
-                                ]),
+                              Positioned(
+                                top: MediaQuery.of(context).size.height / 10 -
+                                    30,
+                                left: 25,
+                                child: Container(
+                                  height: isSmallScreen ? 50 : 60,
+                                  width: isSmallScreen ? 270 : 320,
+                                  child: RichText(
+                                    textAlign: TextAlign.center,
+                                    text: TextSpan(children: [
+                                      TextSpan(
+                                          text:
+                                              "${args.memberDetails['name']}님! 이미 매칭신청을 완료해 진행 중이에요:)\n아래의 ",
+                                          style: TextStyle(
+                                              fontSize: isSmallScreen ? 12 : 13,
+                                              color: Color(0xff5c5c5c),
+                                              fontWeight: FontWeight.bold)),
+                                      TextSpan(
+                                          text: "매칭 진행 중 ",
+                                          style: TextStyle(
+                                              fontSize: isSmallScreen ? 12 : 13,
+                                              color: Color(0xffFF8282),
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.5)),
+                                      TextSpan(
+                                          text: "버튼을 눌러 확인해보세요!",
+                                          style: TextStyle(
+                                            fontSize: isSmallScreen ? 12 : 13,
+                                            color: Color(0xff5c5c5c),
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                    ]),
+                                  ),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(60),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 4,
+                                            spreadRadius: 2,
+                                            color: Colors.black38,
+                                            offset: const Offset(0, 3))
+                                      ]),
+                                ),
                               ),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(60),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 4,
-                                        spreadRadius: 2,
-                                        color: Colors.black38,
-                                        offset: const Offset(0, 3))
-                                  ]),
-                            ),
-                          ),
-                          Positioned(
-                              top: MediaQuery.of(context).size.height / 10,
-                              right: 30,
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                child: Stack(
+                              Positioned(
+                                  top: MediaQuery.of(context).size.height / 10,
+                                  right: 30,
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          top: 11,
+                                          left: 0,
+                                          child: Container(
+                                            height: 11,
+                                            width: 11,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Container(
+                                            height: 9,
+                                            width: 9,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 7,
+                                          right: 7,
+                                          child: Container(
+                                            height: 7,
+                                            width: 7,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                              Positioned(
+                                child: Column(
                                   children: [
-                                    Positioned(
-                                      top: 11,
-                                      left: 0,
-                                      child: Container(
-                                        height: 11,
-                                        width: 11,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            BorderRadius.circular(5)),
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Container(
-                                        height: 9,
-                                        width: 9,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            BorderRadius.circular(5)),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 7,
-                                      right: 7,
-                                      child: Container(
-                                        height: 7,
-                                        width: 7,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            BorderRadius.circular(5)),
-                                      ),
-                                    ),
+                                    Expanded(flex: 3, child: Container()),
+                                    Expanded(
+                                        flex: 7,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: isSmallScreen ? 30 : 40,
+                                            horizontal: 25,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [],
+                                              ),
+                                              Expanded(child: Container()),
+                                              Center(
+                                                child: Container(
+                                                  //alignment: Alignment.center,
+                                                  height:
+                                                      isSmallScreen ? 210 : 240,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: isSmallScreen
+                                                            ? 160
+                                                            : 180,
+                                                      ),
+                                                      buildButton(
+                                                          false,
+                                                          1,
+                                                          context,
+                                                          args,
+                                                          isSmallScreen),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(child: Container()),
+                                            ],
+                                          ),
+                                        )),
                                   ],
                                 ),
-                              )),
-                          Positioned(
-                            child: Column(
-                              children: [
-                                Expanded(flex: 3, child: Container()),
-                                Expanded(
-                                    flex: 7,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: isSmallScreen ? 30 : 40,
-                                        horizontal: 25,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [],
-                                          ),
-                                          Expanded(child: Container()),
-                                          Center(
-                                            child: Container(
-                                              //alignment: Alignment.center,
-                                              height:
-                                              isSmallScreen ? 210 : 240,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
-                                                children: [
-                                                  SizedBox(
-                                                    width: isSmallScreen
-                                                        ? 160
-                                                        : 180,
-                                                  ),
-                                                  buildButton(
-                                                      '채팅',
-                                                      2,
-                                                      context,
-                                                      args,
-                                                      isSmallScreen),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(child: Container()),
-                                        ],
-                                      ),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ));
-                }else if (args.status['status'] == 'MATCHED' && index == 1){
+                              ),
+                            ],
+                          ));
+                } else if (args.status['status'] == 'MATCHED' &&
+                    index == 0 &&
+                    clicked) {
                   showDialog(
                       context: context,
                       builder: (_) => Stack(
-                        children: [
-                          Positioned(
-                            top: MediaQuery.of(context).size.height / 10 +
-                                AppBar().preferredSize.height,
-                            right: 0,
-                            child: Container(
-                              height: isSmallScreen ? 130 : 150,
-                              width: isSmallScreen ? 130 : 150,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(100),
+                            children: [
+                              Positioned(
+                                top: MediaQuery.of(context).size.height / 10 +
+                                    AppBar().preferredSize.height,
+                                right: 0,
+                                child: Container(
+                                  height: isSmallScreen ? 130 : 150,
+                                  width: isSmallScreen ? 130 : 150,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xffFFB5B5),
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          Positioned(
-                            top: MediaQuery.of(context).size.height / 10 -
-                                30,
-                            left: 25,
-                            child: Container(
-                              height: isSmallScreen ? 50 : 60,
-                              width: isSmallScreen ? 250 : 300,
-                              child: RichText(
-                                textAlign: TextAlign.end,
-                                text: TextSpan(
-                                    children: [
+                              Positioned(
+                                top: MediaQuery.of(context).size.height / 10 -
+                                    30,
+                                left: 25,
+                                child: Container(
+                                  height: isSmallScreen ? 50 : 60,
+                                  width: isSmallScreen ? 250 : 300,
+                                  child: RichText(
+                                    textAlign: TextAlign.end,
+                                    text: TextSpan(children: [
                                       TextSpan(
-                                          text: "${args.memberDetails['name']}님! 드디어 매칭이 완료되었어요!\n아래의 ",
+                                          text:
+                                              "${args.memberDetails['name']}님! 드디어 매칭이 완료되었어요!\n아래의 ",
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xff5c5c5c),
@@ -686,131 +717,137 @@ class _HomePageState extends State<HomePage> {
                                             fontWeight: FontWeight.bold,
                                           )),
                                     ]),
+                                  ),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(60),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            blurRadius: 4,
+                                            spreadRadius: 2,
+                                            color: Colors.black38,
+                                            offset: const Offset(0, 3))
+                                      ]),
+                                ),
                               ),
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(60),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        blurRadius: 4,
-                                        spreadRadius: 2,
-                                        color: Colors.black38,
-                                        offset: const Offset(0, 3))
-                                  ]),
-                            ),
-                          ),
-                          Positioned(
-                              top: MediaQuery.of(context).size.height / 10,
-                              right: 40,
-                              child: Container(
-                                height: 50,
-                                width: 50,
-                                child: Stack(
+                              Positioned(
+                                  top: MediaQuery.of(context).size.height / 10,
+                                  right: 40,
+                                  child: Container(
+                                    height: 50,
+                                    width: 50,
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          top: 11,
+                                          left: 0,
+                                          child: Container(
+                                            height: 11,
+                                            width: 11,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                        ),
+                                        Center(
+                                          child: Container(
+                                            height: 9,
+                                            width: 9,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                        ),
+                                        Positioned(
+                                          bottom: 7,
+                                          right: 7,
+                                          child: Container(
+                                            height: 7,
+                                            width: 7,
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(5)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                              Positioned(
+                                child: Column(
                                   children: [
-                                    Positioned(
-                                      top: 11,
-                                      left: 0,
-                                      child: Container(
-                                        height: 11,
-                                        width: 11,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            BorderRadius.circular(5)),
-                                      ),
-                                    ),
-                                    Center(
-                                      child: Container(
-                                        height: 9,
-                                        width: 9,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            BorderRadius.circular(5)),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 7,
-                                      right: 7,
-                                      child: Container(
-                                        height: 7,
-                                        width: 7,
-                                        decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                            BorderRadius.circular(5)),
-                                      ),
-                                    ),
+                                    Expanded(flex: 3, child: Container()),
+                                    Expanded(
+                                        flex: 7,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: isSmallScreen ? 30 : 40,
+                                            horizontal: 25,
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [],
+                                              ),
+                                              Expanded(child: Container()),
+                                              Center(
+                                                child: Container(
+                                                  //alignment: Alignment.center,
+                                                  height:
+                                                      isSmallScreen ? 210 : 240,
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        width: isSmallScreen
+                                                            ? 160
+                                                            : 180,
+                                                      ),
+                                                      buildButton(
+                                                          false,
+                                                          1,
+                                                          context,
+                                                          args,
+                                                          isSmallScreen),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(child: Container()),
+                                            ],
+                                          ),
+                                        )),
                                   ],
                                 ),
-                              )),
-                          Positioned(
-                            child: Column(
-                              children: [
-                                Expanded(flex: 3, child: Container()),
-                                Expanded(
-                                    flex: 7,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: isSmallScreen ? 30 : 40,
-                                        horizontal: 25,
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [],
-                                          ),
-                                          Expanded(child: Container()),
-                                          Center(
-                                            child: Container(
-                                              //alignment: Alignment.center,
-                                              height:
-                                              isSmallScreen ? 210 : 240,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment
-                                                    .center,
-                                                children: [
-                                                  SizedBox(
-                                                    width: isSmallScreen
-                                                        ? 160
-                                                        : 180,
-                                                  ),
-                                                  buildButton(
-                                                      '채팅',
-                                                      2,
-                                                      context,
-                                                      args,
-                                                      isSmallScreen),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(child: Container()),
-                                        ],
-                                      ),
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ));
-                }else if(args.status['status'] == 'PENDING' && index == 2){
-                  print('매칭 상태 확인');
+                              ),
+                            ],
+                          ));
+                } else if (args.status['status'] == 'PENDING' &&
+                    index == 1 &&
+                    clicked) {
+                  print('매칭 상태 확인 ㄱ');
                   Navigator.pushNamed(context, '/state', arguments: args);
-                }
-                else {
-                  setState(() {
-                    selectedIndex = index;
-                  });
-                }
+                } else if (args.status['status'] == 'NOT_APPLIED' &&
+                    index == 0 &&
+                    clicked) {
+                  Navigator.pushNamed(context, '/apply', arguments: args);
+                } else if (args.status['status'] == 'MATCHED' &&
+                    index == 1 &&
+                    clicked) {
+                  Navigator.pushNamed(context, '/done',
+                      arguments: args.partners);
+                } else {}
               },
               onTapDown: (TapDownDetails details) {
                 setState(() {
@@ -825,7 +862,7 @@ class _HomePageState extends State<HomePage> {
               borderRadius: const BorderRadius.all(
                 Radius.circular(30),
               ),
-              child: index == 1
+              child: index == 0
                   ? matchingButton(isSmallScreen, isClick, args.status)
                   : chattingButton(isSmallScreen, isClick, args.status)),
         ),
@@ -881,7 +918,9 @@ class _HomePageState extends State<HomePage> {
                           //큰원색
                           BoxShadow(
                             blurRadius: 7,
-                            color: status['status'] != 'NOT_APPLIED' ? Color(0xffEBEBEB) : Color(0xFFCAD6FE),
+                            color: status['status'] != 'NOT_APPLIED'
+                                ? Color(0xffEBEBEB)
+                                : Color(0xFFCAD6FE),
                             spreadRadius: -2,
                             offset: const Offset(-40, -30),
                           ),
@@ -896,9 +935,11 @@ class _HomePageState extends State<HomePage> {
               top: -25,
               child: Container(
                 decoration: BoxDecoration(
-                  color: isClick ? Color(0xff3762EC) : status['status'] != 'NOT_APPLIED'
-                      ? Color(0xffD7D7D7)
-                      : Color(0xFF99B1FF),
+                  color: isClick
+                      ? Color(0xff3762EC)
+                      : status['status'] != 'NOT_APPLIED'
+                          ? Color(0xffD7D7D7)
+                          : Color(0xFF99B1FF),
                   borderRadius: BorderRadius.circular(50),
                 ),
                 width: isSmallScreen ? 90 : 100,
@@ -918,7 +959,7 @@ class _HomePageState extends State<HomePage> {
                     status['status'] != 'NOT_APPLIED' ? '신청완료' : '매칭신청',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: isSmallScreen ? 18 : 20,
                       color: status['status'] != 'NOT_APPLIED'
                           ? Color(0xffACACAC)
                           : Colors.white,
@@ -926,9 +967,11 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Text(
                     'How to Use?',
-                    style: TextStyle(fontSize: 12, color: status['status'] != 'NOT_APPLIED'
-                        ? Color(0xff888888)
-                        : Color(0xff7898FF)),
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: status['status'] != 'NOT_APPLIED'
+                            ? Color(0xff888888)
+                            : Color(0xff7898FF)),
                   ),
                 ],
               ),
@@ -1002,7 +1045,9 @@ class _HomePageState extends State<HomePage> {
               bottom: -25,
               child: Container(
                 decoration: BoxDecoration(
-                  color: status['status'] == 'NOT_APPLIED' ? Color(0xffD7D7D7) : Color(0xFFFFA6A6),
+                  color: status['status'] == 'NOT_APPLIED'
+                      ? Color(0xffD7D7D7)
+                      : Color(0xFFFFA6A6),
                   borderRadius: BorderRadius.circular(50),
                 ),
                 width: isSmallScreen ? 90 : 100,
@@ -1019,10 +1064,10 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    status['status'] == 'PENDING'? '매칭 진행 중' : '채팅하기',
+                    status['status'] == 'PENDING' ? '매칭 진행 중' : '채팅하기',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                      fontSize: isSmallScreen ? 18 : 20,
                       color: status['status'] == 'NOT_APPLIED'
                           ? Color(0xffACACAC)
                           : Colors.white,

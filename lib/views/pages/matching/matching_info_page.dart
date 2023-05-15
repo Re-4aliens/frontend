@@ -1,30 +1,31 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../models/screenArgument.dart';
 
 class MatchingInfoPage extends StatefulWidget {
-  const MatchingInfoPage({super.key, required this.title});
-
-  final String title;
+  const MatchingInfoPage({super.key});
 
   @override
   State<MatchingInfoPage> createState() => _MatchingInfoPageState();
 }
 
 class _MatchingInfoPageState extends State<MatchingInfoPage> {
-
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
+
     return Scaffold(
-      backgroundColor: Color(0xFFF4F4F4),
+      backgroundColor: Color(0xFFF8F8F8),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Color(0xFFF4F4F4),
+        backgroundColor: Color(0xffF8F8F8),
         title: Text(
-          widget.title,
+          '나의 신청 확인',
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
@@ -34,292 +35,386 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new),
-          color: Colors.black,
+          icon: SvgPicture.asset(
+            'assets/icon/icon_back.svg',
+            height: 20,
+          ),
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            //아이콘 수정 필요
-            icon: Icon(CupertinoIcons.question_circle),
-            color: Colors.black,
-          )
-        ],
       ),
-      body: _buildBody(args.applicant),
-    );
-  }
-
-  Widget _buildBody(applicant){
-    return Center(
-      child: Column(
-        children: [
-          Expanded(flex: 1, child: Container()),
-          Expanded(
-            flex: 20,
-            child: Container(
-              margin: EdgeInsets.only(top: 10),
-              decoration: BoxDecoration(
-                  color: Colors.white,
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            Expanded(flex: 1, child: Container()),
+            Expanded(
+              flex: 20,
+              child: Container(
+                decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.shade300,
-                      spreadRadius: 1,
-                      blurRadius: 3,
+                      blurRadius: 10,
+                      offset: Offset(0, 4),
+                      color: Colors.black.withOpacity(0.1)
                     )
-                  ]),
-              width: 350,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(flex: 5, child: Container()),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        applicant['member']['name'].toString(),
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 24),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 5),
-                        decoration: BoxDecoration(
-                          color: Color(0xffD9D9D9),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Icon(Icons.female),
-                      )
-                    ],
-                  ),
-                  Expanded(child: Container()),
-                  Container(
-                    width: 140,
-                    height: 140,
-                    margin: EdgeInsetsDirectional.symmetric(vertical: 20),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(70),
-                      color: Color(0xffA8A8A8),
-                    ),
-                  ),
-                  Expanded(child: Container()),
-                  Text(
-                    '만 나이',
-                    style: TextStyle(
-                      color: Color(0xffD9D9D9),
-                      fontSize: 14,
-                    ),
-                  ),
-                  Text(
-                    '${applicant['member']['age']}세',
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
-                  Expanded(child: Container()),
-                  Container(
-                    width: 350,
-                    margin: EdgeInsets.only(left: 50, right: 50, top: 25),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            Text(
-                              '국가',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xffD9D9D9),
-                                fontWeight: FontWeight.bold,
+                  ]
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    color: Colors.white,
+                    width: isSmallScreen ? 310 : 350,
+                    child:
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(color: Color(0xff4976FF),),
+                              //버튼색
+                              BoxShadow(
+                                blurRadius: 10,
+                                color: Color(0xff7898FF),
+                                offset: const Offset(-5, -5),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  height: 20,
-                                  width: 30,
-                                  decoration:
-                                  BoxDecoration(color: Color(0xffD9D9D9)),
-                                  margin: EdgeInsets.only(right: 5),
-                                ),
-                                Text(
-                                  applicant['member']['nationality'].toString(),
-                                  style: TextStyle(
-                                    fontSize: 20,
+                            ]
+                          ),
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: -80,
+                                left: -40,
+                                child: Container(
+                                  width: 180,
+                                  height: 180,
+                                  margin: EdgeInsetsDirectional.symmetric(vertical: 20),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(90),
+                                    color: Color(0xff94ADFF),
                                   ),
-                                ),
-                              ],
-                            )
-                          ],
+                                ),),
+                              Positioned(
+                                bottom: 100,
+                                right: 60,
+                                child: Container(
+                                  width: 100,
+                                  height: 100,
+                                  margin: EdgeInsetsDirectional.symmetric(vertical: 20),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(90),
+                                    color: Color(0xff6D90FF),
+                                  ),
+                                ),),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(flex: 5, child: Container()),
+                                  Container(
+                                    margin: EdgeInsetsDirectional.symmetric(vertical: 20),
+                                    child: SvgPicture.asset(
+                                      'assets/icon/icon_profile.svg',
+                                      height: isSmallScreen ? 100 : 120,
+                                      color: Color(0xffEBEBEB),
+                                    ),
+                                  ),
+                                  Expanded(flex: 1, child: Container()),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: Color(0xff557EFF),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding: EdgeInsets.only(top: 5, bottom: 5, left: 20, right: 20),
+                                    child: Stack(
+                                      children: [
+                                        Text(
+                                          '${args.applicant['member']['name']}      ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold, fontSize: isSmallScreen ? 18 : 20, color: Colors.white),
+                                        ),
+                                        Positioned(
+                                          right: 0,
+                                          top: 0,
+                                          bottom: 0,
+                                          child: Center(
+                                            child: Container(
+                                              margin: EdgeInsets.only(left: 5),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.circular(15),
+                                              ),
+                                              child: Icon(Icons.female,
+                                                color: Color(0xff7898ff),
+                                              size: 20,),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(flex: 2, child: Container()),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 40, right: 40, top: 25),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '국가',
+                                              style: TextStyle(
+                                                fontSize: isSmallScreen ? 12 : 14,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${args.applicant['member']['nationality']}',
+                                              style: TextStyle(
+                                                fontSize: isSmallScreen ? 18 : 20,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '만 나이',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: isSmallScreen ? 12 : 14,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${args.applicant['member']['age']}세',
+                                              style: TextStyle(
+                                                fontSize: isSmallScreen ? 18 : 20,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'MBTI',
+                                              style: TextStyle(
+                                                fontSize: isSmallScreen ? 12 : 14,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${args.applicant['member']['mbti']}',
+                                              style: TextStyle(
+                                                fontSize: isSmallScreen ? 18 : 20,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Expanded(flex: 4, child: Container()),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              'MBTI',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Color(0xffD9D9D9),
-                                fontWeight: FontWeight.bold,
+
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 14,
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    //color: Colors.blue.shade300,
+                    ),
+                child: Column(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      alignment: Alignment.centerLeft,
+                      margin: EdgeInsets.symmetric(vertical: 25),
+                      decoration: BoxDecoration(
+                          //color: Colors.blue,
+                          ),
+                      child: Text(
+                        '매칭 선호 언어',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: isSmallScreen ? 14 : 16,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4)),
+                              ]),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: Container(
+                              height: 117,
+                              width: isSmallScreen ? 150 : 160,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 20, horizontal: 25),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color:
+                                            Color(0xff7898FF).withOpacity(0.3)),
+                                    //버튼색
+                                    BoxShadow(
+                                      blurRadius: 10,
+                                      color: Colors.white,
+                                      offset: const Offset(-5, -5),
+                                    ),
+                                  ]),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(child: SizedBox()),
+                                      Text(
+                                        '1순위',
+                                        style: TextStyle(
+                                          fontSize: isSmallScreen ? 12 : 14,
+                                          color: Color(0xff7898ff),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text(
+                                        '${args.applicant['preferLanguages']['firstPreferLanguage']}',
+                                        style: TextStyle(
+                                          fontSize:isSmallScreen ? 18 : 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff888888),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    height:  isSmallScreen ? 34 : 45,
+                                    width:  isSmallScreen ? 34 : 45,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffD9D9D9),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            Text(
-                              applicant['member']['mbti'].toString(),
-                              style: TextStyle(
-                                fontSize: 20,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 25,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 10,
+                                    offset: Offset(0, 4)),
+                              ]),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(25),
+                            child: Container(
+                              height: 117,
+                              width: isSmallScreen ? 150 : 160,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 18, horizontal: 25),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color:
+                                            Color(0xff7898FF).withOpacity(0.3)),
+                                    //버튼색
+                                    BoxShadow(
+                                      blurRadius: 10,
+                                      color: Colors.white,
+                                      offset: const Offset(-5, -5),
+                                    ),
+                                  ]),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Expanded(child: SizedBox()),
+                                      Text(
+                                        '2순위',
+                                        style: TextStyle(
+                                          fontSize: isSmallScreen ? 12 : 14,
+                                          color: Color(0xff7898ff),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text(
+                                        '${args.applicant['preferLanguages']['secondPreferLanguage']}',
+                                        style: TextStyle(
+                                          fontSize: isSmallScreen ? 18 : 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff888888),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Container(
+                                    height: isSmallScreen ? 34 : 45,
+                                    width: isSmallScreen ? 34 : 45,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xffD9D9D9),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
-                  Expanded(flex: 5, child: Container()),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 14,
-            child: Container(
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                //color: Colors.blue.shade300,
-              ),
-              child: Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
-                    width: 350,
-                    alignment: Alignment.centerLeft,
-                    margin: EdgeInsets.symmetric(vertical: 20),
-                    decoration: BoxDecoration(
-                      //color: Colors.blue,
+                    SizedBox(
+                      height: 22,
                     ),
-                    child: Text(
-                      '매칭 선호 언어',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        color: Color(0xFFC4C4C4),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 117,
-                        width: 165,
-                        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 25),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                spreadRadius: 1,
-                                blurRadius: 3,
-                              )
-                            ]),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if(true)
-                              Container(
-                                height: 30,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  color: Color(0xffD9D9D9),
-                                ),
-                              )
-                            else
-                              Container(),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              '1순위',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xffD9D9D9),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              applicant['preferLanguages']['firstPreferLanguage'].toString(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Container(
-                        height: 117,
-                        width: 165,
-                        padding: EdgeInsets.symmetric(vertical: 18, horizontal: 25),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                spreadRadius: 1,
-                                blurRadius: 3,
-                              )
-                            ]),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: 30,
-                              width: 45,
-                              decoration: BoxDecoration(
-                                color: Color(0xffD9D9D9),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Text(
-                              '2순위',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xffD9D9D9),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              applicant['preferLanguages']['secondPreferLanguage'].toString(),
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  Expanded(child: Container()),
-                  if (this.widget.title == '나의 매칭 정보')
                     Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        //color: Colors.blue,
-                      ),
+                          //color: Colors.blue,
+                          ),
                       child: InkWell(
                         onTap: () {
                           Navigator.pushNamed(context, '/edit');
@@ -334,21 +429,20 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                           child: Text(
                             '언어 재설정',
                             style: TextStyle(
-                              color: Color(0xFFC4C4C4),
-                              fontSize: 16,
+                              color: Color(0xFF888888),
+                              fontSize: isSmallScreen ? 10 : 12,
                             ),
                           ),
                         ),
                       ),
-                    )
-                  else
-                    Container(),
-                  Expanded(child: Container()),
-                ],
+                    ),
+                    Expanded(child: Container()),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

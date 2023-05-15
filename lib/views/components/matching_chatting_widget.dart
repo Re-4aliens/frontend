@@ -1,10 +1,11 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 Widget matchingChattingWidget(BuildContext context, partners) {
   return Container(
     decoration: BoxDecoration(
-      color: Colors.grey.shade100,
+      color: Color(0xffF5F7FF),
     ),
     child: ListView(
       children: [
@@ -28,8 +29,8 @@ Widget chatList(context, partner, lastMassage, time){
     child: MaterialButton(
       minWidth: 350,
       height: 77,
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      elevation: 5.0,
+      padding: EdgeInsets.symmetric(horizontal: 12),
+      elevation: 0.0,
       onPressed: () {
         print(partner);
         Navigator.pushNamed(context, '/chatting', arguments: partner);
@@ -42,18 +43,18 @@ Widget chatList(context, partner, lastMassage, time){
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            height: 50,
-            width: 50,
-            decoration: BoxDecoration(
-              color: Color(0xffD9D9D9),
-              borderRadius: BorderRadius.circular(25),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SvgPicture.asset(
+              'assets/icon/icon_profile.svg',
+              height: 45,
+              color: Color(0xff7898ff),
             ),
           ),
           Expanded(child: Container(
             margin: EdgeInsets.only(
-              left: 20,
-              top: 15,
+              left: 10,
+              top: 10,
               bottom: 15,
             ),
             child: Column(
@@ -69,7 +70,8 @@ Widget chatList(context, partner, lastMassage, time){
                       ),),
                     Text(time,
                       style: TextStyle(
-
+                        fontSize: 12,
+                        color: Color(0xff888888),
                       ),)
                   ],
                 ),
