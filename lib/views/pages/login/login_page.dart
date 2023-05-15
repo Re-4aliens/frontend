@@ -185,7 +185,9 @@ class _LoginState extends State<Login> {
                                 },
                                 /*
                                 경우에 따라
-                                MATCHED, PENDING, NOT_APPLIED 입력
+                                MATCHED, //매칭됨
+                                PENDING, //매칭신청완료
+                                NOT_APPLIED 입력 // 신청안함
                                  */
                                 {
                                   "status": "NOT_APPLIED"

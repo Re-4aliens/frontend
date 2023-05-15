@@ -15,6 +15,9 @@ class SignUpWelcome extends StatefulWidget {
 class _SignUpWelcomeState extends State<SignUpWelcome> {
   Widget build(BuildContext context) {
     //Members members = new Members('','','','','','','','');
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
+    final double fontSize = isSmallScreen ? 14.0 : 16.0;
 
     return Scaffold(
         appBar: CustomAppBar(
@@ -40,12 +43,12 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                 Text(
                   '환영합니다!\n가입이 완료되었습니다',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
                 ),
                 Text(
                   '이제 매칭을 할 수 있어요\n아래 버튼을 통해 매칭 신청을 해보세요!',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.022, color: Color(0xff414141)),
+                  style: TextStyle(fontSize: isSmallScreen?14:16, color: Color(0xff414141)),
                 ),
                 Expanded(child: SizedBox()),
                 Button(
@@ -59,7 +62,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                 SizedBox(height: 10),
                 Container(
                   width: double.maxFinite,
-                  height: MediaQuery.of(context).size.height * 0.057,
+                  height: 50,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context)
@@ -68,7 +71,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                     },
                     child: Text(
                       '홈으로 가기',
-                      style: TextStyle(color: Color(0xffA7A7A7)),
+                      style: TextStyle(color: Color(0xffA7A7A7), fontSize: fontSize),
                     ),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xffEBEBEB),

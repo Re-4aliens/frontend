@@ -6,12 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:aliens/providers/member_provider.dart';
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:provider/provider.dart';
 
 Widget settingWidget(BuildContext context, memberDetails) {
   final AuthProvider authProvider = new AuthProvider();
   final storage = FlutterSecureStorage();
+  final double screenWidth = MediaQuery.of(context).size.width;
+  final bool isSmallScreen = screenWidth <= 600;
+
 
   File imageFile = File(memberDetails['profileImage']);
 
@@ -27,9 +31,10 @@ Widget settingWidget(BuildContext context, memberDetails) {
                   height: 80,
                   width: 80,
                   decoration: BoxDecoration(
-                      color: Color(0xffA8A8A8),
                       borderRadius: BorderRadius.circular(40)),
-                  child: Image.file(imageFile),
+                  child:imageFile.existsSync()
+                      ? Image.file(imageFile)
+                      : SvgPicture.asset('assets/icon/icon_profile.svg', color: Color(0xffA8A8A8),),
                 ),
                 Positioned(
                     bottom: 0,
@@ -43,11 +48,10 @@ Widget settingWidget(BuildContext context, memberDetails) {
                           Navigator.pushNamed(context, '/setting/edit',
                               arguments: memberDetails);
                         },
-                        child: Icon(
-                          Icons.edit,
-                          size: 20,
-                          color: Colors.black,
-                        ),
+                        child: SvgPicture.asset('assets/icon/icon_modify.svg',
+                        width: MediaQuery.of(context).size.width * 0.0615,
+                        height: MediaQuery.of(context).size.height * 0.028,
+                        color: Color(0xff414141),)
                       ),
                     ))
               ],
@@ -89,7 +93,7 @@ Widget settingWidget(BuildContext context, memberDetails) {
                   '로그아웃',
                   style: TextStyle(
                     color: Color(0xFF454545),
-                    fontSize: 16,
+                    fontSize: isSmallScreen?12:14,
                   ),
                 ),
               ),
@@ -100,6 +104,8 @@ Widget settingWidget(BuildContext context, memberDetails) {
 }
 
 Widget buildSettingList(context, index, memberDetails) {
+  final double screenWidth = MediaQuery.of(context).size.width;
+  final bool isSmallScreen = screenWidth <= 600;
   List settingList = [
     '이름',
     '생년월일',
@@ -115,17 +121,17 @@ Widget buildSettingList(context, index, memberDetails) {
     null,
     Icon(
       Icons.lock_outline,
-      size: 20,
+      size: isSmallScreen?18:20,
       color: Colors.black,
     ),
     Icon(
       Icons.notifications_none,
-      size: 20,
+      size: isSmallScreen?18:20,
       color: Colors.black,
     ),
     Icon(
       Icons.assignment_outlined,
-      size: 20,
+      size: isSmallScreen?18:20,
       color: Colors.black,
     ),
   ];
@@ -160,19 +166,21 @@ Widget buildSettingList(context, index, memberDetails) {
         Text(
           '${settingList.elementAt(index)}',
           style: TextStyle(
-            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            fontSize: isSmallScreen?14:16,
           ),
         ),
         Expanded(child: Container()),
         if (index < 3)
           Text(
             '${memberInfo.elementAt(index)}',
-            style: TextStyle(fontSize: 16, color: Color(0xff717171)),
+            style: TextStyle(
+                fontSize: isSmallScreen?14:16, color: Color(0xff888888)),
           )
         else
           Icon(
             Icons.arrow_forward_ios,
-            size: 20,
+            size: isSmallScreen?18:20,
             color: Color(0xff4d4d4d),
           ),
       ],

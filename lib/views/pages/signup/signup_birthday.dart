@@ -22,6 +22,8 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
 
   Widget build(BuildContext context){
     dynamic member = ModalRoute.of(context)!.settings.arguments;
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
 
     return Scaffold(
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {}, backgroundColor: Colors.white,),
@@ -31,7 +33,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('생년월일을 알려주세요',
-              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
@@ -52,7 +54,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
                                height: MediaQuery.of(context).size.height * 0.011,
                              ), onPressed: () {},
                            ),
-                           hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
+                           hintStyle: TextStyle(fontSize: isSmallScreen ? 18:20, color: Color(0xffD9D9D9))
                        ),
                        validator : (value) => value!.isEmpty? "Please enter some text" : null,
                        enabled: false,
