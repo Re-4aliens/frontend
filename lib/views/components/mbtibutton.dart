@@ -25,11 +25,12 @@ class mbtiButton extends StatelessWidget{
   Widget build(BuildContext context){
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
+
     return Container(
-      margin: EdgeInsets.only(left: 0,right: 0, top: 0, bottom: 0),
+      margin: EdgeInsets.only(left: 10,right: 10, top: 0, bottom: 0),
      // width: MediaQuery.of(context).size.width * 0.4,
-      width: (MediaQuery.of(context).size.height * 0.34)* 0.668,
-      height: MediaQuery.of(context).size.height * 0.34,
+      width: isSmallScreen ? 140 : 160,
+      height: isSmallScreen ? 200 : 250,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25), // 10은 모서리 반경 값입니다.

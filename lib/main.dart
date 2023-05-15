@@ -3,6 +3,7 @@ import 'package:aliens/views/pages/login/login_checkmail_page.dart';
 import 'package:aliens/views/pages/login/login_findpassword_page.dart';
 import 'package:aliens/views/pages/login/login_page.dart';
 import 'package:aliens/views/pages/setting/setting_delete_what.dart';
+import 'package:aliens/views/pages/matching/matching_partner_info_page.dart';
 import 'package:aliens/views/pages/signup/signup_birthday.dart';
 import 'package:aliens/views/pages/signup/signup_email.dart';
 import 'package:aliens/views/pages/signup/signup_emailverify.dart';
@@ -60,7 +61,6 @@ class MyApp extends StatelessWidget {
      theme: ThemeData(fontFamily: 'NotoSans'),
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
-
       initialRoute: '/splash',
       routes: {
 
@@ -79,8 +79,8 @@ class MyApp extends StatelessWidget {
         '/state' : (context) => MatchingStatePage(),
         '/choose' : (context) => MatchingChoosePage(),
         '/apply/done' : (context) => MatchingApplyDonePage(),
-        '/info/my' : (conext) => MatchingInfoPage(title: '나의 매칭 정보'),
-        '/info/your' : (context) => MatchingInfoPage(title: ''),
+        '/info/my' : (conext) => MatchingInfoPage(),
+        '/info/your' : (context) => MatchingPartnerInfoPage(),
         '/edit' : (context) => MatchingEditPage(),
 
         //setting

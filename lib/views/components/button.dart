@@ -29,7 +29,8 @@ class Button extends StatelessWidget{
             backgroundColor: Color(0xff7898FF),// 여기 색 넣으면됩니다
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(40)
-            )
+            ),
+            elevation: 0.0,
         ),
       ),
     );
