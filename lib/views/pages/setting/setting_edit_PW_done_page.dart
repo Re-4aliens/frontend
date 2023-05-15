@@ -18,8 +18,11 @@ class SettingEditPWDonePage extends StatefulWidget {
 class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     final AuthProvider authProvider = new AuthProvider();
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: CustomAppBar(
           backgroundColor: Colors.transparent,
@@ -40,7 +43,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                           '비밀번호가 변경되었습니다!\n다시 로그인 해주세요.',
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
+                              fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
                           height: 50,
@@ -50,8 +53,8 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                             'assets/icon/icon_check.svg',
                             color: Color(0xff7898ff),
                           ),
-                          height: 100,
-                          width: 100,
+                          height: MediaQuery.of(context).size.height * 0.126,
+                          width: MediaQuery.of(context).size.width*0.272,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                           ),
@@ -64,7 +67,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                 child: Container(
                     alignment: Alignment.bottomCenter,
                     child: Button(
-                        child: Text('확인'),
+                        child: Text('홈으로 돌아가기'),
                         onPressed: () {
                           //로그아웃시키고
                           authProvider.logout(context);

@@ -123,6 +123,8 @@ class _SignUpMbtiState extends State<SignUpMbti> {
   }
 
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
@@ -140,7 +142,7 @@ class _SignUpMbtiState extends State<SignUpMbti> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('${member.name}님의 MBTI가 궁금해요!',
-                style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+                style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 10),

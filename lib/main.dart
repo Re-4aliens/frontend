@@ -2,6 +2,7 @@ import 'package:aliens/views/pages/loading_page.dart';
 import 'package:aliens/views/pages/login/login_checkmail_page.dart';
 import 'package:aliens/views/pages/login/login_findpassword_page.dart';
 import 'package:aliens/views/pages/login/login_page.dart';
+import 'package:aliens/views/pages/setting/setting_delete_what.dart';
 import 'package:aliens/views/pages/matching/matching_partner_info_page.dart';
 import 'package:aliens/views/pages/signup/signup_birthday.dart';
 import 'package:aliens/views/pages/signup/signup_email.dart';
@@ -87,6 +88,7 @@ class MyApp extends StatelessWidget {
         '/setting/notification' : (context) => SettingNotificationPage(),
         '/setting/terms': (context) => SettingTermsPage(),
         '/setting/security': (context) => SettingSecurityPage(),
+        '/setting/delete/what': (context) => SettingDeleteWhatPage(),
         '/setting/delete' : (context) => SettingDeletePage(),
         '/setting/delete/done': (context) => SettingDeleteDonePage(),
         '/setting/edit/PW' : (context) => SettingEditPWPage(),

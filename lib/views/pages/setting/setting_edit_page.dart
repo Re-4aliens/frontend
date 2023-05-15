@@ -1,8 +1,17 @@
 import 'dart:convert';
-
+import 'dart:io';
+import 'package:aliens/models/members.dart';
+import 'package:aliens/providers/member_provider.dart';
+import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_svg/svg.dart';
+import '../../../providers/auth_provider.dart';
 import '../../components/button.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:aliens/views/components/appbar.dart';
+
 
 
 class SettingEditPage extends StatefulWidget {
@@ -14,29 +23,29 @@ class SettingEditPage extends StatefulWidget {
 
 class _SettingEditPageState extends State<SettingEditPage> {
   @override
+  File? _profileImage;
+  final picker = ImagePicker();
+  //비동기 처리를 통해 이미지 가져오기
+  Future getImage(ImageSource imageSource) async {
+    final image = await picker.pickImage(source: imageSource);
+    setState(() {
+      _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
+    });
+  }
+
   Widget build(BuildContext context) {
+    final AuthProvider authProvider = new AuthProvider();
     var memberDetails = ModalRoute.of(context)!.settings.arguments;
+    dynamic member = ModalRoute.of(context)!.settings.arguments;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final bool isSmallScreen = screenWidth <= 600;
+
+    final storage = FlutterSecureStorage();
+  //  File imageFile = File(memberDetails['profileImage']);
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios_new),
-          color: Colors.black,
-        ),
-        title: Text(
-          '프로필 변경하기',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+      appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, onPressed: (){}, title: '프로필 변경하기',),
       body: Column(
         children: [
           Expanded(
@@ -53,8 +62,12 @@ class _SettingEditPageState extends State<SettingEditPage> {
                           height: 80,
                           width: 80,
                           decoration: BoxDecoration(
-                              color: Color(0xffA8A8A8),
                               borderRadius: BorderRadius.circular(40)),
+                         child:SvgPicture.asset('assets/icon/icon_profile.svg', color: Color(0xffA8A8A8),),
+                         /* child:
+                          member.profileImage.existsSync()
+                              ? Image.file(member.profileImage)
+                              : SvgPicture.asset('assets/icon/icon_profile.svg', color: Color(0xffA8A8A8),),*/
                         ),
                         Positioned(
                             bottom: 0,
@@ -63,15 +76,33 @@ class _SettingEditPageState extends State<SettingEditPage> {
                               height: 30,
                               width: 30,
                               child: FloatingActionButton(
-                                backgroundColor: Colors.white,
-                                onPressed: () {
-
-                                },
-                                child: Icon(
-                                  Icons.edit,
-                                  size: 20,
-                                  color: Colors.black,
-                                ),
+                                  backgroundColor: Colors.white,
+                                  onPressed: () {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context){
+                                          return SimpleDialog(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(20.0),
+                                            ),
+                                            children: [
+                                              SimpleDialogOption(
+                                                child: Text('사진 찍기',),
+                                                onPressed: (){getImage(ImageSource.camera);},
+                                              ),
+                                              SimpleDialogOption(
+                                                child: Text('사진첩에서 가져오기'),
+                                                onPressed: (){getImage(ImageSource.gallery);},
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                    );
+                                  },
+                                  child: SvgPicture.asset('assets/icon/icon_modify.svg',
+                                    width: MediaQuery.of(context).size.width * 0.0615,
+                                    height: MediaQuery.of(context).size.height * 0.028,
+                                    color: Color(0xff414141),)
                               ),
                             ))
                       ],
@@ -80,8 +111,29 @@ class _SettingEditPageState extends State<SettingEditPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  InkWell(
-                    onTap: () {},
+                  /*InkWell(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context){
+                            return SimpleDialog(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.0),
+                              ),
+                              children: [
+                                SimpleDialogOption(
+                                  child: Text('사진 찍기',),
+                                  onPressed: (){getImage(ImageSource.camera);},
+                                ),
+                                SimpleDialogOption(
+                                  child: Text('사진첩에서 가져오기'),
+                                  onPressed: (){getImage(ImageSource.gallery);},
+                                ),
+                              ],
+                            );
+                          }
+                      );
+                    },
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border(
@@ -92,11 +144,11 @@ class _SettingEditPageState extends State<SettingEditPage> {
                         '사진 변경하기',
                         style: TextStyle(
                           color: Color(0xFF6a6a6a),
-                          fontSize: 12,
+                          fontSize: isSmallScreen?10:12,
                         ),
                       ),
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             ),
@@ -122,6 +174,8 @@ class _SettingEditPageState extends State<SettingEditPage> {
   }
 
   Widget buildInfoList(index, memberDetails) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final bool isSmallScreen = screenWidth <= 600;
     List infoList = [
       'MBTI',
       '성별',
@@ -147,13 +201,17 @@ class _SettingEditPageState extends State<SettingEditPage> {
       onTap: () {
         if(index == 3)
           Navigator.pushNamed(context, navigatorList.elementAt(index));
+        /*else if(index == 0)*/
+
       },
       title: Row(
         children: [
           Text(
             '${infoList.elementAt(index)}',
             style: TextStyle(
-              fontSize: 16,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
+              fontSize: isSmallScreen? 14:16,
             ),
           ),
           Expanded(child: Container()),
@@ -162,28 +220,27 @@ class _SettingEditPageState extends State<SettingEditPage> {
               children: [
                 Text(
                   '${memberInfo.elementAt(index)}',
-                  style: TextStyle(fontSize: 16, color: Color(0xff717171)),
+                  style: TextStyle(fontWeight: FontWeight.w700,fontSize: isSmallScreen?14:16, color: Color(0xff717171)),
                 ),
                 Container(
                   margin: EdgeInsets.only(left: 10),
-                  child: Icon(
-                    Icons.arrow_forward_ios,
-                    size: 20,
-                    color: Color(0xff4d4d4d),
-                  ),
+                  child: SvgPicture.asset('assets/icon/icon_next.svg',
+                  width: MediaQuery.of(context).size.width * 0.022,
+                  color: Color(0xff4D4D4D),)
                 ),
               ],
             )
           else if (0 < index && index < 3)
             Text(
               '${memberInfo.elementAt(index)}',
-              style: TextStyle(fontSize: 16, color: Color(0xff717171)),
+              style: TextStyle(fontSize: isSmallScreen?14: 16, color: Color(0xff888888)),
             )
           else
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 20,
-              color: Color(0xff4d4d4d),
+            Container(
+                margin: EdgeInsets.only(left: 10),
+                child: SvgPicture.asset('assets/icon/icon_next.svg',
+                  width: MediaQuery.of(context).size.width * 0.022,
+                  color: Color(0xff4D4D4D),)
             ),
         ],
       ),

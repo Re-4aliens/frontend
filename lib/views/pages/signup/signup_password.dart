@@ -26,6 +26,8 @@ class _SignUpPasswordState extends State<SignUpPassword>{
 
   Widget build(BuildContext context){
     dynamic member = ModalRoute.of(context)!.settings.arguments;
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {}, backgroundColor: Colors.white,),
@@ -35,7 +37,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('비밀번호를 설정하시면\n가입이 완료됩니다',
-              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
@@ -46,11 +48,11 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                      controller: _PasswordController,
                      decoration: new InputDecoration(
                          hintText: '비밀번호 입력',
-                         hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
+                         hintStyle: TextStyle(fontSize: isSmallScreen?18:20, color: Color(0xffD9D9D9))
                      ),
                    ),
                ),
-            Text('영문,특수기호, 숫자를 포함 10자 이상', style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, color: Color(0xffB8B8B8)),),
+            Text('영문,특수기호, 숫자를 포함 10자 이상', style: TextStyle(fontSize: isSmallScreen?12:14, color: Color(0xffB8B8B8)),),
             Expanded(child: SizedBox()),
             Button(
                 child: Text('가입하기'),

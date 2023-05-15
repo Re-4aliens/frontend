@@ -78,16 +78,16 @@ class mbtiButton extends StatelessWidget{
                     children: [
                       Text(text, textAlign: TextAlign.center,style: TextStyle(
                           color: selected ? Colors.white: Colors.black,
-                          fontSize: 15, fontWeight: FontWeight.bold),),
+                          fontSize: isSmallScreen?15:17, fontWeight: FontWeight.bold),),
                       Text(explain,textAlign: TextAlign.center,style: TextStyle(
                           color: selected ? Colors.white: Colors.black,
-                          fontSize: 13),),
+                          fontSize: isSmallScreen?13:15),),
                       Container(
                         width: 60,height: 60,
                         decoration: BoxDecoration(shape: BoxShape.circle,
                             color: selected? Color(0xffFFB5B5): Colors.grey),
                       ),
-                      Text(mbti, textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,
+                      Text(mbti, textAlign: TextAlign.center, style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold,
                           color:selected? Colors.white : Colors.black ),),
                     ],
                   ),
@@ -98,65 +98,6 @@ class mbtiButton extends StatelessWidget{
 
         ),
       ) ,
-/*
-      margin: EdgeInsets.only(left: 0,right: 0, top: 0, bottom: 0),
-      child: MaterialButton(
-        minWidth: (MediaQuery.of(context).size.height * 0.294)* 2/3,
-        height: MediaQuery.of(context).size.height * 0.294,
-        elevation: 3.0,
-        highlightElevation: 1.0,
-        onPressed: onPressed,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
-          //side: BorderSide(color: Color(0xff7898FF))
-        ),
-        color: selected? Color(0xff7898FF):Colors.white,
-        textColor: Colors.black,
-
-        child: Column(
-          //crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  selected? SvgPicture.asset(
-                      'assets/icon/icon_check.svg',
-                      width: MediaQuery.of(context).size.width * 0.077,
-                      color: Colors.white)
-                      : SvgPicture.asset(
-                    'assets/icon/icon_emptycheck.svg',
-                    width : MediaQuery.of(context).size.width * 0.077,
-                   // color : Color(0xffFFF2a2)
-                  ),
-
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.245),
-                ],
-              ),
-              SizedBox(height: 10),
-              Center(
-                child: Column(
-                  children: [
-                    Text(text, textAlign: TextAlign.center,style: TextStyle(
-                        color: selected ? Colors.white: Colors.black,
-                        fontSize: 15, fontWeight: FontWeight.bold),),
-                    Text(explain,textAlign: TextAlign.center,style: TextStyle(
-                        color: selected ? Colors.white: Colors.black,
-                        fontSize: 13),),
-                    Container(
-                      width: 60,height: 60,
-                      decoration: BoxDecoration(shape: BoxShape.circle,
-                          color: selected? Color(0xffFFB5B5): Colors.grey),
-                    ),
-                    Text(mbti, textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold,
-                        color:selected? Colors.white : Colors.black ),),
-                  ],
-                ),
-              ),
-
-            ]
-        ),
-
-      ),*/
     );
 
   }

@@ -24,7 +24,10 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},backgroundColor: Colors.transparent,),
         body: Container(
@@ -37,7 +40,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
               ),
               Text(
                 '새로운 비밀번호를 입력하시면\n비밀번호 변경이 완료됩니다.',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 20,
@@ -47,6 +50,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                 decoration: InputDecoration(
                   hintText: '새 비밀번호 입력',
                   hintStyle: TextStyle(
+                    fontSize: isSmallScreen?18:20,
                     color: Color(0xffb8b8b8),
                   ),
                 ),
@@ -56,7 +60,8 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                   child: Text(
                     '영문, 특수기호, 숫자를 포함 10자 이상',
                     style: TextStyle(
-                      color: Color(0xffb8b8b8),
+                      fontSize: isSmallScreen?12:14,
+                      color: Color(0xffB8B8B8),
                     ),
                   )),
               SizedBox(
@@ -68,6 +73,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                 decoration: InputDecoration(
                   hintText: '새 비밀번호 재입력',
                   hintStyle: TextStyle(
+                    fontSize: isSmallScreen?18:20,
                     color: Color(0xffb8b8b8),
                   ),
                 ),
@@ -77,6 +83,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                   child: Text(
                     '영문, 특수기호, 숫자를 포함 10자 이상',
                     style: TextStyle(
+                      fontSize: isSmallScreen?12:14,
                       color: Color(0xffb8b8b8),
                     ),
                   )),
@@ -87,8 +94,9 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
-                        child: Text('확인'),
+                        child: Text('비밀번호 변경하기'),
                         onPressed: () async {
+                          Navigator.pushNamed(context,'/setting/edit/PW/done');
                           var userInfo = await storage.read(key: 'auth');
 
                             //입력한 두 패스워드가 같으면
