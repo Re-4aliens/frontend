@@ -17,6 +17,8 @@ class _SignUpNameState extends State<SignUpName>{
   final TextEditingController _nameController = TextEditingController();
 
   Widget build(BuildContext context){
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     Member member = new Member(
       email: '',
       password: '',
@@ -36,7 +38,7 @@ class _SignUpNameState extends State<SignUpName>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('이름을 알려주세요',
-              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: isSmallScreen ?22:24, fontWeight: FontWeight.bold),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
@@ -45,11 +47,20 @@ class _SignUpNameState extends State<SignUpName>{
                      controller: _nameController,
                      decoration: new InputDecoration(
                          hintText: '이름',
-                       hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
+                       hintStyle: TextStyle(fontSize: isSmallScreen ?18:20, color: Color(0xffD9D9D9))
                      ),
                    ),
                ),
             Expanded(child: SizedBox()),
+            Button(
+                child: Text('다음'),
+                onPressed: (){
+                  if(_formKey.currentState!.validate()){
+                    member.name = _nameController.text;
+                    print(member.toJson());
+                    Navigator.pushNamed(context,'/birthday', arguments: member);
+                  }
+                })
 
           ],
         ),

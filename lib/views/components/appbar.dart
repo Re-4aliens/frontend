@@ -26,16 +26,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context){
     return AppBar(
       //key: _scaffold,
-      title: Text("${title}", style: TextStyle(color : Colors.black)),
+      title: Text("${title}", style: TextStyle(color : Colors.black, fontWeight: FontWeight.w700)),
       backgroundColor: backgroundColor,
       elevation: 0.0,
       centerTitle: center,
       leading: IconButton(
         icon: SvgPicture.asset(
           'assets/icon/icon_back.svg',
+          color: Color(0xff4D4D4D),
           width: 24,
-          height: MediaQuery.of(context).size.height * 0.029,
-        ),
+          height: MediaQuery.of(context).size.height * 0.029,),
         onPressed: (){
           Navigator.of(context).pop();
         },

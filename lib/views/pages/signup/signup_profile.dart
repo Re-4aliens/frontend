@@ -31,6 +31,8 @@ class _SignUpProfileState extends State<SignUpProfile>{
 
   Widget build(BuildContext context){
     dynamic member = ModalRoute.of(context)!.settings.arguments;
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -41,23 +43,12 @@ class _SignUpProfileState extends State<SignUpProfile>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('나의 프로필 이미지를\n선택해 주세요',
-              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+              style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             Center(
               child: Stack(
                 children: [
                   Container(
-                      /*decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: Offset(0, 4),
-                          ),
-                        ],
-                      ),*/
                     child:_profileImage == null?
                         Container(
                           child: SvgPicture.asset(
@@ -119,10 +110,10 @@ class _SignUpProfileState extends State<SignUpProfile>{
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 20),
             Center(
               child:Text('프로필 사진을 선택하여\n본인을 나타내주세요\n상대방과 더 가까워질 수 있어요!',
-                style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023 ),
+                style: TextStyle(fontSize: isSmallScreen?12:14),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -148,7 +139,8 @@ class _SignUpProfileState extends State<SignUpProfile>{
                 },
                 child: Text('다음에 변경할래요!',
                   style: TextStyle(decoration: TextDecoration.underline,
-                      fontSize: MediaQuery.of(context).size.height * 0.023,                  color: Color(0xff626262)),),),
+                      fontSize: isSmallScreen?12:14,
+                      color: Color(0xff626262)),),),
             ),
           ],
         ),

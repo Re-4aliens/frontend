@@ -194,6 +194,7 @@ class _HomePageState extends State<HomePage> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
         elevation: 0,
         backgroundColor:
             selectedIndex == 0 ? Color(0xffF2F5FF) : Colors.transparent,
