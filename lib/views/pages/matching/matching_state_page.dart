@@ -1,16 +1,17 @@
 import 'dart:convert';
 
+import 'package:aliens/models/screenArgument.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
-
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../../../models/screenArgument.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../components/button.dart';
+
+import 'package:flutter/animation.dart';
+
+import 'package:blobs/blobs.dart';
+
 
 class MatchingStatePage extends StatefulWidget {
   const MatchingStatePage({super.key});
@@ -20,11 +21,16 @@ class MatchingStatePage extends StatefulWidget {
 }
 
 class _MatchingStatePageState extends State<MatchingStatePage> {
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
+
     return Scaffold(
-       // backgroundColor: Color(0xFFF4F4F4),
+        backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.white,
@@ -34,51 +40,76 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
             },
             icon: SvgPicture.asset(
               'assets/icon/icon_back.svg',
-              width: MediaQuery.of(context).size.width * 0.062,
-              height: MediaQuery.of(context).size.height * 0.029,            ),
-            color: Colors.black,
+              height: 20,
+            ),
           ),
         ),
-        body: Column(
+        extendBodyBehindAppBar: true,
+        body: Stack(
           children: [
+
             Column(
               children: [
-                Expanded(flex:1, child: Container()),
-
+                Expanded(flex: 2, child: SizedBox()),
                 Text(
                   '매칭 대기중...',
                   style: TextStyle(
-                    fontSize: MediaQuery.of(context).size.height * 0.039,
+                    fontSize: isSmallScreen ? 22 : 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
-                  height: 10,
-                ),
-                Center(
-                    child:  LinearPercentIndicator(
-                  width: MediaQuery.of(context).size.width * 0.513,
-                  animation: true,
-                  lineHeight: MediaQuery.of(context).size.height * 0.009,
-                  animationDuration: 2000,
-                  percent: 0.9,
-                  linearStrokeCap: LinearStrokeCap.roundAll,
-                  progressColor: Color(0xff7898FF),
-                ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.059,
+                  height: 20,
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9),
-                    borderRadius: BorderRadius.circular(90),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                  width: MediaQuery.of(context).size.width * 0.361,
-                  height: MediaQuery.of(context).size.height * 0.21,
+                  child: LinearPercentIndicator(
+                    alignment: MainAxisAlignment.center,
+                    animation: true,
+                    restartAnimation: true,
+                    lineHeight: 8,
+                    percent: 1,
+                    animationDuration: 8000,
+                    width: 200,
+                    progressColor: Color(0xff7898FF),
+                    barRadius: const Radius.circular(16),
+                    backgroundColor: Color(0xffDAE3FF),
+                  ),
                 ),
                 SizedBox(
-                  height: 70,
+                  height: isSmallScreen ? 40 : 70,
+                ),
+                Stack(
+                  children: [
+                    Blob.animatedRandom(
+                      size: isSmallScreen ? 170 : 200,
+                      edgesCount:6,
+                      //minGrowth:4,
+                      duration:  Duration(milliseconds: 1000),
+                      loop: true,
+                      styles:  BlobStyles(
+                          color:  Color(0xffFFB5B5)
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: Blob.animatedRandom(
+                        size: isSmallScreen ? 70 : 80,
+                        edgesCount:6,
+                        //minGrowth:4,
+                        duration:  Duration(milliseconds: 1000),
+                        loop: true,
+                        styles:  BlobStyles(
+                            color:  Color(0xffD8E1FF)
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: isSmallScreen ? 40 : 70,
                 ),
                 Text(
                   '조금만 기다려주세요.\n내 성향과 스타일에 꼭 맞는\n친구를 찾고 있어요!',
@@ -88,30 +119,30 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(
-                  height: 70,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 20,left: 20,bottom: 40),
-                  child: Button(
-                      child: Text('나의 신청 확인하기'),
-                      onPressed: (){
-                        Navigator.pushNamed(context, '/info/my', arguments: args);
-                      }),
-                ),
-                /*SizedBox(
-                  height: 40,
-                ),
-                Text('위 버튼을 누르면 나의 접수 정보를 확인하고\n언어를 수정할 수 있어요.',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFFB1B1B1),
-                  ),
-                  textAlign: TextAlign.center,
-                ),*/
+                Expanded(flex: 3, child: SizedBox()),
               ],
             ),
-            Expanded(flex: 3,child: Container()),
+            Column(
+              children: [
+                Expanded(flex: isSmallScreen ? 8 : 7, child: Container()),
+                Expanded(
+                    flex: 2,
+                    child: Container(
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 25, left: 25),
+                        child: Positioned(
+                          child: Button(
+                            child: Text('나의 신청 확인하기'),
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/info/my', arguments: args);
+                            },
+                          ),
+                        ),
+                      ),
+                    )),
+              ],
+            ),
           ],
         ));
   }
