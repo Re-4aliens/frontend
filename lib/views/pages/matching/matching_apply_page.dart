@@ -32,9 +32,8 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
           leading: IconButton(
             icon: SvgPicture.asset(
               'assets/icon/icon_back.svg',
-              width: 24,
-              height: MediaQuery.of(context).size.height * 0.029,
-
+              height: 16,
+              color: Color(0xff212121),
             ),
             onPressed: (){
               Navigator.of(context).pop();
@@ -74,12 +73,72 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('매칭신청을 시작합니다!',
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      margin: EdgeInsets.only(bottom: 10, right: 30),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 4),
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                          )
+                        ]
+                      ),
+                      width: 176,
+                      height: 37,
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('Let\'s friendship ! ',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff7898FF),
+                          ),),
+                          Text('\u{1F44B}',
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      margin: EdgeInsets.only(right: 130, top: 10, bottom: 10),
+                      decoration: BoxDecoration(
+                          color: Color(0xff7898ff),
+                        borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(0, 4),
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                            )
+                          ]
+                      ),
+                      alignment: Alignment.center,
+                      width: 120,
+                      height: 37,
+                      child: Text('\u{1F9E1}\u{1F49B}\u{1F49A}\u{1F499}',
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),),
+                    ),
+                  ),
+                  SizedBox(height: 40,),
+                  Text('곧 매칭신청이\n시작됩니다!',
                     style: TextStyle(fontSize: isSmallScreen ? 20 : 25, fontWeight: FontWeight.bold,),),
                   RichText(
                       text: TextSpan(
                           children: [
-                            TextSpan(text:'\n선호언어', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isSmallScreen ? 12 : 16, color: Colors.black),),
+                            TextSpan(text:'\n선호언어', style: TextStyle(fontSize: isSmallScreen ? 12 : 16, color: Color(0xff3666FF)),),
                             TextSpan(text: '에 따라 매칭이 되며,', style: TextStyle(fontSize: isSmallScreen ? 14 : 16,color: Colors.black, height: 2)),
                                 ]
                             ),
@@ -87,7 +146,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                   RichText(
                     text: TextSpan(
                         children: [
-                          TextSpan(text:'랜덤 선호언어 친구(SF)', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isSmallScreen ? 12 : 16, color: Colors.black),),
+                          TextSpan(text:'랜덤 선호언어 친구(SF)', style: TextStyle(fontSize: isSmallScreen ? 12 : 16, color: Color(0xff3666FF)),),
                           TextSpan(text: '가 추가됩니다', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Colors.black)),
                         ]
                     ),
@@ -109,9 +168,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                         onPressed: (){
                           Navigator.pushNamed(context,'/choose', arguments: args);
                         },
-
                       ),
-
                     ),
                   ),
                 )),
