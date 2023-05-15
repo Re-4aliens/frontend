@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../../../providers/chatting_provider.dart';
 
 List<Map<String, dynamic>> chatList = [
-  {'text': 'hi', 'time': ''}
+  {'text': 'hi', 'time': '17:26pm'}
 ];
 
 var channel;
@@ -73,7 +74,10 @@ class _ChattingPageState extends State<ChattingPage> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios_new),
+          icon: SvgPicture.asset(
+            'assets/icon/icon_back.svg',
+            height: 16,
+          ),
           color: Colors.black,
         ),
         title: Row(
@@ -81,10 +85,10 @@ class _ChattingPageState extends State<ChattingPage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 10.0),
-              child: Icon(
-                Icons.account_circle,
-                color: Color(0xff7898FF),
-                size: 40,
+              child: SvgPicture.asset(
+                'assets/icon/icon_profile.svg',
+                height: 35,
+                color: Color(0xff7898ff),
               ),
             ),
             Column(
@@ -122,8 +126,10 @@ class _ChattingPageState extends State<ChattingPage> {
                       ));
             },
             //아이콘 수정 필요
-            icon: Icon(CupertinoIcons.bars),
-            color: Colors.black,
+            icon: SvgPicture.asset(
+              'assets/icon/icon_more.svg',
+              height: 20,
+            ),
           )
         ],
       ),
@@ -155,11 +161,11 @@ class _ChattingPageState extends State<ChattingPage> {
                         return Row(
                           children: [
                             Padding(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Icon(
-                                Icons.account_circle,
-                                color: Color(0xff7898FF),
-                                size: 40,
+                              padding: EdgeInsets.only(left: 30),
+                              child: SvgPicture.asset(
+                                'assets/icon/icon_profile.svg',
+                                height: 40,
+                                color: Color(0xff7898ff),
                               ),
                             ),
                             Row(
@@ -175,21 +181,21 @@ class _ChattingPageState extends State<ChattingPage> {
                                         borderRadius: BorderRadius.circular(30),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black12,
-                                            blurRadius: 5,
-                                            spreadRadius: 0.5,
-                                            offset: const Offset(0, 3)
-                                          )
-                                        ]
-                                    ),
+                                              color: Colors.black12,
+                                              blurRadius: 5,
+                                              spreadRadius: 0.5,
+                                              offset: const Offset(0, 3))
+                                        ]),
                                     padding: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 18),
                                     margin: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 10),
-                                    child: Text('${chatList[index]['text']}', style: TextStyle(
-                                      color: Color(0xff616161),
-                                    ),),
-
+                                    child: Text(
+                                      '${chatList[index]['text']}',
+                                      style: TextStyle(
+                                        color: Color(0xff616161),
+                                      ),
+                                    ),
                                   ),
                                 ),
                                 Padding(
@@ -224,7 +230,9 @@ class _ChattingPageState extends State<ChattingPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      icon: Icon(Icons.add),
+                      icon: Icon(Icons.add,
+                      color: Color(0xff7898ff),
+                      size: 30,),
                       onPressed: () {
                         setState(() {
                           if (isChecked) {
@@ -240,9 +248,10 @@ class _ChattingPageState extends State<ChattingPage> {
                     Expanded(
                       child: Container(
                           decoration: BoxDecoration(
+                            color: Color(0xffFAFAFA),
                               borderRadius: BorderRadius.circular(360),
                               border: Border.all(
-                                color: Colors.grey,
+                                color: Color(0xffC9C9C9),
                                 width: 1,
                               )),
                           padding: EdgeInsets.symmetric(horizontal: 10),
@@ -253,6 +262,7 @@ class _ChattingPageState extends State<ChattingPage> {
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
                                 ),
+
                                 controller: _controller,
                                 onChanged: (value) {
                                   setState(() {
@@ -264,7 +274,11 @@ class _ChattingPageState extends State<ChattingPage> {
                                 onPressed: _newMessage.trim().isEmpty
                                     ? null
                                     : _sendMessage,
-                                icon: Icon(Icons.send),
+                                icon: SvgPicture.asset(
+                                  'assets/icon/icon_send.svg',
+                                  height: 22,
+                                  color: Color(0xff7898ff),
+                                ),
                               ),
                             ],
                           )),
@@ -278,16 +292,44 @@ class _ChattingPageState extends State<ChattingPage> {
               Container(
                 height: isChecked ? 340 : 0,
                 alignment: Alignment.center,
-                child: Container(
-
-                  height: 100,
-                  width: 100,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  child: Text('밸런스게임'),
+                color: Colors.white,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: (){
+                        setState(() {
+                          isChecked = false;
+                        });
+                        print(MediaQuery.of(context).viewInsets.bottom);
+                      },
+                      child: Container(
+                        height: 100,
+                        width: 100,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: Color(0xffF5F7FF),
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                              color: Colors.black.withOpacity(0.1)
+                            )
+                          ]
+                        ),
+                        alignment: Alignment.center,
+                        child: Text('밸런스게임'),
+                        margin: EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ),
+                    Text('밸런스게임\n제안하기',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Color(0xff888888),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14
+                    ),),
+                  ],
                 ),
               ),
             ],

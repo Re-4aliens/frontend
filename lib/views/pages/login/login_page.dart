@@ -60,7 +60,7 @@ class _LoginState extends State<Login> {
                       Container(
                         width: 155,
                         height: 100,
-                        decoration: BoxDecoration(color: Colors.grey),
+                        //decoration: BoxDecoration(color: Colors.grey),
                       ),
                       Text(
                         '프렌즈쉽에 오신것을 환영합니다.',
@@ -188,7 +188,7 @@ class _LoginState extends State<Login> {
                                 MATCHED, PENDING, NOT_APPLIED 입력
                                  */
                                 {
-                                  "status": "PENDING"
+                                  "status": "NOT_APPLIED"
                                 },
                                 {
                                   "member": {
@@ -209,45 +209,52 @@ class _LoginState extends State<Login> {
                                   "partners": [
                                     {
                                       "memberId": 1,
-                                      "name": "Jenny",
-                                      "mbti": "ENTJ",
+                                      "name": "Mila",
+                                      "mbti": "ISFP",
                                       "gender": "FEMALE",
-                                      "nationality": "Korean",
+                                      "nationality": "Korea",
                                       "profileImage": "url",
                                       "countryImage": "url"
                                     },
                                     {
-                                      "memberId": 1,
-                                      "name": "Jenny",
-                                      "mbti": "ENTJ",
+                                      "memberId": 2,
+                                      "name": "Risa",
+                                      "mbti": "ISTJ",
                                       "gender": "FEMALE",
-                                      "nationality": "Korean",
+                                      "nationality": "Korea",
                                       "profileImage": "url",
                                       "countryImage": "url"
                                     },
                                     {
-                                      "memberId": 1,
-                                      "name": "Jenny",
-                                      "mbti": "ENTJ",
-                                      "gender": "FEMALE",
-                                      "nationality": "Korean",
+                                      "memberId": 3,
+                                      "name": "Carina",
+                                      "mbti": "ENFJ",
+                                      "gender": "MALE",
+                                      "nationality": "Japan",
                                       "profileImage": "url",
                                       "countryImage": "url"
                                     },
                                     {
-                                      "memberId": 1,
-                                      "name": "Jenny",
-                                      "mbti": "ENTJ",
-                                      "gender": "FEMALE",
-                                      "nationality": "Korean",
+                                      "memberId": 4,
+                                      "name": "Jade",
+                                      "mbti": "ESFP",
+                                      "gender": "MALE",
+                                      "nationality": "China",
                                       "profileImage": "url",
                                       "countryImage": "url"
                                     },
                                   ]
                                 });
 
+                            /*
                             Navigator.popAndPushNamed(context, '/main',
                                 arguments: screenArgument);
+
+ */
+                            Navigator.of(context)
+                                .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
+                            , arguments: screenArgument);
+
                           } else {
                             showDialog(
                                 context: context,
