@@ -65,7 +65,7 @@ class _LoginState extends State<Login> {
                       Text(
                         '프렌즈쉽에 오신것을 환영합니다.',
                         style: TextStyle(
-                            fontSize: fontSize, color: Color(0xff616161)),
+                            fontSize: isSmallScreen?14:16, color: Color(0xff616161)),
                       ),
                     ],
                   ),
@@ -85,8 +85,8 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(30),
                             boxShadow: [
                               BoxShadow(
-                                blurRadius: 5,
-                                spreadRadius: 0.2,
+                                blurRadius: 10,
+                                //spreadRadius: 0.2,
                                 color: Colors.grey.shade300,
                                 offset: const Offset(0, 4),
                               )
@@ -97,10 +97,10 @@ class _LoginState extends State<Login> {
                           controller: _emailController,
                           decoration: new InputDecoration(
                             contentPadding:
-                                EdgeInsets.symmetric(horizontal: 30),
+                                EdgeInsets.symmetric(horizontal: 27.21),
                             hintText: '이메일 주소',
                             hintStyle: TextStyle(
-                                fontSize: fontSize, color: Color(0xffA0A0A0)),
+                                fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
                             enabledBorder: InputBorder.none,
                             focusedBorder: InputBorder.none,
                             /*
@@ -111,7 +111,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: MediaQuery.of(context).size.height*0.035),
                     Form(
                       key: _pwFormKey,
                       child: Container(
@@ -122,8 +122,8 @@ class _LoginState extends State<Login> {
                             borderRadius: BorderRadius.circular(30),
                             boxShadow: [
                               BoxShadow(
-                                blurRadius: 5,
-                                spreadRadius: 0.2,
+                                blurRadius: 10,
+                                //spreadRadius: 0.2,
                                 color: Colors.grey.shade300,
                                 offset: const Offset(0, 4),
                               )
@@ -134,18 +134,18 @@ class _LoginState extends State<Login> {
                           controller: _passwordController,
                           decoration: new InputDecoration(
                               contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 30),
+                                  EdgeInsets.symmetric(horizontal: 27.21),
                               hintText: '비밀번호',
                               hintStyle: TextStyle(
-                                  fontSize: fontSize, color: Color(0xffA0A0A0)),
+                                  fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
                               enabledBorder: InputBorder.none,
                               focusedBorder: InputBorder.none,
                               errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25))),
+                                  borderRadius: BorderRadius.circular(30))),
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.031),
                     BigButton(
                       child: Text(
                         '로그인',
@@ -190,7 +190,7 @@ class _LoginState extends State<Login> {
                                 NOT_APPLIED 입력 // 신청안함
                                  */
                                 {
-                                  "status": "NOT_APPLIED"
+                                  "status": "MATCHED"
                                 },
                                 {
                                   "member": {
@@ -284,10 +284,11 @@ class _LoginState extends State<Login> {
                         }
                       },
                     ),
+                    SizedBox(height: MediaQuery.of(context).size.height *0.035 ,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('비밀번호를 잊으셨나요?'),
+                        Text('비밀번호를 잊으셨나요?', style: TextStyle(fontSize: isSmallScreen?10:12),),
                         TextButton(
                             onPressed: () {
                               Navigator.pushNamed(
@@ -296,6 +297,7 @@ class _LoginState extends State<Login> {
                             child: Text(
                               '비밀번호 찾기',
                               style: TextStyle(
+                                fontSize: isSmallScreen?10:12,
                                   decoration: TextDecoration.underline,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),

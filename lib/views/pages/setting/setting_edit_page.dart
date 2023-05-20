@@ -45,7 +45,7 @@ class _SettingEditPageState extends State<SettingEditPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, onPressed: (){}, title: '프로필 변경하기',),
+      appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, title: '프로필 변경하기', infookay: false, infocontent: '',),
       body: Column(
         children: [
           Expanded(

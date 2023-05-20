@@ -36,9 +36,9 @@ class _SignUpProfileState extends State<SignUpProfile>{
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {}, backgroundColor: Colors.transparent,),
+      appBar: CustomAppBar(appBar: AppBar(), title: '',  backgroundColor: Colors.transparent, infookay: false, infocontent: '',),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
+        padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -113,7 +113,7 @@ class _SignUpProfileState extends State<SignUpProfile>{
             SizedBox(height: 20),
             Center(
               child:Text('프로필 사진을 선택하여\n본인을 나타내주세요\n상대방과 더 가까워질 수 있어요!',
-                style: TextStyle(fontSize: isSmallScreen?12:14),
+                style: TextStyle(fontSize: isSmallScreen?12:14, color: Color(0xff626262)),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -126,16 +126,16 @@ class _SignUpProfileState extends State<SignUpProfile>{
                     //member.profileImage = _profileImage!.path.toString();
                     member.profileImage = 'g.jpg';
                     print(member.toJson());
-                    Navigator.pushNamed(context,'/school', arguments: member);
+                    Navigator.pushNamed(context,'/email', arguments: member);
                   }
                 }),
             Center(
               child: TextButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/school', arguments: member);
+                  Navigator.pushNamed(context, '/email', arguments: member);
                         member.profileImage = 'g.jpg';
                         print(member.toJson());
-                        Navigator.pushNamed(context,'/school', arguments: member);
+                        Navigator.pushNamed(context,'/email', arguments: member);
                 },
                 child: Text('다음에 변경할래요!',
                   style: TextStyle(decoration: TextDecoration.underline,
