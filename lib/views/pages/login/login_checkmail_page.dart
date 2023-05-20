@@ -65,7 +65,7 @@ class _LoginCheckMailState extends State<LoginCheckMail> {
                 SizedBox(height: MediaQuery.of(context).size.height * 0.028),
                 Container(
                   width: double.maxFinite,
-                  height: 48,
+                  height: isSmallScreen?44:48,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context);
