@@ -26,7 +26,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
         backgroundColor: Colors.white,
         appBar: CustomAppBar(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(), title: '', onPressed: (){},
+          appBar: AppBar(), title: '',infookay: false, infocontent: '',
         ),
         body: Padding(
           padding: const EdgeInsets.only(left: 20,right: 20, bottom: 50, top:120),

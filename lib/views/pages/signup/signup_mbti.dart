@@ -1,5 +1,7 @@
 import 'package:aliens/views/components/appbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 import 'package:aliens/views/components/mbtibutton.dart';
@@ -131,7 +133,8 @@ class _SignUpMbtiState extends State<SignUpMbti> {
       appBar: CustomAppBar(
         appBar: AppBar(),
         title: '',
-        onPressed: () {}, backgroundColor: Color(0xffF5F7FF),
+        backgroundColor: Color(0xffF5F7FF),
+        infookay: true, infocontent: '\nMBTI를 선택해주세요.\n상대방이 보는 나의 프로필을 통해\nMBTI를 공유할 수 있어요!',
       ),
       body: SingleChildScrollView(
         //padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
@@ -145,7 +148,7 @@ class _SignUpMbtiState extends State<SignUpMbti> {
                 style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 10),
+                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
                 child: Column(
                   children: [
                     for (int i = 0; i < 8; i++)
