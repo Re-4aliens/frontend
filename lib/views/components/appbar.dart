@@ -3,15 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
-  final VoidCallback onPressed;
 
   CustomAppBar({
     //required Key key,
     required this.appBar,
     required this.title,
-    required this.onPressed,
     required this.backgroundColor,
-   // required this.info,
+    required this.infookay,
+    required this.infocontent,
     this. center = true
   }); //: super(key: key);
 
@@ -19,11 +18,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   final String title;
   final bool center;
   final Color backgroundColor;
- // final bool info;
+  final bool infookay;
+  final String infocontent;
   final GlobalKey<ScaffoldState> _scaffold = GlobalKey();
 
   @override
   Widget build(BuildContext context){
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     return AppBar(
       //key: _scaffold,
       title: Text("${title}", style: TextStyle(color : Colors.black, fontWeight: FontWeight.w700)),
@@ -41,8 +43,41 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
         },
       ),
       actions: [
+        if (infookay)
         IconButton(
-          onPressed: onPressed,
+          onPressed: (){
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return CupertinoTheme(
+                    data: CupertinoThemeData(
+                      barBackgroundColor: Colors.white
+                    ),
+                    child:Dialog(
+                      backgroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child:ConstrainedBox(
+                          constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width * 0.3 ,
+                              maxHeight: MediaQuery.of(context).size.height * 0.3
+                          ),
+                          child:CupertinoAlertDialog(
+                            title: SvgPicture.asset(
+                              'assets/icon/icon_info.svg',
+                              width: MediaQuery.of(context).size.width * 0.062,
+                              height: MediaQuery.of(context).size.height * 0.029, color: Color(0xff7898FF),),
+                            content: Text('${infocontent}',
+                              style: TextStyle(
+                                fontSize: isSmallScreen?10:12,
+                                fontWeight: FontWeight.bold,
+                              ),),
+                          ),)
+                    ));
+              },
+            );
+          },
           icon: SvgPicture.asset(
             'assets/icon/icon_info.svg',
             width: MediaQuery.of(context).size.width * 0.062,

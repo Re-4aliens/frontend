@@ -22,9 +22,9 @@ class _SignUpGenderState extends State<SignUpGender>{
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
-      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {}, backgroundColor: Colors.white,),
+      appBar: CustomAppBar(appBar: AppBar(), title: '',  backgroundColor: Colors.white, infookay: false, infocontent: '',),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
+        padding: EdgeInsets.only(right: 24, left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -34,7 +34,7 @@ class _SignUpGenderState extends State<SignUpGender>{
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('성별', style: TextStyle(fontSize: isSmallScreen?18:20,),),
+                Text('성별', style: TextStyle(fontSize: isSmallScreen?14:16,),),
                 ButtonTheme(
                   alignedDropdown: true,
                 child: DropdownButton(

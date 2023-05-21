@@ -20,7 +20,7 @@ class Button extends StatelessWidget{
 
     return Container(
       width : double.maxFinite,
-      height: 50,
+      height: isSmallScreen?44:48,
       child: ElevatedButton(
         onPressed: onPressed,
         child: child,
@@ -28,7 +28,7 @@ class Button extends StatelessWidget{
           textStyle: TextStyle(fontSize: fontSize),
             backgroundColor: Color(0xff7898FF),// 여기 색 넣으면됩니다
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(40)
+                borderRadius: BorderRadius.circular(30)
             ),
             elevation: 0.0,
         ),
