@@ -32,7 +32,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {}, backgroundColor: Colors.white,),
+      appBar: CustomAppBar(appBar: AppBar(), title: '',  backgroundColor: Colors.white, infookay: false, infocontent: '',),
       body: Padding(
         padding: EdgeInsets.only(right: 20, left: 20, top: MediaQuery
             .of(context).size.height * 0.06,
@@ -85,7 +85,56 @@ class _SignUpEmailState extends State<SignUpEmail> {
                             fontSize: MediaQuery
                                 .of(context).size.height * 0.023,
                             color: _isButtonEnabled? Color(0xffC4C4C4) : Color(0xffC4C4C4)),),
-                        onPressed: _isButtonEnabled ? () async {
+                        onPressed:()
+                            {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return CupertinoAlertDialog(
+                                      title: Text(
+                                        '이메일 중복확인', textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: isSmallScreen?14:16),),
+                                      content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '사용 가능한 이메일입니다.\n계속해서 회원가입 진행을 완료해주세요:)',
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(fontSize: isSmallScreen?12:14),),
+                                          ]
+                                      ),
+                                      actions: <Widget>[
+                                        CupertinoDialogAction(
+                                          child: Text('취소',
+                                            style: TextStyle(
+                                                color: Colors.black, fontSize: isSmallScreen?12:14),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                        ),
+                                        CupertinoDialogAction(
+                                            child: Text('계속하기',
+                                              style: TextStyle(fontSize: isSmallScreen?12:14,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),),
+                                            onPressed: () {
+                                              setState(() {
+                                                _isContinueButtonPressed = true;
+                                                _isVerified = true;
+                                              });
+                                              Navigator.pop(context);}
+                                        )
+                                      ],
+                                    );
+                                  }
+                              );
+                            }
+                            //아래 주석 전부다 api 연결시 활성화
+                        /*_isButtonEnabled ? () async {
                           //true면 존재, 다시 시도
 
                           //false면 존재하지 않음.
@@ -116,9 +165,11 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                 context: context,
                                 builder: (BuildContext context) {
                                   return CupertinoAlertDialog(
-                                    /*shape: RoundedRectangleBorder(
+                                    */
+                        /*shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20.0),
                                     ),*/
+                        /*
                                     title: Text(
                                       '이메일 중복확인',
                                       textAlign: TextAlign.center,
@@ -188,42 +239,10 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                             Navigator.pop(context);}
                                             )
                                     ],
-
-                                       /* Row(
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .spaceBetween,
-                                          children: [
-                                            SimpleDialogOption(
-                                              child: Text('취소',
-                                                style: TextStyle(
-                                                    fontSize: 14),),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                            ),
-                                            Divider(
-                                              color: Color(0xff7898FF),
-                                              thickness: 1,
-                                              //height: 10,
-                                            ),
-                                            SimpleDialogOption(
-                                                child: Text('계속하기',
-                                                  style: TextStyle(fontSize: 14,
-                                                      fontWeight: FontWeight
-                                                          .bold),),
-                                                onPressed: () {
-                                                  setState(() {
-                                                    _isContinueButtonPressed = true;
-                                                    _isVerified = true;
-                                                  });
-                                                  Navigator.pop(context);
-                                                }
-                                            )
-                                          ],
-                                        )*/
                                     );
-                                });
-                        } : null,
+                                }
+                                );
+                        } : null,*/
                       ),
                     )
                   ],
@@ -235,7 +254,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
             Expanded(child: SizedBox()),
           Container(
               width : double.maxFinite,
-              height: 50,
+              height: isSmallScreen?44:48,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   textStyle: TextStyle(fontSize: fontSize,

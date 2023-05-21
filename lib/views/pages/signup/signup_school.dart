@@ -23,7 +23,7 @@ class _SignUpSchoolState extends State<SignUpSchool> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},backgroundColor: Colors.transparent,),
+      appBar: CustomAppBar(appBar: AppBar(), title: '',backgroundColor: Colors.transparent, infookay: false, infocontent: '',),
       body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(

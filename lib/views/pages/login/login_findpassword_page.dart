@@ -23,23 +23,25 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
   final TextEditingController _EmailController = TextEditingController();
 
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final bool isSmallScreen = screenWidth <= 600;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         appBar: AppBar(),
         title: '',
-        onPressed: () {},
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent, infookay: false, infocontent: '',
       ),
       body: Padding(
-        padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
+        padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('가입하신 이메일과\n이름정보를 입력해주세요.',
-              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.04, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.w700),),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.0166,),
             Text('비밀번호를 찾기 위해 작성하신 메일로\n임시비밀번호를 발급해드려요.',
-              style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.023, color: Color(0xff888888)),),
+              style: TextStyle(fontSize: isSmallScreen?12:14, color: Color(0xff888888)),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
             Form(
               key: _formKey,
@@ -50,7 +52,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                     controller: _NameController,
                     decoration: new InputDecoration(
                         hintText: '이름',
-                        hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
+                        hintStyle: TextStyle(fontSize: isSmallScreen?18:20, color: Color(0xffD9D9D9))
                     ),
                   ),
                   SizedBox(height: 10,),
@@ -59,7 +61,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                     controller: _EmailController,
                     decoration: new InputDecoration(
                         hintText: '이메일',
-                        hintStyle: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.032, color: Color(0xffD9D9D9))
+                        hintStyle: TextStyle(fontSize: isSmallScreen?18:20, color: Color(0xffD9D9D9))
                     ),
                   )
 
@@ -68,9 +70,11 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
             ),
             Expanded(child: SizedBox()),
             Button(
-                child: Text('임시 비밀번호 발급'),
+                child: Text('확인'),
                 onPressed: () async {
-                  if(_formKey.currentState!.validate()){
+                  Navigator.pushNamed(context,'/login/checkemail');
+
+                 /* if(_formKey.currentState!.validate()){
                     var email = emailController.text;
                     //임시 비밀번호 발급 요청
                     var url = '';
@@ -108,7 +112,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                         ],
                       ));
                     }
-                  }
+                  }*/
                 })
           ],
         ),
