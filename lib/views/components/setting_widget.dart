@@ -23,44 +23,68 @@ Widget settingWidget(BuildContext context, memberDetails) {
     children: [
       Expanded(
         child: Container(
-          child: Container(
-            alignment: Alignment.center,
-            child: Stack(
-              children: [
-                Container(
-                  height: 80,
-                  width: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(40)),
-                  child:imageFile.existsSync()
-                      ? Image.file(imageFile)
-                      : SvgPicture.asset('assets/icon/icon_profile.svg', color: Color(0xffA8A8A8),),
-                ),
-                Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      child: FloatingActionButton(
-                        backgroundColor: Colors.white,
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/setting/edit',
-                              arguments: memberDetails);
-                        },
-                        child: SvgPicture.asset('assets/icon/icon_modify.svg',
-                        width: MediaQuery.of(context).size.width * 0.0615,
-                        height: MediaQuery.of(context).size.height * 0.028,
-                        color: Color(0xff414141),)
-                      ),
-                    ))
-              ],
-            ),
+          padding: EdgeInsets.only(right: 20,left: 20, top: 17,bottom: 17),
+            decoration: BoxDecoration(
+            color: Color(0xff7898FF),
+            borderRadius: BorderRadius.circular(20),
           ),
+
+          width: MediaQuery.of(context).size.width * 0.87,
+          height: isSmallScreen? MediaQuery.of(context).size.height * 0.3:MediaQuery.of(context).size.height * 0.15,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Column(
+                children: [
+                  Text(memberDetails['name'].toString()+'님'),
+                  Text(memberDetails['birthday'].toString(), style: TextStyle(
+                    fontSize: isSmallScreen?12:14
+                  ),),
+                  Text(memberDetails['email'].toString(), style: TextStyle(
+                      fontSize: isSmallScreen?12:14)
+                  )
+                ],
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Stack(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height*0.09,
+                      width: 80,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40)),
+                      child:imageFile.existsSync()
+                          ? Image.file(imageFile)
+                          : SvgPicture.asset('assets/icon/icon_profile.svg', color: Color(0xffA8A8A8),),
+                    ),
+                    Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.038,
+                          width: 30,
+                          child: FloatingActionButton(
+                              backgroundColor: Colors.white,
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/setting/edit',
+                                    arguments: memberDetails);
+                                },
+                              child: SvgPicture.asset('assets/icon/icon_modify.svg',
+                                height: MediaQuery.of(context).size.height * 0.019,
+                                width: MediaQuery.of(context).size.width * 0.0415,
+                                color: Color(0xff7898FF),)
+                          ),
+                        ))
+                  ],
+                ),
+              )
+            ],
+          )
         ),
       ),
       Expanded(
-        flex: 4,
+        flex: 2,
         child: Container(
           decoration: BoxDecoration(
             //color: Colors.green.shade200
