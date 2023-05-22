@@ -111,44 +111,7 @@ class _SettingEditPageState extends State<SettingEditPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  /*InkWell(
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context){
-                            return SimpleDialog(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20.0),
-                              ),
-                              children: [
-                                SimpleDialogOption(
-                                  child: Text('사진 찍기',),
-                                  onPressed: (){getImage(ImageSource.camera);},
-                                ),
-                                SimpleDialogOption(
-                                  child: Text('사진첩에서 가져오기'),
-                                  onPressed: (){getImage(ImageSource.gallery);},
-                                ),
-                              ],
-                            );
-                          }
-                      );
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                            bottom:
-                            BorderSide(width: 1.0, color: Color(0xFF6a6a6a))),
-                      ),
-                      child: Text(
-                        '사진 변경하기',
-                        style: TextStyle(
-                          color: Color(0xFF6a6a6a),
-                          fontSize: isSmallScreen?10:12,
-                        ),
-                      ),
-                    ),
-                  ),*/
+
                 ],
               ),
             ),
