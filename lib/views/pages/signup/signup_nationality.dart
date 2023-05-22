@@ -17,7 +17,7 @@ class SignUpNationality extends StatefulWidget {
   State<SignUpNationality> createState() => _SignUpNationalityState();
 }
 
-List<dynamic> nationList = [];
+List<dynamic> nationList = ['Korea', 'China', 'Japan', 'USA', 'India', 'UK', 'India', 'Russia', 'Australia'];
 
 class _SignUpNationalityState extends State<SignUpNationality> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -69,7 +69,9 @@ class _SignUpNationalityState extends State<SignUpNationality> {
         title: '',
         onPressed: () {}, backgroundColor: Colors.white,
       ),
-      body: FutureBuilder(
+      body:
+/*
+      FutureBuilder(
           future: getNationList(),
           builder: (context, snapshot) {
             if (snapshot.hasData == false)
@@ -77,7 +79,9 @@ class _SignUpNationalityState extends State<SignUpNationality> {
             else if (snapshot.hasError) {
               return Container();
             } else {
-              return Padding(
+              return
+                */
+                Padding(
                 padding: EdgeInsets.only(
                     right: 20,
                     left: 20,
@@ -115,7 +119,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                                     MediaQuery.of(context).size.height * 0.011,
                               ),
                               hint: Text('국적'),
-                              items: snapshot.data!.map((value) {
+                              items: nationList.map((value) {
                                 return DropdownMenuItem(
                                     child: Text(
                                       value,
@@ -146,10 +150,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                         onPressed: () {
                           if (_selectedNationality != '') {
                             //member.nationality = _selectedNationality;
-                            var nationality = snapshot.data!
-                                    .toList()
-                                    .indexOf(_selectedNationality) +
-                                1;
+                            var nationality = nationList.toList().indexOf(_selectedNationality) + 1;
                             member.nationality = nationality.toString();
                             print(member.toJson());
                             Navigator.pushNamed(context, '/mbti',
@@ -158,9 +159,9 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                         })
                   ],
                 ),
-              );
-            }
-          }),
+              )
+           // }
+          //}),
     );
   }
 }
