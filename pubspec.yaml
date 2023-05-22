@@ -51,6 +51,9 @@ dependencies:
   country_picker: ^2.0.20
   web_socket_channel: ^2.3.0
   blobs: ^2.0.0
+  flutter_native_splash: ^2.2.19
+  transition: ^2.0.2
+  flutter_inset_box_shadow: ^1.0.8
 # =======
 # >>>>>>> parent of dfdf35b (feat: 채팅 페이지 추가)
 
