@@ -2,6 +2,7 @@ import 'package:aliens/views/pages/loading_page.dart';
 import 'package:aliens/views/pages/login/login_checkmail_page.dart';
 import 'package:aliens/views/pages/login/login_findpassword_page.dart';
 import 'package:aliens/views/pages/login/login_page.dart';
+import 'package:aliens/views/pages/matching/matching_list_page.dart';
 import 'package:aliens/views/pages/setting/setting_delete_what.dart';
 import 'package:aliens/views/pages/matching/matching_partner_info_page.dart';
 import 'package:aliens/views/pages/signup/signup_birthday.dart';
@@ -19,6 +20,7 @@ import 'package:aliens/views/pages/start_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:aliens/views/pages/signup/signup_name.dart';
+import 'package:flutter/services.dart';
 
 
 import 'package:provider/provider.dart';
@@ -50,6 +52,17 @@ import './providers/member_provider.dart';
 
 void main() {
   runApp(const MyApp());
+  //Setting SysemUIOverlay
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemStatusBarContrastEnforced: true,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      statusBarIconBrightness: Brightness.dark)
+  );
+
+//Setting SystmeUIMode
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
 }
 
 class MyApp extends StatelessWidget {

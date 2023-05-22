@@ -22,19 +22,17 @@ class _SplashPageState extends State<SplashPage>
   void initState() {
     super.initState();
     Timer(Duration(milliseconds: 5), () {
-      isStart = true;
+      setState(() {
+        isStart = true;
+      });
     });
 
-
-    //4초 후에 넘어가기
-
-    Timer(Duration(milliseconds: 4000), () {
-      Navigator.popAndPushNamed(context, '/');
+    //5초 후에 넘어가기
+    Timer(Duration(milliseconds: 5000), () {
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+      );
     });
-
-
-
-
   }
 
 

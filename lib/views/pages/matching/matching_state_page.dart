@@ -12,7 +12,6 @@ import 'package:flutter/animation.dart';
 
 import 'package:blobs/blobs.dart';
 
-
 class MatchingStatePage extends StatefulWidget {
   const MatchingStatePage({super.key});
 
@@ -21,6 +20,22 @@ class MatchingStatePage extends StatefulWidget {
 }
 
 class _MatchingStatePageState extends State<MatchingStatePage> {
+
+  DateTime matchingDate = DateTime.parse("2023-05-28 00:00:00");
+  DateTime nowDate = DateTime.now();
+
+  late Duration diff;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    setState(() {
+      if(matchingDate.difference(nowDate).inSeconds > 0)
+        diff = matchingDate.difference(nowDate);
+      else
+        diff = Duration(seconds: 0);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,11 +58,17 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
               height: 20,
             ),
           ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  print(diff.inSeconds);
+                },
+                icon: Icon(Icons.account_circle))
+          ],
         ),
         extendBodyBehindAppBar: true,
         body: Stack(
           children: [
-
             Column(
               children: [
                 Expanded(flex: 2, child: SizedBox()),
@@ -60,7 +81,9 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                 ),
                 SizedBox(
                   height: 20,
+                  width: double.infinity,
                 ),
+                /*
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
@@ -78,6 +101,129 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                     backgroundColor: Color(0xffDAE3FF),
                   ),
                 ),
+
+                 */
+                TweenAnimationBuilder<Duration>(
+                    duration: Duration(seconds: diff.inSeconds),
+                    tween: Tween(
+                        begin: Duration(seconds: diff.inSeconds),
+                        end: Duration.zero),
+                    onEnd: () {
+                      print('Timer ended');
+                    },
+                    builder:
+                        (BuildContext context, Duration value, Widget? child) {
+                      final days = value.inDays.toString().padLeft(2, '0');
+                      final hours = (value.inHours % 24).toString().padLeft(2, '0');
+                      final minutes = (value.inMinutes % 60).toString().padLeft(2, '0');
+                      final seconds = (value.inSeconds % 60).toString().padLeft(2, '0');
+                      return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xffF9F9FF),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: Offset(0, 3),
+                                      color: Color(0xff4976FF).withOpacity(0.12),
+                                      blurRadius: 10,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text('$days',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xff7898FF),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20)
+                                ),
+                                padding: EdgeInsets.all(8),
+                              ),
+                              Padding(padding: EdgeInsets.all(10), child: Text(':',
+                                  style: TextStyle(
+                                      color: Color(0xff7898FF),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20))),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xffF9F9FF),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: Offset(0, 3),
+                                      color: Color(0xff4976FF).withOpacity(0.12),
+                                      blurRadius: 10,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text('$hours',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xff7898FF),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20)
+                                ),
+                                padding: EdgeInsets.all(8),
+                              ),
+                              Padding(padding: EdgeInsets.all(10), child: Text(':',
+                                  style: TextStyle(
+                                      color: Color(0xff7898FF),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20))),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xffF9F9FF),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: Offset(0, 3),
+                                      color: Color(0xff4976FF).withOpacity(0.12),
+                                      blurRadius: 10,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text('$minutes',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xff7898FF),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20)
+                                ),
+                                padding: EdgeInsets.all(8),
+                              ),
+                              Padding(padding: EdgeInsets.all(10), child: Text(':',
+                                  style: TextStyle(
+                                      color: Color(0xff7898FF),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20))),
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Color(0xffF9F9FF),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      offset: Offset(0, 3),
+                                      color: Color(0xff4976FF).withOpacity(0.12),
+                                      blurRadius: 10,
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text('$seconds',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xff7898FF),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20)
+                                ),
+                                padding: EdgeInsets.all(8),
+                              ),
+                            ],
+                          ));
+                    }),
                 SizedBox(
                   height: isSmallScreen ? 40 : 70,
                 ),
@@ -85,25 +231,21 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                   children: [
                     Blob.animatedRandom(
                       size: isSmallScreen ? 170 : 200,
-                      edgesCount:6,
+                      edgesCount: 6,
                       //minGrowth:4,
-                      duration:  Duration(milliseconds: 1000),
+                      duration: Duration(milliseconds: 1000),
                       loop: true,
-                      styles:  BlobStyles(
-                          color:  Color(0xffFFB5B5)
-                      ),
+                      styles: BlobStyles(color: Color(0xffFFB5B5)),
                     ),
                     Positioned(
                       bottom: 0,
                       child: Blob.animatedRandom(
                         size: isSmallScreen ? 70 : 80,
-                        edgesCount:6,
+                        edgesCount: 6,
                         //minGrowth:4,
-                        duration:  Duration(milliseconds: 1000),
+                        duration: Duration(milliseconds: 1000),
                         loop: true,
-                        styles:  BlobStyles(
-                            color:  Color(0xffD8E1FF)
-                        ),
+                        styles: BlobStyles(color: Color(0xffD8E1FF)),
                       ),
                     ),
                   ],
@@ -135,7 +277,8 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                           child: Button(
                             child: Text('나의 신청 확인하기'),
                             onPressed: () {
-                              Navigator.pushNamed(context, '/info/my', arguments: args);
+                              Navigator.pushNamed(context, '/info/my',
+                                  arguments: args);
                             },
                           ),
                         ),

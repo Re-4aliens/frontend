@@ -55,7 +55,11 @@ class _StartPageState extends State<StartPage>{
 
   @override
   Widget build(BuildContext context) {
+
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
+      backgroundColor: Color(0xfff8f8f8),
       body: Center(
         child: Column(
           children: <Widget>[
@@ -70,13 +74,13 @@ class _StartPageState extends State<StartPage>{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(width: 100, height: 50,
-                      decoration: BoxDecoration(color: Colors.grey),
+                      decoration: BoxDecoration(color: Colors.grey.shade400),
                         ),
                     Text('FRIEND SHIP',
-                      style : TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style : TextStyle(fontSize: isSmallScreen ? 22 : 24, fontWeight: FontWeight.bold),
                     ),
                     Text('내 손안의 외국인 프렌즈',
-                        style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.022),),
+                        style: TextStyle(fontSize: isSmallScreen ? 12 : 14),),
                       ],),),),
               Expanded(
                 flex:4,
@@ -89,18 +93,18 @@ class _StartPageState extends State<StartPage>{
                         children: [
                           BigButton(onPressed: () {
                             Navigator.pushNamed(context, '/name');},
-                              child: Text('시작하기')),
+                              child: Text('시작하기', style: TextStyle(fontSize: isSmallScreen ? 14 : 16),)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text('이미 계정이 있나요?', style: TextStyle(fontSize: MediaQuery.of(context).size.height * 0.019),),
+                              Text('이미 계정이 있나요?', style: TextStyle(fontSize: isSmallScreen ? 12 : 14),),
                               TextButton(onPressed: (){
                                 Navigator.pushNamed(context, '/login');
                               },
                                   child: Text('로그인',
                                       style: TextStyle(color: Color(0xff000000),
-                                      fontSize: MediaQuery.of(context).size.height * 0.019,
+                                      fontSize: isSmallScreen ? 12 : 14,
                                       fontWeight: FontWeight.bold,
                                       )))
                             ],
