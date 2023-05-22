@@ -24,7 +24,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(),
           title: '',
-          onPressed: () {},
+           infookay: false, infocontent: '',
         ),
         body: Padding(
           padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
@@ -59,10 +59,10 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                     );
                   },
                 ),
-                SizedBox(height: 10),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                 Container(
                   width: double.maxFinite,
-                  height: 50,
+                  height: isSmallScreen?44:48,
                   child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context)

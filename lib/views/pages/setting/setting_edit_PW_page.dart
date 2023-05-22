@@ -29,7 +29,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(appBar: AppBar(), title: '', onPressed: () {},backgroundColor: Colors.transparent,),
+        appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.transparent, infookay: false, infocontent: '',),
         body: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(
