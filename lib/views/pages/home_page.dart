@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage> {
         toolbarHeight: selectedIndex == 1 ? 90 : 56,
         elevation: selectedIndex == 1 ? 7 : 0,
         shadowColor: Colors.black26,
-        backgroundColor: selectedIndex == 0 ? Color(0xffF2F5FF) : Colors.white,
+        backgroundColor: selectedIndex == 1 ? Colors.white :Color(0xffF2F5FF),
         leadingWidth: 100,
         leading: Column(
           children: [
