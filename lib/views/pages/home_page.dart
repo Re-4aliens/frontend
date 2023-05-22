@@ -187,9 +187,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           _pageTitle.elementAt(selectedIndex),
           style: TextStyle(
+            fontSize: isSmallScreen?16:18,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
@@ -212,7 +214,9 @@ class _HomePageState extends State<HomePage> {
                     },
                     icon: SvgPicture.asset(
                       'assets/icon/icon_back.svg',
-                      height: 16,
+                      color: Color(0xff4D4D4D),
+                      width: 24,
+                      height: MediaQuery.of(context).size.height * 0.029,
                     ),
                     color: Colors.black,
                   ),
@@ -241,9 +245,9 @@ class _HomePageState extends State<HomePage> {
               onPressed: () {},
               icon: SvgPicture.asset(
                 'assets/icon/icon_info.svg',
-                width: 24,
-                height: 24,
-                color: Color(0xff7898ff),
+                width: MediaQuery.of(context).size.width * 0.062,
+                height: MediaQuery.of(context).size.height * 0.029,
+                color: Color(0xff7898FF),
               ),
             )
           else
