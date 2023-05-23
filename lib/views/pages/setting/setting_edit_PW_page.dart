@@ -96,11 +96,12 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                     child: Button(
                         child: Text('비밀번호 변경하기'),
                         onPressed: () async {
-                          Navigator.pushNamed(context,'/setting/edit/PW/done');
+
                           var userInfo = await storage.read(key: 'auth');
 
                             //입력한 두 패스워드가 같으면
                             if (_passwordController.text == _passwordControllerSecond.text) {
+                              Navigator.pushNamed(context,'/setting/edit/PW/done');
                               print('바꾸기');
                               //비밀번호 수정 요청
                               var url =
