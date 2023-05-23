@@ -10,6 +10,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../components/appbar.dart';
+import '../../components/button.dart';
 
 class SettingDeletePage extends StatefulWidget {
   const SettingDeletePage({super.key});
@@ -28,29 +29,9 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
     var memberDetails = ModalRoute.of(context)!.settings.arguments;
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset('assets/icon/icon_back.svg',
-              width: MediaQuery.of(context).size.width * 0.062,
-              height: MediaQuery.of(context).size.height * 0.029,),
-            color: Color(0xff7898FF),
-          ),
-          title: Text(
-            '회원탈퇴',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
+        appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '회원탈퇴',),
         body: Container(
-          padding: EdgeInsets.only(right: 20, left:20, top: MediaQuery.of(context).size.height * 0.06),
+          padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -70,6 +51,37 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                 height: 20,
               ),
               _passwordCheck(memberDetails),
+              Expanded(child: SizedBox()),
+              Button(
+                  child: Text('탈퇴하기'),
+                  onPressed: (){
+                    showDialog(context: context, builder: (BuildContext context) =>
+                    CupertinoAlertDialog(
+                      title: Text('정말 탈퇴하시겠어요?',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,),),
+                      content: const Text('채팅내역, 매칭내역 등 이제까지 사용해주신\n데이터들은 복구되지 않아요.'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: const Text('취소',
+                              style: TextStyle(
+                                color: Colors.black,
+                              )),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            //탈퇴
+                            Navigator.pushNamed(context, '/setting/delete/done');
+                          },
+                          child: const Text('탈퇴하기',
+                              style: TextStyle(
+                                color: Colors.black,
+                              )),
+                        ),
+                      ],
+                    ));
+                  })
             ],
           ),
         )
@@ -77,43 +89,40 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
   }
   Widget _passwordCheck(memberDetails){
     return Container(
-      width: 250,
+      width: MediaQuery.of(context).size.width,
       child: TextFormField(
         controller: passwordController,
         decoration: InputDecoration(
-
         ),
 
         onEditingComplete: (){
           FocusScope.of(context).unfocus();
           //auth에서 불러오기
           if(passwordController.text == memberDetails.member.password) {
-            showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
-
-              title: Text('정말 탈퇴하시겠어요?',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),),
-              content: const Text('채팅내역, 매칭내역 등 이제까지 사용해주신\n데이터들은 복구되지 않아요.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('취소',
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
-                ),
-                TextButton(
-                  onPressed: () {
+            showDialog(context: context, builder: (BuildContext context) =>
+                CupertinoAlertDialog(
+                  title: Text('정말 탈퇴하시겠어요?',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,),),
+                  content: const Text('채팅내역, 매칭내역 등 이제까지 사용해주신\n데이터들은 복구되지 않아요.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('취소',
+                          style: TextStyle(
+                            color: Colors.black,
+                          )),
+                    ),
+                    TextButton(
+                      onPressed: () {
                     //탈퇴
-
-                    Navigator.pushNamed(context, '/setting/delete/done');
-                  },
-                  child: const Text('탈퇴하기',
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
-                ),
+                        Navigator.pushNamed(context, '/setting/delete/done');
+                        },
+                      child: const Text('탈퇴하기',
+                          style: TextStyle(
+                            color: Colors.black,
+                          )),
+                    ),
               ],
             ));
           } else {

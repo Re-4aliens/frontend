@@ -5,6 +5,8 @@ import 'package:aliens/views/pages/login/login_page.dart';
 import 'package:aliens/views/pages/matching/matching_list_page.dart';
 import 'package:aliens/views/pages/setting/setting_delete_what.dart';
 import 'package:aliens/views/pages/matching/matching_partner_info_page.dart';
+import 'package:aliens/views/pages/setting/setting_terms_private.dart';
+import 'package:aliens/views/pages/setting/setting_terms_use.dart';
 import 'package:aliens/views/pages/signup/signup_birthday.dart';
 import 'package:aliens/views/pages/signup/signup_email.dart';
 import 'package:aliens/views/pages/signup/signup_emailverify.dart';
@@ -37,6 +39,9 @@ import './views/pages/home_page.dart';
 import './views/pages/setting/setting_edit_page.dart';
 import './views/pages/setting/setting_notification_page.dart';
 import './views/pages/setting/setting_terms_page.dart';
+import './views/pages/setting/setting_terms_private.dart';
+import './views/pages/setting/setting_terms_use.dart';
+
 import './views/pages/setting/setting_security_page.dart';
 import './views/pages/setting/setting_delete_page.dart';
 import './views/pages/setting/setting_delete_done_page.dart';
@@ -100,6 +105,8 @@ class MyApp extends StatelessWidget {
         '/setting/edit' : (context) => SettingEditPage(),
         '/setting/notification' : (context) => SettingNotificationPage(),
         '/setting/terms': (context) => SettingTermsPage(),
+        '/setting/terms/use' : (context) => SettingTermsUsePage(),
+        '/setting/terms/private': (context) => SettingTermsPrivatePage(),
         '/setting/security': (context) => SettingSecurityPage(),
         '/setting/delete/what': (context) => SettingDeleteWhatPage(),
         '/setting/delete' : (context) => SettingDeletePage(),
