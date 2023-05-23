@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +19,7 @@ class SettingNotificationPage extends StatefulWidget {
 
 class _SettingNotificationPageState extends State<SettingNotificationPage> {
   bool switchValue1 = false;
-  bool switchValue2 = false;
-  bool switchValue3 = false;
+  List<bool> itemNotifications = [false, false];
   bool switchValue4 = false;
 
   @override
@@ -29,118 +29,124 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        centerTitle: true,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: SvgPicture.asset('assets/icon/icon_back.svg',
-            width: MediaQuery.of(context).size.width * 0.062,
-            height: MediaQuery.of(context).size.height * 0.029,),
-          color: Color(0xff7898FF),
-        ),
-        title: Text(
-          '알림',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+      appBar: CustomAppBar(appBar: AppBar(), title: '알림 설정', backgroundColor: Colors.transparent, infookay: false, infocontent: '',
       ),
-      body: Column(
-        children: [
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('알림 수신',
-                  style: TextStyle(
-                    fontSize: isSmallScreen?14:16,
-                  ),),
-                CupertinoSwitch(
-                  value: switchValue1,
-                  activeColor: Color(0xff7898FF),
-                  trackColor: Color(0xffC1C1C1),
-                  onChanged:  (value) => setState(() {
-                    this.switchValue1 = value;
-                  }),
-                ),
-              ],
+      body: Container(
+        margin: EdgeInsets.symmetric(horizontal: 24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.05),
+              child: Text('매칭 완료 및 채팅시 빠르게 소식을\n전달받으실 수 있어요.',
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                fontSize: isSmallScreen?12:14,
+                color: Color(0xff888888)
+              ),),
             ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('매칭 알림',
-                  style: TextStyle(
-                    fontSize: isSmallScreen?14:16,
-                  ),),
-                CupertinoSwitch(
-                  value: switchValue2,
-                  activeColor: Color(0xff7898FF),
-                  trackColor: Color(0xffC1C1C1),
-                  onChanged:  (value) => setState(() {
-                    this.switchValue2 = value;
-                  }),
-                ),
-              ],
+            Container(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.notifications_none,
+                        size: isSmallScreen?22:24,
+                        color: Colors.black,
+                      ),
+                      Text(' 전체 알림',
+                        style: TextStyle(
+                          fontSize: isSmallScreen?18:20,
+                        ),),
+                    ],
+                  ),
+                  CupertinoSwitch(
+                    value: switchValue1,
+                    activeColor: Color(0xff7898FF),
+                    trackColor: Color(0xffC1C1C1),
+                    onChanged:  (value) => setState(() {
+                      this.switchValue1 = value;
+                      itemNotifications = List<bool>.filled(itemNotifications.length, value);
+                    }),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('채팅 알림',
-                  style: TextStyle(
-                    fontSize: isSmallScreen?14:16,
-                  ),),
-                CupertinoSwitch(
-                  value: switchValue3,
-                  activeColor: Color(0xff7898FF),
-                  trackColor: Color(0xffC1C1C1),
-                  onChanged:  (value) => setState(() {
-                    this.switchValue3 = value;
-                  }),
-                ),
-              ],
+            Divider(
+              thickness: 1,
+              color: Color(0xffEFEFEF),
             ),
-          ),
-          Divider(
-            thickness: 15,
-            color: Color(0xffEFEFEF),
-          ),
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('앱 내부 알림',
-                  style: TextStyle(
-                    fontSize: isSmallScreen?14:16,
-                  ),),
-                CupertinoSwitch(
-                  value: switchValue4,
-                  activeColor: Color(0xff7898FF),
-                  trackColor: Color(0xffC1C1C1),
-                  onChanged:  (value) => setState(() {
-                    this.switchValue4 = value;
-                  }),
-                ),
-              ],
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.symmetric(vertical: 8),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('매칭 알림',
+                    style: TextStyle(
+                      fontSize: isSmallScreen?16:18,
+                    ),),
+                  CupertinoSwitch(
+                    value: itemNotifications[0],
+                    activeColor: Color(0xff7898FF),
+                    trackColor: Color(0xffC1C1C1),
+                    onChanged:  (value) => setState(() {
+                      this.itemNotifications[0] = value;
+                    }),
+                  ),
+                ],
+              ),
             ),
-          )
-        ],
+            Container(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('채팅 알림',
+                    style: TextStyle(
+                      fontSize: isSmallScreen?16:18,
+                    ),),
+                  CupertinoSwitch(
+                    value: itemNotifications[1],
+                    activeColor: Color(0xff7898FF),
+                    trackColor: Color(0xffC1C1C1),
+                    onChanged:  (value) => setState(() {
+                      this.itemNotifications[1] = value;
+                    }),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: MediaQuery.of(context).size.height* 0.085),
+            Container(
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('앱 내부 알림',
+                    style: TextStyle(
+                      fontSize: isSmallScreen?18:20,
+                    ),),
+                  CupertinoSwitch(
+                    value: switchValue4,
+                    activeColor: Color(0xff7898FF),
+                    trackColor: Color(0xffC1C1C1),
+                    onChanged:  (value) => setState(() {
+                      this.switchValue4 = value;
+                    }),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              thickness: 1,
+              color: Color(0xffEFEFEF),
+            ),
+          ],
+        ),
       )
     );
   }
