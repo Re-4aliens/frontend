@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,30 +19,55 @@ class SettingTermsPage extends StatefulWidget {
 class _SettingTermsPageState extends State<SettingTermsPage> {
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final bool isSmallScreen = screenWidth <= 600;
+
+    List termsList = [
+      '이용약관',
+      '개인정보 처리방침',
+    ];
+
+
+
+    List navigatorList = [
+      '/setting/terms/use',
+      '/setting/terms/private'
+    ];
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
+      appBar:CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, infookay: false, infocontent: '', title: '이용약관',),
+      body: Container(
+        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.05),
+        child: ListView.builder(
+          itemCount: 2,
+          itemBuilder: (contex, index){
+            return ListTile(
+              onTap:() {
+                Navigator.pushNamed(context, navigatorList.elementAt(index));
+            },
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text(
+                    '${termsList.elementAt(index)}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: isSmallScreen?14:16,
+                    ),
+                  ),
+                  Expanded(child: Container()),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: isSmallScreen?14:16,
+                    color: Color(0xffC1C1C1),
+                  ),
+                ],
+              ),
+            );
           },
-          icon: Icon(Icons.arrow_back_ios_new),
-          color: Colors.black,
+
         ),
-        title: Text(
-          '이용약관',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-        ],
       )
     );
   }

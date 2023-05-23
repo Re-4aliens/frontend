@@ -69,6 +69,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                     child: Button(
                         child: Text('홈으로 돌아가기'),
                         onPressed: () {
+                          Navigator.pushNamed(context,'/');
                           //로그아웃시키고
                           authProvider.logout(context);
                         }),

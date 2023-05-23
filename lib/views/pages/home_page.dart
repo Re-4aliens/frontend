@@ -1,13 +1,21 @@
+import 'dart:io';
+
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
+
 import '../../main.dart';
+import '../../mockdatas/mockdata_model.dart';
 import '../../models/screenArgument.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../providers/auth_provider.dart';
 import '../components/matching_widget.dart' as matching;
-import '../components/setting_widget.dart';
+import '../components/setting_list_widget.dart';
 import '../components/chatting_widget.dart';
 import '../components/matching_chatting_widget.dart';
+import '../components/setting_profile_widget.dart';
 
 int selectedIndex = 0;
 
@@ -20,6 +28,18 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
+
+  File? _profileImage;
+  final picker = ImagePicker();
+  //비동기 처리를 통해 이미지 가져오기
+  Future getImage(ImageSource imageSource) async {
+    final image = await picker.pickImage(source: imageSource);
+    setState(() {
+      _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
+    });
+  }
+
+
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
 
@@ -1093,4 +1113,222 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget settingWidget(BuildContext context, memberDetails) {
+    final AuthProvider authProvider = new AuthProvider();
+    final storage = FlutterSecureStorage();
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final bool isSmallScreen = screenWidth <= 600;
+
+    File imageFile = File(memberDetails['profileImage']);
+
+    return Container(
+      color: Color(0xffF5F7FF),
+      child: Column(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+                padding: EdgeInsets.only(right: 20,left: 20, top: 17,bottom: 17),
+                decoration: BoxDecoration(
+                  color: Color(0xff7898FF),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+
+                width: MediaQuery.of(context).size.width * 0.87,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: memberDetails['name'].toString(),
+                            style: TextStyle(
+                              fontSize: isSmallScreen?30:32,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: '님',
+                                style: TextStyle(
+                                  fontSize: isSmallScreen?12:14,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(memberDetails['birthday'].toString(), style: TextStyle(
+                                fontSize: isSmallScreen?12:14,
+                                color: Colors.white
+                            ),),
+                            Text(memberDetails['email'].toString(), style: TextStyle(
+                                fontSize: isSmallScreen?12:14,
+                                color: Colors.white
+                            )
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Stack(
+                        children: [
+                          Container(
+                            height: MediaQuery.of(context).size.height*0.09,
+                            width: 80,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(40)),
+                            child:imageFile.existsSync()
+                                ? Image.file(imageFile)
+                                : SvgPicture.asset('assets/icon/icon_profile.svg', color:Colors.white,),
+                          ),
+                          Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                height: MediaQuery.of(context).size.height * 0.038,
+                                width: 30,
+                                child: FloatingActionButton(
+                                    backgroundColor: Color(0xffE5EBFF),
+                                    onPressed: () {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context){
+                                            return SimpleDialog(
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius: BorderRadius.circular(20.0),
+                                              ),
+                                              children: [
+                                                SimpleDialogOption(
+                                                  child: Text('사진 찍기',),
+                                                  onPressed: (){getImage(ImageSource.camera);},
+                                                ),
+                                                SimpleDialogOption(
+                                                  child: Text('사진첩에서 가져오기'),
+                                                  onPressed: (){getImage(ImageSource.gallery);},
+                                                ),
+                                              ],
+                                            );
+                                          }
+                                      );
+                                    },
+                                    child: SvgPicture.asset('assets/icon/icon_modify.svg',
+                                      height: MediaQuery.of(context).size.height * 0.019,
+                                      width: MediaQuery.of(context).size.width * 0.0415,
+                                      color: Color(0xff7898FF),)
+                                ),
+                              ))
+                        ],
+                      ),
+                    )
+                  ],
+                )
+            ),
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
+          Expanded(
+              flex: 5,
+              child:
+              Container(
+                width: MediaQuery.of(context).size.width * 0.87,
+                padding: EdgeInsets.only(right: 23, left: 23, top: 17, bottom: 17),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ListView.builder(
+                  itemCount: 5,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height * 0.03,
+                        child: Text(
+                          '프로필 확인 및 수정',
+                          style: TextStyle(
+                            color: Color(0xffC1C1C1),
+                            fontSize: isSmallScreen ? 14 : 16,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container(
+                          height: MediaQuery.of(context).size.height * 0.04,
+                          child: buildProfileList(context, index - 1, memberDetails));
+                    }
+                  },
+                ),
+              )
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
+          Expanded(
+              flex: 4,
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.87,
+                //margin: EdgeInsets.only(right: 24, left: 24),
+                padding: EdgeInsets.only(right: 20,left: 20, top: 17,bottom: 17),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: ListView.builder(
+                  itemCount: 4,
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height * 0.03,
+                        child: Text(
+                          '계정관리',
+                          style: TextStyle(
+                            color: Color(0xffC1C1C1),
+                            fontSize: isSmallScreen ? 14 : 16,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Container(
+                          height: MediaQuery.of(context).size.height * 0.04,
+                          child: buildSettingList(context, index - 1, memberDetails));
+                    }
+                  },
+                ),
+              )
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
+          Expanded(
+              child: Container(
+                alignment: Alignment.center,
+                child: InkWell(
+                  onTap: () async {
+                    //http 로그아웃 요청
+                    authProvider.logout(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(width: 1.0, color: Color(0xFF7898FF))),
+                    ),
+                    child: Text(
+                      '로그아웃',
+                      style: TextStyle(
+                        color: Color(0xFF7898FF),
+                        fontSize: isSmallScreen?12:14,
+                      ),
+                    ),
+                  ),
+                ),
+              )),
+        ],
+      ),
+    );
+  }
+
 }
