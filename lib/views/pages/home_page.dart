@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage> {
         ]),
       ),
       args.status['status'] == 'MATCHED'
-          ? matchingChattingWidget(context, args.partners)
+          ? matchingChattingWidget(screenArguments: args,)
           : chattingWidget(context, args.partners),
       settingWidget(context, args.memberDetails)
     ];
@@ -870,7 +870,7 @@ class _HomePageState extends State<HomePage> {
                     index == 1 &&
                     clicked) {
                   Navigator.pushNamed(context, '/done',
-                      arguments: args.partners);
+                      arguments: args);
                 } else {}
               },
               onTapDown: (TapDownDetails details) {
