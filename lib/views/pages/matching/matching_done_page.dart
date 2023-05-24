@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aliens/models/screenArgument.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +19,8 @@ class MatchingDonePage extends StatefulWidget {
 class _MatchingDonePageState extends State<MatchingDonePage> {
   @override
   Widget build(BuildContext context) {
-    dynamic partners = ModalRoute.of(context)!.settings.arguments;
+
+    final screenArguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
 
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
@@ -128,15 +130,15 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
 
                      */
                     Navigator.push(
-                        context,
-                        Transition(
-                            child: MatchingListPage(partners: partners,), transitionEffect: TransitionEffect.BOTTOM_TO_TOP),);
+                      context,
+                      Transition(
+                          child: MatchingListPage(screenArguments: screenArguments,), transitionEffect: TransitionEffect.BOTTOM_TO_TOP),);
                   },
                   onVerticalDragStart: (DragStartDetail){
                     Navigator.push(
                       context,
                       Transition(
-                          child: MatchingListPage(partners: partners,), transitionEffect: TransitionEffect.BOTTOM_TO_TOP),);
+                          child: MatchingListPage(screenArguments: screenArguments,), transitionEffect: TransitionEffect.BOTTOM_TO_TOP),);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,

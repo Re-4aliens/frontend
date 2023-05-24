@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'dart:math' as math;
 
 import '../../../models/screenArgument.dart';
+import '../chatting/chatting_page.dart';
 
 class CustomClipPath extends CustomClipper<Path> {
   @override
@@ -27,9 +28,9 @@ class CustomClipPath extends CustomClipper<Path> {
 }
 
 class MatchingListPage extends StatefulWidget {
-  final dynamic partners;
+  final ScreenArguments screenArguments;
 
-  const MatchingListPage({super.key, required this.partners});
+  const MatchingListPage({super.key, required this.screenArguments});
 
   @override
   State<MatchingListPage> createState() => _MatchingListPageState();
@@ -77,7 +78,7 @@ class _MatchingListPageState extends State<MatchingListPage> {
               Spacer(),
               Container(
                 child: Text(
-                  '매칭 목록',
+                  '매칭 완료 !',
                   style: TextStyle(
                       fontSize: isSmallScreen ? 18 : 20,
                       fontWeight: FontWeight.bold,
@@ -100,9 +101,9 @@ class _MatchingListPageState extends State<MatchingListPage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  for (int i = 0; i < widget.partners['partners'].length; i++)
+                  for (int i = 0; i < widget.screenArguments.partners['partners'].length; i++)
                     MatchingList(
-                      partner: widget.partners['partners'][i],
+                      partner: widget.screenArguments.partners['partners'][i],
                       onPressed: () {
                         setState(() {
                           selectedIndex = i;
@@ -134,9 +135,14 @@ class _MatchingListPageState extends State<MatchingListPage> {
                             onPressed: () {
                               if (selectedIndex != -1) {
                                 //login페이지를 push
+                                /*
                                 Navigator.pushNamed(context, '/chatting',
                                     arguments: widget.partners['partners']
-                                        [selectedIndex]);
+                                        [selectedIndex]);*/
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => ChattingPage(screenArguments: widget.screenArguments, memberIndex: selectedIndex)),
+                                );
 
 /*
                                 //스택 비우고
@@ -184,9 +190,9 @@ class MatchingList extends StatefulWidget {
 
   const MatchingList(
       {super.key,
-      required this.partner,
-      required this.onPressed,
-      required this.isClicked});
+        required this.partner,
+        required this.onPressed,
+        required this.isClicked});
 
   @override
   State<MatchingList> createState() => _MatchingListState();
@@ -211,7 +217,8 @@ class _MatchingListState extends State<MatchingList> {
               spreadRadius: 0.5,
               offset: const Offset(0, 4)),
         ],
-        gradient: widget.isClicked ?  LinearGradient(
+        gradient: widget.isClicked
+            ? LinearGradient(
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
             stops: [0.45, 0.55],
@@ -219,135 +226,265 @@ class _MatchingListState extends State<MatchingList> {
             colors: [
               Color(0xff95AEFF),
               Color(0xff4976ff),
-            ]
-        ) : LinearGradient(colors: [Colors.white, Colors.white]),
+            ])
+            : LinearGradient(colors: [Colors.white, Colors.white]),
       ),
       child: InkWell(
         onTap: widget.onPressed,
         borderRadius: BorderRadius.circular(20),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Container(
-              height: isSmallScreen ? 70 : 80,
-              width: isSmallScreen ? 300 : 350,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    //내부 그림자
-                    BoxShadow(
-                      color: widget.isClicked
-                          ? Colors.transparent
-                          : Color(0xff7898FF).withOpacity(0.3),
-                    ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            height: isSmallScreen ? 70 : 80,
+            width: isSmallScreen ? 300 : 350,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  //내부 그림자
+                  BoxShadow(
+                    color: widget.isClicked
+                        ? Colors.transparent
+                        : Color(0xff7898FF).withOpacity(0.3),
+                  ),
 
-                    //버튼색
+                  //버튼색
 
-                    widget.isClicked ?
-                    BoxShadow(
-                      color: Color(0xff7898ff),
-                      spreadRadius: -5.0,
-                      blurRadius: 10,
-                    ) :
-                    BoxShadow(
-                      blurRadius: 10,
-                      color: Colors.white,
-                      offset: const Offset(-5, -5),
-                    )
-
-                  ]),
-              padding: EdgeInsets.only(left: 20, right: 30),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    onTap: () {
+                  widget.isClicked
+                      ? BoxShadow(
+                    color: Color(0xff7898ff),
+                    spreadRadius: -5.0,
+                    blurRadius: 10,
+                  )
+                      : BoxShadow(
+                    blurRadius: 10,
+                    color: Colors.white,
+                    offset: const Offset(-5, -5),
+                  )
+                ]),
+            padding: EdgeInsets.only(left: 20, right: 30),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    /*
                       Navigator.pushNamed(context, '/info/your',
                           arguments: widget.partner);
-                    },
-                    child: SvgPicture.asset(
-                      'assets/icon/icon_profile.svg',
-                      width: 50,
-                      color: Color(0xffEBEBEB),
-                    ),
-                  ),
-                  Expanded(
-                      child: Container(
-                    margin: EdgeInsets.symmetric(
-                      vertical: 5,
-                      horizontal: 20,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              '${widget.partner['name']}',
-                              style: TextStyle(
-                                fontSize: isSmallScreen ? 18 : 20,
-                                fontWeight: FontWeight.bold,
-                                color: widget.isClicked
-                                    ? Colors.white
-                                    : Colors.black,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Container(
-                              height: 18,
-                              width: 18,
-                              child: widget.partner['gender'] == 'MALE'
-                                  ? Icon(
-                                      Icons.male_rounded,
-                                      size: 15,
-                                      color: Colors.white,
-                                    )
-                                  : Icon(
-                                      Icons.female_rounded,
-                                      size: 15,
+
+                       */
+                    showDialog(
+                        context: context,
+                        builder: (_) => Center(
+                          child: Container(
+                            width: 340,
+                            height: 275,
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                    width: 340,
+                                    height: 225,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                      BorderRadius.circular(20),
                                       color: Colors.white,
                                     ),
-                              decoration: BoxDecoration(
-                                color: widget.partner['gender'] == 'MALE'
-                                    ? Color(0xffFFB5B5)
-                                    : Color(0xffFFF3C7),
-                                borderRadius: BorderRadius.circular(9),
-                              ),
-                            )
-                          ],
-                        ),
-                        Text(
-                          '${widget.partner['mbti']}',
-                          style: TextStyle(
-                            fontSize: isSmallScreen ? 14 : 16,
-                            color: widget.isClicked
-                                ? Colors.white
-                                : Color(0xffA4A4A4),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        SizedBox(
+                                          height: 50,
+                                        ),
+                                        Text(
+                                          '${widget.partner['name']}',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 36,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(15),
+                                          child: Text(
+                                            '안녕하세요! 경영학과 23학번 입니다!',
+                                            style: TextStyle(
+                                              color: Color(0xff888888),
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffF1F1F1),
+                                            borderRadius:
+                                            BorderRadius.circular(20),
+                                          ),
+                                          padding: EdgeInsets.only(
+                                              top: 5,
+                                              bottom: 5,
+                                              left: 15,
+                                              right: 20),
+                                          child: Stack(
+                                            children: [
+                                              Text(
+                                                '       ${widget.partner['nationality']}, ${widget.partner['mbti']}',
+                                                style: TextStyle(
+                                                    fontSize: isSmallScreen
+                                                        ? 14
+                                                        : 16,
+                                                    color:
+                                                    Color(0xff616161)),
+                                              ),
+                                              Positioned(
+                                                left: 0,
+                                                top: 0,
+                                                bottom: 0,
+                                                child: SvgPicture.asset(
+                                                  'assets/flag/${widget.partner['nationality']}.svg',
+                                                  width: 20,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 30,
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  width: 340,
+                                  height: 105,
+                                  child: Stack(
+                                    children: [
+                                      Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Container(
+                                          width: 100,
+                                          height: 100,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(100),
+                                              color: Colors.white),
+                                          padding: EdgeInsets.all(5),
+                                          child: SvgPicture.asset(
+                                            'assets/icon/icon_profile.svg',
+                                            color: Color(0xffEBEBEB),
+                                          ),
+                                        ),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.bottomCenter,
+                                        child: Container(
+                                          height: 20,
+                                          width: 20,
+                                          child: Icon(
+                                            widget.partner['gender'] == 'MALE' ? Icons.male_rounded : Icons.female_rounded,
+                                            size: 15,
+                                            color: Color(0xff7898ff),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffebebeb),
+                                            borderRadius:
+                                            BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )),
-                  Container(
-                    child: SvgPicture.asset(
-                      'assets/flag/${widget.partner['nationality']}.svg',
-                      height: 30,
-                      width: 50,
-                    ),
-                    decoration: BoxDecoration(boxShadow: [
-                      BoxShadow(
-                        offset: Offset(2, 3),
-                        blurRadius: 5,
-                        color: Colors.black.withOpacity(0.2),
-                      )
-                    ]),
-                  )
-                ],
-              ),
+                        ));
+                  },
+                  child: SvgPicture.asset(
+                    'assets/icon/icon_profile.svg',
+                    width: 50,
+                    color: Color(0xffEBEBEB),
+                  ),
+                ),
+                Expanded(
+                    child: Container(
+                      margin: EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 20,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                '${widget.partner['name']}',
+                                style: TextStyle(
+                                  fontSize: isSmallScreen ? 18 : 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: widget.isClicked
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                height: 18,
+                                width: 18,
+                                child: widget.partner['gender'] == 'MALE'
+                                    ? Icon(
+                                  Icons.male_rounded,
+                                  size: 15,
+                                  color: Colors.white,
+                                )
+                                    : Icon(
+                                  Icons.female_rounded,
+                                  size: 15,
+                                  color: Colors.white,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: widget.partner['gender'] == 'MALE'
+                                      ? Color(0xffFFB5B5)
+                                      : Color(0xffFFF3C7),
+                                  borderRadius: BorderRadius.circular(9),
+                                ),
+                              )
+                            ],
+                          ),
+                          Text(
+                            '${widget.partner['mbti']}',
+                            style: TextStyle(
+                              fontSize: isSmallScreen ? 14 : 16,
+                              color: widget.isClicked
+                                  ? Colors.white
+                                  : Color(0xffA4A4A4),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )),
+                Container(
+                  child: SvgPicture.asset(
+                    'assets/flag/${widget.partner['nationality']}.svg',
+                    height: 30,
+                    width: 50,
+                  ),
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                      offset: Offset(2, 3),
+                      blurRadius: 5,
+                      color: Colors.black.withOpacity(0.2),
+                    )
+                  ]),
+                )
+              ],
             ),
           ),
+        ),
       ),
     );
   }
