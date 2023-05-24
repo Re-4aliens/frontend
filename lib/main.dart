@@ -135,7 +135,7 @@ class MyApp extends StatelessWidget {
         '/login/checkemail' : (context)=> LoginCheckMail(),
 
         //chatting
-        '/chatting': (context) => ChattingPage(),
+        //'/chatting': (context) => ChattingPage(),
 
         //loading
         '/loading' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: LoadingPage()),
