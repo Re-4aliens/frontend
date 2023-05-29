@@ -24,7 +24,7 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
-    final AuthProvider authProvider = new AuthProvider();
+    //final AuthProvider authProvider = new AuthProvider();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -82,7 +82,9 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                     child: Button(
                         child: Text('홈으로 돌아가기'),
                         onPressed: () {
-                          Navigator.pushNamed(context,'/');
+                          Navigator.of(context)
+                              .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+                          );
                         }),
                   )),
 

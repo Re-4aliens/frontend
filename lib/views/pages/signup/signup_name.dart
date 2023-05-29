@@ -1,8 +1,9 @@
+import 'package:aliens/models/signup_model.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 
-import '../../../models/member_model.dart';
+import '../../../models/signup_model.dart';
 import '../../components/button.dart';
 
 class SignUpName extends StatefulWidget{
@@ -19,7 +20,7 @@ class _SignUpNameState extends State<SignUpName>{
   Widget build(BuildContext context){
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
-    Member member = new Member(
+    SignUpModel member = new SignUpModel(
       email: '',
       password: '',
       mbti: '',
@@ -31,6 +32,7 @@ class _SignUpNameState extends State<SignUpName>{
     );
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.white, infookay: false, infocontent: '',),
       body: Padding(
         padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),

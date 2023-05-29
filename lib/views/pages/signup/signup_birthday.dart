@@ -26,6 +26,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
     final bool isSmallScreen = screenWidth <= 700;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(appBar: AppBar(), title: '',  backgroundColor: Colors.white, infookay: false, infocontent: '',),
       body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),

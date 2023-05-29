@@ -26,7 +26,7 @@ class _ChattingPageState extends State<ChattingPage> {
   var _newMessage = '';
   bool isLoading = true;
   bool isKeypadUp = false;
-
+/*
   //키패드가 업되어있는 상태면
   void _sendMessage() {
     setState(() {
@@ -50,6 +50,8 @@ class _ChattingPageState extends State<ChattingPage> {
     });
   }
 
+
+ */
   @override
   void initState() {
     super.initState();
@@ -74,6 +76,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
+      /*
       child: WillPopScope(
         onWillPop: () {
           if (isChecked) {
@@ -473,6 +476,8 @@ class _ChattingPageState extends State<ChattingPage> {
           ]),
         ),
       ),
+
+       */
     );
   }
 }

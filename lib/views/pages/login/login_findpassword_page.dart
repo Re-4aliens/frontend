@@ -4,6 +4,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../apis.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 
@@ -18,7 +19,6 @@ class LoginFindPassword extends StatefulWidget {
 
 class _LoginFindPasswordState extends State<LoginFindPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
   final TextEditingController _NameController = TextEditingController();
   final TextEditingController _EmailController = TextEditingController();
 
@@ -72,27 +72,18 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
             Button(
                 child: Text('확인'),
                 onPressed: () async {
-                  Navigator.pushNamed(context,'/login/checkemail');
 
-                 /* if(_formKey.currentState!.validate()){
-                    var email = emailController.text;
+                 if(_formKey.currentState!.validate()){
+                    var _email = _EmailController.text;
+                    var _name = _NameController.text;
                     //임시 비밀번호 발급 요청
-                    var url = '';
-                    //url = 'http://13.125.205.59:8080/api/v1/member/$email/password/temp'; //mocksever
-                    print(url);
-                    var response = await http.post(Uri.parse(url),
-                        headers: {'Content-Type': 'application/json'},
-                        body: jsonEncode({
-                          "name": 'Joy'
-                        }));
+
 
                     //success
-                    if (response.statusCode == 200) {
-                      print(json.decode(response.body));
+                    if (await APIs.temporaryPassword(_email, _name)) {
                       Navigator.pushNamed(context,'/login/checkemail');
                       //fail
                     } else {
-                      print(response.body);
                       showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
 
                         title: Text('이메일과 이름 미일치',
@@ -112,7 +103,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                         ],
                       ));
                     }
-                  }*/
+                  }
                 })
           ],
         ),

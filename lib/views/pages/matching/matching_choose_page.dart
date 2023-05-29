@@ -114,8 +114,8 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                 if (selectedIndex[0] != -1 &&
                                     selectedIndex[1] != -1) {
                                   //신청 요청
-                                  args.applicant['preferLanguages']['firstPreferLanguage'] = nationlist[selectedIndex[0]][0];
-                                  args.applicant['preferLanguages']['secondPreferLanguage'] = nationlist[selectedIndex[1]][0];
+                                  //args.applicant['preferLanguages']['firstPreferLanguage'] = nationlist[selectedIndex[0]][0];
+                                  //args.applicant['preferLanguages']['secondPreferLanguage'] = nationlist[selectedIndex[1]][0];
                                   //페이지 이동
                                   Navigator.pushNamed(context, '/apply/done', arguments: args);
                                 } else {

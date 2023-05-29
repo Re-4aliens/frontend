@@ -32,42 +32,8 @@ class _SignUpNationalityState extends State<SignUpNationality> {
     final bool isSmallScreen = screenWidth <= 700;
 
 
-    //값 불러오는 함수
-    /*Future<List?> getNationList() async {
-      List<String> nationTextList = [];
-      try {
-        const url =
-            'http://13.125.205.59:8080/api/v1/member/nationalities'; //mocksever
-
-        var response = await http.get(Uri.parse(url));
-
-        //success
-        if (response.statusCode == 200) {
-          print('요청 성공');
-          var listLength =
-              json.decode(response.body)['response']['nationalities'].length;
-          for (int i = 0; i < listLength; i++) {
-            nationTextList.add(json.decode(response.body)['response']
-                ['nationalities'][i]['natinalityText']);
-            nationList.add(json
-                .decode(response.body)['response']['nationalities'][i]
-                .values
-                .toList());
-          }
-        } else {
-          //오류 생기면 상태 확인
-          print("요청 오류: " + response.statusCode.toString());
-        }
-      } catch (error) {
-        print(error);
-        return null;
-      }
-
-      //리스트 반환
-      return nationTextList;
-    }*/
-
     return Scaffold(
+        backgroundColor: Colors.white,
       appBar: CustomAppBar(
         appBar: AppBar(),
         title: '',
@@ -129,7 +95,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                                   print('Select country: ${country.displayName}');
                                   setState(() {
                                     var countryName = country.displayName.toString();
-                                    countryName = countryName.substring(0, countryName.indexOf(' '));
+                                    countryName = countryName.substring(0, countryName.indexOf(' ('));
                                     _selectedNationality = countryName;
                                   });
                                 });
