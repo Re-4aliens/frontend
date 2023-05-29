@@ -3,12 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:aliens/models/auth_model.dart';
-import 'package:aliens/models/member_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-
+/*
 class AuthProvider with ChangeNotifier {
   static final storage = FlutterSecureStorage();
 
@@ -166,3 +166,5 @@ class AuthProvider with ChangeNotifier {
 
  */
 }
+
+ */

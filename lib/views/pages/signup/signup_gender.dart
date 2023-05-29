@@ -22,6 +22,7 @@ class _SignUpGenderState extends State<SignUpGender>{
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: CustomAppBar(appBar: AppBar(), title: '',  backgroundColor: Colors.white, infookay: false, infocontent: '',),
       body: Padding(
         padding: EdgeInsets.only(right: 24, left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),

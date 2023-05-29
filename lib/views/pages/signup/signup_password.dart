@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aliens/apis.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import '../../components/button.dart';
@@ -21,7 +22,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
   FocusNode _passwordFocus = new FocusNode();
 
 
-  final AuthProvider authProvider = new AuthProvider();
+  //final AuthProvider authProvider = new AuthProvider();
   static final storage = FlutterSecureStorage();
 
   Widget build(BuildContext context){
@@ -62,12 +63,14 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                     print(member.toJson());
 
                     //------ 회원가입 api 요청
-                    authProvider.signUp(member, context);
-
+                    //authProvider.signUp(member, context);
+                    if(await APIs.signUp(member))
+                      Navigator.pushNamed(context,'/welcome', arguments: member);
+                    else
+                      print('회원가입실패');
                     //회원가입 성공하면 로그인 요청
 
 
-                    Navigator.pushNamed(context,'/welcome', arguments: member);
                   }
                 })
 

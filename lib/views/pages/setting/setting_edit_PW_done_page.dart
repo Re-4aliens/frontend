@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../apis.dart';
 import '../../components/button.dart';
 import 'package:aliens/providers/auth_provider.dart';
 
@@ -20,7 +21,6 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
-    final AuthProvider authProvider = new AuthProvider();
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -69,9 +69,8 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                     child: Button(
                         child: Text('홈으로 돌아가기'),
                         onPressed: () {
-                          Navigator.pushNamed(context,'/');
-                          //로그아웃시키고
-                          authProvider.logout(context);
+                          //로그아웃
+                          APIs.logOut(context);
                         }),
                   )),
 

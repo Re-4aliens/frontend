@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +13,11 @@ class matchingChattingWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
+    //String _file = screenArguments.partners?[3].profileImage as String;
+    //var _path = screenArguments.partners?[3].profileImage as Path;
+    var _imageFile = File('${screenArguments.partners?[3].profileImage}');
+
+
     return Container(
       decoration: BoxDecoration(
         color: Color(0xffF5F7FF),
@@ -22,17 +28,20 @@ class matchingChattingWidget extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20,),
-              chatList(context, screenArguments.partners['partners'][0]['memberId'], '마지막 메세지', '22:20pm'),
-              chatList(context, screenArguments.partners['partners'][1]['memberId'], '안녕하세요.', '22:20pm'),
-              chatList(context, screenArguments.partners['partners'][2]['memberId'], 'Hello! what is your major?', '22:20pm'),
-              chatList(context, screenArguments.partners['partners'][3]['memberId'], '어떤 과목을 전공하고 계신가요?', '22:20pm'),
+              Image.network('${screenArguments.partners?[3].profileImage}'),
+              Image.asset('${screenArguments.partners?[3].profileImage}'),
+              Image.file(_imageFile),
+              //chatList(context, screenArguments.partners['partners'][0]['memberId'], '마지막 메세지', '22:20pm'),
+              //chatList(context, screenArguments.partners['partners'][1]['memberId'], '안녕하세요.', '22:20pm'),
+              //chatList(context, screenArguments.partners['partners'][2]['memberId'], 'Hello! what is your major?', '22:20pm'),
+              //chatList(context, screenArguments.partners['partners'][3]['memberId'], '어떤 과목을 전공하고 계신가요?', '22:20pm'),
             ],
           ),
         ],
       ),
     );
   }
-
+/*
   Widget chatList(context, memberId, lastMassage, time){
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -103,5 +112,7 @@ class matchingChattingWidget extends StatelessWidget{
       ),
     );
   }
+
+ */
 }
 
