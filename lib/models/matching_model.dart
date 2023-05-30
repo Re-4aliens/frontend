@@ -1,4 +1,4 @@
-import './member_model.dart';
+import './memberDetails_model.dart';
 
 class PreferLanguages {
   String? firstPreferLanguage;

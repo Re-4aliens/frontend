@@ -21,10 +21,9 @@ Widget buildProfileList(context, index, memberDetails) {
   ];
 
   List memberInfo = [
-    memberDetails['gender'].toString(),
-    //birthday 값 추후 가공
-    memberDetails['nationality'].toString(),
-    memberDetails['mbti'].toString(),
+    memberDetails.gender.toString(),
+    memberDetails.nationality.toString(),
+    memberDetails.mbti.toString(),
   ];
 
 

@@ -126,7 +126,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                     child: Stack(
                                       children: [
                                         Text(
-                                          '${args.applicant['member']['name']}      ',
+                                          'd',
+                                          //'${args.applicant['member']['name']}      ',
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold, fontSize: isSmallScreen ? 18 : 20, color: Colors.white),
                                         ),
@@ -167,7 +168,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                               ),
                                             ),
                                             Text(
-                                              '${args.applicant['member']['nationality']}',
+                                              'd',
+                                              //'${args.applicant['member']['nationality']}',
                                               style: TextStyle(
                                                 fontSize: isSmallScreen ? 18 : 20,
                                                 color: Colors.white,
@@ -186,8 +188,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                 fontSize: isSmallScreen ? 12 : 14,
                                               ),
                                             ),
-                                            Text(
-                                              '${args.applicant['member']['age']}세',
+                                            Text('d',
+//                                              '${args.applicant['member']['age']}세',
                                               style: TextStyle(
                                                 fontSize: isSmallScreen ? 18 : 20,
                                                 color: Colors.white,
@@ -206,8 +208,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                 color: Colors.white,
                                               ),
                                             ),
-                                            Text(
-                                              '${args.applicant['member']['mbti']}',
+                                            Text('d',
+                                              //'${args.applicant['member']['mbti']}',
                                               style: TextStyle(
                                                 fontSize: isSmallScreen ? 18 : 20,
                                                 color: Colors.white,
@@ -308,8 +310,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       SizedBox(
                                         height: 2,
                                       ),
-                                      Text(
-                                        '${args.applicant['preferLanguages']['firstPreferLanguage']}',
+                                      Text('d',
+                                        //'${args.applicant['preferLanguages']['firstPreferLanguage']}',
                                         style: TextStyle(
                                           fontSize:isSmallScreen ? 18 : 20,
                                           fontWeight: FontWeight.bold,
@@ -383,8 +385,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       SizedBox(
                                         height: 2,
                                       ),
-                                      Text(
-                                        '${args.applicant['preferLanguages']['secondPreferLanguage']}',
+                                      Text('d',
+                                        //'${args.applicant['preferLanguages']['secondPreferLanguage']}',
                                         style: TextStyle(
                                           fontSize: isSmallScreen ? 18 : 20,
                                           fontWeight: FontWeight.bold,

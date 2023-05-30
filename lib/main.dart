@@ -83,8 +83,8 @@ class MyApp extends StatelessWidget {
       routes: {
 
 
-        //'/' : (context)=> StartPage(),
-        '/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: StartPage()),
+        '/' : (context)=> StartPage(),
+        //'/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: StartPage()),
 
         //'/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
         '/main': (context)=> HomePage(),
@@ -138,8 +138,8 @@ class MyApp extends StatelessWidget {
         //'/chatting': (context) => ChattingPage(),
 
         //loading
-        '/loading' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: LoadingPage()),
-
+        //'/loading' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: LoadingPage()),
+        '/loading' : (context) => LoadingPage(),
 
       },
     );

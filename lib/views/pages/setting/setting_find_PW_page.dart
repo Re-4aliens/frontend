@@ -75,10 +75,8 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
                         child: Text('인증완료'),
-                        onPressed: ()async {
-                          Navigator.pushNamed(context, '/setting/edit/PW',
-                              arguments: _passwordController.text);
-                        /*  //if 지금 비밀번호랑 입력한 거랑 같으면
+                        onPressed: () async {
+                          //if 지금 비밀번호랑 입력한 거랑 같으면
                           var userInfo = await storage.read(key: 'auth');
                           if (_passwordController.text ==
                               json.decode(userInfo!)['password'])
@@ -105,7 +103,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                                               )),
                                         ),
                                       ],
-                                    ));*/
+                                    ));
                         }
                         ),
                   ),

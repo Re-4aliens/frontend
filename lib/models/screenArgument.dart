@@ -1,8 +1,13 @@
+import 'package:aliens/models/partner_model.dart';
+
+import './memberDetails_model.dart';
+import 'applicant_model.dart';
+
 class ScreenArguments {
-  final Map<String, dynamic> memberDetails;
-  final Map<String, dynamic> status;
-  final Map<String, dynamic> applicant;
-  final Map<String, dynamic> partners;
+  MemberDetails?  memberDetails;
+  String? status;
+  Applicant? applicant;
+  List<Partner>? partners;
 
   ScreenArguments(this.memberDetails, this.status, this.applicant, this.partners);
 }

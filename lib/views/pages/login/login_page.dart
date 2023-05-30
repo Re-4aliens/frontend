@@ -5,6 +5,7 @@ import 'package:aliens/views/components/button_big.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
+import '../../../apis.dart';
 import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
 
@@ -26,8 +27,6 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _pwFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthProvider authProvider = new AuthProvider();
-  static final storage = FlutterSecureStorage();
 
   //storage에 작성할 모델
   final Auth auth = new Auth();
@@ -60,7 +59,6 @@ class _LoginState extends State<Login> {
                       Container(
                         width: 155,
                         height: 100,
-                        //decoration: BoxDecoration(color: Colors.grey),
                       ),
                       Text(
                         '프렌즈쉽에 오신것을 환영합니다.',
@@ -157,105 +155,12 @@ class _LoginState extends State<Login> {
                           auth.email = _emailController.text;
                           auth.password = _passwordController.text;
 
-                          /* api 추후에 활성화 시킬 부분
-                          //await 키워드로 authprovider.login이 완료될 때까지 잠시 대기
-                          var loginSuccess =
-                          await authProvider.login(auth, context);
-                          */
-
-                          var loginSuccess = true; //임의 값. 값을 수정하면서 사용
+                          var loginSuccess = await APIs.logIn(auth); //임의 값. 값을 수정하면서 사용
 
                           if (loginSuccess) {
-                            print('로그인시도');
-                            /* 추후에 활성화 시킬 부분
                            //스택 비우고 화면 이동
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/loading', (Route<dynamic> route) => false);
-                            */
-                            var screenArgument = new ScreenArguments(
-                                {
-                                  "email": "exaple_user@exaple.com",
-                                  "mbti": "ENFJ",
-                                  "gender": "MALE",
-                                  "nationality": "Korea",
-                                  "birthday": "2000-01-01",
-                                  "name": "RYAN",
-                                  "profileImage": "url",
-                                  "age": 26
-                                },
-                                /*
-                                경우에 따라
-                                MATCHED, //매칭됨
-                                PENDING, //매칭신청완료
-                                NOT_APPLIED 입력 // 신청안함
-                                 */
-                                {
-                                  "status": "MATCHED"
-                                },
-                                {
-                                  "member": {
-                                    "name": "Jenny",
-                                    "gender": "Female",
-                                    "mbti": "INTJ",
-                                    "nationality": "Korea",
-                                    "age": 26,
-                                    "profileImage": "url/example",
-                                    "countryImage": "url/example"
-                                  },
-                                  "preferLanguages": {
-                                    "firstPreferLanguage": "string",
-                                    "secondPreferLanguage": "string"
-                                  }
-                                },
-                                {
-                                  "partners": [
-                                    {
-                                      "memberId": 1,
-                                      "name": "Mila",
-                                      "mbti": "ISFP",
-                                      "gender": "FEMALE",
-                                      "nationality": "Korea",
-                                      "profileImage": "url",
-                                      "countryImage": "url"
-                                    },
-                                    {
-                                      "memberId": 2,
-                                      "name": "Risa",
-                                      "mbti": "ISTJ",
-                                      "gender": "FEMALE",
-                                      "nationality": "Korea",
-                                      "profileImage": "url",
-                                      "countryImage": "url"
-                                    },
-                                    {
-                                      "memberId": 3,
-                                      "name": "Carina",
-                                      "mbti": "ENFJ",
-                                      "gender": "MALE",
-                                      "nationality": "Japan",
-                                      "profileImage": "url",
-                                      "countryImage": "url"
-                                    },
-                                    {
-                                      "memberId": 4,
-                                      "name": "Jade",
-                                      "mbti": "ESFP",
-                                      "gender": "MALE",
-                                      "nationality": "China",
-                                      "profileImage": "url",
-                                      "countryImage": "url"
-                                    },
-                                  ]
-                                });
-
-                            /*
-                            Navigator.popAndPushNamed(context, '/main',
-                                arguments: screenArgument);
-
- */
-                            Navigator.of(context)
-                                .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
-                            , arguments: screenArgument);
 
                           } else {
                             showDialog(

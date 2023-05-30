@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/widgets.dart';
-import 'package:aliens/models/member_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
+/*
 class MemberProvider with ChangeNotifier {
   Member member = new Member();
   static final storage = FlutterSecureStorage();
@@ -50,3 +50,6 @@ class MemberProvider with ChangeNotifier {
     return json.decode(utf8.decode(response.bodyBytes))['response'];
   }
 }
+
+
+ */
