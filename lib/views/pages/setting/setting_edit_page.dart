@@ -34,7 +34,6 @@ class _SettingEditPageState extends State<SettingEditPage> {
   }
 
   Widget build(BuildContext context) {
-    final AuthProvider authProvider = new AuthProvider();
     var memberDetails = ModalRoute.of(context)!.settings.arguments;
     dynamic member = ModalRoute.of(context)!.settings.arguments;
     final double screenWidth = MediaQuery.of(context).size.width;

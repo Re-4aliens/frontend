@@ -101,6 +101,7 @@ class _MatchingListPageState extends State<MatchingListPage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  /*
                   for (int i = 0; i < widget.screenArguments.partners['partners'].length; i++)
                     MatchingList(
                       partner: widget.screenArguments.partners['partners'][i],
@@ -111,6 +112,8 @@ class _MatchingListPageState extends State<MatchingListPage> {
                       },
                       isClicked: selectedIndex == i,
                     ),
+
+                   */
                 ],
               ),
               Spacer(

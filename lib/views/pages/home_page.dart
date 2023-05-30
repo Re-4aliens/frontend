@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../apis.dart';
 import '../../main.dart';
 import '../../mockdatas/mockdata_model.dart';
 import '../../models/screenArgument.dart';
@@ -28,9 +29,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-
   File? _profileImage;
   final picker = ImagePicker();
+
   //비동기 처리를 통해 이미지 가져오기
   Future getImage(ImageSource imageSource) async {
     final image = await picker.pickImage(source: imageSource);
@@ -38,7 +39,6 @@ class _HomePageState extends State<HomePage> {
       _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
     });
   }
-
 
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
@@ -198,8 +198,10 @@ class _HomePageState extends State<HomePage> {
           ),
         ]),
       ),
-      args.status['status'] == 'MATCHED'
-          ? matchingChattingWidget(screenArguments: args,)
+      args.status == 'MATCHED'
+          ? matchingChattingWidget(
+              screenArguments: args,
+            )
           : chattingWidget(context, args.partners),
       settingWidget(context, args.memberDetails)
     ];
@@ -211,7 +213,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           _pageTitle.elementAt(selectedIndex),
           style: TextStyle(
-            fontSize: isSmallScreen?16:18,
+            fontSize: isSmallScreen ? 16 : 18,
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
@@ -219,7 +221,7 @@ class _HomePageState extends State<HomePage> {
         toolbarHeight: selectedIndex == 1 ? 90 : 56,
         elevation: selectedIndex == 1 ? 7 : 0,
         shadowColor: Colors.black26,
-        backgroundColor: selectedIndex == 1 ? Colors.white :Color(0xffF2F5FF),
+        backgroundColor: selectedIndex == 1 ? Colors.white : Color(0xffF2F5FF),
         leadingWidth: 100,
         leading: Column(
           children: [
@@ -242,7 +244,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ],
               )
-            else if(selectedIndex == 1)
+            else if (selectedIndex == 1)
               Container(
                 alignment: Alignment.center,
                 height: 90,
@@ -291,7 +293,8 @@ class _HomePageState extends State<HomePage> {
                 'assets/icon/icon_home.svg',
                 width: 25,
                 height: 25,
-                color: selectedIndex == 0 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
+                color:
+                    selectedIndex == 0 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
             label: '홈',
@@ -303,7 +306,8 @@ class _HomePageState extends State<HomePage> {
                 'assets/icon/icon_chatting.svg',
                 width: 25,
                 height: 25,
-                color: selectedIndex == 1 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
+                color:
+                    selectedIndex == 1 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
             label: '채팅',
@@ -315,7 +319,8 @@ class _HomePageState extends State<HomePage> {
                 'assets/icon/icon_setting.svg',
                 width: 25,
                 height: 25,
-                color: selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
+                color:
+                    selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
             label: '설정',
@@ -354,9 +359,7 @@ class _HomePageState extends State<HomePage> {
           child: InkWell(
               onTap: () {
                 print(clicked);
-                if (args.status['status'] == 'NOT_APPLIED' &&
-                    index == 1 &&
-                    clicked) {
+                if (args.status == 'NOT_APPLIED' && index == 1 && clicked) {
                   showDialog(
                       context: context,
                       builder: (_) => Stack(
@@ -519,9 +522,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ));
-                } else if (args.status['status'] == 'PENDING' &&
-                    index == 0 &&
-                    clicked) {
+                } else if (args.status == 'PENDING' && index == 0 && clicked) {
                   showDialog(
                       context: context,
                       builder: (_) => Stack(
@@ -552,7 +553,7 @@ class _HomePageState extends State<HomePage> {
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text:
-                                              "${args.memberDetails['name']}님! 이미 매칭신청을 완료해 진행 중이에요:)\n아래의 ",
+                                              "${args.memberDetails.name}님! 이미 매칭신청을 완료해 진행 중이에요:)\n아래의 ",
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xff5c5c5c),
@@ -688,9 +689,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ));
-                } else if (args.status['status'] == 'MATCHED' &&
-                    index == 0 &&
-                    clicked) {
+                } else if (args.status == 'MATCHED' && index == 0 && clicked) {
                   showDialog(
                       context: context,
                       builder: (_) => Stack(
@@ -721,7 +720,7 @@ class _HomePageState extends State<HomePage> {
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text:
-                                              "${args.memberDetails['name']}님! 드디어 매칭이 완료되었어요!\n아래의 ",
+                                              "${args.memberDetails.name}님! 드디어 매칭이 완료되었어요!\n아래의 ",
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xff5c5c5c),
@@ -857,20 +856,15 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ));
-                } else if (args.status['status'] == 'PENDING' &&
-                    index == 1 &&
-                    clicked) {
+                } else if (args.status == 'PENDING' && index == 1 && clicked) {
                   print('매칭 상태 확인 ㄱ');
                   Navigator.pushNamed(context, '/state', arguments: args);
-                } else if (args.status['status'] == 'NOT_APPLIED' &&
+                } else if (args.status == 'NOT_APPLIED' &&
                     index == 0 &&
                     clicked) {
                   Navigator.pushNamed(context, '/apply', arguments: args);
-                } else if (args.status['status'] == 'MATCHED' &&
-                    index == 1 &&
-                    clicked) {
-                  Navigator.pushNamed(context, '/done',
-                      arguments: args);
+                } else if (args.status == 'MATCHED' && index == 1 && clicked) {
+                  Navigator.pushNamed(context, '/done', arguments: args);
                 } else {}
               },
               onTapDown: (TapDownDetails details) {
@@ -901,16 +895,14 @@ class _HomePageState extends State<HomePage> {
         decoration: BoxDecoration(boxShadow: [
           //내부 그림자
           BoxShadow(
-            color: status['status'] != 'NOT_APPLIED'
-                ? Color(0xffCBCBCB)
-                : Color(0xff678CFF),
+            color:
+                status != 'NOT_APPLIED' ? Color(0xffCBCBCB) : Color(0xff678CFF),
           ),
           //버튼색
           BoxShadow(
             blurRadius: 7,
-            color: status['status'] != 'NOT_APPLIED'
-                ? Color(0xffE0E0E0)
-                : Color(0xffAEC1FF),
+            color:
+                status != 'NOT_APPLIED' ? Color(0xffE0E0E0) : Color(0xffAEC1FF),
             spreadRadius: 14,
             offset: const Offset(-20, -20),
           ),
@@ -935,14 +927,14 @@ class _HomePageState extends State<HomePage> {
                         boxShadow: [
                           //큰원 내부그림자
                           BoxShadow(
-                            color: status['status'] != 'NOT_APPLIED'
+                            color: status != 'NOT_APPLIED'
                                 ? Color(0xffCBCBCB)
                                 : Color(0xff678CFF),
                           ),
                           //큰원색
                           BoxShadow(
                             blurRadius: 7,
-                            color: status['status'] != 'NOT_APPLIED'
+                            color: status != 'NOT_APPLIED'
                                 ? Color(0xffEBEBEB)
                                 : Color(0xFFCAD6FE),
                             spreadRadius: -2,
@@ -961,7 +953,7 @@ class _HomePageState extends State<HomePage> {
                 decoration: BoxDecoration(
                   color: isClick
                       ? Color(0xff3762EC)
-                      : status['status'] != 'NOT_APPLIED'
+                      : status != 'NOT_APPLIED'
                           ? Color(0xffD7D7D7)
                           : Color(0xFF99B1FF),
                   borderRadius: BorderRadius.circular(50),
@@ -980,11 +972,11 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    status['status'] != 'NOT_APPLIED' ? '신청완료' : '매칭신청',
+                    status != 'NOT_APPLIED' ? '신청완료' : '매칭신청',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: isSmallScreen ? 18 : 20,
-                      color: status['status'] != 'NOT_APPLIED'
+                      color: status != 'NOT_APPLIED'
                           ? Color(0xffACACAC)
                           : Colors.white,
                     ),
@@ -993,7 +985,7 @@ class _HomePageState extends State<HomePage> {
                     'How to Use?',
                     style: TextStyle(
                         fontSize: 12,
-                        color: status['status'] != 'NOT_APPLIED'
+                        color: status != 'NOT_APPLIED'
                             ? Color(0xff888888)
                             : Color(0xff7898FF)),
                   ),
@@ -1015,14 +1007,14 @@ class _HomePageState extends State<HomePage> {
             boxShadow: [
               //내부그림자
               BoxShadow(
-                color: status['status'] == 'NOT_APPLIED'
+                color: status == 'NOT_APPLIED'
                     ? Color(0xffCBCBCB)
                     : Color(0xffFF9393),
               ),
               //버튼색
               BoxShadow(
                 blurRadius: 7,
-                color: status['status'] == 'NOT_APPLIED'
+                color: status == 'NOT_APPLIED'
                     ? Color(0xffE0E0E0)
                     : Color(0xffFFB5B5),
                 spreadRadius: 14,
@@ -1047,13 +1039,13 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(25),
                         boxShadow: [
                           BoxShadow(
-                            color: status['status'] == 'NOT_APPLIED'
+                            color: status == 'NOT_APPLIED'
                                 ? Color(0xffCBCBCB)
                                 : Color(0xffFF9393),
                           ),
                           BoxShadow(
                             blurRadius: 7,
-                            color: status['status'] == 'NOT_APPLIED'
+                            color: status == 'NOT_APPLIED'
                                 ? Color(0xffEBEBEB)
                                 : Color(0xFFFFCECE),
                             spreadRadius: -2,
@@ -1069,7 +1061,7 @@ class _HomePageState extends State<HomePage> {
               bottom: -25,
               child: Container(
                 decoration: BoxDecoration(
-                  color: status['status'] == 'NOT_APPLIED'
+                  color: status == 'NOT_APPLIED'
                       ? Color(0xffD7D7D7)
                       : Color(0xFFFFA6A6),
                   borderRadius: BorderRadius.circular(50),
@@ -1088,11 +1080,11 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    status['status'] == 'PENDING' ? '매칭 진행 중' : '채팅하기',
+                    status == 'PENDING' ? '매칭 진행 중' : '채팅하기',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: isSmallScreen ? 18 : 20,
-                      color: status['status'] == 'NOT_APPLIED'
+                      color: status == 'NOT_APPLIED'
                           ? Color(0xffACACAC)
                           : Colors.white,
                     ),
@@ -1101,7 +1093,7 @@ class _HomePageState extends State<HomePage> {
                     'How to Use?',
                     style: TextStyle(
                         fontSize: 12,
-                        color: status['status'] == 'NOT_APPLIED'
+                        color: status == 'NOT_APPLIED'
                             ? Color(0xff888888)
                             : Color(0xffFF8F8F)),
                   ),
@@ -1115,12 +1107,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget settingWidget(BuildContext context, memberDetails) {
-    final AuthProvider authProvider = new AuthProvider();
+    //final AuthProvider authProvider = new AuthProvider();
     final storage = FlutterSecureStorage();
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isSmallScreen = screenWidth <= 600;
 
-    File imageFile = File(memberDetails['profileImage']);
+    File imageFile = File(memberDetails.profileImage);
 
     return Container(
       color: Color(0xffF5F7FF),
@@ -1129,12 +1121,12 @@ class _HomePageState extends State<HomePage> {
           Expanded(
             flex: 3,
             child: Container(
-                padding: EdgeInsets.only(right: 20,left: 20, top: 17,bottom: 17),
+                padding:
+                    EdgeInsets.only(right: 20, left: 20, top: 17, bottom: 17),
                 decoration: BoxDecoration(
                   color: Color(0xff7898FF),
                   borderRadius: BorderRadius.circular(20),
                 ),
-
                 width: MediaQuery.of(context).size.width * 0.87,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -1145,9 +1137,9 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         RichText(
                           text: TextSpan(
-                            text: memberDetails['name'].toString(),
+                            text: memberDetails.name.toString(),
                             style: TextStyle(
-                              fontSize: isSmallScreen?30:32,
+                              fontSize: isSmallScreen ? 30 : 32,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
@@ -1155,7 +1147,7 @@ class _HomePageState extends State<HomePage> {
                               TextSpan(
                                 text: '님',
                                 style: TextStyle(
-                                  fontSize: isSmallScreen?12:14,
+                                  fontSize: isSmallScreen ? 12 : 14,
                                   color: Colors.white,
                                 ),
                               ),
@@ -1165,15 +1157,16 @@ class _HomePageState extends State<HomePage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(memberDetails['birthday'].toString(), style: TextStyle(
-                                fontSize: isSmallScreen?12:14,
-                                color: Colors.white
-                            ),),
-                            Text(memberDetails['email'].toString(), style: TextStyle(
-                                fontSize: isSmallScreen?12:14,
-                                color: Colors.white
-                            )
+                            Text(
+                              memberDetails.birthday.toString(),
+                              style: TextStyle(
+                                  fontSize: isSmallScreen ? 12 : 14,
+                                  color: Colors.white),
                             ),
+                            Text(memberDetails.email.toString(),
+                                style: TextStyle(
+                                    fontSize: isSmallScreen ? 12 : 14,
+                                    color: Colors.white)),
                           ],
                         )
                       ],
@@ -1183,64 +1176,87 @@ class _HomePageState extends State<HomePage> {
                       child: Stack(
                         children: [
                           Container(
-                            height: MediaQuery.of(context).size.height*0.09,
+                            height: MediaQuery.of(context).size.height * 0.09,
                             width: 80,
                             decoration: BoxDecoration(
+                                color: memberDetails.profileImage != "" ? Colors.white : Colors.transparent,
+                                image: DecorationImage(
+                                  image: memberDetails.profileImage != ""
+                                      ? NetworkImage(
+                                          memberDetails.profileImage,
+                                        )
+                                      : NetworkImage(''),
+                                  fit: BoxFit.fill,
+                                ),
                                 borderRadius: BorderRadius.circular(40)),
-                            child:imageFile.existsSync()
-                                ? Image.file(imageFile)
+                            child: memberDetails.profileImage != ""
+                                ? SizedBox()
                                 : SvgPicture.asset('assets/icon/icon_profile.svg', color:Colors.white,),
                           ),
                           Positioned(
                               bottom: 0,
                               right: 0,
                               child: Container(
-                                height: MediaQuery.of(context).size.height * 0.038,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.038,
                                 width: 30,
                                 child: FloatingActionButton(
                                     backgroundColor: Color(0xffE5EBFF),
                                     onPressed: () {
                                       showDialog(
                                           context: context,
-                                          builder: (BuildContext context){
+                                          builder: (BuildContext context) {
                                             return SimpleDialog(
                                               shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(20.0),
+                                                borderRadius:
+                                                    BorderRadius.circular(20.0),
                                               ),
                                               children: [
                                                 SimpleDialogOption(
-                                                  child: Text('사진 찍기',),
-                                                  onPressed: (){getImage(ImageSource.camera);},
+                                                  child: Text(
+                                                    '사진 찍기',
+                                                  ),
+                                                  onPressed: () {
+                                                    getImage(
+                                                        ImageSource.camera);
+                                                  },
                                                 ),
                                                 SimpleDialogOption(
                                                   child: Text('사진첩에서 가져오기'),
-                                                  onPressed: (){getImage(ImageSource.gallery);},
+                                                  onPressed: () {
+                                                    getImage(
+                                                        ImageSource.gallery);
+                                                  },
                                                 ),
                                               ],
                                             );
-                                          }
-                                      );
+                                          });
                                     },
-                                    child: SvgPicture.asset('assets/icon/icon_modify.svg',
-                                      height: MediaQuery.of(context).size.height * 0.019,
-                                      width: MediaQuery.of(context).size.width * 0.0415,
-                                      color: Color(0xff7898FF),)
-                                ),
+                                    child: SvgPicture.asset(
+                                      'assets/icon/icon_modify.svg',
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.019,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.0415,
+                                      color: Color(0xff7898FF),
+                                    )),
                               ))
                         ],
                       ),
                     )
                   ],
-                )
-            ),
+                )),
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
           Expanded(
               flex: 5,
-              child:
-              Container(
+              child: Container(
                 width: MediaQuery.of(context).size.width * 0.87,
-                padding: EdgeInsets.only(right: 23, left: 23, top: 17, bottom: 17),
+                padding:
+                    EdgeInsets.only(right: 23, left: 23, top: 17, bottom: 17),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -1262,19 +1278,22 @@ class _HomePageState extends State<HomePage> {
                     } else {
                       return Container(
                           height: MediaQuery.of(context).size.height * 0.04,
-                          child: buildProfileList(context, index - 1, memberDetails));
+                          child: buildProfileList(
+                              context, index - 1, memberDetails));
                     }
                   },
                 ),
-              )
+              )),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.02,),
           Expanded(
               flex: 4,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.87,
                 //margin: EdgeInsets.only(right: 24, left: 24),
-                padding: EdgeInsets.only(right: 20,left: 20, top: 17,bottom: 17),
+                padding:
+                    EdgeInsets.only(right: 20, left: 20, top: 17, bottom: 17),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -1296,39 +1315,41 @@ class _HomePageState extends State<HomePage> {
                     } else {
                       return Container(
                           height: MediaQuery.of(context).size.height * 0.04,
-                          child: buildSettingList(context, index - 1, memberDetails));
+                          child: buildSettingList(
+                              context, index - 1, memberDetails));
                     }
                   },
                 ),
-              )
+              )),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.04,
           ),
-          SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
           Expanded(
               child: Container(
-                alignment: Alignment.center,
-                child: InkWell(
-                  onTap: () async {
-                    //http 로그아웃 요청
-                    authProvider.logout(context);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                          bottom: BorderSide(width: 1.0, color: Color(0xFF7898FF))),
-                    ),
-                    child: Text(
-                      '로그아웃',
-                      style: TextStyle(
-                        color: Color(0xFF7898FF),
-                        fontSize: isSmallScreen?12:14,
-                      ),
-                    ),
+            alignment: Alignment.center,
+            child: InkWell(
+              onTap: () async {
+                //http 로그아웃 요청
+                //authProvider.logout(context);
+                await APIs.logOut(context);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(width: 1.0, color: Color(0xFF7898FF))),
+                ),
+                child: Text(
+                  '로그아웃',
+                  style: TextStyle(
+                    color: Color(0xFF7898FF),
+                    fontSize: isSmallScreen ? 12 : 14,
                   ),
                 ),
-              )),
+              ),
+            ),
+          )),
         ],
       ),
     );
   }
-
 }

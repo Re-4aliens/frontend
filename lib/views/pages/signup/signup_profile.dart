@@ -133,9 +133,8 @@ class _SignUpProfileState extends State<SignUpProfile>{
               child: TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, '/email', arguments: member);
-                        member.profileImage = 'g.jpg';
+                        member.profileImage = '';
                         print(member.toJson());
-                        Navigator.pushNamed(context,'/email', arguments: member);
                 },
                 child: Text('다음에 변경할래요!',
                   style: TextStyle(decoration: TextDecoration.underline,

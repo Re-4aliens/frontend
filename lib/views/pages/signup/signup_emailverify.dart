@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../../apis.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -57,9 +58,18 @@ class _SignUpVerifyState extends State<SignUpVerify>{
               ),
               Button(
                 child: Text('본인인증 완료'),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/password', arguments: member);
-                },
+                onPressed: () async {
+                  if(await APIs.getAuthenticationStatus(member.email) == 'AUTHENTICATED')
+                    Navigator.pushNamed(context, '/password', arguments: member);
+                  else if(await APIs.getAuthenticationStatus(member.email) == 'EMAIL_SENT_NOT_AUTHENTICATED') {
+                      print('인증안됨');
+                      showDialog(context: context, builder: (BuildContext context){
+                        return CupertinoAlertDialog(
+                          title: Text("메일함을 확인해주세요!")
+                        );
+                      });
+                    }
+                  },
               ),
             ],
           ),

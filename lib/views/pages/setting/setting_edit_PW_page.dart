@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../apis.dart';
 import '../../components/appbar.dart';
 import '../../components/button.dart';
 import 'package:http/http.dart' as http;
@@ -97,38 +98,15 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                         child: Text('비밀번호 변경하기'),
                         onPressed: () async {
 
-                          var userInfo = await storage.read(key: 'auth');
 
                             //입력한 두 패스워드가 같으면
                             if (_passwordController.text == _passwordControllerSecond.text) {
-                              Navigator.pushNamed(context,'/setting/edit/PW/done');
-                              print('바꾸기');
-                              //비밀번호 수정 요청
-                              var url =
-                                 'http://13.125.205.59:8080/api/v1/member/password'; //mocksever
-                            //토큰 읽어오기
-                              var jwtToken = await storage.read(key: 'token');
-
-                              //accessToken만 보내기
-                              jwtToken = json.decode(jwtToken!)['accessToken'];
-
-
-                              var response = await http.put(Uri.parse(url),
-                                  headers: {
-                                    'Authorization': 'Bearer $jwtToken',
-                                    'Content-Type': 'application/json'},
-                                  body: jsonEncode({
-                                    "currentPassword":json.decode(userInfo!)['password'],
-                                    "newPassword" : _passwordControllerSecond.text,
-                                  }));
 
                               //success
-                              if (response.statusCode == 200) {
-                                print(json.decode(response.body));
+                              if (await APIs.changePassword(_passwordController.text)) {
                                 Navigator.pushNamed(context,'/setting/edit/PW/done');
                                 //fail
                               } else {
-                                print(response.statusCode);
                                 showDialog(
                                     context: context,
                                     builder: (BuildContext context) =>

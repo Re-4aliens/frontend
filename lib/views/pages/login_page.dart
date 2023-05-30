@@ -7,6 +7,9 @@ import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+/// 필요 없는 페이지
+
+/*
 class LogInPage extends StatefulWidget {
   const LogInPage({super.key});
 
@@ -17,7 +20,7 @@ class LogInPage extends StatefulWidget {
 class _LogInPageState extends State<LogInPage> {
   final TextEditingController emailController = new  TextEditingController();
   final TextEditingController passwordController = new  TextEditingController();
-  final AuthProvider authProvider = new AuthProvider();
+  //final AuthProvider authProvider = new AuthProvider();
   static final storage = FlutterSecureStorage();
 
   //storage에 작성할 모델
@@ -86,7 +89,7 @@ class _LogInPageState extends State<LogInPage> {
                   );
 
                   //http 요청
-                  authProvider.login(auth, context);
+                  //authProvider.login(auth, context);
 
                 },
                 child: Text("Log In"),
@@ -98,3 +101,5 @@ class _LogInPageState extends State<LogInPage> {
     );
   }
 }
+
+ */

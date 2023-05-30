@@ -76,7 +76,7 @@ Widget buildButton(String _title, int btnIndex, BuildContext context, args){
       if (btnIndex == 0)
         Navigator.pushNamed(context, '/apply', arguments: args);
       else{
-        print(partners);
+        print(args.partners);
         Navigator.pushNamed(context, '/done', arguments: args.partners);
       }
     },
