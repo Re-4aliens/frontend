@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,30 +15,19 @@ class MatchingEditPage extends StatefulWidget {
 }
 
 class _MatchingEditPageState extends State<MatchingEditPage> {
+  final _nationlist = ['한국어', 'English', '中國語', '日本語'];
+  var _firstPreferLanguage = '한국어';
+  var _secondPreferLanguage = 'English';
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isSmallScreen = screenWidth <= 600;
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            centerTitle: true,
-            leading: IconButton(
-              icon: SvgPicture.asset(
-                'assets/icon/icon_back.svg',
-                color: Color(0xff4D4D4D),
-                width: 24,
-                height: MediaQuery.of(context).size.height * 0.029,
-              ),
-              onPressed: (){
-                Navigator.of(context).pop();
-              },
-            )
-        ),
+        appBar: CustomAppBar(appBar: AppBar(), backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '',),
         body: Container(
-          padding: EdgeInsetsDirectional.symmetric(horizontal: 25),
+          padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -54,7 +44,7 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                   ],
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                Container(
+                /*Container(
                   height: MediaQuery.of(context).size.height*0.14,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
@@ -87,7 +77,7 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                       ),
                     ],
                   ),
-                ),
+                ),*/
                 Container(
                   decoration: BoxDecoration(
                     //color: Colors.green,
@@ -116,14 +106,18 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                                 width: 110,
                                 child: DropdownButton(
                                   isExpanded: true,
-                                  hint: Text("한국어",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),),
-                                  items: [],
-                                  onChanged: (newValue) {},
+                                  items: _nationlist.map((value){
+                                    return DropdownMenuItem(
+                                    child: Text(value,
+                                    style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
+                              value: value);
+                              }).toList(),
+                                    value: _firstPreferLanguage,
+                                    onChanged: (value){
+                                      print(value);
+                                      setState(() {
+                                        _firstPreferLanguage = value!;
+                                      });}
                                 ),
                               ),
                             ],
@@ -147,22 +141,24 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                     Container(
                       width: 110,
                       child: DropdownButton(
-                        isExpanded: true,
-                        hint: Text("English",
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),),
-                        items: [],
-                        onChanged: (newValue) {},
+                          isExpanded: true,
+                          items: _nationlist.map((value){
+                            return DropdownMenuItem(
+                                child: Text(value,
+                                  style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
+                                value: value);
+                          }).toList(),
+                          value: _secondPreferLanguage,
+                          onChanged: (value){
+                            print(value);
+                            setState(() {
+                              _secondPreferLanguage = value!;
+                            });}
                       ),
                     ),
                   ],
                 ),
-                SizedBox(
-                  height: 200,
-                ),
+                Expanded(child: SizedBox()),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Button(

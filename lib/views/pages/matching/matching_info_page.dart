@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,26 +22,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
 
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Color(0xffF8F8F8),
-        title: Text(
-          '나의 신청 확인',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: SvgPicture.asset(
-            'assets/icon/icon_back.svg',
-            height: 20,
-          ),
-        ),
-      ),
+      appBar: CustomAppBar(appBar: AppBar(), backgroundColor: Colors.transparent, infookay: false, infocontent: '', title: '나의 신청 확인',),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -127,7 +109,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       children: [
                                         Text(
                                           'd',
-                                          //'${args.applicant['member']['name']}      ',
+                                          //'${args.applicant['member']['name']}      '
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold, fontSize: isSmallScreen ? 18 : 20, color: Colors.white),
                                         ),

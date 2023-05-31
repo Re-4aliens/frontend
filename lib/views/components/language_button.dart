@@ -4,11 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class languageButton extends StatelessWidget{
   final language;
+  final flag;
 
 
   const languageButton({
     Key? key,
     required this.language,
+    required this.flag,
   }) : super(key:key);
 
   @override

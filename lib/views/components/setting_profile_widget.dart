@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 Widget buildProfileList(context, index, memberDetails) {
-
-
   final double screenWidth = MediaQuery.of(context).size.width;
   final bool isSmallScreen = screenWidth <= 600;
   List settingList = [
@@ -30,9 +28,10 @@ Widget buildProfileList(context, index, memberDetails) {
   return ListTile(
     onTap: () {
       if (index == 3)
-        Navigator.pushNamed(context, '/edit');
+        Navigator.pushNamed(context, '/setting/lan/edit');
       else if(index ==2)
-        ;
+        Navigator.pushNamed(context, '/setting/MBTI/edit');
+
     },
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

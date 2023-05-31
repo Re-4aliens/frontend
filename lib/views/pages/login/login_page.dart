@@ -4,6 +4,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:aliens/views/components/button_big.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../apis.dart';
 import '../../../models/screenArgument.dart';
@@ -57,9 +58,11 @@ class _LoginState extends State<Login> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Container(
-                        width: 155,
-                        height: 100,
+                        child: SvgPicture.asset('assets/character/logoimage.svg'),
                       ),
+                      SizedBox(height: 15),
+                      SvgPicture.asset('assets/character/logotext.svg', color: Colors.black,),
+                      SizedBox(height: 5,),
                       Text(
                         '프렌즈쉽에 오신것을 환영합니다.',
                         style: TextStyle(

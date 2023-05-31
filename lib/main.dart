@@ -5,6 +5,8 @@ import 'package:aliens/views/pages/login/login_page.dart';
 import 'package:aliens/views/pages/matching/matching_list_page.dart';
 import 'package:aliens/views/pages/setting/setting_delete_what.dart';
 import 'package:aliens/views/pages/matching/matching_partner_info_page.dart';
+import 'package:aliens/views/pages/setting/setting_lan_edit.dart';
+import 'package:aliens/views/pages/setting/setting_mbti_edit.dart';
 import 'package:aliens/views/pages/setting/setting_terms_private.dart';
 import 'package:aliens/views/pages/setting/setting_terms_use.dart';
 import 'package:aliens/views/pages/signup/signup_birthday.dart';
@@ -103,6 +105,8 @@ class MyApp extends StatelessWidget {
 
         //setting
         '/setting/edit' : (context) => SettingEditPage(),
+        '/setting/lan/edit':(context) => SettingLanEditPage(),
+        '/setting/MBTI/edit' : (context) => SettingMBTIEditPage(),
         '/setting/notification' : (context) => SettingNotificationPage(),
         '/setting/terms': (context) => SettingTermsPage(),
         '/setting/terms/use' : (context) => SettingTermsUsePage(),
