@@ -33,7 +33,7 @@ class _SignUpVerifyState extends State<SignUpVerify>{
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height:MediaQuery.of(context).size.height * 0.2),
+              SizedBox(height:MediaQuery.of(context).size.height * 0.15),
               Container(
                 child: SvgPicture.asset(
                   'assets/icon/icon_mail.svg',
@@ -53,7 +53,8 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                 style: TextStyle(fontSize: isSmallScreen?14:16,color: Color(0xff888888)),
               ),
               Expanded(child: SizedBox()),
-              Text('*메일을 받지 못했다면 스팸함 또는 이메일 설정을 확인해주세요.\n',
+              Text('*메일을 받지 못했다면 스팸함\n 또는 이메일 설정을 확인해주세요.\n',
+                textAlign: TextAlign.center,
                 style: TextStyle(fontSize: isSmallScreen?10:12, color: Color(0xff888888)),
               ),
               Button(

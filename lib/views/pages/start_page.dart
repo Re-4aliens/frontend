@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../components/button.dart';
 import '../components/button_big.dart';
 
@@ -73,12 +74,19 @@ class _StartPageState extends State<StartPage>{
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(width: 100, height: 50,
-                      decoration: BoxDecoration(color: Colors.grey.shade400),
-                        ),
-                    Text('FRIEND SHIP',
-                      style : TextStyle(fontSize: isSmallScreen ? 22 : 24, fontWeight: FontWeight.bold),
+                    Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: SvgPicture.asset(
+                          'assets/character/logoimage.svg',
+                        )
                     ),
+                    SizedBox(height: 10),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      child: SvgPicture.asset(
+                        'assets/character/logotext.svg',
+                        color: Colors.black,
+                      ),),
                     Text('내 손안의 외국인 프렌즈',
                         style: TextStyle(fontSize: isSmallScreen ? 12 : 14),),
                       ],),),),
