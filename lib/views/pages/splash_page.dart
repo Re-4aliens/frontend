@@ -53,22 +53,10 @@ class _SplashPageState extends State<SplashPage>
           AnimatedPositioned(
             duration: Duration(milliseconds: 3000),
             curve: Curves.elasticInOut,
-            /*
-            child: Image.asset(
-              'assets/component_2.png',
-              width: 200,
-              height: 200,
-            ),
-
-             */
             child: Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(200),
-                  color: Color(0xffD3DEFF).withOpacity(0.54)
+              child: SvgPicture.asset('assets/character/splash_eightstar.svg',
+                width: 200, height: 200,
               ),
-              child: Text('이미지'),
               alignment: Alignment.center,
             ),
             left: isStart? 0 : -200,
@@ -79,13 +67,9 @@ class _SplashPageState extends State<SplashPage>
             duration: Duration(milliseconds: 3000),
             curve: Curves.elasticInOut,
             child: Container(
+              child: SvgPicture.asset('assets/character/splash_fivestar.svg',
               width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(200),
-                  color: Color(0xffFFF3C7).withOpacity(0.59)
-              ),
-              child: Text('이미지'),
+              height: 120,),
               alignment: Alignment.center,
             ),
             /*
@@ -112,7 +96,7 @@ class _SplashPageState extends State<SplashPage>
 
              */
             child: SvgPicture.asset(
-              'assets/illustration/Hi.svg',
+              'assets/character/splash_hi.svg',
             ),
 
             right: isStart? 0 : -400,
@@ -125,7 +109,8 @@ class _SplashPageState extends State<SplashPage>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('타이틀 로고', style: TextStyle(fontSize: 25, color: Colors.white),),
+                SvgPicture.asset('assets/character/splash_logo.svg'),
+               // Text('타이틀 로고', style: TextStyle(fontSize: 25, color: Colors.white),),
                 RichText(
                   text: TextSpan(
                       children: [

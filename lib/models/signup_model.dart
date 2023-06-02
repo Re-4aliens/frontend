@@ -3,7 +3,7 @@ class SignUpModel {
   String? password;
   String? mbti;
   String? gender;
-  String? nationality;
+  int? nationality;
   String? birthday;
   String? name;
   String? profileImage;
