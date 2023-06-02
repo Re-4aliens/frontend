@@ -484,9 +484,15 @@ class APIs {
   }
 
 
-  //mbti 수정
+  /*
+
+
+  mbti 수정
+
+
+   */
   static Future<bool> updateMBTI(String mbti) async {
-    var url = 'http://13.125.205.59:8080/api/v1/member/password';
+    var url = 'http://13.125.205.59:8080/api/v1/member/mbti';
 
     // 토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
