@@ -123,8 +123,7 @@ class _SignUpProfileState extends State<SignUpProfile>{
                 child: Text('완료'),
                 onPressed: (){
                   if(_profileImage != null){
-                    //member.profileImage = _profileImage!.path.toString();
-                    member.profileImage = 'g.jpg';
+                    member.profileImage = _profileImage!.path.toString();
                     print(member.toJson());
                     Navigator.pushNamed(context,'/email', arguments: member);
                   }

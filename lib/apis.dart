@@ -5,6 +5,7 @@ import 'models/applicant_model.dart';
 import 'models/auth_model.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 
 import 'models/memberDetails_model.dart';
@@ -90,31 +91,39 @@ class APIs {
   static Future<bool> signUp(SignUpModel member) async {
     const url = 'http://13.125.205.59:8080/api/v1/member';
 
-    var response = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "email": member.email,
-          "password": member.password,
-          "mbti": member.mbti,
-          "gender": member.gender,
-          "nationality": member.nationality,
-          "birthday": member.birthday,
-          "name": member.name,
-          "profileImage": member.profileImage,
-        }));
+    var request = http.MultipartRequest('POST', Uri.parse(url));
 
-    //success
+    // FormData 텍스트 필드 추가
+    request.fields['email'] = member.email!;
+    request.fields['password'] = member.password!;
+    request.fields['mbti'] = member.mbti!;
+    request.fields['gender'] = member.gender!;
+    request.fields['nationality'] = '1';
+    request.fields['birthday'] = member.birthday!;
+    request.fields['name'] = member.name!;
+
+    // FormData 파일 필드 추가
+    if (member.profileImage != null) {
+      var file = await http.MultipartFile.fromPath(
+        'profileImage',
+        member.profileImage!
+      );
+      request.files.add(file);
+    }
+
+    // request 전송
+    var response = await request.send();
+
+    // success
     if (response.statusCode == 200) {
-      print(json.decode(response.body));
-
+      print(await response.stream.bytesToString());
       return true;
-      //fail
+    // fail
     } else {
-      print(json.decode(response.body));
+      print(response.reasonPhrase);
       return false;
     }
   }
-
   /*
 
   로그인
