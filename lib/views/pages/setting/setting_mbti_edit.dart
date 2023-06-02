@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../apis.dart';
 import '../../components/button.dart';
 
 class SettingMBTIEditPage extends StatefulWidget {
@@ -69,13 +71,17 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
               padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: Button(
                   child: Text('확인'),
-                  onPressed: (){
+                  onPressed: () async {
+                    if(await APIs.updateMBTI(_selectedMBTI))
                     Navigator.pop(context);
+
                   }),
             )
           ],
         ),
       ),
+
     );
+
   }
 }

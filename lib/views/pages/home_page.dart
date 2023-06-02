@@ -379,7 +379,7 @@ class _HomePageState extends State<HomePage> {
                                     borderRadius: BorderRadius.circular(100),
                                   ),
                                 ),
-                              ),
+                              ), //팔내리는 캐릭터
                               Positioned(
                                 top: MediaQuery.of(context).size.height / 12 -
                                     10,
@@ -421,7 +421,7 @@ class _HomePageState extends State<HomePage> {
                                             offset: const Offset(0, 3))
                                       ]),
                                 ),
-                              ),
+                              ),//말풍선
                               Positioned(
                                   top: MediaQuery.of(context).size.height /10,
                                   right: 7,
@@ -439,7 +439,7 @@ class _HomePageState extends State<HomePage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                BorderRadius.circular(5)),
                                           ),
                                         ),
                                         Center(
@@ -449,7 +449,7 @@ class _HomePageState extends State<HomePage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                BorderRadius.circular(5)),
                                           ),
                                         ),
                                         Positioned(
@@ -461,7 +461,7 @@ class _HomePageState extends State<HomePage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                BorderRadius.circular(5)),
                                           ),
                                         ),
                                       ],
@@ -534,17 +534,18 @@ class _HomePageState extends State<HomePage> {
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
-                                  height: isSmallScreen ? 130 : 150,
-                                  width: isSmallScreen ? 130 : 150,
+                                  child: SvgPicture.asset('assets/character/handsdown1.svg',
+                                    height: isSmallScreen ? 160 : 230,
+                                    width: isSmallScreen ? 160 : 230,
+                                  ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffFFB5B5),
                                     borderRadius: BorderRadius.circular(100),
                                   ),
                                 ),
-                              ),
+                              ), //팔내리는 캐릭터
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 10 -
+                                top: MediaQuery.of(context).size.height / 12 -
                                     30,
                                 left: 25,
                                 child: Container(
@@ -588,7 +589,7 @@ class _HomePageState extends State<HomePage> {
                                             offset: const Offset(0, 3))
                                       ]),
                                 ),
-                              ),
+                              ),//말풍선
                               Positioned(
                                   top: MediaQuery.of(context).size.height / 10,
                                   right: 30,
@@ -633,7 +634,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ],
                                     ),
-                                  )),
+                                  )), //말풍선 똥똥똥
                               Positioned(
                                 child: Column(
                                   children: [
@@ -999,7 +1000,9 @@ class _HomePageState extends State<HomePage> {
                           child: SizedBox()),
                       Expanded(
                           flex: 9,
-                          child:SvgPicture.asset('assets/character/matching_puzzle.svg',
+                          child: status != 'NOT_APPLIED'
+                              ? SvgPicture.asset('assets/character/none_puzzle.svg')
+                              :SvgPicture.asset('assets/character/matching_puzzle.svg',
                           )
                       )
                     ],
@@ -1120,9 +1123,9 @@ class _HomePageState extends State<HomePage> {
                           child: SizedBox()),
                       Expanded(
                           flex: 9,
-                          child:SvgPicture.asset('assets/character/speech_bubble.svg',
-                            color:
-                              Color(0xffBABABA),
+                          child:status == 'NOT_APPLIED'?
+                          SvgPicture.asset('assets/character/none_speech_bubble.svg')
+                                :SvgPicture.asset('assets/character/speech_bubble.svg',
                             )
                           )
                     ],
