@@ -165,17 +165,20 @@ class _SignUpNationalityState extends State<SignUpNationality> {
             Button(
                 child: Text('확인'),
                 onPressed: () {
-                  if (_selectedNationality != '') {
+                  member.nationality = 1;
+                  print(member.toJson());
+                  Navigator.pushNamed(context, '/mbti', arguments:member);
+                  /*if (_selectedNationality != '') {
                     member.nationality = _selectedNationality;
-                    /*var nationality = snapshot.data!
+                    *//*var nationality = snapshot.data!
                         .toList()
                         .indexOf(_selectedNationality) +
                         1;
-                    member.nationality = nationality.toString();*/
+                    member.nationality = nationality.toString();*//*
                     print(member.toJson());
                     Navigator.pushNamed(context, '/mbti',
                         arguments: member);
-                  }
+                  }*/
                 })
           ],
         ),

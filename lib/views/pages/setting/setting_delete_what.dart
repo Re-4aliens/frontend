@@ -95,9 +95,9 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                               Container(
                                 width: MediaQuery.of(context).size.width * 0.1,
                                 height: 100.0,
+                                child: SvgPicture.asset(('assets/character/signout_crying.svg')),
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: Color(0xffD9D9D9),
                                 ),
                               ),
                               SizedBox(width: 23),
