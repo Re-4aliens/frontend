@@ -73,7 +73,8 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
                   child: Text('확인'),
                   onPressed: () async {
                     if(await APIs.updateMBTI(_selectedMBTI))
-                    Navigator.pop(context);
+
+                    Navigator.pop(context, _selectedMBTI);
 
                   }),
             )

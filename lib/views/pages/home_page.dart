@@ -99,7 +99,8 @@ class _HomePageState extends State<HomePage> {
                               color: Color(0xff888888),
                               height: 1.5)),
                       TextSpan(
-                          text: '${args.memberDetails?.mbti}',
+                          text: 'ENFP'
+                          /*'${args.memberDetails?.mbti}'*/,
                           style: TextStyle(
                               fontSize: 12, color: Color(0xff7898ff))),
                       TextSpan(
