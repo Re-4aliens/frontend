@@ -103,7 +103,7 @@ class APIs {
     request.fields['name'] = member.name!;
 
     // FormData 파일 필드 추가
-    if (member.profileImage != null) {
+    if (member.profileImage != null && member.profileImage!.isNotEmpty) {
       var file = await http.MultipartFile.fromPath(
         'profileImage',
         member.profileImage!
