@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget buildProfileList(context, index, memberDetails) {
+Widget buildProfileList(context, index, memberDetails){
+/*  var updatedMBTI = await Navigator.pushNamed(
+    context, '/setting/MBTI/edit'
+  );*/
+
   final double screenWidth = MediaQuery.of(context).size.width;
   final bool isSmallScreen = screenWidth <= 600;
   List settingList = [
