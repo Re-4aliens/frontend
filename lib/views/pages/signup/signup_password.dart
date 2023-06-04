@@ -67,11 +67,9 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                     if(await APIs.signUp(member))
                       Navigator.pushNamed(context,'/welcome', arguments: member);
                     else
-                      print('회원가입실패');
+                      print('회원가입실패');}
                     //회원가입 성공하면 로그인 요청
 
-
-                  }
                 })
 
           ],

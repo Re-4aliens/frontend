@@ -15,12 +15,29 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
   var selectedStack = -1;
   var selectedIndex = [-1, -1];
 
-  List<List<String>> nationlist = [
-    ['한국어', 'KR'],
-    ['English', 'EN'],
-    ['中國語', 'CN'],
-    ['日本語', 'JP'],
+  final List<Map<String, dynamic>> nationlist = [
+    {
+      'language': '한국어',
+      'lan': 'kr',
+      'puzzle': 'assets/character/yellow_puzzle.svg',
+    }, //한국어
+    {
+      'language': 'English',
+      'lan': 'EN',
+      'puzzle': 'assets/character/blue_puzzle.svg',
+    }, //영어
+    {
+      'language': '中國語',
+      'lan': 'CN',
+      'puzzle': 'assets/character/pink_puzzle.svg',
+    },//중국어
+    {
+      'language': '日本語',
+      'lan': 'JP',
+      'puzzle': 'assets/character/green_puzzle.svg',
+    }//일본어
   ];
+
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +56,9 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
           leading: IconButton(
             icon: SvgPicture.asset(
               'assets/icon/icon_back.svg',
-              height: 16,
-            ),
+              color: Color(0xff4D4D4D),
+              width: 24,
+              height: MediaQuery.of(context).size.height * 0.029,),
             onPressed: (){
               Navigator.of(context).pop();
             },
@@ -48,7 +66,6 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
           actions: [
             IconButton(
               onPressed: () {
-
                 showDialog(
                     context: context,
                     builder: (BuildContext context) =>
@@ -67,7 +84,8 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                   child: SvgPicture.asset(
                                     'assets/icon/icon_info.svg',
                                     color: Color(0xff7898ff),
-                                    height: 25,
+                                    width: MediaQuery.of(context).size.width * 0.062,
+                                    height: MediaQuery.of(context).size.height * 0.029,
                                   ),
                                 ),
                                 Text('상대방과 대화할 때\n어떤 언어를 사용하길 원하시나요?\n언어 2가지를 선택 해주세요\n매칭 시 우선순위로 진행돼요!',
@@ -88,7 +106,8 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
               //아이콘 수정 필요
               icon: SvgPicture.asset(
                 'assets/icon/icon_info.svg',
-                width: 24,
+                width: MediaQuery.of(context).size.width * 0.062,
+                height: MediaQuery.of(context).size.height * 0.029,
               ),
             )
           ],
@@ -159,20 +178,20 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                     Text(
                       '선호언어 선택',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: isSmallScreen?22:24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     SizedBox(
-                      height: 25,
+                      height: MediaQuery.of(context).size.height *0.03 ,
                     ),
                     Text(
                       '상대방과 원하는 언어로 대화할 수 있어요.\n선호도에 따라 4가지 언어 중 선택 가능합니다.',
-                      style: TextStyle(fontSize: 16, color: Color(0xff616161)),
+                      style: TextStyle(fontSize: isSmallScreen?14:16, color: Color(0xff616161)),
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(
-                      height: 40,
+                      height: MediaQuery.of(context).size.height * 0.047,
                     ),
                     for (int i = 0; i < 2; i++)
                       Column(
@@ -181,7 +200,9 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               LanguageButton(
-                                  languageText: nationlist[2 * i],
+                                  language: nationlist[2 * i]['language'],
+                                  lan : nationlist[2 * i]['lan'],
+                                  puzzle: nationlist[2 * i]['puzzle'],
                                   selectedFirst:
                                   selectedIndex[0] == (2 * i),
                                   selectedSecond:
@@ -224,17 +245,19 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                         else {
                                           print('두 번째 선택');
                                           //두 번째에 값을 넣는다.
-                                          selectedIndex[1] = (2 * i);
+                                          selectedIndex[1] == (2 * i);
                                         }
                                       }
                                     });
-                                  }),
+                                  },
+                                /*puzzle : nationlist[2 * i],*/),
                               SizedBox(
                                 width: 20,
                               ),
                               LanguageButton(
-                                  languageText: nationlist[(2 * i + 1)],
-                                  selectedFirst:
+                                language: nationlist[2 * i+1]['language'],
+                                lan : nationlist[2 * i+1]['lan'],
+                                puzzle: nationlist[2 * i+1]['puzzle'],                                  selectedFirst:
                                   selectedIndex[0] == (2 * i + 1),
                                   selectedSecond:
                                   selectedIndex[1] == (2 * i + 1),
@@ -280,7 +303,8 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                         }
                                       }
                                     });
-                                  })
+                                  },
+                               )
                             ],
                           ),
                           SizedBox(
@@ -299,17 +323,22 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
 }
 
 class LanguageButton extends StatelessWidget {
-  final List<String> languageText;
+
+  final language;
+  final lan;
   final selectedFirst;
   final selectedSecond;
+  final puzzle;
   final VoidCallback onPressed;
 
   const LanguageButton(
       {Key? key,
-      required this.languageText,
-      required this.selectedFirst,
-      required this.selectedSecond,
-      required this.onPressed})
+        required this.language,
+        required this.lan,
+        required this.selectedFirst,
+        required this.selectedSecond,
+        required this.puzzle,
+        required this.onPressed})
       : super(key: key);
 
   Color changeColor(bool selectedFirst, bool selectedSecond) {
@@ -332,6 +361,8 @@ class LanguageButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.height;
+    final bool isSmallScreen = screenWidth <= 700;
     return Container(
       decoration: BoxDecoration(
         color: changeColor(selectedFirst, selectedSecond),
@@ -375,11 +406,10 @@ class LanguageButton extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      height: 40,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFD9D9D9),
-                      ),
+                      child : SvgPicture.asset(puzzle,
+                        width: isSmallScreen?40:45,
+                        height: isSmallScreen?40:45,
+                      )
                     ),
                     Container(
                       height: 30,
@@ -420,10 +450,10 @@ class LanguageButton extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      languageText[0],
+                      language,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: isSmallScreen?18:20,
                         color: selectedFirst || selectedSecond
                             ? Colors.white
                             : Colors.black,
@@ -433,9 +463,9 @@ class LanguageButton extends StatelessWidget {
                       width: 4,
                     ),
                     Text(
-                      languageText[1],
+                      lan,
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: isSmallScreen?10:12,
                         color: selectedFirst || selectedSecond
                             ? Colors.white
                             : Color(0xff888888),

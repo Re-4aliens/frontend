@@ -10,101 +10,129 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 int selectedStack = -1;
 final List<Map<String, dynamic>> mbtiList = [
   {
-    'mbti': 'INTJ',
-    'text': '분석가형',
-    'explain': '전락가',
-    'step': '1',
-  },//INTJ
-  {
-    'mbti': 'INTP',
-    'text': '분석가형',
-    'explain': '논리술사',
-    'step': '2'
-  },//INTP
-  {
-    'mbti': 'INFJ',
-    'text': '외교관형',
-    'explain': '옹호자',
-    'step': '3'
-  },//INFJ
-  {
-    'mbti': 'INFP',
-    'text': '외교관형',
-    'explain': '중재자',
-    'step': '4'
-  },//INFP
-  {
-    'mbti': 'ISTJ',
-    'text': '관리자형',
-    'explain': '현실주의자',
-    'step': '5'
-  },//ISTJ
-  {
-    'mbti': 'ISTP',
-    'text': '탐험가형',
-    'explain': '장인',
-    'step': '6'
-  },//ISTP
-  {
-    'mbti': 'ISFJ',
-    'text': '관리자형',
-    'explain': '수호자',
-    'step': '7'
-  },//ISFJ
-  {
-    'mbti': 'ISFP',
-    'text': '분석가형',
-    'explain': '전락가',
-    'step': '8'
-  },//ISFP
-  {
     'mbti': 'ENTJ',
     'text': '분석가형',
     'explain': '통솔가',
-    'step': '9'
+    'step': '9',
+    'image': 'assets/mbti/ENTJ.svg'
   },//ENTJ
   {
     'mbti': 'ENTP',
     'text': '분석가형',
     'explain': '변론가',
-    'step': '10'
+    'step': '10',
+    'image': 'assets/mbti/ENTP.svg'
   },//ENTP
+
+  {
+    'mbti': 'ESTJ',
+    'text': '관리자형',
+    'explain': '경영자',
+    'step': '13',
+    'image': 'assets/mbti/ESTJ.svg'
+  },//ESTJ
+  {
+    'mbti': 'ESFJ',
+    'text': '관리자형',
+    'explain': '집정관',
+    'step': '15',
+    'image': 'assets/mbti/ESFJ.svg'
+  },//ESFJ
+
   {
     'mbti': 'ENFJ',
     'text': '외교관형',
     'explain': '선도자',
-    'step': '11'
+    'step': '11',
+    'image': 'assets/mbti/ENFJ.svg'
   },//ENFJ
   {
     'mbti': 'ENFP',
     'text': '외교관형',
     'explain': '활동가',
-    'step': '12'
+    'step': '12',
+    'image': 'assets/mbti/ENFP.svg'
   },//ENFP
-  {
-    'mbti': 'ESTJ',
-    'text': '관리자형',
-    'explain': '경영자',
-    'step': '13'
-  },//ESTJ
+
   {
     'mbti': 'ESTP',
     'text': '탐험가형',
     'explain': '사업가',
-    'step': '14'
+    'step': '14',
+    'image': 'assets/mbti/ESTP.svg'
   },//ESTP
-  {
-    'mbti': 'ESFJ',
-    'text': '관리자형',
-    'explain': '집정관',
-    'step': '15'
-  },//ESFJ
   {
     'mbti': 'ESFP',
     'text': '탐험가형',
     'explain': '연예인',
-    'step': '16'
+    'step': '16',
+    'image': 'assets/mbti/ESFP.svg'
   },//ESFP
+
+  {
+    'mbti': 'INTJ',
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '1',
+    'image': 'assets/mbti/INTJ.svg'
+  },//INTJ
+  {
+    'mbti': 'INTP',
+    'text': '분석가형',
+    'explain': '논리술사',
+    'step': '2',
+    'image': 'assets/mbti/INTP.svg'
+  },//INTP
+
+  {
+    'mbti': 'ISTJ',
+    'text': '관리자형',
+    'explain': '현실주의자',
+    'step': '5',
+    'image': 'assets/mbti/ISTJ.svg'
+  },//ISTJ
+  {
+    'mbti': 'ISFJ',
+    'text': '관리자형',
+    'explain': '수호자',
+    'step': '7',
+    'image': 'assets/mbti/ISFJ.svg'
+  },//ISFJ
+
+  {
+    'mbti': 'INFJ',
+    'text': '외교관형',
+    'explain': '옹호자',
+    'step': '3',
+    'image': 'assets/mbti/INFJ.svg'
+  },//INFJ
+  {
+    'mbti': 'INFP',
+    'text': '외교관형',
+    'explain': '중재자',
+    'step': '4',
+    'image': 'assets/mbti/INFP.svg'
+  },//INFP
+
+  {
+    'mbti': 'ISTP',
+    'text': '탐험가형',
+    'explain': '장인',
+    'step': '6',
+    'image': 'assets/mbti/ISTP.svg'
+  },//ISTP
+  {
+    'mbti': 'ISFP',
+    'text': '분석가형',
+    'explain': '전락가',
+    'step': '8',
+    'image': 'assets/mbti/ISFP.svg'
+  },//ISFP
+
+
+
+
+
 ];
 
 class SignUpMbti extends StatefulWidget {
@@ -134,7 +162,7 @@ class _SignUpMbtiState extends State<SignUpMbti> {
         appBar: AppBar(),
         title: '',
         backgroundColor: Color(0xffF5F7FF),
-        infookay: true, infocontent: '\nMBTI를 선택해주세요.\n상대방이 보는 나의 프로필을 통해\nMBTI를 공유할 수 있어요!',
+        infookay: true, infocontent: '\nMBTI를 선택해주세요\nMBTI를 기반으로 나와 더 잘 맞는 친구를 찾을 수 있어요!',
       ),
       body: SingleChildScrollView(
         //padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
@@ -164,6 +192,7 @@ class _SignUpMbtiState extends State<SignUpMbti> {
                                 selected: selectedStack == (2 * i),
                                 step: mbtiList[2 * i]['step'],
                                 onPressed: () => setState(() => selectedStack = 2 * i),
+                                image: mbtiList[2 * i]['image'],
                               ),
                               mbtiButton(
                                 text: mbtiList[(2 * i + 1)]['text'],
@@ -173,6 +202,8 @@ class _SignUpMbtiState extends State<SignUpMbti> {
                                 step: mbtiList[(2 * i + 1)]['step'],
                                 onPressed: () =>
                                     setState(() => selectedStack = (2 * i + 1)),
+                                image: mbtiList[(2 * i + 1)]['image']
+
                               ),
                             ],
                           ),

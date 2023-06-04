@@ -25,7 +25,7 @@ class _SignUpNameState extends State<SignUpName>{
       password: '',
       mbti: '',
       gender: '',
-      nationality: '',
+      nationality: 0,
       birthday: '',
       name: '',
       profileImage: '',

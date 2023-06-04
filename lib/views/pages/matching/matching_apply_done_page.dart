@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -27,19 +28,8 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            icon: SvgPicture.asset(
-              'assets/icon/icon_back.svg',
-              height: 16,
-              color: Color(0xff212121),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+        appBar: CustomAppBar(
+          appBar: AppBar(),backgroundColor: Colors.transparent, infookay: false, infocontent: '', title: '',
         ),
         extendBodyBehindAppBar: true,
         body: Column(
@@ -48,13 +38,8 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
               child: Column(children: [
                 Expanded(flex: 3, child: SizedBox()),
                 Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFD9D9D9),
-                    borderRadius: BorderRadius.circular(80),
+                  child: SvgPicture.asset('assets/character/apply_done.svg'),
                   ),
-                  width: 160,
-                  height: 160,
-                ),
                 Expanded(flex: 1, child: SizedBox()),
               ]),
             ),
@@ -69,27 +54,27 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                     ),
                   ),
                   SizedBox(
-                    height: 18,
+                    height: MediaQuery.of(context).size.height* 0.022,
                   ),
                   Text(
                     '아래 버튼을 클릭하면\n매칭 진행 상황을 알 수 있어요.',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xff616161),
-                      fontSize: 16,
+                      fontSize: isSmallScreen?14:16,
                     ),
                   ),
                   SizedBox(
-                    height: 90,
+                    height: MediaQuery.of(context).size.height * 0.12,
                   ),
                   Container(
                     alignment: Alignment.topCenter,
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 25, left: 25),
+                      padding: const EdgeInsets.only(right: 24,left: 24),
                       child: Positioned(
                         child: Container(
                           width: double.maxFinite,
-                          height: 50,
+                          height: isSmallScreen?44:48,
                           child: ElevatedButton(
                             onPressed: () {
                               //스택 비우고
@@ -117,9 +102,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                       ),
                     ),
                   ),
-                  SizedBox(
-                    height: 25,
-                  ),
+                  SizedBox(height: MediaQuery.of(context).size.height * 0.03),
                   Container(
                     alignment: Alignment.topCenter,
                     child: Padding(
@@ -127,7 +110,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                       child: Positioned(
                         child: Container(
                           width: double.maxFinite,
-                          height: 50,
+                          height: isSmallScreen?44:48,
                           child: ElevatedButton(
                             onPressed: () {
                               Navigator.of(context)
