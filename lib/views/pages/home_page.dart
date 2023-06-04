@@ -99,7 +99,8 @@ class _HomePageState extends State<HomePage> {
                               color: Color(0xff888888),
                               height: 1.5)),
                       TextSpan(
-                          text: 'ENFP',
+                          text: 'ENFP'
+                          /*'${args.memberDetails?.mbti}'*/,
                           style: TextStyle(
                               fontSize: 12, color: Color(0xff7898ff))),
                       TextSpan(
@@ -183,15 +184,16 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height / 10,
+            top: MediaQuery.of(context).size.height / 13,
             right: 0,
             child: Container(
-              height: isSmallScreen ? 130 : 150,
-              width: isSmallScreen ? 130 : 150,
-              child: Text('캐릭터/일러스트'),
+              child: SvgPicture.asset('assets/character/handsup1.svg',
+                height: isSmallScreen ? 190 : 260,
+                width: isSmallScreen ? 190 : 260,
+                //color: Color(0xffFFB5B5),
+              ),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: Color(0xffFFB5B5),
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
@@ -365,21 +367,22 @@ class _HomePageState extends State<HomePage> {
                       builder: (_) => Stack(
                             children: [
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 10 +
+                                top: MediaQuery.of(context).size.height / 15 +
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
-                                  height: isSmallScreen ? 130 : 150,
-                                  width: isSmallScreen ? 130 : 150,
+                                  child: SvgPicture.asset('assets/character/handsdown1.svg',
+                                    height: isSmallScreen ? 160 : 230,
+                                    width: isSmallScreen ? 160 : 230,
+                                  ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffFFB5B5),
                                     borderRadius: BorderRadius.circular(100),
                                   ),
                                 ),
-                              ),
+                              ), //팔내리는 캐릭터
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 10 -
+                                top: MediaQuery.of(context).size.height / 12 -
                                     10,
                                 left: 25,
                                 child: Container(
@@ -419,10 +422,10 @@ class _HomePageState extends State<HomePage> {
                                             offset: const Offset(0, 3))
                                       ]),
                                 ),
-                              ),
+                              ),//말풍선
                               Positioned(
-                                  top: MediaQuery.of(context).size.height / 10,
-                                  right: 30,
+                                  top: MediaQuery.of(context).size.height /10,
+                                  right: 7,
                                   child: Container(
                                     height: 50,
                                     width: 50,
@@ -437,7 +440,7 @@ class _HomePageState extends State<HomePage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                BorderRadius.circular(5)),
                                           ),
                                         ),
                                         Center(
@@ -447,7 +450,7 @@ class _HomePageState extends State<HomePage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                BorderRadius.circular(5)),
                                           ),
                                         ),
                                         Positioned(
@@ -459,12 +462,12 @@ class _HomePageState extends State<HomePage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(5)),
+                                                BorderRadius.circular(5)),
                                           ),
                                         ),
                                       ],
                                     ),
-                                  )),
+                                  )),//말풍선 똥똥똥
                               Positioned(
                                 child: Column(
                                   children: [
@@ -528,21 +531,22 @@ class _HomePageState extends State<HomePage> {
                       builder: (_) => Stack(
                             children: [
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 10 +
+                                top: MediaQuery.of(context).size.height / 15 +
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
-                                  height: isSmallScreen ? 130 : 150,
-                                  width: isSmallScreen ? 130 : 150,
+                                  child: SvgPicture.asset('assets/character/handsdown1.svg',
+                                    height: isSmallScreen ? 160 : 230,
+                                    width: isSmallScreen ? 160 : 230,
+                                  ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffFFB5B5),
                                     borderRadius: BorderRadius.circular(100),
                                   ),
                                 ),
-                              ),
+                              ), //팔내리는 캐릭터
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 10 -
+                                top: MediaQuery.of(context).size.height / 12 -
                                     30,
                                 left: 25,
                                 child: Container(
@@ -586,7 +590,7 @@ class _HomePageState extends State<HomePage> {
                                             offset: const Offset(0, 3))
                                       ]),
                                 ),
-                              ),
+                              ),//말풍선
                               Positioned(
                                   top: MediaQuery.of(context).size.height / 10,
                                   right: 30,
@@ -631,7 +635,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                       ],
                                     ),
-                                  )),
+                                  )), //말풍선 똥똥똥
                               Positioned(
                                 child: Column(
                                   children: [
@@ -964,7 +968,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               height: isSmallScreen ? 210 : 240,
-              padding: EdgeInsets.all(25),
+              padding: EdgeInsets.only(left:25, top:25, right:6),
               decoration: BoxDecoration(),
               width: double.infinity,
               child: Column(
@@ -989,6 +993,21 @@ class _HomePageState extends State<HomePage> {
                             ? Color(0xff888888)
                             : Color(0xff7898FF)),
                   ),
+                  SizedBox(height: isSmallScreen?25:55),
+                  Row(
+                    children: [
+                      Expanded(
+                          flex : 3,
+                          child: SizedBox()),
+                      Expanded(
+                          flex: 9,
+                          child: status != 'NOT_APPLIED'
+                              ? SvgPicture.asset('assets/character/none_puzzle.svg')
+                              :SvgPicture.asset('assets/character/matching_puzzle.svg',
+                          )
+                      )
+                    ],
+                  )
                 ],
               ),
             ),
@@ -1072,7 +1091,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               height: isSmallScreen ? 210 : 240,
-              padding: EdgeInsets.all(25),
+              padding: EdgeInsets.only(left:25, top:25, right:6),
               decoration: BoxDecoration(),
               width: double.infinity,
               child: Column(
@@ -1097,6 +1116,21 @@ class _HomePageState extends State<HomePage> {
                             ? Color(0xff888888)
                             : Color(0xffFF8F8F)),
                   ),
+                  SizedBox(height: isSmallScreen?40:70),
+                  Row(
+                    children: [
+                      Expanded(
+                          flex : 3,
+                          child: SizedBox()),
+                      Expanded(
+                          flex: 9,
+                          child:status == 'NOT_APPLIED'?
+                          SvgPicture.asset('assets/character/none_speech_bubble.svg')
+                                :SvgPicture.asset('assets/character/speech_bubble.svg',
+                            )
+                          )
+                    ],
+                  )
                 ],
               ),
             ),

@@ -10,6 +10,8 @@ class mbtiButton extends StatelessWidget{
   final bool selected;
   final String step;
   final VoidCallback onPressed;
+  final String image;
+
 
   const mbtiButton({
     Key? key,
@@ -18,13 +20,14 @@ class mbtiButton extends StatelessWidget{
     required this.mbti,
     required this.selected,
     required this.step,
-    required this.onPressed
+    required this.onPressed,
+    required this.image,
   }) : super(key:key);
 
   @override
   Widget build(BuildContext context){
     final double screenWidth = MediaQuery.of(context).size.height;
-    final bool isSmallScreen = screenWidth <= 700;
+    final bool isSmallScreen = screenWidth <= 800;
 
     return Container(
       margin: EdgeInsets.only(left: 10,right: 10, top: 0, bottom: 0),
@@ -85,7 +88,8 @@ class mbtiButton extends StatelessWidget{
                       Container(
                         width: 60,height: 60,
                         decoration: BoxDecoration(shape: BoxShape.circle,
-                            color: selected? Color(0xffFFB5B5): Colors.grey),
+                        ),
+                        child: SvgPicture.asset(image),
                       ),
                       Text(mbti, textAlign: TextAlign.center, style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold,
                           color:selected? Colors.white : Colors.black ),),

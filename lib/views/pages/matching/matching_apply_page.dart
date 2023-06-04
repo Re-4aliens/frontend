@@ -26,20 +26,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          leading: IconButton(
-            icon: SvgPicture.asset(
-              'assets/icon/icon_back.svg',
-              height: 16,
-              color: Color(0xff212121),
-            ),
-            onPressed: (){
-              Navigator.of(context).pop();
-            },
-          ),
-        ),
+        appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, infookay: false, infocontent: '', title: '',),
         extendBodyBehindAppBar: true,
         body: _buildBody(args, isSmallScreen),
 
@@ -52,7 +39,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
             Positioned(
               top: 0,
                 bottom: 0,
-                right: isSmallScreen ? -300 : -330,
+                right: isSmallScreen ? -330 : -350,
                 child: Container(
                     width: isSmallScreen ? 600 : 700,
                     decoration: BoxDecoration(
@@ -68,7 +55,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                         shape: BoxShape.circle, color: Color(0xffF3F6FF))
                 )),
             Padding(
-              padding: const EdgeInsets.only(left: 25),
+              padding: const EdgeInsets.only(left: 24, right: 24),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -132,13 +119,13 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                       ),),
                     ),
                   ),
-                  SizedBox(height: 40,),
+                  SizedBox(height: 40),
                   Text('곧 매칭신청이\n시작됩니다!',
-                    style: TextStyle(fontSize: isSmallScreen ? 20 : 25, fontWeight: FontWeight.bold,),),
+                    style: TextStyle(fontSize: isSmallScreen ? 22 : 24, fontWeight: FontWeight.bold,),),
                   RichText(
                       text: TextSpan(
                           children: [
-                            TextSpan(text:'\n선호언어', style: TextStyle(fontSize: isSmallScreen ? 12 : 16, color: Color(0xff3666FF)),),
+                            TextSpan(text:'\n선호언어', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Color(0xff3666FF)),),
                             TextSpan(text: '에 따라 매칭이 되며,', style: TextStyle(fontSize: isSmallScreen ? 14 : 16,color: Colors.black, height: 2)),
                                 ]
                             ),
@@ -146,7 +133,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                   RichText(
                     text: TextSpan(
                         children: [
-                          TextSpan(text:'랜덤 선호언어 친구(SF)', style: TextStyle(fontSize: isSmallScreen ? 12 : 16, color: Color(0xff3666FF)),),
+                          TextSpan(text:'랜덤 선호언어 친구(SF)', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Color(0xff3666FF),),),
                           TextSpan(text: '가 추가됩니다', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Colors.black)),
                         ]
                     ),

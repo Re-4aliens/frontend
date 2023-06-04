@@ -103,6 +103,7 @@ class APIs {
     request.fields['name'] = member.name!;
 
     // FormData 파일 필드 추가
+
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
       var file = await http.MultipartFile.fromPath(
         'profileImage',
@@ -483,4 +484,44 @@ class APIs {
     return _screenArguments;
   }
 
+
+  /*
+
+
+  mbti 수정
+
+
+   */
+  static Future<bool> updateMBTI(String mbti) async {
+    var url = 'http://13.125.205.59:8080/api/v1/member';
+
+    // 토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    // 액세스 토큰만 보내기
+    jwtToken = json.decode(jwtToken!)['accessToken'];
+
+    // 업데이트할 MBTI 정보를 담은 Map 생성
+    var requestData = {
+      'mbti': mbti,
+    };
+    var response = await http.patch(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(requestData),
+    );
+    //성공
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+    }
+    //실패
+    else {
+      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      return false;
+    }
+  }
 }

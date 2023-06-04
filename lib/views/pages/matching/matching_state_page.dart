@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:aliens/models/screenArgument.dart';
+import 'package:aliens/views/pages/matching/matching_edit_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import '../../components/appbar.dart';
 import '../../components/button.dart';
 
 import 'package:flutter/animation.dart';
@@ -46,41 +48,23 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.white,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: SvgPicture.asset(
-              'assets/icon/icon_back.svg',
-              height: 20,
-            ),
-          ),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  print(diff.inSeconds);
-                },
-                icon: Icon(Icons.account_circle))
-          ],
-        ),
+        appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent,infookay: false, infocontent: '', title: '',),
         extendBodyBehindAppBar: true,
         body: Stack(
           children: [
             Column(
               children: [
-                Expanded(flex: 2, child: SizedBox()),
+                Expanded(flex: 3, child: SizedBox()),
                 Text(
                   '매칭 대기중...',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: isSmallScreen ? 22 : 24,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: MediaQuery.of(context).size.height * 0.04,
                   width: double.infinity,
                 ),
                 /*
@@ -139,7 +123,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                                     style: TextStyle(
                                         color: Color(0xff7898FF),
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20)
+                                        fontSize: isSmallScreen?18:20)
                                 ),
                                 padding: EdgeInsets.all(8),
                               ),
@@ -147,7 +131,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                                   style: TextStyle(
                                       color: Color(0xff7898FF),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20))),
+                                      fontSize: isSmallScreen?18:20))),
                               Container(
                                 decoration: BoxDecoration(
                                   color: Color(0xffF9F9FF),
@@ -165,7 +149,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                                     style: TextStyle(
                                         color: Color(0xff7898FF),
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20)
+                                        fontSize: isSmallScreen?18:20)
                                 ),
                                 padding: EdgeInsets.all(8),
                               ),
@@ -173,7 +157,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                                   style: TextStyle(
                                       color: Color(0xff7898FF),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20))),
+                                      fontSize: isSmallScreen?18:20))),
                               Container(
                                 decoration: BoxDecoration(
                                   color: Color(0xffF9F9FF),
@@ -191,7 +175,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                                     style: TextStyle(
                                         color: Color(0xff7898FF),
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20)
+                                        fontSize: isSmallScreen?18:20)
                                 ),
                                 padding: EdgeInsets.all(8),
                               ),
@@ -199,7 +183,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                                   style: TextStyle(
                                       color: Color(0xff7898FF),
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 20))),
+                                      fontSize: isSmallScreen?18:20))),
                               Container(
                                 decoration: BoxDecoration(
                                   color: Color(0xffF9F9FF),
@@ -217,7 +201,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                                     style: TextStyle(
                                         color: Color(0xff7898FF),
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20)
+                                        fontSize: isSmallScreen?18:20)
                                 ),
                                 padding: EdgeInsets.all(8),
                               ),
@@ -225,12 +209,12 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                           ));
                     }),
                 SizedBox(
-                  height: isSmallScreen ? 40 : 70,
+                  height: MediaQuery.of(context).size.height * 0.07,
                 ),
                 Stack(
                   children: [
                     Blob.animatedRandom(
-                      size: isSmallScreen ? 170 : 200,
+                      size: isSmallScreen ? 140 : 170,
                       edgesCount: 6,
                       //minGrowth:4,
                       duration: Duration(milliseconds: 1000),
@@ -251,13 +235,13 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                   ],
                 ),
                 SizedBox(
-                  height: isSmallScreen ? 40 : 70,
+                  height: isSmallScreen?15:40,
                 ),
                 Text(
                   '조금만 기다려주세요.\n내 성향과 스타일에 꼭 맞는\n친구를 찾고 있어요!',
                   style: TextStyle(
                     color: Color(0xff616161),
-                    fontSize: 16,
+                    fontSize: isSmallScreen?14:16,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -266,13 +250,13 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
             ),
             Column(
               children: [
-                Expanded(flex: isSmallScreen ? 8 : 7, child: Container()),
+                Expanded(flex: isSmallScreen ? 6 : 5, child: Container()),
                 Expanded(
-                    flex: 2,
+                    flex: 1,
                     child: Container(
                       alignment: Alignment.topCenter,
                       child: Padding(
-                        padding: const EdgeInsets.only(right: 25, left: 25),
+                        padding: const EdgeInsets.only(right: 24, left: 24),
                         child: Positioned(
                           child: Button(
                             child: Text('나의 신청 확인하기'),

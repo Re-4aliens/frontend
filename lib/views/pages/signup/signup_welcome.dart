@@ -1,6 +1,7 @@
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../models/members.dart';
 import '../../components/button.dart';
@@ -38,7 +39,9 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                     width: MediaQuery.of(context).size.width * 0.4,
                     height: MediaQuery.of(context).size.height * 0.186,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.grey)),
+                        shape: BoxShape.circle),
+                  child: SvgPicture.asset('assets/character/welcome.svg'),
+                ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.036),
                 Text(
                   '환영합니다!\n가입이 완료되었습니다',
