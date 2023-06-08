@@ -59,8 +59,8 @@ class _SplashPageState extends State<SplashPage>
               ),
               alignment: Alignment.center,
             ),
-            left: isStart? 0 : -200,
-            top: isStart? 0 : -200,
+            left: isStart? -30 : -200,
+            top: isStart? -70 : -200,
           ),
 
           AnimatedPositioned(
@@ -80,7 +80,7 @@ class _SplashPageState extends State<SplashPage>
             ),
 
              */
-            right: isStart? 0 : -120,
+            right: isStart? -60 : -120,
             top: 150,
           ),
 
@@ -99,8 +99,8 @@ class _SplashPageState extends State<SplashPage>
               'assets/character/splash_hi.svg',
             ),
 
-            right: isStart? 0 : -400,
-            bottom: isStart? 0 : -300,
+            right: isStart? -200 : -500,
+            bottom: isStart? -150 : -400,
           ),
 
 

@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:aliens/apis.dart';
+import 'package:aliens/models/applicant_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:aliens/providers/auth_provider.dart';
@@ -28,7 +30,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
-    var memberDetails = ModalRoute.of(context)!.settings.arguments;
+    var memberDetails = ModalRoute.of(context)!.settings.arguments as MemberDetails;
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '회원탈퇴',),
@@ -81,9 +83,10 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                                 onPressed: () async {
                                   //탈퇴
                                   if (await APIs.withdraw(
-                                      passwordController.text))
-                                    Navigator.pushNamed(
-                                        context, '/setting/delete/done');
+                                      passwordController.text)){
+                                    await APIs.deleteInfo(memberDetails.memberId);
+                                    Navigator.pushNamed(context, '/setting/delete/done');
+                                  }
                                 },
                                 child: const Text('탈퇴하기',
                                     style: TextStyle(
@@ -156,8 +159,10 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                     TextButton(
                       onPressed: () async{
                     //탈퇴
-                        if(await APIs.withdraw(passwordController.text))
+                        if(await APIs.withdraw(passwordController.text)){
+                          await APIs.deleteInfo(memberDetails.memberId);
                           Navigator.pushNamed(context, '/setting/delete/done');
+                        }
                         },
                       child: const Text('탈퇴하기',
                           style: TextStyle(

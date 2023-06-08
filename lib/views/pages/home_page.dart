@@ -205,7 +205,7 @@ class _HomePageState extends State<HomePage> {
               screenArguments: args,
             )
           : chattingWidget(context, args.partners),
-      settingWidget(context, args.memberDetails)
+      settingWidget(context, args)
     ];
 
     return Scaffold(
@@ -1140,13 +1140,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget settingWidget(BuildContext context, memberDetails) {
+  Widget settingWidget(BuildContext context, screenArguments) {
     //final AuthProvider authProvider = new AuthProvider();
     final storage = FlutterSecureStorage();
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isSmallScreen = screenWidth <= 600;
 
-    File imageFile = File(memberDetails.profileImage);
+    File imageFile = File(screenArguments.memberDetails.profileImage);
 
     return Container(
       color: Color(0xffF5F7FF),
@@ -1171,7 +1171,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         RichText(
                           text: TextSpan(
-                            text: memberDetails.name.toString(),
+                            text: screenArguments.memberDetails.name.toString(),
                             style: TextStyle(
                               fontSize: isSmallScreen ? 30 : 32,
                               fontWeight: FontWeight.bold,
@@ -1192,12 +1192,12 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              memberDetails.birthday.toString(),
+                              screenArguments.memberDetails.birthday.toString(),
                               style: TextStyle(
                                   fontSize: isSmallScreen ? 12 : 14,
                                   color: Colors.white),
                             ),
-                            Text(memberDetails.email.toString(),
+                            Text(screenArguments.memberDetails.email.toString(),
                                 style: TextStyle(
                                     fontSize: isSmallScreen ? 12 : 14,
                                     color: Colors.white)),
@@ -1213,17 +1213,17 @@ class _HomePageState extends State<HomePage> {
                             height: MediaQuery.of(context).size.height * 0.09,
                             width: 80,
                             decoration: BoxDecoration(
-                                color: memberDetails.profileImage != "" ? Colors.white : Colors.transparent,
+                                color: screenArguments.memberDetails.profileImage != "" ? Colors.white : Colors.transparent,
                                 image: DecorationImage(
-                                  image: memberDetails.profileImage != ""
+                                  image: screenArguments.memberDetails.profileImage != ""
                                       ? NetworkImage(
-                                          memberDetails.profileImage,
+                                    screenArguments.memberDetails.profileImage,
                                         )
                                       : NetworkImage(''),
                                   fit: BoxFit.fill,
                                 ),
                                 borderRadius: BorderRadius.circular(40)),
-                            child: memberDetails.profileImage != ""
+                            child: screenArguments.memberDetails.profileImage != ""
                                 ? SizedBox()
                                 : SvgPicture.asset('assets/icon/icon_profile.svg', color:Colors.white,),
                           ),
@@ -1313,7 +1313,7 @@ class _HomePageState extends State<HomePage> {
                       return Container(
                           height: MediaQuery.of(context).size.height * 0.04,
                           child: buildProfileList(
-                              context, index - 1, memberDetails));
+                              context, index - 1, screenArguments.memberDetails));
                     }
                   },
                 ),
@@ -1350,7 +1350,7 @@ class _HomePageState extends State<HomePage> {
                       return Container(
                           height: MediaQuery.of(context).size.height * 0.04,
                           child: buildSettingList(
-                              context, index - 1, memberDetails));
+                              context, index - 1, screenArguments));
                     }
                   },
                 ),
