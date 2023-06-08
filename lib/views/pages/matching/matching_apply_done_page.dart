@@ -76,7 +76,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                           width: double.maxFinite,
                           height: isSmallScreen?44:48,
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               //스택 비우고
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   '/main', (Route<dynamic> route) => false,
@@ -113,8 +113,14 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                           height: isSmallScreen?44:48,
                           child: ElevatedButton(
                             onPressed: () {
+                              /*
                               Navigator.of(context)
                                   .popUntil((route) => route.isFirst);
+
+                               */
+
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                  '/loading', (Route<dynamic> route) => false);
                             },
                             child: Text(
                               '홈으로 돌아가기',
