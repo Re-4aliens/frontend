@@ -48,7 +48,21 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent,infookay: false, infocontent: '', title: '',),
+        appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            leading: IconButton(
+              icon: SvgPicture.asset(
+                'assets/icon/icon_back.svg',
+                color: Color(0xff4D4D4D),
+                width: 24,
+                height: MediaQuery.of(context).size.height * 0.029,),
+              onPressed: (){
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                    '/loading', (Route<dynamic> route) => false);
+              },
+            ),
+            ),
         extendBodyBehindAppBar: true,
         body: Stack(
           children: [
@@ -67,26 +81,6 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                   height: MediaQuery.of(context).size.height * 0.04,
                   width: double.infinity,
                 ),
-                /*
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: LinearPercentIndicator(
-                    alignment: MainAxisAlignment.center,
-                    animation: true,
-                    restartAnimation: true,
-                    lineHeight: 8,
-                    percent: 1,
-                    animationDuration: 8000,
-                    width: 200,
-                    progressColor: Color(0xff7898FF),
-                    barRadius: const Radius.circular(16),
-                    backgroundColor: Color(0xffDAE3FF),
-                  ),
-                ),
-
-                 */
                 TweenAnimationBuilder<Duration>(
                     duration: Duration(seconds: diff.inSeconds),
                     tween: Tween(
@@ -211,8 +205,11 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.07,
                 ),
+                Image(image: AssetImage("assets/illustration/loading_03.gif")),
+                /*
                 Stack(
                   children: [
+
                     Blob.animatedRandom(
                       size: isSmallScreen ? 140 : 170,
                       edgesCount: 6,
@@ -234,6 +231,8 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                     ),
                   ],
                 ),
+
+                 */
                 SizedBox(
                   height: isSmallScreen?15:40,
                 ),

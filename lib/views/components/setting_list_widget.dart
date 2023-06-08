@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 
 
-Widget buildSettingList(context, index, memberDetails) {
+Widget buildSettingList(context, index, screenArguments) {
   final double screenWidth = MediaQuery.of(context).size.width;
   final bool isSmallScreen = screenWidth <= 600;
   List settingList = [
@@ -39,7 +39,7 @@ Widget buildSettingList(context, index, memberDetails) {
 
   return ListTile(
     onTap: () {
-      Navigator.pushNamed(context, navigatorList.elementAt(index), arguments: memberDetails);
+      Navigator.pushNamed(context, navigatorList.elementAt(index), arguments: screenArguments);
     },
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

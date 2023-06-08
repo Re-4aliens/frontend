@@ -42,6 +42,13 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                         shape: BoxShape.circle),
                   child: SvgPicture.asset('assets/character/welcome.svg'),
                 ),
+                Container(
+                  child: SvgPicture.asset(
+                    'assets/character/welcome.svg',
+                    width: MediaQuery.of(context).size.width * 0.22,
+                    height: MediaQuery.of(context).size.height * 0.10,
+                  ),
+                ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.036),
                 Text(
                   '환영합니다!\n가입이 완료되었습니다',
@@ -55,14 +62,24 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                 ),
                 Expanded(child: SizedBox()),
                 Button(
-                  child: Text('매칭 신청하러 가기'),
+                  child: Text('로그인하러 가기'),
                   onPressed: () {
+                    //스택 비우고
+                    Navigator.of(context)
+                        .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+                    );
+                    //login페이지를 push
+                    Navigator.pushNamed(context, '/login');
+                    /*
                     Navigator.of(context)
                         .pushNamedAndRemoveUntil('/apply', (Route<dynamic> route) => false
                     );
+
+                     */
                   },
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                /*
                 Container(
                   width: double.maxFinite,
                   height: isSmallScreen?44:48,
@@ -82,6 +99,8 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                             borderRadius: BorderRadius.circular(40))),
                   ),
                 )
+
+                 */
               ],
             ),
           ),

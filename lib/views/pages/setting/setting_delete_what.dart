@@ -11,6 +11,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../mockdatas/mockdata_model.dart';
+import '../../../models/screenArgument.dart';
 import '../../components/appbar.dart';
 import '../../components/button.dart';
 
@@ -27,6 +28,10 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
+
+
+    var screenArguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
@@ -265,7 +270,7 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                 width: MediaQuery.of(context).size.width * 0.43,
                                 child: ElevatedButton(
                                   onPressed: (){
-                                    Navigator.pushNamed(context, '/setting/delete', arguments: memberDetails);
+                                    Navigator.pushNamed(context, '/setting/delete', arguments: screenArguments.memberDetails);
                                   },
                                   child: Text('탈퇴하기'),
                                     style: ElevatedButton.styleFrom(
