@@ -25,7 +25,7 @@ class _LoadingPageState extends State<LoadingPage> {
                     //받아오는 동안
                     return Container(
                         margin: EdgeInsets.only(left: 75),
-                        child: Image(image: AssetImage("assets/illustration/loading.gif")));
+                        child: Image(image: AssetImage("assets/illustration/loading_01.gif")));
                   }
                   else
                     //받아온 후
@@ -33,15 +33,10 @@ class _LoadingPageState extends State<LoadingPage> {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           '/main', (Route<dynamic> route) => false,
                           arguments: snapshot.data);
-                      /*
-                      Navigator.popAndPushNamed(context, '/main',
-                          arguments: _screenArguments);
-
-                       */
                     });
                     return Container(
                         margin: EdgeInsets.only(left: 75),
-                        child: Image(image: AssetImage("assets/illustration/loading.gif")));
+                        child: Image(image: AssetImage("assets/illustration/loading_01.gif")));
             })
 
       ),
