@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -28,6 +29,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  MemberDetails memberDetails = MemberDetails();
+
+ /* void updateMBTIValue(String selectedMBTI) {
+    setState(() {
+      memberDetails.mbti= selectedMBTI;
+    });
+  }*/
   @override
   File? _profileImage;
   final picker = ImagePicker();
@@ -1145,7 +1154,6 @@ class _HomePageState extends State<HomePage> {
     final storage = FlutterSecureStorage();
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isSmallScreen = screenWidth <= 600;
-
     File imageFile = File(memberDetails.profileImage);
 
     return Container(
@@ -1253,6 +1261,8 @@ class _HomePageState extends State<HomePage> {
                                                   onPressed: () {
                                                     getImage(
                                                         ImageSource.camera);
+
+                                                    //로딩 재생
                                                   },
                                                 ),
                                                 SimpleDialogOption(
@@ -1260,6 +1270,8 @@ class _HomePageState extends State<HomePage> {
                                                   onPressed: () {
                                                     getImage(
                                                         ImageSource.gallery);
+                                                    //로딩 재생
+
                                                   },
                                                 ),
                                               ],
@@ -1386,4 +1398,11 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+/*  void updateMBTIValue(String selectedMBTI) {
+    setState(() {
+      memberInfo[index] = selectedMBTI;
+    });
+  }*/
 }
+
