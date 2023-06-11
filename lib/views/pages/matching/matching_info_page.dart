@@ -108,7 +108,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                     child: Stack(
                                       children: [
                                         Text(
-                                          'd',
+                                          '${args.applicant?.member?.name}      ',
                                           //'${args.applicant['member']['name']}      '
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold, fontSize: isSmallScreen ? 18 : 20, color: Colors.white),
@@ -150,8 +150,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                               ),
                                             ),
                                             Text(
-                                              'd',
-                                              //'${args.applicant['member']['nationality']}',
+                                              '${args.applicant?.member?.nationality}',
                                               style: TextStyle(
                                                 fontSize: isSmallScreen ? 18 : 20,
                                                 color: Colors.white,
@@ -170,8 +169,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                 fontSize: isSmallScreen ? 12 : 14,
                                               ),
                                             ),
-                                            Text('d',
-//                                              '${args.applicant['member']['age']}세',
+                                            Text('${args.applicant?.member?.age}세',
                                               style: TextStyle(
                                                 fontSize: isSmallScreen ? 18 : 20,
                                                 color: Colors.white,
@@ -190,8 +188,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                 color: Colors.white,
                                               ),
                                             ),
-                                            Text('d',
-                                              //'${args.applicant['member']['mbti']}',
+                                            Text('${args.applicant?.member?.mbti}',
                                               style: TextStyle(
                                                 fontSize: isSmallScreen ? 18 : 20,
                                                 color: Colors.white,
@@ -272,10 +269,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       offset: const Offset(-5, -5),
                                     ),
                                   ]),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Stack(
                                 children: [
                                   Column(
                                     crossAxisAlignment:
@@ -292,8 +286,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       SizedBox(
                                         height: 2,
                                       ),
-                                      Text('d',
-                                        //'${args.applicant['preferLanguages']['firstPreferLanguage']}',
+                                      Text('${args.applicant?.preferLanguages?.firstPreferLanguage}',
                                         style: TextStyle(
                                           fontSize:isSmallScreen ? 18 : 20,
                                           fontWeight: FontWeight.bold,
@@ -302,11 +295,12 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       ),
                                     ],
                                   ),
-                                  Container(
-                                    height:  isSmallScreen ? 34 : 45,
-                                    width:  isSmallScreen ? 34 : 45,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffD9D9D9),
+                                  Positioned(
+                                    right: 0,
+                                    child: Container(
+                                      height:  isSmallScreen ? 34 : 45,
+                                      width:  isSmallScreen ? 34 : 45,
+                                      child: SvgPicture.asset('assets/character/yellow_puzzle.svg'),
                                     ),
                                   ),
                                 ],
@@ -347,10 +341,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       offset: const Offset(-5, -5),
                                     ),
                                   ]),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              child: Stack(
                                 children: [
                                   Column(
                                     crossAxisAlignment:
@@ -367,8 +358,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       SizedBox(
                                         height: 2,
                                       ),
-                                      Text('d',
-                                        //'${args.applicant['preferLanguages']['secondPreferLanguage']}',
+                                      Text('${args.applicant?.preferLanguages?.secondPreferLanguage}',
                                         style: TextStyle(
                                           fontSize: isSmallScreen ? 18 : 20,
                                           fontWeight: FontWeight.bold,
@@ -377,11 +367,12 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       ),
                                     ],
                                   ),
-                                  Container(
-                                    height: isSmallScreen ? 34 : 45,
-                                    width: isSmallScreen ? 34 : 45,
-                                    decoration: BoxDecoration(
-                                      color: Color(0xffD9D9D9),
+                                  Positioned(
+                                    right: 0,
+                                    child: Container(
+                                      height: isSmallScreen ? 34 : 45,
+                                      width: isSmallScreen ? 34 : 45,
+                                      child: SvgPicture.asset('assets/character/blue_puzzle.svg'),
                                     ),
                                   ),
                                 ],
