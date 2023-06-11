@@ -542,9 +542,10 @@ class APIs {
     jwtToken = json.decode(jwtToken!)['accessToken'];
 
     // MultipartFile로 변환
+
     var profileImage = await http.MultipartFile.fromPath(
       'profileImage',
-      profileImageFile.path,
+     profileImageFile.path,
     );
 
     // FormData 생성
