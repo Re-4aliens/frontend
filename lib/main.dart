@@ -54,10 +54,35 @@ import './views/pages/setting/setting_find_PW_page.dart';
 import './views/pages/chatting/chatting_page.dart';
 import './views/pages/splash_page.dart';
 
-import './providers/member_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_core/firebase_core.dart';
+//import 'firebase_options.dart';
 
 
-void main() {
+void main() async {
+/*
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // fcm 초기화 부분! => 초기화 이후 연결이 됐다면 현재 기기의 토큰값을 로그에 출력해줄거에요
+  await initializeDefault();
+  final fcmToken = await FirebaseMessaging.instance.getToken();
+  // fcm 토큰 출력
+  print(fcmToken);
+
+  // 포그라운드 핸들러 => 메시지가 왔을때 포그라운드에서 처리를 할 수 있는 코드에요. 테스트 먼저 해보시고 따로 함수로 빼서 설정하셔도 됩니다!
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
+    print('Received FCM message with data: ${message.data} at ${DateTime.now()}');
+    message.data.forEach((key, value) {
+      print('$key: $value');
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
+  });
+
+*/
+
   runApp(const MyApp());
   //Setting SysemUIOverlay
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -70,6 +95,13 @@ void main() {
 
 //Setting SystmeUIMode
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
+}
+
+Future<void> initializeDefault() async {
+  FirebaseApp app = await Firebase.initializeApp(
+    //options: DefaultFirebaseOptions.currentPlatform,
+  );
+  print('Initialized default app $app');
 }
 
 class MyApp extends StatelessWidget {
