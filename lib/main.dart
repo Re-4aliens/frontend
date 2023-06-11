@@ -63,13 +63,13 @@ void main() async {
 /*
   WidgetsFlutterBinding.ensureInitialized();
 
-  // fcm 초기화 부분! => 초기화 이후 연결이 됐다면 현재 기기의 토큰값을 로그에 출력해줄거에요
+  // fcm 초기화 부분
   await initializeDefault();
   final fcmToken = await FirebaseMessaging.instance.getToken();
   // fcm 토큰 출력
   print(fcmToken);
 
-  // 포그라운드 핸들러 => 메시지가 왔을때 포그라운드에서 처리를 할 수 있는 코드에요. 테스트 먼저 해보시고 따로 함수로 빼서 설정하셔도 됩니다!
+  // 포그라운드 핸들러
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
     print('Received FCM message with data: ${message.data} at ${DateTime.now()}');
