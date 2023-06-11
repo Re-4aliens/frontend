@@ -32,11 +32,7 @@ class _HomePageState extends State<HomePage> {
 
   MemberDetails memberDetails = MemberDetails();
 
- /* void updateMBTIValue(String selectedMBTI) {
-    setState(() {
-      memberDetails.mbti= selectedMBTI;
-    });
-  }*/
+
   @override
   File? _profileImage;
   final picker = ImagePicker();
@@ -1258,22 +1254,33 @@ class _HomePageState extends State<HomePage> {
                                                   child: Text(
                                                     '사진 찍기',
                                                   ),
-                                                  onPressed: () {
-                                                    getImage(
-                                                        ImageSource.camera);
+                                                  onPressed: () async{
+                                                    await getImage(ImageSource.camera);
+// 로딩 재생
+                                                    if (_profileImage != null && _profileImage?.path != null) {
+                                                      String? imagePath = _profileImage?.path!;
+                                                      if (await APIs.updateProfile(File(imagePath!))) {
+                                                    Navigator.of(context).pushNamedAndRemoveUntil('/loading', (Route<dynamic> route) => false);
+                                                    }
+                                                  }
 
                                                     //로딩 재생
                                                   },
                                                 ),
-                                                SimpleDialogOption(
-                                                  child: Text('사진첩에서 가져오기'),
-                                                  onPressed: () {
-                                                    getImage(
-                                                        ImageSource.gallery);
-                                                    //로딩 재생
+                                                SimpleDialogOption(child: Text('사진첩에서 가져오기'),
+                                                  onPressed: () async {
+                                                  await getImage(ImageSource.gallery);
+
+                                                  // 로딩 재생
+                                                  if (_profileImage != null && _profileImage?.path != null) {
+                                                    String? imagePath = _profileImage?.path!;
+                                                    if (await APIs.updateProfile(File(imagePath!))) {
+                                                      Navigator.of(context).pushNamedAndRemoveUntil('/loading', (Route<dynamic> route) => false);
+                                                    }
+                                                  }
 
                                                   },
-                                                ),
+                                            ),
                                               ],
                                             );
                                           });
