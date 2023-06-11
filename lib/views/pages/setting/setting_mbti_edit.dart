@@ -73,8 +73,8 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
                   child: Text('확인'),
                   onPressed: () async {
                     if(await APIs.updateMBTI(_selectedMBTI))
-
-                    Navigator.pop(context, _selectedMBTI);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/loading', (Route<dynamic> route) => false);
 
                   }),
             )

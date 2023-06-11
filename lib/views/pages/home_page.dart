@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -28,6 +29,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  MemberDetails memberDetails = MemberDetails();
+
+
   @override
   File? _profileImage;
   final picker = ImagePicker();
@@ -1250,18 +1255,33 @@ class _HomePageState extends State<HomePage> {
                                                   child: Text(
                                                     '사진 찍기',
                                                   ),
-                                                  onPressed: () {
-                                                    getImage(
-                                                        ImageSource.camera);
+                                                  onPressed: () async{
+                                                    await getImage(ImageSource.camera);
+// 로딩 재생
+                                                    if (_profileImage != null && _profileImage?.path != null) {
+                                                      String? imagePath = _profileImage?.path!;
+                                                      if (await APIs.updateProfile(File(imagePath!))) {
+                                                    Navigator.of(context).pushNamedAndRemoveUntil('/loading', (Route<dynamic> route) => false);
+                                                    }
+                                                  }
+
+                                                    //로딩 재생
                                                   },
                                                 ),
-                                                SimpleDialogOption(
-                                                  child: Text('사진첩에서 가져오기'),
-                                                  onPressed: () {
-                                                    getImage(
-                                                        ImageSource.gallery);
+                                                SimpleDialogOption(child: Text('사진첩에서 가져오기'),
+                                                  onPressed: () async {
+                                                  await getImage(ImageSource.gallery);
+
+                                                  // 로딩 재생
+                                                  if (_profileImage != null && _profileImage?.path != null) {
+                                                    String? imagePath = _profileImage?.path!;
+                                                    if (await APIs.updateProfile(File(imagePath!))) {
+                                                      Navigator.of(context).pushNamedAndRemoveUntil('/loading', (Route<dynamic> route) => false);
+                                                    }
+                                                  }
+
                                                   },
-                                                ),
+                                            ),
                                               ],
                                             );
                                           });
@@ -1386,4 +1406,11 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+/*  void updateMBTIValue(String selectedMBTI) {
+    setState(() {
+      memberInfo[index] = selectedMBTI;
+    });
+  }*/
 }
+

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'models/applicant_model.dart';
 import 'models/auth_model.dart';
+import 'dart:io';
+
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -105,8 +107,8 @@ class APIs {
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
       var file = await http.MultipartFile.fromPath(
-        'profileImage',
-        member.profileImage!
+          'profileImage',
+          member.profileImage!
       );
       request.files.add(file);
     }
@@ -118,7 +120,7 @@ class APIs {
     if (response.statusCode == 200) {
       print(await response.stream.bytesToString());
       return true;
-    // fail
+      // fail
     } else {
       print(response.reasonPhrase);
       return false;
@@ -255,7 +257,7 @@ class APIs {
     jwtToken = json.decode(jwtToken!)['accessToken'];
 
     var response = await http.put(
-      Uri.parse(_url),
+        Uri.parse(_url),
         headers: {
           'Authorization': 'Bearer $jwtToken',
           'Content-Type': 'application/json'
@@ -297,12 +299,12 @@ class APIs {
 
 
     var response = await http.post(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-        'RefreshToken': '$refreshToken',
-      },
+        Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+          'RefreshToken': '$refreshToken',
+        },
         body: jsonEncode({
           "password" : password,
         })
@@ -415,34 +417,34 @@ class APIs {
 
   //상대 정보 요청
   static Future<List<Partner>> getApplicantPartners() async {
-      const url = 'http://13.125.205.59:8080/api/v1/matching/partners';
+    const url = 'http://13.125.205.59:8080/api/v1/matching/partners';
 
-      //토큰 읽어오기
-      var jwtToken = await storage.read(key: 'token');
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
 
-      //accessToken만 보내기
-      jwtToken = json.decode(jwtToken!)['accessToken'];
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['accessToken'];
 
-      var response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json'
-        },
-      );
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
+    );
 
-      //success
-      if (response.statusCode == 200) {
-        print(json.decode(utf8.decode(response.bodyBytes)));
-        List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data']['partners'];
-        return body.map((dynamic item) => Partner.fromJson(item)).toList();
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data']['partners'];
+      return body.map((dynamic item) => Partner.fromJson(item)).toList();
 
-        //fail
-      } else {
-        //오류 생기면 바디 확인
-        print(json.decode(utf8.decode(response.bodyBytes))['message']);
-        throw Exception('요청 오류');
-      }
+      //fail
+    } else {
+      //오류 생기면 바디 확인
+      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      throw Exception('요청 오류');
+    }
   }
 
 
@@ -469,9 +471,7 @@ class APIs {
 
   /*
 
-
   mbti 수정
-
 
    */
   static Future<bool> updateMBTI(String mbti) async {
@@ -507,6 +507,47 @@ class APIs {
     }
   }
 
+
+
+/*
+
+프로필 수정
+
+ */
+
+  static Future<bool> updateProfile(File profileImageFile) async {
+    var url = 'http://13.125.205.59:8080/api/v1/member/profile-image';
+
+    // 토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    // 액세스 토큰만 보내기
+    jwtToken = json.decode(jwtToken!)['accessToken'];
+
+    // MultipartFile로 변환
+
+    var profileImage = await http.MultipartFile.fromPath(
+      'profileImage',
+     profileImageFile.path,
+    );
+
+    // FormData 생성
+    var formData = http.MultipartRequest('PUT', Uri.parse(url));
+    formData.headers['Authorization'] = 'Bearer $jwtToken';
+    formData.files.add(profileImage);
+
+    // 요청 전송
+    var response = await formData.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      return true;
+    } else {
+      print(response.reasonPhrase);
+      return false;
+    }
+  }
+  
 
   /*
 
@@ -544,6 +585,7 @@ class APIs {
   }
 
 
+
   /*
 
   회원 정보 삭제
@@ -567,4 +609,4 @@ class APIs {
       print(response.body);
     }
   }
-}
+
