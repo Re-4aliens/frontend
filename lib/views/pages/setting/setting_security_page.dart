@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aliens/models/screenArgument.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +24,8 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
-    var memberDetails = ModalRoute.of(context)!.settings.arguments;
+    var screenArguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(appBar: AppBar(), backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '보안관리',),
@@ -40,7 +42,7 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
             ),),
             ListTile(
               onTap: (){
-                Navigator.pushNamed(context, '/setting/edit/find', arguments: memberDetails);
+                Navigator.pushNamed(context, '/setting/edit/find', arguments: screenArguments.memberDetails);
               },
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -66,7 +68,7 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
                 ),),
             ListTile(
               onTap: (){
-                Navigator.pushNamed(context, '/setting/delete/what', arguments: memberDetails);
+                Navigator.pushNamed(context, '/setting/delete/what', arguments: screenArguments);
               },
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

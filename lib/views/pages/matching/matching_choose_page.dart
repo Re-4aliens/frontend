@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../apis.dart';
 import '../../../models/screenArgument.dart';
 
 class MatchingChoosePage extends StatefulWidget {
@@ -128,15 +129,17 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                             width: double.maxFinite,
                             height: 50,
                             child: ElevatedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 //success
                                 if (selectedIndex[0] != -1 &&
                                     selectedIndex[1] != -1) {
                                   //신청 요청
-                                  //args.applicant['preferLanguages']['firstPreferLanguage'] = nationlist[selectedIndex[0]][0];
-                                  //args.applicant['preferLanguages']['secondPreferLanguage'] = nationlist[selectedIndex[1]][0];
-                                  //페이지 이동
-                                  Navigator.pushNamed(context, '/apply/done', arguments: args);
+                                  if(await APIs.applicantMatching(selectedIndex[0], selectedIndex[1])){
+                                    //페이지 이동
+                                    Navigator.pushNamed(context, '/apply/done', arguments: args);
+                                  }else{
+                                    print('요청 실패');
+                                  };
                                 } else {
                                   //fail
                                 };

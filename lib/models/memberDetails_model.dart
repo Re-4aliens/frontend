@@ -1,4 +1,5 @@
 class MemberDetails {
+  int? memberId;
   String? email;
   String? mbti;
   String? gender;
@@ -10,6 +11,7 @@ class MemberDetails {
 
   MemberDetails(
       {
+        this.memberId,
         this.email,
         this.mbti,
         this.gender,
@@ -20,6 +22,7 @@ class MemberDetails {
         this.age,});
 
   factory MemberDetails.fromJson(Map<String, dynamic> json) => MemberDetails(
+    memberId: json['memberId'],
     email: json['email'],
     mbti: json['mbti'],
     gender: json['gender'],

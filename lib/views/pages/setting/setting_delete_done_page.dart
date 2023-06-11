@@ -20,7 +20,6 @@ class SettingDeleteDonePage extends StatefulWidget {
 
 class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
   @override
-  @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
@@ -28,10 +27,6 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
     return Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(), title: '',infookay: false, infocontent: '',
-        ),
         body: Padding(
           padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.12),
           child: Column(

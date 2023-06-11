@@ -105,7 +105,6 @@ class APIs {
     request.fields['name'] = member.name!;
 
     // FormData 파일 필드 추가
-
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
       var file = await http.MultipartFile.fromPath(
           'profileImage',
@@ -127,6 +126,7 @@ class APIs {
       return false;
     }
   }
+
   /*
 
   로그인
@@ -447,18 +447,6 @@ class APIs {
     }
   }
 
-/*
-  Future<Map<String, dynamic>> getData() async {
-    var memberDetails = Provider.of<MemberProvider>(context, listen: false);
-    status = await applicantStatus();
-    if(status['status'] == 'MATCHED'){
-      applicant = await applicantInfo();
-      partners = await applicantPartners();
-    }
-    return memberDetails.memberInfo();
-  }
-
- */
 
   static Future<ScreenArguments> getMatchingData() async {
 
@@ -472,14 +460,8 @@ class APIs {
     _status = await APIs.getApplicantStatus();
     _memberDetails = MemberDetails.fromJson(await APIs.getMemberDetails());
 
-    if(_status == 'MATCHED') {
-      _applicant = Applicant.fromJson(await APIs.getApplicantInfo());
-      _partners = await APIs.getApplicantPartners();
-    }
-    else{
-      _applicant = null;
-      _partners = null;
-    }
+    _applicant = _status != 'NOT_APPLIED' ? Applicant.fromJson(await APIs.getApplicantInfo()) : null;
+    _partners = _status == 'MATCHED' ? await APIs.getApplicantPartners() : null;
 
     _screenArguments = new ScreenArguments(_memberDetails, _status, _applicant, _partners);
 
@@ -526,6 +508,7 @@ class APIs {
   }
 
 
+
 /*
 
 프로필 수정
@@ -564,5 +547,66 @@ class APIs {
       return false;
     }
   }
+  
 
-}
+  /*
+
+  매칭 신청
+
+   */
+  static Future<bool> applicantMatching(firstPreferLanguage, secondPreferLanguage) async {
+    var _url =
+        'http://13.125.205.59:8080/api/v1/matching/applicant'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['accessToken'];
+
+    var response = await http.post(Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "firstPreferLanguage": firstPreferLanguage,
+          "secondPreferLanguage": secondPreferLanguage,
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
+
+
+
+  /*
+
+  회원 정보 삭제
+  http://13.125.205.5ㅐ9:8080/api/v1/member/906
+   */
+  static Future<void> deleteInfo(memberId) async {
+
+    var url =
+        'http://13.125.205.59:8080/api/v1/member/${memberId}'; //mocksever
+
+
+    var response = await http.delete(Uri.parse(url),
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+
+      //fail
+    } else {
+      print(response.body);
+    }
+  }
+
