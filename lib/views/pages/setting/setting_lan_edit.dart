@@ -152,6 +152,8 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: Button(
+                //수정
+                  isEnabled: true,
                   child: Text('확인'),
                   onPressed: (){
                     Navigator.pop(context);

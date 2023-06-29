@@ -258,6 +258,8 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                         padding: const EdgeInsets.only(right: 24, left: 24),
                         child: Positioned(
                           child: Button(
+                            //수정
+                            isEnabled: true,
                             child: Text('나의 신청 확인하기'),
                             onPressed: () {
                               Navigator.pushNamed(context, '/info/my',

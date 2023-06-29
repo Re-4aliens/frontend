@@ -24,8 +24,7 @@ class _LoadingPageState extends State<LoadingPage> {
                   if (snapshot.hasData == false) {
                     //받아오는 동안
                     return Container(
-                        margin: EdgeInsets.only(left: 75),
-                        child: Image(image: AssetImage("assets/illustration/loading_01.gif")));
+                        margin: EdgeInsets.only(left: 75));
                   }
                   else
                     //받아온 후

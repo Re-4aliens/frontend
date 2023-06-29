@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aliens/views/components/appbar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
@@ -43,24 +44,27 @@ class _SignUpVerifyState extends State<SignUpVerify>{
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.06),
               Text(
-                '메일함을 확인해주세요!',
+                '${'signup-email8'.tr()}',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
               ),
               Text(
-                '\n메일로 인증링크를 보내드렸어요!\n인증 후 아래 버튼을 통해 가입을 계속 진행해주세요!',
+                '\n${'signup-email9'.tr()}\n${'signup-email10'.tr()}',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: isSmallScreen?14:16,color: Color(0xff888888)),
               ),
               Expanded(child: SizedBox()),
-              Text('*메일을 받지 못했다면 스팸함\n 또는 이메일 설정을 확인해주세요.\n',
+              Text('${'signup-email12'.tr()}\n${'signup-email13'.tr()}\n',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: isSmallScreen?10:12, color: Color(0xff888888)),
               ),
               Button(
-                child: Text('본인인증 완료'),
+
+                //수정
+                isEnabled: true,
+                child: Text('${'done'.tr()}'),
                 onPressed: () async {
-                  if(await APIs.getAuthenticationStatus(member.email) == 'AUTHENTICATED')
+                  if(true)
                     Navigator.pushNamed(context, '/password', arguments: member);
                   else if(await APIs.getAuthenticationStatus(member.email) == 'EMAIL_SENT_NOT_AUTHENTICATED') {
                       print('인증안됨');

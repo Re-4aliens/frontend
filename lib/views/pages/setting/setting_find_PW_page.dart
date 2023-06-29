@@ -74,6 +74,8 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
+                      //수정
+                        isEnabled: true,
                         child: Text('인증완료'),
                         onPressed: () async {
                           //if 지금 비밀번호랑 입력한 거랑 같으면

@@ -6,43 +6,61 @@ import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class matchingChattingWidget extends StatelessWidget{
+import '../../apis.dart';
+
+class matchingChattingWidget extends StatefulWidget{
+
   const matchingChattingWidget({super.key, required this.screenArguments});
 
   final ScreenArguments screenArguments;
 
   @override
+  State<StatefulWidget> createState() => _matchingChattingWidgetState();
+
+}
+class _matchingChattingWidgetState extends State<matchingChattingWidget>{
+
+
+
+  @override
   Widget build(BuildContext context) {
-    //String _file = screenArguments.partners?[3].profileImage as String;
-    //var _path = screenArguments.partners?[3].profileImage as Path;
-    var _imageFile = File('${screenArguments.partners?[3].profileImage}');
+    /*
+    return FutureBuilder(
+      future: APIs.getChatroomData(),
+        builder: (BuildContext context, AsyncSnapshot snapshot){
+          if (snapshot.hasData == false) {
+            //받아오는 동안
+            return Container(
+                margin: EdgeInsets.only(left: 75),
+                child: Image(image: AssetImage("assets/illustration/loading_01.gif")));
+          }
+          else
+          return Container(
+            decoration: BoxDecoration(
+              color: Color(0xffF5F7FF),
+            ),
+            child: ListView.builder(
+                itemCount: widget.screenArguments.partners?.length,
+                itemBuilder: (context, index){
+                  return chatList(context, widget.screenArguments.partners?[index], '마지막 메세지', '22:20pm');
+                }),
+          );
+        }
+    );
 
-
+     */
     return Container(
       decoration: BoxDecoration(
         color: Color(0xffF5F7FF),
       ),
-      child: ListView(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 20,),
-              Image.network('${screenArguments.partners?[3].profileImage}'),
-              Image.asset('${screenArguments.partners?[3].profileImage}'),
-              Image.file(_imageFile),
-              //chatList(context, screenArguments.partners['partners'][0]['memberId'], '마지막 메세지', '22:20pm'),
-              //chatList(context, screenArguments.partners['partners'][1]['memberId'], '안녕하세요.', '22:20pm'),
-              //chatList(context, screenArguments.partners['partners'][2]['memberId'], 'Hello! what is your major?', '22:20pm'),
-              //chatList(context, screenArguments.partners['partners'][3]['memberId'], '어떤 과목을 전공하고 계신가요?', '22:20pm'),
-            ],
-          ),
-        ],
-      ),
+      child: ListView.builder(
+          itemCount: widget.screenArguments.partners?.length,
+          itemBuilder: (context, index){
+            return chatList(context, widget.screenArguments.partners?[index], '마지막 메세지', '22:20pm');
+          }),
     );
   }
-/*
-  Widget chatList(context, memberId, lastMassage, time){
+  Widget chatList(context, _partner, lastMassage, time){
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: MaterialButton(
@@ -51,11 +69,9 @@ class matchingChattingWidget extends StatelessWidget{
         padding: EdgeInsets.symmetric(horizontal: 12),
         elevation: 0.0,
         onPressed: () {
-          //print(partner);
-          //Navigator.pushNamed(context, '/chatting', arguments: screenArguments);
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ChattingPage(screenArguments: screenArguments, memberIndex: memberId - 1,)),
+            MaterialPageRoute(builder: (context) => ChattingPage(applicant: widget.screenArguments.applicant, partner: _partner,)),
           );
         },
         shape: RoundedRectangleBorder(
@@ -86,7 +102,7 @@ class matchingChattingWidget extends StatelessWidget{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(screenArguments.partners['partners'][memberId - 1]['name'],
+                      Text(_partner.name,
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -113,6 +129,6 @@ class matchingChattingWidget extends StatelessWidget{
     );
   }
 
- */
+
 }
 

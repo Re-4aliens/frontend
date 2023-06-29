@@ -151,6 +151,8 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                     padding: const EdgeInsets.only(right: 25,left: 25),
                     child: Positioned(
                       child: Button(
+                        //수정
+                        isEnabled: true,
                         child: Text('매칭 시작하기'),
                         onPressed: (){
                           Navigator.pushNamed(context,'/choose', arguments: args);

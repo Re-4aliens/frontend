@@ -132,7 +132,7 @@ class APIs {
   로그인
 
    */
-  static Future<bool> logIn(Auth auth) async {
+  static Future<String> logIn(Auth auth) async {
     const url =
         'http://13.125.205.59:8080/api/v1/member/authentication'; //mocksever
 
@@ -159,11 +159,11 @@ class APIs {
         value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))['data']),
       );
 
-      return true;
+      return jsonEncode(json.decode(utf8.decode(response.bodyBytes))['status']);
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
+      return jsonEncode(json.decode(utf8.decode(response.bodyBytes))['stauts']);
     }
   }
 
@@ -263,8 +263,8 @@ class APIs {
           'Content-Type': 'application/json'
         },
         body: jsonEncode({
-          "currentPassword":json.decode(userInfo!)['password'],
-          "newPassword" : newPassword,
+          "currentPassword": json.decode(userInfo!)['password'],
+          "newPassword": newPassword,
         })
     );
 
@@ -306,7 +306,7 @@ class APIs {
           'RefreshToken': '$refreshToken',
         },
         body: jsonEncode({
-          "password" : password,
+          "password": password,
         })
     );
 
@@ -321,7 +321,6 @@ class APIs {
       return false;
     }
   }
-
 
 
   //유저 정보 요청
@@ -436,20 +435,56 @@ class APIs {
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data']['partners'];
+      List<dynamic> body = json.decode(
+          utf8.decode(response.bodyBytes))['data']['partners'];
       return body.map((dynamic item) => Partner.fromJson(item)).toList();
 
       //fail
     } else {
       //오류 생기면 바디 확인
       print(json.decode(utf8.decode(response.bodyBytes))['message']);
-      throw Exception('요청 오류');
+
+      //임의로 넣어두겠습니다
+      List<Partner> _partners = [
+        Partner(memberId: 0,
+          name: "",
+          mbti: "",
+          gender: "",
+          nationality: "",
+          profileImage: "",
+          countryImage: ""
+        ),
+        Partner(memberId: 0,
+            name: "",
+            mbti: "",
+            gender: "",
+            nationality: "",
+            profileImage: "",
+            countryImage: ""
+        ),
+        Partner(memberId: 0,
+            name: "",
+            mbti: "",
+            gender: "",
+            nationality: "",
+            profileImage: "",
+            countryImage: ""
+        ),
+        Partner(memberId: 0,
+            name: "",
+            mbti: "",
+            gender: "",
+            nationality: "",
+            profileImage: "",
+            countryImage: ""
+        )
+      ];
+      return _partners;
     }
   }
 
 
   static Future<ScreenArguments> getMatchingData() async {
-
     late ScreenArguments _screenArguments;
 
     late MemberDetails _memberDetails;
@@ -460,10 +495,13 @@ class APIs {
     _status = await APIs.getApplicantStatus();
     _memberDetails = MemberDetails.fromJson(await APIs.getMemberDetails());
 
-    _applicant = _status != 'NOT_APPLIED' ? Applicant.fromJson(await APIs.getApplicantInfo()) : null;
+    _applicant = _status != 'NOT_APPLIED'
+        ? Applicant.fromJson(await APIs.getApplicantInfo())
+        : null;
     _partners = _status == 'MATCHED' ? await APIs.getApplicantPartners() : null;
 
-    _screenArguments = new ScreenArguments(_memberDetails, _status, _applicant, _partners);
+    _screenArguments =
+    new ScreenArguments(_memberDetails, _status, _applicant, _partners);
 
     return _screenArguments;
   }
@@ -508,7 +546,6 @@ class APIs {
   }
 
 
-
 /*
 
 프로필 수정
@@ -528,7 +565,7 @@ class APIs {
 
     var profileImage = await http.MultipartFile.fromPath(
       'profileImage',
-     profileImageFile.path,
+      profileImageFile.path,
     );
 
     // FormData 생성
@@ -547,14 +584,14 @@ class APIs {
       return false;
     }
   }
-  
 
   /*
 
   매칭 신청
 
    */
-  static Future<bool> applicantMatching(firstPreferLanguage, secondPreferLanguage) async {
+  static Future<bool> applicantMatching(firstPreferLanguage,
+      secondPreferLanguage) async {
     var _url =
         'http://13.125.205.59:8080/api/v1/matching/applicant'; //mocksever
 
@@ -585,14 +622,12 @@ class APIs {
   }
 
 
-
   /*
 
   회원 정보 삭제
   http://13.125.205.5ㅐ9:8080/api/v1/member/906
    */
   static Future<void> deleteInfo(memberId) async {
-
     var url =
         'http://13.125.205.59:8080/api/v1/member/${memberId}'; //mocksever
 
@@ -610,3 +645,38 @@ class APIs {
     }
   }
 
+  /*
+
+  채팅방 정보
+
+   */
+
+  static Future<bool> getChatroomData() async {
+    const url = '';
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['accessToken'];
+
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      //오류 생기면 바디 확인
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
+
+}

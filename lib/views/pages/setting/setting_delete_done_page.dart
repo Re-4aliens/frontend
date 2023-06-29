@@ -75,6 +75,8 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                   child: Container(
                     alignment: Alignment.bottomCenter,
                     child: Button(
+                      //수정
+                        isEnabled: true,
                         child: Text('홈으로 돌아가기'),
                         onPressed: () {
                           Navigator.of(context)

@@ -95,6 +95,8 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
+                      //수정
+                        isEnabled: true,
                         child: Text('비밀번호 변경하기'),
                         onPressed: () async {
 
