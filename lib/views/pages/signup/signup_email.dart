@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:aliens/apis.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:aliens/views/pages/signup/signup_password.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -53,14 +54,14 @@ class _SignUpEmailState extends State<SignUpEmail> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '본인 인증을 위해\n이메일을 입력해주세요',
+              '${'signup-email1'.tr()}\n${'signup-email2'.tr()}',
               style: TextStyle(
                   fontSize: isSmallScreen ? 22 : 24,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.013),
             Text(
-              '작성하신 메일로 보내드린 코드를 통해 인증이 진행됩니다.',
+              '${'signup-email3'.tr()}\n${'signup-email4'.tr()}',
               style: TextStyle(
                   fontSize: isSmallScreen ? 12 : 14, color: Color(0xff888888)),
             ),
@@ -79,7 +80,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                         controller: _EmailController,
                         decoration: new InputDecoration(
                           border: InputBorder.none,
-                          hintText: '이메일 주소를 입력해주세요',
+                          hintText: '${'signup-email5'.tr()}',
                           hintStyle: TextStyle(
                             fontSize: isSmallScreen ? 14 : 16,
                             color: Color(0xffD9D9D9),
@@ -96,7 +97,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(40))),
                         child: Text(
-                          '중복확인',
+                          '${'signup-email6'.tr()}',
                           style: TextStyle(
                               fontSize: isSmallScreen ? 12 : 14,
                               color: _isButtonEnabled
@@ -135,7 +136,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                       actions: <Widget>[
                                         CupertinoDialogAction(
                                           child: Text(
-                                            '확인',
+                                            '${'confirm'.tr()}',
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize:
@@ -182,7 +183,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                       actions: <Widget>[
                                         CupertinoDialogAction(
                                           child: Text(
-                                            '취소',
+                                            '${'cancel'.tr()}',
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize:
@@ -194,7 +195,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                         ),
                                         CupertinoDialogAction(
                                             child: Text(
-                                              '계속하기',
+                                              '${'next'.tr()}',
                                               style: TextStyle(
                                                   fontSize:
                                                       isSmallScreen ? 12 : 14,
@@ -226,7 +227,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
               height: 7,
             ),
             _isButtonEnabled
-                ? Text("*알맞은 이메일 주소입니다:)")
+                ? Text('${'signup-email11'.tr()}')
                 : SizedBox(
                     height: 0,
                   ),
@@ -246,13 +247,40 @@ class _SignUpEmailState extends State<SignUpEmail> {
                             : Color(0xffEBEBEB), // 여기 색 넣으면됩니다
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40))),
-                    child: Text('인증 요청'),
+                    child: Text('${'signup-email7'.tr()}'),
                     onPressed: _isVerified
                         ? () async {
                             member.email = _EmailController!.text;
                             print(member.toJson());
-                            await APIs.verifyEmail(member.email);
+                            //await APIs.verifyEmail(member.email);
                             Navigator.pushNamed(context, '/verify', arguments: member);
+                            /*
+                            showDialog(
+                                context: context,
+                                builder: (_) => FutureBuilder(
+                                    future: APIs.verifyEmail(member.email),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot snapshot) {
+                                      if (snapshot.hasData == false) {
+                                        //받아오는 동안
+                                        return Container(
+                                            margin: EdgeInsets.only(left: 75),
+                                            child: Image(
+                                                image: AssetImage(
+                                                    "assets/illustration/loading_01.gif")));
+                                      } else
+                                        //받아온 후
+                                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                          Navigator.pushNamed(context, '/verify', arguments: member);
+                                        });
+                                      print(member.toJson());
+                                      return Container(
+                                          margin: EdgeInsets.only(left: 75),
+                                          child: Image(
+                                              image: AssetImage(
+                                                  "assets/illustration/loading_01.gif")));
+                                    }));
+                             */
                           }
                         : null))
           ],
@@ -265,7 +293,8 @@ class _SignUpEmailState extends State<SignUpEmail> {
     if (value.isEmpty) {
       print('이메일 주소를 입력해주세요');
     } else {
-      String pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      String pattern =
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
       RegExp regExp = new RegExp(pattern);
       if (!regExp.hasMatch(value)) {
         print('잘못된 이메일 형식입니다');

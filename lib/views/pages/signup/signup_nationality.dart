@@ -1,5 +1,8 @@
 import 'dart:convert';
-import 'package:country_picker/country_picker.dart';
+import 'package:dash_flags/dash_flags.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -9,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../../models/countries.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 
@@ -25,6 +29,8 @@ class _SignUpNationalityState extends State<SignUpNationality> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _NationalityController = new TextEditingController();
   var _selectedNationality = '';
+  String? tempPickedCountry = "Afghanistan";
+  bool _isButtonEnabled = false;
 
   Widget build(BuildContext context) {
     dynamic member = ModalRoute.of(context)!.settings.arguments;
@@ -49,151 +55,136 @@ class _SignUpNationalityState extends State<SignUpNationality> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '국적을 선택해주세요',
+              'signup-nationality'.tr(),
               style: TextStyle(
                   fontSize: isSmallScreen?22:24,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '국적',
-                    style: TextStyle(
-                      fontSize:isSmallScreen?14:16,
-                    ),
-                  ),
-                  InkWell(
-                    key: _formKey,
-                    onTap: (){
-
-                    },
-                    child: Row(
+            Form(
+                key: _formKey,
+                child: GestureDetector(
+                  onTap: (){
+                    HapticFeedback.mediumImpact();
+                    _selectCountry();
+                  },
+                  child: Column(
                       children: [
-                        Text(
-                          _selectedNationality,
-                          style: TextStyle(
-                            fontSize: isSmallScreen?18:20, fontWeight: FontWeight.bold
+                        TextFormField(
+                          decoration: new InputDecoration(
+                              hintText: 'nationality'.tr(),
+                              suffixIcon: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(alignment: Alignment.centerRight, width: 180, child: Text("${_selectedNationality}", style: TextStyle(fontSize: isSmallScreen? 16:20, fontWeight: FontWeight.bold),)),
+                                  IconButton(
+                                    icon: SvgPicture.asset(
+                                      'assets/icon/icon_dropdown.svg',
+                                      width: MediaQuery.of(context).size.width * 0.037,
+                                      height: MediaQuery.of(context).size.height * 0.011,
+                                    ), onPressed: () {},
+                                  ),
+                                ],
+                              ),
+                              hintStyle: TextStyle(fontSize: isSmallScreen?14:16, color: Colors.black)
                           ),
-                        ),
-                        IconButton(
-                          icon: SvgPicture.asset(
-                            'assets/icon/icon_dropdown.svg',
-                            width:
-                            MediaQuery.of(context).size.width * 0.037,
-                            height:
-                            MediaQuery.of(context).size.height * 0.011,
-                          ),
-                          onPressed: () {
-                            showCountryPicker(
-                                context: context,
-                                showPhoneCode: false,
-                                onSelect: (Country country){
-                                  print('Select country: ${country.displayName}');
-                                  setState(() {
-                                    var countryName = country.displayName.toString();
-                                    countryName = countryName.substring(0, countryName.indexOf(' ('));
-                                    _selectedNationality = countryName;
-                                  });
-                                });
-                          },
+                          //validator : (value) => value!.isEmpty? "Please enter some text" : null,
+                          enabled: false,
                         )
-                      ],
-                    ),
-
-                  )
-
-                ],
-              ),
+                      ]
+                  ),
+                )
             ),
-
-            /*
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      '국적',
-                      style: TextStyle(
-                        fontSize:isSmallScreen?14:16,
-                      ),
-                    ),
-                    ButtonTheme(
-                      alignedDropdown: true,
-                      child: DropdownButton(
-                          underline: SizedBox.shrink(),
-                          icon: SvgPicture.asset(
-                            'assets/icon/icon_dropdown.svg',
-                            width:
-                            MediaQuery.of(context).size.width * 0.037,
-                            height:
-                            MediaQuery.of(context).size.height * 0.011,
-                          ),
-                          hint: Text('국적'),
-                          items: country.map((value) {
-                            return DropdownMenuItem(
-                                child: Text(
-                                  value,
-                                  style: TextStyle(
-                                      fontSize: MediaQuery.of(context).size.height *
-                                          0.032,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                value: value);
-                          }).toList(),
-                          value: _selectedNationality,
-                          onChanged: (value) {
-                            print(value);
-                            setState(() {
-                              _selectedNationality = value!.toString();
-                            });
-                          }),
-                    ),
-                  ],
-                ),
-              ),
-            ),*/
             Divider(
               height: 0,
               thickness: 1,
             ),
             Expanded(child: SizedBox()),
             Button(
-                child: Text('확인'),
+                isEnabled: _isButtonEnabled,
+                child: Text('confirm'.tr(), style: TextStyle( color: _isButtonEnabled? Colors.white : Color(0xff888888))),
                 onPressed: () {
-                  member.nationality = 1;
-                  print(member.toJson());
-                  Navigator.pushNamed(context, '/mbti', arguments:member);
-                  /*if (_selectedNationality != '') {
-                    member.nationality = _selectedNationality;
-                    *//*var nationality = snapshot.data!
-                        .toList()
-                        .indexOf(_selectedNationality) +
-                        1;
-                    member.nationality = nationality.toString();*//*
-                    print(member.toJson());
-                    Navigator.pushNamed(context, '/mbti',
-                        arguments: member);
-                  }*/
-                })
+                  if(_isButtonEnabled){
+                      member.nationality = 1;
+                      //member.nationality = _selectedNationality;
+                      print(member.toJson());
+                      Navigator.pushNamed(context, '/mbti', arguments: member);
+                    }
+                  })
           ],
         ),
       )
-      /*FutureBuilder(
-          future: getNationList(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData == false)
-              return Container();
-            else if (snapshot.hasError) {
-              return Container();
-            } else {
-              return ;
-            }
-          }),*/
     );
+  }
+  _selectCountry() async{
+    String? pickedCountry = await showModalBottomSheet<String>(
+      context: context,
+      builder:  (context){
+        return Container(
+            child: Column(
+              children: [
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CupertinoButton(
+                        child: Text('cancel'.tr()),
+                        onPressed: (){
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      CupertinoButton(
+                        child: Text('done'.tr()),
+                        onPressed: (){
+                          Navigator.of(context).pop(tempPickedCountry);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(
+                  height: 0,
+                  thickness: 1,
+                ),
+                Expanded(
+                    child: CupertinoPicker(
+                      magnification: 1.22,
+                      squeeze: 1.2,
+                      itemExtent: 30,
+                      onSelectedItemChanged: (int selectedItem) {
+                        setState(() {
+                          tempPickedCountry = countries[selectedItem]['name'];
+                        });
+                      },
+                      children:
+                      List<Widget>.generate(countries.length, (int index) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(flex: 1, child: Container(
+                              alignment: Alignment.center,
+                              width: 30,
+                              child: CountryFlag(
+                                country: Country.fromCode('${countries[index]['code']}'),
+                                height: 20,
+                              ),
+                            ),),
+                            Expanded(flex: 1, child: Text('${countries[index]['name']}', overflow: TextOverflow.ellipsis, softWrap: true,)),
+                          ],
+                        );
+                      }),
+                    )
+                ),
+              ],
+            )
+        );
+      },
+    );
+    if(pickedCountry != null && pickedCountry != _selectedNationality){
+      setState((){
+        _selectedNationality = pickedCountry;
+        _isButtonEnabled = true;
+      });
+    }
   }
 }

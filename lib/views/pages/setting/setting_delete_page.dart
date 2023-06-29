@@ -57,6 +57,8 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
               _passwordCheck(memberDetails),
               Expanded(child: SizedBox()),
               Button(
+                //수정
+                  isEnabled: true,
                   child: Text('탈퇴하기'),
                   onPressed: () async {
                     var userInfo = await storage.read(key: 'auth');

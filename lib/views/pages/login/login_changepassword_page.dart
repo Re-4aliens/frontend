@@ -52,6 +52,8 @@ class _LoginChangeMailState extends State<LoginChangeMail> {
                 ),
                 Expanded(child: SizedBox()),
                 Button(
+                  //수정
+                  isEnabled: true,
                   child: Text('비밀번호 변경하기'),
                   onPressed: () {
                     //스택 비우고

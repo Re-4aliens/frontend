@@ -19,7 +19,7 @@ class MessageBuble extends StatefulWidget {
 class _MessageBubleState extends State<MessageBuble> {
   @override
   Widget build(BuildContext context) {
-    return widget.message.messageCategory == 'VS_GAME_MESSAGE' ? _vsGameBubble() : widget.message.senderId == widget.applicant['email'] ? _myBubble() : _partnerBubble();
+    return widget.message.messageCategory == 'VS_GAME_MESSAGE' ? _vsGameBubble() : widget.message.senderId == widget.applicant.member.name ? _myBubble() : _partnerBubble();
   }
 
   Widget _partnerBubble() {

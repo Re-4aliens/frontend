@@ -67,6 +67,8 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                 child: Container(
                     alignment: Alignment.bottomCenter,
                     child: Button(
+                      //수정
+                        isEnabled: true,
                         child: Text('홈으로 돌아가기'),
                         onPressed: () {
                           //로그아웃
