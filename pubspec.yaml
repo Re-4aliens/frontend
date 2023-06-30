@@ -49,7 +49,6 @@ dependencies:
   cupertino_icons: ^1.0.2
   async: ^2.10.0
 
-# <<<<<<< HEAD
   # redis: ^3.1.0
   country_picker: ^2.0.20
   web_socket_channel: ^2.3.0
@@ -57,8 +56,10 @@ dependencies:
   flutter_native_splash: ^2.2.19
   transition: ^2.0.2
   flutter_inset_box_shadow: ^1.0.8
+  easy_localization: ^3.0.0
+  dash_flags: ^0.1.1
+  flutter_local_notifications: ^14.1.1
 # =======
-# >>>>>>> parent of dfdf35b (feat: 채팅 페이지 추가)
 
 
 dev_dependencies:
@@ -90,6 +91,7 @@ flutter:
     - assets/illustration/
     - assets/character/
     - assets/mbti/
+    - assets/translations/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

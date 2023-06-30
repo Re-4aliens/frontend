@@ -70,6 +70,8 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: Button(
+                //수정
+                  isEnabled: true,
                   child: Text('확인'),
                   onPressed: () async {
                     if(await APIs.updateMBTI(_selectedMBTI))

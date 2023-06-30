@@ -1,4 +1,5 @@
 import 'package:aliens/views/components/appbar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,18 +52,20 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.036),
                 Text(
-                  '환영합니다!\n가입이 완료되었습니다',
+                  '${'signup-done1'.tr()}\n${'signup-done2'.tr()}',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '이제 매칭을 할 수 있어요\n아래 버튼을 통해 매칭 신청을 해보세요!',
+                  '${'signup-done3'.tr()}\n${'signup-done4'.tr()}',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: isSmallScreen?14:16, color: Color(0xff414141)),
                 ),
                 Expanded(child: SizedBox()),
                 Button(
-                  child: Text('로그인하러 가기'),
+                  //수정
+                  isEnabled: true,
+                  child: Text('${'signup-done5'.tr()}'),
                   onPressed: () {
                     //스택 비우고
                     Navigator.of(context)

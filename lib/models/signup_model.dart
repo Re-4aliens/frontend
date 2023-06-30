@@ -7,6 +7,7 @@ class SignUpModel {
   String? birthday;
   String? name;
   String? profileImage;
+  String? bio;
 
   SignUpModel(
       {
@@ -17,7 +18,8 @@ class SignUpModel {
         this.nationality,
         this.birthday,
         this.name,
-        this.profileImage,});
+        this.profileImage,
+      this.bio});
 
   factory SignUpModel.fromJson(Map<String, dynamic> json) => SignUpModel(
     email: json['email'],
@@ -28,6 +30,7 @@ class SignUpModel {
     birthday: json['birthday'],
     name: json['name'],
     profileImage: json['profileImage'],
+    bio: json['bio'],
     );
 
   Map<String, dynamic> toJson() {
@@ -40,6 +43,7 @@ class SignUpModel {
     data['birthday'] = this.birthday;
     data['name'] = this.name;
     data['profileImage'] = this.profileImage;
+    data['bio'] = this.bio;
     return data;
   }
 }

@@ -60,53 +60,14 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                   fontSize: isSmallScreen ? 12 : 14,
                 ),
               ),
-              SizedBox(
-                height: 50,
-              ),
               Expanded(
                 flex: 5,
                 child: Container(
-                  width: 300,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: 40,
-                        left: 20,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xFFD9D9D9),
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          width: 50,
-                          height: 50,
-                        ),
-                      ),
-                      Positioned(
-                        top: 80,
-                        right: 20,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xFFD9D9D9),
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          width: 80,
-                          height: 80,
-                        ),
-                      ),
-                      Positioned(
-                        bottom: 80,
-                        right: 70,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color(0xFFD9D9D9),
-                            borderRadius: BorderRadius.circular(78),
-                          ),
-                          width: 156,
-                          height: 156,
-                        ),
-                      ),
-                    ],
+                  child: SvgPicture.asset('assets/character/matchingCharacters.svg',
+                    height: isSmallScreen ? 190 : 260,
+                    width: isSmallScreen ? 190 : 260,
                   ),
+                  alignment: Alignment.center,
                 ),
               ),
               Expanded(
