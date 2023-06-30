@@ -1219,14 +1219,7 @@ class _HomePageState extends State<HomePage> {
                             width: 80,
                             decoration: BoxDecoration(
                                 color: screenArguments.memberDetails.profileImage != "" ? Colors.white : Colors.transparent,
-                                image: DecorationImage(
-                                  image: screenArguments.memberDetails.profileImage != ""
-                                      ? NetworkImage(
-                                    screenArguments.memberDetails.profileImage,
-                                        )
-                                      : NetworkImage(''),
-                                  fit: BoxFit.fill,
-                                ),
+
                                 borderRadius: BorderRadius.circular(40)),
                             child: screenArguments.memberDetails.profileImage != ""
                                 ? SizedBox()

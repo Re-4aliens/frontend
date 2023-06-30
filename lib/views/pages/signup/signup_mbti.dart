@@ -1,4 +1,5 @@
 import 'package:aliens/views/components/appbar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -143,7 +144,6 @@ class SignUpMbti extends StatefulWidget {
 }
 
 class _SignUpMbtiState extends State<SignUpMbti> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -164,60 +164,64 @@ class _SignUpMbtiState extends State<SignUpMbti> {
         backgroundColor: Color(0xffF5F7FF),
         infookay: true, infocontent: '\nMBTI를 선택해주세요\nMBTI를 기반으로 나와 더 잘 맞는 친구를 찾을 수 있어요!',
       ),
-      body: SingleChildScrollView(
+      body:
         //padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
-        child: Container(
+        Container(
           padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
           color: Color(0xffF5F7FF),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('${member.name}님의 MBTI가 궁금해요!',
+              Text('${member.name}${'signup-mbti'.tr()}',
                 style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
-                child: Column(
-                  children: [
-                    for (int i = 0; i < 8; i++)
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              mbtiButton(
-                                text: mbtiList[2 * i]['text'],
-                                explain: mbtiList[2 * i]['explain'],
-                                mbti: (mbtiList[2 * i]['mbti']),
-                                selected: selectedStack == (2 * i),
-                                step: mbtiList[2 * i]['step'],
-                                onPressed: () => setState(() => selectedStack = 2 * i),
-                                image: mbtiList[2 * i]['image'],
-                              ),
-                              mbtiButton(
-                                text: mbtiList[(2 * i + 1)]['text'],
-                                explain: mbtiList[(2 * i + 1)]['explain'],
-                                mbti: (mbtiList[(2 * i + 1)]['mbti']),
-                                selected: selectedStack == (2 * i + 1),
-                                step: mbtiList[(2 * i + 1)]['step'],
-                                onPressed: () =>
-                                    setState(() => selectedStack = (2 * i + 1)),
-                                image: mbtiList[(2 * i + 1)]['image']
+              Expanded(
+                child: SingleChildScrollView(child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.01),
+                  child: Column(
+                    children: [
+                      for (int i = 0; i < 8; i++)
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                mbtiButton(
+                                  text: mbtiList[2 * i]['text'],
+                                  explain: mbtiList[2 * i]['explain'],
+                                  mbti: (mbtiList[2 * i]['mbti']),
+                                  selected: selectedStack == (2 * i),
+                                  step: mbtiList[2 * i]['step'],
+                                  onPressed: () => setState(() => selectedStack = 2 * i),
+                                  image: mbtiList[2 * i]['image'],
+                                ),
+                                mbtiButton(
+                                    text: mbtiList[(2 * i + 1)]['text'],
+                                    explain: mbtiList[(2 * i + 1)]['explain'],
+                                    mbti: (mbtiList[(2 * i + 1)]['mbti']),
+                                    selected: selectedStack == (2 * i + 1),
+                                    step: mbtiList[(2 * i + 1)]['step'],
+                                    onPressed: () =>
+                                        setState(() => selectedStack = (2 * i + 1)),
+                                    image: mbtiList[(2 * i + 1)]['image']
 
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          )
-                        ],
-                      )
-                  ],
-                ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 20,
+                            )
+                          ],
+                        )
+                    ],
+                  ),
+                ),),
               ),
               SizedBox(height: 20),
               Button(
-                  child: Text('확인'),
+                //수정
+                  isEnabled: selectedStack != -1,
+                  child: Text('confirm'.tr(), style: TextStyle( color: selectedStack != -1? Colors.white : Color(0xff888888))),
                   onPressed: () {
                     if (selectedStack != -1) {
                       member.mbti = mbtiList[selectedStack]['mbti'];
@@ -228,7 +232,6 @@ class _SignUpMbtiState extends State<SignUpMbti> {
             ],
           ),
         ),
-      ),
     );
   }
 }

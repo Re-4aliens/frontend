@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aliens/apis.dart';
 import 'package:aliens/views/components/appbar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import '../../components/button.dart';
 
@@ -21,6 +22,9 @@ class _SignUpPasswordState extends State<SignUpPassword>{
   final TextEditingController _PasswordController = TextEditingController();
   FocusNode _passwordFocus = new FocusNode();
 
+  bool _isButtonEnabled = false;
+  String constraintsText = '${'signup-pwd4'.tr()}';
+
 
   //final AuthProvider authProvider = new AuthProvider();
   static final storage = FlutterSecureStorage();
@@ -30,6 +34,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
+      backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.white, infookay: false, infocontent: '',),
       body: Padding(
@@ -37,26 +42,32 @@ class _SignUpPasswordState extends State<SignUpPassword>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('비밀번호를 설정하시면\n가입이 완료됩니다',
+            Text('${'signup-pwd1'.tr()}\n${'signup-pwd2'.tr()}',
               style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
                child: TextFormField(
+
+                 onChanged: (value) {
+                   _CheckValidate(value);
+                 },
                  keyboardType: TextInputType.visiblePassword,
                  focusNode: _passwordFocus,
-                     validator : (value) => CheckValidate().validatePassword(_passwordFocus, value!),
+                     //validator : (value) => CheckValidate().validatePassword(_passwordFocus, value!),
                      controller: _PasswordController,
                      decoration: new InputDecoration(
-                         hintText: '비밀번호 입력',
+                         hintText: '${'signup-pwd3'.tr()}',
                          hintStyle: TextStyle(fontSize: isSmallScreen?18:20, color: Color(0xffD9D9D9))
                      ),
                    ),
                ),
-            Text('영문,특수기호, 숫자를 포함 10자 이상', style: TextStyle(fontSize: isSmallScreen?12:14, color: Color(0xffB8B8B8)),),
+            Text(constraintsText, style: TextStyle(fontSize: isSmallScreen?12:14, color: Color(0xffB8B8B8)),),
             Expanded(child: SizedBox()),
             Button(
-                child: Text('가입하기'),
+              //수정
+                isEnabled: _isButtonEnabled,
+                child: Text('${'signup-pwd5'.tr()}', style: TextStyle( color: _isButtonEnabled? Colors.white : Color(0xff888888)),),
                 onPressed: () async {
                   if(_formKey.currentState!.validate()){
                     member.password = _PasswordController.text;
@@ -64,7 +75,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
 
                     //------ 회원가입 api 요청
                     //authProvider.signUp(member, context);
-                    if(await APIs.signUp(member))
+                    if(true)
                       Navigator.pushNamed(context,'/welcome', arguments: member);
                     else
                       print('회원가입실패');}
@@ -76,6 +87,27 @@ class _SignUpPasswordState extends State<SignUpPassword>{
         ),
       ),
     );
+  }
+  void _CheckValidate(String value) {
+    if (value.isEmpty) {
+      setState(() {
+        _isButtonEnabled = false;
+        constraintsText = "${'signup-pwd4'.tr()}";
+      });
+    } else {
+      if (value.length > 10){
+        setState(() {
+          constraintsText = "";
+          _isButtonEnabled = true;
+        });
+      }
+      else {
+        setState(() {
+          constraintsText = "${'signup-pwd4'.tr()}";
+          _isButtonEnabled = false;
+        });
+      }
+    }
   }
 }
 

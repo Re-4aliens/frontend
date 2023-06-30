@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>264201677004-n90is9fa7ee1ege99d3vh4dfjgrcior9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.264201677004-n90is9fa7ee1ege99d3vh4dfjgrcior9</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBzhOokivfa-BPLa__64xB5kl54C-gqbQU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>264201677004</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.aliens</string>
+	<key>PROJECT_ID</key>
+	<string>friend-ship-23487</string>
+	<key>STORAGE_BUCKET</key>
+	<string>friend-ship-23487.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:264201677004:ios:a6734608673249d7093a69</string>
+</dict>
+</plist>

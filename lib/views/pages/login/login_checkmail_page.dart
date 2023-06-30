@@ -1,4 +1,5 @@
 import 'package:aliens/views/components/appbar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,18 +42,20 @@ class _LoginCheckMailState extends State<LoginCheckMail> {
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.07),
                 Text(
-                  '메일을 확인해주세요.',
+                  '${'find-pwd5'.tr()}',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  '작성하신 메일로 임시비밀번호를 발급해드렸어요!\n다시 로그인 해주세요.',
+                  '${'find-pwd6'.tr()}\n${'find-pwd7'.tr()}',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: isSmallScreen?14:16),
                 ),
                 Expanded(child: SizedBox()),
                 Button(
-                  child: Text('로그인하기'),
+                  //수정
+                  isEnabled: true,
+                  child: Text('login1'.tr()),
                   onPressed: () {
                     //스택 비우고
                     Navigator.of(context)
@@ -71,7 +74,7 @@ class _LoginCheckMailState extends State<LoginCheckMail> {
                       Navigator.pop(context);
                     },
                     child: Text(
-                      '이메일 재입력하기',
+                      '${'find-pwd8'.tr()}',
                       style: TextStyle(color: Color(0xffA7A7A7), fontSize: isSmallScreen?14:16),
                     ),
                     style: ElevatedButton.styleFrom(

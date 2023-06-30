@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:aliens/views/components/appbar.dart';
 import 'package:aliens/views/components/button_big.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,6 +39,8 @@ class _LoginState extends State<Login> {
     final double fontSize = isSmallScreen ? 16.0 : 20.0;
     final double heightSize = isSmallScreen ? 70 : 90;
 
+    String constraintsText = "";
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
@@ -64,7 +67,7 @@ class _LoginState extends State<Login> {
                       SvgPicture.asset('assets/character/logotext.svg', color: Colors.black,),
                       SizedBox(height: 5,),
                       Text(
-                        '프렌즈쉽에 오신것을 환영합니다.',
+                        'login3'.tr(),
                         style: TextStyle(
                             fontSize: isSmallScreen?14:16, color: Color(0xff616161)),
                       ),
@@ -99,7 +102,7 @@ class _LoginState extends State<Login> {
                           decoration: new InputDecoration(
                             contentPadding:
                                 EdgeInsets.symmetric(horizontal: 27.21),
-                            hintText: '이메일 주소',
+                            hintText: 'email'.tr(),
                             hintStyle: TextStyle(
                                 fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
                             enabledBorder: InputBorder.none,
@@ -130,13 +133,15 @@ class _LoginState extends State<Login> {
                               )
                             ]),
                         child: TextFormField(
+                          obscureText: true,
+                          obscuringCharacter: '*',
                           validator: (value) =>
                               value!.isEmpty ? "Please enter some text" : null,
                           controller: _passwordController,
                           decoration: new InputDecoration(
                               contentPadding:
                                   EdgeInsets.symmetric(horizontal: 27.21),
-                              hintText: '비밀번호',
+                              hintText: 'password'.tr(),
                               hintStyle: TextStyle(
                                   fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
                               enabledBorder: InputBorder.none,
@@ -149,7 +154,7 @@ class _LoginState extends State<Login> {
                     SizedBox(height: MediaQuery.of(context).size.height * 0.031),
                     BigButton(
                       child: Text(
-                        '로그인',
+                        'login1'.tr(),
                         style: TextStyle(fontSize: fontSize),
                       ),
                       onPressed: () async {
@@ -158,9 +163,9 @@ class _LoginState extends State<Login> {
                           auth.email = _emailController.text;
                           auth.password = _passwordController.text;
 
-                          var loginSuccess = await APIs.logIn(auth); //임의 값. 값을 수정하면서 사용
+                          var loginSuccess = await APIs.logIn(auth);
 
-                          if (loginSuccess) {
+                          if (loginSuccess == "200") {
                            //스택 비우고 화면 이동
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/loading', (Route<dynamic> route) => false);
@@ -176,7 +181,7 @@ class _LoginState extends State<Login> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      content: const Text('이메일과 비밀번호를 확인해주세요.'),
+                                      content: Text('아이디 및 비밀번호를 확인해주세요!'),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
@@ -196,16 +201,16 @@ class _LoginState extends State<Login> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('비밀번호를 잊으셨나요?', style: TextStyle(fontSize: isSmallScreen?10:12),),
+                        Text('findpassword1'.tr(), style: TextStyle(fontSize: isSmallScreen?12:14),),
                         TextButton(
                             onPressed: () {
                               Navigator.pushNamed(
                                   context, '/login/findpassword');
                             },
                             child: Text(
-                              '비밀번호 찾기',
+                              'findpassword2'.tr(),
                               style: TextStyle(
-                                fontSize: isSmallScreen?10:12,
+                                fontSize: isSmallScreen?12:14,
                                   decoration: TextDecoration.underline,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),

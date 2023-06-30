@@ -9,6 +9,7 @@ import 'package:aliens/views/pages/setting/setting_lan_edit.dart';
 import 'package:aliens/views/pages/setting/setting_mbti_edit.dart';
 import 'package:aliens/views/pages/setting/setting_terms_private.dart';
 import 'package:aliens/views/pages/setting/setting_terms_use.dart';
+import 'package:aliens/views/pages/signup/signup_bio.dart';
 import 'package:aliens/views/pages/signup/signup_birthday.dart';
 import 'package:aliens/views/pages/signup/signup_email.dart';
 import 'package:aliens/views/pages/signup/signup_emailverify.dart';
@@ -21,6 +22,7 @@ import 'package:aliens/views/pages/signup/signup_school.dart';
 import 'package:aliens/views/pages/signup/signup_verifyfinish.dart';
 import 'package:aliens/views/pages/signup/signup_welcome.dart';
 import 'package:aliens/views/pages/start_page.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:aliens/views/pages/signup/signup_name.dart';
@@ -58,11 +60,19 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 //import 'firebase_options.dart';
 
+final supportedLocales = [
+  Locale('en', 'US'),
+  Locale('ko', 'KR')
+];
 
 void main() async {
-/*
+
   WidgetsFlutterBinding.ensureInitialized();
 
+  // easylocalization 초기화
+  await EasyLocalization.ensureInitialized();
+
+/*
   // fcm 초기화 부분
   await initializeDefault();
   final fcmToken = await FirebaseMessaging.instance.getToken();
@@ -81,20 +91,17 @@ void main() async {
     });
   });
 
-*/
 
-  runApp(const MyApp());
-  //Setting SysemUIOverlay
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      systemStatusBarContrastEnforced: true,
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
-      systemNavigationBarIconBrightness: Brightness.dark,
-      statusBarIconBrightness: Brightness.dark)
-  );
+ */
 
-//Setting SystmeUIMode
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: [SystemUiOverlay.top]);
+
+  runApp(EasyLocalization(
+    path: 'assets/translations',
+    fallbackLocale: Locale('en', 'US'),
+    supportedLocales: supportedLocales,
+      child: const MyApp()
+  ));
+
 }
 
 Future<void> initializeDefault() async {
@@ -110,6 +117,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      localizationsDelegates: context.localizationDelegates,
+     supportedLocales: context.supportedLocales,
+     locale: context.locale,
      theme: ThemeData(fontFamily: 'NotoSans'),
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
@@ -154,6 +164,7 @@ class MyApp extends StatelessWidget {
         //SignUp
         '/name' : (context) => SignUpName(),
         '/birthday': (context) => SignUpBirthday(),
+        '/bio': (context) => SignUpBio(),
         '/gender' : (context) => SignUpGender(),
         '/nationality' :(context) => SignUpNationality(),
         '/mbti': (context) => SignUpMbti(),

@@ -1,4 +1,5 @@
 import 'package:aliens/views/components/appbar.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -19,6 +20,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
   final TextEditingController _BirthdayController = TextEditingController();
   DateTime? tempPickedDate;
   DateTime _selectedDate = DateTime.now();
+  bool _isButtonEnabled = false;
 
   Widget build(BuildContext context){
     dynamic member = ModalRoute.of(context)!.settings.arguments;
@@ -33,7 +35,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('생년월일을 알려주세요',
+            Text('signup-birthday'.tr(),
               style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
@@ -47,7 +49,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
                    children: [
                      TextFormField(
                        decoration: new InputDecoration(
-                           hintText: '생년월일 선택',
+                           hintText: 'birthday'.tr(),
                            suffixIcon: IconButton(
                              icon: SvgPicture.asset(
                                'assets/icon/icon_dropdown.svg',
@@ -67,9 +69,11 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
                ),
             Expanded(child: SizedBox()),
             Button(
-                child: Text('확인'),
+              //수정
+                isEnabled: _isButtonEnabled,
+                child: Text('confirm'.tr(), style: TextStyle( color: _isButtonEnabled? Colors.white : Color(0xff888888))),
                 onPressed: (){
-                  if(_formKey.currentState!.validate()){
+                  if(_isButtonEnabled){
                     member.birthday = _BirthdayController.text;
                     print(member.toJson());
                     Navigator.pushNamed(context,'/gender', arguments: member);
@@ -92,13 +96,13 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CupertinoButton(
-                        child: Text('취소'),
+                        child: Text('cancel'.tr()),
                         onPressed: (){
                           Navigator.of(context).pop();
                         },
                       ),
                       CupertinoButton(
-                        child: Text('완료'),
+                        child: Text('done'.tr()),
                         onPressed: (){
                           Navigator.of(context).pop(tempPickedDate);
                         },
@@ -114,15 +118,15 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
                   child: Container(
                     child: CupertinoDatePicker(
                       minimumYear: 1950,
-                      maximumYear: DateTime.now().year,
-                      initialDateTime: DateTime.now(),
+                      maximumYear: DateTime.now().year - 14,
+                      initialDateTime: DateTime.parse("${DateTime.now().year - 14}-01-01"),
                       mode: CupertinoDatePickerMode.date,
                       onDateTimeChanged: (DateTime dateTime){
                         tempPickedDate = dateTime;
                       },
                     ),
                   ),
-                )
+                ),
               ],
             )
         );
@@ -133,6 +137,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
         _selectedDate = pickedDate;
         _BirthdayController.text = pickedDate.toString();
         convertDateTimeDisplay(_BirthdayController.text);
+        _isButtonEnabled = true;
       });
     }
   }

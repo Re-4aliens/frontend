@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +7,8 @@ import 'dart:math' as math;
 
 import '../../../models/screenArgument.dart';
 import '../chatting/chatting_page.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 class CustomClipPath extends CustomClipper<Path> {
   @override
@@ -91,7 +94,7 @@ class _MatchingListPageState extends State<MatchingListPage> {
               ),
               Container(
                 child: Text(
-                  '4명의 친구와 매칭되었어요!',
+                  '${widget.screenArguments.partners!.length}명의 친구와 매칭되었어요!',
                   style: TextStyle(
                       fontSize: isSmallScreen ? 16 : 18, color: Colors.white),
                 ),
@@ -101,10 +104,10 @@ class _MatchingListPageState extends State<MatchingListPage> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  /*
-                  for (int i = 0; i < widget.screenArguments.partners['partners'].length; i++)
+
+                  for (int i = 0; i < widget.screenArguments.partners!.length; i++)
                     MatchingList(
-                      partner: widget.screenArguments.partners['partners'][i],
+                      partner: widget.screenArguments.partners![i],
                       onPressed: () {
                         setState(() {
                           selectedIndex = i;
@@ -113,7 +116,7 @@ class _MatchingListPageState extends State<MatchingListPage> {
                       isClicked: selectedIndex == i,
                     ),
 
-                   */
+
                 ],
               ),
               Spacer(
@@ -144,7 +147,7 @@ class _MatchingListPageState extends State<MatchingListPage> {
                                         [selectedIndex]);*/
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => ChattingPage(screenArguments: widget.screenArguments, memberIndex: selectedIndex)),
+                                  MaterialPageRoute(builder: (context) => ChattingPage(applicant: widget.screenArguments.applicant, partner: widget.screenArguments.partners![selectedIndex])),
                                 );
 
 /*
@@ -209,6 +212,9 @@ class _MatchingListState extends State<MatchingList> {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
 
+    var flagSrc = widget.partner.nationality.toString();
+    flagSrc = flagSrc.substring(flagSrc.indexOf(' ') + 1, flagSrc.length);
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: isSmallScreen ? 10 : 15),
       decoration: BoxDecoration(
@@ -270,6 +276,7 @@ class _MatchingListState extends State<MatchingList> {
               children: [
                 InkWell(
                   onTap: () {
+                    print(widget.partner.profileImage);
                     /*
                       Navigator.pushNamed(context, '/info/your',
                           arguments: widget.partner);
@@ -301,7 +308,7 @@ class _MatchingListState extends State<MatchingList> {
                                           height: 50,
                                         ),
                                         Text(
-                                          '${widget.partner['name']}',
+                                          '${widget.partner.name}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 36,
@@ -331,7 +338,7 @@ class _MatchingListState extends State<MatchingList> {
                                           child: Stack(
                                             children: [
                                               Text(
-                                                '       ${widget.partner['nationality']}, ${widget.partner['mbti']}',
+                                                '       ${widget.partner.nationality}, ${widget.partner.mbti}',
                                                 style: TextStyle(
                                                     fontSize: isSmallScreen
                                                         ? 14
@@ -344,7 +351,7 @@ class _MatchingListState extends State<MatchingList> {
                                                 top: 0,
                                                 bottom: 0,
                                                 child: SvgPicture.asset(
-                                                  'assets/flag/${widget.partner['nationality']}.svg',
+                                                  'assets/flag/${flagSrc}.svg',
                                                   width: 20,
                                                 ),
                                               ),
@@ -365,18 +372,33 @@ class _MatchingListState extends State<MatchingList> {
                                     children: [
                                       Align(
                                         alignment: Alignment.topCenter,
-                                        child: Container(
+                                        child:
+                                        widget.partner.profileImage == "" ?
+                                        Container(
                                           width: 100,
                                           height: 100,
                                           decoration: BoxDecoration(
-                                              borderRadius:
-                                              BorderRadius.circular(100),
-                                              color: Colors.white),
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                          ),
                                           padding: EdgeInsets.all(5),
                                           child: SvgPicture.asset(
                                             'assets/icon/icon_profile.svg',
                                             color: Color(0xffEBEBEB),
                                           ),
+                                        ):
+                                        Container(
+                                          width: 100,
+                                          height: 100,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.white,
+                                            image: DecorationImage(
+                                                fit: BoxFit.fill,
+                                                image: NetworkImage(widget.partner.profileImage!)
+                                            ),
+                                          ),
+                                          padding: EdgeInsets.all(5),
                                         ),
                                       ),
                                       Align(
@@ -385,7 +407,7 @@ class _MatchingListState extends State<MatchingList> {
                                           height: 20,
                                           width: 20,
                                           child: Icon(
-                                            widget.partner['gender'] == 'MALE' ? Icons.male_rounded : Icons.female_rounded,
+                                            widget.partner.gender == 'MALE' ? Icons.male_rounded : Icons.female_rounded,
                                             size: 15,
                                             color: Color(0xff7898ff),
                                           ),
@@ -404,11 +426,13 @@ class _MatchingListState extends State<MatchingList> {
                           ),
                         ));
                   },
+
                   child: SvgPicture.asset(
                     'assets/icon/icon_profile.svg',
                     width: 50,
                     color: Color(0xffEBEBEB),
                   ),
+
                 ),
                 Expanded(
                     child: Container(
@@ -423,7 +447,7 @@ class _MatchingListState extends State<MatchingList> {
                           Row(
                             children: [
                               Text(
-                                '${widget.partner['name']}',
+                                '${widget.partner.name}',
                                 style: TextStyle(
                                   fontSize: isSmallScreen ? 18 : 20,
                                   fontWeight: FontWeight.bold,
@@ -438,7 +462,7 @@ class _MatchingListState extends State<MatchingList> {
                               Container(
                                 height: 18,
                                 width: 18,
-                                child: widget.partner['gender'] == 'MALE'
+                                child: widget.partner.gender == 'MALE'
                                     ? Icon(
                                   Icons.male_rounded,
                                   size: 15,
@@ -450,7 +474,7 @@ class _MatchingListState extends State<MatchingList> {
                                   color: Colors.white,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: widget.partner['gender'] == 'MALE'
+                                  color: widget.partner.gender == 'MALE'
                                       ? Color(0xffFFB5B5)
                                       : Color(0xffFFF3C7),
                                   borderRadius: BorderRadius.circular(9),
@@ -459,7 +483,7 @@ class _MatchingListState extends State<MatchingList> {
                             ],
                           ),
                           Text(
-                            '${widget.partner['mbti']}',
+                            '${widget.partner.mbti}',
                             style: TextStyle(
                               fontSize: isSmallScreen ? 14 : 16,
                               color: widget.isClicked
@@ -472,7 +496,7 @@ class _MatchingListState extends State<MatchingList> {
                     )),
                 Container(
                   child: SvgPicture.asset(
-                    'assets/flag/${widget.partner['nationality']}.svg',
+                    'assets/flag/${flagSrc}.svg',
                     height: 30,
                     width: 50,
                   ),

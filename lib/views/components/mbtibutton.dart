@@ -30,10 +30,12 @@ class mbtiButton extends StatelessWidget{
     final bool isSmallScreen = screenWidth <= 800;
 
     return Container(
-      margin: EdgeInsets.only(left: 10,right: 10, top: 0, bottom: 0),
+      margin: EdgeInsets.only(left: 15,right: 15, top: 5, bottom: 5),
      // width: MediaQuery.of(context).size.width * 0.4,
-      width: isSmallScreen?MediaQuery.of(context).size.width * 0.37: MediaQuery.of(context).size.width * 0.42,
-      height: isSmallScreen? (MediaQuery.of(context).size.width * 0.37)*4.5/3:(MediaQuery.of(context).size.width * 0.42)*4.5/3,
+      width: isSmallScreen ? 140 : 160,
+      height: isSmallScreen ? 210 : 240,
+      //width: isSmallScreen?MediaQuery.of(context).size.width * 0.37: MediaQuery.of(context).size.width * 0.42,
+      //height: isSmallScreen? (MediaQuery.of(context).size.width * 0.37)*4.5/3:(MediaQuery.of(context).size.width * 0.42)*4.5/3,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25), // 10은 모서리 반경 값입니다.

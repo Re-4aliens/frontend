@@ -48,6 +48,8 @@ class _SignUpSchoolState extends State<SignUpSchool> {
                ),
             Expanded(child: SizedBox()),
             Button(
+              //수정
+                isEnabled: true,
                 child: Text('다음'),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
