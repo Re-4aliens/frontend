@@ -70,5 +70,25 @@
   "find-pwd5": "Check Email",
   "find-pwd6": "We sent the temporary password to the email!",
   "find-pwd7": "Please log in again",
-  "find-pwd8": "Retry"
+  "find-pwd8": "Retry",
+
+  "homepage-welcome" : "Welcome!",
+  "homepage-welome1.1" : "Welcome to ",
+  "homepage-welcome1.2" : "Friendship",
+  "homepage-happy" : "Today, I'm happy!",
+  "homepage-positive1" : "Which ",
+  "homepage-positive2" : "mbti ",
+  "homepage-positive3" : "is the best match for #파워긍정왕..",
+  "homepage-positive4" : "ENFP",
+  "homepage-positive5" : "?",
+  "homepage-more" : "Read More",
+  "homepage-start": "The start of an exciting new semester!",
+  "homepage-meet" : "Meet new friends.",
+  "homepage-applydone" : "Done applying",
+  "homepage-apply" : "Apply for matching",
+  "homepage-progress" : "Matching in progress",
+  "homepage-chatting" : "Chatting",
+  "homepage-home": "home",
+  "homepage-chatting1": "chatting",
+  "homepage-setting": "setting"
 }

@@ -70,5 +70,25 @@
   "find-pwd5": "메일을 확인해주세요.",
   "find-pwd6": "작성하신 메일로 임시 비밀번호를 발급해드렸어요!",
   "find-pwd7": "다시 로그인 해주세요.",
-  "find-pwd8": "이메일 재입력하기"
+  "find-pwd8": "이메일 재입력하기",
+
+  "homepage-welcome" : "어서오세요!",
+  "homepage-welome1.1" : "프렌드쉽",
+  "homepage-welome1.2" : "에 온 걸 환영해요",
+  "homepage-happy" : "오늘의 내 기분은 해피!",
+  "homepage-positive1" : "#파워긍정왕",
+  "homepage-positive2" : "ENFP",
+  "homepage-positive3" : "와 어울리는",
+  "homepage-positive4" : "MBTI",
+  "homepage-positive5" : "는?",
+  "homepage-more" : "자세히보기",
+  "homepage-start" : "설레는 새학기의 시작!",
+  "homepage-meet" : "새로운 친구를 만나보세요.",
+  "homepage-applydone": "신청완료",
+  "homepage-apply": "매칭신청",
+  "homepage-progress" : "매칭 진행 중",
+  "homepage-chatting": "채팅하기",
+  "homepage-home": "홈",
+  "homepage-chatting1": "채팅",
+  "homepage-setting": "설정"
 }
