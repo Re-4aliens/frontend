@@ -70,5 +70,12 @@
   "find-pwd5": "Check Email",
   "find-pwd6": "We sent the temporary password to the email!",
   "find-pwd7": "Please log in again",
-  "find-pwd8": "Retry"
+  "find-pwd8": "Retry",
+
+  "matched1": "Match!",
+  "matched2": "Let's go meet new friends",
+  "matched3": "Friends list",
+  "matched4": "Match!",
+  "matched5": "You've got {num} matches!",
+  "matched6": "Send message"
 }
