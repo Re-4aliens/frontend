@@ -397,19 +397,19 @@ class _HomePageState extends State<HomePage> {
                                   child: RichText(
                                     text: TextSpan(children: [
                                       TextSpan(
-                                          text: "아래의 ",
+                                          text: '${'homepage-press'.tr()}',
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 14,
                                               color: Color(0xff5c5c5c),
                                               fontWeight: FontWeight.bold)),
                                       TextSpan(
-                                          text: "매칭 신청 ",
+                                          text: '${'homepage-apply'.tr()}',
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 14,
                                               color: Color(0xff7898FF),
                                               fontWeight: FontWeight.bold)),
                                       TextSpan(
-                                          text: "버튼을 눌러 매칭을 시작해보세요!",
+                                          text: '${'homepage-matchingstart'.tr()}',
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 14,
                                               color: Color(0xff5c5c5c),
@@ -553,30 +553,30 @@ class _HomePageState extends State<HomePage> {
                               ), //팔내리는 캐릭터
                               Positioned(
                                 top: MediaQuery.of(context).size.height / 12 -
-                                    30,
+                                    35,
                                 left: 25,
                                 child: Container(
-                                  height: isSmallScreen ? 50 : 60,
+                                  height: isSmallScreen ? 50 : 65,
                                   width: isSmallScreen ? 270 : 320,
                                   child: RichText(
                                     textAlign: TextAlign.center,
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text:
-                                              "${args.memberDetails.name}님! 이미 매칭신청을 완료해 진행 중이에요:)\n아래의 ",
+                                              "${args.memberDetails.name}${'homepage-already'.tr()} ",
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xff5c5c5c),
                                               fontWeight: FontWeight.bold)),
                                       TextSpan(
-                                          text: "매칭 진행 중 ",
+                                          text: '${'homepage-progress'.tr()}' ,
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xffFF8282),
                                               fontWeight: FontWeight.bold,
                                               height: 1.5)),
                                       TextSpan(
-                                          text: "버튼을 눌러 확인해보세요!",
+                                          text: '${'homepage-check'.tr()}',
                                           style: TextStyle(
                                             fontSize: isSmallScreen ? 12 : 13,
                                             color: Color(0xff5c5c5c),
@@ -730,20 +730,20 @@ class _HomePageState extends State<HomePage> {
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text:
-                                              "${args.memberDetails.name}님! 드디어 매칭이 완료되었어요!\n아래의 ",
+                                              "${args.memberDetails.name}'${'homepage-complete'.tr()}' ",
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xff5c5c5c),
                                               fontWeight: FontWeight.bold)),
                                       TextSpan(
-                                          text: "채팅하기 ",
+                                          text: '${'homepage-chatting'.tr()}',
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xffFF8282),
                                               fontWeight: FontWeight.bold,
                                               height: 1.5)),
                                       TextSpan(
-                                          text: "버튼을 눌러 채팅을 시작해보세요!",
+                                          text: '${'homepage-chatbutton'.tr()}',
                                           style: TextStyle(
                                             fontSize: isSmallScreen ? 12 : 13,
                                             color: Color(0xff5c5c5c),
