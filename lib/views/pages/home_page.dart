@@ -390,11 +390,12 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 top: MediaQuery.of(context).size.height / 12 -
                                     10,
-                                left: 25,
+                                left: 20,
                                 child: Container(
                                   height: isSmallScreen ? 40 : 50,
-                                  width: isSmallScreen ? 260 : 310,
+                                  width: isSmallScreen ? 270 : 320,
                                   child: RichText(
+                                    textAlign: TextAlign.start,
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text: '${'homepage-press'.tr()}',
@@ -413,7 +414,9 @@ class _HomePageState extends State<HomePage> {
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 14,
                                               color: Color(0xff5c5c5c),
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.bold,),
+
+                                      ),
                                     ]),
                                   ),
                                   alignment: Alignment.center,
@@ -709,28 +712,30 @@ class _HomePageState extends State<HomePage> {
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
-                                  height: isSmallScreen ? 130 : 150,
-                                  width: isSmallScreen ? 130 : 150,
+                                  child: SvgPicture.asset('assets/character/handsdown1.svg',
+                                    height: isSmallScreen ? 160 : 230,
+                                    width: isSmallScreen ? 160 : 230,
+                                  ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffFFB5B5),
                                     borderRadius: BorderRadius.circular(100),
                                   ),
                                 ),
                               ),
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 10 -
-                                    30,
-                                left: 25,
+                                top: MediaQuery.of(context).size.height / 15-
+                                    20,
+                                left: 30,
                                 child: Container(
-                                  height: isSmallScreen ? 50 : 60,
-                                  width: isSmallScreen ? 250 : 300,
+                                  padding: EdgeInsets.only(right: 10),
+                                  height: isSmallScreen ? 55 : 65,
+                                  width: isSmallScreen ?290:320,
                                   child: RichText(
                                     textAlign: TextAlign.end,
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text:
-                                              "${args.memberDetails.name}'${'homepage-complete'.tr()}' ",
+                                              "${args.memberDetails.name}${'homepage-complete'.tr()} ",
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xff5c5c5c),
@@ -773,7 +778,7 @@ class _HomePageState extends State<HomePage> {
                                     child: Stack(
                                       children: [
                                         Positioned(
-                                          top: 11,
+                                          top: 10,
                                           left: 0,
                                           child: Container(
                                             height: 11,
@@ -786,7 +791,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Center(
                                           child: Container(
-                                            height: 9,
+                                            height: 8,
                                             width: 9,
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
@@ -795,7 +800,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         Positioned(
-                                          bottom: 7,
+                                          bottom: 6,
                                           right: 7,
                                           child: Container(
                                             height: 7,
@@ -1122,7 +1127,7 @@ class _HomePageState extends State<HomePage> {
                             ? Color(0xff888888)
                             : Color(0xffFF8F8F)),
                   ),
-                  SizedBox(height: isSmallScreen?20:50),
+                  SizedBox(height: isSmallScreen?40:50),
                   Row(
                     children: [
                       Expanded(
