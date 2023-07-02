@@ -84,11 +84,17 @@
   "homepage-more" : "Read More",
   "homepage-start": "The start of an exciting new semester!",
   "homepage-meet" : "Meet new friends.",
-  "homepage-applydone" : "Done applying",
+  "homepage-applydone" : "Application completed",
   "homepage-apply" : "Apply for matching",
   "homepage-progress" : "Matching in progress",
   "homepage-chatting" : "Chatting",
   "homepage-home": "home",
   "homepage-chatting1": "chatting",
-  "homepage-setting": "setting"
+  "homepage-setting": "setting",
+  "homepage-complete" : "! Matching is finally done!\n Press the ",
+  "homepage-chatbutton": " button below to start matching!",
+  "homepage-already": "! You have already completed the matching application and are in the process:)\n Press the ",
+  "homepage-check": " button below and check it!",
+  "homepage-press" : "Press the ",
+  "homepage-mathcingstart": " button below to start matching!"
 }

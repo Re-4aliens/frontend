@@ -90,5 +90,11 @@
   "homepage-chatting": "채팅하기",
   "homepage-home": "홈",
   "homepage-chatting1": "채팅",
-  "homepage-setting": "설정"
+  "homepage-setting": "설정",
+  "homepage-complete": "님! 드디어 매칭이 완료되었어요!\n 아래의",
+  "homepage-chatbutton": " 버튼을 눌러 매칭을 시작해보세요!",
+  "homepage-already" : "님! 이미 매칭신청을 완료해 진행중이에요:)\n 아래의",
+  "homepage-check": " 버튼을 눌러 확인해보세요!",
+  "homepage-press": "아래의 ",
+  "homepage-matchingstart": " 버튼을 눌러 매칭을 시작해보세요!"
 }
