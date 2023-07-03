@@ -4,41 +4,43 @@ import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import '../../../models/chatRoom_model.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
 
-List<MessageModel> _list = [];
 
+List<MessageModel> _list = [];
 var channel;
 
 class ChattingPage extends StatefulWidget {
   const ChattingPage(
-      {super.key, required this.applicant, required this.partner});
+      {super.key, required this.applicant, required this.partner, required this.chatRoom});
 
   final Applicant? applicant;
   final Partner partner;
+  final ChatRoom chatRoom;
 
   @override
   State<ChattingPage> createState() => _ChattingPageState();
 }
 
 class _ChattingPageState extends State<ChattingPage> {
+
   final _controller = TextEditingController();
   var _newMessage = '';
   bool isLoading = true;
   bool isKeypadUp = false;
 
-  //키패드가 업되어있는 상태면
   void _sendMessage() {
     setState(() {
       FocusScope.of(context).unfocus();
       _list.add(
         MessageModel(
-            roomId: 1,
+            roomId: widget.chatRoom.roomId,
             receiverId: widget.partner.name,
             senderId: widget.applicant?.member?.name,
             message: _newMessage,
-            messageCategory: 'NORMAL_MESSAGE,'),
+            messageCategory: 'NORMAL_MESSAGE'),
       );
 
       //데이터 베이스에 추가 SET
@@ -53,6 +55,15 @@ class _ChattingPageState extends State<ChattingPage> {
   void initState() {
     super.initState();
     final wsUrl = Uri.parse('');
+    if(_list.isEmpty)
+      _list.add(
+        MessageModel(
+            roomId: widget.chatRoom.roomId,
+            receiverId: widget.partner.name,
+            senderId: widget.applicant?.member?.name,
+            message: '시작',
+            messageCategory: 'START_MESSAGE'),
+      );
     //channel = IOWebSocketChannel.connect(wsUrl);
   }
 
@@ -358,23 +369,19 @@ class _ChattingPageState extends State<ChattingPage> {
                     case ConnectionState.none:
                     case ConnectionState.active:
                     case ConnectionState.done:
-                      if (_list.isNotEmpty) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: ListView.builder(
                               itemCount: _list.length,
                               itemBuilder: (context, index) {
-                                return MessageBuble(
+                                return MessageBubble(
                                   message: _list[index],
                                   applicant: widget.applicant,
+                                  showingTime: _list.length - 1 == index,
                                 );
                               }),
                         );
-                      } else {
-                        return Center(
-                          child: Text('start chat'),
-                        );
-                      }
+
                   }
                 },
               ),
@@ -472,7 +479,7 @@ class _ChattingPageState extends State<ChattingPage> {
                           });
                           _list.add(
                             MessageModel(
-                                roomId: 1,
+                                roomId: widget.chatRoom.roomId,
                                 receiverId: widget.partner.name,
                                 senderId: widget.applicant?.member?.name,
                                 message: '밸런스 게임',

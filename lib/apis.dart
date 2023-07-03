@@ -1,3 +1,4 @@
+import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/signup_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -629,7 +630,7 @@ class APIs {
    */
   static Future<void> deleteInfo(memberId) async {
     var url =
-        'http://13.125.205.59:8080/api/v1/member/${memberId}'; //mocksever
+        'http://13.125.205.59:8080/api/v1/member/${memberId}';
 
 
     var response = await http.delete(Uri.parse(url),
@@ -647,12 +648,11 @@ class APIs {
 
   /*
 
-  채팅방 정보
+  채팅룸 정보
 
    */
-
-  static Future<bool> getChatroomData() async {
-    const url = '';
+  static Future<List<ChatRoom>> getChatRooms() async {
+    var _url = 'http://13.125.205.59:8080/chat/rooms';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -661,22 +661,34 @@ class APIs {
     jwtToken = json.decode(jwtToken!)['accessToken'];
 
     var response = await http.get(
-      Uri.parse(url),
+      Uri.parse(_url),
       headers: {
         'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
       },
     );
 
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['response'];
+      return body.map((dynamic item) => ChatRoom.fromJson(item)).toList();
+
       //fail
     } else {
-      //오류 생기면 바디 확인
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
+      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      throw Exception('요청 오류');
     }
   }
 
+  /*
+
+  메세지 받아오기
+
+
+   */
+
+  static Future<void> getMessages() async {
+
+  }
 }

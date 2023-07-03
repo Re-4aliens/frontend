@@ -2,24 +2,35 @@ import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 
 import '../../models/message_model.dart';
 
-class MessageBuble extends StatefulWidget {
-  const MessageBuble(
-      {super.key, required this.message, required this.applicant});
+class MessageBubble extends StatefulWidget {
+  const MessageBubble(
+      {super.key, required this.message, required this.applicant, required this.showingTime});
 
   final MessageModel message;
   final applicant;
+  final bool showingTime;
 
   @override
-  State<MessageBuble> createState() => _MessageBubleState();
+  State<MessageBubble> createState() => _MessageBubbleState();
 }
 
-class _MessageBubleState extends State<MessageBuble> {
+class _MessageBubbleState extends State<MessageBubble> {
   @override
   Widget build(BuildContext context) {
-    return widget.message.messageCategory == 'VS_GAME_MESSAGE' ? _vsGameBubble() : widget.message.senderId == widget.applicant.member.name ? _myBubble() : _partnerBubble();
+    if(widget.message.messageCategory == 'VS_GAME_MESSAGE')
+      return _vsGameBubble();
+    else if(widget.message.messageCategory == 'START_MESSAGE')
+      return _timeBubble();
+    else {
+      if(widget.message.senderId == widget.applicant.member.name)
+        return _myBubble();
+      else
+        return _partnerBubble();
+    }
   }
 
   Widget _partnerBubble() {
@@ -84,7 +95,8 @@ class _MessageBubleState extends State<MessageBuble> {
         Padding(
           padding: EdgeInsets.symmetric(vertical: 10),
           child: Text(
-            '시간',
+            widget.showingTime ?
+            '${DateFormat('hh:mm a').format(DateTime.now())}' : '',
             style: TextStyle(
               fontSize: 12,
             ),
@@ -197,5 +209,22 @@ class _MessageBubleState extends State<MessageBuble> {
         ),
       ],
     );
+  }
+
+  Widget _timeBubble() {
+    return Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Color(0xff9B9B9B),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 15),
+            margin: EdgeInsets.symmetric(vertical: 10),
+            child: Text('${DateFormat('yyyy/MM/dd').format(DateTime.now())}', style: TextStyle(color: Colors.white),),
+          ),
+          Text("새로운 대화를 시작합니다.", style: TextStyle(color: Color(0xff717171), fontSize: 12),)
+        ],
+      );
   }
 }

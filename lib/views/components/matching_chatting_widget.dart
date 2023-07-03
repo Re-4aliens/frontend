@@ -24,9 +24,9 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget>{
 
   @override
   Widget build(BuildContext context) {
-    /*
+
     return FutureBuilder(
-      future: APIs.getChatroomData(),
+      future: APIs.getChatRooms(),
         builder: (BuildContext context, AsyncSnapshot snapshot){
           if (snapshot.hasData == false) {
             //받아오는 동안
@@ -42,25 +42,15 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget>{
             child: ListView.builder(
                 itemCount: widget.screenArguments.partners?.length,
                 itemBuilder: (context, index){
-                  return chatList(context, widget.screenArguments.partners?[index], '마지막 메세지', '22:20pm');
+                  return chatList(context, widget.screenArguments.partners?[index], snapshot.data[index], '마지막 메세지', '22:20pm');
                 }),
           );
         }
     );
 
-     */
-    return Container(
-      decoration: BoxDecoration(
-        color: Color(0xffF5F7FF),
-      ),
-      child: ListView.builder(
-          itemCount: widget.screenArguments.partners?.length,
-          itemBuilder: (context, index){
-            return chatList(context, widget.screenArguments.partners?[index], '마지막 메세지', '22:20pm');
-          }),
-    );
   }
-  Widget chatList(context, _partner, lastMassage, time){
+
+  Widget chatList(context, _partner, chatRoom, lastMassage, time){
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       child: MaterialButton(
@@ -71,7 +61,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget>{
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ChattingPage(applicant: widget.screenArguments.applicant, partner: _partner,)),
+            MaterialPageRoute(builder: (context) => ChattingPage(applicant: widget.screenArguments.applicant, partner: _partner, chatRoom: chatRoom,)),
           );
         },
         shape: RoundedRectangleBorder(
