@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aliens/models/memberDetails_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -76,52 +77,52 @@ class _HomePageState extends State<HomePage> {
                   child: RichText(
                     text: TextSpan(children: [
                       TextSpan(
-                        text: '어서오세요!\n',
+                        text: '${'homepage-welcome'.tr()}\n',
                         style: TextStyle(
                             fontSize: 20, color: Color(0xff5A5A5A), height: 1),
                       ),
                       TextSpan(
-                          text: '프렌드쉽',
+                          text: '${'homepage-welome1.1'.tr()}',
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                               color: Colors.black,
                               height: 1.5)),
                       TextSpan(
-                          text: '에 온 걸 환영해요.\n',
+                          text: '${'homepage-welcome1.2'.tr()}\n',
                           style: TextStyle(
                               fontSize: 24, color: Color(0xff5A5A5A))),
                       TextSpan(
-                          text: '오늘의 내 기분은 해피!\n',
+                          text: '${'homepage-happy'.tr()}\n',
                           style: TextStyle(
                               fontSize: 12,
                               color: Color(0xff888888),
                               height: 2)),
                       TextSpan(
-                          text: '#파워긍정왕 ',
+                          text: '${'homepage-positive1'.tr()}',
                           style: TextStyle(
                               fontSize: 12,
                               color: Color(0xff888888),
                               height: 1.5)),
                       TextSpan(
-                          text: 'ENFP'
+                          text: '${'homepage-positive2'.tr()}'
                           /*'${args.memberDetails?.mbti}'*/,
                           style: TextStyle(
                               fontSize: 12, color: Color(0xff7898ff))),
                       TextSpan(
-                          text: '와 어울리는 ',
+                          text: '${'homepage-positive3'.tr()}',
                           style: TextStyle(
                               fontSize: 12, color: Color(0xff888888))),
                       TextSpan(
-                          text: 'MBTI',
+                          text: '${'homepage-positive4'.tr()}',
                           style: TextStyle(
                               fontSize: 12, color: Color(0xff7898ff))),
                       TextSpan(
-                          text: '는?\n',
+                          text: '${'homepage-positive5'.tr()}\n',
                           style: TextStyle(
                               fontSize: 12, color: Color(0xff888888))),
                       TextSpan(
-                          text: '자세히보기\n',
+                          text: '${'homepage-more'.tr()}\n',
                           style: TextStyle(
                               fontSize: 12, color: Colors.black, height: 2.5))
                     ]),
@@ -136,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     alignment: Alignment.topLeft,
                     padding: EdgeInsets.symmetric(
-                      vertical: isSmallScreen ? 30 : 40,
+                      vertical: isSmallScreen ? 20 : 30,
                       horizontal: 25,
                     ),
                     child: Column(
@@ -147,7 +148,7 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '설레는 새학기의 시작!',
+                              '${'homepage-start'.tr()}',
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -155,7 +156,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             Text(
-                              '새로운 친구를 만나보세요.',
+                              '${'homepage-meet'.tr()}',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xffababab),
@@ -304,7 +305,7 @@ class _HomePageState extends State<HomePage> {
                     selectedIndex == 0 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
-            label: '홈',
+            label: '${'homepage-home'.tr()}',
           ),
           BottomNavigationBarItem(
             icon: Padding(
@@ -317,7 +318,7 @@ class _HomePageState extends State<HomePage> {
                     selectedIndex == 1 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
-            label: '채팅',
+            label:'${'homepage-chatting1'.tr()}' ,
           ),
           BottomNavigationBarItem(
             icon: Padding(
@@ -330,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                     selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
-            label: '설정',
+            label: '${'homepage-setting'.tr()}',
           )
         ],
       ),
@@ -389,30 +390,33 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 top: MediaQuery.of(context).size.height / 12 -
                                     10,
-                                left: 25,
+                                left: 20,
                                 child: Container(
                                   height: isSmallScreen ? 40 : 50,
-                                  width: isSmallScreen ? 260 : 310,
+                                  width: isSmallScreen ? 270 : 320,
                                   child: RichText(
+                                    textAlign: TextAlign.start,
                                     text: TextSpan(children: [
                                       TextSpan(
-                                          text: "아래의 ",
+                                          text: '${'homepage-press'.tr()}',
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 14,
                                               color: Color(0xff5c5c5c),
                                               fontWeight: FontWeight.bold)),
                                       TextSpan(
-                                          text: "매칭 신청 ",
+                                          text: '${'homepage-apply'.tr()}',
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 14,
                                               color: Color(0xff7898FF),
                                               fontWeight: FontWeight.bold)),
                                       TextSpan(
-                                          text: "버튼을 눌러 매칭을 시작해보세요!",
+                                          text: '${'homepage-matchingstart'.tr()}',
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 14,
                                               color: Color(0xff5c5c5c),
-                                              fontWeight: FontWeight.bold)),
+                                              fontWeight: FontWeight.bold,),
+
+                                      ),
                                     ]),
                                   ),
                                   alignment: Alignment.center,
@@ -552,30 +556,30 @@ class _HomePageState extends State<HomePage> {
                               ), //팔내리는 캐릭터
                               Positioned(
                                 top: MediaQuery.of(context).size.height / 12 -
-                                    30,
+                                    35,
                                 left: 25,
                                 child: Container(
-                                  height: isSmallScreen ? 50 : 60,
+                                  height: isSmallScreen ? 50 : 65,
                                   width: isSmallScreen ? 270 : 320,
                                   child: RichText(
                                     textAlign: TextAlign.center,
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text:
-                                              "${args.memberDetails.name}님! 이미 매칭신청을 완료해 진행 중이에요:)\n아래의 ",
+                                              "${args.memberDetails.name}${'homepage-already'.tr()} ",
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xff5c5c5c),
                                               fontWeight: FontWeight.bold)),
                                       TextSpan(
-                                          text: "매칭 진행 중 ",
+                                          text: '${'homepage-progress'.tr()}' ,
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xffFF8282),
                                               fontWeight: FontWeight.bold,
                                               height: 1.5)),
                                       TextSpan(
-                                          text: "버튼을 눌러 확인해보세요!",
+                                          text: '${'homepage-check'.tr()}',
                                           style: TextStyle(
                                             fontSize: isSmallScreen ? 12 : 13,
                                             color: Color(0xff5c5c5c),
@@ -708,41 +712,43 @@ class _HomePageState extends State<HomePage> {
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
-                                  height: isSmallScreen ? 130 : 150,
-                                  width: isSmallScreen ? 130 : 150,
+                                  child: SvgPicture.asset('assets/character/handsdown1.svg',
+                                    height: isSmallScreen ? 160 : 230,
+                                    width: isSmallScreen ? 160 : 230,
+                                  ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
-                                    color: Color(0xffFFB5B5),
                                     borderRadius: BorderRadius.circular(100),
                                   ),
                                 ),
                               ),
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 10 -
-                                    30,
-                                left: 25,
+                                top: MediaQuery.of(context).size.height / 15-
+                                    20,
+                                left: 30,
                                 child: Container(
-                                  height: isSmallScreen ? 50 : 60,
-                                  width: isSmallScreen ? 250 : 300,
+                                  padding: EdgeInsets.only(right: 10),
+                                  height: isSmallScreen ? 55 : 65,
+                                  width: isSmallScreen ?290:320,
                                   child: RichText(
                                     textAlign: TextAlign.end,
                                     text: TextSpan(children: [
                                       TextSpan(
                                           text:
-                                              "${args.memberDetails.name}님! 드디어 매칭이 완료되었어요!\n아래의 ",
+                                              "${args.memberDetails.name}${'homepage-complete'.tr()} ",
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xff5c5c5c),
                                               fontWeight: FontWeight.bold)),
                                       TextSpan(
-                                          text: "채팅하기 ",
+                                          text: '${'homepage-chatting'.tr()}',
                                           style: TextStyle(
                                               fontSize: isSmallScreen ? 12 : 13,
                                               color: Color(0xffFF8282),
                                               fontWeight: FontWeight.bold,
                                               height: 1.5)),
                                       TextSpan(
-                                          text: "버튼을 눌러 채팅을 시작해보세요!",
+                                          text: '${'homepage-chatbutton'.tr()}',
                                           style: TextStyle(
                                             fontSize: isSmallScreen ? 12 : 13,
                                             color: Color(0xff5c5c5c),
@@ -772,7 +778,7 @@ class _HomePageState extends State<HomePage> {
                                     child: Stack(
                                       children: [
                                         Positioned(
-                                          top: 11,
+                                          top: 10,
                                           left: 0,
                                           child: Container(
                                             height: 11,
@@ -785,7 +791,7 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Center(
                                           child: Container(
-                                            height: 9,
+                                            height: 8,
                                             width: 9,
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
@@ -794,7 +800,7 @@ class _HomePageState extends State<HomePage> {
                                           ),
                                         ),
                                         Positioned(
-                                          bottom: 7,
+                                          bottom: 6,
                                           right: 7,
                                           child: Container(
                                             height: 7,
@@ -967,13 +973,13 @@ class _HomePageState extends State<HomePage> {
                           : Color(0xFF99B1FF),
                   borderRadius: BorderRadius.circular(50),
                 ),
-                width: isSmallScreen ? 90 : 100,
-                height: isSmallScreen ? 90 : 100,
+                width: isSmallScreen ? 90 : 95,
+                height: isSmallScreen ? 90 : 95,
               ),
             ),
             Container(
               height: isSmallScreen ? 210 : 240,
-              padding: EdgeInsets.only(left:25, top:25, right:6),
+              padding: EdgeInsets.only(left:25, top:20, right:6),
               decoration: BoxDecoration(),
               width: double.infinity,
               child: Column(
@@ -981,10 +987,10 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    status != 'NOT_APPLIED' ? '신청완료' : '매칭신청',
+                    status != 'NOT_APPLIED' ? '${'homepage-applydone'.tr()}' : '${'homepage-apply'.tr()}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: isSmallScreen ? 18 : 20,
+                      fontSize: isSmallScreen ? 16 : 18,
                       color: status != 'NOT_APPLIED'
                           ? Color(0xffACACAC)
                           : Colors.white,
@@ -993,19 +999,19 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'How to Use?',
                     style: TextStyle(
-                        fontSize: 12,
+                        fontSize: isSmallScreen ? 10 : 12,
                         color: status != 'NOT_APPLIED'
                             ? Color(0xff888888)
                             : Color(0xff7898FF)),
                   ),
-                  SizedBox(height: isSmallScreen?25:55),
+                  SizedBox(height: isSmallScreen?20:40),
                   Row(
                     children: [
                       Expanded(
                           flex : 3,
                           child: SizedBox()),
                       Expanded(
-                          flex: 9,
+                          flex: 8,
                           child: status != 'NOT_APPLIED'
                               ? SvgPicture.asset('assets/character/none_puzzle.svg')
                               :SvgPicture.asset('assets/character/matching_puzzle.svg',
@@ -1096,7 +1102,7 @@ class _HomePageState extends State<HomePage> {
             ),
             Container(
               height: isSmallScreen ? 210 : 240,
-              padding: EdgeInsets.only(left:25, top:25, right:6),
+              padding: EdgeInsets.only(left:25, top:20, right:6),
               decoration: BoxDecoration(),
               width: double.infinity,
               child: Column(
@@ -1104,10 +1110,10 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    status == 'PENDING' ? '매칭 진행 중' : '채팅하기',
+                    status == 'PENDING' ? '${'homepage-progress'.tr()}' : '${'homepage-chatting'.tr()}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: isSmallScreen ? 18 : 20,
+                      fontSize: isSmallScreen ? 16 : 18,
                       color: status == 'NOT_APPLIED'
                           ? Color(0xffACACAC)
                           : Colors.white,
@@ -1116,12 +1122,12 @@ class _HomePageState extends State<HomePage> {
                   Text(
                     'How to Use?',
                     style: TextStyle(
-                        fontSize: 12,
+                        fontSize: isSmallScreen ? 10 : 12,
                         color: status == 'NOT_APPLIED'
                             ? Color(0xff888888)
                             : Color(0xffFF8F8F)),
                   ),
-                  SizedBox(height: isSmallScreen?40:70),
+                  SizedBox(height: isSmallScreen?40:50),
                   Row(
                     children: [
                       Expanded(
