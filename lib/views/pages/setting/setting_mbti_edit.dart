@@ -5,6 +5,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../apis.dart';
 import '../../components/button.dart';
@@ -25,7 +26,7 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
     final bool isSmallScreen = screenWidth <= 600;
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(appBar: AppBar(), backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: 'MBTI 변경',),
+      appBar: CustomAppBar(appBar: AppBar(), backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '${'setting-mbti'.tr()}'),
       body: Container(
         padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(

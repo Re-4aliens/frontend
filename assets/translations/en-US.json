@@ -96,5 +96,23 @@
   "homepage-already": "! You have already completed the matching application and are in the process:)\n Press the ",
   "homepage-check": " button below and check it!",
   "homepage-press" : "Press the ",
-  "homepage-mathcingstart": " button below to start matching!"
+  "homepage-mathcingstart": " button below to start matching!",
+
+
+  "setting": "Setting",
+  "setting-nim" : " ",
+  "setting-takepicture" : "Take a photo",
+  "setting-gallery": "Import from gallery",
+  "setting-profile": "View and edit profile",
+  "setting-account": "Account management",
+  "setting-logout": "Log out",
+  "setting-gender": "Gender",
+  "setting-nationality": "Nationality",
+  "setting-lan": "Language settings",
+  "setting-displaylan" : "Display language",
+  "setting-mbti": "Edit MBTI",
+  "setting-security": "Security",
+  "setting-noti": "Notification",
+  "setting-terms": "Terms of service"
+
 }
