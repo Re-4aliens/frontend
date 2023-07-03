@@ -96,5 +96,22 @@
   "homepage-already" : "님! 이미 매칭신청을 완료해 진행중이에요:)\n 아래의",
   "homepage-check": " 버튼을 눌러 확인해보세요!",
   "homepage-press": "아래의 ",
-  "homepage-matchingstart": " 버튼을 눌러 매칭을 시작해보세요!"
+  "homepage-matchingstart": " 버튼을 눌러 매칭을 시작해보세요!",
+
+  "setting": "설정",
+  "setting-nim" : "님",
+  "setting-takepicture": "사진찍기",
+  "setting-gallery": "앨범에서 가져오기",
+  "setting-profile": "프로필 확인 및 수정",
+  "setting-account": "계정관리",
+  "setting-logout": "로그아웃",
+  "setting-gender": "성별",
+  "setting-nationality": "국적",
+  "setting-lan": "언어 재설정",
+  "setting-displaylan": "표시 언어",
+  "setting-mbti": "MBTI 변경",
+  "setting-security": "보안관리",
+  "setting-noti": "알림설정",
+  "setting-terms": "이용약관"
+
 }
