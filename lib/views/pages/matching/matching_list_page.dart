@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/countries.dart';
 import 'package:dash_flags/dash_flags.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -155,7 +156,11 @@ class _MatchingListPageState extends State<MatchingListPage> {
                                           applicant:
                                               widget.screenArguments.applicant,
                                           partner: widget.screenArguments
-                                              .partners![selectedIndex])),
+                                              .partners![selectedIndex],
+                                      // 수정
+                                      chatRoom: ChatRoom(
+
+                                      ),)),
                                 );
 
 /*
