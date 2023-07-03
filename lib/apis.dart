@@ -101,7 +101,7 @@ class APIs {
     request.fields['password'] = member.password!;
     request.fields['mbti'] = member.mbti!;
     request.fields['gender'] = member.gender!;
-    request.fields['nationality'] = '1';
+    request.fields['nationality'] = member.nationality!;
     request.fields['birthday'] = member.birthday!;
     request.fields['name'] = member.name!;
 
