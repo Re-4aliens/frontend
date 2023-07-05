@@ -78,7 +78,7 @@
   "homepage-happy" : "Today, I'm happy!",
   "homepage-positive1" : "Which ",
   "homepage-positive2" : "mbti ",
-  "homepage-positive3" : "is the best match for #파워긍정왕..",
+  "homepage-positive3" : "is the best match for #HappyCamper ",
   "homepage-positive4" : "ENFP",
   "homepage-positive5" : "?",
   "homepage-more" : "Read More",
@@ -113,6 +113,38 @@
   "setting-mbti": "Edit MBTI",
   "setting-security": "Security",
   "setting-noti": "Notification",
-  "setting-terms": "Terms of service"
+  "setting-terms": "Terms of service",
+  "setting-noti1": "You can receive quick updates\nwhen a match is found and during chat.",
+  "setting-notiall": "All notifications",
+  "setting-notimatch": "Matching notifications",
+  "setting-notichat": "Chatting notifications",
+  "setting-notiinapp": "In-app notifications",
+  "setting-changepass": "Change Password",
+  "setting-withdrawal": "Withdrawal",
+  "setting-memwithdrawal": "Membership Withdrawal",
+  "setting-findpas": "Please enter\nyour current password\nto change the password.",
+  "setting-enterpass": "Enter password",
+  "setting-wrongpass": "Password mismatch",
+  "setting-confirmpass": "Please confirm your password.",
+  "setting-newpas1": "Please enter a new password\nto complete the password change.",
+  "setting-newpas2": "Enter new password",
+  "setting-newpas3": "Re-enter new password",
+  "setting-newpas4": "Change password",
+  "setting-authen": "Authentication completed",
+  "setting-settingcancel": "Unable to change",
+  "setting-why": "Reason for inability to change",
+  "setting-newmis": "New password mismatch",
+  "setting-confirm": "Please confirm your password.",
+  "setting-pasdone": "Your password has been changed!\nPlease log in again.",
+  "setting-gohome": "Go to home"
+
+
+
+
+
+
+
+
+
 
 }

@@ -167,7 +167,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
               child: Button(
                 //수정
                   isEnabled: true,
-                  child: Text('확인'),
+                  child: Text('${'confirm'.tr()}'),
                   onPressed: (){
                     if (_selectedLanguage == '한국어') {
                       EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
