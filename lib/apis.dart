@@ -1,5 +1,6 @@
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/signup_model.dart';
+import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'models/applicant_model.dart';
@@ -12,6 +13,7 @@ import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 
 import 'models/memberDetails_model.dart';
+import 'models/message_model.dart';
 import 'models/partner_model.dart';
 import 'models/screenArgument.dart';
 
@@ -688,7 +690,48 @@ class APIs {
 
    */
 
-  static Future<void> getMessages() async {
+  static Future<List<MessageModel>> getMessages() async {
+    var roomId = 1;
+    var _url =
+        'http://13.125.205.59:8081/api/v1/chat/${roomId}'; //mocksever
 
+    var response = await http.get(Uri.parse(_url));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
+      List<MessageModel> value = body.map((dynamic item) => MessageModel.fromJson(item)).toList();
+      //return List.from(value.reversed);
+
+      return value;
+      //fail
+    } else {
+      print(response.body);
+      throw Exception('요청 오류');
+    }
   }
+
+  static Future<List<MessageModel>> getPreviousMessages(int chatId) async {
+    var roomId = 1;
+    var _url =
+        'http://13.125.205.59:8081/api/v1/chat/${roomId}/${chatId}'; //mocksever
+
+    var response = await http.get(Uri.parse(_url));
+
+    //success
+    if (response.statusCode == 200) {
+      print('dd');
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
+      List<MessageModel> value = body.map((dynamic item) => MessageModel.fromJson(item)).toList();
+      //return List.from(value.reversed);
+
+      return value;
+      //fail
+    } else {
+      print(response.body);
+      throw Exception('요청 오류');
+    }
+  }
+
 }

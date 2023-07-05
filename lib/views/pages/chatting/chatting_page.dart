@@ -1,9 +1,12 @@
 import 'package:aliens/models/applicant_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
+import 'package:aliens/views/components/profileDialog_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import '../../../apis.dart';
 import '../../../models/chatRoom_model.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
@@ -14,11 +17,12 @@ var channel;
 
 class ChattingPage extends StatefulWidget {
   const ChattingPage(
-      {super.key, required this.applicant, required this.partner, required this.chatRoom});
+      {super.key, required this.applicant, required this.partner, required this.chatRoom, required this.memberDetails});
 
   final Applicant? applicant;
   final Partner partner;
   final ChatRoom chatRoom;
+  final MemberDetails memberDetails;
 
   @override
   State<ChattingPage> createState() => _ChattingPageState();
@@ -27,20 +31,28 @@ class ChattingPage extends StatefulWidget {
 class _ChattingPageState extends State<ChattingPage> {
 
   final _controller = TextEditingController();
+
+  final ScrollController _scrollController = ScrollController();
   var _newMessage = '';
   bool isLoading = true;
   bool isKeypadUp = false;
+  var itemLength = 1;
 
   void _sendMessage() {
     setState(() {
       FocusScope.of(context).unfocus();
       _list.add(
         MessageModel(
+          chatId: _list.length,
+          chatType: 0,
+          chatContent: _newMessage,
             roomId: widget.chatRoom.roomId,
-            receiverId: widget.partner.name,
-            senderId: widget.applicant?.member?.name,
-            message: _newMessage,
-            messageCategory: 'NORMAL_MESSAGE'),
+            senderId: widget.memberDetails.memberId,
+            senderName: widget.memberDetails.name,
+            receiverId: widget.partner.memberId,
+            sendTime: DateTime.now().toString(),
+            unReadCount: 1,
+        ),
       );
 
       //데이터 베이스에 추가 SET
@@ -55,14 +67,25 @@ class _ChattingPageState extends State<ChattingPage> {
   void initState() {
     super.initState();
     final wsUrl = Uri.parse('');
+
+    _scrollController.addListener(() {
+      scrollListener();
+    });
+
+
     if(_list.isEmpty)
       _list.add(
         MessageModel(
+            chatId: -1,
+            chatType: -1,
+            chatContent: '시작',
             roomId: widget.chatRoom.roomId,
-            receiverId: widget.partner.name,
-            senderId: widget.applicant?.member?.name,
-            message: '시작',
-            messageCategory: 'START_MESSAGE'),
+            senderId: widget.memberDetails.memberId,
+            senderName: widget.memberDetails.name,
+            receiverId: widget.partner.memberId,
+            sendTime: DateTime.now().toString(),
+            unReadCount: 1,
+        ),
       );
     //channel = IOWebSocketChannel.connect(wsUrl);
   }
@@ -72,6 +95,19 @@ class _ChattingPageState extends State<ChattingPage> {
     // TODO: implement dispose
     super.dispose();
     //channel.sink.close();
+
+    _scrollController.dispose();
+  }
+  scrollListener() async {
+    if (_scrollController.offset == _scrollController.position.maxScrollExtent
+        && !_scrollController.position.outOfRange) {
+      if(_list.last.chatId != 1){
+        _list.insertAll(_list.length, await APIs.getPreviousMessages(_list.last.chatId!));
+      }
+      setState(() {
+        itemLength = _list.length;
+      });
+    }
   }
 
   //랜덤채팅 바 보여주기
@@ -81,9 +117,6 @@ class _ChattingPageState extends State<ChattingPage> {
   Widget build(BuildContext context) {
     //final arguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     bool isKeyboardOpen = false;
-
-    var flagSrc = widget.partner.nationality.toString();
-    flagSrc = flagSrc.substring(flagSrc.indexOf(' ') + 1, flagSrc.length);
 
 
 
@@ -129,155 +162,7 @@ class _ChattingPageState extends State<ChattingPage> {
                           context: context,
                           builder: (_) => Scaffold(
                                 backgroundColor: Colors.transparent,
-                                body: Center(
-                                  child: Container(
-                                    width: 340,
-                                    height: 275,
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          bottom: 0,
-                                          child: Container(
-                                            width: 340,
-                                            height: 225,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              color: Colors.white,
-                                            ),
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.end,
-                                                  children: [
-                                                    GestureDetector(
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(15.0),
-                                                        child:
-                                                            Icon(Icons.close),
-                                                      ),
-                                                      onTap: () {
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                    ),
-                                                  ],
-                                                ),
-                                                Text(
-                                                  '${widget.partner.name}',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 36,
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(15),
-                                                  child: Text(
-                                                    '안녕하세요! 경영학과 23학번 입니다!',
-                                                    style: TextStyle(
-                                                      color: Color(0xff888888),
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xffF1F1F1),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            20),
-                                                  ),
-                                                  padding: EdgeInsets.only(
-                                                      top: 5,
-                                                      bottom: 5,
-                                                      left: 15,
-                                                      right: 20),
-                                                  child: Stack(
-                                                    children: [
-                                                      Text(
-                                                        '       ${widget.partner.nationality}, ${widget.partner.mbti}',
-                                                        style: TextStyle(
-                                                            fontSize: 16,
-                                                            color: Color(
-                                                                0xff616161)),
-                                                      ),
-                                                      Positioned(
-                                                        left: 0,
-                                                        top: 0,
-                                                        bottom: 0,
-                                                        child: SvgPicture.asset(
-                                                          'assets/flag/${flagSrc}.svg',
-                                                          width: 20,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: 30,
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          width: 340,
-                                          height: 105,
-                                          child: Stack(
-                                            children: [
-                                              Align(
-                                                alignment: Alignment.topCenter,
-                                                child: Container(
-                                                  width: 100,
-                                                  height: 100,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                      color: Colors.white),
-                                                  padding: EdgeInsets.all(5),
-                                                  child: SvgPicture.asset(
-                                                    'assets/icon/icon_profile.svg',
-                                                    color: Color(0xffEBEBEB),
-                                                  ),
-                                                ),
-                                              ),
-                                              Align(
-                                                alignment:
-                                                    Alignment.bottomCenter,
-                                                child: Container(
-                                                  height: 20,
-                                                  width: 20,
-                                                  child: Icon(
-                                                    widget.partner.gender ==
-                                                            'MALE'
-                                                        ? Icons.male_rounded
-                                                        : Icons.female_rounded,
-                                                    size: 15,
-                                                    color: Color(0xff7898ff),
-                                                  ),
-                                                  decoration: BoxDecoration(
-                                                    color: Color(0xffebebeb),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                                body: ProfileDialog(partner: widget.partner,),
                               ));
                     },
                   ),
@@ -362,22 +247,42 @@ class _ChattingPageState extends State<ChattingPage> {
             Expanded(
                 child: Container(
               color: Color(0xffF5F7FF),
-              child: StreamBuilder(
+              child: FutureBuilder(
+                future: APIs.getMessages(),
                 builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.waiting:
-                    case ConnectionState.none:
-                    case ConnectionState.active:
-                    case ConnectionState.done:
+                  if(snapshot.hasData == false){
+                    return Center(
+                      child: Text('받아오는 중'),
+                    );
+                  }
+                 else {
+                   if(itemLength == 1){
+                     _list = snapshot.data!;
+                     itemLength = _list.length;
+                   }
+                   print('길이: ${itemLength}');
                         return Padding(
                           padding: const EdgeInsets.only(top: 15),
                           child: ListView.builder(
-                              itemCount: _list.length,
+                            reverse: true,
+                              controller: _scrollController,
+                              itemCount: itemLength,
                               itemBuilder: (context, index) {
                                 return MessageBubble(
-                                  message: _list[index],
+                                  message: MessageModel(
+                                    chatId: _list![index].chatId,
+                                    chatType: _list![index].chatType,
+                                    chatContent: _list![index].chatContent,
+                                    roomId: _list![index].roomId,
+                                    senderId: _list![index].senderId,
+                                    receiverId: _list[index].receiverId,
+                                    senderName: _list![index].senderName,
+                                    sendTime: _list![index].sendTime,
+                                    unReadCount: _list![index].unReadCount,
+                                  ),
                                   applicant: widget.applicant,
-                                  showingTime: _list.length - 1 == index,
+                                  showingTime: index == 0,
+                                  showingPic: _list!.length - 1 == index,
                                 );
                               }),
                         );
@@ -479,11 +384,16 @@ class _ChattingPageState extends State<ChattingPage> {
                           });
                           _list.add(
                             MessageModel(
+                                chatId: _list.length,
+                                chatType: 1,
+                                chatContent: '밸런스 게임',
                                 roomId: widget.chatRoom.roomId,
-                                receiverId: widget.partner.name,
-                                senderId: widget.applicant?.member?.name,
-                                message: '밸런스 게임',
-                                messageCategory: 'VS_GAME_MESSAGE'),
+                                senderId: widget.memberDetails.memberId,
+                                senderName: widget.memberDetails.name,
+                                receiverId: widget.partner.memberId,
+                                sendTime: DateTime.now().toString(),
+                                unReadCount: 1,
+                            ),
                           );
                         },
                         child: Container(
