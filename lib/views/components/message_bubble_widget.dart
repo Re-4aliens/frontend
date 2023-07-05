@@ -8,11 +8,12 @@ import '../../models/message_model.dart';
 
 class MessageBubble extends StatefulWidget {
   const MessageBubble(
-      {super.key, required this.message, required this.applicant, required this.showingTime});
+      {super.key, required this.message, required this.applicant, required this.showingTime, required this.showingPic});
 
   final MessageModel message;
   final applicant;
   final bool showingTime;
+  final bool showingPic;
 
   @override
   State<MessageBubble> createState() => _MessageBubbleState();
@@ -21,9 +22,9 @@ class MessageBubble extends StatefulWidget {
 class _MessageBubbleState extends State<MessageBubble> {
   @override
   Widget build(BuildContext context) {
-    if(widget.message.messageCategory == 'VS_GAME_MESSAGE')
+    if(widget.message.chatType == 1)
       return _vsGameBubble();
-    else if(widget.message.messageCategory == 'START_MESSAGE')
+    else if(widget.message.chatType == -1)
       return _timeBubble();
     else {
       if(widget.message.senderId == widget.applicant.member.name)
@@ -36,6 +37,7 @@ class _MessageBubbleState extends State<MessageBubble> {
   Widget _partnerBubble() {
     return Row(
       children: [
+        widget.showingPic ?
         Padding(
           padding: EdgeInsets.only(left: 25),
           child: SvgPicture.asset(
@@ -43,6 +45,8 @@ class _MessageBubbleState extends State<MessageBubble> {
             height: 40,
             color: Color(0xff7898ff),
           ),
+        ) : SizedBox(
+          width: 65,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -65,7 +69,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                 margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Text(
-                  '${widget.message.message}',
+                  '${widget.message.chatContent}',
                   style: TextStyle(
                     color: Color(0xff616161),
                   ),
@@ -75,7 +79,8 @@ class _MessageBubbleState extends State<MessageBubble> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                '시간',
+                widget.showingTime ?
+                '${DateFormat('hh:mm a').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
                 style: TextStyle(
                   fontSize: 12,
                 ),
@@ -120,7 +125,7 @@ class _MessageBubbleState extends State<MessageBubble> {
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
             margin: EdgeInsets.only(top: 10, bottom: 10, left: 18, right: 25),
             child: Text(
-              '${widget.message.message}',
+              '${widget.message.chatContent}',
               style: TextStyle(
                 color: Colors.white,
               ),

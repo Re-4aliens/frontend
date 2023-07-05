@@ -146,9 +146,6 @@ class _MatchingListPageState extends State<MatchingListPage> {
                             onPressed: () {
                               if (selectedIndex != -1) {
                                 /*
-                                Navigator.pushNamed(context, '/chatting',
-                                    arguments: widget.partners['partners']
-                                        [selectedIndex]);*/
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -157,11 +154,15 @@ class _MatchingListPageState extends State<MatchingListPage> {
                                               widget.screenArguments.applicant,
                                           partner: widget.screenArguments
                                               .partners![selectedIndex],
-                                      // 수정
-                                      chatRoom: ChatRoom(
+                                        memberDetails: widget.screenArguments.memberDetails,
+                                        // 수정
+                                        chatRoom: ChatRoom(
 
-                                      ),)),
+                                        ),
+                                      )),
                                 );
+
+                                 */
 
 /*
                                 //스택 비우고

@@ -59,10 +59,13 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget>{
         padding: EdgeInsets.symmetric(horizontal: 12),
         elevation: 0.0,
         onPressed: () {
+          /*
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => ChattingPage(applicant: widget.screenArguments.applicant, partner: _partner, chatRoom: chatRoom,)),
           );
+
+           */
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
