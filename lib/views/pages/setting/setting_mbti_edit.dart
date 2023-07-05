@@ -73,7 +73,7 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
               child: Button(
                 //수정
                   isEnabled: true,
-                  child: Text('확인'),
+                  child: Text('${'confirm'.tr()}'),
                   onPressed: () async {
                     if(await APIs.updateMBTI(_selectedMBTI))
                       Navigator.of(context).pushNamedAndRemoveUntil(

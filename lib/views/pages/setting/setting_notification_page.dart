@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -29,7 +29,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(appBar: AppBar(), title: '알림 설정', backgroundColor: Colors.transparent, infookay: false, infocontent: '',
+      appBar: CustomAppBar(appBar: AppBar(), title: '${'setting-noti'.tr()}', backgroundColor: Colors.transparent, infookay: false, infocontent: '',
       ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: 24),
@@ -38,7 +38,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
           children: [
             Container(
               margin: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.05),
-              child: Text('매칭 완료 및 채팅시 빠르게 소식을\n전달받으실 수 있어요.',
+              child: Text('${'setting-noti1'.tr()}',
               textAlign: TextAlign.start,
               style: TextStyle(
                 fontSize: isSmallScreen?12:14,
@@ -57,7 +57,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                         size: isSmallScreen?22:24,
                         color: Colors.black,
                       ),
-                      Text(' 전체 알림',
+                      Text('${'setting-notiall'.tr()}',
                         style: TextStyle(
                           fontSize: isSmallScreen?18:20,
                         ),),
@@ -85,7 +85,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('매칭 알림',
+                  Text('${'setting-notimatch'.tr()}',
                     style: TextStyle(
                       fontSize: isSmallScreen?16:18,
                     ),),
@@ -105,7 +105,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('채팅 알림',
+                  Text('${'setting-notichat'.tr()}',
                     style: TextStyle(
                       fontSize: isSmallScreen?16:18,
                     ),),
@@ -126,7 +126,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('앱 내부 알림',
+                  Text('${'setting-notiinapp'.tr()}',
                     style: TextStyle(
                       fontSize: isSmallScreen?18:20,
                     ),),
