@@ -14,6 +14,7 @@
   "confirm": "Confirm",
   "done": "Done",
   "cancel": "Cancel",
+  "again": "Retry input",
   "signup-name": "Let me know your name",
   "name": "Name",
   "name-constraintsText1": "Unable to include special characters",
@@ -136,7 +137,26 @@
   "setting-newmis": "New password mismatch",
   "setting-confirm": "Please confirm your password.",
   "setting-pasdone": "Your password has been changed!\nPlease log in again.",
-  "setting-gohome": "Go to home"
+  "setting-gohome": "Go to home",
+  "setting-deletewhat": "Wait! If you proceed with withdrawal, you will lose the following features.",
+  "setting-delete1": "You need to sign up again\nfrom the beginning.",
+  "setting-delete1.1": "All information of the member\nwill be completely deleted.\nYou need to sign up again.",
+  "setting-delete2": "The saved information\ncannot be recovered.",
+  "setting-delete2.1": "Personal data(ex.conservation history)\nwill be destroyed and cannot be recovered.",
+  "setting-delete3": "You lose the opportunity to meet\nfriends from diverse nationalities.",
+  "setting-delete3.1": "You will miss out on the opportunity\nto meet more diverse friends.",
+  "setting-onemore": "Please reconsider one more time.",
+  "setting-putpas": "Please enter your password.",
+  "setting-real":"Are you sure you want to withdraw?",
+  "setting-withdrawaldone":"Withdrawal completed.",
+  "setting-fail": "fail",
+  "setting-failwhy": "Withdrawal failed\ndue to password mismatch",
+  "setting-delete5": "Chat history, matching records, and other data used so far cannot be recovered.",
+  "setting-thank": "Thank you for using our service so far.\nThrough membership registration,\nyou can start again anytime!",
+  "setting-private": "Privacy Policy"
+
+
+
 
 
 

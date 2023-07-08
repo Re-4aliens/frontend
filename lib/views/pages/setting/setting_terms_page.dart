@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
@@ -23,8 +23,8 @@ class _SettingTermsPageState extends State<SettingTermsPage> {
     final bool isSmallScreen = screenWidth <= 600;
 
     List termsList = [
-      '이용약관',
-      '개인정보 처리방침',
+      '${'setting-terms'.tr()}',
+      '${'setting-private'.tr()}',
     ];
 
 
@@ -36,7 +36,7 @@ class _SettingTermsPageState extends State<SettingTermsPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar:CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, infookay: false, infocontent: '', title: '이용약관',),
+      appBar:CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, infookay: false, infocontent: '', title: '${'setting-terms'.tr()}',),
       body: Container(
         padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.05),
         child: ListView.builder(
