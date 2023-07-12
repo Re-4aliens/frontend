@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:aliens/views/pages/matching/matching_edit_page.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 import 'package:flutter/material.dart';
@@ -49,7 +49,7 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
             color: Color(0xff7898FF),
           ),
           title: Text(
-            '회원탈퇴',
+            '${'setting-memwithdrawal'.tr()}',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -66,14 +66,14 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('탈퇴하기',
+                        Text('${'setting-withdrawal'.tr()}',
                           style: TextStyle(
                               fontSize: isSmallScreen?22:24,
                               fontWeight: FontWeight.bold
                           ),),
                         Container(
                             padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Text('잠깐! 탈퇴하게되면 아래의 기능들을 잃게 되요.',
+                            child: Text('${'setting-deletewhat'.tr()}',
                               style: TextStyle(
                                 fontSize: isSmallScreen?12:14,
                                 color: Color(0xff888888),
@@ -111,13 +111,13 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('처음부터 다시 가입해야 해요.',
+                                    Text('${'setting-delete1'.tr()}',
                                     style: TextStyle(
                                       fontSize: isSmallScreen?12:14,
                                       fontWeight: FontWeight.w700
                                     ),),
                                     SizedBox(height: 5),
-                                    Text('탈퇴회원의 정보는 완벽히 삭제됩니다.\n탈퇴하시면 회원가입부터 다시 해야 해요',
+                                    Text('${'setting-delete1.1'.tr()}',
                                     style: TextStyle(
                                       fontSize: isSmallScreen?10:12
                                     ),)
@@ -161,13 +161,13 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('저장된 정보는 다시 복구되지 않아요.',
+                                    Text('${'setting-delete2'.tr()}',
                                       style: TextStyle(
                                           fontSize: isSmallScreen?12:14,
                                           fontWeight: FontWeight.w700
                                       ),),
                                     SizedBox(height: 5),
-                                    Text('회원정보 및 개인형 서비스(매칭, 대화 목록 등)\n데이터는 완전히 파기되어 복구되지 않아요.',
+                                    Text('${'setting-delete2.1'.tr()}',
                                       style: TextStyle(
                                           fontSize: isSmallScreen?10:12
                                       ),)
@@ -210,13 +210,13 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('다양한 국적 및 배경을 가진 친구들과 \n교류할 수 있는 경험을 잃게돼요.',
+                                    Text('${'setting-delete3'.tr()}',
                                       style: TextStyle(
                                           fontSize: isSmallScreen?12:14,
                                           fontWeight: FontWeight.w700
                                       ),),
                                     SizedBox(height: 5,),
-                                    Text('더 다양한 친구들을 만나볼 기회를 잃게됩니다.',
+                                    Text('${'setting-delete3.1'.tr()}',
                                       style: TextStyle(
                                           fontSize: isSmallScreen?10:12
                                       ),)
@@ -229,7 +229,7 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                         Expanded(child: SizedBox()),
                         Container(
                           alignment: Alignment.center,
-                          child: Text('다시 한번 생각해주세요.',
+                          child: Text('${'setting-onemore'.tr()}',
                               style: TextStyle(
                                   fontSize: isSmallScreen?12:14,
                                   color: Color(0xff888888)
@@ -253,7 +253,7 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                   onPressed: (){
                                     Navigator.of(context).pop();
                                   },
-                                  child: Text('취소',
+                                  child: Text('${'cancel'.tr()}',
                                     style: TextStyle(color: Color(0xff888888),
                                         fontSize: isSmallScreen?14:16),),
                                   style: ElevatedButton.styleFrom(
@@ -272,7 +272,7 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                   onPressed: (){
                                     Navigator.pushNamed(context, '/setting/delete', arguments: screenArguments.memberDetails);
                                   },
-                                  child: Text('탈퇴하기'),
+                                  child: Text('${'setting-withdrawal'.tr()}'),
                                     style: ElevatedButton.styleFrom(
                                         textStyle: TextStyle(fontSize: isSmallScreen?14:16),
                                         backgroundColor: Color(0xff7898FF),// 여기 색 넣으면됩니다

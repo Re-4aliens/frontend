@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 
@@ -39,7 +39,7 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '탈퇴완료',
+                          '${'setting-withdrawaldone'.tr()}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
@@ -61,7 +61,7 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.05,
                         ),
-                        Text('그동안 이용해주셔서 감사합니다.\n회원가입을 통해\n언제든지 다시 시작할 수 있어요!',
+                        Text('${'setting-thank'.tr()}',
                           style: TextStyle(
                             color: Color(0xff414141),
                             fontSize: isSmallScreen?14:16
@@ -77,7 +77,7 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                     child: Button(
                       //수정
                         isEnabled: true,
-                        child: Text('홈으로 돌아가기'),
+                        child: Text('${'setting-gohome'.tr()}'),
                         onPressed: () {
                           Navigator.of(context)
                               .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false

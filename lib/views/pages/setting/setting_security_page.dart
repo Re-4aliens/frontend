@@ -9,7 +9,7 @@ import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../components/appbar.dart';
 
 class SettingSecurityPage extends StatefulWidget {
@@ -28,14 +28,14 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(appBar: AppBar(), backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '보안관리',),
+      appBar: CustomAppBar(appBar: AppBar(), backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '${'setting-security'.tr()}',),
         body: Container(
           padding: EdgeInsets.only(right: 24, left: 24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
-            Text('보안',
+            Text('${'setting-security'.tr()}',
               style: TextStyle(
               fontSize: isSmallScreen?14:16,
               color: Color(0xffC1C1C1)
@@ -47,7 +47,7 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('비밀번호 변경', style: TextStyle(fontSize: isSmallScreen?14:16, fontWeight: FontWeight.bold),),
+                  Text('${'setting-changepass'.tr()}', style: TextStyle(fontSize: isSmallScreen?14:16, fontWeight: FontWeight.bold),),
                   SvgPicture.asset(
                     'assets/icon/icon_next.svg',
                       width: MediaQuery.of(context).size.width * 0.022,
@@ -61,7 +61,7 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
               color: Color(0xffEFEFEF),
             ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.04,),
-              Text('탈퇴',
+              Text('${'setting-withdrawal'.tr()}',
                 style: TextStyle(
                     fontSize: isSmallScreen?14:16,
                     color: Color(0xffC1C1C1)
@@ -73,7 +73,7 @@ class _SettingSecurityPageState extends State<SettingSecurityPage> {
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('회원탈퇴', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isSmallScreen?14:16),),
+                  Text('${'setting-memwithdrawal'.tr()}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: isSmallScreen?14:16),),
                   SvgPicture.asset(
                     'assets/icon/icon_next.svg',
                     width: MediaQuery.of(context).size.width * 0.022,

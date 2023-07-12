@@ -1,5 +1,7 @@
 
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 
 
 
@@ -7,9 +9,9 @@ Widget buildSettingList(context, index, screenArguments) {
   final double screenWidth = MediaQuery.of(context).size.width;
   final bool isSmallScreen = screenWidth <= 600;
   List settingList = [
-    '보안관리',
-    '알림설정',
-    '이용약관',
+    '${'setting-security'.tr()}',
+    '${'setting-noti'.tr()}',
+    '${'setting-terms'.tr()}',
   ];
 
   List settingIcon = [
