@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../components/appbar.dart';
 import '../../components/button.dart';
@@ -20,6 +20,7 @@ class SettingFindPWPage extends StatefulWidget {
 
 class _SettingFindPWPageState extends State<SettingFindPWPage> {
   static final storage = FlutterSecureStorage();
+  final TextEditingController _passwordController = TextEditingController();
 
 
   @override
@@ -27,10 +28,10 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     var memberDetails = ModalRoute.of(context)!.settings.arguments;
-    final TextEditingController _passwordController = TextEditingController();
 
     return Scaffold(
         backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(appBar: AppBar(), title: '',backgroundColor: Colors.transparent, infookay: false, infocontent: '',),
 
         body: Container(
@@ -41,7 +42,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
               SizedBox(
                 height: 50,
               ),
-              Text('비밀번호를 변경하기 위해\n기존 비밀번호를 입력해주세요.',
+              Text('${'setting-findpas'.tr()}',
                 style: TextStyle(
                     fontSize: isSmallScreen?22:24,
                     fontWeight: FontWeight.bold
@@ -50,9 +51,11 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                 height: 20,
               ),
               TextFormField(
+                obscureText: true,
+                obscuringCharacter: '*',
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  hintText: '비밀번호 입력',
+                  hintText: '${'setting-enterpass'.tr()}',
                   hintStyle: TextStyle(
                     fontSize: isSmallScreen?18:20,
                     color: Color(0xffD9D9D9),
@@ -62,7 +65,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
               ),
               Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text('영문, 특수기호, 숫자를 포함 10자 이상',
+                  child: Text('${'signup-pwd4'.tr()}',
                     style: TextStyle(
                       fontSize: isSmallScreen?12:14,
                       color: Color(0xffb8b8b8),
@@ -76,7 +79,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                     child: Button(
                       //수정
                         isEnabled: true,
-                        child: Text('인증완료'),
+                        child: Text('${'setting-authen'.tr()}'),
                         onPressed: () async {
                           //if 지금 비밀번호랑 입력한 거랑 같으면
                           var userInfo = await storage.read(key: 'auth');
@@ -89,17 +92,17 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                                 builder: (BuildContext context) =>
                                     CupertinoAlertDialog(
 
-                                      title: Text('비밀번호 미일치',
+                                      title: Text('${'setting-wrongpass'.tr()}',
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      content: const Text('비밀번호를 확인해주세요.'),
+                                      content: Text('${'setting-confirmpass'.tr()}'),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.of(context).pop(),
-                                          child: const Text('확인',
+                                          child: Text('${'confirm'.tr()}',
                                               style: TextStyle(
                                                 color: Colors.black,
                                               )),

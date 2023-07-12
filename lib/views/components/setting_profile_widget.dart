@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 
 Widget buildProfileList(context, index, memberDetails){
 /*  var updatedMBTI = await Navigator.pushNamed(
@@ -9,10 +11,10 @@ Widget buildProfileList(context, index, memberDetails){
   final double screenWidth = MediaQuery.of(context).size.width;
   final bool isSmallScreen = screenWidth <= 600;
   List settingList = [
-    '성별',
-    '국적',
+    '${'setting-gender'.tr()}',
+    '${'setting-nationality'.tr()}',
     'MBTI',
-    '언어 재설정',
+    '${'setting-lan'.tr()}',
   ];
 
   List settingIcon = [

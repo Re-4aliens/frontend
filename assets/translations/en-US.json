@@ -14,6 +14,7 @@
   "confirm": "Confirm",
   "done": "Done",
   "cancel": "Cancel",
+  "again": "Retry input",
   "signup-name": "Let me know your name",
   "name": "Name",
   "name-constraintsText1": "Unable to include special characters",
@@ -78,7 +79,7 @@
   "homepage-happy" : "Today, I'm happy!",
   "homepage-positive1" : "Which ",
   "homepage-positive2" : "mbti ",
-  "homepage-positive3" : "is the best match for #파워긍정왕..",
+  "homepage-positive3" : "is the best match for #HappyCamper ",
   "homepage-positive4" : "ENFP",
   "homepage-positive5" : "?",
   "homepage-more" : "Read More",
@@ -96,5 +97,74 @@
   "homepage-already": "! You have already completed the matching application and are in the process:)\n Press the ",
   "homepage-check": " button below and check it!",
   "homepage-press" : "Press the ",
-  "homepage-mathcingstart": " button below to start matching!"
+  "homepage-mathcingstart": " button below to start matching!",
+
+
+  "setting": "Setting",
+  "setting-nim" : " ",
+  "setting-takepicture" : "Take a photo",
+  "setting-gallery": "Import from gallery",
+  "setting-profile": "View and edit profile",
+  "setting-account": "Account management",
+  "setting-logout": "Log out",
+  "setting-gender": "Gender",
+  "setting-nationality": "Nationality",
+  "setting-lan": "Language settings",
+  "setting-displaylan" : "Display language",
+  "setting-mbti": "Edit MBTI",
+  "setting-security": "Security",
+  "setting-noti": "Notification",
+  "setting-terms": "Terms of service",
+  "setting-noti1": "You can receive quick updates\nwhen a match is found and during chat.",
+  "setting-notiall": "All notifications",
+  "setting-notimatch": "Matching notifications",
+  "setting-notichat": "Chatting notifications",
+  "setting-notiinapp": "In-app notifications",
+  "setting-changepass": "Change Password",
+  "setting-withdrawal": "Withdrawal",
+  "setting-memwithdrawal": "Membership Withdrawal",
+  "setting-findpas": "Please enter\nyour current password\nto change the password.",
+  "setting-enterpass": "Enter password",
+  "setting-wrongpass": "Password mismatch",
+  "setting-confirmpass": "Please confirm your password.",
+  "setting-newpas1": "Please enter a new password\nto complete the password change.",
+  "setting-newpas2": "Enter new password",
+  "setting-newpas3": "Re-enter new password",
+  "setting-newpas4": "Change password",
+  "setting-authen": "Authentication completed",
+  "setting-settingcancel": "Unable to change",
+  "setting-why": "Reason for inability to change",
+  "setting-newmis": "New password mismatch",
+  "setting-confirm": "Please confirm your password.",
+  "setting-pasdone": "Your password has been changed!\nPlease log in again.",
+  "setting-gohome": "Go to home",
+  "setting-deletewhat": "Wait! If you proceed with withdrawal, you will lose the following features.",
+  "setting-delete1": "You need to sign up again\nfrom the beginning.",
+  "setting-delete1.1": "All information of the member\nwill be completely deleted.\nYou need to sign up again.",
+  "setting-delete2": "The saved information\ncannot be recovered.",
+  "setting-delete2.1": "Personal data(ex.conservation history)\nwill be destroyed and cannot be recovered.",
+  "setting-delete3": "You lose the opportunity to meet\nfriends from diverse nationalities.",
+  "setting-delete3.1": "You will miss out on the opportunity\nto meet more diverse friends.",
+  "setting-onemore": "Please reconsider one more time.",
+  "setting-putpas": "Please enter your password.",
+  "setting-real":"Are you sure you want to withdraw?",
+  "setting-withdrawaldone":"Withdrawal completed.",
+  "setting-fail": "fail",
+  "setting-failwhy": "Withdrawal failed\ndue to password mismatch",
+  "setting-delete5": "Chat history, matching records, and other data used so far cannot be recovered.",
+  "setting-thank": "Thank you for using our service so far.\nThrough membership registration,\nyou can start again anytime!",
+  "setting-private": "Privacy Policy"
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
