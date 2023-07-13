@@ -1,3 +1,4 @@
+import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/loading_page.dart';
 import 'package:aliens/views/pages/login/login_checkmail_page.dart';
 import 'package:aliens/views/pages/login/login_findpassword_page.dart';
@@ -68,11 +69,12 @@ final supportedLocales = [
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  SqlMessageDataBase();
 
   // easylocalization 초기화
   await EasyLocalization.ensureInitialized();
 
-/*
+
   // fcm 초기화 부분
   await initializeDefault();
   final fcmToken = await FirebaseMessaging.instance.getToken();
@@ -92,7 +94,6 @@ void main() async {
   });
 
 
- */
 
 
   runApp(EasyLocalization(

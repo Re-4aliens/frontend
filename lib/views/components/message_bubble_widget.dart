@@ -1,17 +1,20 @@
 import 'package:aliens/mockdatas/mockdata_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import 'package:web_socket_channel/io.dart';
+
 
 import '../../models/message_model.dart';
 
 class MessageBubble extends StatefulWidget {
   const MessageBubble(
-      {super.key, required this.message, required this.applicant, required this.showingTime, required this.showingPic});
+      {super.key, required this.message, required this.memberDetails, required this.showingTime, required this.showingPic});
 
   final MessageModel message;
-  final applicant;
+  final MemberDetails memberDetails;
   final bool showingTime;
   final bool showingPic;
 
@@ -20,14 +23,19 @@ class MessageBubble extends StatefulWidget {
 }
 
 class _MessageBubbleState extends State<MessageBubble> {
+  var channel;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     if(widget.message.chatType == 1)
       return _vsGameBubble();
-    else if(widget.message.chatType == -1)
-      return _timeBubble();
     else {
-      if(widget.message.senderId == widget.applicant.member.name)
+      if(widget.message.senderId == widget.memberDetails.memberId)
         return _myBubble();
       else
         return _partnerBubble();
@@ -69,7 +77,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                 margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Text(
-                  '${widget.message.chatContent}',
+                  '${widget.message.chatId}',
                   style: TextStyle(
                     color: Color(0xff616161),
                   ),
@@ -79,8 +87,9 @@ class _MessageBubbleState extends State<MessageBubble> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
+                widget.message.sendTime == null? '':
                 widget.showingTime ?
-                '${DateFormat('hh:mm a').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
+                '${DateFormat('hh:mm').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
                 style: TextStyle(
                   fontSize: 12,
                 ),
@@ -93,45 +102,54 @@ class _MessageBubbleState extends State<MessageBubble> {
   }
 
   Widget _myBubble() {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Text(
-            widget.showingTime ?
-            '${DateFormat('hh:mm a').format(DateTime.now())}' : '',
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          ),
-        ),
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: 270, // 최대 너비 지정
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Color(0xff7898ff),
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 5,
-                      spreadRadius: 0.5,
-                      offset: const Offset(0, 3))
-                ]),
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-            margin: EdgeInsets.only(top: 10, bottom: 10, left: 18, right: 25),
-            child: Text(
-              '${widget.message.chatContent}',
-              style: TextStyle(
-                color: Colors.white,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                widget.showingTime ?
+                '${DateFormat('hh:mm a').format(DateTime.now())}' : '',
+                style: TextStyle(
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: 270, // 최대 너비 지정
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Color(0xff7898ff),
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 5,
+                          spreadRadius: 0.5,
+                          offset: const Offset(0, 3))
+                    ]),
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+                margin: EdgeInsets.only(top: 10, bottom: 10, left: 18, right: 25),
+                child: Text(
+                  '${widget.message.chatContent}',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
+        Padding(
+          padding: EdgeInsets.only(right: 18),
+          child: widget.message.unReadCount == 0 ? Text('읽음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('읽지 않음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
+        )
       ],
     );
   }
@@ -216,20 +234,5 @@ class _MessageBubbleState extends State<MessageBubble> {
     );
   }
 
-  Widget _timeBubble() {
-    return Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Color(0xff9B9B9B),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            padding: EdgeInsets.symmetric(horizontal: 15),
-            margin: EdgeInsets.symmetric(vertical: 10),
-            child: Text('${DateFormat('yyyy/MM/dd').format(DateTime.now())}', style: TextStyle(color: Colors.white),),
-          ),
-          Text("새로운 대화를 시작합니다.", style: TextStyle(color: Color(0xff717171), fontSize: 12),)
-        ],
-      );
-  }
+
 }
