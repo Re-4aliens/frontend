@@ -137,7 +137,7 @@ class APIs {
    */
   static Future<String> logIn(Auth auth) async {
     const url =
-        'http://13.125.205.59:8080/api/v1/member/authentication'; //mocksever
+        'http://13.125.205.59:8080/api/v1/auth/authentication'; //mocksever
 
     var response = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
@@ -455,7 +455,6 @@ class APIs {
           gender: "",
           nationality: "",
           profileImage: "",
-          countryImage: ""
         ),
         Partner(memberId: 0,
             name: "",
@@ -463,7 +462,6 @@ class APIs {
             gender: "",
             nationality: "",
             profileImage: "",
-            countryImage: ""
         ),
         Partner(memberId: 0,
             name: "",
@@ -471,7 +469,6 @@ class APIs {
             gender: "",
             nationality: "",
             profileImage: "",
-            countryImage: ""
         ),
         Partner(memberId: 0,
             name: "",
@@ -479,7 +476,6 @@ class APIs {
             gender: "",
             nationality: "",
             profileImage: "",
-            countryImage: ""
         )
       ];
       return _partners;
@@ -650,9 +646,10 @@ class APIs {
 
   /*
 
-  채팅룸 정보
+  채팅룸 정보 => 변경
 
    */
+  /*
   static Future<List<ChatRoom>> getChatRooms() async {
     var _url = 'http://13.125.205.59:8080/chat/rooms';
 
@@ -683,6 +680,8 @@ class APIs {
     }
   }
 
+   */
+
   /*
 
   메세지 받아오기
@@ -699,7 +698,6 @@ class APIs {
 
     //success
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       List<MessageModel> value = body.map((dynamic item) => MessageModel.fromJson(item)).toList();
       //return List.from(value.reversed);

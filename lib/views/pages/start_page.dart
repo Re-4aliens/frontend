@@ -151,7 +151,6 @@ class _StartPageState extends State<StartPage> {
                           'English'
                       ),),
                       TextButton(onPressed: (){
-
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -159,14 +158,24 @@ class _StartPageState extends State<StartPage> {
                                 applicant: mockScreenArgument.applicant,
                                 partner: mockScreenArgument.partners![0],
                                 memberDetails: mockScreenArgument.memberDetails!,
-                                chatRoom: ChatRoom(
-
-                                ),
                               )),
                         );
 
                       }
-                        ,child: Text('채팅 연결'),)
+                        ,child: Text('${mockScreenArgument.partners![0].name}'),),
+                      TextButton(onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChattingPage(
+                                applicant: mockScreenArgument.applicant,
+                                partner: mockScreenArgument.partners![1],
+                                memberDetails: mockScreenArgument.memberDetails!,
+                              )),
+                        );
+
+                      }
+                        ,child: Text('${mockScreenArgument.partners![1].name}'),)
                     ],
                   )
                 ],

@@ -77,7 +77,7 @@ var partners = const [
 
 ScreenArguments mockScreenArgument = ScreenArguments(
     MemberDetails(
-      memberId: 1,
+      memberId: 6,
       mbti: 'ENFP',
       name: 'Daisy',
       nationality: 'South Korea',
@@ -101,18 +101,26 @@ ScreenArguments mockScreenArgument = ScreenArguments(
             PreferLanguages(firstPreferLanguage: 'KOREA', secondPreferLanguage: 'ENGLISH')),
     [
       Partner(
+        roomState: "OPEN",
+        roomId: 1,
           name: '파트너1',
           nationality: 'South Korea',
           gender: 'FEMALE',
           mbti: 'ENFP',
+          memberId: 1,
           profileImage: '',
-          countryImage: ''),
+          firstPreferLanguage: "KOREAN",
+      secondPreferLanguage: "ENGLISH"),
       Partner(
+        roomState: "OPEN",
+        roomId: 2,
           name: '파트너2',
           nationality: 'South Korea',
           gender: 'MALE',
           mbti: 'ISTJ',
+          memberId: 3,
           profileImage: '',
-          countryImage: '')
+          firstPreferLanguage: "KOREAN",
+          secondPreferLanguage: "ENGLISH")
     ]
 );

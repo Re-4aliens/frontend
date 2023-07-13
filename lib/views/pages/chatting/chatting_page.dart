@@ -1,3 +1,11 @@
+
+import 'dart:convert';
+
+import 'package:aliens/repository/sql_message_database.dart';
+import 'package:aliens/repository/sql_message_repository.dart';
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
+
 import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/screenArgument.dart';
@@ -6,10 +14,13 @@ import 'package:aliens/views/components/profileDialog_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:web_socket_channel/io.dart';
+import 'package:sqflite/sqflite.dart';
 import '../../../apis.dart';
 import '../../../models/chatRoom_model.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
+import '../../../providers/chat_provider.dart';
 
 
 List<MessageModel> _list = [];
@@ -17,11 +28,10 @@ var channel;
 
 class ChattingPage extends StatefulWidget {
   const ChattingPage(
-      {super.key, required this.applicant, required this.partner, required this.chatRoom, required this.memberDetails});
+      {super.key, required this.applicant, required this.partner,required this.memberDetails});
 
   final Applicant? applicant;
   final Partner partner;
-  final ChatRoom chatRoom;
   final MemberDetails memberDetails;
 
   @override
@@ -36,69 +46,63 @@ class _ChattingPageState extends State<ChattingPage> {
   var _newMessage = '';
   bool isLoading = true;
   bool isKeypadUp = false;
-  var itemLength = 1;
+  var itemLength = 0;
+  bool isSended = false;
+  String createdDate = '20230713';
+  bool isNewChat = true;
+  bool bottomFlag = false;
 
-  void _sendMessage() {
-    setState(() {
-      FocusScope.of(context).unfocus();
-      _list.add(
-        MessageModel(
-          chatId: _list.length,
-          chatType: 0,
-          chatContent: _newMessage,
-            roomId: widget.chatRoom.roomId,
-            senderId: widget.memberDetails.memberId,
-            senderName: widget.memberDetails.name,
-            receiverId: widget.partner.memberId,
-            sendTime: DateTime.now().toString(),
-            unReadCount: 1,
-        ),
-      );
 
-      //데이터 베이스에 추가 SET
-      //channel.sink.add(_newMessage);
-      //텍스트폼 비우기
-      _controller.clear();
-      _newMessage = '';
-    });
+  void createdChat() async{
+    var chat = MessageModel(
+        requestId: DataUtils.makeUUID(),
+        chatId: _list.length,
+        chatType: 0,
+        chatContent: _newMessage,
+        roomId: widget.partner.roomId,
+        senderId: 6,
+        senderName: "Daisy",
+        receiverId: 1,
+        sendTime: DateTime.now().toString()
+    );
+    await SqlMessageRepository.create(chat);
+    updateUi();
   }
+
+  Future<List<MessageModel>> _loadChatList()  async {
+    return await SqlMessageRepository.getList(widget.partner.roomId!);
+  }
+
 
   @override
   void initState() {
     super.initState();
-    final wsUrl = Uri.parse('');
+    final wsUrl = Uri.parse('ws://13.125.205.59:8081/ws/chat');
 
     _scrollController.addListener(() {
       scrollListener();
     });
 
+    setState(() {
+      createdDate = DateTime.now().toString();
+    });
 
-    if(_list.isEmpty)
-      _list.add(
-        MessageModel(
-            chatId: -1,
-            chatType: -1,
-            chatContent: '시작',
-            roomId: widget.chatRoom.roomId,
-            senderId: widget.memberDetails.memberId,
-            senderName: widget.memberDetails.name,
-            receiverId: widget.partner.memberId,
-            sendTime: DateTime.now().toString(),
-            unReadCount: 1,
-        ),
-      );
-    //channel = IOWebSocketChannel.connect(wsUrl);
+    channel = IOWebSocketChannel.connect(wsUrl);
   }
+
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    //channel.sink.close();
+    channel.sink.close();
 
     _scrollController.dispose();
   }
+
+
   scrollListener() async {
+    /*
     if (_scrollController.offset == _scrollController.position.maxScrollExtent
         && !_scrollController.position.outOfRange) {
       if(_list.last.chatId != 1){
@@ -108,6 +112,21 @@ class _ChattingPageState extends State<ChattingPage> {
         itemLength = _list.length;
       });
     }
+
+     */
+  }
+
+
+
+  void updateUi() async {
+    setState(() {
+      //텍스트폼 비우기
+      //스크롤 아래로 내리기
+      bottomFlag = true;
+      _controller.clear();
+      _newMessage = '';
+      FocusScope.of(context).unfocus();
+    });
   }
 
   //랜덤채팅 바 보여주기
@@ -115,9 +134,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
   @override
   Widget build(BuildContext context) {
-    //final arguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
     bool isKeyboardOpen = false;
-
 
 
     return GestureDetector(
@@ -246,8 +263,53 @@ class _ChattingPageState extends State<ChattingPage> {
           body: Column(children: [
             Expanded(
                 child: Container(
+                    padding: const EdgeInsets.only(top: 15),
               color: Color(0xffF5F7FF),
-              child: FutureBuilder(
+              child: FutureBuilder<List<MessageModel>>(
+                future: _loadChatList(),
+                builder: (context, snapshot){
+                  if(snapshot.hasError){
+                    return Center(child: Text('${snapshot}'));
+                  }
+                  if(snapshot.hasData) {
+                    var datas = snapshot.data;
+                    _list = snapshot.data!;
+                    print(_list.length);
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                        _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                      });
+                    return ListView(
+                        controller: _scrollController,
+                      children: List.generate(
+                          datas!.length, (index) {
+                            return Column(
+                              children: [
+                                MessageBubble(message: MessageModel(
+                                    requestId: datas[index].requestId,
+                                    chatId: datas[index].chatId,
+                                    chatType: datas[index].chatType,
+                                    chatContent: datas[index].chatContent,
+                                    roomId: datas[index].roomId,
+                                    senderId: datas[index].senderId,
+                                    senderName: datas[index].senderName,
+                                    receiverId: datas[index].receiverId,
+                                    sendTime: datas[index].sendTime
+                                ),
+                                    memberDetails: widget.memberDetails,
+                                    showingTime: index == 0 ? true : datas[index].senderId != datas[index - 1].senderId,
+                                    showingPic: index == 0 ? true : index - 1 == index)
+                              ],
+                            );
+                      }),
+                    );
+                  }
+                  else
+                    return CircularProgressIndicator();
+                },
+              )
+
+
+   /* FutureBuilder(
                 future: APIs.getMessages(),
                 builder: (context, snapshot) {
                   if(snapshot.hasData == false){
@@ -256,20 +318,25 @@ class _ChattingPageState extends State<ChattingPage> {
                     );
                   }
                  else {
+
                    if(itemLength == 1){
                      _list = snapshot.data!;
                      itemLength = _list.length;
                    }
-                   print('길이: ${itemLength}');
-                        return Padding(
+
+
+                        return
+                          Padding(
                           padding: const EdgeInsets.only(top: 15),
-                          child: ListView.builder(
-                            reverse: true,
+                            child: ListView.builder(
+                              reverse: true,
                               controller: _scrollController,
                               itemCount: itemLength,
                               itemBuilder: (context, index) {
+                                /*
                                 return MessageBubble(
                                   message: MessageModel(
+                                    requestId: _list![index].requestId,
                                     chatId: _list![index].chatId,
                                     chatType: _list![index].chatType,
                                     chatContent: _list![index].chatContent,
@@ -280,16 +347,18 @@ class _ChattingPageState extends State<ChattingPage> {
                                     sendTime: _list![index].sendTime,
                                     unReadCount: _list![index].unReadCount,
                                   ),
-                                  applicant: widget.applicant,
-                                  showingTime: index == 0,
+                                  memberDetails: widget.memberDetails,
+                                  showingTime: index > 0 ? _list![index].senderId != _list![index - 1].senderId : true,
                                   showingPic: _list!.length - 1 == index,
-                                );
+                                );*/
                               }),
                         );
 
                   }
                 },
-              ),
+              ),*/
+
+
             )),
             Column(
               children: [
@@ -353,7 +422,7 @@ class _ChattingPageState extends State<ChattingPage> {
                                 IconButton(
                                   onPressed: _newMessage.trim().isEmpty
                                       ? null
-                                      : _sendMessage,
+                                      : createdChat,
                                   icon: SvgPicture.asset(
                                     'assets/icon/icon_send.svg',
                                     height: 22,
@@ -381,21 +450,20 @@ class _ChattingPageState extends State<ChattingPage> {
                         onTap: () {
                           setState(() {
                             isChecked = false;
+                            _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: Duration(milliseconds: 500), curve: Curves.ease);
                           });
-                          _list.add(
-                            MessageModel(
-                                chatId: _list.length,
-                                chatType: 1,
-                                chatContent: '밸런스 게임',
-                                roomId: widget.chatRoom.roomId,
-                                senderId: widget.memberDetails.memberId,
-                                senderName: widget.memberDetails.name,
-                                receiverId: widget.partner.memberId,
-                                sendTime: DateTime.now().toString(),
-                                unReadCount: 1,
-                            ),
-                          );
-                        },
+                          _list.insert(0, MessageModel(
+                            chatId: _list.length,
+                            chatType: 1,
+                            chatContent: '밸런스 게임',
+                            roomId: widget.partner.roomId,
+                            senderId: widget.memberDetails.memberId,
+                            senderName: widget.memberDetails.name,
+                            receiverId: widget.partner.memberId,
+                            sendTime: DateTime.now().toString(),
+                            unReadCount: 1,
+                          ),);
+                          },
                         child: Container(
                           height: 100,
                           width: 100,
@@ -429,6 +497,22 @@ class _ChattingPageState extends State<ChattingPage> {
           ]),
         ),
       ),
+    );
+  }
+  Widget _timeBubble() {
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Color(0xff9B9B9B),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 15),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          child: Text('DateFormat().format(DateTime.now())', style: TextStyle(color: Colors.white),),
+        ),
+        Text("새로운 대화를 시작합니다.", style: TextStyle(color: Color(0xff717171), fontSize: 12),)
+      ],
     );
   }
 }
