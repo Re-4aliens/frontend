@@ -1,3 +1,4 @@
+import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/signup_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
@@ -502,7 +503,7 @@ class APIs {
     _screenArguments =
     new ScreenArguments(_memberDetails, _status, _applicant, _partners);
 
-    return _screenArguments;
+    return mockScreenArgument;
   }
 
 

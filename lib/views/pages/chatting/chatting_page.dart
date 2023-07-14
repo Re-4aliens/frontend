@@ -11,6 +11,7 @@ import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:aliens/views/components/profileDialog_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -48,7 +49,7 @@ class _ChattingPageState extends State<ChattingPage> {
   bool isKeypadUp = false;
   var itemLength = 0;
   bool isSended = false;
-  String createdDate = '20230713';
+  String createdDate = '2023-07-12';
   bool isNewChat = true;
   bool bottomFlag = false;
 
@@ -60,9 +61,9 @@ class _ChattingPageState extends State<ChattingPage> {
         chatType: 0,
         chatContent: _newMessage,
         roomId: widget.partner.roomId,
-        senderId: 6,
+        senderId: widget.memberDetails.memberId,
         senderName: "Daisy",
-        receiverId: 1,
+        receiverId: widget.partner.memberId,
         sendTime: DateTime.now().toString()
     );
     await SqlMessageRepository.create(chat);
@@ -81,10 +82,6 @@ class _ChattingPageState extends State<ChattingPage> {
 
     _scrollController.addListener(() {
       scrollListener();
-    });
-
-    setState(() {
-      createdDate = DateTime.now().toString();
     });
 
     channel = IOWebSocketChannel.connect(wsUrl);
@@ -282,8 +279,14 @@ class _ChattingPageState extends State<ChattingPage> {
                         controller: _scrollController,
                       children: List.generate(
                           datas!.length, (index) {
+                            final currentDate = DateTime.parse(datas[index].sendTime!);
                             return Column(
                               children: [
+                                if (index == 0 ||
+                                    currentDate.year != DateTime.parse(datas[index - 1].sendTime!).year ||
+                                    currentDate.month != DateTime.parse(datas[index - 1].sendTime!).month ||
+                                    currentDate.day != DateTime.parse(datas[index - 1].sendTime!).day)
+                                  _timeBubble(index, currentDate.toString()),
                                 MessageBubble(message: MessageModel(
                                     requestId: datas[index].requestId,
                                     chatId: datas[index].chatId,
@@ -296,8 +299,8 @@ class _ChattingPageState extends State<ChattingPage> {
                                     sendTime: datas[index].sendTime
                                 ),
                                     memberDetails: widget.memberDetails,
-                                    showingTime: index == 0 ? true : datas[index].senderId != datas[index - 1].senderId,
-                                    showingPic: index == 0 ? true : index - 1 == index)
+                                    showingTime: true,
+                                    showingPic: index == 0 ? true : datas[index].senderId != datas[index - 1].senderId)
                               ],
                             );
                       }),
@@ -307,57 +310,6 @@ class _ChattingPageState extends State<ChattingPage> {
                     return CircularProgressIndicator();
                 },
               )
-
-
-   /* FutureBuilder(
-                future: APIs.getMessages(),
-                builder: (context, snapshot) {
-                  if(snapshot.hasData == false){
-                    return Center(
-                      child: Text('받아오는 중'),
-                    );
-                  }
-                 else {
-
-                   if(itemLength == 1){
-                     _list = snapshot.data!;
-                     itemLength = _list.length;
-                   }
-
-
-                        return
-                          Padding(
-                          padding: const EdgeInsets.only(top: 15),
-                            child: ListView.builder(
-                              reverse: true,
-                              controller: _scrollController,
-                              itemCount: itemLength,
-                              itemBuilder: (context, index) {
-                                /*
-                                return MessageBubble(
-                                  message: MessageModel(
-                                    requestId: _list![index].requestId,
-                                    chatId: _list![index].chatId,
-                                    chatType: _list![index].chatType,
-                                    chatContent: _list![index].chatContent,
-                                    roomId: _list![index].roomId,
-                                    senderId: _list![index].senderId,
-                                    receiverId: _list[index].receiverId,
-                                    senderName: _list![index].senderName,
-                                    sendTime: _list![index].sendTime,
-                                    unReadCount: _list![index].unReadCount,
-                                  ),
-                                  memberDetails: widget.memberDetails,
-                                  showingTime: index > 0 ? _list![index].senderId != _list![index - 1].senderId : true,
-                                  showingPic: _list!.length - 1 == index,
-                                );*/
-                              }),
-                        );
-
-                  }
-                },
-              ),*/
-
 
             )),
             Column(
@@ -499,7 +451,7 @@ class _ChattingPageState extends State<ChattingPage> {
       ),
     );
   }
-  Widget _timeBubble() {
+  Widget _timeBubble(int index, String date) {
     return Column(
       children: [
         Container(
@@ -507,11 +459,19 @@ class _ChattingPageState extends State<ChattingPage> {
             color: Color(0xff9B9B9B),
             borderRadius: BorderRadius.circular(20),
           ),
-          padding: EdgeInsets.symmetric(horizontal: 15),
-          margin: EdgeInsets.symmetric(vertical: 10),
-          child: Text('DateFormat().format(DateTime.now())', style: TextStyle(color: Colors.white),),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          margin: EdgeInsets.only(top: 20),
+          child:
+          index == 0 ?
+          Text('${DateFormat('yyyy/MM/dd').format(DateTime.parse(createdDate))}', style: TextStyle(color: Colors.white),)
+              :
+          Text('${DateFormat('yyyy/MM/dd').format(DateTime.parse(date))}', style: TextStyle(color: Colors.white),),
         ),
-        Text("새로운 대화를 시작합니다.", style: TextStyle(color: Color(0xff717171), fontSize: 12),)
+        if(index == 0)
+        Padding(
+          padding: const EdgeInsets.only(top: 15.0, bottom: 20.0),
+          child: Text("새로운 대화를 시작합니다.", style: TextStyle(color: Color(0xff717171), fontSize: 12),),
+        )
       ],
     );
   }
