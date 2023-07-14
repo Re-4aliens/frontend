@@ -273,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                 alignment: Alignment.center,
                 height: 90,
                 child: Text(
-                  '채팅',
+                  'chat1'.tr(),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

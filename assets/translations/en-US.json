@@ -104,6 +104,8 @@
   "homepage-already": "! You have already completed the matching application and are in the process:)\n Press the ",
   "homepage-check": " button below and check it!",
   "homepage-press" : "Press the ",
-  "homepage-mathcingstart": " button below to start matching!"
+  "homepage-mathcingstart": " button below to start matching!",
 
+
+  "chat1" : "Chats"
 }

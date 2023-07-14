@@ -77,7 +77,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                 margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Text(
-                  '${widget.message.chatId}',
+                  '${widget.message.chatContent}',
                   style: TextStyle(
                     color: Color(0xff616161),
                   ),
@@ -87,9 +87,8 @@ class _MessageBubbleState extends State<MessageBubble> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                widget.message.sendTime == null? '':
-                widget.showingTime ?
-                '${DateFormat('hh:mm').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
+                widget.showingTime! ?
+                '${DateFormat('hh:mm aaa').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
                 style: TextStyle(
                   fontSize: 12,
                 ),
@@ -112,8 +111,8 @@ class _MessageBubbleState extends State<MessageBubble> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                widget.showingTime ?
-                '${DateFormat('hh:mm a').format(DateTime.now())}' : '',
+                widget.showingTime! ?
+                '${DateFormat('hh:mm aaa').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
                 style: TextStyle(
                   fontSize: 12,
                 ),

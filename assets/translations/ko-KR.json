@@ -104,5 +104,8 @@
   "homepage-already" : "님! 이미 매칭신청을 완료해 진행중이에요:)\n 아래의",
   "homepage-check": " 버튼을 눌러 확인해보세요!",
   "homepage-press": "아래의 ",
-  "homepage-matchingstart": " 버튼을 눌러 매칭을 시작해보세요!"
+  "homepage-matchingstart": " 버튼을 눌러 매칭을 시작해보세요!",
+
+
+  "chat1" : "Chats"
 }
