@@ -1,4 +1,4 @@
-
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:aliens/repository/sql_message_database.dart';
@@ -12,6 +12,7 @@ import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:aliens/views/components/profileDialog_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -23,13 +24,16 @@ import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
 import '../../../providers/chat_provider.dart';
 
-
 List<MessageModel> _list = [];
 var channel;
+var readChannel;
 
 class ChattingPage extends StatefulWidget {
   const ChattingPage(
-      {super.key, required this.applicant, required this.partner,required this.memberDetails});
+      {super.key,
+      required this.applicant,
+      required this.partner,
+      required this.memberDetails});
 
   final Applicant? applicant;
   final Partner partner;
@@ -40,7 +44,6 @@ class ChattingPage extends StatefulWidget {
 }
 
 class _ChattingPageState extends State<ChattingPage> {
-
   final _controller = TextEditingController();
 
   final ScrollController _scrollController = ScrollController();
@@ -49,54 +52,136 @@ class _ChattingPageState extends State<ChattingPage> {
   bool isKeypadUp = false;
   var itemLength = 0;
   bool isSended = false;
-  String createdDate = '2023-07-12';
+  static String createdDate = '1999-01-01';
   bool isNewChat = true;
   bool bottomFlag = false;
 
+  StreamSubscription<dynamic>? responseSubscription;
 
-  void createdChat() async{
-    var chat = MessageModel(
-        requestId: DataUtils.makeUUID(),
-        chatId: _list.length,
-        chatType: 0,
-        chatContent: _newMessage,
-        roomId: widget.partner.roomId,
-        senderId: widget.memberDetails.memberId,
-        senderName: "Daisy",
-        receiverId: widget.partner.memberId,
-        sendTime: DateTime.now().toString()
-    );
-    await SqlMessageRepository.create(chat);
-    updateUi();
+  void getMessage() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
+      print('Received FCM message with data: ${message.data} at ${DateTime.now()}');
+
+      //받은 fcm 저장하고 보여주기
+      var field = json.decode(message.data as String);
+      var newChat = MessageModel(
+          chatType: field['chatType'],
+          chatContent: field['chatContent'],
+          roomId: field['roomId'],
+          senderId: field['senderId'],
+          senderName: field['senderName'],
+          receiverId: field['receiverId'],
+          sendTime: field['sendTime']
+      );
+      //저장됨
+      await SqlMessageRepository.create(newChat);
+      updateUi();
+
+      //읽음 처리 전송
+
+      //응답받으면 업데이트하기
+
+
+    });
   }
 
-  Future<List<MessageModel>> _loadChatList()  async {
+
+  void createdChat() async {
+    //응답값 설정
+    Map<String, dynamic> response = {
+      'requestId': DataUtils.makeUUID(),
+      'fcmToken': "fxTG0oKYRsWj9sIdE1CLHS:APA91bF69Yq8OF_DfJgo4OEcOx2Qy6TyZIptRYPEmgbSLX_w_XQ5-CsCuE9UPNz9bn4QMP_Ic_8IDvREHC3Osq_1LXl3nUOatbfyOfp-N6ejpNYXJIPf6b8C7hHdr7423aqDNWdZK2yy",
+      'chatType': 0,
+      'chatContent': _newMessage,
+      'roomId': widget.partner.roomId,
+      'senderId': widget.memberDetails.memberId,
+      'senderName': "Ryan",
+      'receiverId': widget.partner.memberId,
+      'sendTime': DateTime.now().toString(),
+    };
+
+    updateUi();
+
+    //웹소켓 전송
+    channel.sink.add(json.encode(response));
+
+    if (responseSubscription == null) {
+      responseSubscription = channel.stream.listen((message) async {
+        print('Received response: $message');
+        if(json.decode(message)['status'] == 'success'){
+          var chat = MessageModel(
+              chatType: 0,
+              chatContent: response['chatContent'],
+              roomId: response['roomId'],
+              senderId: response['senderId'],
+              senderName: response['senderName'],
+              receiverId: response['receiverId'],
+              sendTime: response['sendTime']
+          );
+          //저장됨
+          await SqlMessageRepository.create(chat);
+          setState(() {});
+        }
+      }, onError: (error) {
+        print('Error: $error');
+      }, onDone: () {
+        print('WebSocket connection closed');
+      });
+    }
+
+  }
+
+  Future<List<MessageModel>> _loadChatList(unReadChatList) async {
+
+    //리스트 업데이트
+    for (final message in unReadChatList) {
+      await SqlMessageRepository.create(message);
+    }
+
+/*
+    //읽음 처리 보내기
+    Map<String, dynamic> response = {
+      "requestId": DataUtils.makeUUID(),
+      "fcmToken": "",
+      "chatId" : 123
+    };
+    readChannel.sink.add(json.encode(response));
+
+    //성공하면 수정
+ */
+
+
+    //업데이트된 리스트 불러오기
     return await SqlMessageRepository.getList(widget.partner.roomId!);
   }
-
 
   @override
   void initState() {
     super.initState();
     final wsUrl = Uri.parse('ws://13.125.205.59:8081/ws/chat');
+    final wsReadUrl = Uri.parse('ws://13.125.205.59:8081/ws/read');
 
     _scrollController.addListener(() {
       scrollListener();
     });
+    createdDate = DateTime.now().toString();
 
     channel = IOWebSocketChannel.connect(wsUrl);
+    readChannel = IOWebSocketChannel.connect(wsReadUrl);
   }
-
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     channel.sink.close();
+    readChannel.sink.close();
 
     _scrollController.dispose();
-  }
 
+    responseSubscription?.cancel();
+    responseSubscription = null;
+  }
 
   scrollListener() async {
     /*
@@ -113,8 +198,6 @@ class _ChattingPageState extends State<ChattingPage> {
      */
   }
 
-
-
   void updateUi() async {
     setState(() {
       //텍스트폼 비우기
@@ -122,7 +205,6 @@ class _ChattingPageState extends State<ChattingPage> {
       bottomFlag = true;
       _controller.clear();
       _newMessage = '';
-      FocusScope.of(context).unfocus();
     });
   }
 
@@ -133,7 +215,6 @@ class _ChattingPageState extends State<ChattingPage> {
   Widget build(BuildContext context) {
     bool isKeyboardOpen = false;
 
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: WillPopScope(
@@ -142,7 +223,7 @@ class _ChattingPageState extends State<ChattingPage> {
             isChecked = false;
             return Future.value(false);
           } else
-            return Future.value(false);
+            return Future.value(true);
         },
         child: Scaffold(
           appBar: AppBar(
@@ -176,7 +257,9 @@ class _ChattingPageState extends State<ChattingPage> {
                           context: context,
                           builder: (_) => Scaffold(
                                 backgroundColor: Colors.transparent,
-                                body: ProfileDialog(partner: widget.partner,),
+                                body: ProfileDialog(
+                                  partner: widget.partner,
+                                ),
                               ));
                     },
                   ),
@@ -220,29 +303,46 @@ class _ChattingPageState extends State<ChattingPage> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text("어떤 서비스를 원하세요?", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                                  Text(
+                                    "어떤 서비스를 원하세요?",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                   Padding(
                                     padding: const EdgeInsets.all(25.0),
-                                    child: Text("대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.", textAlign: TextAlign.center, style: TextStyle(fontSize: 16,),),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(13),
-                                    decoration: BoxDecoration(
-                                      color: Color(0xff7898FF),
-                                      borderRadius: BorderRadius.circular(5)
+                                    child: Text(
+                                      "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
                                     ),
-                                    alignment: Alignment.center,
-                                    child: Text("신고하기", style: TextStyle(color: Colors.white),),
                                   ),
-                                  SizedBox(height: 10,),
                                   Container(
                                     padding: EdgeInsets.all(13),
                                     decoration: BoxDecoration(
                                         color: Color(0xff7898FF),
-                                        borderRadius: BorderRadius.circular(5)
-                                    ),
+                                        borderRadius: BorderRadius.circular(5)),
                                     alignment: Alignment.center,
-                                    child: Text("차단하기", style: TextStyle(color: Colors.white),),
+                                    child: Text(
+                                      "신고하기",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.all(13),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xff7898FF),
+                                        borderRadius: BorderRadius.circular(5)),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "차단하기",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   )
                                 ],
                               ),
@@ -261,57 +361,81 @@ class _ChattingPageState extends State<ChattingPage> {
             Expanded(
                 child: Container(
                     padding: const EdgeInsets.only(top: 15),
-              color: Color(0xffF5F7FF),
-              child: FutureBuilder<List<MessageModel>>(
-                future: _loadChatList(),
-                builder: (context, snapshot){
-                  if(snapshot.hasError){
-                    return Center(child: Text('${snapshot}'));
-                  }
-                  if(snapshot.hasData) {
-                    var datas = snapshot.data;
-                    _list = snapshot.data!;
-                    print(_list.length);
-                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                        _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 200), curve: Curves.easeIn);
-                      });
-                    return ListView(
-                        controller: _scrollController,
-                      children: List.generate(
-                          datas!.length, (index) {
-                            final currentDate = DateTime.parse(datas[index].sendTime!);
-                            return Column(
-                              children: [
-                                if (index == 0 ||
-                                    currentDate.year != DateTime.parse(datas[index - 1].sendTime!).year ||
-                                    currentDate.month != DateTime.parse(datas[index - 1].sendTime!).month ||
-                                    currentDate.day != DateTime.parse(datas[index - 1].sendTime!).day)
-                                  _timeBubble(index, currentDate.toString()),
-                                MessageBubble(message: MessageModel(
-                                    requestId: datas[index].requestId,
-                                    chatId: datas[index].chatId,
-                                    chatType: datas[index].chatType,
-                                    chatContent: datas[index].chatContent,
-                                    roomId: datas[index].roomId,
-                                    senderId: datas[index].senderId,
-                                    senderName: datas[index].senderName,
-                                    receiverId: datas[index].receiverId,
-                                    sendTime: datas[index].sendTime
-                                ),
-                                    memberDetails: widget.memberDetails,
-                                    showingTime: true,
-                                    showingPic: index == 0 ? true : datas[index].senderId != datas[index - 1].senderId)
-                              ],
-                            );
-                      }),
-                    );
-                  }
-                  else
-                    return CircularProgressIndicator();
-                },
-              )
+                    color: Color(0xffF5F7FF),
+                    child: FutureBuilder<List<MessageModel>>(
+                      future: APIs.getMessages(widget.partner.roomId),
+                      builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(child: Text('${snapshot}'));
+                        }
+                        if (snapshot.hasData) {
+                          //받아온 안읽은 채팅리스트
+                          var unReadChatList = snapshot.data;
+                          //안읽은 채팅이 있으면 DB에 저장해서 보여주기
+                          return FutureBuilder<List<MessageModel>>(
+                            future: _loadChatList(unReadChatList),
+                              builder: (context, snapshot){
+                                if(snapshot.hasError) return Center(child: Text('채팅 불러오는데 오류'),);
+                                if(snapshot.hasData){
+                                  _list = snapshot.data!;
+                                  var datas = snapshot.data;
 
-            )),
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((timeStamp) {
+                                    _scrollController.animateTo(
+                                        _scrollController.position.maxScrollExtent,
+                                        duration: Duration(milliseconds: 200),
+                                        curve: Curves.easeIn);
+                                  });
+                                  return ListView(
+                                    controller: _scrollController,
+                                    children: List.generate(datas!.length, (index) {
+                                      final currentDate =
+                                      DateTime.parse(datas[index].sendTime!);
+                                      return Column(
+                                        children: [
+                                          if (index == 0 ||
+                                              currentDate.year !=
+                                                  DateTime.parse(
+                                                      datas[index - 1].sendTime!)
+                                                      .year ||
+                                              currentDate.month !=
+                                                  DateTime.parse(
+                                                      datas[index - 1].sendTime!)
+                                                      .month ||
+                                              currentDate.day !=
+                                                  DateTime.parse(
+                                                      datas[index - 1].sendTime!)
+                                                      .day)
+                                            _timeBubble(index, currentDate.toString()),
+                                          MessageBubble(
+                                              message: MessageModel(
+                                                  chatId: datas[index].chatId,
+                                                  chatType: datas[index].chatType,
+                                                  chatContent: datas[index].chatContent,
+                                                  roomId: datas[index].roomId,
+                                                  senderId: datas[index].senderId,
+                                                  senderName: datas[index].senderName,
+                                                  receiverId: datas[index].receiverId,
+                                                  sendTime: datas[index].sendTime),
+                                              memberDetails: widget.memberDetails,
+                                              showingTime: true,
+                                              showingPic: index == 0
+                                                  ? true
+                                                  : datas[index].senderId !=
+                                                  datas[index - 1].senderId)
+                                        ],
+                                      );
+                                    }),
+                                  );
+                                } else return Center(child: Text('저장된 메세지 없음'));
+                          });
+                        } else
+                          return Center(child: Text('받아올 메세지 없음'),);
+                      },
+                    )
+                )
+            ),
             Column(
               children: [
                 Container(
@@ -402,8 +526,12 @@ class _ChattingPageState extends State<ChattingPage> {
                         onTap: () {
                           setState(() {
                             isChecked = false;
-                            _scrollController.animateTo(_scrollController.position.minScrollExtent, duration: Duration(milliseconds: 500), curve: Curves.ease);
+                            _scrollController.animateTo(
+                                _scrollController.position.minScrollExtent,
+                                duration: Duration(milliseconds: 500),
+                                curve: Curves.ease);
                           });
+                          /*
                           _list.insert(0, MessageModel(
                             chatId: _list.length,
                             chatType: 1,
@@ -414,8 +542,8 @@ class _ChattingPageState extends State<ChattingPage> {
                             receiverId: widget.partner.memberId,
                             sendTime: DateTime.now().toString(),
                             unReadCount: 1,
-                          ),);
-                          },
+                          ),);*/
+                        },
                         child: Container(
                           height: 100,
                           width: 100,
@@ -451,6 +579,7 @@ class _ChattingPageState extends State<ChattingPage> {
       ),
     );
   }
+
   Widget _timeBubble(int index, String date) {
     return Column(
       children: [
@@ -461,17 +590,24 @@ class _ChattingPageState extends State<ChattingPage> {
           ),
           padding: EdgeInsets.symmetric(horizontal: 20),
           margin: EdgeInsets.only(top: 20),
-          child:
-          index == 0 ?
-          Text('${DateFormat('yyyy/MM/dd').format(DateTime.parse(createdDate))}', style: TextStyle(color: Colors.white),)
-              :
-          Text('${DateFormat('yyyy/MM/dd').format(DateTime.parse(date))}', style: TextStyle(color: Colors.white),),
+          child: index == 0
+              ? Text(
+                  '${DateFormat('yyyy/MM/dd').format(DateTime.parse(createdDate))}',
+                  style: TextStyle(color: Colors.white),
+                )
+              : Text(
+                  '${DateFormat('yyyy/MM/dd').format(DateTime.parse(date))}',
+                  style: TextStyle(color: Colors.white),
+                ),
         ),
-        if(index == 0)
-        Padding(
-          padding: const EdgeInsets.only(top: 15.0, bottom: 20.0),
-          child: Text("새로운 대화를 시작합니다.", style: TextStyle(color: Color(0xff717171), fontSize: 12),),
-        )
+        if (index == 0)
+          Padding(
+            padding: const EdgeInsets.only(top: 15.0, bottom: 20.0),
+            child: Text(
+              "새로운 대화를 시작합니다.",
+              style: TextStyle(color: Color(0xff717171), fontSize: 12),
+            ),
+          )
       ],
     );
   }

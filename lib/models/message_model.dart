@@ -1,7 +1,6 @@
 import 'package:uuid/uuid.dart';
 
 class MessageFields {
-  static final String requestId = 'requestId';
   static final String chatId = 'chatId';
   static final String chatType = 'chatType';
   static final String chatContent = 'chatContent';
@@ -14,7 +13,6 @@ class MessageFields {
 }
 
 class MessageModel {
-  String? requestId;
   int? chatId;
   int? chatType;
   String? chatContent;
@@ -26,7 +24,7 @@ class MessageModel {
   int? unReadCount;
 
   MessageModel(
-      {this.requestId,
+      {
         this.chatId,
       this.chatType,
       this.chatContent,
@@ -38,7 +36,6 @@ class MessageModel {
       this.unReadCount});
 
   MessageModel.fromJson(Map<String, dynamic> json) {
-    requestId = json['requestId'];
     chatId = json['chatId'];
     chatType = json['chatType'];
     chatContent = json['chatContent'];
@@ -52,7 +49,6 @@ class MessageModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['requestId'] = this.requestId;
     data['chatId'] = this.chatId;
     data['chatType'] = this.chatType;
     data['chatContent'] = this.chatContent;

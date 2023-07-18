@@ -89,7 +89,6 @@ class MessageDB {
     var _list =  List.generate(maps.length, (index) {
       print('${index}: ${maps[index]['chatId']}');
       return MessageModel(
-        requestId: maps[index]['requestId'],
         chatId: maps[index]['chatID'],        //null
         chatType: maps[index]['chatType'],
         chatContent: maps[index]['chatContent'],

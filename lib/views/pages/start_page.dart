@@ -7,6 +7,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../apis.dart';
 import '../../models/chatRoom_model.dart';
 import '../components/button.dart';
 import '../components/button_big.dart';
@@ -173,9 +174,12 @@ class _StartPageState extends State<StartPage> {
                                 memberDetails: mockScreenArgument.memberDetails!,
                               )),
                         );
-
                       }
-                        ,child: Text('${mockScreenArgument.partners![1].name}'),)
+                        ,child: Text('${mockScreenArgument.partners![1].name}'),),
+                      TextButton(onPressed: () async {
+                       await APIs.signUp(signUpModel);
+                      }
+                        ,child: Text('회원가입'),),
                     ],
                   )
                 ],

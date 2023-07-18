@@ -1,16 +1,18 @@
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/repository/sql_message_database.dart';
+import 'package:sqflite/sqflite.dart';
 
 class SqlMessageRepository{
   static Future<void> create(MessageModel messageModel) async {
     var _db = await SqlMessageDataBase().database;
-    await _db.insert("chat", messageModel.toJson());
+    await _db.insert("chat",
+        messageModel.toJson(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
   static Future<List<MessageModel>> getList(int roomId) async{
     var _db = await SqlMessageDataBase().database;
     var result = await _db.query("chat", columns: [
-      MessageFields.receiverId,
       MessageFields.chatId,
       MessageFields.chatType,
       MessageFields.chatContent,
@@ -23,10 +25,10 @@ class SqlMessageRepository{
     ]);
     List<MessageModel> _list = [];
 
-    for(int i =0; i < result.length; i++){
-      if(MessageModel.fromJson(result[i]).roomId != roomId)
+    for(final message in result){
+      if(MessageModel.fromJson(message).roomId != roomId)
         continue;
-        _list.add(MessageModel.fromJson(result[i]));
+      _list.add(MessageModel.fromJson(message));
     }
     return _list;
   }
@@ -35,7 +37,6 @@ class SqlMessageRepository{
     String currentMessage = '';
     var _db = await SqlMessageDataBase().database;
     var result = await _db.query("chat", columns: [
-      MessageFields.receiverId,
       MessageFields.chatId,
       MessageFields.chatType,
       MessageFields.chatContent,
@@ -58,7 +59,6 @@ class SqlMessageRepository{
     String currentTime = '';
     var _db = await SqlMessageDataBase().database;
     var result = await _db.query("chat", columns: [
-      MessageFields.receiverId,
       MessageFields.chatId,
       MessageFields.chatType,
       MessageFields.chatContent,
@@ -81,7 +81,6 @@ class SqlMessageRepository{
     int unreadChatCount = 0;
     var _db = await SqlMessageDataBase().database;
     var result = await _db.query("chat", columns: [
-      MessageFields.receiverId,
       MessageFields.chatId,
       MessageFields.chatType,
       MessageFields.chatContent,
@@ -100,5 +99,16 @@ class SqlMessageRepository{
     }
     return unreadChatCount;
   }
+
+  static Future<int> update(MessageModel message) async {
+    var _db = await SqlMessageDataBase().database;
+    return await _db.update(
+      "chat",
+      message.toJson(),
+      where: 'chatId = ?',
+      whereArgs: [message.chatId],
+    );
+  }
+
 }
 
