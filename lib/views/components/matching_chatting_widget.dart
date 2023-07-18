@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
+import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,14 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
       child: ListView.builder(
           itemCount: widget.screenArguments.partners?.length,
           itemBuilder: (context, index) {
-            return chatList(context, index);
+            return Column(
+              children: [
+                if(index==0)TextButton(onPressed: (){
+                  SqlMessageDataBase.instance.deleteDB();
+                }, child: Text('DB삭제')),
+                chatList(context, index),
+              ],
+            );
           }),
     );
   }
@@ -65,7 +73,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                       partner: widget.screenArguments.partners![index],
                       memberDetails: widget.screenArguments.memberDetails!,
                     )),
-          );
+          ).then((value) => setState(() {}));
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
@@ -102,20 +110,22 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                       FutureBuilder(
                           future: getCurrentTime(index),
                           builder: (context, snapshot) {
-                            if(!snapshot.hasData)
-                              return Text('',
+                            if (!snapshot.hasData || snapshot.data == '')
+                              return Text(
+                                '없음',
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff888888),
-                                ),);
+                                ),
+                              );
                             else
-                            return Text(
-                              '${DateFormat('hh:mm aaa').format(DateTime.parse(snapshot.data!))}',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Color(0xff888888),
-                              ),
-                            );
+                              return Text(
+                                '${DateFormat('hh:mm aaa').format(DateTime.parse(snapshot.data!))}',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xff888888),
+                                ),
+                              );
                           })
                     ],
                   ),
@@ -127,45 +137,50 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                       FutureBuilder(
                         future: getCurrentMessage(index),
                         builder: (context, snapshot) {
-                          if(!snapshot.hasData)
-                            return Text('',
+                          if (!snapshot.hasData)
+                            return Text(
+                              '없음',
                               style: TextStyle(
                                 fontSize: 16,
                                 color: Color(0xffA4A4A4),
-                              ),);
+                              ),
+                            );
                           else
-                          return Text(
-                            '${snapshot.data}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Color(0xffA4A4A4),
-                            ),
-                          );
+                            return Text(
+                              '${snapshot.data}',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Color(0xffA4A4A4),
+                              ),
+                            );
                         },
                       ),
                       FutureBuilder(
-                        future: getUnreadChat(index),
-                        builder: (context, snapshot) {
-                          if(!snapshot.hasData || snapshot.data == 0)
-                            return SizedBox(height: 24,width: 24,);
-                          else
-                            return Container(
-                              height: 24,
-                              width: 24,
-                              decoration: BoxDecoration(
-                                color: Color(0xff7898ff),
-                                shape: BoxShape.circle,
-                              ),
-                              alignment: Alignment.center,
-                              child: Text('${snapshot.data}',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),),
-                            );
-
-                          }
-                      )
+                          future: getUnreadChat(index),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData || snapshot.data == 0)
+                              return SizedBox(
+                                height: 24,
+                                width: 24,
+                              );
+                            else
+                              return Container(
+                                height: 24,
+                                width: 24,
+                                decoration: BoxDecoration(
+                                  color: Color(0xff7898ff),
+                                  shape: BoxShape.circle,
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${snapshot.data}',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                          })
                     ],
                   ),
                 ],

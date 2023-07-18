@@ -1,7 +1,9 @@
 import 'package:aliens/models/screenArgument.dart';
+import 'package:aliens/models/signup_model.dart';
 
 import '../models/applicant_model.dart';
 import '../models/memberDetails_model.dart';
+import '../models/message_model.dart';
 import '../models/partner_model.dart';
 
 var token = const [
@@ -77,7 +79,7 @@ var partners = const [
 
 ScreenArguments mockScreenArgument = ScreenArguments(
     MemberDetails(
-      memberId: 6,
+      memberId: 955,
       mbti: 'ENFP',
       name: 'Daisy',
       nationality: 'South Korea',
@@ -107,7 +109,7 @@ ScreenArguments mockScreenArgument = ScreenArguments(
           nationality: 'South Korea',
           gender: 'FEMALE',
           mbti: 'ENFP',
-          memberId: 1,
+          memberId: 712,
           profileImage: '',
           firstPreferLanguage: "KOREAN",
       secondPreferLanguage: "ENGLISH"),
@@ -146,3 +148,31 @@ ScreenArguments mockScreenArgument = ScreenArguments(
           secondPreferLanguage: "ENGLISH")
     ]
 );
+
+SignUpModel signUpModel = SignUpModel(
+  email: 'gorus132@gmail.com',
+  name: 'Daisy',
+  mbti: 'ENFP',
+  gender: 'FEMALE',
+  nationality: 'India',
+  password: '1234567',
+  birthday: '1993-09-13',
+  profileImage: '',
+  bio: '',
+);
+
+void saveMockData() async {
+  var chat = MessageModel(
+    chatId: 2,
+    chatType: 0,
+    chatContent: "h",
+    roomId: 1,
+    senderId: 955,
+    senderName: "Ryan",
+    receiverId: 712,
+    sendTime: "2023-07-17 13:56:33.583170",
+    unReadCount: 0,
+  );
+  //await SqlMessageRepository.create(chat);
+  //updateUi();
+}

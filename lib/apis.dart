@@ -107,6 +107,7 @@ class APIs {
     request.fields['nationality'] = member.nationality!;
     request.fields['birthday'] = member.birthday!;
     request.fields['name'] = member.name!;
+    request.fields['selfIntroduction'] = member.bio!;
 
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
@@ -126,7 +127,7 @@ class APIs {
       return true;
       // fail
     } else {
-      print(response.reasonPhrase);
+      print(await response.stream.bytesToString());
       return false;
     }
   }
@@ -504,6 +505,7 @@ class APIs {
     new ScreenArguments(_memberDetails, _status, _applicant, _partners);
 
     return mockScreenArgument;
+    //return _screenArguments;
   }
 
 
@@ -687,11 +689,9 @@ class APIs {
 
   메세지 받아오기
 
-
    */
 
-  static Future<List<MessageModel>> getMessages() async {
-    var roomId = 1;
+  static Future<List<MessageModel>> getMessages(roomId) async {
     var _url =
         'http://13.125.205.59:8081/api/v1/chat/${roomId}'; //mocksever
 
@@ -700,10 +700,9 @@ class APIs {
     //success
     if (response.statusCode == 200) {
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
-      List<MessageModel> value = body.map((dynamic item) => MessageModel.fromJson(item)).toList();
+      return body.map((dynamic item) => MessageModel.fromJson(item)).toList();
       //return List.from(value.reversed);
 
-      return value;
       //fail
     } else {
       print(response.body);
@@ -711,26 +710,5 @@ class APIs {
     }
   }
 
-  static Future<List<MessageModel>> getPreviousMessages(int chatId) async {
-    var roomId = 1;
-    var _url =
-        'http://13.125.205.59:8081/api/v1/chat/${roomId}/${chatId}'; //mocksever
-
-    var response = await http.get(Uri.parse(_url));
-
-    //success
-    if (response.statusCode == 200) {
-      print('dd');
-      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
-      List<MessageModel> value = body.map((dynamic item) => MessageModel.fromJson(item)).toList();
-      //return List.from(value.reversed);
-
-      return value;
-      //fail
-    } else {
-      print(response.body);
-      throw Exception('요청 오류');
-    }
-  }
 
 }

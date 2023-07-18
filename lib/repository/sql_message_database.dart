@@ -19,7 +19,7 @@ class SqlMessageDataBase{
 
   Future<Database> get database async {
     if(_database != null) return _database!;
-    await _initDB();
+    await _initDB();  //데이터 베이스 생성
     return _database!;
   }
 
@@ -31,8 +31,7 @@ class SqlMessageDataBase{
   void _createDB(Database db, int version) async{
     await db.execute('''
       CREATE TABLE ${tableName}(
-              ${MessageFields.requestId} TEXT,
-              ${MessageFields.chatId} INTEGER,
+              ${MessageFields.chatId} INTEGER PRIMARY KEY,
               ${MessageFields.chatType} INTEGER, 
               ${MessageFields.chatContent} TEXT,
               ${MessageFields.roomId} INTEGER,
@@ -47,6 +46,11 @@ class SqlMessageDataBase{
 
   void _closeDataBase() async {
     if (_database != null) await _database!.close();
+  }
+
+  Future<void> deleteDB() async {
+    String _path = join(await getDatabasesPath(), 'chat.db');
+    await deleteDatabase(_path);
   }
 
 }
