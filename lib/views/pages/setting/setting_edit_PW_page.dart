@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../apis.dart';
 import '../../components/appbar.dart';
@@ -40,16 +40,18 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                 height: 50,
               ),
               Text(
-                '새로운 비밀번호를 입력하시면\n비밀번호 변경이 완료됩니다.',
+                '${'setting-newpas1'.tr()}',
                 style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 20,
               ),
               TextFormField(
+                obscureText: true,
+                obscuringCharacter: '*',
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  hintText: '새 비밀번호 입력',
+                  hintText: '${'setting-newpas2'.tr()}',
                   hintStyle: TextStyle(
                     fontSize: isSmallScreen?18:20,
                     color: Color(0xffb8b8b8),
@@ -59,7 +61,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
               Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    '영문, 특수기호, 숫자를 포함 10자 이상',
+                      '${'signup-pwd4'.tr()}',
                     style: TextStyle(
                       fontSize: isSmallScreen?12:14,
                       color: Color(0xffB8B8B8),
@@ -69,10 +71,12 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                 height: 30,
               ),
               TextFormField(
+                obscureText: true,
+                obscuringCharacter: '*',
                 key: _formKey,
                 controller: _passwordControllerSecond,
                 decoration: InputDecoration(
-                  hintText: '새 비밀번호 재입력',
+                  hintText: '${'setting-newpas3'.tr()}',
                   hintStyle: TextStyle(
                     fontSize: isSmallScreen?18:20,
                     color: Color(0xffb8b8b8),
@@ -82,7 +86,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
               Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    '영문, 특수기호, 숫자를 포함 10자 이상',
+                    '${'signup-pwd4'.tr()}',
                     style: TextStyle(
                       fontSize: isSmallScreen?12:14,
                       color: Color(0xffb8b8b8),
@@ -97,7 +101,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                     child: Button(
                       //수정
                         isEnabled: true,
-                        child: Text('비밀번호 변경하기'),
+                        child: Text('${'setting-newpas4'.tr()}'),
                         onPressed: () async {
 
 
@@ -114,18 +118,18 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                                     builder: (BuildContext context) =>
                                         CupertinoAlertDialog(
                                           title: Text(
-                                            '변경 불가',
+                                            '${'setting-settingcancel'.tr()}',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          content: const Text(
-                                              '변경불가 이유'),
+                                          content:  Text(
+                                              '${'setting-why'.tr()}'),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () =>
                                                   Navigator.of(context).pop(),
-                                              child: const Text('확인',
+                                              child: Text('${'confirm'.tr()}',
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                   )),
@@ -139,17 +143,17 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                                   builder: (BuildContext context) =>
                                       CupertinoAlertDialog(
                                         title: Text(
-                                          '새 비밀번호 미일치',
+                                          '${'setting-newmis'.tr()}',
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        content: const Text('비밀번호를 확인해주세요.'),
+                                        content: Text('${'setting-confirm'.tr()}'),
                                         actions: <Widget>[
                                           TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context).pop(),
-                                            child: const Text('확인',
+                                            child: Text('${'confirm'.tr()}',
                                                 style: TextStyle(
                                                   color: Colors.black,
                                                 )),

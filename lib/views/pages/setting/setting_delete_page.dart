@@ -4,7 +4,7 @@ import 'package:aliens/apis.dart';
 import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 import 'package:flutter/material.dart';
@@ -33,20 +33,20 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
     var memberDetails = ModalRoute.of(context)!.settings.arguments as MemberDetails;
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '회원탈퇴',),
+        appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '${'setting-memwithdrawal'.tr()}',),
         body: Container(
           padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('탈퇴하기',
+              Text('${'setting-withdrawal'.tr()}',
                 style: TextStyle(
                     fontSize: isSmallScreen?22:24,
                     fontWeight: FontWeight.bold
                 ),),
               Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text('비밀번호를 입력하여 주세요.',
+                  child: Text('${'setting-putpas'.tr()}',
                     style: TextStyle(
                       fontSize: isSmallScreen?12:14,
                       color: Color(0xffb8b8b8),
@@ -59,7 +59,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
               Button(
                 //수정
                   isEnabled: true,
-                  child: Text('탈퇴하기'),
+                  child: Text('${'setting-withdrawal'.tr()}'),
                   onPressed: () async {
                     var userInfo = await storage.read(key: 'auth');
 
@@ -68,15 +68,15 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                       showDialog(
                           context: context, builder: (BuildContext context) =>
                           CupertinoAlertDialog(
-                            title: Text('정말 탈퇴하시겠어요?',
+                            title: Text('${'setting-real'.tr()}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,),),
-                            content: const Text(
-                                '채팅내역, 매칭내역 등 이제까지 사용해주신\n데이터들은 복구되지 않아요.'),
+                            content:Text(
+                                '${'setting-withdrawal'.tr()}'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
-                                child: const Text('취소',
+                                child: Text('${'cancel'.tr()}',
                                     style: TextStyle(
                                       color: Colors.black,
                                     )),
@@ -90,7 +90,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                                     Navigator.pushNamed(context, '/setting/delete/done');
                                   }
                                 },
-                                child: const Text('탈퇴하기',
+                                child: Text('${'setting-withdrawal'.tr()}',
                                     style: TextStyle(
                                       color: Colors.black,
                                     )),
@@ -101,17 +101,17 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                       showDialog(
                           context: context, builder: (BuildContext context) =>
                           CupertinoAlertDialog(
-                            title: Text('탈퇴 실패',
+                            title: Text('${'setting-fail'.tr()}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            content: const Text(
-                                '비밀번호 입력 미일치로 인해\n탈퇴에 실패하셨습니다.'),
+                            content: Text(
+                                '${'setting-failwhy'.tr()}'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
-                                child: const Text('취소',
+                                child: Text('${'cancel'.tr()}',
                                     style: TextStyle(
                                       color: Colors.black,
                                     )),
@@ -120,7 +120,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: const Text('다시 입력하기',
+                                child:  Text('${'again'.tr()}',
                                   style: TextStyle(
                                     color: Colors.black,
                                   ),),
@@ -146,14 +146,14 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
           if(passwordController.text == memberDetails.member.password) {
             showDialog(context: context, builder: (BuildContext context) =>
                 CupertinoAlertDialog(
-                  title: Text('정말 탈퇴하시겠어요?',
+                  title: Text('${'setting-real'.tr()}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,),),
-                  content: const Text('채팅내역, 매칭내역 등 이제까지 사용해주신\n데이터들은 복구되지 않아요.'),
+                  content: Text('${'setting-delete5'.tr()}'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('취소',
+                      child: Text('${'cancel'.tr()}',
                           style: TextStyle(
                             color: Colors.black,
                           )),
@@ -166,7 +166,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                           Navigator.pushNamed(context, '/setting/delete/done');
                         }
                         },
-                      child: const Text('탈퇴하기',
+                      child: Text('${'setting-withdrawal'.tr()}',
                           style: TextStyle(
                             color: Colors.black,
                           )),
@@ -175,16 +175,16 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
             ));
           } else {
             showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
-              title: Text('탈퇴 실패',
+              title: Text('${'setting-fail'.tr()}',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
               ),
-              content: const Text('비밀번호 입력 미일치로 인해\n탈퇴에 실패하셨습니다.'),
+              content: Text('${'setting-failwhy'.tr()}'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('취소',
+                  child: Text('${'cancel'.tr()}',
                       style: TextStyle(
                         color: Colors.black,
                       )),
@@ -193,7 +193,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('다시 입력하기',
+                  child: Text('${'again'.tr()}',
                   style: TextStyle(
                     color: Colors.black,
                   ),),
