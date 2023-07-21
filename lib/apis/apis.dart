@@ -504,7 +504,7 @@ class APIs {
     _screenArguments =
     new ScreenArguments(_memberDetails, _status, _applicant, _partners);
 
-    return mockScreenArgument;
+    return mockScreenArgument_2;
     //return _screenArguments;
   }
 
