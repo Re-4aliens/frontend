@@ -81,17 +81,33 @@ class _HomePageState extends State<HomePage> {
                         style: TextStyle(
                             fontSize: 20, color: Color(0xff5A5A5A), height: 1),
                       ),
-                      TextSpan(
-                          text: '${'homepage-welome1.1'.tr()}',
-                          style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                              height: 1.5)),
-                      TextSpan(
-                          text: '${'homepage-welcome1.2'.tr()}\n',
-                          style: TextStyle(
-                              fontSize: 24, color: Color(0xff5A5A5A))),
+                      EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
+                      TextSpan(children: [
+                        TextSpan(
+                            text: '${'homepage-welome1.1'.tr()}',
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                height: 1.5)),
+                        TextSpan(
+                            text: '${'homepage-welcome1.2'.tr()}\n',
+                            style: TextStyle(
+                                fontSize: 24, color: Color(0xff5A5A5A))),
+                      ]) :
+                      TextSpan(children: [
+                        TextSpan(
+                            text: '${'homepage-welome1.1'.tr()}',
+                            style: TextStyle(
+                                fontSize: 24, color: Color(0xff5A5A5A))),
+                        TextSpan(
+                            text: '${'homepage-welcome1.2'.tr()}\n',
+                            style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                height: 1.5)),
+                      ]),
                       TextSpan(
                           text: '${'homepage-happy'.tr()}\n',
                           style: TextStyle(
@@ -257,7 +273,7 @@ class _HomePageState extends State<HomePage> {
                 alignment: Alignment.center,
                 height: 90,
                 child: Text(
-                  '채팅',
+                  'chat1'.tr(),
                   style: TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

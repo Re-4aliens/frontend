@@ -1,8 +1,14 @@
 import 'dart:convert';
+import 'package:aliens/models/applicant_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
+import 'package:aliens/models/partner_model.dart';
+import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../../apis.dart';
+import '../../models/chatRoom_model.dart';
 import '../components/button.dart';
 import '../components/button_big.dart';
 
@@ -10,6 +16,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:aliens/providers/member_provider.dart';
 import 'package:provider/provider.dart';
+
+import 'chatting/chatting_page.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -143,6 +151,35 @@ class _StartPageState extends State<StartPage> {
                       TextButton(onPressed: ()=>EasyLocalization.of(context)!.setLocale(Locale('en', 'US')), child: Text(
                           'English'
                       ),),
+                      TextButton(onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChattingPage(
+                                applicant: mockScreenArgument.applicant,
+                                partner: mockScreenArgument.partners![0],
+                                memberDetails: mockScreenArgument.memberDetails!,
+                              )),
+                        );
+
+                      }
+                        ,child: Text('${mockScreenArgument.partners![0].name}'),),
+                      TextButton(onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ChattingPage(
+                                applicant: mockScreenArgument.applicant,
+                                partner: mockScreenArgument.partners![1],
+                                memberDetails: mockScreenArgument.memberDetails!,
+                              )),
+                        );
+                      }
+                        ,child: Text('${mockScreenArgument.partners![1].name}'),),
+                      TextButton(onPressed: () async {
+                       await APIs.signUp(signUpModel);
+                      }
+                        ,child: Text('회원가입'),),
                     ],
                   )
                 ],
