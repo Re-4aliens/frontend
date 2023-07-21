@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
     List _pageTitle = [
       '',
       '',
-      '설정',
+      '${'setting'.tr()}',
     ];
 
     List _pageWidget = [
@@ -1206,7 +1206,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             children: [
                               TextSpan(
-                                text: '님',
+                                text: '${'setting-nim'.tr()}',
                                 style: TextStyle(
                                   fontSize: isSmallScreen ? 12 : 14,
                                   color: Colors.white,
@@ -1238,11 +1238,11 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Container(
                             height: MediaQuery.of(context).size.height * 0.09,
-                            width: 80,
+                            width: MediaQuery.of(context).size.height * 0.09,
                             decoration: BoxDecoration(
                                 color: screenArguments.memberDetails.profileImage != "" ? Colors.white : Colors.transparent,
 
-                                borderRadius: BorderRadius.circular(40)),
+                                borderRadius: BorderRadius.circular((MediaQuery.of(context).size.height * 0.09 )/2)),
                             child: screenArguments.memberDetails.profileImage != ""
                                 ? SizedBox()
                                 : SvgPicture.asset('assets/icon/icon_profile.svg', color:Colors.white,),
@@ -1268,7 +1268,7 @@ class _HomePageState extends State<HomePage> {
                                               children: [
                                                 SimpleDialogOption(
                                                   child: Text(
-                                                    '사진 찍기',
+                                                    '${'setting-takepicture'.tr()}',
                                                   ),
                                                   onPressed: () async{
                                                     await getImage(ImageSource.camera);
@@ -1283,7 +1283,7 @@ class _HomePageState extends State<HomePage> {
                                                     //로딩 재생
                                                   },
                                                 ),
-                                                SimpleDialogOption(child: Text('사진첩에서 가져오기'),
+                                                SimpleDialogOption(child: Text('${'setting-gallery'.tr()}'),
                                                   onPressed: () async {
                                                   await getImage(ImageSource.gallery);
 
@@ -1337,7 +1337,7 @@ class _HomePageState extends State<HomePage> {
                       return Container(
                         height: MediaQuery.of(context).size.height * 0.03,
                         child: Text(
-                          '프로필 확인 및 수정',
+                          '${'setting-profile'.tr()}',
                           style: TextStyle(
                             color: Color(0xffC1C1C1),
                             fontSize: isSmallScreen ? 14 : 16,
@@ -1374,7 +1374,7 @@ class _HomePageState extends State<HomePage> {
                       return Container(
                         height: MediaQuery.of(context).size.height * 0.03,
                         child: Text(
-                          '계정관리',
+                          '${'setting-account'.tr()}',
                           style: TextStyle(
                             color: Color(0xffC1C1C1),
                             fontSize: isSmallScreen ? 14 : 16,
@@ -1408,7 +1408,7 @@ class _HomePageState extends State<HomePage> {
                       bottom: BorderSide(width: 1.0, color: Color(0xFF7898FF))),
                 ),
                 child: Text(
-                  '로그아웃',
+                  '${'setting-logout'.tr()}',
                   style: TextStyle(
                     color: Color(0xFF7898FF),
                     fontSize: isSmallScreen ? 12 : 14,
@@ -1422,10 +1422,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-/*  void updateMBTIValue(String selectedMBTI) {
-    setState(() {
-      memberInfo[index] = selectedMBTI;
-    });
-  }*/
+
 }
 

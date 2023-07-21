@@ -4,7 +4,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../apis.dart';
 import '../../components/button.dart';
 import 'package:aliens/providers/auth_provider.dart';
@@ -40,7 +40,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '비밀번호가 변경되었습니다!\n다시 로그인 해주세요.',
+                          '${'setting-pasdone'.tr()}',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
@@ -69,7 +69,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                     child: Button(
                       //수정
                         isEnabled: true,
-                        child: Text('홈으로 돌아가기'),
+                        child: Text('${'setting-gohome'.tr()}'),
                         onPressed: () {
                           //로그아웃
                           APIs.logOut(context);
