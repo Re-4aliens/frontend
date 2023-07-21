@@ -1,4 +1,7 @@
+import 'package:aliens/mockdatas/mockdata_model.dart';
+import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/signup_model.dart';
+import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'models/applicant_model.dart';
@@ -11,6 +14,7 @@ import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 
 import 'models/memberDetails_model.dart';
+import 'models/message_model.dart';
 import 'models/partner_model.dart';
 import 'models/screenArgument.dart';
 
@@ -100,9 +104,10 @@ class APIs {
     request.fields['password'] = member.password!;
     request.fields['mbti'] = member.mbti!;
     request.fields['gender'] = member.gender!;
-    request.fields['nationality'] = '1';
+    request.fields['nationality'] = member.nationality!;
     request.fields['birthday'] = member.birthday!;
     request.fields['name'] = member.name!;
+    request.fields['selfIntroduction'] = member.bio!;
 
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
@@ -122,7 +127,7 @@ class APIs {
       return true;
       // fail
     } else {
-      print(response.reasonPhrase);
+      print(await response.stream.bytesToString());
       return false;
     }
   }
@@ -134,7 +139,7 @@ class APIs {
    */
   static Future<String> logIn(Auth auth) async {
     const url =
-        'http://13.125.205.59:8080/api/v1/member/authentication'; //mocksever
+        'http://13.125.205.59:8080/api/v1/auth/authentication'; //mocksever
 
     var response = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
@@ -452,7 +457,6 @@ class APIs {
           gender: "",
           nationality: "",
           profileImage: "",
-          countryImage: ""
         ),
         Partner(memberId: 0,
             name: "",
@@ -460,7 +464,6 @@ class APIs {
             gender: "",
             nationality: "",
             profileImage: "",
-            countryImage: ""
         ),
         Partner(memberId: 0,
             name: "",
@@ -468,7 +471,6 @@ class APIs {
             gender: "",
             nationality: "",
             profileImage: "",
-            countryImage: ""
         ),
         Partner(memberId: 0,
             name: "",
@@ -476,7 +478,6 @@ class APIs {
             gender: "",
             nationality: "",
             profileImage: "",
-            countryImage: ""
         )
       ];
       return _partners;
@@ -503,7 +504,8 @@ class APIs {
     _screenArguments =
     new ScreenArguments(_memberDetails, _status, _applicant, _partners);
 
-    return _screenArguments;
+    return mockScreenArgument_2;
+    //return _screenArguments;
   }
 
 
@@ -629,7 +631,7 @@ class APIs {
    */
   static Future<void> deleteInfo(memberId) async {
     var url =
-        'http://13.125.205.59:8080/api/v1/member/${memberId}'; //mocksever
+        'http://13.125.205.59:8080/api/v1/member/${memberId}';
 
 
     var response = await http.delete(Uri.parse(url),
@@ -647,12 +649,12 @@ class APIs {
 
   /*
 
-  채팅방 정보
+  채팅룸 정보 => 변경
 
    */
-
-  static Future<bool> getChatroomData() async {
-    const url = '';
+  /*
+  static Future<List<ChatRoom>> getChatRooms() async {
+    var _url = 'http://13.125.205.59:8080/chat/rooms';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -661,22 +663,52 @@ class APIs {
     jwtToken = json.decode(jwtToken!)['accessToken'];
 
     var response = await http.get(
-      Uri.parse(url),
+      Uri.parse(_url),
       headers: {
         'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
       },
     );
 
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['response'];
+      return body.map((dynamic item) => ChatRoom.fromJson(item)).toList();
+
       //fail
     } else {
-      //오류 생기면 바디 확인
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
+      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      throw Exception('요청 오류');
     }
   }
+
+   */
+
+  /*
+
+  메세지 받아오기
+
+   */
+
+  static Future<List<MessageModel>> getMessages(roomId) async {
+    var _url =
+        'http://13.125.205.59:8081/api/v1/chat/${roomId}'; //mocksever
+
+    var response = await http.get(Uri.parse(_url));
+
+    //success
+    if (response.statusCode == 200) {
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
+      return body.map((dynamic item) => MessageModel.fromJson(item)).toList();
+      //return List.from(value.reversed);
+
+      //fail
+    } else {
+      print(response.body);
+      throw Exception('요청 오류');
+    }
+  }
+
 
 }

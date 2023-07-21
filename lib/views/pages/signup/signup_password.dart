@@ -72,7 +72,6 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                   if(_formKey.currentState!.validate()){
                     member.password = _PasswordController.text;
                     print(member.toJson());
-
                     //------ 회원가입 api 요청
                     //authProvider.signUp(member, context);
                     if(true)

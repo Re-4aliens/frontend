@@ -105,8 +105,8 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                 child: Text('confirm'.tr(), style: TextStyle( color: _isButtonEnabled? Colors.white : Color(0xff888888))),
                 onPressed: () {
                   if(_isButtonEnabled){
-                      member.nationality = 1;
-                      //member.nationality = _selectedNationality;
+                      //member.nationality = 1;
+                      member.nationality = _selectedNationality;
                       print(member.toJson());
                       Navigator.pushNamed(context, '/mbti', arguments: member);
                     }

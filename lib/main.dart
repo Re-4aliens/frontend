@@ -1,3 +1,4 @@
+import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/loading_page.dart';
 import 'package:aliens/views/pages/login/login_checkmail_page.dart';
 import 'package:aliens/views/pages/login/login_findpassword_page.dart';
@@ -68,31 +69,19 @@ final supportedLocales = [
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  SqlMessageDataBase();
 
   // easylocalization 초기화
   await EasyLocalization.ensureInitialized();
 
-/*
+
   // fcm 초기화 부분
   await initializeDefault();
   final fcmToken = await FirebaseMessaging.instance.getToken();
   // fcm 토큰 출력
   print(fcmToken);
 
-  // 포그라운드 핸들러
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
-    print('Received FCM message with data: ${message.data} at ${DateTime.now()}');
-    message.data.forEach((key, value) {
-      print('$key: $value');
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-    });
-  });
 
-
- */
 
 
   runApp(EasyLocalization(

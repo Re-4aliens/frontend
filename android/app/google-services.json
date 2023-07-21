@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "264201677004",
+    "project_id": "friend-ship-23487",
+    "storage_bucket": "friend-ship-23487.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:264201677004:android:a42c0f448f79143b093a69",
+        "android_client_info": {
+          "package_name": "com.example.aliens"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "264201677004-gcr23jj5s643k33tiipk6svhstf9nitj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwytGFFareyqZbQTAPwHQyvt-wYdOx-ig"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "264201677004-gcr23jj5s643k33tiipk6svhstf9nitj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "264201677004-n90is9fa7ee1ege99d3vh4dfjgrcior9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.aliens"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
