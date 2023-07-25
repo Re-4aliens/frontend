@@ -177,7 +177,7 @@ ScreenArguments mockScreenArgument_2 = ScreenArguments(
     [
       Partner(
           roomState: "OPEN",
-          roomId: 1,
+          roomId: 43,
           name: '파트너1',
           nationality: 'South Korea',
           gender: 'FEMALE',
