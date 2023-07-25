@@ -418,7 +418,7 @@ class APIs {
 
   //상대 정보 요청
   static Future<List<Partner>> getApplicantPartners() async {
-    const url = 'http://192.168.221.201:8080/api/v1/matching/partners';
+    const url = 'http://13.125.205.59:8080/api/v1/matching/partners';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
