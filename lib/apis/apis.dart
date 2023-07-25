@@ -4,8 +4,8 @@ import 'package:aliens/models/signup_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'models/applicant_model.dart';
-import 'models/auth_model.dart';
+import '../models/applicant_model.dart';
+import '../models/auth_model.dart';
 import 'dart:io';
 
 
@@ -13,10 +13,10 @@ import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 
-import 'models/memberDetails_model.dart';
-import 'models/message_model.dart';
-import 'models/partner_model.dart';
-import 'models/screenArgument.dart';
+import '../models/memberDetails_model.dart';
+import '../models/message_model.dart';
+import '../models/partner_model.dart';
+import '../models/screenArgument.dart';
 
 class APIs {
   static final storage = FlutterSecureStorage();
@@ -137,7 +137,7 @@ class APIs {
   로그인
 
    */
-  static Future<String> logIn(Auth auth) async {
+  static Future<bool> logIn(Auth auth) async {
     const url =
         'http://13.125.205.59:8080/api/v1/auth/authentication'; //mocksever
 
@@ -147,7 +147,6 @@ class APIs {
           "email": auth.email,
           "password": auth.password,
         }));
-
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
@@ -157,18 +156,16 @@ class APIs {
         key: 'auth',
         value: jsonEncode(auth),
       );
-
       //토큰 저장
       await storage.write(
         key: 'token',
         value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))['data']),
       );
-
-      return jsonEncode(json.decode(utf8.decode(response.bodyBytes))['status']);
+      return true;
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      return jsonEncode(json.decode(utf8.decode(response.bodyBytes))['stauts']);
+      return false;
     }
   }
 
@@ -421,7 +418,7 @@ class APIs {
 
   //상대 정보 요청
   static Future<List<Partner>> getApplicantPartners() async {
-    const url = 'http://13.125.205.59:8080/api/v1/matching/partners';
+    const url = 'http://192.168.221.201:8080/api/v1/matching/partners';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -459,25 +456,25 @@ class APIs {
           profileImage: "",
         ),
         Partner(memberId: 0,
-            name: "",
-            mbti: "",
-            gender: "",
-            nationality: "",
-            profileImage: "",
+          name: "",
+          mbti: "",
+          gender: "",
+          nationality: "",
+          profileImage: "",
         ),
         Partner(memberId: 0,
-            name: "",
-            mbti: "",
-            gender: "",
-            nationality: "",
-            profileImage: "",
+          name: "",
+          mbti: "",
+          gender: "",
+          nationality: "",
+          profileImage: "",
         ),
         Partner(memberId: 0,
-            name: "",
-            mbti: "",
-            gender: "",
-            nationality: "",
-            profileImage: "",
+          name: "",
+          mbti: "",
+          gender: "",
+          nationality: "",
+          profileImage: "",
         )
       ];
       return _partners;
@@ -487,6 +484,7 @@ class APIs {
 
   static Future<ScreenArguments> getMatchingData() async {
     late ScreenArguments _screenArguments;
+    /*
 
     late MemberDetails _memberDetails;
     late String _status;
@@ -503,7 +501,7 @@ class APIs {
 
     _screenArguments =
     new ScreenArguments(_memberDetails, _status, _applicant, _partners);
-
+*/
     return mockScreenArgument_2;
     //return _screenArguments;
   }
@@ -699,6 +697,8 @@ class APIs {
 
     //success
     if (response.statusCode == 200) {
+      print('안읽은 메세지 요청');
+      print(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       return body.map((dynamic item) => MessageModel.fromJson(item)).toList();
       //return List.from(value.reversed);

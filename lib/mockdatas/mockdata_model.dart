@@ -77,7 +77,7 @@ var partners = const [
   }
 ];
 
-ScreenArguments mockScreenArgument = ScreenArguments(
+ScreenArguments mockScreenArgument_1 = ScreenArguments(
     MemberDetails(
       memberId: 955,
       mbti: 'ENFP',
@@ -149,6 +149,79 @@ ScreenArguments mockScreenArgument = ScreenArguments(
     ]
 );
 
+
+ScreenArguments mockScreenArgument_2 = ScreenArguments(
+    MemberDetails(
+      memberId: 712,
+      mbti: 'ENFP',
+      name: 'Daisy',
+      nationality: 'South Korea',
+      email: 'gorus132@naver.com',
+      gender: 'FEMALE',
+      birthday: '2001-02-01',
+      profileImage: '',
+      age: 22,
+    ),
+    "MATCHED",
+    Applicant(
+        member: Member(
+            name: 'Daisy',
+            nationality: 'South Korea',
+            gender: 'FEMALE',
+            mbti: 'ENFP',
+            age: 22,
+            profileImage: '',
+            countryImage: ''),
+        preferLanguages:
+        PreferLanguages(firstPreferLanguage: 'KOREA', secondPreferLanguage: 'ENGLISH')),
+    [
+      Partner(
+          roomState: "OPEN",
+          roomId: 1,
+          name: '파트너1',
+          nationality: 'South Korea',
+          gender: 'FEMALE',
+          mbti: 'ENFP',
+          memberId: 955,
+          profileImage: '',
+          firstPreferLanguage: "KOREAN",
+          secondPreferLanguage: "ENGLISH"),
+      Partner(
+          roomState: "OPEN",
+          roomId: 2,
+          name: '파트너2',
+          nationality: 'South Korea',
+          gender: 'MALE',
+          mbti: 'ISTJ',
+          memberId: 3,
+          profileImage: '',
+          firstPreferLanguage: "KOREAN",
+          secondPreferLanguage: "ENGLISH"),
+      Partner(
+          roomState: "OPEN",
+          roomId: 3,
+          name: '파트너3',
+          nationality: 'South Korea',
+          gender: 'MALE',
+          mbti: 'ISTJ',
+          memberId: 193,
+          profileImage: '',
+          firstPreferLanguage: "KOREAN",
+          secondPreferLanguage: "ENGLISH"),
+      Partner(
+          roomState: "OPEN",
+          roomId: 4,
+          name: '파트너4',
+          nationality: 'South Korea',
+          gender: 'MALE',
+          mbti: 'ISTJ',
+          memberId: 948,
+          profileImage: '',
+          firstPreferLanguage: "KOREAN",
+          secondPreferLanguage: "ENGLISH")
+    ]
+);
+
 SignUpModel signUpModel = SignUpModel(
   email: 'gorus132@gmail.com',
   name: 'Daisy',
@@ -171,7 +244,7 @@ void saveMockData() async {
     senderName: "Ryan",
     receiverId: 712,
     sendTime: "2023-07-17 13:56:33.583170",
-    unReadCount: 0,
+    unreadCount: 0,
   );
   //await SqlMessageRepository.create(chat);
   //updateUi();

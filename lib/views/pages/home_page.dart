@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../apis.dart';
+import '../../../apis/apis.dart';
 import '../../main.dart';
 import '../../mockdatas/mockdata_model.dart';
 import '../../models/screenArgument.dart';

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../apis.dart';
+import '../../../apis/apis.dart';
 import '../../../models/screenArgument.dart';
 
 class MatchingChoosePage extends StatefulWidget {
