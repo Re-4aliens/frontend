@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/repository/sql_message_repository.dart';
+import 'package:async/async.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
 
@@ -15,25 +16,29 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:sqflite/sqflite.dart';
-import '../../../apis.dart';
+import '../../../apis/apis.dart';
+import '../../../apis/firebase_apis.dart';
 import '../../../models/chatRoom_model.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
 import '../../../providers/chat_provider.dart';
+import 'package:web_socket_channel/io.dart';
 
 List<MessageModel> _list = [];
 var channel;
 var readChannel;
+var allReadChannel;
 
 class ChattingPage extends StatefulWidget {
   const ChattingPage(
       {super.key,
-      required this.applicant,
-      required this.partner,
-      required this.memberDetails});
+        required this.applicant,
+        required this.partner,
+        required this.memberDetails});
 
   final Applicant? applicant;
   final Partner partner;
@@ -55,73 +60,59 @@ class _ChattingPageState extends State<ChattingPage> {
   static String createdDate = '1999-01-01';
   bool isNewChat = true;
   bool bottomFlag = false;
+  var isChecked = false;
+  late AsyncMemoizer _memoizer;
+
+
+  Future<List<MessageModel>>? myFuture;
+  FlutterLocalNotificationsPlugin?  _flutterLocalNotificationsPlugin;
 
   StreamSubscription<dynamic>? responseSubscription;
-
-  void getMessage() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
-      print('Received FCM message with data: ${message.data} at ${DateTime.now()}');
-
-      //받은 fcm 저장하고 보여주기
-      var field = json.decode(message.data as String);
-      var newChat = MessageModel(
-          chatType: field['chatType'],
-          chatContent: field['chatContent'],
-          roomId: field['roomId'],
-          senderId: field['senderId'],
-          senderName: field['senderName'],
-          receiverId: field['receiverId'],
-          sendTime: field['sendTime']
-      );
-      //저장됨
-      await SqlMessageRepository.create(newChat);
-      updateUi();
-
-      //읽음 처리 전송
-
-      //응답받으면 업데이트하기
+  StreamSubscription<dynamic>? readResponseSubscription;
 
 
-    });
-  }
+  /*
 
+  채팅 전송
 
+   */
   void createdChat() async {
+
     //응답값 설정
-    Map<String, dynamic> response = {
+    Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
-      'fcmToken': "fxTG0oKYRsWj9sIdE1CLHS:APA91bF69Yq8OF_DfJgo4OEcOx2Qy6TyZIptRYPEmgbSLX_w_XQ5-CsCuE9UPNz9bn4QMP_Ic_8IDvREHC3Osq_1LXl3nUOatbfyOfp-N6ejpNYXJIPf6b8C7hHdr7423aqDNWdZK2yy",
+      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+      //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
+
+      'fcmToken': "dNRrfFS3lkpGjrmR8h_02c:APA91bGFN8mw7ncHT3xG6k3P__ylVyyP6jbeNSRnAsDp-QCBoXAGCtGV9SboimtCPOBvibSxsCm2BUy8twurtB_eiynrHQetthqRnbtjoAulKrHxAX2k64k3tseYbUbk9AKaQmg7_E_F",
       'chatType': 0,
       'chatContent': _newMessage,
       'roomId': widget.partner.roomId,
       'senderId': widget.memberDetails.memberId,
-      'senderName': "Ryan",
+      'senderName': "Daisy",
       'receiverId': widget.partner.memberId,
       'sendTime': DateTime.now().toString(),
     };
 
-    updateUi();
-
-    //웹소켓 전송
-    channel.sink.add(json.encode(response));
+    channel.sink.add(json.encode(request));
 
     if (responseSubscription == null) {
       responseSubscription = channel.stream.listen((message) async {
-        print('Received response: $message');
+        print('웹소켓 전송 Received response: $message');
         if(json.decode(message)['status'] == 'success'){
           var chat = MessageModel(
               chatType: 0,
-              chatContent: response['chatContent'],
-              roomId: response['roomId'],
-              senderId: response['senderId'],
-              senderName: response['senderName'],
-              receiverId: response['receiverId'],
-              sendTime: response['sendTime']
+              chatContent: request['chatContent'],
+              roomId: request['roomId'],
+              senderId: request['senderId'],
+              senderName: request['senderName'],
+              receiverId: request['receiverId'],
+              sendTime: request['sendTime'],
+              unreadCount: 1,
+            chatId: int.parse(message.data['chatId'])
           );
-          //저장됨
+          print('저장');
           await SqlMessageRepository.create(chat);
-          setState(() {});
         }
       }, onError: (error) {
         print('Error: $error');
@@ -129,87 +120,218 @@ class _ChattingPageState extends State<ChattingPage> {
         print('WebSocket connection closed');
       });
     }
-
+    updateUi();
   }
 
+
+  /*
+
+  채팅 내역 화면에 보여주기
+
+   */
   Future<List<MessageModel>> _loadChatList(unReadChatList) async {
 
-    //리스트 업데이트
+    //1. 리스트 업데이트
     for (final message in unReadChatList) {
       await SqlMessageRepository.create(message);
     }
 
-/*
-    //읽음 처리 보내기
-    Map<String, dynamic> response = {
-      "requestId": DataUtils.makeUUID(),
-      "fcmToken": "",
-      "chatId" : 123
-    };
-    readChannel.sink.add(json.encode(response));
+    this._memoizer.runOnce(() async{
 
-    //성공하면 수정
- */
+      //2. 읽음 처리 보내기
+      //응답값 설정
+      Map<String, dynamic> request = {
+        'requestId': DataUtils.makeUUID(),
+        'partnerId': widget.partner.memberId,
+        //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+        //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
+        'fcmToken': "dNRrfFS3lkpGjrmR8h_02c:APA91bGFN8mw7ncHT3xG6k3P__ylVyyP6jbeNSRnAsDp-QCBoXAGCtGV9SboimtCPOBvibSxsCm2BUy8twurtB_eiynrHQetthqRnbtjoAulKrHxAX2k64k3tseYbUbk9AKaQmg7_E_F",
+        'roomId': widget.partner.roomId
+      };
 
 
-    //업데이트된 리스트 불러오기
-    return await SqlMessageRepository.getList(widget.partner.roomId!);
+      //웹소켓 전송
+      await allReadChannel.sink.add(json.encode(request));
+      if (readResponseSubscription == null) {
+        readResponseSubscription = allReadChannel.stream.listen((message) async {
+          print('Received response: $message');
+
+
+          if(json.decode(message)['status'] == 'success'){
+            print('읽음 수정 ㄱ');
+            //상대방에 있는 읽음 처리 없으니까 내가 읽은 거 수정할 필요는 없음
+            //await SqlMessageRepository.update(widget.partner);
+            setState(() {});
+          }
+
+        }, onError: (error) {
+          print('Error: $error');
+        }, onDone: () {
+          print('WebSocket connection closed');
+        });
+      }
+
+    });
+    //3. 업데이트된 리스트 불러오기
+    return await SqlMessageRepository.getList(widget.partner.roomId!, widget.memberDetails.memberId!);
   }
+
+
+  Future<void> _showNotification(String content) async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails('your channel id', 'your channel name',
+        channelDescription: 'your channel description',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker');
+
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+
+    await _flutterLocalNotificationsPlugin!.show(
+      0,
+      '메시지가 도착했습니다.',
+      content,
+      platformChannelSpecifics,
+      payload: content,
+    );
+  }
+
+  void onSelectNotification(String? payload) async {
+    debugPrint("$payload");
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Notification Payload'),
+          content: Text('Payload: $payload'),
+        ));
+  }
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  StreamSubscription<RemoteMessage>? _messageStreamSubscription;
 
   @override
   void initState() {
     super.initState();
+    createdDate = DateTime.now().toString();
+
     final wsUrl = Uri.parse('ws://13.125.205.59:8081/ws/chat');
     final wsReadUrl = Uri.parse('ws://13.125.205.59:8081/ws/read');
+    final wsAllReadUrl = Uri.parse('ws://13.125.205.59:8081/ws/room');
 
-    _scrollController.addListener(() {
-      scrollListener();
-    });
-    createdDate = DateTime.now().toString();
 
     channel = IOWebSocketChannel.connect(wsUrl);
     readChannel = IOWebSocketChannel.connect(wsReadUrl);
+    allReadChannel = IOWebSocketChannel.connect(wsAllReadUrl);
+
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    //var initializationSettingsIOS = IOSInitializationSettings();
+
+    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+
+    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    _flutterLocalNotificationsPlugin!.initialize(initializationSettings);
+
+    _messageStreamSubscription =
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+
+          //채팅에 대한 fcm인 경우
+          if(message.data['chatContent'] != null){
+            // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
+            print('Received FCM with: ${message.data} at ${DateTime.now()}');
+            //받은 fcm 저장하고 보여주기
+            var newChat = MessageModel(
+                chatType: int.parse(message.data['chatType']),
+                chatContent: message.data['chatContent'],
+                roomId: int.parse(message.data['roomId']),
+                senderId: int.parse(message.data['senderId']),
+                senderName: message.data['senderName'],
+                receiverId: int.parse(message.data['receiverId']),
+                sendTime: message.data['sendTime'],
+                unreadCount: 1,
+                chatId: int.parse(message.data['chatId'])
+            );
+            await SqlMessageRepository.create(newChat);
+            await SqlMessageRepository.getList(widget.partner.roomId!, widget.memberDetails.memberId!);
+            setState(() {
+            });
+
+
+            //단일 읽음 처리
+            //응답값 설정
+            Map<String, dynamic> request = {
+              'requestId': DataUtils.makeUUID(),
+              //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+              'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
+              'chatId': message.data['chatId'],
+            };
+            //웹소켓 전송
+            await readChannel.sink.add(json.encode(request));
+            if (readResponseSubscription == null) {
+              readResponseSubscription = readChannel.stream.listen((message) async {
+                print('단일 읽음처리 Received response: $message');
+                if(json.decode(message)['status'] == 'success'){
+                  //해당 룸아이디 && 리시버 = 파트너 인 경우 unReadCount 0으로
+                  //얘 역시 할 필요 없음
+                  //await SqlMessageRepository.update(widget.partner);
+                  setState(() {});
+                }
+              }, onError: (error) {
+                print('Error: $error');
+              }, onDone: () {
+                print('WebSocket connection closed');
+              });
+            }
+
+          }
+          //상대방이 읽었다는 것에 대한 fcm인 경우
+          else {
+
+          }
+          }
+
+        );
+
+
+    myFuture = APIs.getMessages(widget.partner.roomId);
+    _memoizer = AsyncMemoizer();
   }
+
 
   @override
   void dispose() {
     super.dispose();
     channel.sink.close();
     readChannel.sink.close();
+    allReadChannel.sink.close();
 
     _scrollController.dispose();
 
     responseSubscription?.cancel();
     responseSubscription = null;
+
+    readResponseSubscription?.cancel();
+    readResponseSubscription = null;
+
+
+    FirebaseMessaging.onMessage.drain();
+    _messageStreamSubscription?.cancel();
+  }
+  getToken() async {
+    String? token = await FirebaseMessaging.instance.getToken();
+    print(token);
   }
 
-  scrollListener() async {
-    /*
-    if (_scrollController.offset == _scrollController.position.maxScrollExtent
-        && !_scrollController.position.outOfRange) {
-      if(_list.last.chatId != 1){
-        _list.insertAll(_list.length, await APIs.getPreviousMessages(_list.last.chatId!));
-      }
-      setState(() {
-        itemLength = _list.length;
-      });
-    }
-
-     */
-  }
 
   void updateUi() async {
     setState(() {
       //텍스트폼 비우기
-      //스크롤 아래로 내리기
-      bottomFlag = true;
       _controller.clear();
       _newMessage = '';
     });
   }
 
-  //랜덤채팅 바 보여주기
-  var isChecked = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -256,11 +378,11 @@ class _ChattingPageState extends State<ChattingPage> {
                       showDialog(
                           context: context,
                           builder: (_) => Scaffold(
-                                backgroundColor: Colors.transparent,
-                                body: ProfileDialog(
-                                  partner: widget.partner,
-                                ),
-                              ));
+                            backgroundColor: Colors.transparent,
+                            body: ProfileDialog(
+                              partner: widget.partner,
+                            ),
+                          ));
                     },
                   ),
                 ),
@@ -293,61 +415,61 @@ class _ChattingPageState extends State<ChattingPage> {
                   showDialog(
                       context: context,
                       builder: (builder) => Dialog(
-                            elevation: 0,
-                            backgroundColor: Color(0xffffffff),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5.0),
-                            ),
-                            child: Container(
-                              padding: EdgeInsets.all(30),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    "어떤 서비스를 원하세요?",
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(25.0),
-                                    child: Text(
-                                      "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(13),
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff7898FF),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "신고하기",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 10,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.all(13),
-                                    decoration: BoxDecoration(
-                                        color: Color(0xff7898FF),
-                                        borderRadius: BorderRadius.circular(5)),
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "차단하기",
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  )
-                                ],
+                        elevation: 0,
+                        backgroundColor: Color(0xffffffff),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5.0),
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.all(30),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                "어떤 서비스를 원하세요?",
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
                               ),
-                            ),
-                          ));
+                              Padding(
+                                padding: const EdgeInsets.all(25.0),
+                                child: Text(
+                                  "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(13),
+                                decoration: BoxDecoration(
+                                    color: Color(0xff7898FF),
+                                    borderRadius: BorderRadius.circular(5)),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "신고하기",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Container(
+                                padding: EdgeInsets.all(13),
+                                decoration: BoxDecoration(
+                                    color: Color(0xff7898FF),
+                                    borderRadius: BorderRadius.circular(5)),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "차단하기",
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ));
                 },
                 //아이콘 수정 필요
                 icon: SvgPicture.asset(
@@ -363,19 +485,26 @@ class _ChattingPageState extends State<ChattingPage> {
                     padding: const EdgeInsets.only(top: 15),
                     color: Color(0xffF5F7FF),
                     child: FutureBuilder<List<MessageModel>>(
-                      future: APIs.getMessages(widget.partner.roomId),
+                      future: myFuture,
                       builder: (context, snapshot) {
-                        if (snapshot.hasError) {
-                          return Center(child: Text('${snapshot}'));
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          // 첫 번째 Future가 아직 완료되지 않았을 때 로딩 상태 표시
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else if (snapshot.hasError) {
+                          // 첫 번째 Future에서 오류가 발생한 경우 에러 메시지 표시
+                          return Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          );
                         }
-                        if (snapshot.hasData) {
-                          //받아온 안읽은 채팅리스트
+                        else  {
                           var unReadChatList = snapshot.data;
                           //안읽은 채팅이 있으면 DB에 저장해서 보여주기
                           return FutureBuilder<List<MessageModel>>(
-                            future: _loadChatList(unReadChatList),
+                              future: _loadChatList(unReadChatList),
                               builder: (context, snapshot){
-                                if(snapshot.hasError) return Center(child: Text('채팅 불러오는데 오류'),);
+                                if(snapshot.hasError) return Center(child: Text('${snapshot.error}'),);
                                 if(snapshot.hasData){
                                   _list = snapshot.data!;
                                   var datas = snapshot.data;
@@ -384,9 +513,10 @@ class _ChattingPageState extends State<ChattingPage> {
                                       .addPostFrameCallback((timeStamp) {
                                     _scrollController.animateTo(
                                         _scrollController.position.maxScrollExtent,
-                                        duration: Duration(milliseconds: 200),
+                                        duration: Duration(milliseconds: 10),
                                         curve: Curves.easeIn);
                                   });
+
                                   return ListView(
                                     controller: _scrollController,
                                     children: List.generate(datas!.length, (index) {
@@ -417,9 +547,13 @@ class _ChattingPageState extends State<ChattingPage> {
                                                   senderId: datas[index].senderId,
                                                   senderName: datas[index].senderName,
                                                   receiverId: datas[index].receiverId,
-                                                  sendTime: datas[index].sendTime),
+                                                  sendTime: datas[index].sendTime,
+                                                unreadCount: datas[index].unreadCount
+                                              ),
                                               memberDetails: widget.memberDetails,
-                                              showingTime: true,
+                                              showingTime: index == 0? false : (datas[index - 1].receiverId != datas[index].receiverId
+                                                  || DateTime.parse(datas[index - 1].sendTime!).difference(DateTime.parse(datas[index].sendTime!)).inMinutes > 1
+                                              ),
                                               showingPic: index == 0
                                                   ? true
                                                   : datas[index].senderId !=
@@ -429,9 +563,8 @@ class _ChattingPageState extends State<ChattingPage> {
                                     }),
                                   );
                                 } else return Center(child: Text('저장된 메세지 없음'));
-                          });
-                        } else
-                          return Center(child: Text('받아올 메세지 없음'),);
+                              });
+                        }
                       },
                     )
                 )
@@ -480,21 +613,21 @@ class _ChattingPageState extends State<ChattingPage> {
                               children: [
                                 Expanded(
                                     child: TextField(
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                  ),
-                                  onTap: () {
-                                    setState(() {
-                                      isChecked = false;
-                                    });
-                                  },
-                                  controller: _controller,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      _newMessage = value;
-                                    });
-                                  },
-                                )),
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                      onTap: () {
+                                        setState(() {
+                                          isChecked = false;
+                                        });
+                                      },
+                                      controller: _controller,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _newMessage = value;
+                                        });
+                                      },
+                                    )),
                                 IconButton(
                                   onPressed: _newMessage.trim().isEmpty
                                       ? null
@@ -516,7 +649,7 @@ class _ChattingPageState extends State<ChattingPage> {
                 ),
                 Container(
                   height:
-                      isChecked ? MediaQuery.of(context).size.height * .35 : 0,
+                  isChecked ? MediaQuery.of(context).size.height * .35 : 0,
                   alignment: Alignment.center,
                   color: Colors.white,
                   child: Column(
@@ -592,13 +725,13 @@ class _ChattingPageState extends State<ChattingPage> {
           margin: EdgeInsets.only(top: 20),
           child: index == 0
               ? Text(
-                  '${DateFormat('yyyy/MM/dd').format(DateTime.parse(createdDate))}',
-                  style: TextStyle(color: Colors.white),
-                )
+            '${DateFormat('yyyy/MM/dd').format(DateTime.parse(createdDate))}',
+            style: TextStyle(color: Colors.white),
+          )
               : Text(
-                  '${DateFormat('yyyy/MM/dd').format(DateTime.parse(date))}',
-                  style: TextStyle(color: Colors.white),
-                ),
+            '${DateFormat('yyyy/MM/dd').format(DateTime.parse(date))}',
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         if (index == 0)
           Padding(

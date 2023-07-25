@@ -9,7 +9,7 @@ class MessageFields {
   static final String senderName = 'senderName';
   static final String receiverId = 'receiverId';
   static final String sendTime = 'sendTime';
-  static final String unReadCount = 'unReadCount';
+  static final String unreadCount = 'unreadCount';
 }
 
 class MessageModel {
@@ -21,7 +21,7 @@ class MessageModel {
   String? senderName;
   int? receiverId;
   String? sendTime;
-  int? unReadCount;
+  int? unreadCount;
 
   MessageModel(
       {
@@ -33,7 +33,7 @@ class MessageModel {
       this.senderName,
       this.receiverId,
       this.sendTime,
-      this.unReadCount});
+      this.unreadCount});
 
   MessageModel.fromJson(Map<String, dynamic> json) {
     chatId = json['chatId'];
@@ -44,7 +44,7 @@ class MessageModel {
     senderName = json['senderName'];
     receiverId = json['receiverId'];
     sendTime = json['sendTime'];
-    unReadCount = json['unReadCount'];
+    unreadCount = json['unreadCount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -57,7 +57,7 @@ class MessageModel {
     data['senderName'] = this.senderName;
     data['receiverId'] = this.receiverId;
     data['sendTime'] = this.sendTime;
-    data['unReadCount'] = this.unReadCount;
+    data['unreadCount'] = this.unreadCount;
     return data;
   }
 }

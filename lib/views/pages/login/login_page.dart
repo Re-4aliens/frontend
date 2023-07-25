@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../apis.dart';
+import '../../../apis/apis.dart';
 import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
 
@@ -165,7 +165,7 @@ class _LoginState extends State<Login> {
 
                           var loginSuccess = await APIs.logIn(auth);
 
-                          if (loginSuccess == "200") {
+                          if (loginSuccess) {
                            //스택 비우고 화면 이동
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/loading', (Route<dynamic> route) => false);
