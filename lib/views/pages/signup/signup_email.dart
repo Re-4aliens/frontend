@@ -1,12 +1,11 @@
 import 'dart:convert';
-import 'package:aliens/apis.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:aliens/views/pages/signup/signup_password.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
-import '../../../apis.dart';
+import '../../../apis/apis.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 

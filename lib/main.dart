@@ -28,6 +28,7 @@ import 'package:flutter/material.dart';
 
 import 'package:aliens/views/pages/signup/signup_name.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
 import 'package:provider/provider.dart';
@@ -59,6 +60,8 @@ import './views/pages/splash_page.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'apis/firebase_apis.dart';
 //import 'firebase_options.dart';
 
 final supportedLocales = [
@@ -81,8 +84,13 @@ void main() async {
   // fcm 토큰 출력
   print(fcmToken);
 
+  //백그라운드 메세지 처리 핸들러 연결
+  FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
 
-
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(FirebaseAPIs.channel);
 
   runApp(EasyLocalization(
     path: 'assets/translations',
@@ -102,6 +110,7 @@ Future<void> initializeDefault() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -178,38 +187,6 @@ class MyApp extends StatelessWidget {
         '/loading' : (context) => LoadingPage(),
 
       },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('4aliens'),
-      ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              '',
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

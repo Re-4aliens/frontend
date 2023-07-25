@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../../../apis.dart';
+import '../../../apis/apis.dart';
 import '../../components/button.dart';
 import 'package:aliens/providers/auth_provider.dart';
 

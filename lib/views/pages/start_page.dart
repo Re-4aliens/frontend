@@ -7,7 +7,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../apis.dart';
+import '../../../apis/apis.dart';
 import '../../models/chatRoom_model.dart';
 import '../components/button.dart';
 import '../components/button_big.dart';
@@ -151,31 +151,6 @@ class _StartPageState extends State<StartPage> {
                       TextButton(onPressed: ()=>EasyLocalization.of(context)!.setLocale(Locale('en', 'US')), child: Text(
                           'English'
                       ),),
-                      TextButton(onPressed: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ChattingPage(
-                                applicant: mockScreenArgument.applicant,
-                                partner: mockScreenArgument.partners![0],
-                                memberDetails: mockScreenArgument.memberDetails!,
-                              )),
-                        );
-
-                      }
-                        ,child: Text('${mockScreenArgument.partners![0].name}'),),
-                      TextButton(onPressed: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ChattingPage(
-                                applicant: mockScreenArgument.applicant,
-                                partner: mockScreenArgument.partners![1],
-                                memberDetails: mockScreenArgument.memberDetails!,
-                              )),
-                        );
-                      }
-                        ,child: Text('${mockScreenArgument.partners![1].name}'),),
                       TextButton(onPressed: () async {
                        await APIs.signUp(signUpModel);
                       }

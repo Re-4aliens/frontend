@@ -39,7 +39,8 @@ class SqlMessageDataBase{
               ${MessageFields.senderName} TEXT,
               ${MessageFields.receiverId} INTEGER, 
               ${MessageFields.sendTime} TEXT,
-              ${MessageFields.unReadCount} INTEGER
+              ${MessageFields.unreadCount} INTEGER,
+              UNIQUE (${MessageFields.chatId}) ON CONFLICT IGNORE
             )
     ''');
   }
