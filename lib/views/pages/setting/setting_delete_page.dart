@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:aliens/apis.dart';
+
+import '../../../apis/apis.dart';
 import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:flutter/cupertino.dart';

@@ -94,6 +94,10 @@ class _MessageBubbleState extends State<MessageBubble> {
                 ),
               ),
             ),
+            Padding(
+              padding: EdgeInsets.only(right: 18),
+              child: widget.message.unreadCount == 0 ? Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
+            )
           ],
         ),
       ],
@@ -147,7 +151,7 @@ class _MessageBubbleState extends State<MessageBubble> {
         ),
         Padding(
           padding: EdgeInsets.only(right: 18),
-          child: widget.message.unReadCount == 0 ? Text('읽음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('읽지 않음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
+          child: widget.message.unreadCount == 0 ? Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
         )
       ],
     );
