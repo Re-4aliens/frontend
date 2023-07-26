@@ -152,7 +152,7 @@ ScreenArguments mockScreenArgument_1 = ScreenArguments(
 
 ScreenArguments mockScreenArgument_2 = ScreenArguments(
     MemberDetails(
-      memberId: 712,
+      memberId: 1017,
       mbti: 'ENFP',
       name: 'Daisy',
       nationality: 'South Korea',
@@ -182,7 +182,7 @@ ScreenArguments mockScreenArgument_2 = ScreenArguments(
           nationality: 'South Korea',
           gender: 'FEMALE',
           mbti: 'ENFP',
-          memberId: 955,
+          memberId: 16,
           profileImage: '',
           firstPreferLanguage: "KOREAN",
           secondPreferLanguage: "ENGLISH"),
