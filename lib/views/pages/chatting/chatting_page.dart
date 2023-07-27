@@ -210,19 +210,29 @@ class _ChattingPageState extends State<ChattingPage> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   StreamSubscription<RemoteMessage>? _messageStreamSubscription;
 
+
+  void connectWebSocket() async {
+    String chatToken = await APIs.getChatToken();
+
+    final wsUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/message/send');
+    final wsReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/message/read');
+    final wsAllReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/room/read');
+
+    var header = {
+      'Authorization': chatToken
+    };
+
+    channel = IOWebSocketChannel.connect(wsUrl, headers: header);
+    readChannel = IOWebSocketChannel.connect(wsReadUrl, headers: header);
+    allReadChannel = IOWebSocketChannel.connect(wsAllReadUrl, headers: header);
+  }
+
   @override
   void initState() {
     super.initState();
     createdDate = DateTime.now().toString();
 
-    final wsUrl = Uri.parse('ws://13.125.205.59:8081/ws/chat');
-    final wsReadUrl = Uri.parse('ws://13.125.205.59:8081/ws/read');
-    final wsAllReadUrl = Uri.parse('ws://13.125.205.59:8081/ws/room');
-
-
-    channel = IOWebSocketChannel.connect(wsUrl);
-    readChannel = IOWebSocketChannel.connect(wsReadUrl);
-    allReadChannel = IOWebSocketChannel.connect(wsAllReadUrl);
+    connectWebSocket();
 
     var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
     //var initializationSettingsIOS = IOSInitializationSettings();
@@ -264,6 +274,7 @@ class _ChattingPageState extends State<ChattingPage> {
               //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
               'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
               'chatId': message.data['chatId'],
+              'roomId': message.data['roomId'],
             };
             //웹소켓 전송
             await readChannel.sink.add(json.encode(request));
