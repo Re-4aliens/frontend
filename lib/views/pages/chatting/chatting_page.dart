@@ -29,9 +29,6 @@ import '../../../providers/chat_provider.dart';
 import 'package:web_socket_channel/io.dart';
 
 List<MessageModel> _list = [];
-var channel;
-var readChannel;
-var allReadChannel;
 
 class ChattingPage extends StatefulWidget {
   const ChattingPage(
@@ -62,7 +59,10 @@ class _ChattingPageState extends State<ChattingPage> {
   bool bottomFlag = false;
   var isChecked = false;
   late AsyncMemoizer _memoizer;
-
+  List<Map> requestBuffer = [];
+  var sendChannel;
+  var readChannel;
+  var bulkReadChannel;
 
   Future<List<MessageModel>>? myFuture;
   FlutterLocalNotificationsPlugin?  _flutterLocalNotificationsPlugin;
@@ -70,20 +70,86 @@ class _ChattingPageState extends State<ChattingPage> {
   StreamSubscription<dynamic>? responseSubscription;
   StreamSubscription<dynamic>? readResponseSubscription;
 
+  @override
+  void initState() {
+    super.initState();
+    createdDate = DateTime.now().toString();
+    connectWebSocket();
 
-  /*
+    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    //var initializationSettingsIOS = IOSInitializationSettings();
 
-  채팅 전송
+    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
 
-   */
-  void createdChat() async {
+    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    _flutterLocalNotificationsPlugin!.initialize(initializationSettings);
 
-    //응답값 설정
+    _messageStreamSubscription =
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+
+          //채팅에 대한 fcm인 경우
+          if(message.data['chatContent'] != null){
+            // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
+            print('Received FCM with: ${message.data} at ${DateTime.now()}');
+            //받은 fcm 저장하고 보여주기
+            var newChat = MessageModel(
+                chatType: int.parse(message.data['chatType']),
+                chatContent: message.data['chatContent'],
+                roomId: int.parse(message.data['roomId']),
+                senderId: int.parse(message.data['senderId']),
+                senderName: message.data['senderName'],
+                receiverId: int.parse(message.data['receiverId']),
+                sendTime: message.data['sendTime'],
+                unreadCount: 1,
+                chatId: int.parse(message.data['chatId'])
+            );
+            await SqlMessageRepository.create(newChat);
+            await SqlMessageRepository.getList(widget.partner.roomId!, widget.memberDetails.memberId!);
+            setState(() {
+            });
+
+            //단일 읽음 처리
+            sendReadRequest(message);
+          }
+          //상대방이 읽었다는 것에 대한 fcm인 경우
+          else {
+
+          }
+          }
+
+        );
+
+
+    myFuture = APIs.getMessages(widget.partner.roomId);
+    _memoizer = AsyncMemoizer();
+  }
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    sendChannel.sink.close();
+    readChannel.sink.close();
+    bulkReadChannel.sink.close();
+
+    _scrollController.dispose();
+
+    responseSubscription?.cancel();
+    responseSubscription = null;
+
+    readResponseSubscription?.cancel();
+    readResponseSubscription = null;
+
+
+    FirebaseMessaging.onMessage.drain();
+    _messageStreamSubscription?.cancel();
+  }
+
+  void sendMessage() async {
     Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
       //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
       //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
-
       'fcmToken': "dNRrfFS3lkpGjrmR8h_02c:APA91bGFN8mw7ncHT3xG6k3P__ylVyyP6jbeNSRnAsDp-QCBoXAGCtGV9SboimtCPOBvibSxsCm2BUy8twurtB_eiynrHQetthqRnbtjoAulKrHxAX2k64k3tseYbUbk9AKaQmg7_E_F",
       'chatType': 0,
       'chatContent': _newMessage,
@@ -93,36 +159,116 @@ class _ChattingPageState extends State<ChattingPage> {
       'receiverId': widget.partner.memberId,
       'sendTime': DateTime.now().toString(),
     };
-
-    channel.sink.add(json.encode(request));
-
-    if (responseSubscription == null) {
-      responseSubscription = channel.stream.listen((message) async {
-        print('웹소켓 전송 Received response: $message');
-        if(json.decode(message)['status'] == 'success'){
-          var chat = MessageModel(
-              chatType: 0,
-              chatContent: request['chatContent'],
-              roomId: request['roomId'],
-              senderId: request['senderId'],
-              senderName: request['senderName'],
-              receiverId: request['receiverId'],
-              sendTime: request['sendTime'],
-              unreadCount: 1,
-            chatId: int.parse(message.data['chatId'])
-          );
-          print('저장');
-          await SqlMessageRepository.create(chat);
-        }
-      }, onError: (error) {
-        print('Error: $error');
-      }, onDone: () {
-        print('WebSocket connection closed');
-      });
-    }
-    updateUi();
+    await sendChannel.sink.add(json.encode(request));
+    requestBuffer.add(request);
   }
 
+  void sendReadRequest(RemoteMessage message) async {
+    Map<String, dynamic> request = {
+      'requestId': DataUtils.makeUUID(),
+      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+      'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
+      'chatId': message.data['chatId'],
+      'roomId': message.data['roomId'],
+    };
+    await readChannel.sink.add(json.encode(request));
+  }
+
+  void sendBulkReadRequest() async {
+    Map<String, dynamic> request = {
+      'requestId': DataUtils.makeUUID(),
+      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+      'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
+      'partnerId': widget.partner.memberId,
+      'roomId': widget.partner.roomId,
+    };
+    await bulkReadChannel.sink.add(json.encode(request));
+  }
+
+  void connectWebSocket() async {
+    String chatToken = await APIs.getChatToken();
+    final wsUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/message/send');
+    final wsReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/message/read');
+    final wsAllReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/room/read');
+    var header = {
+      'Authorization': chatToken
+    };
+    sendChannel = IOWebSocketChannel.connect(wsUrl, headers: header);
+    readChannel = IOWebSocketChannel.connect(wsReadUrl, headers: header);
+    bulkReadChannel = IOWebSocketChannel.connect(wsAllReadUrl, headers: header);
+
+    sendChannel.stream.listen((message) async {
+      messageSendResponseHandler(message);
+    }, onError: (error) {
+      print('Error: $error');
+    }, onDone: () {
+      print('WebSocket connection closed');
+    });
+
+    readChannel.stream.listen((message) async {
+      readResponseHandler(message);
+    }, onError: (error) {
+      print('Error: $error');
+    }, onDone: () {
+      print('WebSocket connection closed');
+    });
+
+    bulkReadChannel.stream.listen((message) async {
+      bulkReadResponseHandler(message);
+    }, onError: (error) {
+      print('Error: $error');
+    }, onDone: () {
+      print('WebSocket connection closed');
+    });
+  }
+
+  void readResponseHandler(message) {
+    print('Received response: $message');
+    if(json.decode(message)['status'] == 'success'){
+      //해당 룸아이디 && 리시버 = 파트너 인 경우 unReadCount 0으로
+      //얘 역시 할 필요 없음
+      //await SqlMessageRepository.update(widget.partner);
+      setState(() {});
+    }
+  }
+
+  void bulkReadResponseHandler(message) {
+    print('Received response: $message');
+    if(json.decode(message)['status'] == 'success'){
+      //해당 룸아이디 && 리시버 = 파트너 인 경우 unReadCount 0으로
+      //얘 역시 할 필요 없음
+      //await SqlMessageRepository.update(widget.partner);
+      setState(() {});
+    }
+  }
+
+  void messageSendResponseHandler(message) async{
+    print('웹소켓 전송 Received response: $message');
+    if (json.decode(message)['status'] == 'success') {
+
+      var requestId = json.decode(message)['requestId'];
+      // requestBuffer에서 해당 requestId를 가진 request를 반환
+      var request = requestBuffer.firstWhere((element) => element['requestId'] == requestId);
+
+      print(json.decode(message)['chatId']);
+      var chat = MessageModel(
+          chatId: json.decode(message)['chatId'],
+          chatType: 0,
+          chatContent: request['chatContent'],
+          roomId: request['roomId'],
+          senderId: request['senderId'],
+          senderName: request['senderName'],
+          receiverId: request['receiverId'],
+          sendTime: request['sendTime'],
+          unreadCount: 1
+      );
+      //저장됨
+      await SqlMessageRepository.create(chat);
+      setState(() {});
+
+      requestBuffer.remove(request);
+    }
+  }
 
   /*
 
@@ -130,7 +276,6 @@ class _ChattingPageState extends State<ChattingPage> {
 
    */
   Future<List<MessageModel>> _loadChatList(unReadChatList) async {
-
     //1. 리스트 업데이트
     for (final message in unReadChatList) {
       await SqlMessageRepository.create(message);
@@ -138,39 +283,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
     this._memoizer.runOnce(() async{
 
-      //2. 읽음 처리 보내기
-      //응답값 설정
-      Map<String, dynamic> request = {
-        'requestId': DataUtils.makeUUID(),
-        'partnerId': widget.partner.memberId,
-        //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
-        //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
-        'fcmToken': "dNRrfFS3lkpGjrmR8h_02c:APA91bGFN8mw7ncHT3xG6k3P__ylVyyP6jbeNSRnAsDp-QCBoXAGCtGV9SboimtCPOBvibSxsCm2BUy8twurtB_eiynrHQetthqRnbtjoAulKrHxAX2k64k3tseYbUbk9AKaQmg7_E_F",
-        'roomId': widget.partner.roomId
-      };
-
-
-      //웹소켓 전송
-      await allReadChannel.sink.add(json.encode(request));
-      if (readResponseSubscription == null) {
-        readResponseSubscription = allReadChannel.stream.listen((message) async {
-          print('Received response: $message');
-
-
-          if(json.decode(message)['status'] == 'success'){
-            print('읽음 수정 ㄱ');
-            //상대방에 있는 읽음 처리 없으니까 내가 읽은 거 수정할 필요는 없음
-            //await SqlMessageRepository.update(widget.partner);
-            setState(() {});
-          }
-
-        }, onError: (error) {
-          print('Error: $error');
-        }, onDone: () {
-          print('WebSocket connection closed');
-        });
-      }
-
+    sendBulkReadRequest();
     });
     //3. 업데이트된 리스트 불러오기
     return await SqlMessageRepository.getList(widget.partner.roomId!, widget.memberDetails.memberId!);
@@ -210,124 +323,6 @@ class _ChattingPageState extends State<ChattingPage> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   StreamSubscription<RemoteMessage>? _messageStreamSubscription;
 
-
-  void connectWebSocket() async {
-    String chatToken = await APIs.getChatToken();
-
-    final wsUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/message/send');
-    final wsReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/message/read');
-    final wsAllReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/room/read');
-
-    var header = {
-      'Authorization': chatToken
-    };
-
-    channel = IOWebSocketChannel.connect(wsUrl, headers: header);
-    readChannel = IOWebSocketChannel.connect(wsReadUrl, headers: header);
-    allReadChannel = IOWebSocketChannel.connect(wsAllReadUrl, headers: header);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    createdDate = DateTime.now().toString();
-
-    connectWebSocket();
-
-    var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-    //var initializationSettingsIOS = IOSInitializationSettings();
-
-    var initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
-
-    _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-    _flutterLocalNotificationsPlugin!.initialize(initializationSettings);
-
-    _messageStreamSubscription =
-        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-
-          //채팅에 대한 fcm인 경우
-          if(message.data['chatContent'] != null){
-            // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
-            print('Received FCM with: ${message.data} at ${DateTime.now()}');
-            //받은 fcm 저장하고 보여주기
-            var newChat = MessageModel(
-                chatType: int.parse(message.data['chatType']),
-                chatContent: message.data['chatContent'],
-                roomId: int.parse(message.data['roomId']),
-                senderId: int.parse(message.data['senderId']),
-                senderName: message.data['senderName'],
-                receiverId: int.parse(message.data['receiverId']),
-                sendTime: message.data['sendTime'],
-                unreadCount: 1,
-                chatId: int.parse(message.data['chatId'])
-            );
-            await SqlMessageRepository.create(newChat);
-            await SqlMessageRepository.getList(widget.partner.roomId!, widget.memberDetails.memberId!);
-            setState(() {
-            });
-
-
-            //단일 읽음 처리
-            //응답값 설정
-            Map<String, dynamic> request = {
-              'requestId': DataUtils.makeUUID(),
-              //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
-              'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
-              'chatId': message.data['chatId'],
-              'roomId': message.data['roomId'],
-            };
-            //웹소켓 전송
-            await readChannel.sink.add(json.encode(request));
-            if (readResponseSubscription == null) {
-              readResponseSubscription = readChannel.stream.listen((message) async {
-                print('단일 읽음처리 Received response: $message');
-                if(json.decode(message)['status'] == 'success'){
-                  //해당 룸아이디 && 리시버 = 파트너 인 경우 unReadCount 0으로
-                  //얘 역시 할 필요 없음
-                  //await SqlMessageRepository.update(widget.partner);
-                  setState(() {});
-                }
-              }, onError: (error) {
-                print('Error: $error');
-              }, onDone: () {
-                print('WebSocket connection closed');
-              });
-            }
-
-          }
-          //상대방이 읽었다는 것에 대한 fcm인 경우
-          else {
-
-          }
-          }
-
-        );
-
-
-    myFuture = APIs.getMessages(widget.partner.roomId);
-    _memoizer = AsyncMemoizer();
-  }
-
-
-  @override
-  void dispose() {
-    super.dispose();
-    channel.sink.close();
-    readChannel.sink.close();
-    allReadChannel.sink.close();
-
-    _scrollController.dispose();
-
-    responseSubscription?.cancel();
-    responseSubscription = null;
-
-    readResponseSubscription?.cancel();
-    readResponseSubscription = null;
-
-
-    FirebaseMessaging.onMessage.drain();
-    _messageStreamSubscription?.cancel();
-  }
   getToken() async {
     String? token = await FirebaseMessaging.instance.getToken();
     print(token);
@@ -642,7 +637,7 @@ class _ChattingPageState extends State<ChattingPage> {
                                 IconButton(
                                   onPressed: _newMessage.trim().isEmpty
                                       ? null
-                                      : createdChat,
+                                      : sendMessage,
                                   icon: SvgPicture.asset(
                                     'assets/icon/icon_send.svg',
                                     height: 22,
