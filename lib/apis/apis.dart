@@ -418,7 +418,7 @@ class APIs {
 
   //상대 정보 요청
   static Future<List<Partner>> getApplicantPartners() async {
-    const url = 'http://192.168.221.201:8080/api/v1/matching/partners';
+    const url = 'http://13.125.205.59:8080/api/v1/matching/partners';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -710,5 +710,31 @@ class APIs {
     }
   }
 
+  // 채팅 토큰 받아오기
+  static Future<String> getChatToken() async {
+    var _url = 'http://13.125.205.59:8080/api/v1/chat/token';
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
 
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['accessToken'];
+
+    var response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      return json.decode(utf8.decode(response.bodyBytes))['data'];
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      throw Exception('요청 오류');
+    }
+  }
 }
