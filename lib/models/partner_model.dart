@@ -8,6 +8,7 @@ class Partner {
   String? nationality;
   String? profileImage;
   String? countryImage;
+  String? selfIntroduction;
 
   Partner(
       {this.memberId,
@@ -16,7 +17,9 @@ class Partner {
         this.gender,
         this.nationality,
         this.profileImage,
-        this.countryImage});
+        this.countryImage,
+        this.selfIntroduction
+      });
 
   Partner.fromJson(Map<String, dynamic> json) {
     memberId = json['memberId'];
@@ -26,6 +29,7 @@ class Partner {
     nationality = json['nationality'];
     profileImage = json['profileImage'];
     countryImage = json['countryImage'];
+    selfIntroduction = json['selfIntrodcution'];
   }
 
   Map<String, dynamic> toJson() {
@@ -37,6 +41,7 @@ class Partner {
     data['nationality'] = this.nationality;
     data['profileImage'] = this.profileImage;
     data['countryImage'] = this.countryImage;
+    data['selfIntroduction'] = this.selfIntroduction;
     return data;
   }
 }

@@ -100,9 +100,10 @@ class APIs {
     request.fields['password'] = member.password!;
     request.fields['mbti'] = member.mbti!;
     request.fields['gender'] = member.gender!;
-    request.fields['nationality'] = '1';
+    request.fields['nationality'] = member.nationality!;
     request.fields['birthday'] = member.birthday!;
     request.fields['name'] = member.name!;
+    request.fields['selfIntrodution'] = member.selfIntroduction!;
 
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
@@ -132,9 +133,9 @@ class APIs {
   로그인
 
    */
-  static Future<String> logIn(Auth auth) async {
+  static Future<bool> logIn(Auth auth) async {
     const url =
-        'http://13.125.205.59:8080/api/v1/member/authentication'; //mocksever
+        'http://13.125.205.59:8080/api/v1/auth/authentication'; //mocksever
 
     var response = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
@@ -142,7 +143,6 @@ class APIs {
           "email": auth.email,
           "password": auth.password,
         }));
-
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
@@ -152,18 +152,16 @@ class APIs {
         key: 'auth',
         value: jsonEncode(auth),
       );
-
       //토큰 저장
       await storage.write(
         key: 'token',
         value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))['data']),
       );
-
-      return jsonEncode(json.decode(utf8.decode(response.bodyBytes))['status']);
+      return true;
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      return jsonEncode(json.decode(utf8.decode(response.bodyBytes))['stauts']);
+      return false;
     }
   }
 
@@ -452,7 +450,8 @@ class APIs {
           gender: "",
           nationality: "",
           profileImage: "",
-          countryImage: ""
+          countryImage: "",
+          selfIntroduction: ""
         ),
         Partner(memberId: 0,
             name: "",
@@ -460,7 +459,8 @@ class APIs {
             gender: "",
             nationality: "",
             profileImage: "",
-            countryImage: ""
+            countryImage: "",
+          selfIntroduction: ""
         ),
         Partner(memberId: 0,
             name: "",
@@ -468,7 +468,8 @@ class APIs {
             gender: "",
             nationality: "",
             profileImage: "",
-            countryImage: ""
+            countryImage: "",
+          selfIntroduction: ""
         ),
         Partner(memberId: 0,
             name: "",
@@ -476,7 +477,8 @@ class APIs {
             gender: "",
             nationality: "",
             profileImage: "",
-            countryImage: ""
+            countryImage: "",
+          selfIntroduction: ""
         )
       ];
       return _partners;
@@ -586,6 +588,36 @@ class APIs {
   }
 
   /*
+  자기소개 수정
+  */
+  static Future<bool> updateSelfIntroduction(String selfIntroduction) async {
+    var url = 'http://13.125.205.59:8080/api/v1/member/self-introduction';
+
+    // 토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    // 액세스 토큰만 보내기
+    jwtToken = json.decode(jwtToken!)['accessToken'];
+
+    // FormData 생성
+    var formData = http.MultipartRequest('PUT', Uri.parse(url));
+    formData.headers['Authorization'] = 'Bearer $jwtToken';
+    formData.fields['selfIntroduction'] = selfIntroduction;
+
+    // 요청 전송
+    var response = await formData.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      return true;
+    } else {
+      print(response.reasonPhrase);
+      return false;
+    }
+  }
+
+
+  /*
 
   매칭 신청
 
@@ -606,8 +638,8 @@ class APIs {
           'Authorization': 'Bearer $jwtToken',
           'Content-Type': 'application/json'},
         body: jsonEncode({
-          "firstPreferLanguage": firstPreferLanguage,
-          "secondPreferLanguage": secondPreferLanguage,
+          "firstPreferLanguage": 1,
+          "secondPreferLanguage": 2,
         }));
 
     //success
@@ -679,4 +711,20 @@ class APIs {
     }
   }
 
+  /*매칭 남은 시간*/
+static Future<void> matchingProfessData() async{
+  final url = Uri.parse('http://13.125.205.59:8080/api/v1/matching/remaining-period');
+
+  final response = await http.post(
+    url,
+    body: {'remainingPeriod': 'DD:HH:MM:SS'},
+  );
+
+  if (response.statusCode == 200) {
+
+    print('Response: ${response.body}');
+  } else {
+    print('Error: ${response.statusCode}');
+  }
+}
 }

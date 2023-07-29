@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import '../../../apis.dart';
 import '../../../models/screenArgument.dart';
 
@@ -89,7 +89,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                     height: MediaQuery.of(context).size.height * 0.029,
                                   ),
                                 ),
-                                Text('상대방과 대화할 때\n어떤 언어를 사용하길 원하시나요?\n언어 2가지를 선택 해주세요\n매칭 시 우선순위로 진행돼요!',
+                                Text('${'matching-chooseinfo'.tr()}',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
@@ -146,10 +146,10 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                               },
                               child: Text(
                                 selectedIndex[0] == -1
-                                    ? '선호언어를 선택해주세요'
+                                    ? '${'matching-chooselan'.tr()}'
                                     : selectedIndex[1] == -1
-                                        ? '2가지를 선택해주세요'
-                                        : '완료',
+                                        ? '${'matching-choosetwo'.tr()}'
+                                        : '${'done'.tr()}',
                                 style: TextStyle(
                                   color: selectedIndex[0] != -1 &&
                                           selectedIndex[1] != -1
@@ -178,20 +178,27 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                 Expanded(flex: 2, child: Container()),
                 Column(
                   children: [
-                    Text(
-                      '선호언어 선택',
-                      style: TextStyle(
-                        fontSize: isSmallScreen?22:24,
-                        fontWeight: FontWeight.bold,
+                    Padding(
+                      padding: const EdgeInsets.only(right: 25,left: 25),
+                      child: Column(
+                        children: [
+                          Text(
+                            '${'matching-chooselan'.tr()}',
+                            style: TextStyle(
+                              fontSize: isSmallScreen?22:24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height *0.03 ,
+                          ),
+                          Text(
+                            '${'matching-choosedetail'.tr()}',
+                            style: TextStyle(fontSize: isSmallScreen?14:16, color: Color(0xff616161)),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height *0.03 ,
-                    ),
-                    Text(
-                      '상대방과 원하는 언어로 대화할 수 있어요.\n선호도에 따라 4가지 언어 중 선택 가능합니다.',
-                      style: TextStyle(fontSize: isSmallScreen?14:16, color: Color(0xff616161)),
-                      textAlign: TextAlign.center,
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.047,

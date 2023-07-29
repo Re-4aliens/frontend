@@ -152,5 +152,32 @@
   "setting-failwhy": "비밀번호 입력 미일치로 인해\n탈퇴에 실패하였습니다.",
   "setting-delete5": "채팅내역, 매칭 내역 등 이제까지 사용된 데이터들은 복구되지 않아요.",
   "setting-thank": "그동안 이용해주셔서 감사합니다.\n회원가입을 통해\n언제든지 다시 시작할 수 있어요!",
-  "setting-private": "개인정보 처리 방침"
+  "setting-private": "개인정보 처리 방침",
+
+  "matching-soon": "곧 매칭신청이\n시작됩니다!",
+  "matching-preferlan": "선호언어",
+  "matching-matchdone": "에 따라 매칭이 되며,",
+  "matching-sf": "랜덤 선호언어 친구(SF)",
+  "matching-add": "가 추가됩니다.",
+  "matching-start": "매칭 시작하기",
+  "matching-chooselan": "선호언어 선택",
+  "matching-choosetwo": "2가지를 선택해주세요.",
+  "matching-choosedetail": "상대방과 원하는 언어로 대화할 수 있어요.\n선호도에 따라 4가지 언어 중 선택 가능합니다.",
+  "matching-choosefirst": "첫 번째 선택",
+  "matching-chooseinfo": "'상대방과 대화할 때\n어떤 언어를 사용하길 원하시나요?\n언어 2가지를 선택 해주세요\n매칭 시 우선순위로 진행돼요!'",
+  "matching-applydone": "매칭 신청 완료!",
+  "matching-applysee": "아래 버튼을 클릭하면\n매칭 진행 상황을 알 수 있어요.",
+  "matching-state": "매칭 진행 상황",
+  "matching-progress": "매칭 대기중...",
+  "matching-wait": "조금만 기다려주세요.\n내 성향과 스타일에 꼭 맞는\n친구를 찾고 있어요!",
+  "matching-mine": "나의 신청 확인하기",
+
+
+  "country" : "국가",
+  "Age(years)": "만 나이",
+  "matchinglan" : "매칭 선호 언어",
+  "first": "1순위",
+  "second": "2순위",
+  "matchingpreferlan": "매칭 선호 언어"
+
 }
