@@ -4,7 +4,8 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:easy_localization/easy_localization.dart';
+import '../../../apis.dart';
 import '../../components/button.dart';
 
 class MatchingEditPage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                 ),
                 Row(
                   children: [
-                    Text('언어 재설정',
+                    Text('${'matchingpreferlan'.tr()}',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: isSmallScreen?22:24,
@@ -86,7 +87,7 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text('매칭 선호 언어',
+                      Text('${'matchingpreferlan'.tr()}',
                         style: TextStyle(
                           fontSize: isSmallScreen?14:16,
                         ),),
@@ -94,7 +95,7 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                         children: [
                           Row(
                             children: [
-                              Text('1순위',
+                              Text('${'first'.tr()}',
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: isSmallScreen?12:14,
@@ -130,7 +131,7 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text('2순위',
+                    Text('${'second'.tr()}',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize:isSmallScreen?12:14,
@@ -164,9 +165,16 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                   child: Button(
                     //수정
                       isEnabled: true,
-                      child: Text('확인'),
-                      onPressed: (){
-                        Navigator.pop(context);
+
+                      child: Text('${'confirm'.tr()}'),
+                      onPressed: () async {
+                        if(await APIs.applicantMatching(_firstPreferLanguage, _secondPreferLanguage)){
+                          Navigator.pop(context);
+                        }
+                        else{
+                          print("요청실패");
+                        }
+
                       }),
                 )
               ],

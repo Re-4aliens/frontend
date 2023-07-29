@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 import 'package:aliens/providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -47,7 +47,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
               child: Column(
                 children: [
                   Text(
-                    '매칭 신청 완료!',
+                    '${'matching-applydone'.tr()}',
                     style: TextStyle(
                       fontSize: isSmallScreen ? 22 : 24,
                       fontWeight: FontWeight.bold,
@@ -57,7 +57,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                     height: MediaQuery.of(context).size.height* 0.022,
                   ),
                   Text(
-                    '아래 버튼을 클릭하면\n매칭 진행 상황을 알 수 있어요.',
+                    '${'matching-applysee'.tr()}',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xff616161),
@@ -85,7 +85,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                               Navigator.pushNamed(context, '/state', arguments: args);
                             },
                             child: Text(
-                              '매칭 진행 상황',
+                              '${'matching-state'.tr()}',
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -123,7 +123,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                                   '/loading', (Route<dynamic> route) => false);
                             },
                             child: Text(
-                              '홈으로 돌아가기',
+                              '${'setting-gohome'.tr()}',
                               style: TextStyle(
                                 color: Color(0xffA7A7A7),
                               ),

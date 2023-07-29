@@ -165,7 +165,7 @@ class _LoginState extends State<Login> {
 
                           var loginSuccess = await APIs.logIn(auth);
 
-                          if (loginSuccess == "200") {
+                          if (loginSuccess/* == "200"*/) {
                            //스택 비우고 화면 이동
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/loading', (Route<dynamic> route) => false);
@@ -196,7 +196,10 @@ class _LoginState extends State<Login> {
                           }
                         }
                       },
-                    ),
+                      /*onPressed: (){Navigator.of(context).pushNamed(
+                        '/loading');}*/
+
+                        ),
                     SizedBox(height: MediaQuery.of(context).size.height *0.035 ,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,

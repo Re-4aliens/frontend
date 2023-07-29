@@ -32,6 +32,7 @@ class Member {
   int? age;
   String? profileImage;
   String? countryImage;
+  String? selfIntroduction;
 
   Member(
       {this.name,
@@ -40,7 +41,9 @@ class Member {
         this.nationality,
         this.age,
         this.profileImage,
-        this.countryImage});
+        this.countryImage,
+        this.selfIntroduction
+      });
 
   Member.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -50,6 +53,7 @@ class Member {
     age = json['age'];
     profileImage = json['profileImage'];
     countryImage = json['countryImage'];
+    selfIntroduction = json['selfIntroduction'];
   }
 
   Map<String, dynamic> toJson() {
@@ -61,6 +65,7 @@ class Member {
     data['age'] = this.age;
     data['profileImage'] = this.profileImage;
     data['countryImage'] = this.countryImage;
+    data['selfIntroduction'] = this.selfIntroduction;
     return data;
   }
 }

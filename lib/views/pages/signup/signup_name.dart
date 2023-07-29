@@ -29,11 +29,11 @@ class _SignUpNameState extends State<SignUpName>{
       password: '',
       mbti: '',
       gender: '',
-      nationality: 0,
+      nationality: '',
       birthday: '',
       name: '',
       profileImage: '',
-      bio: ''
+        selfIntroduction: ''
     );
 
     return Scaffold(

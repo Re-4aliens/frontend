@@ -97,7 +97,7 @@
   "homepage-already": "! You have already completed the matching application and are in the process:)\n Press the ",
   "homepage-check": " button below and check it!",
   "homepage-press" : "Press the ",
-  "homepage-mathcingstart": " button below to start matching!",
+  "homepage-matchingstart": "\nbutton below to start matching!",
 
 
   "setting": "Setting",
@@ -136,7 +136,7 @@
   "setting-why": "Reason for inability to change",
   "setting-newmis": "New password mismatch",
   "setting-confirm": "Please confirm your password.",
-  "setting-pasdone": "Your password has been changed!\nPlease log in again.",
+  "setting-pasdone": "Your password\nhas been changed!\nPlease log in again.",
   "setting-gohome": "Go to home",
   "setting-deletewhat": "Wait! If you proceed with withdrawal, you will lose the following features.",
   "setting-delete1": "You need to sign up again\nfrom the beginning.",
@@ -153,9 +153,34 @@
   "setting-failwhy": "Withdrawal failed\ndue to password mismatch",
   "setting-delete5": "Chat history, matching records, and other data used so far cannot be recovered.",
   "setting-thank": "Thank you for using our service so far.\nThrough membership registration,\nyou can start again anytime!",
-  "setting-private": "Privacy Policy"
+  "setting-private": "Privacy Policy",
 
 
+  "matching-soon" : "Matching applications\nwill start soon!",
+  "matching-preferlan": "According to language preferences, ",
+  "matching-matchdone": "matching will be done.",
+  "matching-sf": "Random language friends(sf)",
+  "matching-add": " will be included.",
+  "matching-start": "Start matching",
+  "matching-chooselan": "Select preferred language",
+  "matching-choosetwo": "Please select second options.",
+  "matching-choosedetail": "You can have conversations with the other person in the desired language.\nYou can choose from four languages based on your preferences",
+  "matching-choosefirst": "First selection",
+  "matching-chooseinfo": "What language(s) would you like to use\nwhen communicating with the other person?\nPlease select two languages as your preferred choices.\nThey will be prioritized during the matching process.",
+  "matching-applydone": "Matching application done!",
+  "matching-applysee": "By clicking the button below,\nyou can check the progress of the matching process.",
+  "matching-state": "Matching progress",
+  "matching-progress": "Matching in progress...",
+  "matching-wait": "Please wait a little longer.\nWe're searching for friends who perfectly match\nyour preferences and style!",
+  "matching-mine": "Check my applications",
+
+
+  "country" : "country",
+  "Age(years)": "Age(years)",
+  "matchinglan": "Matching preferred languages",
+  "first": "First priority",
+  "second": "Second priority",
+  "matchingpreferlan": "Matching preferred\nlanguages"
 
 
 
