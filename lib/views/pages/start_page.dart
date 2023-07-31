@@ -32,7 +32,7 @@ class _StartPageState extends State<StartPage> {
   //storage로부터 읽을 모델
   dynamic userInfo = null;
 
-/*
+
   @override
   void initState(){
     super.initState();
@@ -44,7 +44,7 @@ class _StartPageState extends State<StartPage> {
 
 
   }
-*/
+
   //비동기로 storage 정보 확인
   _asyncMethod() async {
     //auth값 읽어서 userInfo에 저장
