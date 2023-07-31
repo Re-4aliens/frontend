@@ -484,7 +484,6 @@ class APIs {
 
   static Future<ScreenArguments> getMatchingData() async {
     late ScreenArguments _screenArguments;
-    /*
 
     late MemberDetails _memberDetails;
     late String _status;
@@ -501,9 +500,9 @@ class APIs {
 
     _screenArguments =
     new ScreenArguments(_memberDetails, _status, _applicant, _partners);
-*/
-    return mockScreenArgument_2;
-    //return _screenArguments;
+
+    //return mockScreenArgument_2;
+    return _screenArguments;
   }
 
 
