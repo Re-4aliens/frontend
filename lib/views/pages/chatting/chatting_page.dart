@@ -150,17 +150,18 @@ class _ChattingPageState extends State<ChattingPage> {
       'requestId': DataUtils.makeUUID(),
       //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
       //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
-      'fcmToken': "dNRrfFS3lkpGjrmR8h_02c:APA91bGFN8mw7ncHT3xG6k3P__ylVyyP6jbeNSRnAsDp-QCBoXAGCtGV9SboimtCPOBvibSxsCm2BUy8twurtB_eiynrHQetthqRnbtjoAulKrHxAX2k64k3tseYbUbk9AKaQmg7_E_F",
+      //'fcmToken': "dNRrfFS3lkpGjrmR8h_02c:APA91bGFN8mw7ncHT3xG6k3P__ylVyyP6jbeNSRnAsDp-QCBoXAGCtGV9SboimtCPOBvibSxsCm2BUy8twurtB_eiynrHQetthqRnbtjoAulKrHxAX2k64k3tseYbUbk9AKaQmg7_E_F",
       'chatType': 0,
       'chatContent': _newMessage,
       'roomId': widget.partner.roomId,
       'senderId': widget.memberDetails.memberId,
-      'senderName': "Daisy",
+      'senderName': widget.memberDetails.name,
       'receiverId': widget.partner.memberId,
       'sendTime': DateTime.now().toString(),
     };
     await sendChannel.sink.add(json.encode(request));
     requestBuffer.add(request);
+    updateUi();
   }
 
   void sendReadRequest(RemoteMessage message) async {
@@ -187,7 +188,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
   void connectWebSocket() async {
     String chatToken = await APIs.getChatToken();
-    final wsUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/message/send');
+    final wsUrl = Uri.parse('ws://13.125.205.59:8083/ws/chat/message/send');
     final wsReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/message/read');
     final wsAllReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/room/read');
     var header = {
