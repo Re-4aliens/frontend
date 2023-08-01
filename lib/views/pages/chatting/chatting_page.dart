@@ -188,9 +188,9 @@ class _ChattingPageState extends State<ChattingPage> {
 
   void connectWebSocket() async {
     String chatToken = await APIs.getChatToken();
-    final wsUrl = Uri.parse('ws://13.125.205.59:8083/ws/chat/message/send');
-    final wsReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/message/read');
-    final wsAllReadUrl = Uri.parse('ws://13.125.205.59:8082/ws/chat/room/read');
+    final wsUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/message/send');
+    final wsReadUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/message/read');
+    final wsAllReadUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/room/read');
     var header = {
       'Authorization': chatToken
     };

@@ -34,6 +34,9 @@ class _StartPageState extends State<StartPage> {
   dynamic token =null;
 
 
+  String selectedValue = 'English';
+
+
   @override
   void initState(){
     super.initState();
@@ -115,6 +118,42 @@ class _StartPageState extends State<StartPage> {
                       '${'title1'.tr()}${'title2'.tr()}',
                       style: TextStyle(fontSize: isSmallScreen ? 12 : 14),
                     ),
+                    DropdownButton<String>(
+                      underline: SizedBox(),
+                      value: selectedValue,
+                      items: <String>['English', '한국어']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                                fontSize: isSmallScreen ? 12 : 14,
+                            color: Color(0xff616161)),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedValue = newValue!;
+                          switch (selectedValue){
+                            case '한국어':
+                              EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
+                              break;
+                            case 'English':
+                              EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
+                              break;
+                          }
+                        });
+                      },
+                      icon: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: SvgPicture.asset(
+                          'assets/icon/icon_dropdown.svg',
+                          height: 8,
+                        ),
+                      )
+                    ),
                   ],
                 ),
               ),
@@ -160,21 +199,6 @@ class _StartPageState extends State<StartPage> {
                           )
                         ],
                       )),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(onPressed: ()=>EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR')), child: Text(
-                          '한국어'
-                      ),),
-                      TextButton(onPressed: ()=>EasyLocalization.of(context)!.setLocale(Locale('en', 'US')), child: Text(
-                          'English'
-                      ),),
-                      TextButton(onPressed: () async {
-                       await APIs.signUp(signUpModel);
-                      }
-                        ,child: Text('회원가입'),),
-                    ],
-                  )
                 ],
               ),
             ),
