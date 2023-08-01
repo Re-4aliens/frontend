@@ -139,7 +139,7 @@ class APIs {
    */
   static Future<bool> logIn(Auth auth) async {
     const url =
-        'http://13.125.205.59:8080/api/v1/auth/authentication'; //mocksever
+        'http://3.34.2.246:8080/api/v1/auth/authentication'; //mocksever
 
     var response = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
@@ -159,7 +159,7 @@ class APIs {
       //토큰 저장
       await storage.write(
         key: 'token',
-        value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))['data']),
+        value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))),
       );
       return true;
       //fail
@@ -177,14 +177,14 @@ class APIs {
   static Future<void> logOut(BuildContext context) async {
     print('로그아웃 시도');
     const url =
-        'http://13.125.205.59:8080/api/v1/member/authentication'; //mocksever
+        'http://13.125.205.59:8080/api/v1/auth/logout'; //mocksever
 
     //토큰 읽어오기
     var accessToken = await storage.read(key: 'token');
     var refreshToken = await storage.read(key: 'token');
 
-    accessToken = json.decode(accessToken!)['accessToken'];
-    refreshToken = json.decode(refreshToken!)['refreshToken'];
+    accessToken = json.decode(accessToken!)['data']['accessToken'];
+    refreshToken = json.decode(refreshToken!)['data']['refreshToken'];
 
 
     var response = await http.delete(Uri.parse(url),
@@ -256,7 +256,7 @@ class APIs {
     var userInfo = await storage.read(key: 'auth');
 
     //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var response = await http.put(
         Uri.parse(_url),
@@ -294,10 +294,10 @@ class APIs {
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
     //accessToken
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var refreshToken = await storage.read(key: 'token');
-    refreshToken = json.decode(refreshToken!)['refreshToken'];
+    refreshToken = json.decode(refreshToken!)['data']['refreshToken'];
 
 
     var response = await http.post(
@@ -327,13 +327,13 @@ class APIs {
 
   //유저 정보 요청
   static Future<Map<String, dynamic>> getMemberDetails() async {
-    var _url = 'http://13.125.205.59:8080/api/v1/member'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v1/member'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
 
     //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var response = await http.get(
       Uri.parse(_url),
@@ -357,13 +357,13 @@ class APIs {
 
   //매칭 상태 요청
   static Future<String> getApplicantStatus() async {
-    var _url = 'http://13.125.205.59:8080/api/v1/matching/status'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v1/matching/status'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
 
     //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var response = await http.get(
       Uri.parse(_url),
@@ -372,7 +372,6 @@ class APIs {
         'Content-Type': 'application/json'
       },
     );
-
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
@@ -380,7 +379,7 @@ class APIs {
 
       //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }
@@ -388,13 +387,13 @@ class APIs {
   //매칭 정보 요청
   static Future<Map<String, dynamic>> getApplicantInfo() async {
     const url =
-        'http://13.125.205.59:8080/api/v1/matching/applicant'; //mocksever
+        'http://3.34.2.246:8080/api/v1/matching/applicant'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
 
     //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var response = await http.get(
       Uri.parse(url),
@@ -418,13 +417,13 @@ class APIs {
 
   //상대 정보 요청
   static Future<List<Partner>> getApplicantPartners() async {
-    const url = 'http://13.125.205.59:8080/api/v1/matching/partners';
+    const url = 'http://3.34.2.246:8080/api/v1/matching/partners';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
 
     //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var response = await http.get(
       Uri.parse(url),
@@ -481,6 +480,57 @@ class APIs {
     }
   }
 
+  static Future<bool> getAccessToken(BuildContext context) async {
+    print('accesstoken 재발급');
+    const url =
+        'http://3.34.2.246:8080/api/v1/auth/reissue'; //mocksever
+
+    //토큰 읽어오기
+    var accessToken = await storage.read(key: 'token');
+    var refreshToken = await storage.read(key: 'token');
+
+    accessToken = json.decode(accessToken!)['data']['accessToken'];
+    refreshToken = json.decode(refreshToken!)['data']['refreshToken'];
+
+
+    var response = await http.delete(Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $accessToken',
+        'Content-Type': 'application/json',
+        'RefreshToken': '$refreshToken',
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+
+      //refresh token이 만료되었다면 재로그인
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-005'){
+        print('리프레시 토큰이 만료되어 자동 로그인 기간이 지났습니다. 다시 로그인해주세요.');
+        //start page로 이동
+        return false;
+      }else if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-006'){
+
+        //start page로 이동
+        return false;
+      }else {
+        //만료되지 않았다면
+        //발급받은 새로운 accesstoken을 저장
+        await storage.write(
+          key: 'token',
+          value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))),
+        );
+        Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
+        return true;
+      }
+
+      //fail
+    } else {
+      print(response.body);
+      return false;
+    }
+  }
 
   static Future<ScreenArguments> getMatchingData() async {
     late ScreenArguments _screenArguments;
@@ -518,7 +568,7 @@ class APIs {
     var jwtToken = await storage.read(key: 'token');
 
     // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     // 업데이트할 MBTI 정보를 담은 Map 생성
     var requestData = {
@@ -558,7 +608,7 @@ class APIs {
     var jwtToken = await storage.read(key: 'token');
 
     // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     // MultipartFile로 변환
 
@@ -598,7 +648,7 @@ class APIs {
     var jwtToken = await storage.read(key: 'token');
 
     //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var response = await http.post(Uri.parse(_url),
         headers: {
@@ -716,7 +766,7 @@ class APIs {
     var jwtToken = await storage.read(key: 'token');
 
     //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var response = await http.get(
       Uri.parse(_url),
