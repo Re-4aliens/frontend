@@ -12,9 +12,7 @@ class SplashPage extends StatefulWidget {
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
+class _SplashPageState extends State<SplashPage> {
   late Animation animation;
 
   bool isStart = false;
@@ -34,15 +32,6 @@ class _SplashPageState extends State<SplashPage>
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
       );
-    });
-  }
-
-
-  @override
-  void dispose() {
-    super.dispose();
-    controller.removeListener(() {
-      controller.dispose();
     });
   }
 
