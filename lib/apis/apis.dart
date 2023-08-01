@@ -137,15 +137,16 @@ class APIs {
   로그인
 
    */
-  static Future<bool> logIn(Auth auth) async {
+  static Future<bool> logIn(Auth auth, String fcmToken) async {
     const url =
-        'http://3.34.2.246:8080/api/v1/auth/authentication'; //mocksever
+        'http://3.34.2.246:8079/api/v1/auth/authentication'; //mocksever
 
     var response = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "email": auth.email,
           "password": auth.password,
+          "fcmToken": fcmToken
         }));
     //success
     if (response.statusCode == 200) {
@@ -740,7 +741,7 @@ class APIs {
 
   static Future<List<MessageModel>> getMessages(roomId) async {
     var _url =
-        'http://3.34.2.246:8080/api/v1/chat/${roomId}'; //mocksever
+        'http://3.34.2.246:8081/api/v1/chat/${roomId}'; //mocksever
 
 
     //토큰 읽어오기
