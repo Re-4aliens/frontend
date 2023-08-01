@@ -61,13 +61,12 @@ class _StartPageState extends State<StartPage> {
 
       print('지금 시간: ${DateTime.now()}\n토큰 저장 시간: ${timestamp}\n 차이: ${diff}');
       //리프레시 토큰 기간(60s)이 지났다면
-      if(diff > Duration(seconds: 60)){
+      if(diff > Duration(days: 6)){
         //토큰 및 정보 지움
         //자동로그인 해제
         await storage.delete(key: 'auth');
         await storage.delete(key: 'token');
-
-      } else if (diff < Duration(seconds: 60) && diff > Duration(seconds: 30)){
+      } else if (diff <= Duration(days: 6) && diff > Duration(minutes: 29)){
         //액세스 토큰 기간(30s)이 지났다면
         //액세스 토큰 재발급
         print('액세스 토큰 재발급');
