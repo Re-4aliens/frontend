@@ -253,7 +253,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                             print(member.toJson());
                             //await APIs.verifyEmail(member.email);
                             Navigator.pushNamed(context, '/verify', arguments: member);
-                            /*
+
                             showDialog(
                                 context: context,
                                 builder: (_) => FutureBuilder(
@@ -267,19 +267,21 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                             child: Image(
                                                 image: AssetImage(
                                                     "assets/illustration/loading_01.gif")));
-                                      } else
+                                      } else{
                                         //받아온 후
                                         WidgetsBinding.instance!.addPostFrameCallback((_) {
                                           Navigator.pushNamed(context, '/verify', arguments: member);
                                         });
-                                      print(member.toJson());
-                                      return Container(
-                                          margin: EdgeInsets.only(left: 75),
-                                          child: Image(
-                                              image: AssetImage(
-                                                  "assets/illustration/loading_01.gif")));
+                                        print(member.toJson());
+                                        return Container(
+                                            margin: EdgeInsets.only(left: 75),
+                                            child: Image(
+                                                image: AssetImage(
+                                                    "assets/illustration/loading_01.gif")));
+                                      }
+
                                     }));
-                             */
+
                           }
                         : null))
           ],
