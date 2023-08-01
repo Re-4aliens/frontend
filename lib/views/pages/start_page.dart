@@ -114,9 +114,12 @@ class _StartPageState extends State<StartPage> {
                         color: Colors.black,
                       ),
                     ),
-                    Text(
-                      '${'title1'.tr()}${'title2'.tr()}',
-                      style: TextStyle(fontSize: isSmallScreen ? 12 : 14),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 14.0),
+                      child: Text(
+                        '${'title1'.tr()}${'title2'.tr()}',
+                        style: TextStyle(fontSize: isSmallScreen ? 16 : 18, color: Color(0xff414141)),
+                      ),
                     ),
                     DropdownButton<String>(
                       underline: SizedBox(),

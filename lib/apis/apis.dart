@@ -740,9 +740,22 @@ class APIs {
 
   static Future<List<MessageModel>> getMessages(roomId) async {
     var _url =
-        'http://3.34.2.246:8081/api/v1/chat/${roomId}'; //mocksever
+        'http://3.34.2.246:8080/api/v1/chat/${roomId}'; //mocksever
 
-    var response = await http.get(Uri.parse(_url));
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
+    );
 
     //success
     if (response.statusCode == 200) {
