@@ -88,7 +88,7 @@ class _ChattingPageState extends State<ChattingPage> {
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
 
           //채팅에 대한 fcm인 경우
-          if(message.data['chatContent'] != null){
+          if(message.data['chatContent'] != null && message.data['roomId'] != null){
             // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
             print('Received FCM with: ${message.data} at ${DateTime.now()}');
             //받은 fcm 저장하고 보여주기
@@ -111,14 +111,21 @@ class _ChattingPageState extends State<ChattingPage> {
             //단일 읽음 처리
             sendReadRequest(message);
           }
+          else if (message.data['chatContent'] == null && message.data['roomId'] != null){
+            print('Received FCM with: ${message.data} at ${DateTime.now()}');
+            await SqlMessageRepository.bulkUpdate(widget.partner);
+            setState(() {});
+          }
           //상대방이 읽었다는 것에 대한 fcm인 경우
           else {
+            print('Received FCM with: ${message.data} at ${DateTime.now()}');
 
-          }
+            await SqlMessageRepository.update(widget.partner, int.parse(message.data['chatId']));
+            setState(() {});
+            }
           }
 
         );
-
 
     myFuture = APIs.getMessages(widget.partner.roomId);
     _memoizer = AsyncMemoizer();
@@ -165,6 +172,7 @@ class _ChattingPageState extends State<ChattingPage> {
   }
 
   void sendReadRequest(RemoteMessage message) async {
+    print('단일 읽음처리');
     Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
       //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
@@ -198,6 +206,8 @@ class _ChattingPageState extends State<ChattingPage> {
     readChannel = IOWebSocketChannel.connect(wsReadUrl, headers: header);
     bulkReadChannel = IOWebSocketChannel.connect(wsAllReadUrl, headers: header);
 
+    sendBulkReadRequest();
+
     sendChannel.stream.listen((message) async {
       messageSendResponseHandler(message);
     }, onError: (error) {
@@ -226,19 +236,14 @@ class _ChattingPageState extends State<ChattingPage> {
   void readResponseHandler(message) {
     print('Received response: $message');
     if(json.decode(message)['status'] == 'success'){
-      //해당 룸아이디 && 리시버 = 파트너 인 경우 unReadCount 0으로
-      //얘 역시 할 필요 없음
-      //await SqlMessageRepository.update(widget.partner);
       setState(() {});
     }
   }
 
-  void bulkReadResponseHandler(message) {
-    print('Received response: $message');
+  void bulkReadResponseHandler(message) async {
+    print('bulk read channel Received response: $message');
     if(json.decode(message)['status'] == 'success'){
-      //해당 룸아이디 && 리시버 = 파트너 인 경우 unReadCount 0으로
-      //얘 역시 할 필요 없음
-      //await SqlMessageRepository.update(widget.partner);
+      await SqlMessageRepository.bulkUpdate(widget.partner);
       setState(() {});
     }
   }
@@ -283,8 +288,6 @@ class _ChattingPageState extends State<ChattingPage> {
     }
 
     this._memoizer.runOnce(() async{
-
-    sendBulkReadRequest();
     });
     //3. 업데이트된 리스트 불러오기
     return await SqlMessageRepository.getList(widget.partner.roomId!, widget.memberDetails.memberId!);

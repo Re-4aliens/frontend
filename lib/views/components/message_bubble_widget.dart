@@ -4,38 +4,31 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
-import 'package:web_socket_channel/io.dart';
 
 
 import '../../models/message_model.dart';
 
-class MessageBubble extends StatefulWidget {
-  const MessageBubble(
-      {super.key, required this.message, required this.memberDetails, required this.showingTime, required this.showingPic});
-
+class MessageBubble extends StatelessWidget {
   final MessageModel message;
   final MemberDetails memberDetails;
   final bool showingTime;
   final bool showingPic;
 
-  @override
-  State<MessageBubble> createState() => _MessageBubbleState();
-}
+  const MessageBubble({
+    Key? key,
+    required this.message,
+    required this.memberDetails,
+    required this.showingTime,
+    required this.showingPic,
+  }) : super(key:key);
 
-class _MessageBubbleState extends State<MessageBubble> {
-  var channel;
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    if(widget.message.chatType == 1)
+    if(message.chatType == 1)
       return _vsGameBubble();
     else {
-      if(widget.message.senderId == widget.memberDetails.memberId)
+      if(message.senderId == memberDetails.memberId)
         return _myBubble();
       else
         return _partnerBubble();
@@ -45,7 +38,7 @@ class _MessageBubbleState extends State<MessageBubble> {
   Widget _partnerBubble() {
     return Row(
       children: [
-        widget.showingPic ?
+        showingPic ?
         Padding(
           padding: EdgeInsets.only(left: 25),
           child: SvgPicture.asset(
@@ -77,7 +70,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                 margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Text(
-                  '${widget.message.chatContent}',
+                  '${message.chatContent}',
                   style: TextStyle(
                     color: Color(0xff616161),
                   ),
@@ -87,17 +80,13 @@ class _MessageBubbleState extends State<MessageBubble> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                widget.showingTime! ?
-                '${DateFormat('hh:mm aaa').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
+                showingTime! ?
+                '${DateFormat('hh:mm aaa').format(DateTime.parse('${message.sendTime}'))}' : '',
                 style: TextStyle(
                   fontSize: 12,
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(right: 18),
-              child: widget.message.unreadCount == 0 ? Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
-            )
           ],
         ),
       ],
@@ -115,8 +104,8 @@ class _MessageBubbleState extends State<MessageBubble> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                widget.showingTime! ?
-                '${DateFormat('hh:mm aaa').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
+                showingTime! ?
+                '${DateFormat('hh:mm aaa').format(DateTime.parse('${message.sendTime}'))}' : '',
                 style: TextStyle(
                   fontSize: 12,
                 ),
@@ -140,7 +129,7 @@ class _MessageBubbleState extends State<MessageBubble> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                 margin: EdgeInsets.only(top: 10, bottom: 10, left: 18, right: 25),
                 child: Text(
-                  '${widget.message.chatContent}',
+                  '${message.chatContent}',
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -151,7 +140,7 @@ class _MessageBubbleState extends State<MessageBubble> {
         ),
         Padding(
           padding: EdgeInsets.only(right: 18),
-          child: widget.message.unreadCount == 0 ? Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
+          child: message.unreadCount == 0 ? Text('읽음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('읽지않음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
         )
       ],
     );
