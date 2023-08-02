@@ -85,7 +85,7 @@ class _SignUpNameState extends State<SignUpName>{
         constraintsText = "";
       });
     } else {
-      if (value.length > 2){
+      if (value.length > 1){
         String pattern = r"^[ㄱ-ㅎ가-힣0-9a-zA-Zぁ-ゔァ-ヴー々〆〤一-龥+]*$";
         RegExp regExp = new RegExp(pattern);
         if (!regExp.hasMatch(value)) {

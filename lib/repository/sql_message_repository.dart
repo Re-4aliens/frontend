@@ -112,18 +112,30 @@ class SqlMessageRepository{
     return unreadChatCount;
   }
 
-  static Future<void> update(Partner partner) async {
+  static Future<void> update(Partner partner, int chatId) async {
     var _db = await SqlMessageDataBase().database;
 
-    final roomId = partner.roomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
-    final receiverId = partner.memberId; // 리시버 (어떤 리시버의 데이터를 업데이트할지 선택)
+    final _roomId = partner.roomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
+    final _receiverId = partner.memberId; // 리시버 (어떤 리시버의 데이터를 업데이트할지 선택)
+    final _chatId = chatId;
 
     await _db.rawUpdate('''
       UPDATE chat 
       SET unreadCount = 0 
-      WHERE roomId = ? AND receiverId = ?
-    ''', [roomId, receiverId]);
+      WHERE roomId = ? AND receiverId = ? AND chatId = ?
+    ''', [_roomId, _receiverId, _chatId]);
+  }
 
+  static Future<void> bulkUpdate(Partner partner) async {
+    var _db = await SqlMessageDataBase().database;
+
+    final _roomId = partner.roomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
+
+    await _db.rawUpdate('''
+      UPDATE chat 
+      SET unreadCount = 0 
+      WHERE roomId = ?
+    ''', [_roomId]);
   }
 
 }

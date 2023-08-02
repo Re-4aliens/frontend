@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:aliens/views/components/button_big.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -163,8 +164,8 @@ class _LoginState extends State<Login> {
                             _pwFormKey.currentState!.validate()) {
                           auth.email = _emailController.text;
                           auth.password = _passwordController.text;
-
-                          var loginSuccess = await APIs.logIn(auth);
+                          final fcmToken = await FirebaseMessaging.instance.getToken();
+                          var loginSuccess = await APIs.logIn(auth, fcmToken!);
 
                           if (loginSuccess) {
 

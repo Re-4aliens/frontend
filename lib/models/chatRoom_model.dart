@@ -1,24 +1,26 @@
-class ChatRoom {
-  int? roomId;
-  String? status;
-  List<dynamic>? chatMessages;
-  int? partnerId;
+import 'package:aliens/models/partner_model.dart';
 
-  ChatRoom({this.roomId, this.status, this.chatMessages, this.partnerId});
+class ChatRoom {
+  Partner? partner;
+  String? lastChatContent;
+  String? lastChatTime;
+  int? numberOfUnreadChat;
+
+  ChatRoom({this.partner, this.lastChatContent, this.lastChatTime, this.numberOfUnreadChat});
 
   ChatRoom.fromJson(Map<String, dynamic> json) {
-    roomId = json['roomId'];
-    status = json['status'];
-    chatMessages = json['chatMessages'];
-    partnerId = json['partnerId'];
+    partner = json['partner'];
+    lastChatContent = json['lastChatContent'];
+    lastChatTime = json['lastChatTime'];
+    numberOfUnreadChat = json['numberOfUnreadChat'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['roomId'] = this.roomId;
-    data['status'] = this.status;
-    data['chatMessages'] = this.chatMessages;
-    data['partnerId'] = this.partnerId;
+    data['partner'] = this.partner;
+    data['lastChatContent'] = this.lastChatContent;
+    data['lastChatTime'] = this.lastChatTime;
+    data['numberOfUnreadChat'] = this.numberOfUnreadChat;
     return data;
   }
 }
