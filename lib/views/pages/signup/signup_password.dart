@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:aliens/apis.dart';
+import '../../../apis/apis.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -72,7 +72,6 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                   if(_formKey.currentState!.validate()){
                     member.password = _PasswordController.text;
                     print(member.toJson());
-
                     //------ 회원가입 api 요청
                     //authProvider.signUp(member, context);
                     if(await APIs.signUp(member))

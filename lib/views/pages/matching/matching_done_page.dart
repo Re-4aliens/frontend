@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:aliens/models/screenArgument.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -43,7 +44,7 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
             children: [
               Expanded(flex: 1, child: Container()),
               Text(
-                '매칭이 완료되었어요!',
+                'matched1'.tr(),
                 style: TextStyle(
                   fontSize: isSmallScreen ? 22 : 24,
                   fontWeight: FontWeight.w900,
@@ -54,7 +55,7 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                 height: 10,
               ),
               Text(
-                '새로운 친구를 만나러 가볼까요?',
+                'matched2'.tr(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: isSmallScreen ? 12 : 14,
@@ -110,7 +111,7 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                         Expanded(
                           flex: 2,
                           child: Text(
-                            '매칭 목록',
+                            'matched3'.tr(),
                             style: TextStyle(
                               fontSize: isSmallScreen ? 16 : 18,
                               fontWeight: FontWeight.bold,
