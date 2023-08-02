@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,6 +27,7 @@ class _SplashPageState extends State<SplashPage>
         isStart = true;
       });
     });
+
 
     //5초 후에 넘어가기
     Timer(Duration(milliseconds: 5000), () {
@@ -72,14 +74,6 @@ class _SplashPageState extends State<SplashPage>
               height: 120,),
               alignment: Alignment.center,
             ),
-            /*
-            child: Image.asset(
-              'assets/component_1.png',
-              width: 120,
-              height: 120,
-            ),
-
-             */
             right: isStart? -60 : -120,
             top: 150,
           ),
@@ -87,14 +81,6 @@ class _SplashPageState extends State<SplashPage>
           AnimatedPositioned(
             duration: Duration(milliseconds: 3000),
             curve: Curves.elasticInOut,
-            /*
-            child: Image.asset(
-              'assets/character.png',
-              width: 400,
-              height: 300,
-            ),
-
-             */
             child: SvgPicture.asset(
               'assets/character/splash_hi.svg',
             ),
@@ -110,21 +96,24 @@ class _SplashPageState extends State<SplashPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset('assets/character/splash_logo.svg'),
-               // Text('타이틀 로고', style: TextStyle(fontSize: 25, color: Colors.white),),
                 RichText(
-                  text: TextSpan(
+                  text:
+                  EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
+                  TextSpan(
                       children: [
-                        TextSpan(text:'내 손안의 ', style: TextStyle(fontSize: 14, color: Colors.white),),
-                        TextSpan(text: '외국인 프렌즈', style: TextStyle(fontSize: 14,color: Colors.white, fontWeight: FontWeight.bold)),
+                        TextSpan(text:'title1'.tr(), style: TextStyle(fontSize: 14, color: Colors.white),),
+                        TextSpan(text:'title2'.tr(), style: TextStyle(fontSize: 14,color: Colors.white, fontWeight: FontWeight.bold)),
+                      ]
+                  ) :
+                  TextSpan(
+                      children: [
+                        TextSpan(text:'title1'.tr(), style: TextStyle(fontSize: 14,color: Colors.white, fontWeight: FontWeight.bold)),
+                        TextSpan(text:'title2'.tr(), style: TextStyle(fontSize: 14, color: Colors.white),),
                       ]
                   ),
                 ),
               ],
             ),
-            /*
-              child: Image.asset('assets/titleImage.png',height: 80,)
-
-             */
           )
         ],
       ),

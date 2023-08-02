@@ -73,6 +73,14 @@
   "find-pwd7": "Please log in again",
   "find-pwd8": "Retry",
 
+
+  "matched1": "Match!",
+  "matched2": "Let's go meet new friends",
+  "matched3": "Friends list",
+  "matched4": "Match!",
+  "matched5": "You've got {num} matches!",
+  "matched6": "Send message",
+
   "homepage-welcome" : "Welcome!",
   "homepage-welome1.1" : "Welcome to ",
   "homepage-welcome1.2" : "Friendship",
@@ -100,6 +108,7 @@
   "homepage-matchingstart": "\nbutton below to start matching!",
 
 
+  "chat1" : "Chats",
   "setting": "Setting",
   "setting-nim" : " ",
   "setting-takepicture" : "Take a photo",
@@ -181,13 +190,6 @@
   "first": "First priority",
   "second": "Second priority",
   "matchingpreferlan": "Matching preferred\nlanguages"
-
-
-
-
-
-
-
 
 
 

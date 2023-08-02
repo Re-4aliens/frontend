@@ -59,6 +59,10 @@ dependencies:
   easy_localization: ^3.0.0
   dash_flags: ^0.1.1
   flutter_local_notifications: ^14.1.1
+  sqflite: ^2.2.8+4
+  path: ^1.8.2
+  uuid: ^3.0.7
+  stomp_dart_client: ^0.4.4
 # =======
 
 

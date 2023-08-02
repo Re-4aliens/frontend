@@ -1,30 +1,51 @@
 import 'package:aliens/mockdatas/mockdata_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
+import 'package:web_socket_channel/io.dart';
+
 
 import '../../models/message_model.dart';
 
-class MessageBuble extends StatefulWidget {
-  const MessageBuble(
-      {super.key, required this.message, required this.applicant});
+class MessageBubble extends StatefulWidget {
+  const MessageBubble(
+      {super.key, required this.message, required this.memberDetails, required this.showingTime, required this.showingPic});
 
   final MessageModel message;
-  final applicant;
+  final MemberDetails memberDetails;
+  final bool showingTime;
+  final bool showingPic;
 
   @override
-  State<MessageBuble> createState() => _MessageBubleState();
+  State<MessageBubble> createState() => _MessageBubbleState();
 }
 
-class _MessageBubleState extends State<MessageBuble> {
+class _MessageBubbleState extends State<MessageBubble> {
+  var channel;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return widget.message.messageCategory == 'VS_GAME_MESSAGE' ? _vsGameBubble() : widget.message.senderId == widget.applicant.member.name ? _myBubble() : _partnerBubble();
+    if(widget.message.chatType == 1)
+      return _vsGameBubble();
+    else {
+      if(widget.message.senderId == widget.memberDetails.memberId)
+        return _myBubble();
+      else
+        return _partnerBubble();
+    }
   }
 
   Widget _partnerBubble() {
     return Row(
       children: [
+        widget.showingPic ?
         Padding(
           padding: EdgeInsets.only(left: 25),
           child: SvgPicture.asset(
@@ -32,6 +53,8 @@ class _MessageBubleState extends State<MessageBuble> {
             height: 40,
             color: Color(0xff7898ff),
           ),
+        ) : SizedBox(
+          width: 65,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -54,7 +77,7 @@ class _MessageBubleState extends State<MessageBuble> {
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
                 margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Text(
-                  '${widget.message.message}',
+                  '${widget.message.chatContent}',
                   style: TextStyle(
                     color: Color(0xff616161),
                   ),
@@ -64,12 +87,17 @@ class _MessageBubleState extends State<MessageBuble> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10),
               child: Text(
-                '시간',
+                widget.showingTime! ?
+                '${DateFormat('hh:mm aaa').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
                 style: TextStyle(
                   fontSize: 12,
                 ),
               ),
             ),
+            Padding(
+              padding: EdgeInsets.only(right: 18),
+              child: widget.message.unreadCount == 0 ? Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
+            )
           ],
         ),
       ],
@@ -77,44 +105,54 @@ class _MessageBubleState extends State<MessageBuble> {
   }
 
   Widget _myBubble() {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: Text(
-            '시간',
-            style: TextStyle(
-              fontSize: 12,
-            ),
-          ),
-        ),
-        ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: 270, // 최대 너비 지정
-          ),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Color(0xff7898ff),
-                borderRadius: BorderRadius.circular(30),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 5,
-                      spreadRadius: 0.5,
-                      offset: const Offset(0, 3))
-                ]),
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-            margin: EdgeInsets.only(top: 10, bottom: 10, left: 18, right: 25),
-            child: Text(
-              '${widget.message.message}',
-              style: TextStyle(
-                color: Colors.white,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                widget.showingTime! ?
+                '${DateFormat('hh:mm aaa').format(DateTime.parse('${widget.message.sendTime}'))}' : '',
+                style: TextStyle(
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
+            ConstrainedBox(
+              constraints: BoxConstraints(
+                maxWidth: 270, // 최대 너비 지정
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Color(0xff7898ff),
+                    borderRadius: BorderRadius.circular(30),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 5,
+                          spreadRadius: 0.5,
+                          offset: const Offset(0, 3))
+                    ]),
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
+                margin: EdgeInsets.only(top: 10, bottom: 10, left: 18, right: 25),
+                child: Text(
+                  '${widget.message.chatContent}',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
+        Padding(
+          padding: EdgeInsets.only(right: 18),
+          child: widget.message.unreadCount == 0 ? Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('${widget.message.unreadCount}', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
+        )
       ],
     );
   }
@@ -198,4 +236,6 @@ class _MessageBubleState extends State<MessageBuble> {
       ],
     );
   }
+
+
 }

@@ -73,6 +73,14 @@
   "find-pwd7": "다시 로그인 해주세요.",
   "find-pwd8": "이메일 재입력하기",
 
+
+  "matched1": "매칭이 완료되었어요!",
+  "matched2": "새로운 친구를 만나러 가볼까요?",
+  "matched3": "매칭 목록",
+  "matched4": "매칭 완료!",
+  "matched5": "{num}명의 친구와 매칭되었어요!",
+  "matched6": "채팅하기",
+
   "homepage-welcome" : "어서오세요!",
   "homepage-welome1.1" : "프렌드쉽",
   "homepage-welome1.2" : "에 온 걸 환영해요",
@@ -99,6 +107,8 @@
   "homepage-press": "아래의 ",
   "homepage-matchingstart": " 버튼을 눌러 매칭을 시작해보세요!",
 
+  "chat1" : "Chats",
+  
   "setting": "설정",
   "setting-nim" : "님",
   "setting-takepicture": "사진찍기",
@@ -179,5 +189,6 @@
   "first": "1순위",
   "second": "2순위",
   "matchingpreferlan": "매칭 선호 언어"
+
 
 }

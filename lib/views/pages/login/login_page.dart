@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../apis.dart';
+
 import '../../../apis/apis.dart';
 import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
@@ -28,8 +28,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _pwFormKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController(text: 'cju4103@pukyong.ac.kr');
+  final TextEditingController _passwordController = TextEditingController(text: '1234567');
 
   //storage에 작성할 모델
   final Auth auth = new Auth();
@@ -168,6 +168,7 @@ class _LoginState extends State<Login> {
 
                           if (loginSuccess) {
                             //스택 비우고 화면 이동
+
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/loading', (Route<dynamic> route) => false);
 

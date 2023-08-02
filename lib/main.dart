@@ -1,3 +1,4 @@
+import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/loading_page.dart';
 import 'package:aliens/views/pages/login/login_checkmail_page.dart';
 import 'package:aliens/views/pages/login/login_findpassword_page.dart';
@@ -27,6 +28,7 @@ import 'package:flutter/material.dart';
 
 import 'package:aliens/views/pages/signup/signup_name.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 
 import 'package:provider/provider.dart';
@@ -58,6 +60,8 @@ import './views/pages/splash_page.dart';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
+
+import 'apis/firebase_apis.dart';
 //import 'firebase_options.dart';
 
 final supportedLocales = [
@@ -68,32 +72,25 @@ final supportedLocales = [
 void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  SqlMessageDataBase();
 
   // easylocalization 초기화
   await EasyLocalization.ensureInitialized();
 
-/*
+
   // fcm 초기화 부분
   await initializeDefault();
   final fcmToken = await FirebaseMessaging.instance.getToken();
   // fcm 토큰 출력
   print(fcmToken);
 
-  // 포그라운드 핸들러
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
-    print('Received FCM message with data: ${message.data} at ${DateTime.now()}');
-    message.data.forEach((key, value) {
-      print('$key: $value');
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-    });
-  });
+  //백그라운드 메세지 처리 핸들러 연결
+  FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
 
-
- */
-
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(FirebaseAPIs.channel);
 
   runApp(EasyLocalization(
     path: 'assets/translations',
@@ -113,6 +110,7 @@ Future<void> initializeDefault() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -189,38 +187,6 @@ class MyApp extends StatelessWidget {
         '/loading' : (context) => LoadingPage(),
 
       },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-
-  const MyHomePage({super.key});
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('4aliens'),
-      ),
-      body: Center(
-
-        child: Column(
-
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              '',
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

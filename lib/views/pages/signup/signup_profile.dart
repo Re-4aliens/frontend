@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../apis.dart';
+import '../../../apis/apis.dart';
 import '../../../models/members.dart';
 import '../../components/button.dart';
 import 'package:image_picker/image_picker.dart';
