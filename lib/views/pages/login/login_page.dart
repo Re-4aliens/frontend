@@ -28,8 +28,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _pwFormKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController(text: 'cju4103@pukyong.ac.kr');
-  final TextEditingController _passwordController = TextEditingController(text: '1234567');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   //storage에 작성할 모델
   final Auth auth = new Auth();
