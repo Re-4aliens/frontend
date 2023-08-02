@@ -28,6 +28,7 @@ class _SignUpBioState extends State<SignUpBio>{
     dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.white, infookay: false, infocontent: '',),
       body: Padding(
@@ -62,7 +63,7 @@ class _SignUpBioState extends State<SignUpBio>{
                 child: Text('next'.tr()),
                 onPressed: (){
                   if(_isButtonEnabled){
-                    member.bio = _bioController.text;
+                    member.selfIntroduction = _bioController.text;
                     print(member.toJson());
                     Navigator.pushNamed(context, '/email', arguments: member);
                   }

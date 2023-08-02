@@ -1143,14 +1143,14 @@ class _HomePageState extends State<HomePage> {
                             ? Color(0xff888888)
                             : Color(0xffFF8F8F)),
                   ),
-                  SizedBox(height: isSmallScreen?40:50),
+                  SizedBox(height: isSmallScreen?35:50),
                   Row(
                     children: [
                       Expanded(
                           flex : 3,
                           child: SizedBox()),
                       Expanded(
-                          flex: 9,
+                          flex: 8,
                           child:status == 'NOT_APPLIED'?
                           SvgPicture.asset('assets/character/none_speech_bubble.svg')
                                 :SvgPicture.asset('assets/character/speech_bubble.svg',

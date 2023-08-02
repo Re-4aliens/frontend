@@ -9,6 +9,8 @@ class Partner {
   String? gender;
   String? nationality;
   String? profileImage;
+  String? selfIntroduction;
+
   String? firstPreferLanguage;
   String? secondPreferLanguage;
 
@@ -22,6 +24,8 @@ class Partner {
         this.gender,
         this.nationality,
         this.profileImage,
+        this.selfIntroduction,
+
         this.firstPreferLanguage,
         this.secondPreferLanguage
       });
@@ -35,6 +39,7 @@ class Partner {
     gender = json['gender'];
     nationality = json['nationality'];
     profileImage = json['profileImage'];
+    selfIntroduction = json['selfIntrodcution'];
     firstPreferLanguage = json['firstPreferLanguage'];
     secondPreferLanguage = json['secondPreferLanguage'];
   }
@@ -48,6 +53,7 @@ class Partner {
     data['gender'] = this.gender;
     data['nationality'] = this.nationality;
     data['profileImage'] = this.profileImage;
+    data['selfIntroduction'] = this.selfIntroduction;
     data['firstPreferLanguage'] = this.firstPreferLanguage;
     data['secondPreferLanguage'] = this.secondPreferLanguage;
     return data;

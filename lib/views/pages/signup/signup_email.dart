@@ -251,7 +251,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                         ? () async {
                             member.email = _EmailController!.text;
                             print(member.toJson());
-                            //await APIs.verifyEmail(member.email);
+                            await APIs.verifyEmail(member.email);
                             Navigator.pushNamed(context, '/verify', arguments: member);
 
                             showDialog(
