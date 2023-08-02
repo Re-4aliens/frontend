@@ -84,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                       EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
                       TextSpan(children: [
                         TextSpan(
-                            text: '${'homepage-welome1.1'.tr()}',
+                            text: '${'homepage-welcome1.1'.tr()}',
                             style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
@@ -97,7 +97,7 @@ class _HomePageState extends State<HomePage> {
                       ]) :
                       TextSpan(children: [
                         TextSpan(
-                            text: '${'homepage-welome1.1'.tr()}',
+                            text: '${'homepage-welcome1.1'.tr()}',
                             style: TextStyle(
                                 fontSize: 24, color: Color(0xff5A5A5A))),
                         TextSpan(

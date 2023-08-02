@@ -139,14 +139,14 @@ class APIs {
    */
   static Future<bool> logIn(Auth auth, String fcmToken) async {
     const url =
-        'http://3.34.2.246:8079/api/v1/auth/authentication'; //mocksever
+        'http://3.34.2.246:8080/api/v1/auth/authentication'; //mocksever
 
     var response = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           "email": auth.email,
           "password": auth.password,
-          "fcmToken": fcmToken
+          //"fcmToken": fcmToken
         }));
     //success
     if (response.statusCode == 200) {
@@ -552,8 +552,8 @@ class APIs {
     _screenArguments =
     new ScreenArguments(_memberDetails, _status, _applicant, _partners);
 
-    return mockScreenArgument_2;
-    //return _screenArguments;
+    //return mockScreenArgument_2;
+    return _screenArguments;
   }
 
 

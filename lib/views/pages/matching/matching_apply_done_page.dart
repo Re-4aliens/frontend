@@ -113,11 +113,6 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
                           height: isSmallScreen?44:48,
                           child: ElevatedButton(
                             onPressed: () {
-                              /*
-                              Navigator.of(context)
-                                  .popUntil((route) => route.isFirst);
-
-                               */
 
                               Navigator.of(context).pushNamedAndRemoveUntil(
                                   '/loading', (Route<dynamic> route) => false);
