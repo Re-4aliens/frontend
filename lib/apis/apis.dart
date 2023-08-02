@@ -796,20 +796,24 @@ class APIs {
 
       //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == "AT-C-002"){
+
+      }
       throw Exception('요청 오류');
     }
   }
 
   // 채팅 정보 받아오기
   static Future<Map<String, dynamic>> getChatSummary() async {
-    var _url = '';
+    var _url = 'http://3.34.2.246:8081/api/v1/chat/summary';
+    print('토큰 읽기');
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
     //accessToken만 보내기
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
-
+    print('chat 토큰 읽기');
     String chatToken = await APIs.getChatToken();
 
     var response = await http.get(
@@ -821,6 +825,7 @@ class APIs {
       },
     );
 
+    print('요청 완료');
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
@@ -828,7 +833,7 @@ class APIs {
 
       //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }

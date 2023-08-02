@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
@@ -26,12 +25,12 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
 
 
   StreamSubscription<RemoteMessage>? _messageStreamSubscription;
-  List<ChatRoom>? chatRoomList;
+  Future<List<ChatRoom>>? chatRoomList;
   bool flag = true;
   @override
   void initState() {
-    //리스트 업데이트
-    //_updateList();
+    //채팅 정보 받아오기
+    chatRoomList = _getChatRoomList();
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -40,66 +39,74 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
         }
         );
   }
+
+  Future<List<ChatRoom>> _getChatRoomList() async {
+    List<ChatRoom> _chatRoomList = List<ChatRoom>.generate(widget.screenArguments.partners!.length, (index) => ChatRoom(partner: widget.screenArguments.partners![index]));
+    Map<String, dynamic> chatSummary = await APIs.getChatSummary();
+
+    for (int i = 0; i < _chatRoomList.length; i++) {
+      for(int j = 0; j < _chatRoomList.length; j++){
+        if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
+          _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
+          _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
+          _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
+          break;
+        }
+      }
+    }
+    return _chatRoomList;
+  }
+
   _updateList() async {
-    //await APIs.getChatSummary();
-    chatRoomList!.add(ChatRoom(
-      partner: widget.screenArguments.partners![0],
-      lastChatContent: "hi",
-      lastChatTime: "2021-08-01 00:00:00",
-      numberOfUnreadChat: 0
-    ));
-    chatRoomList!.add(ChatRoom(
-        partner: widget.screenArguments.partners![1],
-        lastChatContent: "hii",
-        lastChatTime: "2021-08-01 04:00:00",
-        numberOfUnreadChat: 0
-    ));
-    chatRoomList!.add(ChatRoom(
-        partner: widget.screenArguments.partners![2],
-        lastChatContent: "hello",
-        lastChatTime: "2021-08-01 00:10:00",
-        numberOfUnreadChat: 0
-    ));
-    chatRoomList!.add(ChatRoom(
-        partner: widget.screenArguments.partners![3],
-        lastChatContent: "hi",
-        lastChatTime: "2021-08-01 00:02:00",
-        numberOfUnreadChat: 0
-    ));
-    return chatRoomList;
+    await APIs.getChatSummary();
+
+    //return chatRoomList;
   }
 
   @override
   void dispose() {
+    print('종료');
     _messageStreamSubscription?.cancel();
   }
 
   @override
   Widget build(BuildContext context) {
-    chatRoomList!.sort((a, b) => b.lastChatTime!.compareTo(a.lastChatTime!));
 
     return Container(
       decoration: BoxDecoration(
         color: Color(0xffF5F7FF),
       ),
-      child: ListView.builder(
-          itemCount: widget.screenArguments.partners?.length,
-          itemBuilder: (context, index) {
-            return FutureBuilder(
-              future: _updateList(),
-              builder: (context, snapshot){
-                print(snapshot.data);
-                return Column(
-                  children: [
-                    if(index==0)TextButton(onPressed: (){
-                      SqlMessageDataBase.instance.deleteDB();
-                    }, child: Text('DB삭제')),
-                    chatList(context, index),
-                  ],
-                );
-              },
-            );
-          }),
+      child: FutureBuilder<List<ChatRoom>>(
+          future: chatRoomList,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return Container(
+                  margin: EdgeInsets.only(left: 75),
+                  alignment: Alignment.center,
+                  child: Image(
+                      image: AssetImage(
+                          "assets/illustration/loading_01.gif")));
+            else {
+              return ListView.builder(
+                  itemCount:snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return Column(
+                      children: [
+/*
+                        if(index==0) TextButton(onPressed: (){
+                          SqlMessageDataBase.instance.deleteDB();
+                        }, child: Text('dB 삭제')),
+
+
+ */
+
+                        chatList(context, index, snapshot.data![index]),
+                      ],
+                    );
+                  });
+            }
+          }
+      ),
     );
   }
 
@@ -119,7 +126,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
   }
 
 
-  Widget chatList(context, index) {
+  Widget chatList(context, index, ChatRoom chatRoom) {
     return Padding(
       padding: EdgeInsets.only(right: 25, left: 25, top: 30),
       child: MaterialButton(
@@ -170,7 +177,8 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                         ),
                       ),
                       Text(
-                        '${DateFormat('hh:mm aaa').format(DateTime.parse("2021-08-01 00:00:00"))}',
+                        (chatRoom.lastChatTime == '기록 없음' || chatRoom.lastChatTime == null)? '':
+                        '${DateFormat('hh:mm aaa').format(DateTime.parse('${chatRoom.lastChatTime}'))}',
                         style: TextStyle(
                           fontSize: 12,
                           color: Color(0xff888888),
@@ -184,13 +192,13 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        '시간',
+                        '${chatRoom.lastChatContent}',
                         style: TextStyle(
                           fontSize: 16,
                           color: Color(0xffA4A4A4),
                         ),
                       ),
-                      index != 0 ?
+                      chatRoom.numberOfUnreadChat == 0  || chatRoom.numberOfUnreadChat == null?
                             SizedBox(
                                 height: 24,
                                 width: 24,
@@ -204,7 +212,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  '4',
+                                  '${chatRoom.numberOfUnreadChat}',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,

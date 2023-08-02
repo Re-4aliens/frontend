@@ -73,7 +73,7 @@ class _StartPageState extends State<StartPage> {
         await APIs.getAccessToken(context);
       } else{
         //else
-        Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
+        //Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
       }
     }else{
       //저장된 정보가 없다면
