@@ -95,7 +95,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
         constraintsText = "${'signup-pwd4'.tr()}";
       });
     } else {
-      if (value.length > 10){
+      if (value.length > 9){
         setState(() {
           constraintsText = "";
           _isButtonEnabled = true;
