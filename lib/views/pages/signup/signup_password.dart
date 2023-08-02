@@ -74,7 +74,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                     print(member.toJson());
                     //------ 회원가입 api 요청
                     //authProvider.signUp(member, context);
-                    if(true)
+                    if(await APIs.signUp(member))
                       Navigator.pushNamed(context,'/welcome', arguments: member);
                     else
                       print('회원가입실패');}

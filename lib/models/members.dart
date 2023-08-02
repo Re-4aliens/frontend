@@ -9,6 +9,7 @@ class Members{
   late String birthday;
   late String password;
   late String profileImage;
+  late String selfIntroduction;
 
 
   Members({
@@ -20,6 +21,7 @@ class Members{
     required this.birthday,
     required this.password,
     required this.profileImage,
+    required this.selfIntroduction
   });
 
 }

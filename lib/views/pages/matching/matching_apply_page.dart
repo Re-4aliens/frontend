@@ -3,7 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:easy_localization/easy_localization.dart';
 
 import '../../../models/screenArgument.dart';
 import '../../components/appbar.dart';
@@ -120,21 +120,21 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                     ),
                   ),
                   SizedBox(height: 40),
-                  Text('곧 매칭신청이\n시작됩니다!',
+                  Text('${'matching-soon'.tr()}',
                     style: TextStyle(fontSize: isSmallScreen ? 22 : 24, fontWeight: FontWeight.bold,),),
                   RichText(
                       text: TextSpan(
                           children: [
-                            TextSpan(text:'\n선호언어', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Color(0xff3666FF)),),
-                            TextSpan(text: '에 따라 매칭이 되며,', style: TextStyle(fontSize: isSmallScreen ? 14 : 16,color: Colors.black, height: 2)),
+                            TextSpan(text:'${'matching-preferlan'.tr()}', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Color(0xff3666FF)),),
+                            TextSpan(text: '${'matching-matchdone'.tr()}', style: TextStyle(fontSize: isSmallScreen ? 14 : 16,color: Colors.black, height: 2)),
                                 ]
                             ),
                       ),
                   RichText(
                     text: TextSpan(
                         children: [
-                          TextSpan(text:'랜덤 선호언어 친구(SF)', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Color(0xff3666FF),),),
-                          TextSpan(text: '가 추가됩니다', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Colors.black)),
+                          TextSpan(text:'${'matching-sf'.tr()}', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Color(0xff3666FF),),),
+                          TextSpan(text: '${'matching-add'.tr()}', style: TextStyle(fontSize: isSmallScreen ? 14 : 16, color: Colors.black)),
                         ]
                     ),
 
@@ -153,7 +153,7 @@ class _MatchingApplyPageState extends State<MatchingApplyPage> {
                       child: Button(
                         //수정
                         isEnabled: true,
-                        child: Text('매칭 시작하기'),
+                        child: Text('${'matching-start'.tr()}'),
                         onPressed: (){
                           Navigator.pushNamed(context,'/choose', arguments: args);
                         },
