@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+
 import '../../../apis/apis.dart';
 import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
@@ -98,11 +99,11 @@ class _LoginState extends State<Login> {
                             ]),
                         child: TextFormField(
                           validator: (value) =>
-                              value!.isEmpty ? "Please enter some text" : null,
+                          value!.isEmpty ? "Please enter some text" : null,
                           controller: _emailController,
                           decoration: new InputDecoration(
                             contentPadding:
-                                EdgeInsets.symmetric(horizontal: 27.21),
+                            EdgeInsets.symmetric(horizontal: 27.21),
                             hintText: 'email'.tr(),
                             hintStyle: TextStyle(
                                 fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
@@ -137,11 +138,11 @@ class _LoginState extends State<Login> {
                           obscureText: true,
                           obscuringCharacter: '*',
                           validator: (value) =>
-                              value!.isEmpty ? "Please enter some text" : null,
+                          value!.isEmpty ? "Please enter some text" : null,
                           controller: _passwordController,
                           decoration: new InputDecoration(
                               contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 27.21),
+                              EdgeInsets.symmetric(horizontal: 27.21),
                               hintText: 'password'.tr(),
                               hintStyle: TextStyle(
                                   fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
@@ -167,7 +168,7 @@ class _LoginState extends State<Login> {
                           var loginSuccess = await APIs.logIn(auth, fcmToken!);
 
                           if (loginSuccess) {
-                           //스택 비우고 화면 이동
+
                             Navigator.of(context).pushNamedAndRemoveUntil(
                                 '/loading', (Route<dynamic> route) => false);
 
@@ -211,7 +212,7 @@ class _LoginState extends State<Login> {
                             child: Text(
                               'findpassword2'.tr(),
                               style: TextStyle(
-                                fontSize: isSmallScreen?12:14,
+                                  fontSize: isSmallScreen?12:14,
                                   decoration: TextDecoration.underline,
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold),
