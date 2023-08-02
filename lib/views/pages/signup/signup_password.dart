@@ -77,7 +77,8 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                     if(await APIs.signUp(member))
                       Navigator.pushNamed(context,'/welcome', arguments: member);
                     else
-                      print('회원가입실패');}
+                      print('회원가입실패');
+                  }
                     //회원가입 성공하면 로그인 요청
 
                 })
@@ -94,7 +95,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
         constraintsText = "${'signup-pwd4'.tr()}";
       });
     } else {
-      if (value.length > 10){
+      if (value.length > 9){
         setState(() {
           constraintsText = "";
           _isButtonEnabled = true;

@@ -136,7 +136,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                 if (selectedIndex[0] != -1 &&
                                     selectedIndex[1] != -1) {
                                   //신청 요청
-                                  if(await APIs.applicantMatching(selectedIndex[0], selectedIndex[1])){
+                                  if(await APIs.applicantMatching(selectedIndex[0] + 1, selectedIndex[1] + 1)){
                                     //페이지 이동
                                     Navigator.pushNamed(context, '/apply/done', arguments: args);
                                   }else{

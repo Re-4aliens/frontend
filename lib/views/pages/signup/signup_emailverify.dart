@@ -64,7 +64,7 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                 isEnabled: true,
                 child: Text('${'done'.tr()}'),
                 onPressed: () async {
-                  if(true)
+                  if(await APIs.getAuthenticationStatus(member.email) == 'AUTHENTICATED')
                     Navigator.pushNamed(context, '/password', arguments: member);
                   else if(await APIs.getAuthenticationStatus(member.email) == 'EMAIL_SENT_NOT_AUTHENTICATED') {
                       print('인증안됨');
