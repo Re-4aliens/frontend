@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:aliens/models/chatRoom_model.dart';
@@ -5,6 +6,7 @@ import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -21,8 +23,61 @@ class matchingChattingWidget extends StatefulWidget {
 }
 
 class _matchingChattingWidgetState extends State<matchingChattingWidget> {
+
+
+  StreamSubscription<RemoteMessage>? _messageStreamSubscription;
+  List<ChatRoom>? chatRoomList;
+  bool flag = true;
+  @override
+  void initState() {
+    //리스트 업데이트
+    //_updateList();
+
+    _messageStreamSubscription =
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+          print('Received FCM with: ${message.data} at ${DateTime.now()}');
+
+        }
+        );
+  }
+  _updateList() async {
+    //await APIs.getChatSummary();
+    chatRoomList!.add(ChatRoom(
+      partner: widget.screenArguments.partners![0],
+      lastChatContent: "hi",
+      lastChatTime: "2021-08-01 00:00:00",
+      numberOfUnreadChat: 0
+    ));
+    chatRoomList!.add(ChatRoom(
+        partner: widget.screenArguments.partners![1],
+        lastChatContent: "hii",
+        lastChatTime: "2021-08-01 04:00:00",
+        numberOfUnreadChat: 0
+    ));
+    chatRoomList!.add(ChatRoom(
+        partner: widget.screenArguments.partners![2],
+        lastChatContent: "hello",
+        lastChatTime: "2021-08-01 00:10:00",
+        numberOfUnreadChat: 0
+    ));
+    chatRoomList!.add(ChatRoom(
+        partner: widget.screenArguments.partners![3],
+        lastChatContent: "hi",
+        lastChatTime: "2021-08-01 00:02:00",
+        numberOfUnreadChat: 0
+    ));
+    return chatRoomList;
+  }
+
+  @override
+  void dispose() {
+    _messageStreamSubscription?.cancel();
+  }
+
   @override
   Widget build(BuildContext context) {
+    chatRoomList!.sort((a, b) => b.lastChatTime!.compareTo(a.lastChatTime!));
+
     return Container(
       decoration: BoxDecoration(
         color: Color(0xffF5F7FF),
@@ -30,13 +85,19 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
       child: ListView.builder(
           itemCount: widget.screenArguments.partners?.length,
           itemBuilder: (context, index) {
-            return Column(
-              children: [
-                if(index==0)TextButton(onPressed: (){
-                  SqlMessageDataBase.instance.deleteDB();
-                }, child: Text('DB삭제')),
-                chatList(context, index),
-              ],
+            return FutureBuilder(
+              future: _updateList(),
+              builder: (context, snapshot){
+                print(snapshot.data);
+                return Column(
+                  children: [
+                    if(index==0)TextButton(onPressed: (){
+                      SqlMessageDataBase.instance.deleteDB();
+                    }, child: Text('DB삭제')),
+                    chatList(context, index),
+                  ],
+                );
+              },
             );
           }),
     );
@@ -56,6 +117,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
     return await SqlMessageRepository.getUnreadChat(
         widget.screenArguments.partners![index].roomId!);
   }
+
 
   Widget chatList(context, index) {
     return Padding(
@@ -107,26 +169,13 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      FutureBuilder(
-                          future: getCurrentTime(index),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData || snapshot.data == '')
-                              return Text(
-                                '없음',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff888888),
-                                ),
-                              );
-                            else
-                              return Text(
-                                '${DateFormat('hh:mm aaa').format(DateTime.parse(snapshot.data!))}',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Color(0xff888888),
-                                ),
-                              );
-                          })
+                      Text(
+                        '${DateFormat('hh:mm aaa').format(DateTime.parse("2021-08-01 00:00:00"))}',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xff888888),
+                        ),
+                      )
                     ],
                   ),
                   SizedBox(height: 4),
@@ -134,37 +183,19 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      FutureBuilder(
-                        future: getCurrentMessage(index),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData)
-                            return Text(
-                              '없음',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xffA4A4A4),
-                              ),
-                            );
-                          else
-                            return Text(
-                              '${snapshot.data}',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Color(0xffA4A4A4),
-                              ),
-                            );
-                        },
+                      Text(
+                        '시간',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Color(0xffA4A4A4),
+                        ),
                       ),
-                      FutureBuilder(
-                          future: getUnreadChat(index),
-                          builder: (context, snapshot) {
-                            if (!snapshot.hasData || snapshot.data == 0)
-                              return SizedBox(
+                      index != 0 ?
+                            SizedBox(
                                 height: 24,
                                 width: 24,
-                              );
-                            else
-                              return Container(
+                              ):
+                              Container(
                                 height: 24,
                                 width: 24,
                                 decoration: BoxDecoration(
@@ -173,14 +204,14 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                                 ),
                                 alignment: Alignment.center,
                                 child: Text(
-                                  '${snapshot.data}',
+                                  '4',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
                                   ),
                                 ),
-                              );
-                          })
+                              ),
+
                     ],
                   ),
                 ],
