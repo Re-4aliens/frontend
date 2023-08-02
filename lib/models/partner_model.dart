@@ -10,6 +10,7 @@ class Partner {
   String? nationality;
   String? profileImage;
   String? selfIntroduction;
+
   String? firstPreferLanguage;
   String? secondPreferLanguage;
 
@@ -24,6 +25,7 @@ class Partner {
         this.nationality,
         this.profileImage,
         this.selfIntroduction,
+
         this.firstPreferLanguage,
         this.secondPreferLanguage
       });

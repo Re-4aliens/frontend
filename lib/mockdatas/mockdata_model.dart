@@ -232,6 +232,7 @@ SignUpModel signUpModel = SignUpModel(
   birthday: '1993-09-13',
   profileImage: '',
   selfIntroduction: '',
+
 );
 
 void saveMockData() async {

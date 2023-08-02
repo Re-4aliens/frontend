@@ -110,6 +110,7 @@ class APIs {
     request.fields['name'] = member.name!;
     request.fields['selfIntrodution'] = member.selfIntroduction!;
 
+
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
       var file = await http.MultipartFile.fromPath(
@@ -456,14 +457,6 @@ class APIs {
           nationality: "",
           profileImage: "",
           selfIntroduction:"",
-        ),
-        Partner(memberId: 0,
-          name: "",
-          mbti: "",
-          gender: "",
-          nationality: "",
-          profileImage: "",
-          selfIntroduction:"",
 
         ),
         Partner(memberId: 0,
@@ -482,6 +475,16 @@ class APIs {
           nationality: "",
           profileImage: "",
           selfIntroduction:"",
+
+        ),
+        Partner(memberId: 0,
+          name: "",
+          mbti: "",
+          gender: "",
+          nationality: "",
+          profileImage: "",
+          selfIntroduction:"",
+
         )
       ];
       return _partners;
@@ -624,6 +627,7 @@ class APIs {
 
   /*
 
+
   매칭 신청
 
    */
@@ -645,6 +649,7 @@ class APIs {
         body: jsonEncode({
           "firstPreferLanguage": 1,
           "secondPreferLanguage": 2,
+
         }));
 
     //success
@@ -792,4 +797,5 @@ static Future<void> matchingProfessData() async{
     print('Error: ${response.statusCode}');
   }
 }
+
 }
