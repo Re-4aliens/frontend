@@ -408,7 +408,7 @@ class _ChattingPageState extends State<ChattingPage> {
                       ),
                     ),
                     Text(
-                      '${widget.partner.nationality}',
+                      '${widget.partner.roomId}',
                       style: TextStyle(
                         color: Color(0xff626262),
                         fontSize: 12,
@@ -489,7 +489,7 @@ class _ChattingPageState extends State<ChattingPage> {
               )
             ],
           ),
-          body: Column(children: [
+          body: widget.partner.roomState == 'OPEN' ? Column(children: [
             Expanded(
                 child: Container(
                     padding: const EdgeInsets.only(top: 15),
@@ -558,7 +558,7 @@ class _ChattingPageState extends State<ChattingPage> {
                                                   senderName: datas[index].senderName,
                                                   receiverId: datas[index].receiverId,
                                                   sendTime: datas[index].sendTime,
-                                                unreadCount: datas[index].unreadCount
+                                                  unreadCount: datas[index].unreadCount
                                               ),
                                               memberDetails: widget.memberDetails,
                                               showingTime: index == 0? false : (datas[index - 1].receiverId != datas[index].receiverId
@@ -717,7 +717,11 @@ class _ChattingPageState extends State<ChattingPage> {
                 ),
               ],
             ),
-          ]),
+          ]) : Container(
+            alignment: Alignment.center,
+            color: Color(0xffF5F7FF),
+            child: Text(''),
+          )
         ),
       ),
     );

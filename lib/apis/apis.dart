@@ -377,7 +377,11 @@ class APIs {
     );
     //success
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+
+      print('매칭 상태 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        throw Exception('AT-C-002');
+      }
       return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
 
       //fail
@@ -484,7 +488,6 @@ class APIs {
           nationality: "",
           profileImage: "",
           selfIntroduction:"",
-
         )
       ];
       return _partners;
@@ -550,7 +553,15 @@ class APIs {
     late Applicant? _applicant;
     late List<Partner>? _partners;
 
-    _status = await APIs.getApplicantStatus();
+    try {
+      _status = await APIs.getApplicantStatus();
+    } catch (e) {
+      if(e == "AT-C-002"){
+        await getAccessToken();
+        _status = await APIs.getApplicantStatus();
+      }
+    }
+
     _memberDetails = MemberDetails.fromJson(await APIs.getMemberDetails());
 
     _applicant = _status != 'NOT_APPLIED'
@@ -842,9 +853,7 @@ class APIs {
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      if(json.decode(utf8.decode(response.bodyBytes))['code'] == "AT-C-002"){
 
-      }
       throw Exception('요청 오류');
     }
   }
@@ -874,6 +883,10 @@ class APIs {
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('만료');
+        await getAccessToken();
+      }
       return json.decode(utf8.decode(response.bodyBytes));
 
       //fail
