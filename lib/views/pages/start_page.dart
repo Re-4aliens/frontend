@@ -70,10 +70,12 @@ class _StartPageState extends State<StartPage> {
         //액세스 토큰 기간(30s)이 지났다면
         //액세스 토큰 재발급
         print('액세스 토큰 재발급');
-        await APIs.getAccessToken(context);
+
+        if(await APIs.getAccessToken())
+          Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
       } else{
         //else
-        //Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
       }
     }else{
       //저장된 정보가 없다면
