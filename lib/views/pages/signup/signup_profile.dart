@@ -69,7 +69,7 @@ class _SignUpProfileState extends State<SignUpProfile> {
                   fontSize: isSmallScreen ? 22 : 24,
                   fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.13),
             Center(
               child: Stack(
                 children: [
@@ -78,15 +78,16 @@ class _SignUpProfileState extends State<SignUpProfile> {
                           ? Container(
                               child: SvgPicture.asset(
                                 'assets/icon/icon_profile.svg',
-                                width: MediaQuery.of(context).size.width * 0.33,
-                                height:
-                                    MediaQuery.of(context).size.height * 0.16,
+                                width: isSmallScreen?110:130,
+                                height: isSmallScreen?110:130,
                                 color: Color(0xffE3E3E3),
                               ),
                             )
                           : Container(
-                              width: MediaQuery.of(context).size.width * 0.33,
-                              height: MediaQuery.of(context).size.height * 0.16,
+                        width: isSmallScreen?110:130,
+                              height: isSmallScreen?110:130,
+                              /*width: MediaQuery.of(context).size.width * 0.33,
+                              height: MediaQuery.of(context).size.height * 0.16,*/
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(

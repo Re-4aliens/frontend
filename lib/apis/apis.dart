@@ -108,9 +108,10 @@ class APIs {
     request.fields['nationality'] = member.nationality!;
     request.fields['birthday'] = member.birthday!;
     request.fields['name'] = member.name!;
-    request.fields['selfIntroduction'] = member.selfIntroduction!;
 
-
+    if (member.selfIntroduction != null && member.selfIntroduction!.isNotEmpty) {
+      request.fields['selfIntrodution'] = member.selfIntroduction!;
+    }
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
       var file = await http.MultipartFile.fromPath(

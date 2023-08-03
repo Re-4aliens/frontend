@@ -1183,7 +1183,7 @@ class _HomePageState extends State<HomePage> {
             flex: 3,
             child: Container(
                 padding:
-                    EdgeInsets.only(right: 20, left: 20, top: 17, bottom: 17),
+                    EdgeInsets.only(right: 10, left: 0, top: 17, bottom: 17),
                 decoration: BoxDecoration(
                   color: Color(0xff7898FF),
                   borderRadius: BorderRadius.circular(20),

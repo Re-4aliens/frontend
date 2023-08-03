@@ -117,11 +117,11 @@ class CheckValidate {
       focusNode.requestFocus();
       return '비밀번호를 입력하세요.';
     } else {
-      String pattern = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{10,100}$';
+      String pattern = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{10,16}$';
       RegExp regExp = new RegExp(pattern);
       if (!regExp.hasMatch(value)) {
         focusNode.requestFocus();
-        return '영문, 특수문자, 숫자를 포함 10자 이상';
+        return '영문, 특수문자, 숫자를 포함 10자 이상, 16자 이하';
       } else {
         return null;
       }

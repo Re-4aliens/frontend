@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:aliens/views/components/button_big.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -7,12 +7,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-
 import '../../../apis/apis.dart';
 import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../providers/auth_provider.dart';
 import 'package:aliens/models/auth_model.dart';
@@ -29,8 +26,8 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   final GlobalKey<FormState> _emailFormKey = GlobalKey<FormState>();
   final GlobalKey<FormState> _pwFormKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController(text: 'cju4103@pukyong.ac.kr');
-  final TextEditingController _passwordController = TextEditingController(text: '1234567');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   //storage에 작성할 모델
   final Auth auth = new Auth();
@@ -40,6 +37,7 @@ class _LoginState extends State<Login> {
     final bool isSmallScreen = screenWidth <= 600;
     final double fontSize = isSmallScreen ? 16.0 : 20.0;
     final double heightSize = isSmallScreen ? 70 : 90;
+
 
     String constraintsText = "";
 
