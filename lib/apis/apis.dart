@@ -74,7 +74,7 @@ class APIs {
    */
   static Future<String> getAuthenticationStatus(String email) async {
     var _url =
-        'http://3.34.2.246:8079/api/v1/member/${email}/authentication-status'; //mocksever
+        'http://3.34.2.246:8079/api/v1/email/${email}/authentication-status'; //mocksever
 
     var response = await http.get(Uri.parse(_url));
 
@@ -84,7 +84,7 @@ class APIs {
       return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
       //fail
     } else {
-      print(response.body);
+      print(json.decode(utf8.decode(response.bodyBytes)));
       return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
     }
   }
@@ -108,7 +108,7 @@ class APIs {
     request.fields['nationality'] = member.nationality!;
     request.fields['birthday'] = member.birthday!;
     request.fields['name'] = member.name!;
-    request.fields['selfIntrodution'] = member.selfIntroduction!;
+    request.fields['selfIntroduction'] = member.selfIntroduction!;
 
 
     // FormData 파일 필드 추가
@@ -537,7 +537,7 @@ class APIs {
 
       //fail
     } else {
-      print(response.body);
+      print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
   }

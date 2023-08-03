@@ -64,10 +64,10 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                 isEnabled: true,
                 child: Text('${'done'.tr()}'),
                 onPressed: () async {
-                  if(await APIs.getAuthenticationStatus(member.email) == 'AUTHENTICATED')
+                  String status = await APIs.getAuthenticationStatus(member.email);
+                  if(status == 'AUTHENTICATED')
                     Navigator.pushNamed(context, '/password', arguments: member);
-                  else if(await APIs.getAuthenticationStatus(member.email) == 'EMAIL_SENT_NOT_AUTHENTICATED') {
-                      print('인증안됨');
+                  else if(status == 'EMAIL_SENT_NOT_AUTHENTICATED') {
                       showDialog(context: context, builder: (BuildContext context){
                         return CupertinoAlertDialog(
                           title: Text("메일함을 확인해주세요!")
