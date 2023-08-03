@@ -25,17 +25,18 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
 
 
   StreamSubscription<RemoteMessage>? _messageStreamSubscription;
-  Future<List<ChatRoom>>? chatRoomList;
+  Future<List<ChatRoom>>? futureChatRoomList;
+  late List<ChatRoom> _chatRoomList;
   bool flag = true;
   @override
   void initState() {
     //채팅 정보 받아오기
-    chatRoomList = _getChatRoomList();
+    futureChatRoomList = _getChatRoomList();
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
           print('Received FCM with: ${message.data} at ${DateTime.now()}');
-
+          _updateList();
         }
         );
   }
@@ -54,19 +55,46 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
         }
       }
     }
+    _chatRoomList.sort((a, b) {
+      if (a.lastChatTime == null && b.lastChatTime == null) {
+        return 0;
+      } else if (a.lastChatTime == '기록 없음') {
+        return 1; // a의 lastChatTime이 null이면 b가 더 앞으로 감
+      } else if (b.lastChatTime == '기록 없음') {
+        return -1; // b의 lastChatTime이 null이면 a가 더 앞으로 감
+      } else {
+        return b.lastChatTime!.compareTo(a.lastChatTime!); // 일반적인 비교
+      }
+    });
     return _chatRoomList;
   }
 
   _updateList() async {
-    await APIs.getChatSummary();
-
+    Map<String, dynamic> chatSummary = await APIs.getChatSummary();
+    setState(() {
+      for (int i = 0; i < _chatRoomList.length; i++) {
+        for(int j = 0; j < _chatRoomList.length; j++){
+          if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
+            _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
+            _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
+            _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
+            break;
+          }
+        }
+      }
+      _chatRoomList.sort((a, b) {
+        if (a.lastChatTime == null && b.lastChatTime == null) {
+          return 0;
+        } else if (a.lastChatTime == '기록 없음') {
+          return 1; // a의 lastChatTime이 null이면 b가 더 앞으로 감
+        } else if (b.lastChatTime == '기록 없음') {
+          return -1; // b의 lastChatTime이 null이면 a가 더 앞으로 감
+        } else {
+          return b.lastChatTime!.compareTo(a.lastChatTime!); // 일반적인 비교
+        }
+      });
+    });
     //return chatRoomList;
-  }
-
-  @override
-  void dispose() {
-    print('종료');
-    _messageStreamSubscription?.cancel();
   }
 
   @override
@@ -77,7 +105,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
         color: Color(0xffF5F7FF),
       ),
       child: FutureBuilder<List<ChatRoom>>(
-          future: chatRoomList,
+          future: futureChatRoomList,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return Container(
@@ -90,6 +118,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
               return ListView.builder(
                   itemCount:snapshot.data!.length,
                   itemBuilder: (context, index) {
+                    _chatRoomList = snapshot.data!;
                     return Column(
                       children: [
 /*
@@ -97,10 +126,8 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                           SqlMessageDataBase.instance.deleteDB();
                         }, child: Text('dB 삭제')),
 
-
  */
-
-                        chatList(context, index, snapshot.data![index]),
+                        chatList(context, index, _chatRoomList[index]),
                       ],
                     );
                   });
@@ -134,15 +161,21 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
         height: 77,
         elevation: 0.0,
         onPressed: () {
+
+          _messageStreamSubscription?.cancel();
+
           Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => ChattingPage(
                       applicant: widget.screenArguments.applicant,
-                      partner: widget.screenArguments.partners![index],
+                      partner: chatRoom.partner!,
                       memberDetails: widget.screenArguments.memberDetails!,
                     )),
-          ).then((value) => setState(() {}));
+          ).then((value) async {
+
+            await APIs.getChatSummary();
+          });
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
@@ -170,7 +203,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.screenArguments.partners![index].name!,
+                        '${chatRoom.partner!.name}',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

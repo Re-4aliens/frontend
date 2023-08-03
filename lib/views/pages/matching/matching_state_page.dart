@@ -216,7 +216,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                       child: Image(
                           image: AssetImage("assets/illustration/loading_03.gif"),
                       )),
-                  /*
+
                   Stack(
                     children: [
 
@@ -242,7 +242,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                     ],
                   ),
 
-                   */
+
                   SizedBox(
                     height: isSmallScreen?15:40,
                   ),
