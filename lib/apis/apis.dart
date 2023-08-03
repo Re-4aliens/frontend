@@ -680,8 +680,8 @@ class APIs {
   매칭 신청
 
    */
-  static Future<bool> applicantMatching(firstPreferLanguage,
-      secondPreferLanguage) async {
+  static Future<bool> applicantMatching(String firstPreferLanguage,
+      String secondPreferLanguage) async {
     var _url =
         'http://3.34.2.246:8079/api/v1/applicant'; //mocksever
 
@@ -696,8 +696,8 @@ class APIs {
           'Authorization': 'Bearer $jwtToken',
           'Content-Type': 'application/json'},
         body: jsonEncode({
-          "firstPreferLanguage": 1,
-          "secondPreferLanguage": 2,
+          "firstPreferLanguage": firstPreferLanguage,
+          "secondPreferLanguage": secondPreferLanguage,
 
         }));
 
