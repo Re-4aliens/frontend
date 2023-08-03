@@ -22,21 +22,25 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
     {
       'language': '한국어',
       'lan': 'kr',
+      'value': 'KOREAN',
       'puzzle': 'assets/character/yellow_puzzle.svg',
     }, //한국어
     {
       'language': 'English',
       'lan': 'EN',
+      'value': 'ENGLISH',
       'puzzle': 'assets/character/blue_puzzle.svg',
     }, //영어
     {
       'language': '中國語',
       'lan': 'CN',
+      'value': 'JAPANESE',
       'puzzle': 'assets/character/pink_puzzle.svg',
     },//중국어
     {
       'language': '日本語',
       'lan': 'JP',
+      'value': 'CHINESE',
       'puzzle': 'assets/character/green_puzzle.svg',
     }//일본어
   ];
@@ -136,7 +140,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                 if (selectedIndex[0] != -1 &&
                                     selectedIndex[1] != -1) {
                                   //신청 요청
-                                  if(await APIs.applicantMatching(selectedIndex[0] + 1, selectedIndex[1] + 1)){
+                                  if(await APIs.applicantMatching(nationlist[selectedIndex[0]]['value'], nationlist[selectedIndex[1]]['value'])){
                                     //페이지 이동
                                     Navigator.pushNamed(context, '/apply/done', arguments: args);
                                   }else{
