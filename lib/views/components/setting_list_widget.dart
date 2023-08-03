@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 
 
@@ -44,10 +45,10 @@ Widget buildSettingList(context, index, screenArguments) {
       Navigator.pushNamed(context, navigatorList.elementAt(index), arguments: screenArguments);
     },
     title: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Container(
-          padding: EdgeInsets.only(right: MediaQuery.of(context).size.width * 0.04),
+          padding: EdgeInsets.only(left : 0, right: MediaQuery.of(context).size.width * 0.04),
           child: settingIcon.elementAt(index),
         ),
         Text(

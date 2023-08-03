@@ -56,7 +56,7 @@
   "signup-pwd1": "비밀번호를 설정하시면",
   "signup-pwd2": "가입이 완료됩니다",
   "signup-pwd3": "비밀번호 입력",
-  "signup-pwd4": "영문, 특수기호, 숫자를 포함 10자 이상",
+  "signup-pwd4": "영문, 특수기호, 숫자를 포함 10자 이상, 16자 이하",
   "signup-pwd5": "가입하기",
   "signup-done1": "환영합니다!",
   "signup-done2": "가입이 완료되었습니다",

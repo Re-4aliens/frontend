@@ -56,7 +56,7 @@
   "signup-pwd1": "Complete your signing up ",
   "signup-pwd2": "by setting your password",
   "signup-pwd3": "Enter password",
-  "signup-pwd4": "More than 10 characters including English, special symbols, and numbers",
+  "signup-pwd4": "More than 10 characters and less then 16 characters including English, special symbols, and numbers",
   "signup-pwd5": "Sign up",
   "signup-done1": "Welcome!",
   "signup-done2": "",
