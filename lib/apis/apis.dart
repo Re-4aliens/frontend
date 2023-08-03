@@ -683,7 +683,7 @@ class APIs {
   static Future<bool> applicantMatching(firstPreferLanguage,
       secondPreferLanguage) async {
     var _url =
-        'http://3.34.2.246:8079/api/v1/matching/applicant'; //mocksever
+        'http://3.34.2.246:8079/api/v1/applicant'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -882,7 +882,7 @@ class APIs {
 
   /*매칭 남은 시간*/
 static Future<void> matchingProfessData() async{
-  final url = Uri.parse('http://13.125.205.59:8080/api/v1/matching/remaining-period');
+  final url = Uri.parse('http://13.125.205.59:8080/api/v1/applicant/completion-date');
 
   final response = await http.post(
     url,
