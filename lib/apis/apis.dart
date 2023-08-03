@@ -782,7 +782,7 @@ class APIs {
 
   static Future<List<MessageModel>> getMessages(roomId) async {
     var _url =
-        'http://3.34.2.246:8081/api/v1/chat/${roomId}'; //mocksever
+        'http://3.34.2.246:8081/api/v1/chat/31'; //mocksever
 
 
     //토큰 읽어오기
@@ -790,12 +790,15 @@ class APIs {
 
     //accessToken만 보내기
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    print('chat 토큰 읽기');
+    String chatToken = await APIs.getChatToken();
 
     var response = await http.get(
       Uri.parse(_url),
       headers: {
         'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'ChattingToken': '$chatToken'
       },
     );
 
