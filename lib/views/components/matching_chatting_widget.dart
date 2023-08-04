@@ -28,17 +28,21 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
   Future<List<ChatRoom>>? futureChatRoomList;
   late List<ChatRoom> _chatRoomList;
   bool flag = true;
+
   @override
   void initState() {
     //채팅 정보 받아오기
     futureChatRoomList = _getChatRoomList();
-
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-          print('Received FCM with: ${message.data} at ${DateTime.now()}');
+          print('채팅리스트에서 Received FCM with: ${message.data} at ${DateTime.now()}');
           _updateList();
         }
         );
+  }
+  @override
+  void dispose() {
+    _messageStreamSubscription?.cancel();
   }
 
   Future<List<ChatRoom>> _getChatRoomList() async {
@@ -189,8 +193,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                       memberDetails: widget.screenArguments.memberDetails!,
                     )),
           ).then((value) async {
-
-            await APIs.getChatSummary();
+            _updateList();
           });
         },
         shape: RoundedRectangleBorder(

@@ -90,7 +90,7 @@ class _ChattingPageState extends State<ChattingPage> {
           //채팅에 대한 fcm인 경우
           if(message.data['chatContent'] != null && message.data['roomId'] != null){
             // 메시지 데이터 구조 로깅, 현재 시간도 같이 로그에 출력
-            print('Received FCM with: ${message.data} at ${DateTime.now()}');
+            print('Received 새로운 채팅에 대한 FCM with: ${message.data} at ${DateTime.now()}');
             //받은 fcm 저장하고 보여주기
             var newChat = MessageModel(
                 chatType: int.parse(message.data['chatType']),
@@ -112,7 +112,8 @@ class _ChattingPageState extends State<ChattingPage> {
             sendReadRequest(message);
           }
           else if (message.data['chatContent'] == null && message.data['roomId'] != null){
-            print('Received FCM with: ${message.data} at ${DateTime.now()}');
+            print('Bulk Received FCM with: ${message.data} at ${DateTime.now()}' '${message.senderId}');
+
             await SqlMessageRepository.bulkUpdate(widget.partner);
             setState(() {});
           }
@@ -188,8 +189,8 @@ class _ChattingPageState extends State<ChattingPage> {
     print('단일 읽음처리');
     Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
-      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
-      'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
+      'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+      //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
       'chatId': message.data['chatId'],
       'roomId': message.data['roomId'],
     };
@@ -200,8 +201,8 @@ class _ChattingPageState extends State<ChattingPage> {
   void sendBulkReadRequest() async {
     Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
-      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
-      'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
+      'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+      //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
       'partnerId': widget.partner.memberId,
       'roomId': widget.partner.roomId,
     };
@@ -309,7 +310,7 @@ class _ChattingPageState extends State<ChattingPage> {
     //3. 업데이트된 리스트 불러오기
     return await SqlMessageRepository.getList(widget.partner.roomId!, widget.memberDetails.memberId!);
   }
-
+/*
 
   Future<void> _showNotification(String content) async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -330,6 +331,8 @@ class _ChattingPageState extends State<ChattingPage> {
       payload: content,
     );
   }
+
+ */
 
   void onSelectNotification(String? payload) async {
     debugPrint("$payload");

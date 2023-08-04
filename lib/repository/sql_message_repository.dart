@@ -129,7 +129,9 @@ class SqlMessageRepository{
   static Future<void> bulkUpdate(Partner partner) async {
     var _db = await SqlMessageDataBase().database;
 
+    //모두 읽음으로 바꾸되,
     final _roomId = partner.roomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
+    //final _receiverId = partner.memberId; // 리시버 (어떤 리시버의 데이터를 업데이트할지 선택)
 
     await _db.rawUpdate('''
       UPDATE chat 
