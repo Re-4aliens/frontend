@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/repository/sql_message_repository.dart';
@@ -25,6 +26,7 @@ import '../../../apis/firebase_apis.dart';
 import '../../../models/chatRoom_model.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
+import '../../../models/vsGames.dart';
 import '../../../providers/chat_provider.dart';
 import 'package:web_socket_channel/io.dart';
 
@@ -189,6 +191,27 @@ class _ChattingPageState extends State<ChattingPage> {
     updateUi();
   }
 
+  void sendVSMessage() async {
+
+    // 랜덤 인덱스 생성
+    Random random = Random();
+    int randomIndex = random.nextInt(vsGames.length);
+
+    Map<String, dynamic> request = {
+      'requestId': DataUtils.makeUUID(),
+      'chatType': 1,
+      'chatContent': vsGames[randomIndex]['question'],
+      'roomId': widget.partner.roomId,
+      'senderId': widget.memberDetails.memberId,
+      'senderName': widget.memberDetails.name,
+      'receiverId': widget.partner.memberId,
+      'sendTime': DateTime.now().toString(),
+    };
+    await sendChannel.sink.add(json.encode(request));
+    requestBuffer.add(request);
+    updateUi();
+  }
+
   void sendReadRequest(RemoteMessage message) async {
     print('단일 읽음처리');
     Map<String, dynamic> request = {
@@ -288,7 +311,8 @@ class _ChattingPageState extends State<ChattingPage> {
       print(json.decode(message)['chatId']);
       var chat = MessageModel(
           chatId: json.decode(message)['chatId'],
-          chatType: 0,
+          // TODO chat Type 수정
+          chatType: request['chatType'],
           chatContent: request['chatContent'],
           roomId: request['roomId'],
           senderId: request['senderId'],
@@ -678,9 +702,11 @@ class _ChattingPageState extends State<ChattingPage> {
                                       },
                                     )),
                                 IconButton(
-                                  onPressed: _newMessage.trim().isEmpty
-                                      ? null
-                                      : sendMessage,
+                                  onPressed:
+                                    _newMessage.trim().isEmpty
+                                        ? null
+                                        : sendMessage
+                                  ,
                                   icon: SvgPicture.asset(
                                     'assets/icon/icon_send.svg',
                                     height: 22,
@@ -708,39 +734,17 @@ class _ChattingPageState extends State<ChattingPage> {
                         onTap: () {
                           setState(() {
                             isChecked = false;
-                            _scrollController.animateTo(
-                                _scrollController.position.minScrollExtent,
-                                duration: Duration(milliseconds: 500),
-                                curve: Curves.ease);
                           });
-                          /*
-                          _list.insert(0, MessageModel(
-                            chatId: _list.length,
-                            chatType: 1,
-                            chatContent: '밸런스 게임',
-                            roomId: widget.partner.roomId,
-                            senderId: widget.memberDetails.memberId,
-                            senderName: widget.memberDetails.name,
-                            receiverId: widget.partner.memberId,
-                            sendTime: DateTime.now().toString(),
-                            unReadCount: 1,
-                          ),);*/
+                          sendVSMessage();
                         },
                         child: Container(
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(50),
-                              color: Color(0xffF5F7FF),
-                              boxShadow: [
-                                BoxShadow(
-                                    blurRadius: 10,
-                                    offset: Offset(0, 4),
-                                    color: Colors.black.withOpacity(0.1))
-                              ]),
+                          height: 150,
+                          width: 150,
                           alignment: Alignment.center,
-                          child: Text('밸런스게임'),
-                          margin: EdgeInsets.symmetric(vertical: 10),
+                          //TODO 이미지 교체
+                          child: Image.asset(
+                              'assets/character/vsGame_button.png'
+                          ),
                         ),
                       ),
                       Text(

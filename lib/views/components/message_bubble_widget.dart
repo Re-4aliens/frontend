@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:aliens/models/memberDetails_model.dart';
+import 'package:aliens/models/vsGames.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -147,11 +150,22 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget _vsGameBubble() {
+
+    String answer1 = '';
+    String answer2 = '';
+    for (int i = 0; i < vsGames.length; i++) {
+      if (vsGames[i]['question'] == message.chatContent) {
+        answer1 = vsGames[i]['answer1']!;
+        answer2 = vsGames[i]['answer2']!;
+        break;
+      }
+    }
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 10, bottom: 10, right: 25),
+          padding: EdgeInsets.only(top: 15, bottom: 15),
           child: Container(
             decoration: BoxDecoration(
               boxShadow: [
@@ -181,11 +195,14 @@ class MessageBubble extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //TODO 이미지 교체
                     Container(
                       height: 90,
+                      padding: EdgeInsets.only(top: 10),
+                      child: Image.asset('assets/character/vsGame_hands.png',)
                     ),
                     Text('밸런스 게임', style: TextStyle(color: Color(0xffC4C4C4), fontSize: 12),),
-                    Text('하루만 공강을 만들 수 있다면?', style: TextStyle(color: Color(0xff616161), fontSize: 16, fontWeight: FontWeight.bold),),
+                    Text('${message.chatContent}', style: TextStyle(color: Color(0xff616161), fontSize: 16, fontWeight: FontWeight.bold),),
                     SizedBox(height: 10,),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -198,7 +215,7 @@ class MessageBubble extends StatelessWidget {
                             border: Border.all(color: Color(0xff7898ff),),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Text('월공강', style: TextStyle(color: Color(0xff7898ff)),),
+                          child: Text('$answer1', style: TextStyle(color: Color(0xff7898ff)),),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -212,7 +229,7 @@ class MessageBubble extends StatelessWidget {
                             border: Border.all(color: Color(0xff7898ff),),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Text('금공강', style: TextStyle(color: Color(0xff7898ff)),),
+                          child: Text('$answer2', style: TextStyle(color: Color(0xff7898ff)),),
                         ),
                       ],
                     )
