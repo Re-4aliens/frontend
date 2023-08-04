@@ -146,11 +146,13 @@ class APIs {
         'http://3.34.2.246:8080/api/v1/auth/authentication'; //mocksever
 
     var response = await http.post(Uri.parse(url),
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          "FcmToken": fcmToken
+        },
         body: jsonEncode({
           "email": auth.email,
           "password": auth.password,
-          "fcmToken": fcmToken
         }));
     //success
     if (response.statusCode == 200) {
@@ -179,7 +181,7 @@ class APIs {
   로그아웃
 
    */
-  static Future<void> logOut(BuildContext context) async {
+  static Future<void> logOut(BuildContext context, String fcmToken) async {
     print('로그아웃 시도');
     const url =
         'http://3.34.2.246:8080/api/v1/auth/logout'; //mocksever
@@ -197,6 +199,7 @@ class APIs {
         'Authorization': 'Bearer $accessToken',
         'Content-Type': 'application/json',
         'RefreshToken': '$refreshToken',
+        "FcmToken": fcmToken
       },
     );
 

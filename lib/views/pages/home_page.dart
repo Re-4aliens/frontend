@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -1415,7 +1416,9 @@ class _HomePageState extends State<HomePage> {
               onTap: () async {
                 //http 로그아웃 요청
                 //authProvider.logout(context);
-                await APIs.logOut(context);
+
+                final fcmToken = await FirebaseMessaging.instance.getToken();
+                await APIs.logOut(context, fcmToken!);
               },
               child: Container(
                 decoration: BoxDecoration(

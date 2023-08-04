@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -80,7 +81,9 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                         isEnabled: true,
                         child: Text('${'setting-gohome'.tr()}'),
                         onPressed: () async {
-                          await APIs.logOut(context);
+
+                          final fcmToken = await FirebaseMessaging.instance.getToken();
+                          await APIs.logOut(context, fcmToken!);
                           Navigator.of(context)
                               .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
                           );
