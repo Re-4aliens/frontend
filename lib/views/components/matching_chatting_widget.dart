@@ -43,7 +43,14 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
 
   Future<List<ChatRoom>> _getChatRoomList() async {
     List<ChatRoom> _chatRoomList = List<ChatRoom>.generate(widget.screenArguments.partners!.length, (index) => ChatRoom(partner: widget.screenArguments.partners![index]));
-    Map<String, dynamic> chatSummary = await APIs.getChatSummary();
+    Map<String, dynamic> chatSummary;
+
+    try{
+      chatSummary = await APIs.getChatSummary();
+    } catch(e){
+      await APIs.getAccessToken();
+      chatSummary = await APIs.getChatSummary();
+    }
 
     for (int i = 0; i < _chatRoomList.length; i++) {
       for(int j = 0; j < _chatRoomList.length; j++){
@@ -70,30 +77,39 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
   }
 
   _updateList() async {
-    Map<String, dynamic> chatSummary = await APIs.getChatSummary();
-    setState(() {
-      for (int i = 0; i < _chatRoomList.length; i++) {
-        for(int j = 0; j < _chatRoomList.length; j++){
-          if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
-            _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
-            _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
-            _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
-            break;
+    late Map<String, dynamic> chatSummary;
+    try {
+      chatSummary = await APIs.getChatSummary();
+    } catch (e) {
+      if(e == "AT-C-002"){
+        await APIs.getAccessToken();
+        chatSummary = await APIs.getChatSummary();
+      }
+    }
+
+      setState(() {
+        for (int i = 0; i < _chatRoomList.length; i++) {
+          for(int j = 0; j < _chatRoomList.length; j++){
+            if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
+              _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
+              _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
+              _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
+              break;
+            }
           }
         }
-      }
-      _chatRoomList.sort((a, b) {
-        if (a.lastChatTime == null && b.lastChatTime == null) {
-          return 0;
-        } else if (a.lastChatTime == '기록 없음') {
-          return 1; // a의 lastChatTime이 null이면 b가 더 앞으로 감
-        } else if (b.lastChatTime == '기록 없음') {
-          return -1; // b의 lastChatTime이 null이면 a가 더 앞으로 감
-        } else {
-          return b.lastChatTime!.compareTo(a.lastChatTime!); // 일반적인 비교
-        }
+        _chatRoomList.sort((a, b) {
+          if (a.lastChatTime == null && b.lastChatTime == null) {
+            return 0;
+          } else if (a.lastChatTime == '기록 없음') {
+            return 1; // a의 lastChatTime이 null이면 b가 더 앞으로 감
+          } else if (b.lastChatTime == '기록 없음') {
+            return -1; // b의 lastChatTime이 null이면 a가 더 앞으로 감
+          } else {
+            return b.lastChatTime!.compareTo(a.lastChatTime!); // 일반적인 비교
+          }
+        });
       });
-    });
     //return chatRoomList;
   }
 
