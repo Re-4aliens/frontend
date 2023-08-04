@@ -12,120 +12,120 @@ int selectedStack = -1;
 final List<Map<String, dynamic>> mbtiList = [
   {
     'mbti': 'ENTJ',
-    'text': '분석가형',
-    'explain': '통솔가',
+    'text': 'signup-mbti.a'.tr(),
+    'explain': 'signup-mbti.1'.tr(),
     'step': '9',
     'image': 'assets/mbti/ENTJ.svg'
   },//ENTJ
   {
     'mbti': 'ENTP',
-    'text': '분석가형',
-    'explain': '변론가',
+    'text': 'signup-mbti.a'.tr(),
+    'explain': 'signup-mbti.2'.tr(),
     'step': '10',
     'image': 'assets/mbti/ENTP.svg'
   },//ENTP
 
   {
     'mbti': 'ESTJ',
-    'text': '관리자형',
-    'explain': '경영자',
+    'text': 'signup-mbti.b'.tr(),
+    'explain': 'signup-mbti.3'.tr(),
     'step': '13',
     'image': 'assets/mbti/ESTJ.svg'
   },//ESTJ
   {
     'mbti': 'ESFJ',
-    'text': '관리자형',
-    'explain': '집정관',
+    'text': 'signup-mbti.b'.tr(),
+    'explain': 'signup-mbti.4'.tr(),
     'step': '15',
     'image': 'assets/mbti/ESFJ.svg'
   },//ESFJ
 
   {
     'mbti': 'ENFJ',
-    'text': '외교관형',
-    'explain': '선도자',
+    'text': 'signup-mbti.c'.tr(),
+    'explain': 'signup-mbti.5'.tr(),
     'step': '11',
     'image': 'assets/mbti/ENFJ.svg'
   },//ENFJ
   {
     'mbti': 'ENFP',
-    'text': '외교관형',
-    'explain': '활동가',
+    'text': 'signup-mbti.c'.tr(),
+    'explain': 'signup-mbti.6'.tr(),
     'step': '12',
     'image': 'assets/mbti/ENFP.svg'
   },//ENFP
 
   {
     'mbti': 'ESTP',
-    'text': '탐험가형',
-    'explain': '사업가',
+    'text': 'signup-mbti.d'.tr(),
+    'explain': 'signup-mbti.7'.tr(),
     'step': '14',
     'image': 'assets/mbti/ESTP.svg'
   },//ESTP
   {
     'mbti': 'ESFP',
-    'text': '탐험가형',
-    'explain': '연예인',
+    'text': 'signup-mbti.d'.tr(),
+    'explain': 'signup-mbti.8'.tr(),
     'step': '16',
     'image': 'assets/mbti/ESFP.svg'
   },//ESFP
 
   {
     'mbti': 'INTJ',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': 'signup-mbti.a'.tr(),
+    'explain': 'signup-mbti.9'.tr(),
     'step': '1',
     'image': 'assets/mbti/INTJ.svg'
   },//INTJ
   {
     'mbti': 'INTP',
-    'text': '분석가형',
-    'explain': '논리술사',
+    'text': 'signup-mbti.a'.tr(),
+    'explain': 'signup-mbti.10'.tr(),
     'step': '2',
     'image': 'assets/mbti/INTP.svg'
   },//INTP
 
   {
     'mbti': 'ISTJ',
-    'text': '관리자형',
-    'explain': '현실주의자',
+    'text': 'signup-mbti.b'.tr(),
+    'explain': 'signup-mbti.11'.tr(),
     'step': '5',
     'image': 'assets/mbti/ISTJ.svg'
   },//ISTJ
   {
     'mbti': 'ISFJ',
-    'text': '관리자형',
-    'explain': '수호자',
+    'text': 'signup-mbti.b'.tr(),
+    'explain': 'signup-mbti.12'.tr(),
     'step': '7',
     'image': 'assets/mbti/ISFJ.svg'
   },//ISFJ
 
   {
     'mbti': 'INFJ',
-    'text': '외교관형',
-    'explain': '옹호자',
+    'text': 'signup-mbti.c'.tr(),
+    'explain': 'signup-mbti.13'.tr(),
     'step': '3',
     'image': 'assets/mbti/INFJ.svg'
   },//INFJ
   {
     'mbti': 'INFP',
-    'text': '외교관형',
-    'explain': '중재자',
+    'text': 'signup-mbti.c'.tr(),
+    'explain': 'signup-mbti.14'.tr(),
     'step': '4',
     'image': 'assets/mbti/INFP.svg'
   },//INFP
 
   {
     'mbti': 'ISTP',
-    'text': '탐험가형',
-    'explain': '장인',
+    'text': 'signup-mbti.d'.tr(),
+    'explain': 'signup-mbti.15'.tr(),
     'step': '6',
     'image': 'assets/mbti/ISTP.svg'
   },//ISTP
   {
     'mbti': 'ISFP',
-    'text': '분석가형',
-    'explain': '전락가',
+    'text': 'signup-mbti.d'.tr(),
+    'explain': 'signup-mbti.16'.tr(),
     'step': '8',
     'image': 'assets/mbti/ISFP.svg'
   },//ISFP

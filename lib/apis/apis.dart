@@ -5,6 +5,7 @@ import 'package:aliens/models/signup_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:path/path.dart';
 import '../models/applicant_model.dart';
 import '../models/auth_model.dart';
 import 'dart:io';
@@ -108,9 +109,10 @@ class APIs {
     request.fields['nationality'] = member.nationality!;
     request.fields['birthday'] = member.birthday!;
     request.fields['name'] = member.name!;
-    request.fields['selfIntroduction'] = member.selfIntroduction!;
 
-
+    if (member.selfIntroduction != null && member.selfIntroduction!.isNotEmpty) {
+      request.fields['selfIntroduction'] = member.selfIntroduction!;
+    }
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
       var file = await http.MultipartFile.fromPath(
@@ -303,7 +305,7 @@ class APIs {
     refreshToken = json.decode(refreshToken!)['data']['refreshToken'];
 
 
-    var response = await http.post(
+    var response = await http.delete(
         Uri.parse(_url),
         headers: {
           'Authorization': 'Bearer $jwtToken',
@@ -377,12 +379,19 @@ class APIs {
     );
     //success
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+
+      print('매칭 상태 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        throw Exception('AT-C-002');
+      }
       return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
 
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        throw Exception('AT-C-002');
+      }
       throw Exception('요청 오류');
     }
   }
@@ -520,6 +529,8 @@ class APIs {
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-005'){
         print('리프레시 토큰이 만료되어 자동 로그인 기간이 지났습니다. 다시 로그인해주세요.');
         //start page로 이동
+        Navigator.pushNamedAndRemoveUntil(context as BuildContext, '/start', (route) => false);
+
         return false;
       }else if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-006'){
         //start page로 이동
@@ -550,7 +561,14 @@ class APIs {
     late Applicant? _applicant;
     late List<Partner>? _partners;
 
-    _status = await APIs.getApplicantStatus();
+    try {
+      _status = await APIs.getApplicantStatus();
+    } catch (e) {
+      if(e == "AT-C-002"){
+        await getAccessToken();
+        _status = await APIs.getApplicantStatus();
+      }
+    }
     _memberDetails = MemberDetails.fromJson(await APIs.getMemberDetails());
 
     _applicant = _status != 'NOT_APPLIED'
@@ -885,16 +903,19 @@ class APIs {
 
   /*매칭 남은 시간*/
 static Future<void> matchingProfessData() async{
-  final url = Uri.parse('http://13.125.205.59:8080/api/v1/applicant/completion-date');
+  final url = Uri.parse('http://3.34.2.246:8079/api/v1/applicant/completion-date');
 
   final response = await http.post(
     url,
-    body: {'remainingPeriod': 'DD:HH:MM:SS'},
+    body: {'matchingCompletionDate': 'YYYY-MM-DD HH:MM'},
   );
 
   if (response.statusCode == 200) {
 
     print('Response: ${response.body}');
+    final matchingCompletionDate = response.body;
+    final matchingDateResponse = DateTime.parse(matchingCompletionDate);
+
   } else {
     print('Error: ${response.statusCode}');
   }

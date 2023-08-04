@@ -24,7 +24,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
     final bool isSmallScreen = screenWidth <= 700;
 
     TextEditingController _bioEditingController = TextEditingController();
-    String initialbio = '${args.applicant?.member?.selfIntroduction}';
+    String initialbio = '${args.memberDetails?.selfIntroduction}';
     final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 
@@ -140,7 +140,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                         Row(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Text('${args.applicant?.member?.selfIntroduction}',style: TextStyle(color: Color(0xff888888), fontSize: isSmallScreen?14:16),),
+                                            Text('${args.memberDetails?.selfIntroduction}',style: TextStyle(color: Color(0xff888888), fontSize: isSmallScreen?14:16),),
                                             Material(
                                               child: Ink(
                                                 child: InkWell(
@@ -532,13 +532,14 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
               left: 0,
               child: Container(
                 margin: EdgeInsetsDirectional.symmetric(vertical: 20),
-                child: SvgPicture.asset(
+                child:
+                SvgPicture.asset(
                   'assets/icon/icon_profile.svg',
                   height: isSmallScreen ? 100 : 120,
                   color: Color(0xffEBEBEB),
                 ),
               ),
-            ),
+            ),//프로필
             Positioned(
               right: 0,
               top: MediaQuery.of(context).size.height * 0.3,
@@ -559,7 +560,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                     color: Color(0xff7898ff),
                     size: 22,
                   ),
-                ),),),
+                ),),),//성별
           ],
         ),
       ),
