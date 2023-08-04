@@ -555,9 +555,12 @@ class APIs {
     try {
       _status = await APIs.getApplicantStatus();
     } catch (e) {
+      print(e);
       if(e == "AT-C-002"){
-        await getAccessToken();
+        print('토큰 재발급');
+        getAccessToken();
         _status = await APIs.getApplicantStatus();
+
       }
     }
 
