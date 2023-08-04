@@ -387,6 +387,9 @@ class APIs {
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        throw Exception('AT-C-002');
+      }
       throw Exception('요청 오류');
     }
   }
