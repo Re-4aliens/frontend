@@ -45,8 +45,8 @@ class SqlMessageRepository{
     return _list;
   }
 
-  static Future<String> getCurrentMessage(int roomId) async {
-    String currentMessage = '';
+  static Future<String> getCreatedTime(int roomId) async {
+
     var _db = await SqlMessageDataBase().database;
     var result = await _db.query("chat", columns: [
       MessageFields.chatId,
@@ -59,58 +59,9 @@ class SqlMessageRepository{
       MessageFields.sendTime,
       MessageFields.unreadCount,
     ]);
-    for(int i =0; i < result.length; i++){
-      if(MessageModel.fromJson(result[i]).roomId != roomId)
-        continue;
-      currentMessage = MessageModel.fromJson(result[i]).chatContent!;
-    }
-    return currentMessage;
+    return MessageModel.fromJson(result[0]).sendTime!;
   }
 
-  static Future<String> getCurrentTime(int roomId) async {
-    String currentTime = '';
-    var _db = await SqlMessageDataBase().database;
-    var result = await _db.query("chat", columns: [
-      MessageFields.chatId,
-      MessageFields.chatType,
-      MessageFields.chatContent,
-      MessageFields.roomId,
-      MessageFields.senderId,
-      MessageFields.senderName,
-      MessageFields.receiverId,
-      MessageFields.sendTime,
-      MessageFields.unreadCount,
-    ]);
-    for(int i =0; i < result.length; i++){
-      if(MessageModel.fromJson(result[i]).roomId != roomId)
-        continue;
-      currentTime = MessageModel.fromJson(result[i]).sendTime!;
-    }
-    return currentTime;
-  }
-
-  static Future<int> getUnreadChat(int roomId) async {
-    int unreadChatCount = 0;
-    var _db = await SqlMessageDataBase().database;
-    var result = await _db.query("chat", columns: [
-      MessageFields.chatId,
-      MessageFields.chatType,
-      MessageFields.chatContent,
-      MessageFields.roomId,
-      MessageFields.senderId,
-      MessageFields.senderName,
-      MessageFields.receiverId,
-      MessageFields.sendTime,
-      MessageFields.unreadCount,
-    ]);
-    for(int i =0; i < result.length; i++){
-      if(MessageModel.fromJson(result[i]).roomId != roomId)
-        continue;
-      if(MessageModel.fromJson(result[i]).unreadCount != 0)
-        unreadChatCount++;
-    }
-    return unreadChatCount;
-  }
 
   static Future<void> update(Partner partner, int chatId) async {
     var _db = await SqlMessageDataBase().database;
