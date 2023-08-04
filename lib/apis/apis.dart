@@ -377,11 +377,7 @@ class APIs {
     );
     //success
     if (response.statusCode == 200) {
-
       print('매칭 상태 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
-      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-        throw Exception('AT-C-002');
-      }
       return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
 
       //fail
@@ -796,7 +792,7 @@ class APIs {
 
   static Future<List<MessageModel>> getMessages(roomId) async {
     var _url =
-        'http://3.34.2.246:8081/api/v1/chat/31'; //mocksever
+        'http://3.34.2.246:8081/api/v1/chat/${roomId}'; //mocksever
 
 
     //토큰 읽어오기
@@ -805,7 +801,16 @@ class APIs {
     //accessToken만 보내기
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
     print('chat 토큰 읽기');
-    String chatToken = await APIs.getChatToken();
+    String chatToken = '';
+    try {
+      chatToken = await APIs.getChatToken();
+    } catch (e) {
+      print(e);
+      if(e == "AT-C-002"){
+        await APIs.getAccessToken();
+        chatToken = await APIs.getChatToken();
+      }
+    }
 
     var response = await http.get(
       Uri.parse(_url),
@@ -852,9 +857,12 @@ class APIs {
     //success
     if (response.statusCode == 200) {
       return json.decode(utf8.decode(response.bodyBytes))['data'];
-
       //fail
     } else {
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw Exception('AT-C-002');
+      }
       print(json.decode(utf8.decode(response.bodyBytes)));
 
       throw Exception('요청 오류');
@@ -871,7 +879,16 @@ class APIs {
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     print('chat 토큰 읽기');
-    String chatToken = await APIs.getChatToken();
+    String chatToken = '';
+    try {
+      chatToken = await APIs.getChatToken();
+    } catch (e) {
+      if(e == "AT-C-002"){
+        print(e);
+        APIs.getAccessToken();
+        chatToken = await APIs.getChatToken();
+      }
+    }
 
     var response = await http.get(
       Uri.parse(_url),
@@ -882,19 +899,19 @@ class APIs {
       },
     );
 
-    print('요청 완료');
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-        print('만료');
-        await getAccessToken();
-      }
+
       return json.decode(utf8.decode(response.bodyBytes));
 
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('토큰 만료');
+        throw Exception('AT-C-002');
+      }
       throw Exception('요청 오류');
     }
   }
