@@ -209,7 +209,17 @@ class _ChattingPageState extends State<ChattingPage> {
   }
 
   void connectWebSocket() async {
-    String chatToken = await APIs.getChatToken();
+    String chatToken = '';
+    try {
+      chatToken = await APIs.getChatToken();
+    } catch (e) {
+      print(e);
+      if(e == "AT-C-002"){
+        await APIs.getAccessToken();
+        chatToken = await APIs.getChatToken();
+      }
+    }
+
     final wsUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/message/send');
     final wsReadUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/message/read');
     final wsAllReadUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/room/read');
