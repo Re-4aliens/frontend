@@ -81,7 +81,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                     var _name = _NameController.text;
                     //임시 비밀번호 발급 요청
 
-
+                    await APIs.temporaryPassword(_email, _name);
                     //success
                     if (true) {
                       Navigator.pushNamed(context,'/login/checkemail');

@@ -48,6 +48,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
               Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text('${'setting-putpas'.tr()}',
+
                     style: TextStyle(
                       fontSize: isSmallScreen?12:14,
                       color: Color(0xffb8b8b8),
@@ -73,7 +74,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,),),
                             content:Text(
-                                '${'setting-withdrawal'.tr()}'),
+                                '${'setting-delete5'.tr()}'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
@@ -108,7 +109,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                               ),
                             ),
                             content: Text(
-                                '${'setting-failwhy'.tr()}'),
+                                '${'setting-delete5'.tr()}'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () => Navigator.of(context).pop(),
@@ -140,7 +141,8 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
       width: MediaQuery.of(context).size.width,
       child: TextFormField(
         controller: passwordController,
-
+        obscureText: true,
+        obscuringCharacter: '*',
         onEditingComplete: (){
           FocusScope.of(context).unfocus();
           //auth에서 불러오기

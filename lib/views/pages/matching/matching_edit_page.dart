@@ -81,86 +81,91 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                   ),
                 ),*/
                 Container(
-                  decoration: BoxDecoration(
-                    //color: Colors.green,
-                  ),
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      Text('${'matchingpreferlan'.tr()}',
-                        style: TextStyle(
-                          fontSize: isSmallScreen?14:16,
-                        ),),
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text('${'first'.tr()}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: isSmallScreen?12:14,
-                                ),),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Container(
-                                width: 110,
-                                child: DropdownButton(
-                                  isExpanded: true,
-                                  items: _nationlist.map((value){
-                                    return DropdownMenuItem(
-                                    child: Text(value,
-                                    style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
-                              value: value);
-                              }).toList(),
-                                    value: _firstPreferLanguage,
-                                    onChanged: (value){
-                                      print(value);
-                                      setState(() {
-                                        _firstPreferLanguage = value!;
-                                      });}
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('${'matchingpreferlan'.tr()}',
+                              style: TextStyle(
+                                fontSize: isSmallScreen?14:16,
+                              ),),
+                            Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text('${'first'.tr()}',
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: isSmallScreen?12:14,
+                                      ),),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      width: 110,
+                                      child: DropdownButton(
+                                        isExpanded: true,
+                                        items: _nationlist.map((value){
+                                          return DropdownMenuItem(
+                                          child: Text(value,
+                                          style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
+                                    value: value);
+                                    }).toList(),
+                                          value: _firstPreferLanguage,
+                                          onChanged: (value){
+                                            print(value);
+                                            setState(() {
+                                              _firstPreferLanguage = value!;
+                                            });}
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          ],
+                        ), //1순위
+                      ), //매칭선호언어 글자+1순위
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text('${'second'.tr()}',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize:isSmallScreen?12:14,
+                          ),),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          Container(
+                            width: 110,
+                            child: DropdownButton(
+                                isExpanded: true,
+                                items: _nationlist.map((value){
+                                  return DropdownMenuItem(
+                                      child: Text(value,
+                                        style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
+                                      value: value);
+                                }).toList(),
+                                value: _secondPreferLanguage,
+                                onChanged: (value){
+                                  print(value);
+                                  setState(() {
+                                    _secondPreferLanguage = value!;
+                                  });}
+                            ),
                           ),
                         ],
-                      ),
+                      ),//2순위
                     ],
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text('${'second'.tr()}',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize:isSmallScreen?12:14,
-                    ),),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Container(
-                      width: 110,
-                      child: DropdownButton(
-                          isExpanded: true,
-                          items: _nationlist.map((value){
-                            return DropdownMenuItem(
-                                child: Text(value,
-                                  style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
-                                value: value);
-                          }).toList(),
-                          value: _secondPreferLanguage,
-                          onChanged: (value){
-                            print(value);
-                            setState(() {
-                              _secondPreferLanguage = value!;
-                            });}
-                      ),
-                    ),
-                  ],
-                ),
                 Expanded(child: SizedBox()),
+
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 0.0),
                   child: Button(
