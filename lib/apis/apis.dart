@@ -30,7 +30,7 @@ class APIs {
    */
   static Future<bool> checkExistence(String email) async {
     var _url =
-        'http://3.34.2.246:8079/api/v1/member/email/${email}/existence'; //mocksever
+        'http://3.34.2.246:8080/api/v1/member/email/${email}/existence'; //mocksever
 
     var response = await http.get(Uri.parse(_url));
 
@@ -53,7 +53,7 @@ class APIs {
    */
   static Future<bool> verifyEmail(String email) async {
     var _url =
-        'http://3.34.2.246:8079/api/v1/email/${email}/verification'; //mocksever
+        'http://3.34.2.246:8080/api/v1/email/${email}/verification'; //mocksever
 
     var response = await http.post(Uri.parse(_url));
 
@@ -75,7 +75,7 @@ class APIs {
    */
   static Future<String> getAuthenticationStatus(String email) async {
     var _url =
-        'http://3.34.2.246:8079/api/v1/email/${email}/authentication-status'; //mocksever
+        'http://3.34.2.246:8080/api/v1/email/${email}/authentication-status'; //mocksever
 
     var response = await http.get(Uri.parse(_url));
 
@@ -97,7 +97,7 @@ class APIs {
 
    */
   static Future<bool> signUp(SignUpModel member) async {
-    const url = 'http://3.34.2.246:8079/api/v1/member';
+    const url = 'http://3.34.2.246:8080/api/v1/member';
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
@@ -143,7 +143,7 @@ class APIs {
    */
   static Future<bool> logIn(Auth auth, String fcmToken) async {
     const url =
-        'http://3.34.2.246:8079/api/v1/auth/authentication'; //mocksever
+        'http://3.34.2.246:8080/api/v1/auth/authentication'; //mocksever
 
     var response = await http.post(Uri.parse(url),
         headers: {'Content-Type': 'application/json'},
@@ -182,7 +182,7 @@ class APIs {
   static Future<void> logOut(BuildContext context) async {
     print('로그아웃 시도');
     const url =
-        'http://3.34.2.246:8079/api/v1/auth/logout'; //mocksever
+        'http://3.34.2.246:8080/api/v1/auth/logout'; //mocksever
 
     //토큰 읽어오기
     var accessToken = await storage.read(key: 'token');
@@ -227,7 +227,7 @@ class APIs {
    */
   static Future<bool> temporaryPassword(email, name) async {
     var _url =
-        'http://3.34.2.246:8079/api/v1/member/${email}/password/temp'; //mocksever
+        'http://3.34.2.246:8080/api/v1/member/${email}/password/temp'; //mocksever
 
     var response = await http.post(Uri.parse(_url),
         headers: {'Content-Type': 'application/json'},
@@ -254,7 +254,7 @@ class APIs {
 
    */
   static Future<bool> changePassword(newPassword) async {
-    var _url = 'http://3.34.2.246:8079/api/v1/member/password'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v1/member/password'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -294,7 +294,7 @@ class APIs {
 
    */
   static Future<bool> withdraw(password) async {
-    var _url = 'http://3.34.2.246:8079/api/v1/member/withdraw'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v1/member/withdraw'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -332,7 +332,7 @@ class APIs {
 
   //유저 정보 요청
   static Future<Map<String, dynamic>> getMemberDetails() async {
-    var _url = 'http://3.34.2.246:8079/api/v1/member'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v1/member'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -362,7 +362,7 @@ class APIs {
 
   //매칭 상태 요청
   static Future<String> getApplicantStatus() async {
-    var _url = 'http://3.34.2.246:8079/api/v1/applicant/status'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v1/applicant/status'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -395,7 +395,7 @@ class APIs {
   //매칭 정보 요청
   static Future<Map<String, dynamic>> getApplicantInfo() async {
     const url =
-        'http://3.34.2.246:8079/api/v1/applicant'; //mocksever
+        'http://3.34.2.246:8080/api/v1/applicant'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -425,7 +425,7 @@ class APIs {
 
   //상대 정보 요청
   static Future<List<Partner>> getApplicantPartners() async {
-    const url = 'http://3.34.2.246:8079/api/v1/applicant/partners';
+    const url = 'http://3.34.2.246:8080/api/v1/applicant/partners';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -499,7 +499,7 @@ class APIs {
   static Future<bool> getAccessToken() async {
     print('accesstoken 재발급');
     const url =
-        'http://3.34.2.246:8079/api/v1/auth/reissue'; //mocksever
+        'http://3.34.2.246:8080/api/v1/auth/reissue'; //mocksever
 
     //토큰 읽어오기
     var accessToken = await storage.read(key: 'token');
@@ -588,7 +588,7 @@ class APIs {
 
    */
   static Future<bool> updateMBTI(String mbti) async {
-    var url = 'http://3.34.2.246:8079/api/v1/member';
+    var url = 'http://3.34.2.246:8080/api/v1/member';
 
     // 토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -628,7 +628,7 @@ class APIs {
  */
 
   static Future<bool> updateProfile(File profileImageFile) async {
-    var url = 'http://3.34.2.246:8079/api/v1/member/profile-image';
+    var url = 'http://3.34.2.246:8080/api/v1/member/profile-image';
 
     // 토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -664,7 +664,7 @@ class APIs {
   자기소개 수정
   */
   static Future<bool> updateSelfIntroduction(String selfIntroduction) async {
-    var url = 'http://13.125.205.59:8079/api/v1/member/self-introduction';
+    var url = 'http://13.125.205.59:8080/api/v1/member/self-introduction';
 
     // 토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -699,7 +699,7 @@ class APIs {
   static Future<bool> applicantMatching(String firstPreferLanguage,
       String secondPreferLanguage) async {
     var _url =
-        'http://3.34.2.246:8079/api/v1/applicant'; //mocksever
+        'http://3.34.2.246:8080/api/v1/applicant'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -736,7 +736,7 @@ class APIs {
    */
   static Future<void> deleteInfo(memberId) async {
     var url =
-        'http://3.34.2.246:8079/api/v1/member/${memberId}';
+        'http://3.34.2.246:8080/api/v1/member/${memberId}';
 
 
     var response = await http.delete(Uri.parse(url),
@@ -845,7 +845,7 @@ class APIs {
 
   // 채팅 토큰 받아오기
   static Future<String> getChatToken() async {
-    var _url = 'http://3.34.2.246:8079/api/v1/chat/token';
+    var _url = 'http://3.34.2.246:8080/api/v1/chat/token';
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
 
@@ -925,7 +925,7 @@ class APIs {
 
   /*매칭 남은 시간*/
 static Future<void> matchingProfessData() async{
-  final url = Uri.parse('http://3.34.2.246:8079/api/v1/applicant/completion-date');
+  final url = Uri.parse('http://3.34.2.246:8080/api/v1/applicant/completion-date');
 
   final response = await http.post(
     url,
