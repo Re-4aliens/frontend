@@ -127,10 +127,23 @@ class _ChattingPageState extends State<ChattingPage> {
 
         );
 
-    myFuture = APIs.getMessages(widget.partner.roomId);
+    _unreadListFuc();
+
     _memoizer = AsyncMemoizer();
   }
 
+  _unreadListFuc() async {
+    List<MessageModel> unreadlist = await APIs.getMessages(widget.partner.roomId);
+
+    //1. 리스트 업데이트
+    for (final message in unreadlist) {
+      print(message.chatContent);
+
+      if(message.senderId != widget.memberDetails.memberId){
+        await SqlMessageRepository.create(message);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -281,14 +294,7 @@ class _ChattingPageState extends State<ChattingPage> {
   채팅 내역 화면에 보여주기
 
    */
-  Future<List<MessageModel>> _loadChatList(unReadChatList) async {
-    //1. 리스트 업데이트
-    for (final message in unReadChatList) {
-      await SqlMessageRepository.create(message);
-    }
-
-    this._memoizer.runOnce(() async{
-    });
+  Future<List<MessageModel>> _loadChatList() async {
     //3. 업데이트된 리스트 불러오기
     return await SqlMessageRepository.getList(widget.partner.roomId!, widget.memberDetails.memberId!);
   }
@@ -495,24 +501,7 @@ class _ChattingPageState extends State<ChattingPage> {
                     padding: const EdgeInsets.only(top: 15),
                     color: Color(0xffF5F7FF),
                     child: FutureBuilder<List<MessageModel>>(
-                      future: myFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          // 첫 번째 Future가 아직 완료되지 않았을 때 로딩 상태 표시
-                          return Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else if (snapshot.hasError) {
-                          // 첫 번째 Future에서 오류가 발생한 경우 에러 메시지 표시
-                          return Center(
-                            child: Text('Error: ${snapshot.error}'),
-                          );
-                        }
-                        else  {
-                          var unReadChatList = snapshot.data;
-                          //안읽은 채팅이 있으면 DB에 저장해서 보여주기
-                          return FutureBuilder<List<MessageModel>>(
-                              future: _loadChatList(unReadChatList),
+                              future: _loadChatList(),
                               builder: (context, snapshot){
                                 if(snapshot.hasError) return Center(child: Text('${snapshot.error}'),);
                                 if(snapshot.hasData){
