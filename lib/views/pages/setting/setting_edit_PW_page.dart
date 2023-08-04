@@ -16,12 +16,21 @@ class SettingEditPWPage extends StatefulWidget {
   State<SettingEditPWPage> createState() => _SettingEditPWPageState();
 }
 
+
+
+
 class _SettingEditPWPageState extends State<SettingEditPWPage> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyFirst = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeySecond = GlobalKey<FormState>();
+
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _passwordControllerSecond = TextEditingController();
   static final storage = FlutterSecureStorage();
+  FocusNode _passwordFocusfirst = new FocusNode();
+  FocusNode _passwordFocussecond = new FocusNode();
 
+  bool _isButtonEnabled = false;
+  String constraintsText = '${'signup-pwd4'.tr()}';
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +55,24 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
               SizedBox(
                 height: 20,
               ),
-              TextFormField(
-                obscureText: true,
-                obscuringCharacter: '*',
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  hintText: '${'setting-newpas2'.tr()}',
-                  hintStyle: TextStyle(
-                    fontSize: isSmallScreen?18:20,
-                    color: Color(0xffb8b8b8),
+              Form(
+                key: _formKeyFirst,
+                child: TextFormField(
+                  onChanged: (value){
+                    _CheckValidate(value);
+                  },
+                  keyboardType: TextInputType.visiblePassword,
+                  focusNode: _passwordFocusfirst,
+
+                  obscureText: true,
+                  obscuringCharacter: '*',
+                  controller: _passwordController,
+                  decoration: InputDecoration(
+                    hintText: '${'setting-newpas2'.tr()}',
+                    hintStyle: TextStyle(
+                      fontSize: isSmallScreen?18:20,
+                      color: Color(0xffb8b8b8),
+                    ),
                   ),
                 ),
               ),
@@ -70,16 +88,23 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
               SizedBox(
                 height: 30,
               ),
-              TextFormField(
-                obscureText: true,
-                obscuringCharacter: '*',
-                key: _formKey,
-                controller: _passwordControllerSecond,
-                decoration: InputDecoration(
-                  hintText: '${'setting-newpas3'.tr()}',
-                  hintStyle: TextStyle(
-                    fontSize: isSmallScreen?18:20,
-                    color: Color(0xffb8b8b8),
+              Form(
+                key: _formKeySecond,
+                child: TextFormField(
+                  onChanged: (value){
+                    _CheckValidate(value);
+                  },
+                  keyboardType: TextInputType.visiblePassword,
+                  focusNode: _passwordFocussecond,
+                  obscureText: true,
+                  obscuringCharacter: '*',
+                  controller: _passwordControllerSecond,
+                  decoration: InputDecoration(
+                    hintText: '${'setting-newpas3'.tr()}',
+                    hintStyle: TextStyle(
+                      fontSize: isSmallScreen?18:20,
+                      color: Color(0xffb8b8b8),
+                    ),
                   ),
                 ),
               ),
@@ -100,11 +125,10 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
                       //수정
-                        isEnabled: true,
+                        isEnabled: _isButtonEnabled,
                         child: Text('${'setting-newpas4'.tr()}'),
                         onPressed: () async {
-
-
+    if (_formKeyFirst.currentState?.validate() == true &&_formKeySecond.currentState?.validate() == true) {
                             //입력한 두 패스워드가 같으면
                             if (_passwordController.text == _passwordControllerSecond.text) {
 
@@ -160,12 +184,53 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                                           ),
                                         ],
                                       ));
-                            }})
+                            }}})
                   ),
                 ),
               )
             ],
           ),
         ));
+  }
+
+  void _CheckValidate(String value) {
+    if (value.isEmpty) {
+      setState(() {
+        _isButtonEnabled = false;
+        constraintsText = "${'signup-pwd4'.tr()}";
+      });
+    } else {
+      if (value.length > 9){
+        setState(() {
+          constraintsText = "";
+          _isButtonEnabled = true;
+        });
+      }
+      else {
+        setState(() {
+          constraintsText = "${'signup-pwd4'.tr()}";
+          _isButtonEnabled = false;
+        });
+      }
+    }
+  }
+}
+
+
+class CheckValidate {
+  String? validatePassword(FocusNode focusNode, String value) {
+    if (value.isEmpty) {
+      focusNode.requestFocus();
+      return '비밀번호를 입력하세요.';
+    } else {
+      String pattern = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{10,16}$';
+      RegExp regExp = new RegExp(pattern);
+      if (!regExp.hasMatch(value)) {
+        focusNode.requestFocus();
+        return '영문, 특수문자, 숫자를 포함 10자 이상, 16자 이하';
+      } else {
+        return null;
+      }
+    }
   }
 }
