@@ -194,6 +194,7 @@ class _ChattingPageState extends State<ChattingPage> {
       'roomId': message.data['roomId'],
     };
     await readChannel.sink.add(json.encode(request));
+    updateUi();
   }
 
   void sendBulkReadRequest() async {
@@ -519,8 +520,47 @@ class _ChattingPageState extends State<ChattingPage> {
                                   return ListView(
                                     controller: _scrollController,
                                     children: List.generate(datas!.length, (index) {
-                                      final currentDate =
-                                      DateTime.parse(datas[index].sendTime!);
+                                      final currentDate = DateTime.parse(datas[index].sendTime!);
+                                      String? nextTime = index == datas.length - 1 ? null : DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(datas[index + 1]!.sendTime!));
+                                      String? currentTime = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.parse(datas[index].sendTime!));
+                                      bool nextDiff = nextTime == null ? false : DateTime.parse(nextTime).difference(DateTime.parse(currentTime)).inMinutes > 1;
+
+                                      bool _showingTime(index){
+
+                                        //마지막 채팅인 경우 true
+                                        if(index == datas.length - 1){
+                                          return true;
+                                        }
+                                        //다음 말풍선이 본인이 아니면 true
+                                        else if(datas[index + 1].senderId != datas[index].senderId){
+                                          return true;
+                                        }
+                                        //다음 말풍선 시간이랑 차이가 있으면 true
+                                        else if(nextDiff) {
+                                          return true;
+                                        }
+                                        else {
+                                          return false;
+                                        }
+                                      }
+
+                                      bool _showingPic(index){
+                                        if (index == 0){
+                                          return true;
+                                        }
+                                        else if(datas[index].senderId != datas[index - 1].senderId){
+                                          return true;
+                                        }
+                                        if(index == datas.length - 1){
+                                          return false;
+                                        }
+                                        else if(nextDiff && datas[index].senderId == datas[index + 1].senderId){
+                                          return true;
+                                        }
+                                        else {
+                                          return false;
+                                        }
+                                      }
                                       return Column(
                                         children: [
                                           if (index == 0 ||
@@ -550,22 +590,15 @@ class _ChattingPageState extends State<ChattingPage> {
                                                   unreadCount: datas[index].unreadCount
                                               ),
                                               memberDetails: widget.memberDetails,
-                                              showingTime: index == 0? false : (datas[index - 1].receiverId != datas[index].receiverId
-                                                  || DateTime.parse(datas[index - 1].sendTime!).difference(DateTime.parse(datas[index].sendTime!)).inMinutes > 1
-                                              ),
-                                              showingPic: index == 0
-                                                  ? true
-                                                  : datas[index].senderId !=
-                                                  datas[index - 1].senderId)
+                                              showingTime: _showingTime(index),
+                                              showingPic: _showingPic(index)
+                                          )
                                         ],
                                       );
                                     }),
                                   );
                                 } else return Center(child: Text('저장된 메세지 없음'));
-                              });
-                        }
-                      },
-                    )
+                              })
                 )
             ),
             Column(
@@ -725,7 +758,7 @@ class _ChattingPageState extends State<ChattingPage> {
             borderRadius: BorderRadius.circular(20),
           ),
           padding: EdgeInsets.symmetric(horizontal: 20),
-          margin: EdgeInsets.only(top: 20),
+          margin: EdgeInsets.only(top: 20, bottom: 15),
           child: index == 0
               ? Text(
             '${DateFormat('yyyy/MM/dd').format(DateTime.parse(createdDate))}',
@@ -738,7 +771,7 @@ class _ChattingPageState extends State<ChattingPage> {
         ),
         if (index == 0)
           Padding(
-            padding: const EdgeInsets.only(top: 15.0, bottom: 20.0),
+            padding: const EdgeInsets.only(bottom: 10.0),
             child: Text(
               "새로운 대화를 시작합니다.",
               style: TextStyle(color: Color(0xff717171), fontSize: 12),
