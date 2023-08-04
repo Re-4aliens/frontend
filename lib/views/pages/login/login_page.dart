@@ -44,183 +44,358 @@ class _LoginState extends State<Login> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      body: Padding(
-        padding: EdgeInsets.only(
-          right: 24,
-          left: 24,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Expanded(
-                flex: 5,
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        child: SvgPicture.asset('assets/character/logoimage.svg'),
-                      ),
-                      SizedBox(height: 15),
-                      SvgPicture.asset('assets/character/logotext.svg', color: Colors.black,),
-                      SizedBox(height: 5,),
-                      Text(
-                        'login3'.tr(),
-                        style: TextStyle(
-                            fontSize: isSmallScreen?14:16, color: Color(0xff616161)),
-                      ),
-                    ],
-                  ),
-                )),
-            Expanded(flex: 1, child: Container()),
-            Expanded(
-                flex: 7,
-                child: Column(
+      body: KeyboardVisibilityBuilder(
+        builder: (context, isKeyboardVisible) {
+          return Padding(
+            padding: EdgeInsets.only(
+              right: 24,
+              left: 24,
+            ),
+            child: isKeyboardVisible? SingleChildScrollView(
+                child:Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Form(
-                      key: _emailFormKey,
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: heightSize,
-                        decoration: BoxDecoration(
-                            color: Color(0xffF8F8F8),
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 10,
-                                //spreadRadius: 0.2,
-                                color: Colors.grey.shade300,
-                                offset: const Offset(0, 4),
-                              )
-                            ]),
-                        child: TextFormField(
-                          validator: (value) =>
-                          value!.isEmpty ? "Please enter some text" : null,
-                          controller: _emailController,
-                          decoration: new InputDecoration(
-                            contentPadding:
-                            EdgeInsets.symmetric(horizontal: 27.21),
-                            hintText: 'email'.tr(),
-                            hintStyle: TextStyle(
-                                fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
-                            enabledBorder: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            /*
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25))),
-                                  */
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            child: SvgPicture.asset('assets/character/logoimage.svg'),
+                          ),
+                          SizedBox(height: 15),
+                          SvgPicture.asset('assets/character/logotext.svg', color: Colors.black,),
+                          SizedBox(height: 5,),
+                          Text(
+                            'login3'.tr(),
+                            style: TextStyle(
+                                fontSize: isSmallScreen?14:16, color: Color(0xff616161)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 30),
+                    Column(
+                      children: [
+                        Form(
+                          key: _emailFormKey,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: heightSize,
+                            decoration: BoxDecoration(
+                                color: Color(0xffF8F8F8),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10,
+                                    //spreadRadius: 0.2,
+                                    color: Colors.grey.shade300,
+                                    offset: const Offset(0, 4),
+                                  )
+                                ]),
+                            child: TextFormField(
+                              validator: (value) =>
+                              value!.isEmpty ? "Please enter some text" : null,
+                              controller: _emailController,
+                              decoration: new InputDecoration(
+                                contentPadding:
+                                EdgeInsets.symmetric(horizontal: 27.21),
+                                hintText: 'email'.tr(),
+                                hintStyle: TextStyle(
+                                    fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                /*
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(25))),
+                                      */
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height*0.035),
-                    Form(
-                      key: _pwFormKey,
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: heightSize,
-                        decoration: BoxDecoration(
-                            color: Color(0xffF8F8F8),
-                            borderRadius: BorderRadius.circular(30),
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 10,
-                                //spreadRadius: 0.2,
-                                color: Colors.grey.shade300,
-                                offset: const Offset(0, 4),
-                              )
-                            ]),
-                        child: TextFormField(
-                          obscureText: true,
-                          obscuringCharacter: '*',
-                          validator: (value) =>
-                          value!.isEmpty ? "Please enter some text" : null,
-                          controller: _passwordController,
-                          decoration: new InputDecoration(
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 27.21),
-                              hintText: 'password'.tr(),
-                              hintStyle: TextStyle(
-                                  fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
-                              enabledBorder: InputBorder.none,
-                              focusedBorder: InputBorder.none,
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30))),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.035),
+                        Form(
+                          key: _pwFormKey,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: heightSize,
+                            decoration: BoxDecoration(
+                                color: Color(0xffF8F8F8),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10,
+                                    //spreadRadius: 0.2,
+                                    color: Colors.grey.shade300,
+                                    offset: const Offset(0, 4),
+                                  )
+                                ]),
+                            child: TextFormField(
+                              obscureText: true,
+                              obscuringCharacter: '*',
+                              validator: (value) =>
+                              value!.isEmpty ? "Please enter some text" : null,
+                              controller: _passwordController,
+                              decoration: new InputDecoration(
+                                  contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 27.21),
+                                  hintText: 'password'.tr(),
+                                  hintStyle: TextStyle(
+                                      fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30))),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.031),
-                    BigButton(
-                      child: Text(
-                        'login1'.tr(),
-                        style: TextStyle(fontSize: fontSize),
-                      ),
-                      onPressed: () async {
-                        if (_emailFormKey.currentState!.validate() &&
-                            _pwFormKey.currentState!.validate()) {
-                          auth.email = _emailController.text;
-                          auth.password = _passwordController.text;
-                          final fcmToken = await FirebaseMessaging.instance.getToken();
-                          var loginSuccess = await APIs.logIn(auth, fcmToken!);
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.031),
+                        BigButton(
+                          child: Text(
+                            'login1'.tr(),
+                            style: TextStyle(fontSize: fontSize),
+                          ),
+                          onPressed: () async {
+                            if (_emailFormKey.currentState!.validate() &&
+                                _pwFormKey.currentState!.validate()) {
+                              auth.email = _emailController.text;
+                              auth.password = _passwordController.text;
+                              final fcmToken = await FirebaseMessaging.instance.getToken();
+                              var loginSuccess = await APIs.logIn(auth, fcmToken!);
 
-                          if (loginSuccess) {
+                              if (loginSuccess) {
 
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                                '/loading', (Route<dynamic> route) => false);
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/loading', (Route<dynamic> route) => false);
 
-                          } else {
-                            showDialog(
-                                context: context,
-                                builder: (BuildContext context) =>
-                                    CupertinoAlertDialog(
-                                      title: Text(
-                                        '로그인 실패',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      content: Text('아이디 및 비밀번호를 확인해주세요!'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () =>
-                                              Navigator.of(context).pop(),
-                                          child: const Text('확인',
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                              )),
-                                        ),
-                                      ],
-                                    ));
-                          }
-                        }
-                      },
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.height *0.035 ,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('findpassword1'.tr(), style: TextStyle(fontSize: isSmallScreen?12:14),),
-                        TextButton(
-                            onPressed: () {
-                              Navigator.pushNamed(
-                                  context, '/login/findpassword');
-                            },
-                            child: Text(
-                              'findpassword2'.tr(),
-                              style: TextStyle(
-                                  fontSize: isSmallScreen?12:14,
-                                  decoration: TextDecoration.underline,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold),
-                            ))
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        CupertinoAlertDialog(
+                                          title: Text(
+                                            '로그인 실패',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          content: Text('아이디 및 비밀번호를 확인해주세요!'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                              child: const Text('확인',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  )),
+                                            ),
+                                          ],
+                                        ));
+                              }
+                            }
+                          },
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height *0.035 ,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text('findpassword1'.tr(), style: TextStyle(fontSize: isSmallScreen?12:14),),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, '/login/findpassword');
+                                },
+                                child: Text(
+                                  'findpassword2'.tr(),
+                                  style: TextStyle(
+                                      fontSize: isSmallScreen?12:14,
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                          ],
+                        )
                       ],
                     )
                   ],
-                ))
-          ],
-        ),
+                )
+            ):
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                    flex: 5,
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Container(
+                            child: SvgPicture.asset('assets/character/logoimage.svg'),
+                          ),
+                          SizedBox(height: 15),
+                          SvgPicture.asset('assets/character/logotext.svg', color: Colors.black,),
+                          SizedBox(height: 5,),
+                          Text(
+                            'login3'.tr(),
+                            style: TextStyle(
+                                fontSize: isSmallScreen?14:16, color: Color(0xff616161)),
+                          ),
+                        ],
+                      ),
+                    )),
+                Expanded(flex: 1, child: Container()),
+                Expanded(
+                    flex: 7,
+                    child: Column(
+                      children: [
+                        Form(
+                          key: _emailFormKey,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: heightSize,
+                            decoration: BoxDecoration(
+                                color: Color(0xffF8F8F8),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10,
+                                    //spreadRadius: 0.2,
+                                    color: Colors.grey.shade300,
+                                    offset: const Offset(0, 4),
+                                  )
+                                ]),
+                            child: TextFormField(
+                              validator: (value) =>
+                              value!.isEmpty ? "Please enter some text" : null,
+                              controller: _emailController,
+                              decoration: new InputDecoration(
+                                contentPadding:
+                                EdgeInsets.symmetric(horizontal: 27.21),
+                                hintText: 'email'.tr(),
+                                hintStyle: TextStyle(
+                                    fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                /*
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(25))),
+                                      */
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height*0.035),
+                        Form(
+                          key: _pwFormKey,
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: heightSize,
+                            decoration: BoxDecoration(
+                                color: Color(0xffF8F8F8),
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                    blurRadius: 10,
+                                    //spreadRadius: 0.2,
+                                    color: Colors.grey.shade300,
+                                    offset: const Offset(0, 4),
+                                  )
+                                ]),
+                            child: TextFormField(
+                              obscureText: true,
+                              obscuringCharacter: '*',
+                              validator: (value) =>
+                              value!.isEmpty ? "Please enter some text" : null,
+                              controller: _passwordController,
+                              decoration: new InputDecoration(
+                                  contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 27.21),
+                                  hintText: 'password'.tr(),
+                                  hintStyle: TextStyle(
+                                      fontSize: isSmallScreen?14:16, color: Color(0xffA0A0A0)),
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                  errorBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30))),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height * 0.031),
+                        BigButton(
+                          child: Text(
+                            'login1'.tr(),
+                            style: TextStyle(fontSize: fontSize),
+                          ),
+                          onPressed: () async {
+                            if (_emailFormKey.currentState!.validate() &&
+                                _pwFormKey.currentState!.validate()) {
+                              auth.email = _emailController.text;
+                              auth.password = _passwordController.text;
+                              final fcmToken = await FirebaseMessaging.instance.getToken();
+                              var loginSuccess = await APIs.logIn(auth, fcmToken!);
+
+                              if (loginSuccess) {
+
+                                Navigator.of(context).pushNamedAndRemoveUntil(
+                                    '/loading', (Route<dynamic> route) => false);
+
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        CupertinoAlertDialog(
+                                          title: Text(
+                                            '로그인 실패',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          content: Text('아이디 및 비밀번호를 확인해주세요!'),
+                                          actions: <Widget>[
+                                            TextButton(
+                                              onPressed: () =>
+                                                  Navigator.of(context).pop(),
+                                              child: const Text('확인',
+                                                  style: TextStyle(
+                                                    color: Colors.black,
+                                                  )),
+                                            ),
+                                          ],
+                                        ));
+                              }
+                            }
+                          },
+                        ),
+                        SizedBox(height: MediaQuery.of(context).size.height *0.035 ,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text('findpassword1'.tr(), style: TextStyle(fontSize: isSmallScreen?12:14),),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, '/login/findpassword');
+                                },
+                                child: Text(
+                                  'findpassword2'.tr(),
+                                  style: TextStyle(
+                                      fontSize: isSmallScreen?12:14,
+                                      decoration: TextDecoration.underline,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold),
+                                ))
+                          ],
+                        )
+                      ],
+                    ))
+              ],
+            ),
+          );
+        }
       ),
     );
   }

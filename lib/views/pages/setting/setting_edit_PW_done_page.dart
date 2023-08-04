@@ -33,7 +33,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
           child: Column(
             children: [
               Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Container(
                     //decoration: BoxDecoration(color: Colors.green),
                     child: Column(
@@ -53,8 +53,8 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
                             'assets/icon/icon_check.svg',
                             color: Color(0xff7898ff),
                           ),
-                          height: MediaQuery.of(context).size.height * 0.126,
-                          width: MediaQuery.of(context).size.width*0.272,
+                          height: isSmallScreen?100:110,
+                          width: isSmallScreen?100:110,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
                           ),

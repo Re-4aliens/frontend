@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -496,9 +497,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 3, child: Container()),
+                                    Expanded(flex: 1, child: Container()),
                                     Expanded(
-                                        flex: 7,
+                                        flex: 2,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -575,8 +576,8 @@ class _HomePageState extends State<HomePage> {
                                     35,
                                 left: 25,
                                 child: Container(
-                                  height: isSmallScreen ? 50 : 65,
-                                  width: isSmallScreen ? 270 : 320,
+                                  height: isSmallScreen ? 65 : 75,
+                                  width: isSmallScreen ? 275 : 320,
                                   child: RichText(
                                     textAlign: TextAlign.center,
                                     text: TextSpan(children: [
@@ -664,9 +665,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 3, child: Container()),
+                                    Expanded(flex: 1, child: Container()),
                                     Expanded(
-                                        flex: 7,
+                                        flex: 2,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -833,9 +834,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 3, child: Container()),
+                                    Expanded(flex: 1, child: Container()),
                                     Expanded(
-                                        flex: 7,
+                                        flex: 2,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -889,6 +890,7 @@ class _HomePageState extends State<HomePage> {
                           ));
                 } else if (args.status == 'PENDING' && index == 1 && clicked) {
                   print('매칭 상태 확인 ㄱ');
+                  APIs.matchingProfessData();
                   Navigator.pushNamed(context, '/state', arguments: args);
                 } else if (args.status == 'NOT_APPLIED' &&
                     index == 0 &&
@@ -1183,7 +1185,7 @@ class _HomePageState extends State<HomePage> {
             flex: 3,
             child: Container(
                 padding:
-                    EdgeInsets.only(right: 10, left: 0, top: 17, bottom: 17),
+                    EdgeInsets.only(right: 5, left: 0, top: 17, bottom: 17),
                 decoration: BoxDecoration(
                   color: Color(0xff7898FF),
                   borderRadius: BorderRadius.circular(20),
@@ -1237,15 +1239,26 @@ class _HomePageState extends State<HomePage> {
                       child: Stack(
                         children: [
                           Container(
-                            height: MediaQuery.of(context).size.height * 0.09,
-                            width: MediaQuery.of(context).size.height * 0.09,
+                            height: isSmallScreen?80:90,
+                            width: isSmallScreen?80:90,
                             decoration: BoxDecoration(
-                                color: screenArguments.memberDetails.profileImage != "" ? Colors.white : Colors.transparent,
-
-                                borderRadius: BorderRadius.circular((MediaQuery.of(context).size.height * 0.09 )/2)),
+                                color: screenArguments.memberDetails.profileImage != ""
+                                    ? Colors.white
+                                    : Colors.transparent,
+                              shape: BoxShape.circle
+                            ),
                             child: screenArguments.memberDetails.profileImage != ""
-                                ? SizedBox()
-                                : SvgPicture.asset('assets/icon/icon_profile.svg', color:Colors.white,),
+                                ? Image.network(
+                              screenArguments.memberDetails.profileImage,
+                              height: isSmallScreen ? 80 : 90,
+                              width: isSmallScreen ? 80 : 90,
+                            )
+                                : SvgPicture.asset(
+                              'assets/icon/icon_profile.svg',
+                              color:Colors.white,
+                              height: isSmallScreen?80:90,
+                              width: isSmallScreen?80:90,
+                            ),
                           ),
                           Positioned(
                               bottom: 0,
@@ -1325,7 +1338,7 @@ class _HomePageState extends State<HomePage> {
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.87,
                 padding:
-                    EdgeInsets.only(right: 23, left: 23, top: 17, bottom: 17),
+                    EdgeInsets.only(top: 17, bottom: 17),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -1335,6 +1348,7 @@ class _HomePageState extends State<HomePage> {
                   itemBuilder: (BuildContext context, int index) {
                     if (index == 0) {
                       return Container(
+                        padding: EdgeInsets.only(left:23),
                         height: MediaQuery.of(context).size.height * 0.03,
                         child: Text(
                           '${'setting-profile'.tr()}',
@@ -1357,21 +1371,22 @@ class _HomePageState extends State<HomePage> {
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           Expanded(
-              flex: 4,
+              flex: 5,
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.87,
                 //margin: EdgeInsets.only(right: 24, left: 24),
                 padding:
-                    EdgeInsets.only(right: 20, left: 20, top: 17, bottom: 17),
+                    EdgeInsets.only(top: 17, bottom: 17),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: ListView.builder(
-                  itemCount: 4,
+                  itemCount: 5,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == 0) {
                       return Container(
+                        padding: EdgeInsets.only(left: 23),
                         height: MediaQuery.of(context).size.height * 0.03,
                         child: Text(
                           '${'setting-account'.tr()}',
@@ -1391,7 +1406,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               )),
           SizedBox(
-            height: MediaQuery.of(context).size.height * 0.04,
+            height: MediaQuery.of(context).size.height * 0.02,
           ),
           Expanded(
               child: Container(

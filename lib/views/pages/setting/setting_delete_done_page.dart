@@ -8,6 +8,7 @@ import 'package:aliens/models/auth_model.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import '../../../apis/apis.dart';
 import '../../components/appbar.dart';
 import '../../components/button.dart';
 
@@ -28,7 +29,7 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: Padding(
-          padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.12),
+          padding: EdgeInsets.only(left: 20,right: 20, bottom: 60, top:100),
           child: Column(
             children: [
               Expanded(
@@ -78,7 +79,8 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                       //수정
                         isEnabled: true,
                         child: Text('${'setting-gohome'.tr()}'),
-                        onPressed: () {
+                        onPressed: () async {
+                          await APIs.logOut(context);
                           Navigator.of(context)
                               .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
                           );
