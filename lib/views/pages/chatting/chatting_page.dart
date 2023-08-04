@@ -54,7 +54,7 @@ class _ChattingPageState extends State<ChattingPage> {
   bool isKeypadUp = false;
   var itemLength = 0;
   bool isSended = false;
-  static String createdDate = '1999-01-01';
+  late String createdDate;
   bool isNewChat = true;
   bool bottomFlag = false;
   var isChecked = false;
@@ -70,10 +70,10 @@ class _ChattingPageState extends State<ChattingPage> {
   StreamSubscription<dynamic>? responseSubscription;
   StreamSubscription<dynamic>? readResponseSubscription;
 
+
   @override
   void initState() {
     super.initState();
-    createdDate = DateTime.now().toString();
     connectWebSocket();
 
     var initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -129,7 +129,7 @@ class _ChattingPageState extends State<ChattingPage> {
         );
 
     _unreadListFuc();
-
+    _getCreatedDate();
     _memoizer = AsyncMemoizer();
   }
 
@@ -144,6 +144,10 @@ class _ChattingPageState extends State<ChattingPage> {
         await SqlMessageRepository.create(message);
       }
     }
+  }
+
+  void _getCreatedDate() async {
+    createdDate = await SqlMessageRepository.getCreatedTime(widget.partner.roomId!);
   }
 
   @override

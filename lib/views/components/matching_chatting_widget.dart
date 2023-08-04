@@ -157,21 +157,6 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
     );
   }
 
-  Future<String> getCurrentMessage(int index) async {
-    return await SqlMessageRepository.getCurrentMessage(
-        widget.screenArguments.partners![index].roomId!);
-  }
-
-  Future<String> getCurrentTime(int index) async {
-    return await SqlMessageRepository.getCurrentTime(
-        widget.screenArguments.partners![index].roomId!);
-  }
-
-  Future<int> getUnreadChat(int index) async {
-    return await SqlMessageRepository.getUnreadChat(
-        widget.screenArguments.partners![index].roomId!);
-  }
-
 
   Widget chatList(context, index, ChatRoom chatRoom) {
     return Padding(
