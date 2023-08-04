@@ -40,14 +40,14 @@ class MessageBubble extends StatelessWidget {
       children: [
         showingPic ?
         Padding(
-          padding: EdgeInsets.only(left: 25),
+          padding: EdgeInsets.only(left: 20),
           child: SvgPicture.asset(
             'assets/icon/icon_profile.svg',
-            height: 40,
+            height: 35,
             color: Color(0xff7898ff),
           ),
         ) : SizedBox(
-          width: 65,
+          width: 55,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -68,7 +68,7 @@ class MessageBubble extends StatelessWidget {
                           offset: const Offset(0, 3))
                     ]),
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                margin: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
                 child: Text(
                   '${message.chatContent}',
                   style: TextStyle(
@@ -102,7 +102,7 @@ class MessageBubble extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 0),
               child: Text(
                 showingTime! ?
                 '${DateFormat('hh:mm aaa').format(DateTime.parse('${message.sendTime}'))}' : '',
@@ -127,7 +127,7 @@ class MessageBubble extends StatelessWidget {
                           offset: const Offset(0, 3))
                     ]),
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-                margin: EdgeInsets.only(top: 10, bottom: 10, left: 18, right: 25),
+                margin: EdgeInsets.only(top: 10,left: 5, right: 25),
                 child: Text(
                   '${message.chatContent}',
                   style: TextStyle(
@@ -139,7 +139,7 @@ class MessageBubble extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: EdgeInsets.only(right: 18),
+          padding: EdgeInsets.only(top: 2, right: 18),
           child: message.unreadCount == 0 ? Text('읽음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('읽지않음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
         )
       ],
