@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:aliens/models/memberDetails_model.dart';
+import 'package:aliens/models/vsGames.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,14 +43,14 @@ class MessageBubble extends StatelessWidget {
       children: [
         showingPic ?
         Padding(
-          padding: EdgeInsets.only(left: 25),
+          padding: EdgeInsets.only(left: 20),
           child: SvgPicture.asset(
             'assets/icon/icon_profile.svg',
-            height: 40,
+            height: 35,
             color: Color(0xff7898ff),
           ),
         ) : SizedBox(
-          width: 65,
+          width: 55,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -68,7 +71,7 @@ class MessageBubble extends StatelessWidget {
                           offset: const Offset(0, 3))
                     ]),
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-                margin: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                margin: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
                 child: Text(
                   '${message.chatContent}',
                   style: TextStyle(
@@ -102,7 +105,7 @@ class MessageBubble extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 0),
               child: Text(
                 showingTime! ?
                 '${DateFormat('hh:mm aaa').format(DateTime.parse('${message.sendTime}'))}' : '',
@@ -127,7 +130,7 @@ class MessageBubble extends StatelessWidget {
                           offset: const Offset(0, 3))
                     ]),
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 18),
-                margin: EdgeInsets.only(top: 10, bottom: 10, left: 18, right: 25),
+                margin: EdgeInsets.only(top: 10,left: 5, right: 25),
                 child: Text(
                   '${message.chatContent}',
                   style: TextStyle(
@@ -139,7 +142,7 @@ class MessageBubble extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: EdgeInsets.only(right: 18),
+          padding: EdgeInsets.only(top: 2, right: 18),
           child: message.unreadCount == 0 ? Text('읽음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1))) : Text('읽지않음', style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)),),
         )
       ],
@@ -147,11 +150,22 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget _vsGameBubble() {
+
+    String answer1 = '';
+    String answer2 = '';
+    for (int i = 0; i < vsGames.length; i++) {
+      if (vsGames[i]['question'] == message.chatContent) {
+        answer1 = vsGames[i]['answer1']!;
+        answer2 = vsGames[i]['answer2']!;
+        break;
+      }
+    }
+
     return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 10, bottom: 10, right: 25),
+          padding: EdgeInsets.only(top: 15, bottom: 15),
           child: Container(
             decoration: BoxDecoration(
               boxShadow: [
@@ -181,11 +195,14 @@ class MessageBubble extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    //TODO 이미지 교체
                     Container(
                       height: 90,
+                      padding: EdgeInsets.only(top: 10),
+                      child: Image.asset('assets/character/vsGame_hands.png',)
                     ),
                     Text('밸런스 게임', style: TextStyle(color: Color(0xffC4C4C4), fontSize: 12),),
-                    Text('하루만 공강을 만들 수 있다면?', style: TextStyle(color: Color(0xff616161), fontSize: 16, fontWeight: FontWeight.bold),),
+                    Text('${message.chatContent}', style: TextStyle(color: Color(0xff616161), fontSize: 16, fontWeight: FontWeight.bold),),
                     SizedBox(height: 10,),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -198,7 +215,7 @@ class MessageBubble extends StatelessWidget {
                             border: Border.all(color: Color(0xff7898ff),),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Text('월공강', style: TextStyle(color: Color(0xff7898ff)),),
+                          child: Text('$answer1', style: TextStyle(color: Color(0xff7898ff)),),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -212,7 +229,7 @@ class MessageBubble extends StatelessWidget {
                             border: Border.all(color: Color(0xff7898ff),),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Text('금공강', style: TextStyle(color: Color(0xff7898ff)),),
+                          child: Text('$answer2', style: TextStyle(color: Color(0xff7898ff)),),
                         ),
                       ],
                     )

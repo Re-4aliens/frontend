@@ -12,17 +12,7 @@ FlutterLocalNotificationsPlugin();
 
 class FirebaseAPIs {
   final _firebaseMessaging = FirebaseMessaging.instance;
-
-  void handleMessage(RemoteMessage? message){
-    if(message == null)return ;
-    else {
-      //메세지 있으면 화면에 그리기
-    }
-  }
-  Future initPushNotification() async {
-
-  }
-
+/*
   /// 상단 알림을 위해 AndroidNotificationChannel 생성
   static AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
@@ -37,17 +27,15 @@ class FirebaseAPIs {
     );
     print('Initialized default app $app');
 
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    // fcm 토큰 출력
-    print(fcmToken);
+
 
     FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
       print('Title: ${message.notification?.title}');
       print('Body: ${message.notification?.body}');
       print('Data: ${message.data}');
     });
-  }
 
+  }
 
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
     await Firebase.initializeApp();
@@ -63,7 +51,8 @@ class FirebaseAPIs {
             icon: message.notification!.android!.smallIcon,
           ),
         ));
-  }
 
+  }
+  */
 }
 
