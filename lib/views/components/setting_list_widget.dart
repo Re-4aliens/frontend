@@ -13,6 +13,7 @@ Widget buildSettingList(context, index, screenArguments) {
     '${'setting-security'.tr()}',
     '${'setting-noti'.tr()}',
     '${'setting-terms'.tr()}',
+    '${'setting-inqury'.tr()}',
   ];
 
   List settingIcon = [
@@ -31,6 +32,12 @@ Widget buildSettingList(context, index, screenArguments) {
       size: isSmallScreen?18:20,
       color: Colors.black,
     ),
+    Icon(
+      Icons.contact_support,
+      size: isSmallScreen?18:20,
+      color: Colors.black,
+    ),
+
   ];
 
 
@@ -38,6 +45,7 @@ Widget buildSettingList(context, index, screenArguments) {
     '/setting/security',
     '/setting/notification',
     '/setting/terms',
+    ''
   ];
 
   return ListTile(
@@ -48,20 +56,20 @@ Widget buildSettingList(context, index, screenArguments) {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Container(
-          padding: EdgeInsets.only(left : 0, right: MediaQuery.of(context).size.width * 0.04),
+          padding: EdgeInsets.only(left : MediaQuery.of(context).size.width * 0.012, right: MediaQuery.of(context).size.width * 0.04),
           child: settingIcon.elementAt(index),
         ),
         Text(
           '${settingList.elementAt(index)}',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: isSmallScreen?14:16,
+            fontSize: isSmallScreen?16:18,
           ),
         ),
         Expanded(child: Container()),
         Icon(
           Icons.arrow_forward_ios,
-          size: isSmallScreen?14:16,
+          size: isSmallScreen?16:18,
           color: Color(0xffC1C1C1),
         ),
       ],
