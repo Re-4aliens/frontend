@@ -9,9 +9,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../components/appbar.dart';
 import '../../components/button.dart';
-
+import 'package:http/http.dart';
 import 'package:flutter/animation.dart';
-
+import 'package:http/http.dart' as http;
 import 'package:blobs/blobs.dart';
 
 class MatchingStatePage extends StatefulWidget {
@@ -23,7 +23,7 @@ class MatchingStatePage extends StatefulWidget {
 
 class _MatchingStatePageState extends State<MatchingStatePage> {
 
-  DateTime matchingDate = DateTime.parse("2023-05-28 00:00:00");
+  DateTime matchingDate = DateTime.now();
   DateTime nowDate = DateTime.now();
 
   late Duration diff;
@@ -32,11 +32,37 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
   void initState() {
     // TODO: implement initState
     setState(() {
-      if(matchingDate.difference(nowDate).inSeconds > 0)
-        diff = matchingDate.difference(nowDate);
-      else
-        diff = Duration(seconds: 0);
+      super.initState();
+      diff = Duration(seconds: 0);
+      fetchMatchingDate();
     });
+  }
+
+
+  Future<void> fetchMatchingDate() async {
+    final url = Uri.parse('http://3.34.2.246:8079/api/v1/applicant/completion-date');
+
+    final response = await http.post(
+      url,
+      body: {'matchingCompletionDate': 'YYYY-MM-DD HH:MM'},
+    );
+
+    if (response.statusCode == 200) {
+      final matchingCompletionDate = response.body;
+
+      // DateTime으로 변환
+      final matchingDateResponse = DateTime.parse(matchingCompletionDate);
+
+      setState(() {
+        matchingDate = matchingDateResponse;
+        if (matchingDate.difference(nowDate).inSeconds > 0)
+          diff = matchingDate.difference(nowDate);
+        else
+          diff = Duration(seconds: 0);
+      });
+    } else {
+      print('Error: ${response.statusCode}');
+    }
   }
 
   @override

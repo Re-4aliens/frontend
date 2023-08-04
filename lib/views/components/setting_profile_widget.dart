@@ -18,10 +18,26 @@ Widget buildProfileList(context, index, memberDetails){
   ];
 
   List settingIcon = [
-    null,
-    null,
-    null,
-    null,
+    Icon(
+      Icons.sentiment_very_satisfied,
+      size: isSmallScreen?18:20,
+      color: Colors.black,
+    ),
+    Icon(
+      Icons.favorite_border,
+      size: isSmallScreen?18:20,
+      color: Colors.black,
+    ),
+    Icon(
+      Icons.drafts,
+      size: isSmallScreen?18:20,
+      color: Colors.black,
+    ),
+    Icon(
+      Icons.sentiment_very_satisfied,
+      size: isSmallScreen?18:20,
+      color: Colors.black,
+    ),
   ];
 
   List memberInfo = [
@@ -42,6 +58,10 @@ Widget buildProfileList(context, index, memberDetails){
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        Container(
+          padding: EdgeInsets.only(left : MediaQuery.of(context).size.width * 0.012, right: MediaQuery.of(context).size.width * 0.04),
+          child: settingIcon.elementAt(index),
+        ),
         if (index > 3)
           Container(
             padding: EdgeInsets.only(right: 20),
@@ -51,7 +71,7 @@ Widget buildProfileList(context, index, memberDetails){
           '${settingList.elementAt(index)}',
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: isSmallScreen?14:16,
+            fontSize: isSmallScreen?16:18,
           ),
         ),
         Expanded(child: Container()),
@@ -71,7 +91,7 @@ Widget buildProfileList(context, index, memberDetails){
             SizedBox(width: 1),
             Icon(
               Icons.arrow_forward_ios,
-              size: isSmallScreen?14:16,
+              size: isSmallScreen?16:18,
               color: Color(0xff4D4D4D),
             )
           ],
@@ -79,7 +99,7 @@ Widget buildProfileList(context, index, memberDetails){
         else
           Icon(
             Icons.arrow_forward_ios,
-            size: isSmallScreen?14:16,
+            size: isSmallScreen?16:18,
             color: Color(0xff4d4d4d),
           ),
       ],

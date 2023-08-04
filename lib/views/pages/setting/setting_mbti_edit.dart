@@ -18,8 +18,29 @@ class SettingMBTIEditPage extends StatefulWidget {
 
 class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
   final _MBTIlist = ['INTJ', 'INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
-  var _selectedMBTI = 'INTJ';
+  late String _selectedMBTI;
   @override
+
+  void initState() {
+    super.initState();
+    _loadInitialMBTI();  // 서버에서 MBTI 정보 호출
+  }
+
+  // 서버에서 현재 MBTI 정보를 받아오는 함수
+  Future<void> _loadInitialMBTI() async {
+    try {
+      final memberDetails = await APIs.getMemberDetails(); // 사용자 정보 가져오기
+      final mbti = memberDetails['mbti']; // 사용자의 MBTI 정보
+
+      setState(() {
+        _selectedMBTI = mbti; // _selectedMBTI 값을 서버에서 받아온 MBTI로 설정
+      });
+    } catch (error) {
+      print('Error loading initial MBTI: $error');
+      // 에러 처리
+    }
+  }
+
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isSmallScreen = screenWidth <= 600;

@@ -38,7 +38,7 @@ class mbtiButton extends StatelessWidget{
       //height: isSmallScreen? (MediaQuery.of(context).size.width * 0.37)*4.5/3:(MediaQuery.of(context).size.width * 0.42)*4.5/3,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(25), // 10은 모서리 반경 값입니다.
+        borderRadius: BorderRadius.circular(25),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -66,11 +66,11 @@ class mbtiButton extends StatelessWidget{
                   children: [
                     selected? SvgPicture.asset(
                         'assets/icon/icon_check.svg',
-                        width: MediaQuery.of(context).size.width * 0.077,
+                        width: isSmallScreen?25:30,
                         color: Colors.white)
                         : SvgPicture.asset(
                       'assets/icon/icon_emptycheck.svg',
-                      width : MediaQuery.of(context).size.width * 0.077,
+                      width: isSmallScreen?25:30,
                       // color : Color(0xffFFF2a2)
                     ),
 
@@ -82,19 +82,20 @@ class mbtiButton extends StatelessWidget{
                   child: Column(
                     children: [
                       Text(text, textAlign: TextAlign.center,style: TextStyle(
-                          color: selected ? Colors.white: Colors.black,
+                          color: selected ? Colors.white: Color(0xff616161),
                           fontSize: isSmallScreen?15:17, fontWeight: FontWeight.bold),),
                       Text(explain,textAlign: TextAlign.center,style: TextStyle(
-                          color: selected ? Colors.white: Colors.black,
+                          color: selected ? Colors.white: Color(0xff616161),
                           fontSize: isSmallScreen?13:15),),
                       Container(
-                        width: 60,height: 60,
+                        width: isSmallScreen?70:80,
+                        height: isSmallScreen?70:80,
                         decoration: BoxDecoration(shape: BoxShape.circle,
                         ),
                         child: SvgPicture.asset(image),
                       ),
-                      Text(mbti, textAlign: TextAlign.center, style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold,
-                          color:selected? Colors.white : Colors.black ),),
+                      Text(mbti, textAlign: TextAlign.center, style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold,
+                          color:selected? Colors.white : Color(0xff616161)),),
                     ],
                   ),
                 ),
