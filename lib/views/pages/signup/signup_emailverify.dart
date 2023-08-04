@@ -70,7 +70,7 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                   else if(status == 'EMAIL_SENT_NOT_AUTHENTICATED') {
                       showDialog(context: context, builder: (BuildContext context){
                         return CupertinoAlertDialog(
-                          title: Text("메일함을 확인해주세요!")
+                          title: Text("${'signup-email8'.tr()}")
                         );
                       });
                     }
