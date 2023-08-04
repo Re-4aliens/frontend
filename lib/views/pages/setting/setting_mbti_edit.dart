@@ -7,10 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../apis/apis.dart';
+import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
 
 class SettingMBTIEditPage extends StatefulWidget {
-  const SettingMBTIEditPage({super.key});
+
+  const SettingMBTIEditPage({super.key, required this.screenArguments});
+  final ScreenArguments? screenArguments;
 
   @override
   State<SettingMBTIEditPage> createState() => _SettingMBTIEditPageState();
@@ -23,7 +26,10 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
 
   void initState() {
     super.initState();
-    _loadInitialMBTI();  // 서버에서 MBTI 정보 호출
+    //_loadInitialMBTI();  // 서버에서 MBTI 정보 호출
+
+    print('${widget.screenArguments!.memberDetails!.mbti!}');
+    _selectedMBTI = widget.screenArguments!.memberDetails!.mbti!;
   }
 
   // 서버에서 현재 MBTI 정보를 받아오는 함수
@@ -42,8 +48,11 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
   }
 
   Widget build(BuildContext context) {
+    //final screenArguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isSmallScreen = screenWidth <= 600;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomAppBar(appBar: AppBar(), backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '${'setting-mbti'.tr()}'),

@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
+import '../pages/setting/setting_lan_edit.dart';
+import '../pages/setting/setting_mbti_edit.dart';
 
-Widget buildProfileList(context, index, memberDetails){
+
+Widget buildProfileList(context, index, screenArgument){
 /*  var updatedMBTI = await Navigator.pushNamed(
     context, '/setting/MBTI/edit'
   );*/
@@ -41,9 +44,9 @@ Widget buildProfileList(context, index, memberDetails){
   ];
 
   List memberInfo = [
-    memberDetails.gender.toString(),
-    memberDetails.nationality.toString(),
-    memberDetails.mbti.toString(),
+    screenArgument.memberDetails.gender.toString(),
+    screenArgument.memberDetails.nationality.toString(),
+    screenArgument.memberDetails.mbti.toString(),
   ];
 
 
@@ -52,8 +55,13 @@ Widget buildProfileList(context, index, memberDetails){
       if (index == 3)
         Navigator.pushNamed(context, '/setting/lan/edit');
       else if(index ==2)
-        Navigator.pushNamed(context, '/setting/MBTI/edit');
-
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SettingMBTIEditPage(
+                  screenArguments: screenArgument
+              )),
+        );
     },
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
