@@ -134,6 +134,16 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                   child: Image(
                       image: AssetImage(
                           "assets/illustration/loading_01.gif")));
+            else if(snapshot.data == null){
+              return Center(
+                child: Text('불러올 매칭 상대가 없습니다.',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff616161)
+                  ),textAlign: TextAlign.center,
+                ),
+              );
+            }
             else {
               return ListView.builder(
                   itemCount:snapshot.data!.length,
