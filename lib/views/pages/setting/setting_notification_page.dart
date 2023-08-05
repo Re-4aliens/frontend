@@ -164,12 +164,33 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             value: matchingNotification,
                             activeColor: Color(0xff7898FF),
                             trackColor: Color(0xffC1C1C1),
-                            onChanged: (value) => setState(() {
-                              this.matchingNotification = value;
-                              if(this.matchingNotification == this.chatNotification){
-                                this.allNotification = value;
+                            onChanged: (value) async {
+                              //알림값 읽어오기
+                              var notification = await storage.read(key: 'notification');
+
+                              var allNotification = json.decode(notification!)['allNotification'];
+                              var matchingNotification = json.decode(notification!)['matchingNotification'];
+                              var chatNotification = json.decode(notification!)['chatNotification'];
+
+
+                              await storage.delete(key: 'notification');
+                              if(chatNotification != value){
+                                allNotification = false;
+                              }else if(chatNotification == value){
+                                allNotification = true;
                               }
-                            }),
+                              await storage.write(
+                                key: 'notification',
+                                value: jsonEncode({
+                                  'allNotification' : allNotification,
+                                  'matchingNotification' : value,
+                                  'chatNotification' : chatNotification,
+                                }),
+                              );
+                              setState(() {
+
+                              });
+                            },
                           ),
                         ],
                       ),
@@ -197,17 +218,8 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                 await APIs.getAccessToken();
                                 success = await APIs.setChatNotification(value, false);
                               }
-                              if(success){
-                                setState(() {
-                                  this.chatNotification = value;
-                                  if(this.matchingNotification == this.chatNotification){
-                                    this.allNotification = value;
-                                  }
-                                });
-                              }
-                              else{
-
-                              }
+                              setState(() {
+                              });
                             },
                           ),
                         ],
