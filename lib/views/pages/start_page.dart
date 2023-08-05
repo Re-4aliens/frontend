@@ -66,7 +66,14 @@ class _StartPageState extends State<StartPage> {
         //자동로그인 해제
         await storage.delete(key: 'auth');
         await storage.delete(key: 'token');
-      } else if (diff <= Duration(days: 6) && diff > Duration(minutes: 29)){
+
+      } else if(diff < Duration.zero){
+        print('시간 음수 오류');
+
+        //자동로그인 해제
+        await storage.delete(key: 'auth');
+        await storage.delete(key: 'token');
+      }else if (diff <= Duration(days: 6) && diff >= Duration(minutes: 30)){
         //액세스 토큰 기간(30s)이 지났다면
         //액세스 토큰 재발급
         print('액세스 토큰 재발급');
