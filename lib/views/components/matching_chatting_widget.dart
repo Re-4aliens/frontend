@@ -189,6 +189,12 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                     )),
           ).then((value) async {
             _updateList();
+            _messageStreamSubscription =
+                FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+                  print('채팅리스트에서 Received FCM with: ${message.data} at ${DateTime.now()}');
+                  _updateList();
+                }
+                );
           });
         },
         shape: RoundedRectangleBorder(
