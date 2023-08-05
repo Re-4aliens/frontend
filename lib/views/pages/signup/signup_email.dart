@@ -261,18 +261,16 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                       if (snapshot.hasData == false) {
                                         //받아오는 동안
                                         return Container(
-                                            margin: EdgeInsets.only(left: 75),
                                             child: Image(
                                                 image: AssetImage(
                                                     "assets/illustration/loading_01.gif")));
                                       } else{
                                         //받아온 후
                                         WidgetsBinding.instance!.addPostFrameCallback((_) {
-                                          Navigator.pushNamed(context, '/verify', arguments: member);
+                                          Navigator.popAndPushNamed(context, '/verify', arguments: member);
                                         });
                                         print(member.toJson());
                                         return Container(
-                                            margin: EdgeInsets.only(left: 75),
                                             child: Image(
                                                 image: AssetImage(
                                                     "assets/illustration/loading_01.gif")));

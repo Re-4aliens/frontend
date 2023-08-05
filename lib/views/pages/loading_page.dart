@@ -25,8 +25,7 @@ class _LoadingPageState extends State<LoadingPage> {
                   if (snapshot.hasData == false) {
                     //받아오는 동안
                     return Container(
-                        margin: EdgeInsets.only(left: 75),
-                        child: Image(image: AssetImage("assets/illustration/loading_01.gif")));
+                        child: Image(image: AssetImage("assets/illustration/loading_02.gif")));
                   }
                   else
                     //받아온 후
@@ -36,8 +35,7 @@ class _LoadingPageState extends State<LoadingPage> {
                           arguments: snapshot.data);
                     });
                     return Container(
-                        margin: EdgeInsets.only(left: 75),
-                        child: Image(image: AssetImage("assets/illustration/loading_01.gif")));
+                        child: Image(image: AssetImage("assets/illustration/loading_02.gif")));
             })
 
       ),

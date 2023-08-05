@@ -71,7 +71,6 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
             if(snapshot.connectionState == ConnectionState.waiting){
               return Center(
                 child: Container(
-                    margin: EdgeInsets.only(left: 75),
                     child: Image(image: AssetImage("assets/illustration/loading_01.gif"))),
               );
             }
