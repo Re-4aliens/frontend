@@ -85,12 +85,14 @@ void main() async {
   print(fcmToken);
 
   //백그라운드 메세지 처리 핸들러 연결
-  FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
-
+  //FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
+/*
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
       AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(FirebaseAPIs.channel);
+
+ */
 
   runApp(EasyLocalization(
     path: 'assets/translations',

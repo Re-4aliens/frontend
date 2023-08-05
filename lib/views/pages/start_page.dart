@@ -31,7 +31,8 @@ class _StartPageState extends State<StartPage> {
 
   //storage로부터 읽을 모델
   dynamic userInfo = null;
-  dynamic token =null;
+  dynamic notification = null;
+  dynamic token = null;
 
 
   String selectedValue = 'English';
@@ -45,6 +46,8 @@ class _StartPageState extends State<StartPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //토큰 유효성 검사
       _isValid();
+      //알림 설정
+      _setNotification();
     });
 
   }
@@ -87,6 +90,23 @@ class _StartPageState extends State<StartPage> {
     }else{
       //저장된 정보가 없다면
       print('로그인 필요');
+    }
+  }
+
+  _setNotification() async {
+    notification = await storage.read(key: 'notification');
+    //저장된 설정 정보가 있다면
+    if (notification != null){
+    }else{
+      //true로 설정
+      await storage.write(
+        key: 'notification',
+        value: jsonEncode({
+          'allNotification': true,
+          'matchingNotification': true,
+          'chatNotification': true,
+        }),
+      );
     }
   }
 
