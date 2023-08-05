@@ -1077,6 +1077,11 @@ static Future<String> matchingProfessData() async{
         );
       }
       else{
+        if(matchingNotification != _notification){
+          allNotification = false;
+        }else if(matchingNotification == _notification){
+          allNotification = true;
+        }
         await storage.write(
           key: 'notification',
           value: jsonEncode({
