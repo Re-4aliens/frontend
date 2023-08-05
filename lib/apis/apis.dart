@@ -3,6 +3,7 @@ import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/signup_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path/path.dart';
@@ -991,5 +992,111 @@ static Future<String> matchingProfessData() async{
     throw Exception('요청 오류');
   }
 }
+
+  /*
+
+  채팅 알림 설정 조회
+
+   */
+  static Future<void> getChatNotificationStatus() async {
+    const url =
+        'http://3.34.2.246:8080/api/v1/notification/chat'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+
+    var response = await http.get(Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+          "FcmToken": '$fcmToken'
+        });
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+    }
+  }
+
+  /*
+
+  채팅 알림 설정
+
+   */
+  static Future<bool> setChatNotification(bool _notification, bool all) async {
+    const url =
+        'http://3.34.2.246:8080/api/v1/notification/chat'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+
+    //알림값 읽어오기
+    var notification = await storage.read(key: 'notification');
+
+    var allNotification = json.decode(notification!)['allNotification'];
+    var matchingNotification = json.decode(notification!)['matchingNotification'];
+    var chatNotification = json.decode(notification!)['chatNotification'];
+
+
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+
+    var response = await http.post(Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+          "FcmToken": '$fcmToken'
+        },
+        body: jsonEncode({
+          "chatNotification": _notification.toString(),
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      await getChatNotificationStatus();
+      await storage.delete(key: 'notification');
+      if(all){
+        await storage.write(
+          key: 'notification',
+          value: jsonEncode({
+            'allNotification' : _notification,
+            'matchingNotification' : _notification,
+            'chatNotification' : _notification,
+          }),
+        );
+      }
+      else{
+        await storage.write(
+          key: 'notification',
+          value: jsonEncode({
+            'allNotification' : allNotification,
+            'matchingNotification' : matchingNotification,
+            'chatNotification' : _notification,
+          }),
+        );
+      }
+
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료4');
+        throw 'AT-C-002';
+      }
+      return false;
+    }
+  }
 
 }
