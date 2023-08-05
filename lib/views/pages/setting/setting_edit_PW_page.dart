@@ -37,7 +37,6 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
-        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.transparent, infookay: false, infocontent: '',),
         body: Container(
@@ -58,12 +57,12 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
               Form(
                 key: _formKeyFirst,
                 child: TextFormField(
-                  onChanged: (value){
+                  onChanged: (value) {
                     _CheckValidate(value);
                   },
                   keyboardType: TextInputType.visiblePassword,
                   focusNode: _passwordFocusfirst,
-
+                  validator : (value) => CheckValidate().validatePassword(_passwordFocusfirst, value!),
                   obscureText: true,
                   obscuringCharacter: '*',
                   controller: _passwordController,
@@ -214,7 +213,9 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
       }
     }
   }
+
 }
+
 
 
 class CheckValidate {
