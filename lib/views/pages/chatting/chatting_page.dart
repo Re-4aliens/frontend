@@ -149,7 +149,7 @@ class _ChattingPageState extends State<ChattingPage> {
   }
 
   void _getCreatedDate() async {
-    createdDate = await SqlMessageRepository.getCreatedTime(widget.partner.roomId!);
+    //createdDate = await SqlMessageRepository.getCreatedTime(widget.partner.roomId!);
   }
 
   @override
@@ -782,7 +782,8 @@ class _ChattingPageState extends State<ChattingPage> {
           margin: EdgeInsets.only(top: 20, bottom: 15),
           child: index == 0
               ? Text(
-            '${DateFormat('yyyy/MM/dd').format(DateTime.parse(createdDate))}',
+            //TODO createdDate 수정
+            '${DateFormat('yyyy/MM/dd').format(DateTime.parse('2019-09-09'))}',
             style: TextStyle(color: Colors.white),
           )
               : Text(
