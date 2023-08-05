@@ -964,23 +964,34 @@ class APIs {
     }
   }
 
-  /*매칭 남은 시간*/
-static Future<void> matchingProfessData() async{
-  final url = Uri.parse('http://3.34.2.246:8080/api/v1/applicant/completion-date');
+  /*
 
-  final response = await http.post(
-    url,
-    body: {'matchingCompletionDate': 'YYYY-MM-DD HH:MM'},
+  매칭 완료 일시
+
+  */
+static Future<String> matchingProfessData() async{
+  var _url = Uri.parse('http://3.34.2.246:8080/api/v1/applicant/completion-date');
+
+  //토큰 읽어오기
+  var jwtToken = await storage.read(key: 'token');
+  //accessToken만 보내기
+  jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+  var response = await http.get(
+    _url,
+    headers: {
+      'Authorization': 'Bearer $jwtToken',
+      'Content-Type': 'application/json',
+    },
   );
 
   if (response.statusCode == 200) {
-
-    print('Response: ${response.body}');
-    final matchingCompletionDate = response.body;
-    final matchingDateResponse = DateTime.parse(matchingCompletionDate);
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    return json.decode(utf8.decode(response.bodyBytes))['data']['matchingCompleteDate'];
 
   } else {
-    print('Error: ${response.statusCode}');
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    throw Exception('요청 오류');
   }
 }
 

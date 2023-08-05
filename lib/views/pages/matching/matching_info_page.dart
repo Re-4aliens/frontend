@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:aliens/views/components/appbar.dart';
+import 'package:aliens/views/pages/matching/matching_edit_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -499,7 +500,14 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                 ),
                             child: InkWell(
                               onTap: () {
-                                Navigator.pushNamed(context, '/edit');
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MatchingEditPage(
+                                          screenArguments: args
+                                      )
+                                  ),
+                                );
                               },
                               child: Container(
                                 padding: const EdgeInsets.only(bottom: 1.0),
