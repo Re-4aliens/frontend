@@ -287,20 +287,6 @@ class _HomePageState extends State<HomePage> {
               Container(),
           ],
         ),
-        actions: [
-          if (selectedIndex == 0)
-            IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset(
-                'assets/icon/icon_info.svg',
-                width: MediaQuery.of(context).size.width * 0.062,
-                height: MediaQuery.of(context).size.height * 0.029,
-                color: Color(0xff7898FF),
-              ),
-            )
-          else
-            Container(),
-        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,

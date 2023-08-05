@@ -129,7 +129,6 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return Container(
-                  margin: EdgeInsets.only(left: 75),
                   alignment: Alignment.center,
                   child: Image(
                       image: AssetImage(
