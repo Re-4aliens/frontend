@@ -890,8 +890,6 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ));
                 } else if (args.status == 'PENDING' && index == 1 && clicked) {
-                  print('매칭 상태 확인 ㄱ');
-                  APIs.matchingProfessData();
                   Navigator.pushNamed(context, '/state', arguments: args);
                 } else if (args.status == 'NOT_APPLIED' &&
                     index == 0 &&
@@ -1363,7 +1361,7 @@ class _HomePageState extends State<HomePage> {
                       return Container(
                           height: MediaQuery.of(context).size.height * 0.04,
                           child: buildProfileList(
-                              context, index - 1, screenArguments.memberDetails));
+                              context, index - 1, screenArguments));
                     }
                   },
                 ),
