@@ -78,152 +78,174 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                 fontSize: isSmallScreen?12:14,
                                 color: Color(0xff888888),
                               ),)),
-                        SizedBox(height: 20),
+                        SizedBox(height: 10),
                         Container(
-                          padding: EdgeInsets.only(right: 20,left: 23),
-                          width: MediaQuery.of(context).size.width* 0.9,
-                          height: MediaQuery.of(context).size.height * 0.13,
+
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.width * 11/35,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Color(0xffF5F7FF),
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                //spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: Offset(0, 4),
-                              ),
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 10,
+                                  spreadRadius: 0.5,
+                                  offset: const Offset(0, 4)),
                             ],
+                            gradient: LinearGradient(colors: [Colors.white, Colors.white]),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.1,
-                                height: 100.0,
-                                child: SvgPicture.asset(('assets/character/signout_crying.svg')),
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: MediaQuery.of(context).size.height * 0.15,
                                 decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              SizedBox(width: 23),
-                              Container(
+                                    borderRadius: BorderRadius.circular(20),
+                                    boxShadow: [
+                                      //내부 그림자
+                                      BoxShadow(
+                                        color: Color(0xff7898FF).withOpacity(0.3),
+                                      ),
+
+                                      BoxShadow(
+                                        blurRadius: 10,
+                                        color: Colors.white,
+                                        offset: const Offset(-5, -5),
+                                      )
+                                    ]),
+                                padding: EdgeInsets.only(left: 20, right: 30),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text('${'setting-delete1'.tr()}',
-                                    style: TextStyle(
-                                      fontSize: isSmallScreen?12:14,
-                                      fontWeight: FontWeight.w700
-                                    ),),
+                                      style: TextStyle(
+                                          fontSize: isSmallScreen?12:14,
+                                          fontWeight: FontWeight.bold
+                                      ),),
                                     SizedBox(height: 5),
                                     Text('${'setting-delete1.1'.tr()}',
-                                    style: TextStyle(
-                                      fontSize: isSmallScreen?10:12
-                                    ),)
+                                      style: TextStyle(
+                                          fontSize: isSmallScreen?10:12,
+                                        color: Color(0xff888888)
+                                      ),)
                                   ],
                                 ),
-                              )
-                            ],
-                          ),
+                              ),
+                            ),
+                        ),
+                        Container(
 
-                        ),
-                        SizedBox(height: 15),
-                        Container(
-                          padding: EdgeInsets.only(right: 20,left: 23),
-                          width: MediaQuery.of(context).size.width* 0.9,
-                          height: MediaQuery.of(context).size.height * 0.13,
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.width * 11/35,
+                          margin: EdgeInsets.symmetric(vertical: isSmallScreen ? 10 : 20),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Color(0xffF5F7FF),
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                //spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: Offset(0, 4),
-                              ),
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 10,
+                                  spreadRadius: 0.5,
+                                  offset: const Offset(0, 4)),
                             ],
+                            gradient: LinearGradient(colors: [Colors.white, Colors.white]),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.1,
-                                height: 100.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xffD9D9D9),
-                                ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.15,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    //내부 그림자
+                                    BoxShadow(
+                                      color: Color(0xff7898FF).withOpacity(0.3),
+                                    ),
+
+                                    BoxShadow(
+                                      blurRadius: 10,
+                                      color: Colors.white,
+                                      offset: const Offset(-5, -5),
+                                    )
+                                  ]),
+                              padding: EdgeInsets.only(left: 20, right: 30),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('${'setting-delete2'.tr()}',
+                                    style: TextStyle(
+                                        fontSize: isSmallScreen?12:14,
+                                        fontWeight: FontWeight.bold
+                                    ),),
+                                  SizedBox(height: 5),
+                                  Text('${'setting-delete2.1'.tr()}',
+                                    style: TextStyle(
+                                        fontSize: isSmallScreen?10:12,
+                                        color: Color(0xff888888)
+                                    ),)
+                                ],
                               ),
-                              SizedBox(width: 23),
-                              Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('${'setting-delete2'.tr()}',
-                                      style: TextStyle(
-                                          fontSize: isSmallScreen?12:14,
-                                          fontWeight: FontWeight.w700
-                                      ),),
-                                    SizedBox(height: 5),
-                                    Text('${'setting-delete2.1'.tr()}',
-                                      style: TextStyle(
-                                          fontSize: isSmallScreen?10:12
-                                      ),)
-                                  ],
-                                ),
-                              )
-                            ],
+                            ),
                           ),
                         ),
-                        SizedBox(height: 15),
                         Container(
-                          padding: EdgeInsets.only(right: 20,left: 23),
-                          width: MediaQuery.of(context).size.width* 0.9,
-                          height: MediaQuery.of(context).size.height * 0.13,
+
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.width * 11/35,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                            color: Color(0xffF5F7FF),
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                //spreadRadius: 2,
-                                blurRadius: 10,
-                                offset: Offset(0, 4),
-                              ),
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 10,
+                                  spreadRadius: 0.5,
+                                  offset: const Offset(0, 4)),
                             ],
+                            gradient: LinearGradient(colors: [Colors.white, Colors.white]),
                           ),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.1,
-                                height: 100.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xffD9D9D9),
-                                ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height * 0.15,
+
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20),
+                                  boxShadow: [
+                                    //내부 그림자
+                                    BoxShadow(
+                                      color: Color(0xff7898FF).withOpacity(0.3),
+                                    ),
+
+                                    BoxShadow(
+                                      blurRadius: 10,
+                                      color: Colors.white,
+                                      offset: const Offset(-5, -5),
+                                    )
+                                  ]),
+                              padding: EdgeInsets.only(left: 20, right: 30),
+
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('${'setting-delete3'.tr()}',
+                                    style: TextStyle(
+                                        fontSize: isSmallScreen?12:14,
+                                        fontWeight: FontWeight.bold
+                                    ),),
+                                  SizedBox(height: 5),
+                                  Text('${'setting-delete3.1'.tr()}',
+                                    style: TextStyle(
+                                        fontSize: isSmallScreen?10:12,
+                                        color: Color(0xff888888)
+                                    ),)
+                                ],
                               ),
-                              SizedBox(width: 23),
-                              Container(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('${'setting-delete3'.tr()}',
-                                      style: TextStyle(
-                                          fontSize: isSmallScreen?12:14,
-                                          fontWeight: FontWeight.w700
-                                      ),),
-                                    SizedBox(height: 5,),
-                                    Text('${'setting-delete3.1'.tr()}',
-                                      style: TextStyle(
-                                          fontSize: isSmallScreen?10:12
-                                      ),)
-                                  ],
-                                ),
-                              )
-                            ],
+                            ),
                           ),
                         ),
                         Expanded(child: SizedBox()),
@@ -275,7 +297,7 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                   child: Text('${'setting-withdrawal'.tr()}'),
                                     style: ElevatedButton.styleFrom(
                                         textStyle: TextStyle(fontSize: isSmallScreen?14:16),
-                                        backgroundColor: Color(0xff7898FF),// 여기 색 넣으면됩니다
+                                        backgroundColor: Color(0xff7898FF),
                                         shape: RoundedRectangleBorder(
                                             borderRadius: BorderRadius.circular(40)
                                         )
