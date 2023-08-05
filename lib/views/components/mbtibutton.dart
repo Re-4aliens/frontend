@@ -90,6 +90,7 @@ class mbtiButton extends StatelessWidget{
                       Container(
                         width: isSmallScreen?70:80,
                         height: isSmallScreen?70:80,
+                        padding: EdgeInsets.all(7),
                         decoration: BoxDecoration(shape: BoxShape.circle,
                         ),
                         child: SvgPicture.asset(image),
