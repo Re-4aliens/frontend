@@ -358,7 +358,7 @@ class APIs {
 
       //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }
@@ -387,10 +387,11 @@ class APIs {
 
       //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-        throw Exception('AT-C-002');
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
       }
+      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }
@@ -421,7 +422,7 @@ class APIs {
       //fail
     } else {
       //오류 생기면 바디 확인
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }
@@ -454,7 +455,7 @@ class APIs {
       //fail
     } else {
       //오류 생기면 바디 확인
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
 
       //임의로 넣어두겠습니다
       List<Partner> _partners = [
@@ -561,12 +562,9 @@ class APIs {
     try {
       _status = await APIs.getApplicantStatus();
     } catch (e) {
-      print(e);
       if(e == "AT-C-002"){
-        print('토큰 재발급');
-        getAccessToken();
+        await APIs.getAccessToken();
         _status = await APIs.getApplicantStatus();
-
       }
     }
 
@@ -618,7 +616,7 @@ class APIs {
     }
     //실패
     else {
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
   }
@@ -755,7 +753,6 @@ class APIs {
         body: jsonEncode({
           "firstPreferLanguage": firstPreferLanguage,
           "secondPreferLanguage": secondPreferLanguage,
-
         }));
 
     //success
@@ -909,7 +906,7 @@ class APIs {
     } else {
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
         print('액세스 토큰 만료');
-        throw Exception('AT-C-002');
+        throw 'AT-C-002';
       }
       print(json.decode(utf8.decode(response.bodyBytes)));
 
