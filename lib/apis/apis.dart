@@ -692,6 +692,44 @@ class APIs {
     }
   }
 
+  /*
+
+  선호 언어 수정
+
+   */
+  static Future<bool> updatePreferLanguage(String firstPreferLanguage,
+      String secondPreferLanguage) async {
+    var url = 'http://3.34.2.246:8080/api/v1/applicant/prefer-languages';
+
+    // 토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    // 액세스 토큰만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.patch(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "firstPreferLanguage": firstPreferLanguage,
+        "secondPreferLanguage": secondPreferLanguage,
+      }),
+    );
+    //성공
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+    }
+    //실패
+    else {
+      print('언어 수정 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
+      return false;
+    }
+  }
+
 
   /*
 

@@ -50,10 +50,18 @@ Widget buildProfileList(context, index, screenArgument){
   ];
 
 
+  bool _isKorean = EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR");
   return ListTile(
     onTap: () {
       if (index == 3)
-        Navigator.pushNamed(context, '/setting/lan/edit');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => SettingLanEditPage(
+                  screenArguments: screenArgument,
+                isKorean: _isKorean
+              )),
+        );
       else if(index ==2)
         Navigator.push(
           context,
