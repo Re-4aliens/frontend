@@ -80,19 +80,18 @@ void main() async {
 
   // fcm 초기화 부분
   await initializeDefault();
-  setupInteractedMessage();
-  //final fcmToken = await FirebaseMessaging.instance.getToken();
+  final fcmToken = await FirebaseMessaging.instance.getToken();
   // fcm 토큰 출력
-  //print(fcmToken);
+  print(fcmToken);
 
   //백그라운드 메세지 처리 핸들러 연결
-  //FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
-/*
+  FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
+
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
       AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(FirebaseAPIs.channel);
-*/
+
   runApp(EasyLocalization(
     path: 'assets/translations',
     fallbackLocale: Locale('en', 'US'),
@@ -110,21 +109,35 @@ Future<void> initializeDefault() async {
   print(fcmToken);
 }
 
-Future<void> setupInteractedMessage() async {
-  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage != null) {
-    _handleMessage(initialMessage);
-  }
-  FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-}
+class MyApp extends StatefulWidget{
 
-void _handleMessage(RemoteMessage message) {
-  //앱 실행시
-}
-
-class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    //FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler);
+    setupInteractedMessage();
+  }
+
+  Future<void> setupInteractedMessage() async {
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+
+    }
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    print('message');
+    //앱 실행시
+  }
 
   @override
   Widget build(BuildContext context) {

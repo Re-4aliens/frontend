@@ -12,12 +12,12 @@ FlutterLocalNotificationsPlugin();
 
 class FirebaseAPIs {
   final _firebaseMessaging = FirebaseMessaging.instance;
-/*
+
   /// 상단 알림을 위해 AndroidNotificationChannel 생성
   static AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    importance: Importance.high,
+    importance: Importance.min,
   );
 
 
@@ -40,6 +40,8 @@ class FirebaseAPIs {
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
     await Firebase.initializeApp();
 
+    print('백그라운드 메세지 도착 ${message.data}');
+
     // 백그라운드에서 메세지 처리
     flutterLocalNotificationsPlugin.show(
         message.notification.hashCode,
@@ -51,8 +53,7 @@ class FirebaseAPIs {
             icon: message.notification!.android!.smallIcon,
           ),
         ));
-
   }
-  */
+
 }
 
