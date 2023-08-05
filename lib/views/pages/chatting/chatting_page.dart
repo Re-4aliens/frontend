@@ -142,10 +142,10 @@ class _ChattingPageState extends State<ChattingPage> {
     for (final message in unreadlist) {
       print(message.chatContent);
 
-      if(message.senderId != widget.memberDetails.memberId){
-        await SqlMessageRepository.create(message);
-      }
+      await SqlMessageRepository.create(message);
     }
+    setState(() {
+    });
   }
 
   void _getCreatedDate() async {
