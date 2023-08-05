@@ -113,17 +113,18 @@ class _ChattingPageState extends State<ChattingPage> {
             //단일 읽음 처리
             sendReadRequest(message);
           }
-          else if (message.data['chatContent'] == null && message.data['roomId'] != null){
-            print('Bulk Received FCM with: ${message.data} at ${DateTime.now()}' '${message.senderId}');
-
-            await SqlMessageRepository.bulkUpdate(widget.partner);
-            setState(() {});
-          }
           //상대방이 읽었다는 것에 대한 fcm인 경우
-          else {
+          else if (message.data['chatId'] != null && message.data['roomId'] != null){
             print('Received FCM with: ${message.data} at ${DateTime.now()}');
 
             await SqlMessageRepository.update(widget.partner, int.parse(message.data['chatId']));
+            setState(() {});
+          }
+          //상대방이 일괄 읽었다는 것에 대한 fcm인 경우
+          else {
+            print('Bulk Received FCM with: ${message.data} at ${DateTime.now()}' '${message.senderId}');
+
+            await SqlMessageRepository.bulkUpdate(widget.partner);
             setState(() {});
             }
           }
@@ -216,19 +217,23 @@ class _ChattingPageState extends State<ChattingPage> {
     print('단일 읽음처리');
     Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
-      'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
       //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
+      //'fcmToken': "es5mW8PaTlOVqSk0HQhfjg:APA91bHsLBa767QE2AtQ0G6d0XKjClMskrWkojRLl1705UhHC4gOhszoR6oaJ8LqLWrhdR6OW1UEfUFFUls6lPAhxC9IsPJ-b253mfN5B4lhGap79mqW2JWo8vzHEJFBYWG2CeP9MkJC",
       'chatId': message.data['chatId'],
       'roomId': message.data['roomId'],
     };
     await readChannel.sink.add(json.encode(request));
-    updateUi();
+    setState(() {
+
+    });
   }
 
   void sendBulkReadRequest() async {
     Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
-      'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+      //'fcmToken': "es5mW8PaTlOVqSk0HQhfjg:APA91bHsLBa767QE2AtQ0G6d0XKjClMskrWkojRLl1705UhHC4gOhszoR6oaJ8LqLWrhdR6OW1UEfUFFUls6lPAhxC9IsPJ-b253mfN5B4lhGap79mqW2JWo8vzHEJFBYWG2CeP9MkJC",
+      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
       //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
       'partnerId': widget.partner.memberId,
       'roomId': widget.partner.roomId,
