@@ -67,7 +67,6 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
             if(snapshot.connectionState == ConnectionState.waiting){
               //받아오는 동안
               return Container(
-                  margin: EdgeInsets.only(left: 75),
                   alignment: Alignment.center,
                   child: Image(image: AssetImage("assets/illustration/loading_01.gif")));
             }
