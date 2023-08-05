@@ -277,7 +277,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                       fontSize: isSmallScreen ? 12 : 14,
                                                     ),
                                                   ),
-                                                  Text(' ${args.applicant?.member?.age}세',
+                                                  Text(' ${args.applicant?.member?.age}',
                                                     style: TextStyle(
                                                       fontSize: isSmallScreen ? 18 : 20,
                                                       color: Colors.black,
@@ -541,7 +541,13 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
               child: Container(
                 margin: EdgeInsetsDirectional.symmetric(vertical: 20),
                 child:
-                SvgPicture.asset(
+                args.memberDetails!.profileImage != ""
+                    ? Image.network(
+                  '${args.memberDetails!.profileImage}',
+                  height: isSmallScreen ? 80 : 90,
+                  width: isSmallScreen ? 80 : 90,
+                )
+                    : SvgPicture.asset(
                   'assets/icon/icon_profile.svg',
                   height: isSmallScreen ? 100 : 120,
                   color: Color(0xffEBEBEB),
