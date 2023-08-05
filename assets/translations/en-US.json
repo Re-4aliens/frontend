@@ -180,6 +180,8 @@
   "setting-real":"Are you sure you want to withdraw?",
   "setting-withdrawaldone":"Withdrawal completed.",
   "setting-fail": "fail",
+  "setting-okay" : "Yes, I wanna withdraw",
+  "setting-cancel" : "No, I don't want",
   "setting-failwhy": "Withdrawal failed\ndue to password mismatch",
   "setting-delete5": "Chat history, matching records, and other data used so far cannot be recovered.",
   "setting-thank": "Thank you for using our service so far.\nThrough membership registration,\nyou can start again anytime!",
