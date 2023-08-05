@@ -155,12 +155,12 @@ class MyApp extends StatelessWidget {
         '/apply/done' : (context) => MatchingApplyDonePage(),
         '/info/my' : (conext) => MatchingInfoPage(),
         '/info/your' : (context) => MatchingPartnerInfoPage(),
-        '/edit' : (context) => MatchingEditPage(),
+        //'/edit' : (context) => MatchingEditPage(),
 
         //setting
         '/setting/edit' : (context) => SettingEditPage(),
-        '/setting/lan/edit':(context) => SettingLanEditPage(),
-        '/setting/MBTI/edit' : (context) => SettingMBTIEditPage(),
+        //'/setting/lan/edit':(context) => SettingLanEditPage(),
+        //'/setting/MBTI/edit' : (context) => SettingMBTIEditPage(),
         '/setting/notification' : (context) => SettingNotificationPage(),
         '/setting/terms': (context) => SettingTermsPage(),
         '/setting/terms/use' : (context) => SettingTermsUsePage(),
