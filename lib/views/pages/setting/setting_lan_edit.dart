@@ -35,11 +35,11 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
     }, //영어
     {
       'language': '中國語',
-      'value': 'JAPANESE',
+      'value': 'CHINESE',
     },//중국어
     {
       'language': '日本語',
-      'value': 'CHINESE',
+      'value': 'JAPANESE',
     }//일본어
   ];
   late String _firstPreferLanguage;

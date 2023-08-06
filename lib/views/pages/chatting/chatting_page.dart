@@ -652,12 +652,12 @@ class _ChattingPageState extends State<ChattingPage> {
                         child: Container(
                             decoration: BoxDecoration(
                                 color: Color(0xffFAFAFA),
-                                borderRadius: BorderRadius.circular(360),
+                                borderRadius: BorderRadius.circular(30),
                                 border: Border.all(
                                   color: Color(0xffC9C9C9),
                                   width: 1,
                                 )),
-                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            padding: EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
                               children: [
                                 Expanded(
