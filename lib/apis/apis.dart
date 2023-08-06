@@ -737,25 +737,34 @@ class APIs {
   static Future<bool> updateSelfIntroduction(String selfIntroduction) async {
     var url = 'http://13.125.205.59:8080/api/v1/member/self-introduction';
 
-    // 토큰 읽어오기
+    //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
 
     // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
-    // FormData 생성
-    var formData = http.MultipartRequest('PUT', Uri.parse(url));
-    formData.headers['Authorization'] = 'Bearer $jwtToken';
-    formData.fields['selfIntroduction'] = selfIntroduction;
+    // 업데이트할 MBTI 정보를 담은 Map 생성
+    var requestData = {
+      'selfIntroduction': selfIntroduction,
+    };
 
-    // 요청 전송
-    var response = await formData.send();
+    var response = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(requestData),
+    );
 
+    //성공
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      print(json.decode(utf8.decode(response.bodyBytes)));
       return true;
-    } else {
-      print(response.reasonPhrase);
+    }
+    //실패
+    else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
   }
