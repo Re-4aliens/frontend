@@ -43,6 +43,7 @@ class _SettingEditPageState extends State<SettingEditPage> {
   //  File imageFile = File(memberDetails['profileImage']);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: CustomAppBar(appBar: AppBar(),backgroundColor: Colors.transparent, title: '프로필 변경하기', infookay: false, infocontent: '',),
       body: Column(

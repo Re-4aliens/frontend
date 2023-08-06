@@ -151,6 +151,15 @@ class _SignUpProfileState extends State<SignUpProfile> {
                 textAlign: TextAlign.center,
               ),
             ),
+            Center(
+                child: Text(
+                  '${'signup-picnoti'.tr()}',
+                  style: TextStyle(
+                      fontSize: isSmallScreen ? 10 : 12,
+                      color: Color(0xff626262)),
+                  textAlign: TextAlign.center,
+                )
+            ),
             Expanded(child: SizedBox()),
             SizedBox(height: MediaQuery.of(context).size.height * 0.025),
             Button(

@@ -63,6 +63,7 @@ class _SignUpPasswordState extends State<SignUpPassword>{
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
       backgroundColor: Colors.white,
+
       appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.white, infookay: false, infocontent: '',),
       body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
@@ -71,11 +72,12 @@ class _SignUpPasswordState extends State<SignUpPassword>{
           children: [
             Text('${'signup-pwd1'.tr()}\n${'signup-pwd2'.tr()}',
               style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            Expanded(child: SizedBox()),
              Form(
                key: _formKey,
                child: TextFormField(
-
+                 obscureText: true,
+                 obscuringCharacter: '*',
                  onChanged: (value) {
                    _CheckValidate(value);
                  },
@@ -90,7 +92,8 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                    ),
                ),
             Text(constraintsText, style: TextStyle(fontSize: isSmallScreen?12:14, color: Color(0xffB8B8B8)),),
-            Expanded(child: SizedBox()),
+            Expanded(flex: 8,child: SizedBox()),
+
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -173,13 +176,14 @@ class _SignUpPasswordState extends State<SignUpPassword>{
         constraintsText = "${'signup-pwd4'.tr()}";
       });
     } else {
-      if (value.length > 9){
+      String pattern = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{10,16}$';
+      RegExp regExp = new RegExp(pattern);
+      if (regExp.hasMatch(value)) {
         setState(() {
           constraintsText = "";
           _isButtonEnabled = true;
         });
-      }
-      else {
+      } else {
         setState(() {
           constraintsText = "${'signup-pwd4'.tr()}";
           _isButtonEnabled = false;
@@ -195,8 +199,7 @@ class CheckValidate {
       focusNode.requestFocus();
       return '비밀번호를 입력하세요.';
     } else {
-      String pattern = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{10,16}$';
-      RegExp regExp = new RegExp(pattern);
+      String pattern = r'^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?~^<>,.&+=])[A-Za-z\d$@$!%*#?~^<>,.&+=]{10,16}$';      RegExp regExp = new RegExp(pattern);
       if (!regExp.hasMatch(value)) {
         focusNode.requestFocus();
         return '';

@@ -35,7 +35,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
+      //resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         appBar: AppBar(),
         title: '',
@@ -47,8 +47,8 @@ class _SignUpEmailState extends State<SignUpEmail> {
         padding: EdgeInsets.only(
             right: 20,
             left: 20,
-            top: MediaQuery.of(context).size.height * 0.06,
-            bottom: MediaQuery.of(context).size.height * 0.06),
+            top: MediaQuery.of(context).size.height * 0.05,
+            bottom: MediaQuery.of(context).size.height * 0.05),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -64,7 +64,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
               style: TextStyle(
                   fontSize: isSmallScreen ? 12 : 14, color: Color(0xff888888)),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.022),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             Form(
               key: _formKey,
               child: Row(
