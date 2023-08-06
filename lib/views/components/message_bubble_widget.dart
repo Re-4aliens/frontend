@@ -181,21 +181,19 @@ class MessageBubble extends StatelessWidget {
               child: Container(
                 width: 260,
                 height: 195,
-                padding: EdgeInsets.only(left: 28),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     boxShadow: [
                       BoxShadow(color: Color(0xff7898FF).withOpacity(0.25)),
                       BoxShadow(
                         color: Colors.white,
-                        offset: Offset(-5, -5),
+                        offset: Offset(0, -5),
                         blurRadius: 10,
                       )
                     ]),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    //TODO 이미지 교체
                     Container(
                       height: 90,
                       padding: EdgeInsets.only(top: 10),
@@ -206,6 +204,7 @@ class MessageBubble extends StatelessWidget {
                     SizedBox(height: 10,),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
                           width: 90,

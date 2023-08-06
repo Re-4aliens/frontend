@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/countries.dart';
+import 'package:aliens/models/partner_model.dart';
 import 'package:dash_flags/dash_flags.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -145,33 +146,17 @@ class _MatchingListPageState extends State<MatchingListPage> {
                           child: ElevatedButton(
                             onPressed: () {
                               if (selectedIndex != -1) {
-                                /*
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ChattingPage(
-                                          applicant:
-                                              widget.screenArguments.applicant,
-                                          partner: widget.screenArguments
-                                              .partners![selectedIndex],
-                                        memberDetails: widget.screenArguments.memberDetails,
-                                        // 수정
-                                        chatRoom: ChatRoom(
-
-                                        ),
+                                        applicant:
+                                        widget.screenArguments.applicant,
+                                        partner: widget.screenArguments
+                                            .partners![selectedIndex],
+                                        memberDetails: widget.screenArguments.memberDetails!,
                                       )),
                                 );
-
-                                 */
-
-/*
-                                //스택 비우고
-                                Navigator.of(context)
-                                    .pushNamedAndRemoveUntil('/main', (Route<dynamic> route) => false
-                                );
-                                //채팅 페이지를 push
-                                Navigator.pushNamed(context, '/chat', arguments: widget.partners['partners'][selectedIndex]);
-                        */
                               }
                             },
                             child: Text(
@@ -204,7 +189,7 @@ class _MatchingListPageState extends State<MatchingListPage> {
 }
 
 class MatchingList extends StatefulWidget {
-  final dynamic partner;
+  final Partner partner;
   final VoidCallback onPressed;
   final bool isClicked;
 
@@ -341,7 +326,7 @@ class _MatchingListState extends State<MatchingList> {
                                                         const EdgeInsets.all(
                                                             15),
                                                     child: Text(
-                                                      '안녕하세요! 경영학과 23학번 입니다!',
+                                                      '${widget.partner.selfIntroduction}',
                                                       style: TextStyle(
                                                         color:
                                                             Color(0xff888888),
@@ -435,13 +420,11 @@ class _MatchingListState extends State<MatchingList> {
                                                             shape:
                                                                 BoxShape.circle,
                                                             color: Colors.white,
-                                                            image: DecorationImage(
-                                                                fit:
-                                                                    BoxFit.fill,
-                                                                image: NetworkImage(
-                                                                    widget
-                                                                        .partner
-                                                                        .profileImage!)),
+                                                                image: DecorationImage(
+                                                                  image: NetworkImage(
+                                                                      widget.partner.profileImage!
+                                                                  )
+                                                                )
                                                           ),
                                                           padding:
                                                               EdgeInsets.all(5),
@@ -478,10 +461,26 @@ class _MatchingListState extends State<MatchingList> {
                                     ),
                                   ));
                         },
-                        child: SvgPicture.asset(
+                        child: widget.partner.profileImage == null ? SvgPicture.asset(
                           'assets/icon/icon_profile.svg',
                           width: 50,
                           color: Color(0xffEBEBEB),
+                        ) : Container(
+                          width: 50,
+                          height: 50,
+                          decoration:
+                          BoxDecoration(
+                            shape:
+                            BoxShape.circle,
+                            color: Colors.white,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  widget.partner.profileImage!
+                              )
+                            )
+                          ),
+                          padding:
+                          EdgeInsets.all(5),
                         ),
                       ),
                       Expanded(

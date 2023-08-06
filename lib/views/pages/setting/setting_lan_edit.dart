@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:aliens/mockdatas/mockdata_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,20 +13,57 @@ import '../../../models/screenArgument.dart';
 import '../../components/button.dart';
 
 class SettingLanEditPage extends StatefulWidget {
-  const SettingLanEditPage({super.key});
+
+  const SettingLanEditPage({super.key, required this.screenArguments, required this.isKorean});
+  final ScreenArguments? screenArguments;
+  final bool isKorean;
 
   @override
   State<SettingLanEditPage> createState() => _SettingLanEditPageState();
 }
 
 class _SettingLanEditPageState extends State<SettingLanEditPage> {
-  @override
-  String? _selectedLanguage = '한국어';
-  final _nationlist = ['한국어', 'English', '中國語', '日本語'];
-  var _firstPreferLanguage = '한국어';
-  var _secondPreferLanguage = 'English';
+  late String _selectedLanguage;
+  final List<Map<String, dynamic>> _nationlist = [
+    {
+      'language': '한국어',
+      'value': 'KOREAN',
+    }, //한국어
+    {
+      'language': 'English',
+      'value': 'ENGLISH',
+    }, //영어
+    {
+      'language': '中國語',
+      'value': 'JAPANESE',
+    },//중국어
+    {
+      'language': '日本語',
+      'value': 'CHINESE',
+    }//일본어
+  ];
+  late String _firstPreferLanguage;
+  late String _secondPreferLanguage;
 
-  ScreenArguments? args;
+  @override
+  void initState() {
+
+    _selectedLanguage = widget.isKorean ? '한국어' : 'English';
+
+    if(widget.screenArguments!.status != 'NOT_APPLIED'){
+
+      _firstPreferLanguage = _nationlist.firstWhere((element) =>
+      element['value'] == widget.screenArguments!.applicant!.preferLanguages!
+          .firstPreferLanguage!)['language'];
+
+      _secondPreferLanguage = _nationlist.firstWhere((element) => element['value'] == widget.screenArguments!.applicant!.preferLanguages!.secondPreferLanguage!)['language'];
+    }else{
+      _firstPreferLanguage = '한국어';
+      _secondPreferLanguage = 'English';
+    }
+
+  }
+
 
 /*  void initState() {
     super.initState();
@@ -55,7 +94,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
 
 
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isSmallScreen = screenWidth <= 600;
 
@@ -136,7 +175,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
             ),
 
             //신청이 안된 상태일때는 빈공간
-            args.status == 'NOT_APPLIED'
+            widget.screenArguments!.status != 'PENDING'
                 ? SizedBox(child: Container(),)
                 : Container(
               child: Column(
@@ -164,19 +203,20 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                                 ),
                                 Container(
                                   width: 110,
+
                                   child: DropdownButton(
                                       isExpanded: true,
+
                                       items: _nationlist.map((value){
                                         return DropdownMenuItem(
-                                            child: Text(value,
+                                            child: Text(value['language'],
                                               style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
-                                            value: value);
+                                            value: value['language']);
                                       }).toList(),
                                       value: _firstPreferLanguage,
                                       onChanged: (value){
-                                        print(value);
                                         setState(() {
-                                          _firstPreferLanguage = value!;
+                                          _firstPreferLanguage = value.toString();
                                         });}
                                   ),
                                 ),
@@ -204,15 +244,15 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                             isExpanded: true,
                             items: _nationlist.map((value){
                               return DropdownMenuItem(
-                                  child: Text(value,
+                                  child: Text(value['language'],
                                     style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
-                                  value: value);
+                                  value: value['language']);
                             }).toList(),
                             value: _secondPreferLanguage,
                             onChanged: (value){
                               print(value);
                               setState(() {
-                                _secondPreferLanguage = value!;
+                                _secondPreferLanguage = value.toString();
                               });}
                         ),
                       ),
@@ -229,13 +269,33 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                 //수정
                   isEnabled: true,
                   child: Text('${'confirm'.tr()}'),
-                  onPressed: (){
-                    if (_selectedLanguage == '한국어') {
-                      EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
-                    } else if (_selectedLanguage == 'English') {
-                      EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
+                  onPressed: ()async{
+                    if(_firstPreferLanguage != _secondPreferLanguage){
+                      _firstPreferLanguage = _nationlist.firstWhere((element) => element['language'] == _firstPreferLanguage)['value'];
+                      _secondPreferLanguage = _nationlist.firstWhere((element) => element['language'] == _secondPreferLanguage)['value'];
+                      //펜딩일때만 수정
+                      if(widget.screenArguments!.status == 'PENDING'){
+                        if(await APIs.updatePreferLanguage(_firstPreferLanguage, _secondPreferLanguage)){
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/loading', (Route<dynamic> route) => false);
+                          if (_selectedLanguage == '한국어') {
+                            EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
+                          } else {
+                            EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
+                          }
+                        }
+                      }
+                      else {
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/loading', (Route<dynamic> route) => false);
+                        if (_selectedLanguage == '한국어') {
+                          EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
+                        } else if (_selectedLanguage == 'English') {
+                          EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
+                        }
+                      }
                     }
-                    Navigator.pop(context);
+
                   }),
             )
           ],

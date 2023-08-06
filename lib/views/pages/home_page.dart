@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -76,74 +77,91 @@ class _HomePageState extends State<HomePage> {
                     horizontal: 25,
                   ),
                   alignment: Alignment.centerLeft,
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '${'homepage-welcome'.tr()}\n',
-                        style: TextStyle(
-                            fontSize: 20, color: Color(0xff5A5A5A), height: 1),
+                  child: Column(
+                    children: [
+                      RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: '${'homepage-welcome'.tr()}\n',
+                            style: TextStyle(
+                                fontSize: 20, color: Color(0xff5A5A5A), height: 1),
+                          ),
+                          EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
+                          TextSpan(children: [
+                            TextSpan(
+                                text: '${'homepage-welcome1.1'.tr()}',
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    height: 1.5)),
+                            TextSpan(
+                                text: '${'homepage-welcome1.2'.tr()}\n',
+                                style: TextStyle(
+                                    fontSize: 24, color: Color(0xff5A5A5A))),
+                          ]) :
+                          TextSpan(children: [
+                            TextSpan(
+                                text: '${'homepage-welcome1.1'.tr()}',
+                                style: TextStyle(
+                                    fontSize: 24, color: Color(0xff5A5A5A))),
+                            TextSpan(
+                                text: '${'homepage-welcome1.2'.tr()}\n',
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    height: 1.5)),
+                          ]),
+                          TextSpan(
+                              text: '${'homepage-happy'.tr()}\n',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xff888888),
+                                  height: 2)),
+                          TextSpan(
+                              text: '${'homepage-positive1 '.tr()}',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xff888888),
+                                  height: 1.5)),
+                          TextSpan(
+                              text: '${'homepage-positive2'.tr()}'
+                              /*'${args.memberDetails?.mbti}'*/,
+                              style: TextStyle(
+                                  fontSize: 12, color: Color(0xff7898ff))),
+                          TextSpan(
+                              text: '${'homepage-positive3'.tr()}',
+                              style: TextStyle(
+                                  fontSize: 12, color: Color(0xff888888))),
+                          TextSpan(
+                              text: '${'homepage-positive4'.tr()}',
+                              style: TextStyle(
+                                  fontSize: 12, color: Color(0xff7898ff))),
+                          TextSpan(
+                              text: '${'homepage-positive5'.tr()}\n',
+                              style: TextStyle(
+                                  fontSize: 12, color: Color(0xff888888))),
+                          TextSpan(
+                            text: '${'homepage-more'.tr()}\n',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.black, height: 2.5),
+
+                              recognizer: new TapGestureRecognizer()..onTap = () {
+                                showDialog(context: context, builder: (context){
+                                  return InteractiveViewer(
+                                    child: Image.asset(
+                                        EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
+                                        'assets/character/${args.memberDetails!.mbti}_ko.PNG' :
+                                        'assets/character/${args.memberDetails!.mbti}_en.PNG'
+                                    ),
+                                  );
+                                });
+                              },
+                          )
+                        ]),
                       ),
-                      EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
-                      TextSpan(children: [
-                        TextSpan(
-                            text: '${'homepage-welcome1.1'.tr()}',
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                height: 1.5)),
-                        TextSpan(
-                            text: '${'homepage-welcome1.2'.tr()}\n',
-                            style: TextStyle(
-                                fontSize: 24, color: Color(0xff5A5A5A))),
-                      ]) :
-                      TextSpan(children: [
-                        TextSpan(
-                            text: '${'homepage-welcome1.1'.tr()}',
-                            style: TextStyle(
-                                fontSize: 24, color: Color(0xff5A5A5A))),
-                        TextSpan(
-                            text: '${'homepage-welcome1.2'.tr()}\n',
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                height: 1.5)),
-                      ]),
-                      TextSpan(
-                          text: '${'homepage-happy'.tr()}\n',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xff888888),
-                              height: 2)),
-                      TextSpan(
-                          text: '${'homepage-positive1'.tr()}',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xff888888),
-                              height: 1.5)),
-                      TextSpan(
-                          text: '${'homepage-positive2'.tr()}'
-                          /*'${args.memberDetails?.mbti}'*/,
-                          style: TextStyle(
-                              fontSize: 12, color: Color(0xff7898ff))),
-                      TextSpan(
-                          text: '${'homepage-positive3'.tr()}',
-                          style: TextStyle(
-                              fontSize: 12, color: Color(0xff888888))),
-                      TextSpan(
-                          text: '${'homepage-positive4'.tr()}',
-                          style: TextStyle(
-                              fontSize: 12, color: Color(0xff7898ff))),
-                      TextSpan(
-                          text: '${'homepage-positive5'.tr()}\n',
-                          style: TextStyle(
-                              fontSize: 12, color: Color(0xff888888))),
-                      TextSpan(
-                          text: '${'homepage-more'.tr()}\n',
-                          style: TextStyle(
-                              fontSize: 12, color: Colors.black, height: 2.5))
-                    ]),
+                    ],
                   ),
                 ),
               ),
@@ -287,20 +305,6 @@ class _HomePageState extends State<HomePage> {
               Container(),
           ],
         ),
-        actions: [
-          if (selectedIndex == 0)
-            IconButton(
-              onPressed: () {},
-              icon: SvgPicture.asset(
-                'assets/icon/icon_info.svg',
-                width: MediaQuery.of(context).size.width * 0.062,
-                height: MediaQuery.of(context).size.height * 0.029,
-                color: Color(0xff7898FF),
-              ),
-            )
-          else
-            Container(),
-        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
@@ -391,13 +395,13 @@ class _HomePageState extends State<HomePage> {
                       builder: (_) => Stack(
                             children: [
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 15 +
+                                top: MediaQuery.of(context).size.height / 13 +
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
                                   child: SvgPicture.asset('assets/character/handsdown1.svg',
-                                    height: isSmallScreen ? 160 : 230,
-                                    width: isSmallScreen ? 160 : 230,
+                                    height: isSmallScreen ? 190 : 260,
+                                    width: isSmallScreen ? 190 : 260,
                                   ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -498,9 +502,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 1, child: Container()),
+                                    Expanded(flex: 3, child: Container()),
                                     Expanded(
-                                        flex: 2,
+                                        flex: 7,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -558,13 +562,13 @@ class _HomePageState extends State<HomePage> {
                       builder: (_) => Stack(
                             children: [
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 15 +
+                                top: MediaQuery.of(context).size.height / 13 +
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
                                   child: SvgPicture.asset('assets/character/handsdown1.svg',
-                                    height: isSmallScreen ? 160 : 230,
-                                    width: isSmallScreen ? 160 : 230,
+                                    height: isSmallScreen ? 190 : 260,
+                                    width: isSmallScreen ? 190 : 260,
                                   ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -577,8 +581,8 @@ class _HomePageState extends State<HomePage> {
                                     35,
                                 left: 25,
                                 child: Container(
-                                  height: isSmallScreen ? 65 : 75,
-                                  width: isSmallScreen ? 275 : 320,
+                                  height: isSmallScreen ? 50 : 65,
+                                  width: isSmallScreen ? 270 : 320,
                                   child: RichText(
                                     textAlign: TextAlign.center,
                                     text: TextSpan(children: [
@@ -666,9 +670,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 1, child: Container()),
+                                    Expanded(flex: 3, child: Container()),
                                     Expanded(
-                                        flex: 2,
+                                        flex: 7,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -726,13 +730,13 @@ class _HomePageState extends State<HomePage> {
                       builder: (_) => Stack(
                             children: [
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 10 +
+                                top: MediaQuery.of(context).size.height / 15 +
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
                                   child: SvgPicture.asset('assets/character/handsdown1.svg',
-                                    height: isSmallScreen ? 160 : 230,
-                                    width: isSmallScreen ? 160 : 230,
+                                    height: isSmallScreen ? 190 : 260,
+                                    width: isSmallScreen ? 190 : 260,
                                   ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -835,9 +839,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 1, child: Container()),
+                                    Expanded(flex: 3, child: Container()),
                                     Expanded(
-                                        flex: 2,
+                                        flex: 7,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -890,8 +894,6 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ));
                 } else if (args.status == 'PENDING' && index == 1 && clicked) {
-                  print('매칭 상태 확인 ㄱ');
-                  APIs.matchingProfessData();
                   Navigator.pushNamed(context, '/state', arguments: args);
                 } else if (args.status == 'NOT_APPLIED' &&
                     index == 0 &&
@@ -1246,20 +1248,21 @@ class _HomePageState extends State<HomePage> {
                                 color: screenArguments.memberDetails.profileImage != ""
                                     ? Colors.white
                                     : Colors.transparent,
-                              shape: BoxShape.circle
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+
+                                image: screenArguments.memberDetails.profileImage != ""
+                                    ? NetworkImage(screenArguments.memberDetails.profileImage) : NetworkImage(''),
+                              )
                             ),
-                            child: screenArguments.memberDetails.profileImage != ""
-                                ? Image.network(
-                              screenArguments.memberDetails.profileImage,
-                              height: isSmallScreen ? 80 : 90,
-                              width: isSmallScreen ? 80 : 90,
-                            )
-                                : SvgPicture.asset(
+
+                            child: screenArguments.memberDetails.profileImage == ""
+                                ? SvgPicture.asset(
                               'assets/icon/icon_profile.svg',
                               color:Colors.white,
                               height: isSmallScreen?80:90,
                               width: isSmallScreen?80:90,
-                            ),
+                            ) : SizedBox(),
                           ),
                           Positioned(
                               bottom: 0,
@@ -1363,7 +1366,7 @@ class _HomePageState extends State<HomePage> {
                       return Container(
                           height: MediaQuery.of(context).size.height * 0.04,
                           child: buildProfileList(
-                              context, index - 1, screenArguments.memberDetails));
+                              context, index - 1, screenArguments));
                     }
                   },
                 ),
@@ -1418,7 +1421,7 @@ class _HomePageState extends State<HomePage> {
                 //authProvider.logout(context);
 
                 final fcmToken = await FirebaseMessaging.instance.getToken();
-                await APIs.logOut(context, fcmToken!);
+                await APIs.logOut(context);
               },
               child: Container(
                 decoration: BoxDecoration(

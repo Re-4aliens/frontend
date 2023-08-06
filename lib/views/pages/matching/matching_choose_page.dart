@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:aliens/apis/apis.dart';
@@ -17,6 +18,7 @@ class MatchingChoosePage extends StatefulWidget {
 class _MatchingChoosePageState extends State<MatchingChoosePage> {
   var selectedStack = -1;
   var selectedIndex = [-1, -1];
+  static final storage = FlutterSecureStorage();
 
   final List<Map<String, dynamic>> nationlist = [
     {
@@ -140,7 +142,43 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                 if (selectedIndex[0] != -1 &&
                                     selectedIndex[1] != -1) {
                                   //신청 요청
-                                  if(await APIs.applicantMatching(nationlist[selectedIndex[0]]['value'], nationlist[selectedIndex[1]]['value'])){
+                                  var success;
+                                  try {
+                                    success = await APIs.applicantMatching(nationlist[selectedIndex[0]]['value'], nationlist[selectedIndex[1]]['value']);
+                                  } catch (e) {
+                                    if(e == "AT-C-002"){
+                                      try{
+                                        await APIs.getAccessToken();
+                                      }catch (e){
+                                        if(e == "AT-C-005") {
+                                          //토큰 및 정보 삭제
+                                          await storage.delete(key: 'auth');
+                                          await storage.delete(key: 'token');
+                                          print('로그아웃, 정보 지움');
+
+                                          //스택 비우고 화면 이동
+                                          Navigator.of(context)
+                                              .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+                                          );
+                                        }else if(e == "AT-C-007"){
+                                          //토큰 및 정보 삭제
+                                          await APIs.logOut(context);
+                                        }
+                                        else{
+                                          success = await APIs.applicantMatching(nationlist[selectedIndex[0]]['value'], nationlist[selectedIndex[1]]['value']);
+                                        }
+                                      }
+                                    }
+                                    else if(e == "AT-C-007"){
+                                      //토큰 및 정보 삭제
+                                      await APIs.logOut(context);
+                                    }
+
+                                    else{
+                                      success = await APIs.applicantMatching(nationlist[selectedIndex[0]]['value'], nationlist[selectedIndex[1]]['value']);
+                                    }
+                                  }
+                                  if(success){
                                     //페이지 이동
                                     Navigator.pushNamed(context, '/apply/done', arguments: args);
                                   }else{

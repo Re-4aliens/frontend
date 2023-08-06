@@ -75,7 +75,7 @@ class _SettingEditPWDonePageState extends State<SettingEditPWDonePage> {
 
                           final fcmToken = await FirebaseMessaging.instance.getToken();
                           //로그아웃
-                          APIs.logOut(context, fcmToken!);
+                          APIs.logOut(context);
                         }),
                   )),
 

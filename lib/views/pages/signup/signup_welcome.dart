@@ -35,27 +35,20 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height:MediaQuery.of(context).size.height * 0.1),
-                Container(
-                    width: MediaQuery.of(context).size.width * 0.4,
-                    height: MediaQuery.of(context).size.height * 0.186,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle),
-                  child: SvgPicture.asset('assets/character/welcome.svg'),
-                ),
+                SizedBox(height:MediaQuery.of(context).size.height * 0.18),
                 Container(
                   child: SvgPicture.asset(
                     'assets/character/welcome.svg',
-                    width: MediaQuery.of(context).size.width * 0.22,
-                    height: MediaQuery.of(context).size.height * 0.10,
+                    height: MediaQuery.of(context).size.height * 0.15,
                   ),
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.036),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.06),
                 Text(
                   '${'signup-done1'.tr()}\n${'signup-done2'.tr()}',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
                 ),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 Text(
                   '${'signup-done3'.tr()}\n${'signup-done4'.tr()}',
                   textAlign: TextAlign.center,
@@ -81,7 +74,7 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                      */
                   },
                 ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                 /*
                 Container(
                   width: double.maxFinite,

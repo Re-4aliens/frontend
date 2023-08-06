@@ -50,21 +50,29 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
     Map<String, dynamic> chatSummary;
 
     try{
-      chatSummary = await APIs.getChatSummary();
+      chatSummary = await APIs.getChatSummary(context);
     } catch(e){
       await APIs.getAccessToken();
-      chatSummary = await APIs.getChatSummary();
+      chatSummary = await APIs.getChatSummary(context);
     }
 
     for (int i = 0; i < _chatRoomList.length; i++) {
-      for(int j = 0; j < _chatRoomList.length; j++){
-        if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
-          _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
-          _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
-          _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
-          break;
+      if(_chatRoomList[i].partner!.roomState == 'CLOSE'){
+        _chatRoomList[i].lastChatContent = 'chatting1'.tr();
+        _chatRoomList[i].lastChatTime = '기록 없음';
+        _chatRoomList[i].numberOfUnreadChat = 0;
+      }
+      else{
+        for(int j = 0; j < _chatRoomList.length; j++){
+          if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
+            _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
+            _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
+            _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
+            break;
+          }
         }
       }
+
     }
     _chatRoomList.sort((a, b) {
       if (a.lastChatTime == null && b.lastChatTime == null) {
@@ -83,24 +91,32 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
   _updateList() async {
     late Map<String, dynamic> chatSummary;
     try {
-      chatSummary = await APIs.getChatSummary();
+      chatSummary = await APIs.getChatSummary(context);
     } catch (e) {
       if(e == "AT-C-002"){
         await APIs.getAccessToken();
-        chatSummary = await APIs.getChatSummary();
+        chatSummary = await APIs.getChatSummary(context);
       }
     }
 
       setState(() {
         for (int i = 0; i < _chatRoomList.length; i++) {
-          for(int j = 0; j < _chatRoomList.length; j++){
-            if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
-              _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
-              _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
-              _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
-              break;
+          if(_chatRoomList[i].partner!.roomState == 'CLOSE'){
+            _chatRoomList[i].lastChatContent = 'chatting1'.tr();
+            _chatRoomList[i].lastChatTime = '기록 없음';
+            _chatRoomList[i].numberOfUnreadChat = 0;
+          }
+          else{
+            for(int j = 0; j < _chatRoomList.length; j++){
+              if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
+                _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
+                _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
+                _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
+                break;
+              }
             }
           }
+
         }
         _chatRoomList.sort((a, b) {
           if (a.lastChatTime == null && b.lastChatTime == null) {
@@ -129,11 +145,20 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting)
               return Container(
-                  margin: EdgeInsets.only(left: 75),
                   alignment: Alignment.center,
                   child: Image(
                       image: AssetImage(
                           "assets/illustration/loading_01.gif")));
+            else if(snapshot.data == null){
+              return Center(
+                child: Text('',
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff616161)
+                  ),textAlign: TextAlign.center,
+                ),
+              );
+            }
             else {
               return ListView.builder(
                   itemCount:snapshot.data!.length,
@@ -179,6 +204,12 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                     )),
           ).then((value) async {
             _updateList();
+            _messageStreamSubscription =
+                FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+                  print('채팅리스트에서 Received FCM with: ${message.data} at ${DateTime.now()}');
+                  _updateList();
+                }
+                );
           });
         },
         shape: RoundedRectangleBorder(
@@ -188,12 +219,24 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            widget.screenArguments.partners![index].profileImage == null ?
             Padding(
               padding: const EdgeInsets.only(right: 15),
               child: SvgPicture.asset(
                 'assets/icon/icon_profile.svg',
                 height: 50,
                 color: Color(0xff7898ff),
+              ),
+            ) : Container(
+              height: 50,
+              width: 50,
+              margin: const EdgeInsets.only(right: 15),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                image: DecorationImage(
+                  fit: BoxFit.fitHeight,
+                  image: NetworkImage(widget.screenArguments.partners![index].profileImage!)
+                )
               ),
             ),
             Expanded(

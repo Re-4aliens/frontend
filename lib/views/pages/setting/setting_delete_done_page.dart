@@ -83,7 +83,7 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                         onPressed: () async {
 
                           final fcmToken = await FirebaseMessaging.instance.getToken();
-                          await APIs.logOut(context, fcmToken!);
+                          await APIs.logOut(context);
                           Navigator.of(context)
                               .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
                           );

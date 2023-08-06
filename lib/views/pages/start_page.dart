@@ -31,7 +31,8 @@ class _StartPageState extends State<StartPage> {
 
   //storage로부터 읽을 모델
   dynamic userInfo = null;
-  dynamic token =null;
+  dynamic notification = null;
+  dynamic token = null;
 
 
   String selectedValue = 'English';
@@ -45,13 +46,15 @@ class _StartPageState extends State<StartPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //토큰 유효성 검사
       _isValid();
+      //알림 설정
+      _setNotification();
     });
 
   }
 
 
   _isValid() async {
-    userInfo = await storage.read(key: 'auth');
+    userInfo = await storage.read(key: 'token');
     //저장된 정보가 있다면
     if (userInfo != null){
       //토큰 저장 시간
@@ -60,14 +63,21 @@ class _StartPageState extends State<StartPage> {
       Duration diff = DateTime.now().difference(timestamp);
 
       print('지금 시간: ${DateTime.now()}\n토큰 저장 시간: ${timestamp}\n 차이: ${diff}');
-      //리프레시 토큰 기간(60s)이 지났다면
-      if(diff > Duration(days: 6)){
+      //리프레시 토큰 기간이 지났다면
+      if(diff >= Duration(days: 7)){
         //토큰 및 정보 지움
         //자동로그인 해제
         await storage.delete(key: 'auth');
         await storage.delete(key: 'token');
-      } else if (diff <= Duration(days: 6) && diff > Duration(minutes: 29)){
-        //액세스 토큰 기간(30s)이 지났다면
+
+      } else if(diff < Duration.zero){
+        print('시간 음수 오류');
+
+        //자동로그인 해제
+        await storage.delete(key: 'auth');
+        await storage.delete(key: 'token');
+      }else if (diff <= Duration(days: 6) && diff >= Duration(minutes: 30)){
+        //액세스 토큰 기간이 지났다면
         //액세스 토큰 재발급
         print('액세스 토큰 재발급');
 
@@ -80,6 +90,23 @@ class _StartPageState extends State<StartPage> {
     }else{
       //저장된 정보가 없다면
       print('로그인 필요');
+    }
+  }
+
+  _setNotification() async {
+    notification = await storage.read(key: 'notification');
+    //저장된 설정 정보가 있다면
+    if (notification != null){
+    }else{
+      //true로 설정
+      await storage.write(
+        key: 'notification',
+        value: jsonEncode({
+          'allNotification': true,
+          'matchingNotification': true,
+          'chatNotification': true,
+        }),
+      );
     }
   }
 

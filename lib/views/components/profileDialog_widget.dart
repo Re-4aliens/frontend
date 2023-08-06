@@ -1,10 +1,14 @@
+import 'package:dash_flags/dash_flags.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../models/countries.dart';
+import '../../models/partner_model.dart';
+
 class ProfileDialog extends StatefulWidget{
   const ProfileDialog({super.key, required this.partner});
-  final partner;
+  final Partner partner;
 
   @override
   State<StatefulWidget> createState() => _ProfileDialogState();
@@ -16,9 +20,13 @@ class _ProfileDialogState extends State<ProfileDialog>{
   @override
   Widget build(BuildContext context) {
 
-    var flagSrc = widget.partner.nationality.toString();
-    flagSrc = flagSrc.substring(flagSrc.indexOf(' ') + 1, flagSrc.length);
-
+    var flagSrc = '';
+    for (Map<String, String> country in countries) {
+      if (country['name'] == widget.partner.nationality.toString()) {
+        flagSrc = country['code']!;
+        break;
+      }
+    }
     return Center(
       child: Container(
         width: 340,
@@ -70,7 +78,7 @@ class _ProfileDialogState extends State<ProfileDialog>{
                       padding:
                       const EdgeInsets.all(15),
                       child: Text(
-                        '안녕하세요! 경영학과 23학번 입니다!',
+                        '${widget.partner.selfIntroduction}',
                         style: TextStyle(
                           color: Color(0xff888888),
                           fontSize: 16,
@@ -102,9 +110,15 @@ class _ProfileDialogState extends State<ProfileDialog>{
                             left: 0,
                             top: 0,
                             bottom: 0,
-                            child: SvgPicture.asset(
-                              'assets/flag/${flagSrc}.svg',
-                              width: 20,
+                            child:
+                            Center(
+                              child: Container(
+                                width: 21,
+                                height:14,
+                                child: CountryFlag(
+                                  country: Country.fromCode(flagSrc),
+                                ),
+                              ),
                             ),
                           ),
                         ],
@@ -124,7 +138,9 @@ class _ProfileDialogState extends State<ProfileDialog>{
                 children: [
                   Align(
                     alignment: Alignment.topCenter,
-                    child: Container(
+                    child:
+                        widget.partner.profileImage == null ?
+                    Container(
                       width: 100,
                       height: 100,
                       decoration: BoxDecoration(
@@ -137,7 +153,17 @@ class _ProfileDialogState extends State<ProfileDialog>{
                         'assets/icon/icon_profile.svg',
                         color: Color(0xffEBEBEB),
                       ),
-                    ),
+                    ) : Container(
+                          width: 100,
+                          height: 100,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(widget.partner.profileImage!)
+                            )
+                          ),
+                          padding: EdgeInsets.all(5),
+                        )
                   ),
                   Align(
                     alignment:
