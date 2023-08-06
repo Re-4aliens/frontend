@@ -234,7 +234,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                 image: DecorationImage(
-                  fit: BoxFit.fill,
+                  fit: BoxFit.fitHeight,
                   image: NetworkImage(widget.screenArguments.partners![index].profileImage!)
                 )
               ),

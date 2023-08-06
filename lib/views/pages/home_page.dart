@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Color(0xff888888),
                                   height: 2)),
                           TextSpan(
-                              text: '${'homepage-positive1'.tr()}',
+                              text: '${'homepage-positive1 '.tr()}',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff888888),
@@ -395,13 +395,13 @@ class _HomePageState extends State<HomePage> {
                       builder: (_) => Stack(
                             children: [
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 15 +
+                                top: MediaQuery.of(context).size.height / 13 +
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
                                   child: SvgPicture.asset('assets/character/handsdown1.svg',
-                                    height: isSmallScreen ? 160 : 230,
-                                    width: isSmallScreen ? 160 : 230,
+                                    height: isSmallScreen ? 190 : 260,
+                                    width: isSmallScreen ? 190 : 260,
                                   ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -502,9 +502,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 1, child: Container()),
+                                    Expanded(flex: 3, child: Container()),
                                     Expanded(
-                                        flex: 2,
+                                        flex: 7,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -562,13 +562,13 @@ class _HomePageState extends State<HomePage> {
                       builder: (_) => Stack(
                             children: [
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 15 +
+                                top: MediaQuery.of(context).size.height / 13 +
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
                                   child: SvgPicture.asset('assets/character/handsdown1.svg',
-                                    height: isSmallScreen ? 160 : 230,
-                                    width: isSmallScreen ? 160 : 230,
+                                    height: isSmallScreen ? 190 : 260,
+                                    width: isSmallScreen ? 190 : 260,
                                   ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -581,8 +581,8 @@ class _HomePageState extends State<HomePage> {
                                     35,
                                 left: 25,
                                 child: Container(
-                                  height: isSmallScreen ? 65 : 75,
-                                  width: isSmallScreen ? 275 : 320,
+                                  height: isSmallScreen ? 50 : 65,
+                                  width: isSmallScreen ? 270 : 320,
                                   child: RichText(
                                     textAlign: TextAlign.center,
                                     text: TextSpan(children: [
@@ -670,9 +670,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 1, child: Container()),
+                                    Expanded(flex: 3, child: Container()),
                                     Expanded(
-                                        flex: 2,
+                                        flex: 7,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -730,13 +730,13 @@ class _HomePageState extends State<HomePage> {
                       builder: (_) => Stack(
                             children: [
                               Positioned(
-                                top: MediaQuery.of(context).size.height / 10 +
+                                top: MediaQuery.of(context).size.height / 15 +
                                     AppBar().preferredSize.height,
                                 right: 0,
                                 child: Container(
                                   child: SvgPicture.asset('assets/character/handsdown1.svg',
-                                    height: isSmallScreen ? 160 : 230,
-                                    width: isSmallScreen ? 160 : 230,
+                                    height: isSmallScreen ? 190 : 260,
+                                    width: isSmallScreen ? 190 : 260,
                                   ),
                                   alignment: Alignment.center,
                                   decoration: BoxDecoration(
@@ -839,9 +839,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 1, child: Container()),
+                                    Expanded(flex: 3, child: Container()),
                                     Expanded(
-                                        flex: 2,
+                                        flex: 7,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
