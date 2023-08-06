@@ -290,6 +290,15 @@ class APIs {
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       return false;
     }
   }
@@ -363,6 +372,15 @@ class APIs {
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       throw Exception('요청 오류');
     }
   }
@@ -386,19 +404,26 @@ class APIs {
     );
     //success
     if (response.statusCode == 200) {
-      print('매칭 상태 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
       return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
+      print('매칭 상태 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
+
+
 
       //fail
     } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
         print('액세스 토큰 만료');
         throw 'AT-C-002';
       } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
         print('로그아웃된 토큰');
         throw 'AT-C-007';
+      }else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'MT-C-005'){
+        print('정보 없음');
+        return "NOT_APPLIED";
+      }else{
+
       }
-      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }
@@ -430,6 +455,15 @@ class APIs {
     } else {
       //오류 생기면 바디 확인
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       throw Exception('요청 오류');
     }
   }
@@ -463,6 +497,15 @@ class APIs {
     } else {
       //오류 생기면 바디 확인
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
 
       //임의로 넣어두겠습니다
       List<Partner> _partners = [
@@ -570,8 +613,24 @@ class APIs {
       _status = await APIs.getApplicantStatus();
     } catch (e) {
       if(e == "AT-C-002"){
-        await APIs.getAccessToken();
-        _status = await APIs.getApplicantStatus();
+        try{
+          await APIs.getAccessToken();
+        }catch (e){
+          if(e == "AT-C-005") {
+            //토큰 및 정보 삭제
+            await storage.delete(key: 'auth');
+            await storage.delete(key: 'token');
+            print('로그아웃, 정보 지움');
+
+            //스택 비우고 화면 이동
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+            );
+          }
+            else{
+            _status = await APIs.getApplicantStatus();
+          }
+          }
       }
       else if(e == "AT-C-007"){
         //토큰 및 정보 삭제
@@ -773,6 +832,15 @@ class APIs {
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       return false;
     }
   }
@@ -845,7 +913,7 @@ class APIs {
 
    */
 
-  static Future<List<MessageModel>> getMessages(roomId) async {
+  static Future<List<MessageModel>> getMessages(roomId, context) async {
     var _url =
         'http://3.34.2.246:8081/api/v1/chat/${roomId}'; //mocksever
 
@@ -862,7 +930,21 @@ class APIs {
     } catch (e) {
       print(e);
       if(e == "AT-C-002"){
-        await APIs.getAccessToken();
+        try{
+          await APIs.getAccessToken();
+        }catch (e) {
+          if (e == "AT-C-005") {
+            //토큰 및 정보 삭제
+            await storage.delete(key: 'auth');
+            await storage.delete(key: 'token');
+            print('로그아웃, 정보 지움');
+
+            //스택 비우고 화면 이동
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+            );
+          }
+        }
         chatToken = await APIs.getChatToken();
       }
     }
@@ -915,11 +997,17 @@ class APIs {
 
       //fail
     } else {
+
+      print(json.decode(utf8.decode(response.bodyBytes)));
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
         print('액세스 토큰 만료');
         throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
       }
-      print(json.decode(utf8.decode(response.bodyBytes)));
 
       throw Exception('요청 오류');
     }
@@ -980,8 +1068,13 @@ class APIs {
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-        print('토큰 만료');
-        throw Exception('AT-C-002');
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
       }
       throw Exception('요청 오류');
     }
@@ -1014,6 +1107,15 @@ static Future<String> matchingProfessData() async{
 
   } else {
     print(json.decode(utf8.decode(response.bodyBytes)));
+    if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+      print('액세스 토큰 만료');
+      throw 'AT-C-002';
+    } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+      print('로그아웃된 토큰');
+      throw 'AT-C-007';
+    }else{
+
+    }
     throw Exception('요청 오류');
   }
 }
@@ -1048,6 +1150,15 @@ static Future<String> matchingProfessData() async{
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
     }
   }
 
@@ -1122,8 +1233,13 @@ static Future<String> matchingProfessData() async{
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-        print('액세스 토큰 만료4');
+        print('액세스 토큰 만료');
         throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
       }
       return false;
     }
@@ -1161,6 +1277,15 @@ static Future<String> matchingProfessData() async{
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       return false;
     }
   }
@@ -1196,6 +1321,15 @@ static Future<String> matchingProfessData() async{
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       return false;
     }
   }

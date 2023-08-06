@@ -76,74 +76,105 @@ class _HomePageState extends State<HomePage> {
                     horizontal: 25,
                   ),
                   alignment: Alignment.centerLeft,
-                  child: RichText(
-                    text: TextSpan(children: [
-                      TextSpan(
-                        text: '${'homepage-welcome'.tr()}\n',
-                        style: TextStyle(
-                            fontSize: 20, color: Color(0xff5A5A5A), height: 1),
+                  child: Column(
+                    children: [
+                      RichText(
+                        text: TextSpan(children: [
+                          TextSpan(
+                            text: '${'homepage-welcome'.tr()}\n',
+                            style: TextStyle(
+                                fontSize: 20, color: Color(0xff5A5A5A), height: 1),
+                          ),
+                          EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
+                          TextSpan(children: [
+                            TextSpan(
+                                text: '${'homepage-welcome1.1'.tr()}',
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    height: 1.5)),
+                            TextSpan(
+                                text: '${'homepage-welcome1.2'.tr()}\n',
+                                style: TextStyle(
+                                    fontSize: 24, color: Color(0xff5A5A5A))),
+                          ]) :
+                          TextSpan(children: [
+                            TextSpan(
+                                text: '${'homepage-welcome1.1'.tr()}',
+                                style: TextStyle(
+                                    fontSize: 24, color: Color(0xff5A5A5A))),
+                            TextSpan(
+                                text: '${'homepage-welcome1.2'.tr()}\n',
+                                style: TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black,
+                                    height: 1.5)),
+                          ]),
+                          TextSpan(
+                              text: '${'homepage-happy'.tr()}\n',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xff888888),
+                                  height: 2)),
+                          TextSpan(
+                              text: '${'homepage-positive1'.tr()}',
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color(0xff888888),
+                                  height: 1.5)),
+                          TextSpan(
+                              text: '${'homepage-positive2'.tr()}'
+                              /*'${args.memberDetails?.mbti}'*/,
+                              style: TextStyle(
+                                  fontSize: 12, color: Color(0xff7898ff))),
+                          TextSpan(
+                              text: '${'homepage-positive3'.tr()}',
+                              style: TextStyle(
+                                  fontSize: 12, color: Color(0xff888888))),
+                          TextSpan(
+                              text: '${'homepage-positive4'.tr()}',
+                              style: TextStyle(
+                                  fontSize: 12, color: Color(0xff7898ff))),
+                          TextSpan(
+                              text: '${'homepage-positive5'.tr()}\n',
+                              style: TextStyle(
+                                  fontSize: 12, color: Color(0xff888888))),
+                        ]),
                       ),
-                      EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
-                      TextSpan(children: [
-                        TextSpan(
-                            text: '${'homepage-welcome1.1'.tr()}',
+                      InkWell(
+                        onTap: (){
+                          showDialog(context: context, builder: (context){
+                            return Image.asset(
+                                'assets/character/mbti.png'
+                            );
+                            /*
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage('assets/character/mbti.png'),
+                                        fit: BoxFit.fitHeight
+                                      ),
+                                    color: Colors.white
+                                  ),
+                                  height: 250,
+                                ),
+                              ],
+                            );
+
+                             */
+                          });
+                        },
+                        child: Text('${'homepage-more'.tr()}\n',
                             style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                height: 1.5)),
-                        TextSpan(
-                            text: '${'homepage-welcome1.2'.tr()}\n',
-                            style: TextStyle(
-                                fontSize: 24, color: Color(0xff5A5A5A))),
-                      ]) :
-                      TextSpan(children: [
-                        TextSpan(
-                            text: '${'homepage-welcome1.1'.tr()}',
-                            style: TextStyle(
-                                fontSize: 24, color: Color(0xff5A5A5A))),
-                        TextSpan(
-                            text: '${'homepage-welcome1.2'.tr()}\n',
-                            style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                                height: 1.5)),
-                      ]),
-                      TextSpan(
-                          text: '${'homepage-happy'.tr()}\n',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xff888888),
-                              height: 2)),
-                      TextSpan(
-                          text: '${'homepage-positive1'.tr()}',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: Color(0xff888888),
-                              height: 1.5)),
-                      TextSpan(
-                          text: '${'homepage-positive2'.tr()}'
-                          /*'${args.memberDetails?.mbti}'*/,
-                          style: TextStyle(
-                              fontSize: 12, color: Color(0xff7898ff))),
-                      TextSpan(
-                          text: '${'homepage-positive3'.tr()}',
-                          style: TextStyle(
-                              fontSize: 12, color: Color(0xff888888))),
-                      TextSpan(
-                          text: '${'homepage-positive4'.tr()}',
-                          style: TextStyle(
-                              fontSize: 12, color: Color(0xff7898ff))),
-                      TextSpan(
-                          text: '${'homepage-positive5'.tr()}\n',
-                          style: TextStyle(
-                              fontSize: 12, color: Color(0xff888888))),
-                      TextSpan(
-                          text: '${'homepage-more'.tr()}\n',
-                          style: TextStyle(
-                              fontSize: 12, color: Colors.black, height: 2.5))
-                    ]),
+                                fontSize: 12, color: Colors.black, height: 2.5)),
+                      )
+                    ],
                   ),
                 ),
               ),
