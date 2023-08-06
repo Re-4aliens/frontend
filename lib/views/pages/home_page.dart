@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -141,39 +142,25 @@ class _HomePageState extends State<HomePage> {
                               text: '${'homepage-positive5'.tr()}\n',
                               style: TextStyle(
                                   fontSize: 12, color: Color(0xff888888))),
+                          TextSpan(
+                            text: '${'homepage-more'.tr()}\n',
+                              style: TextStyle(
+                                  fontSize: 12, color: Colors.black, height: 2.5),
+
+                              recognizer: new TapGestureRecognizer()..onTap = () {
+                                showDialog(context: context, builder: (context){
+                                  return InteractiveViewer(
+                                    child: Image.asset(
+                                        EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
+                                        'assets/character/${args.memberDetails!.mbti}_ko.PNG' :
+                                        'assets/character/${args.memberDetails!.mbti}_en.PNG'
+                                    ),
+                                  );
+                                });
+                              },
+                          )
                         ]),
                       ),
-                      InkWell(
-                        onTap: (){
-                          showDialog(context: context, builder: (context){
-                            return Image.asset(
-                                'assets/character/mbti.png'
-                            );
-                            /*
-                            return Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: AssetImage('assets/character/mbti.png'),
-                                        fit: BoxFit.fitHeight
-                                      ),
-                                    color: Colors.white
-                                  ),
-                                  height: 250,
-                                ),
-                              ],
-                            );
-
-                             */
-                          });
-                        },
-                        child: Text('${'homepage-more'.tr()}\n',
-                            style: TextStyle(
-                                fontSize: 12, color: Colors.black, height: 2.5)),
-                      )
                     ],
                   ),
                 ),
