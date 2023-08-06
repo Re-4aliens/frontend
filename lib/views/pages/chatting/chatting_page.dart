@@ -724,7 +724,7 @@ class _ChattingPageState extends State<ChattingPage> {
                         ),
                       ),
                       Text(
-                        '밸런스게임\n제안하기',
+                        'chatting4'.tr(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color(0xff888888),
@@ -739,7 +739,7 @@ class _ChattingPageState extends State<ChattingPage> {
           ]) : Container(
             alignment: Alignment.center,
             color: Color(0xffF5F7FF),
-            child: Text('대화할 수 없는 상대입니다!', style: TextStyle(color: Color(0xff888888)),),
+            child: Text('chatting2'.tr(), style: TextStyle(color: Color(0xff888888)),),
           )
         ),
       ),
@@ -765,7 +765,7 @@ class _ChattingPageState extends State<ChattingPage> {
           Padding(
             padding: const EdgeInsets.only(bottom: 10.0),
             child: Text(
-              "새로운 대화를 시작합니다.",
+              'chatting3'.tr(),
               style: TextStyle(color: Color(0xff717171), fontSize: 12),
             ),
           )

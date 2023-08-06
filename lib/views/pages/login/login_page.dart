@@ -176,17 +176,17 @@ class _LoginState extends State<Login> {
                                     builder: (BuildContext context) =>
                                         CupertinoAlertDialog(
                                           title: Text(
-                                            '로그인 실패',
+                                            'login4'.tr(),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          content: Text('아이디 및 비밀번호를 확인해주세요!'),
+                                          content: Text('login5'.tr()),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () =>
                                                   Navigator.of(context).pop(),
-                                              child: const Text('확인',
+                                              child: Text('${'confirm'.tr()}',
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                   )),
@@ -349,17 +349,17 @@ class _LoginState extends State<Login> {
                                     builder: (BuildContext context) =>
                                         CupertinoAlertDialog(
                                           title: Text(
-                                            '로그인 실패',
+                                            'login4'.tr(),
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          content: Text('아이디 및 비밀번호를 확인해주세요!'),
+                                          content: Text('login5'.tr()),
                                           actions: <Widget>[
                                             TextButton(
                                               onPressed: () =>
                                                   Navigator.of(context).pop(),
-                                              child: const Text('확인',
+                                              child: Text('confirm'.tr(),
                                                   style: TextStyle(
                                                     color: Colors.black,
                                                   )),
