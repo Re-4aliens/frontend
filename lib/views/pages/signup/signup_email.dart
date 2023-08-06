@@ -35,7 +35,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
 
     return Scaffold(
       backgroundColor: Colors.white,
-      resizeToAvoidBottomInset: false,
+      //resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         appBar: AppBar(),
         title: '',
@@ -47,8 +47,8 @@ class _SignUpEmailState extends State<SignUpEmail> {
         padding: EdgeInsets.only(
             right: 20,
             left: 20,
-            top: MediaQuery.of(context).size.height * 0.06,
-            bottom: MediaQuery.of(context).size.height * 0.06),
+            top: MediaQuery.of(context).size.height * 0.05,
+            bottom: MediaQuery.of(context).size.height * 0.05),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -64,7 +64,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
               style: TextStyle(
                   fontSize: isSmallScreen ? 12 : 14, color: Color(0xff888888)),
             ),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.022),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.01),
             Form(
               key: _formKey,
               child: Row(
@@ -113,7 +113,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                   builder: (BuildContext context) {
                                     return CupertinoAlertDialog(
                                       title: Text(
-                                        '이메일 중복확인',
+                                        '${'signup-email14'.tr()}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -125,7 +125,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                               CrossAxisAlignment.center,
                                           children: [
                                             Text(
-                                              '이미 존재하는 이메일입니다.\n다른 이메일로 입력해주세요:)',
+                                              '${'signup-email15'.tr()}',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                   fontSize:
@@ -154,7 +154,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                   builder: (BuildContext context) {
                                     return CupertinoAlertDialog(
                                       title: Text(
-                                        '이메일 중복확인',
+                                        '${'signup-email14'.tr()}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -170,7 +170,7 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                                   const EdgeInsets.symmetric(
                                                       vertical: 8.0),
                                               child: Text(
-                                                '사용 가능한 이메일입니다.\n계속해서 회원가입 진행을 완료해주세요:)',
+                                                '${'signup-email16'.tr()}',
                                                 textAlign: TextAlign.center,
                                                 style: TextStyle(
                                                     fontSize: isSmallScreen

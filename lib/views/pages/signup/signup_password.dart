@@ -65,14 +65,14 @@ class _SignUpPasswordState extends State<SignUpPassword>{
       backgroundColor: Colors.white,
 
       appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.white, infookay: false, infocontent: '',),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('${'signup-pwd1'.tr()}\n${'signup-pwd2'.tr()}',
               style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+            Expanded(child: SizedBox()),
              Form(
                key: _formKey,
                child: TextFormField(
@@ -92,8 +92,8 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                    ),
                ),
             Text(constraintsText, style: TextStyle(fontSize: isSmallScreen?12:14, color: Color(0xffB8B8B8)),),
-            //Expanded(child: SizedBox()),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+            Expanded(flex: 8,child: SizedBox()),
+
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [

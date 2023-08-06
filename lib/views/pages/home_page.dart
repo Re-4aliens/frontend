@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
           Column(
             children: [
               Expanded(
-                flex: 3,
+                flex: isSmallScreen? 4 : 3,
                 child: Container(
                   padding: EdgeInsets.symmetric(
                     horizontal: 25,
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Color(0xff888888),
                                   height: 2)),
                           TextSpan(
-                              text: '${'homepage-positive1'.tr()}',
+                              text: '${'homepage-positive1'.tr()} ',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff888888),
@@ -166,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Expanded(
-                  flex: 7,
+                  flex: isSmallScreen? 8 : 7,
                   child: Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -502,9 +502,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 3, child: Container()),
+                                    Expanded(flex: isSmallScreen? 4 : 3, child: Container()),
                                     Expanded(
-                                        flex: 7,
+                                        flex: isSmallScreen? 8 : 7,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -670,9 +670,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 3, child: Container()),
+                                    Expanded(flex: isSmallScreen? 4 : 3, child: Container()),
                                     Expanded(
-                                        flex: 7,
+                                        flex: isSmallScreen? 8 : 7,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,
@@ -839,9 +839,9 @@ class _HomePageState extends State<HomePage> {
                               Positioned(
                                 child: Column(
                                   children: [
-                                    Expanded(flex: 3, child: Container()),
+                                    Expanded(flex: isSmallScreen? 4 : 3, child: Container()),
                                     Expanded(
-                                        flex: 7,
+                                        flex: isSmallScreen? 8 : 7,
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
                                             vertical: isSmallScreen ? 30 : 40,

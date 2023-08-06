@@ -735,7 +735,7 @@ class APIs {
   자기소개 수정
   */
   static Future<bool> updateSelfIntroduction(String selfIntroduction) async {
-    var url = 'http://13.125.205.59:8080/api/v1/member/self-introduction';
+    var url = 'http://3.34.2.246:8080/api/v1/member/self-introduction';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1222,10 +1222,10 @@ static Future<String> matchingProfessData() async{
         );
       }
       else{
-        if(matchingNotification != _notification){
-          allNotification = false;
-        }else if(matchingNotification == _notification){
+        if(matchingNotification == _notification && _notification == true){
           allNotification = true;
+        }else {
+          allNotification = false;
         }
         await storage.write(
           key: 'notification',
