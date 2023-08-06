@@ -469,7 +469,7 @@ class _ChattingPageState extends State<ChattingPage> {
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                            fit: BoxFit.fitHeight,
+                            fit: BoxFit.fill,
                             image: NetworkImage(widget.partner.profileImage!)
                         )
                     ),

@@ -91,7 +91,7 @@ class _SignUpProfileState extends State<SignUpProfile> {
                               decoration: BoxDecoration(
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
-                                    fit: BoxFit.fitHeight,
+                                    fit: BoxFit.fill,
                                       image: FileImage(_profileImage!))),
                             )),
                   Positioned(
