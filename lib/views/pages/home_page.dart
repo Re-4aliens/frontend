@@ -1403,7 +1403,7 @@ class _HomePageState extends State<HomePage> {
                 //authProvider.logout(context);
 
                 final fcmToken = await FirebaseMessaging.instance.getToken();
-                await APIs.logOut(context, fcmToken!);
+                await APIs.logOut(context);
               },
               child: Container(
                 decoration: BoxDecoration(

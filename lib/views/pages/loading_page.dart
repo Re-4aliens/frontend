@@ -20,7 +20,7 @@ class _LoadingPageState extends State<LoadingPage> {
       body: Center(
         child:
             FutureBuilder(
-              future: APIs.getMatchingData(),
+              future: APIs.getMatchingData(context),
                 builder: (BuildContext context, AsyncSnapshot snapshot){
                   if (snapshot.hasData == false) {
                     //받아오는 동안

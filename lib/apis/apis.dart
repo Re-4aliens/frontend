@@ -184,7 +184,7 @@ class APIs {
   로그아웃
 
    */
-  static Future<void> logOut(BuildContext context, String fcmToken) async {
+  static Future<void> logOut(BuildContext context) async {
     print('로그아웃 시도');
     const url =
         'http://3.34.2.246:8080/api/v1/auth/logout'; //mocksever
@@ -197,12 +197,13 @@ class APIs {
     refreshToken = json.decode(refreshToken!)['data']['refreshToken'];
 
 
+    final fcmToken = await FirebaseMessaging.instance.getToken();
     var response = await http.delete(Uri.parse(url),
       headers: {
         'Authorization': 'Bearer $accessToken',
         'Content-Type': 'application/json',
         'RefreshToken': '$refreshToken',
-        "FcmToken": fcmToken
+        "FcmToken": '${fcmToken}'
       },
     );
 
@@ -222,7 +223,7 @@ class APIs {
 
       //fail
     } else {
-      print(response.body);
+      print(json.decode(utf8.decode(response.bodyBytes)));
     }
   }
 
@@ -393,6 +394,9 @@ class APIs {
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
         print('액세스 토큰 만료');
         throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
       }
       print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
@@ -527,34 +531,34 @@ class APIs {
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      //만료되지 않았다면
+      //발급받은 새로운 accesstoken을 저장
+      await storage.write(
+        key: 'token',
+        value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))),
+      );
+      //Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
+      return true;
 
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       //refresh token이 만료되었다면 재로그인
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-005'){
-        print('리프레시 토큰이 만료되어 자동 로그인 기간이 지났습니다. 다시 로그인해주세요.');
         //start page로 이동
-        return false;
+        throw 'AT-C-005';
       }else if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-006'){
         //start page로 이동
         return false;
       }else {
-        //만료되지 않았다면
-        //발급받은 새로운 accesstoken을 저장
-        await storage.write(
-          key: 'token',
-          value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))),
-        );
-        //Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
-        return true;
-      }
 
-      //fail
-    } else {
+      }
       print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
   }
 
-  static Future<ScreenArguments> getMatchingData() async {
+  static Future<ScreenArguments> getMatchingData(context) async {
     late ScreenArguments _screenArguments;
 
     late MemberDetails _memberDetails;
@@ -568,6 +572,10 @@ class APIs {
       if(e == "AT-C-002"){
         await APIs.getAccessToken();
         _status = await APIs.getApplicantStatus();
+      }
+      else if(e == "AT-C-007"){
+        //토큰 및 정보 삭제
+        await APIs.logOut(context);
       }
     }
 
@@ -918,7 +926,7 @@ class APIs {
   }
 
   // 채팅 정보 받아오기
-  static Future<Map<String, dynamic>> getChatSummary() async {
+  static Future<Map<String, dynamic>> getChatSummary(context) async {
     var _url = 'http://3.34.2.246:8081/api/v1/chat/summary';
     print('토큰 읽기');
     //토큰 읽어오기
@@ -933,7 +941,22 @@ class APIs {
     } catch (e) {
       if(e == "AT-C-002"){
         print(e);
-        APIs.getAccessToken();
+        try{
+          await APIs.getAccessToken();
+        }catch (e){
+          if(e == "AT-C-005"){
+            //토큰 및 정보 삭제
+            await storage.delete(key: 'auth');
+            await storage.delete(key: 'token');
+            print('로그아웃, 정보 지움');
+
+            //스택 비우고 화면 이동
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+            );
+
+          }
+        }
         chatToken = await APIs.getChatToken();
       }
     }
