@@ -283,6 +283,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                                   isEnabled: true,
                                   child: Text('${'matching-mine'.tr()}'),
                                   onPressed: () {
+
                                     Navigator.pushNamed(context, '/info/my',
                                         arguments: args);
                                   },

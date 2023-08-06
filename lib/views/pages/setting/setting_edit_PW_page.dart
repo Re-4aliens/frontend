@@ -36,7 +36,9 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
+
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.transparent, infookay: false, infocontent: '',),
         body: Container(
@@ -127,7 +129,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                         isEnabled: _isButtonEnabled,
                         child: Text('${'setting-newpas4'.tr()}'),
                         onPressed: () async {
-    if (_formKeyFirst.currentState?.validate() == true &&_formKeySecond.currentState?.validate() == true) {
+                          if (_formKeyFirst.currentState?.validate() == true &&_formKeySecond.currentState?.validate() == true) {
                             //입력한 두 패스워드가 같으면
                             if (_passwordController.text == _passwordControllerSecond.text) {
 
