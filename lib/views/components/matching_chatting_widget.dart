@@ -57,14 +57,22 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
     }
 
     for (int i = 0; i < _chatRoomList.length; i++) {
-      for(int j = 0; j < _chatRoomList.length; j++){
-        if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
-          _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
-          _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
-          _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
-          break;
+      if(_chatRoomList[i].partner!.roomState == 'CLOSE'){
+        _chatRoomList[i].lastChatContent = '메세지를 보낼 수 없습니다.';
+        _chatRoomList[i].lastChatTime = '기록 없음';
+        _chatRoomList[i].numberOfUnreadChat = 0;
+      }
+      else{
+        for(int j = 0; j < _chatRoomList.length; j++){
+          if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
+            _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
+            _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
+            _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
+            break;
+          }
         }
       }
+
     }
     _chatRoomList.sort((a, b) {
       if (a.lastChatTime == null && b.lastChatTime == null) {
