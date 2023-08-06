@@ -756,13 +756,7 @@ class _ChattingPageState extends State<ChattingPage> {
           ),
           padding: EdgeInsets.symmetric(horizontal: 20),
           margin: EdgeInsets.only(top: 20, bottom: 15),
-          child: index == 0
-              ? Text(
-            //TODO createdDate 수정
-            '${DateFormat('yyyy/MM/dd').format(DateTime.parse('2019-09-09'))}',
-            style: TextStyle(color: Colors.white),
-          )
-              : Text(
+          child: Text(
             '${DateFormat('yyyy/MM/dd').format(DateTime.parse(date))}',
             style: TextStyle(color: Colors.white),
           ),
