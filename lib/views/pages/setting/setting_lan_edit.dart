@@ -49,10 +49,19 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
   void initState() {
 
     _selectedLanguage = widget.isKorean ? '한국어' : 'English';
-    _firstPreferLanguage = _nationlist.firstWhere((element) => element['value'] == widget.screenArguments!.applicant!.preferLanguages!.firstPreferLanguage!)['language'];
-    _secondPreferLanguage = _nationlist.firstWhere((element) => element['value'] == widget.screenArguments!.applicant!.preferLanguages!.secondPreferLanguage!)['language'];
 
-    print('${_firstPreferLanguage} ${_secondPreferLanguage}');
+    if(widget.screenArguments!.status != 'NOT_APPLIED'){
+
+      _firstPreferLanguage = _nationlist.firstWhere((element) =>
+      element['value'] == widget.screenArguments!.applicant!.preferLanguages!
+          .firstPreferLanguage!)['language'];
+
+      _secondPreferLanguage = _nationlist.firstWhere((element) => element['value'] == widget.screenArguments!.applicant!.preferLanguages!.secondPreferLanguage!)['language'];
+    }else{
+      _firstPreferLanguage = '한국어';
+      _secondPreferLanguage = 'English';
+    }
+
   }
 
 
@@ -264,15 +273,21 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                     if(_firstPreferLanguage != _secondPreferLanguage){
                       _firstPreferLanguage = _nationlist.firstWhere((element) => element['language'] == _firstPreferLanguage)['value'];
                       _secondPreferLanguage = _nationlist.firstWhere((element) => element['language'] == _secondPreferLanguage)['value'];
-
-                      if(await APIs.updatePreferLanguage(_firstPreferLanguage, _secondPreferLanguage)){
+                      //펜딩일때만 수정
+                      if(widget.screenArguments!.status == 'PENDING'){
+                        if(await APIs.updatePreferLanguage(_firstPreferLanguage, _secondPreferLanguage)){
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              '/loading', (Route<dynamic> route) => false);
+                          if (_selectedLanguage == '한국어') {
+                            EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
+                          } else if (_selectedLanguage == 'English') {
+                            EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
+                          }
+                        }
+                      }
+                      else {
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             '/loading', (Route<dynamic> route) => false);
-                        if (_selectedLanguage == '한국어') {
-                          EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
-                        } else if (_selectedLanguage == 'English') {
-                          EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
-                        }
                       }
                     }
 
