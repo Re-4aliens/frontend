@@ -562,7 +562,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                       image: NetworkImage(
                         args.memberDetails!.profileImage!
                       ),
-                      fit: BoxFit.fill
+                      fit: BoxFit.cover
                     )
                   ),
                 ),
