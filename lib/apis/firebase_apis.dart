@@ -21,38 +21,29 @@ class FirebaseAPIs {
   );
 
 
-  Future<void> initializeDefault() async {
-    FirebaseApp app = await Firebase.initializeApp(
-      //options: DefaultFirebaseOptions.currentPlatform,
-    );
-    print('Initialized default app $app');
-
-
-
-    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      print('Title: ${message.notification?.title}');
-      print('Body: ${message.notification?.body}');
-      print('Data: ${message.data}');
-    });
-
-  }
-
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
-    await Firebase.initializeApp();
 
-    print('백그라운드 메세지 도착 ${message.data}');
 
-    // 백그라운드에서 메세지 처리
-    flutterLocalNotificationsPlugin.show(
-        message.notification.hashCode,
-        message.notification!.title,
-        message.notification!.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id, channel.name,
-            icon: message.notification!.android!.smallIcon,
-          ),
-        ));
+    var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var androidDetails = AndroidNotificationDetails(
+      'channel_id', // 채널 ID
+      'Channel name', // 채널 이름
+      priority: Priority.high,
+      importance: Importance.max,
+    );
+    var platformDetails = NotificationDetails(android: androidDetails);
+
+
+    if(message.data['type'] != 'bulkRead'){
+      // 알림 표시
+      flutterLocalNotificationsPlugin.show(
+        0, // 알림 ID
+        '${message.data['title']}', // 제목
+        '${message.data['body']}', // 본문
+        platformDetails, // 알림 설정
+      );
+    }
+
   }
 
 }

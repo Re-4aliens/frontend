@@ -84,15 +84,8 @@ void main() async {
   // fcm 토큰 출력
   print(fcmToken);
 
-  //백그라운드 메세지 처리 핸들러 연결
-  //FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
-/*
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(FirebaseAPIs.channel);
+  FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
 
- */
 
   runApp(EasyLocalization(
     path: 'assets/translations',
@@ -111,35 +104,10 @@ Future<void> initializeDefault() async {
   print(fcmToken);
 }
 
-class MyApp extends StatefulWidget{
+
+class MyApp extends StatelessWidget {
 
   const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-
-  @override
-  void initState() {
-    //FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler);
-    setupInteractedMessage();
-  }
-
-  Future<void> setupInteractedMessage() async {
-    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-    if (initialMessage != null) {
-      _handleMessage(initialMessage);
-
-    }
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-  }
-
-  void _handleMessage(RemoteMessage message) {
-    print('message');
-    //앱 실행시
-  }
 
   @override
   Widget build(BuildContext context) {
