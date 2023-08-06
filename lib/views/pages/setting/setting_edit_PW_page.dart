@@ -131,8 +131,43 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                             //입력한 두 패스워드가 같으면
                             if (_passwordController.text == _passwordControllerSecond.text) {
 
+                              var success;
+                              try {
+                                success = await APIs.changePassword(_passwordController.text);
+                              } catch (e) {
+                                if(e == "AT-C-002"){
+                                  try{
+                                    await APIs.getAccessToken();
+                                  }catch (e){
+                                    if(e == "AT-C-005") {
+                                      //토큰 및 정보 삭제
+                                      await storage.delete(key: 'auth');
+                                      await storage.delete(key: 'token');
+                                      print('로그아웃, 정보 지움');
+
+                                      //스택 비우고 화면 이동
+                                      Navigator.of(context)
+                                          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+                                      );
+                                    }else if(e == "AT-C-007"){
+                                      //토큰 및 정보 삭제
+                                      await APIs.logOut(context);
+                                    }
+                                    else{
+                                      success = await APIs.changePassword(_passwordController.text);
+                                    }
+                                  }
+                                }
+                                else if(e == "AT-C-007"){
+                                  //토큰 및 정보 삭제
+                                  await APIs.logOut(context);
+                                }
+                                else{
+                                  success = await APIs.changePassword(_passwordController.text);
+                                }
+                              }
                               //success
-                              if (await APIs.changePassword(_passwordController.text)) {
+                              if (success) {
                                 Navigator.pushNamed(context,'/setting/edit/PW/done');
                                 //fail
                               } else {

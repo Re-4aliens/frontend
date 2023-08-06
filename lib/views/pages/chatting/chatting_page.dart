@@ -138,7 +138,7 @@ class _ChattingPageState extends State<ChattingPage> {
   }
 
   _unreadListFuc() async {
-    List<MessageModel> unreadlist = await APIs.getMessages(widget.partner.roomId);
+    List<MessageModel> unreadlist = await APIs.getMessages(widget.partner.roomId, context);
 
     //1. 리스트 업데이트
     for (final message in unreadlist) {
