@@ -124,7 +124,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
                       //수정
-                        isEnabled: _isButtonEnabled,
+                        isEnabled: _isButtonEnabled && _passwordController.text == _passwordControllerSecond.text,
                         child: Text('${'setting-newpas4'.tr()}'),
                         onPressed: () async {
     if (_formKeyFirst.currentState?.validate() == true &&_formKeySecond.currentState?.validate() == true) {
