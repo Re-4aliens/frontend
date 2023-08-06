@@ -1106,4 +1106,75 @@ static Future<String> matchingProfessData() async{
     }
   }
 
+  /*
+
+  신고하기
+
+   */
+
+  static Future<bool> reportPartner(String reportCategory, String reportContent, int memberId) async {
+    var _url =
+        'http://3.34.2.246:8080/api/v1/report/${memberId}'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.post(Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "reportCategory": reportCategory,
+          "reportContent": reportContent,
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
+
+  /*
+
+  신고하기
+
+   */
+
+  static Future<bool> blockPartner(Partner partner) async {
+    var _url =
+        'http://3.34.2.246:8080/api/v1/block/${partner.memberId}'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.post(Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "roomId": '${partner.roomId}',
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
+
 }
