@@ -162,7 +162,7 @@ class _SignUpMbtiState extends State<SignUpMbti> {
         appBar: AppBar(),
         title: '',
         backgroundColor: Color(0xffF5F7FF),
-        infookay: true, infocontent: '\nMBTI를 선택해주세요\nMBTI를 기반으로 나와 더 잘 맞는 친구를 찾을 수 있어요!',
+        infookay: true, infocontent: 'signup-mbtiinfo'.tr(),
       ),
       body:
         //padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
