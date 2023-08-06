@@ -257,12 +257,16 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                       color: Color(0xff7898FF),
                                                     ),
                                                   ),
-                                                  Text(
-                                                    '${args.applicant?.member?.nationality}',
-                                                    style: TextStyle(
-                                                      fontSize: isSmallScreen ? 18 : 20,
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.bold,
+                                                  Container(
+                                                    width: 120,
+                                                    child: Text(
+                                                      '${args.applicant?.member?.nationality}',
+                                                      style: TextStyle(
+                                                        fontSize: isSmallScreen ? 18 : 20,
+                                                        color: Colors.black,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                      overflow: TextOverflow.ellipsis,
                                                     ),
                                                   ),
                                                 ],
@@ -538,21 +542,30 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
               top: MediaQuery.of(context).size.height * 0.15,
               right: 0,
               left: 0,
-              child: Container(
-                margin: EdgeInsetsDirectional.symmetric(vertical: 20),
-                child:
-                args.memberDetails!.profileImage != ""
-                    ? Image.network(
-                  '${args.memberDetails!.profileImage}',
-                  height: isSmallScreen ? 80 : 90,
-                  width: isSmallScreen ? 80 : 90,
-                )
-                    : SvgPicture.asset(
-                  'assets/icon/icon_profile.svg',
+              child:
+                args.memberDetails!.profileImage == null ?
+                Container(
+                  margin: EdgeInsetsDirectional.symmetric(vertical: 20),
+                  child: SvgPicture.asset(
+                    'assets/icon/icon_profile.svg',
+                    height: isSmallScreen ? 100 : 120,
+                    color: Color(0xffEBEBEB),
+                  ),
+                ):
+                Container(
                   height: isSmallScreen ? 100 : 120,
-                  color: Color(0xffEBEBEB),
+                  width: isSmallScreen ? 100 : 120,
+                  margin: EdgeInsetsDirectional.symmetric(vertical: 20),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        args.memberDetails!.profileImage!
+                      ),
+                      fit: BoxFit.fitHeight
+                    )
+                  ),
                 ),
-              ),
             ),//프로필
             Positioned(
               right: 0,
