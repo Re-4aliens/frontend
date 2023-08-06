@@ -176,7 +176,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                               await storage.delete(key: 'notification');
                               if(chatNotification != value){
                                 allNotification = false;
-                              }else if(chatNotification == value){
+                              }else if(chatNotification == true && matchingNotification == true){
                                 allNotification = true;
                               }
                               await storage.write(
@@ -212,15 +212,39 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
                               bool success;
+                              var notification = await storage.read(key: 'notification');
 
-                              try{
+                              var allNotification = json.decode(notification!)['allNotification'];
+                              var matchingNotification = json.decode(notification!)['matchingNotification'];
+                              var chatNotification = json.decode(notification!)['chatNotification'];
+
+
+                              await storage.delete(key: 'notification');
+                              if(matchingNotification != value){
+                                allNotification = false;
+                              }else if(chatNotification == true && matchingNotification == true){
+                                allNotification = true;
+                              }
+                              await storage.write(
+                                key: 'notification',
+                                value: jsonEncode({
+                                  'allNotification' : allNotification,
+                                  'matchingNotification' : matchingNotification,
+                                  'chatNotification' : value,
+                                }),
+                              );
+                              setState(() {
+
+                              });
+
+                              /*try{
                                 success = await APIs.setChatNotification(value, false);
                               }catch (e){
                                 await APIs.getAccessToken();
                                 success = await APIs.setChatNotification(value, false);
                               }
                               setState(() {
-                              });
+                              });*/
                             },
                           ),
                         ],
