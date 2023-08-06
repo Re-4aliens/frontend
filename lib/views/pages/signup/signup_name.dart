@@ -85,7 +85,17 @@ class _SignUpNameState extends State<SignUpName>{
         constraintsText = "";
       });
     } else {
-      if (value.length > 1){
+      if(value.length < 2){
+        setState(() {
+          constraintsText = 'name-constraintsText2'.tr();
+          _isButtonEnabled = false;
+        });
+      }else if(value.length > 10){
+        setState(() {
+          constraintsText = 'name-constraintsText3'.tr();
+          _isButtonEnabled = false;
+        });
+      }else{
         String pattern = r"^[ㄱ-ㅎ가-힣0-9a-zA-Zぁ-ゔァ-ヴー々〆〤一-龥+]*$";
         RegExp regExp = new RegExp(pattern);
         if (!regExp.hasMatch(value)) {
@@ -99,12 +109,6 @@ class _SignUpNameState extends State<SignUpName>{
             _isButtonEnabled = true;
           });
         }
-      }
-      else {
-        setState(() {
-          constraintsText = 'name-constraintsText2'.tr();
-          _isButtonEnabled = false;
-        });
       }
     }
   }

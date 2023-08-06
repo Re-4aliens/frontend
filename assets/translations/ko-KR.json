@@ -21,6 +21,7 @@
   "name": "이름",
   "name-constraintsText1": "특수 문자를 포함할 수 없습니다",
   "name-constraintsText2": "최소 글자는 두 글자입니다",
+  "name-constraintsText3": "최대 글자는 열 글자입니다",
   "signup-birthday": "생년월일을 알려주세요",
   "birthday": "생년월일 선택",
   "signup-gender": "성별을 알려주세요",
@@ -64,6 +65,8 @@
   "signup-bio2": "소개를 입력해주세요.",
   "signup-bio3": "상대방이 보는 나의 프로필에 표시돼요.",
   "signup-bio4": "간단히 나를 소개해보세요!",
+  "signup-bio5": "최대 글자는 열 다섯 글자입니다",
+
   "signup-email1": "본인 인증을 위해",
   "signup-email2": "이메일을 입력해주세요",
   "signup-email3": "작성하신 메일로 보내드린 코드를 통해 인증이 진행됩니다.",

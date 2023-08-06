@@ -56,7 +56,10 @@ class _SignUpBioState extends State<SignUpBio>{
                      ),
                  ),
              ),
+
+            Text(constraintsText),
             Text('${'signup-bio3'.tr()}\n${'signup-bio4'.tr()}', style: TextStyle(color: Color(0xff626262)),),
+
             Expanded(child: SizedBox()),
             Button(
               isEnabled: _isButtonEnabled,
@@ -92,11 +95,19 @@ class _SignUpBioState extends State<SignUpBio>{
     if (value.isEmpty) {
       setState(() {
         _isButtonEnabled = false;
+        constraintsText = '';
       });
-    } else {
-        setState(() {
-          _isButtonEnabled = true;
-        });
+    } else if(value.length > 15){
+      setState(() {
+        _isButtonEnabled = false;
+        constraintsText = 'signup-bio5'.tr();
+      });
+    }
+    else {
+      setState(() {
+        _isButtonEnabled = true;
+        constraintsText = '';
+      });
     }
   }
 }
