@@ -32,8 +32,8 @@ class mbtiButton extends StatelessWidget{
     return Container(
       margin: EdgeInsets.only(left: 15,right: 15, top: 5, bottom: 5),
      // width: MediaQuery.of(context).size.width * 0.4,
-      width: isSmallScreen ? 140 : 150,
-      height: isSmallScreen ? 210 : 230,
+      width: isSmallScreen ? 130 : 150,
+      height: isSmallScreen ? 200 : 230,
       //width: isSmallScreen?MediaQuery.of(context).size.width * 0.37: MediaQuery.of(context).size.width * 0.42,
       //height: isSmallScreen? (MediaQuery.of(context).size.width * 0.37)*4.5/3:(MediaQuery.of(context).size.width * 0.42)*4.5/3,
       decoration: BoxDecoration(
@@ -88,8 +88,8 @@ class mbtiButton extends StatelessWidget{
                           color: selected ? Colors.white: Color(0xff616161),
                           fontSize: isSmallScreen?13:15),),
                       Container(
-                        width: isSmallScreen?70:80,
-                        height: isSmallScreen?70:80,
+                        width: isSmallScreen?65:80,
+                        height: isSmallScreen?65:80,
                         padding: EdgeInsets.all(7),
                         decoration: BoxDecoration(shape: BoxShape.circle,
                         ),

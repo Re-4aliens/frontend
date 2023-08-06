@@ -36,7 +36,9 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
+
     return Scaffold(
+        //resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.transparent, infookay: false, infocontent: '',),
         body: Container(
@@ -44,16 +46,12 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: 50,
-              ),
+              Expanded(child: SizedBox()),
               Text(
                 '${'setting-newpas1'.tr()}',
                 style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
               ),
-              SizedBox(
-                height: 20,
-              ),
+              Expanded(child: SizedBox()),
               Form(
                 key: _formKeyFirst,
                 child: TextFormField(
@@ -84,9 +82,8 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                       color: Color(0xffB8B8B8),
                     ),
                   )),
-              SizedBox(
-                height: 30,
-              ),
+
+              Expanded(child: SizedBox()),
               Form(
                 key: _formKeySecond,
                 child: TextFormField(
@@ -116,10 +113,9 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                       color: Color(0xffb8b8b8),
                     ),
                   )),
-              Expanded(
-                child: Container(
+              Expanded(child: SizedBox()),
+              Container(
                   alignment: Alignment.bottomCenter,
-                  padding: EdgeInsets.only(bottom: 50),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
@@ -127,7 +123,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                         isEnabled: _isButtonEnabled && _passwordController.text == _passwordControllerSecond.text,
                         child: Text('${'setting-newpas4'.tr()}'),
                         onPressed: () async {
-    if (_formKeyFirst.currentState?.validate() == true &&_formKeySecond.currentState?.validate() == true) {
+                          if (_formKeyFirst.currentState?.validate() == true &&_formKeySecond.currentState?.validate() == true) {
                             //입력한 두 패스워드가 같으면
                             if (_passwordController.text == _passwordControllerSecond.text) {
 
@@ -221,7 +217,7 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                             }}})
                   ),
                 ),
-              )
+              Expanded(child: SizedBox()),
             ],
           ),
         ));

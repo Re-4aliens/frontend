@@ -1222,10 +1222,10 @@ static Future<String> matchingProfessData() async{
         );
       }
       else{
-        if(matchingNotification != _notification){
-          allNotification = false;
-        }else if(matchingNotification == _notification){
+        if(matchingNotification == _notification && _notification == true){
           allNotification = true;
+        }else {
+          allNotification = false;
         }
         await storage.write(
           key: 'notification',

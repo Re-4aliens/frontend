@@ -117,6 +117,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             activeColor: Color(0xff7898FF),
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
+
                               bool success;
                               print('값: $value');
                               try{
@@ -175,7 +176,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                               await storage.delete(key: 'notification');
                               if(chatNotification != value){
                                 allNotification = false;
-                              }else if(chatNotification == value){
+                              }else if(chatNotification == true && matchingNotification == true){
                                 allNotification = true;
                               }
                               await storage.write(
