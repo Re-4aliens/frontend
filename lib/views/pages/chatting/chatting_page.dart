@@ -429,6 +429,7 @@ class _ChattingPageState extends State<ChattingPage> {
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                widget.partner.profileImage == null ?
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
                   child: IconButton(
@@ -448,6 +449,30 @@ class _ChattingPageState extends State<ChattingPage> {
                           ));
                     },
                   ),
+                ) :
+                InkWell(
+                  onTap: (){
+                    showDialog(
+                        context: context,
+                        builder: (_) => Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: ProfileDialog(
+                            partner: widget.partner,
+                          ),
+                        ));
+                  },
+                  child: Container(
+                    height: 35,
+                    width: 35,
+                    margin: const EdgeInsets.only(right: 10.0),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: NetworkImage(widget.partner.profileImage!)
+                        )
+                    ),
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -461,7 +486,7 @@ class _ChattingPageState extends State<ChattingPage> {
                       ),
                     ),
                     Text(
-                      '${widget.partner.roomId}',
+                      '${widget.partner.nationality}',
                       style: TextStyle(
                         color: Color(0xff626262),
                         fontSize: 12,
@@ -768,7 +793,7 @@ class _ChattingPageState extends State<ChattingPage> {
           ]) : Container(
             alignment: Alignment.center,
             color: Color(0xffF5F7FF),
-            child: Text(''),
+            child: Text('대화할 수 없는 상대입니다!', style: TextStyle(color: Color(0xff888888)),),
           )
         ),
       ),

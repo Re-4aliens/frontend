@@ -1230,20 +1230,21 @@ class _HomePageState extends State<HomePage> {
                                 color: screenArguments.memberDetails.profileImage != ""
                                     ? Colors.white
                                     : Colors.transparent,
-                              shape: BoxShape.circle
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+
+                                image: screenArguments.memberDetails.profileImage != ""
+                                    ? NetworkImage(screenArguments.memberDetails.profileImage) : NetworkImage(''),
+                              )
                             ),
-                            child: screenArguments.memberDetails.profileImage != ""
-                                ? Image.network(
-                              screenArguments.memberDetails.profileImage,
-                              height: isSmallScreen ? 80 : 90,
-                              width: isSmallScreen ? 80 : 90,
-                            )
-                                : SvgPicture.asset(
+
+                            child: screenArguments.memberDetails.profileImage == ""
+                                ? SvgPicture.asset(
                               'assets/icon/icon_profile.svg',
                               color:Colors.white,
                               height: isSmallScreen?80:90,
                               width: isSmallScreen?80:90,
-                            ),
+                            ) : SizedBox(),
                           ),
                           Positioned(
                               bottom: 0,

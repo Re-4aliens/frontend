@@ -113,6 +113,8 @@ class APIs {
 
     if (member.selfIntroduction != null && member.selfIntroduction!.isNotEmpty) {
       request.fields['selfIntroduction'] = member.selfIntroduction!;
+    }else{
+      request.fields['selfIntroduction'] = ' ';
     }
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {

@@ -203,12 +203,24 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            widget.screenArguments.partners![index].profileImage == null ?
             Padding(
               padding: const EdgeInsets.only(right: 15),
               child: SvgPicture.asset(
                 'assets/icon/icon_profile.svg',
                 height: 50,
                 color: Color(0xff7898ff),
+              ),
+            ) : Container(
+              height: 50,
+              width: 50,
+              margin: const EdgeInsets.only(right: 15),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(widget.screenArguments.partners![index].profileImage!)
+                )
               ),
             ),
             Expanded(
