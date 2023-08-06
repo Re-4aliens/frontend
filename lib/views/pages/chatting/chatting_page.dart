@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/repository/sql_message_repository.dart';
+import 'package:aliens/views/components/chat_dialog_widget.dart';
 import 'package:async/async.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
@@ -502,62 +503,7 @@ class _ChattingPageState extends State<ChattingPage> {
                   //print(arguments.partners);
                   showDialog(
                       context: context,
-                      builder: (builder) => Dialog(
-                        elevation: 0,
-                        backgroundColor: Color(0xffffffff),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.all(30),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "어떤 서비스를 원하세요?",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(25.0),
-                                child: Text(
-                                  "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(13),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff7898FF),
-                                    borderRadius: BorderRadius.circular(5)),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "신고하기",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(13),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff7898FF),
-                                    borderRadius: BorderRadius.circular(5)),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "차단하기",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ));
+                      builder: (builder) => ChatDialog(partner: widget.partner, context: context,));
                 },
                 //아이콘 수정 필요
                 icon: SvgPicture.asset(
