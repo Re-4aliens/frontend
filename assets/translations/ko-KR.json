@@ -50,6 +50,8 @@
   "signup-mbti.14": "중재자",
   "signup-mbti.15": "장인",
   "signup-mbti.16": "모험가",
+  "signup-mbti.17": "\nMBTI를 선택해주세요\nMBTI를 기반으로 나와 더 잘 맞는 친구를 찾을 수 있어요!",
+
   "signup-pic1": "나의 프로필 이미지를",
   "signup-pic2": "선택해주세요",
   "signup-pic3": "프로필 사진을 선택하여",
@@ -75,6 +77,11 @@
   "signup-email11": "*알맞은 이메일 주소입니다:)",
   "signup-email12": "*메일을 받지 못했다면 스팸함 ",
   "signup-email13": "또는 이메일 설정을 확인해주세요.",
+  "signup-email14": "이메일 중복확인",
+  "signup-email15": "이미 존재하는 이메일입니다.\n다른 이메일로 입력해주세요:)",
+  "signup-email16": "사용 가능한 이메일입니다.\n계속해서 회원가입 진행을 완료해주세요:)",
+
+
   "signup-pwd1": "비밀번호를 설정하시면",
   "signup-pwd2": "가입이 완료됩니다",
   "signup-pwd3": "비밀번호 입력",
@@ -220,6 +227,7 @@
   "chatting2": "대화할 수 없는 상대입니다!",
   "chatting3": "새로운 대화를 시작합니다.",
   "chatting4": "밸런스게임\n제안하기",
+  "chatting5": "매칭이 완료되면 채팅이 활성화됩니다.\n조금만 기다려주세요!",
   "chatting-dialog1": "어떤 서비스를 원하세요?",
   "chatting-dialog2": "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
   "chatting-report1": "신고하기",

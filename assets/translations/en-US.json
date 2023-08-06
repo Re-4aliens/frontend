@@ -50,6 +50,7 @@
   "signup-mbti.14": "Mediator",
   "signup-mbti.15": "Artisan",
   "signup-mbti.16": "Adventurer",
+  "signup-mbti.17": "\nWhat is your MBTI?\nBased on your MBTI, we can find a good friend of yours!",
 
   "signup-pic1": "Pick a profile picture",
   "signup-pic2": "",
@@ -76,6 +77,10 @@
   "signup-email11": "*Correct format:)",
   "signup-email12": "*If you haven't received the email, ",
   "signup-email13": "please check your spam or email settings",
+  "signup-email14": "Check existence",
+  "signup-email15": "Email already exists.\nPlease enter a different email :)",
+  "signup-email16": "This email is available.\nPlease continue to complete the process :)",
+
   "signup-pwd1": "Complete your signing up ",
   "signup-pwd2": "by setting your password",
   "signup-pwd3": "Enter password",
@@ -221,6 +226,7 @@
   "chatting2": "Unable to talk!",
   "chatting3": "Start a new conversation",
   "chatting4": "Send\nwould you rather game",
+  "chatting5": "Chat will be activated when matching is complete.\nPlease wait a little bit!",
   "chatting-dialog1": "Which service do you want?",
   "chatting-dialog2": "Click the button below to report or block.",
   "chatting-report1": "Report",
