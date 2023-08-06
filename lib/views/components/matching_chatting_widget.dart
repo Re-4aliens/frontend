@@ -50,10 +50,10 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
     Map<String, dynamic> chatSummary;
 
     try{
-      chatSummary = await APIs.getChatSummary();
+      chatSummary = await APIs.getChatSummary(context);
     } catch(e){
       await APIs.getAccessToken();
-      chatSummary = await APIs.getChatSummary();
+      chatSummary = await APIs.getChatSummary(context);
     }
 
     for (int i = 0; i < _chatRoomList.length; i++) {
@@ -101,14 +101,22 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
 
       setState(() {
         for (int i = 0; i < _chatRoomList.length; i++) {
-          for(int j = 0; j < _chatRoomList.length; j++){
-            if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
-              _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
-              _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
-              _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
-              break;
+          if(_chatRoomList[i].partner!.roomState == 'CLOSE'){
+            _chatRoomList[i].lastChatContent = 'chatting1'.tr();
+            _chatRoomList[i].lastChatTime = '기록 없음';
+            _chatRoomList[i].numberOfUnreadChat = 0;
+          }
+          else{
+            for(int j = 0; j < _chatRoomList.length; j++){
+              if (_chatRoomList[i].partner!.roomId == chatSummary['chatSummaries'][j]['roomId']) {
+                _chatRoomList[i].lastChatContent = chatSummary['chatSummaries'][j]['lastChatContent'];
+                _chatRoomList[i].lastChatTime = chatSummary['chatSummaries'][j]['lastChatTime'];
+                _chatRoomList[i].numberOfUnreadChat = chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
+                break;
+              }
             }
           }
+
         }
         _chatRoomList.sort((a, b) {
           if (a.lastChatTime == null && b.lastChatTime == null) {
