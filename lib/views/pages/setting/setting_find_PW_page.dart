@@ -31,7 +31,6 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(appBar: AppBar(), title: '',backgroundColor: Colors.transparent, infookay: false, infocontent: '',),
 
         body: Container(
@@ -63,13 +62,7 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
 
                 ),
               ),
-              Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text('${'signup-pwd4'.tr()}',
-                    style: TextStyle(
-                      fontSize: isSmallScreen?12:14,
-                      color: Color(0xffb8b8b8),
-                    ),)),
+             
               Expanded(
                 child: Container(
                   alignment: Alignment.bottomCenter,

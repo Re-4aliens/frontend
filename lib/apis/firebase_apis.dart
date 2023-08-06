@@ -12,47 +12,39 @@ FlutterLocalNotificationsPlugin();
 
 class FirebaseAPIs {
   final _firebaseMessaging = FirebaseMessaging.instance;
-/*
+
   /// 상단 알림을 위해 AndroidNotificationChannel 생성
   static AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
     'High Importance Notifications', // title
-    importance: Importance.high,
+    importance: Importance.min,
   );
 
 
-  Future<void> initializeDefault() async {
-    FirebaseApp app = await Firebase.initializeApp(
-      //options: DefaultFirebaseOptions.currentPlatform,
-    );
-    print('Initialized default app $app');
-
-
-
-    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      print('Title: ${message.notification?.title}');
-      print('Body: ${message.notification?.body}');
-      print('Data: ${message.data}');
-    });
-
-  }
-
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
-    await Firebase.initializeApp();
 
-    // 백그라운드에서 메세지 처리
-    flutterLocalNotificationsPlugin.show(
-        message.notification.hashCode,
-        message.notification!.title,
-        message.notification!.body,
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id, channel.name,
-            icon: message.notification!.android!.smallIcon,
-          ),
-        ));
+
+    var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    var androidDetails = AndroidNotificationDetails(
+      'channel_id', // 채널 ID
+      'Channel name', // 채널 이름
+      priority: Priority.high,
+      importance: Importance.max,
+    );
+    var platformDetails = NotificationDetails(android: androidDetails);
+
+
+    if(message.data['type'] != 'bulkRead'){
+      // 알림 표시
+      flutterLocalNotificationsPlugin.show(
+        0, // 알림 ID
+        '${message.data['title']}', // 제목
+        '${message.data['body']}', // 본문
+        platformDetails, // 알림 설정
+      );
+    }
 
   }
-  */
+
 }
 

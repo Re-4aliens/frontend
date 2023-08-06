@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,16 +11,43 @@ import '../../../apis/apis.dart';
 import '../../components/button.dart';
 
 class MatchingEditPage extends StatefulWidget {
-  const MatchingEditPage({super.key});
+  const MatchingEditPage({super.key, required this.screenArguments});
 
+  final ScreenArguments screenArguments;
   @override
   State<MatchingEditPage> createState() => _MatchingEditPageState();
 }
 
 class _MatchingEditPageState extends State<MatchingEditPage> {
-  final _nationlist = ['한국어', 'English', '中國語', '日本語'];
-  var _firstPreferLanguage = '한국어';
-  var _secondPreferLanguage = 'English';
+  final List<Map<String, dynamic>> _nationlist = [
+    {
+      'language': '한국어',
+      'value': 'KOREAN',
+    }, //한국어
+    {
+      'language': 'English',
+      'value': 'ENGLISH',
+    }, //영어
+    {
+      'language': '中國語',
+      'value': 'JAPANESE',
+    },//중국어
+    {
+      'language': '日本語',
+      'value': 'CHINESE',
+    }//일본어
+  ];
+  late String _firstPreferLanguage;
+  late String _secondPreferLanguage;
+
+  @override
+  void initState() {
+
+    _firstPreferLanguage = _nationlist.firstWhere((element) => element['value'] == widget.screenArguments!.applicant!.preferLanguages!.firstPreferLanguage!)['language'];
+    _secondPreferLanguage = _nationlist.firstWhere((element) => element['value'] == widget.screenArguments!.applicant!.preferLanguages!.secondPreferLanguage!)['language'];
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -110,15 +138,15 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                                         isExpanded: true,
                                         items: _nationlist.map((value){
                                           return DropdownMenuItem(
-                                          child: Text(value,
+                                          child: Text(value['language'],
                                           style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
-                                    value: value);
+                                    value: value['language']);
                                     }).toList(),
                                           value: _firstPreferLanguage,
                                           onChanged: (value){
                                             print(value);
                                             setState(() {
-                                              _firstPreferLanguage = value!;
+                                              _firstPreferLanguage = value!.toString();
                                             });}
                                       ),
                                     ),
@@ -146,15 +174,14 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                                 isExpanded: true,
                                 items: _nationlist.map((value){
                                   return DropdownMenuItem(
-                                      child: Text(value,
+                                      child: Text(value['language'],
                                         style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
-                                      value: value);
+                                      value: value['language']);
                                 }).toList(),
                                 value: _secondPreferLanguage,
                                 onChanged: (value){
-                                  print(value);
                                   setState(() {
-                                    _secondPreferLanguage = value!;
+                                    _secondPreferLanguage = value!.toString();
                                   });}
                             ),
                           ),
@@ -174,13 +201,15 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
 
                       child: Text('${'confirm'.tr()}'),
                       onPressed: () async {
-                        if(await APIs.applicantMatching(_firstPreferLanguage, _secondPreferLanguage)){
-                          Navigator.pop(context);
-                        }
-                        else{
-                          print("요청실패");
-                        }
+                        if(_firstPreferLanguage != _secondPreferLanguage){
+                          _firstPreferLanguage = _nationlist.firstWhere((element) => element['language'] == _firstPreferLanguage)['value'];
+                          _secondPreferLanguage = _nationlist.firstWhere((element) => element['language'] == _secondPreferLanguage)['value'];
 
+                          if(await APIs.updatePreferLanguage(_firstPreferLanguage, _secondPreferLanguage)){
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/loading', (Route<dynamic> route) => false);
+                          }
+                        }
                       }),
                 )
               ],

@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/repository/sql_message_repository.dart';
+import 'package:aliens/views/components/chat_dialog_widget.dart';
 import 'package:async/async.dart';
 import 'package:convert/convert.dart';
 import 'package:crypto/crypto.dart';
@@ -113,17 +114,18 @@ class _ChattingPageState extends State<ChattingPage> {
             //단일 읽음 처리
             sendReadRequest(message);
           }
-          else if (message.data['chatContent'] == null && message.data['roomId'] != null){
-            print('Bulk Received FCM with: ${message.data} at ${DateTime.now()}' '${message.senderId}');
-
-            await SqlMessageRepository.bulkUpdate(widget.partner);
-            setState(() {});
-          }
           //상대방이 읽었다는 것에 대한 fcm인 경우
-          else {
+          else if (message.data['chatId'] != null && message.data['roomId'] != null){
             print('Received FCM with: ${message.data} at ${DateTime.now()}');
 
             await SqlMessageRepository.update(widget.partner, int.parse(message.data['chatId']));
+            setState(() {});
+          }
+          //상대방이 일괄 읽었다는 것에 대한 fcm인 경우
+          else {
+            print('Bulk Received FCM with: ${message.data} at ${DateTime.now()}' '${message.senderId}');
+
+            await SqlMessageRepository.bulkUpdate(widget.partner);
             setState(() {});
             }
           }
@@ -136,20 +138,20 @@ class _ChattingPageState extends State<ChattingPage> {
   }
 
   _unreadListFuc() async {
-    List<MessageModel> unreadlist = await APIs.getMessages(widget.partner.roomId);
+    List<MessageModel> unreadlist = await APIs.getMessages(widget.partner.roomId, context);
 
     //1. 리스트 업데이트
     for (final message in unreadlist) {
       print(message.chatContent);
 
-      if(message.senderId != widget.memberDetails.memberId){
-        await SqlMessageRepository.create(message);
-      }
+      await SqlMessageRepository.create(message);
     }
+    setState(() {
+    });
   }
 
   void _getCreatedDate() async {
-    createdDate = await SqlMessageRepository.getCreatedTime(widget.partner.roomId!);
+    //createdDate = await SqlMessageRepository.getCreatedTime(widget.partner.roomId!);
   }
 
   @override
@@ -216,19 +218,23 @@ class _ChattingPageState extends State<ChattingPage> {
     print('단일 읽음처리');
     Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
-      'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
       //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
+      //'fcmToken': "es5mW8PaTlOVqSk0HQhfjg:APA91bHsLBa767QE2AtQ0G6d0XKjClMskrWkojRLl1705UhHC4gOhszoR6oaJ8LqLWrhdR6OW1UEfUFFUls6lPAhxC9IsPJ-b253mfN5B4lhGap79mqW2JWo8vzHEJFBYWG2CeP9MkJC",
       'chatId': message.data['chatId'],
       'roomId': message.data['roomId'],
     };
     await readChannel.sink.add(json.encode(request));
-    updateUi();
+    setState(() {
+
+    });
   }
 
   void sendBulkReadRequest() async {
     Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
-      'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
+      //'fcmToken': "es5mW8PaTlOVqSk0HQhfjg:APA91bHsLBa767QE2AtQ0G6d0XKjClMskrWkojRLl1705UhHC4gOhszoR6oaJ8LqLWrhdR6OW1UEfUFFUls6lPAhxC9IsPJ-b253mfN5B4lhGap79mqW2JWo8vzHEJFBYWG2CeP9MkJC",
+      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
       //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
       'partnerId': widget.partner.memberId,
       'roomId': widget.partner.roomId,
@@ -424,6 +430,7 @@ class _ChattingPageState extends State<ChattingPage> {
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                widget.partner.profileImage == null ?
                 Padding(
                   padding: const EdgeInsets.only(right: 10.0),
                   child: IconButton(
@@ -443,6 +450,30 @@ class _ChattingPageState extends State<ChattingPage> {
                           ));
                     },
                   ),
+                ) :
+                InkWell(
+                  onTap: (){
+                    showDialog(
+                        context: context,
+                        builder: (_) => Scaffold(
+                          backgroundColor: Colors.transparent,
+                          body: ProfileDialog(
+                            partner: widget.partner,
+                          ),
+                        ));
+                  },
+                  child: Container(
+                    height: 35,
+                    width: 35,
+                    margin: const EdgeInsets.only(right: 10.0),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        image: DecorationImage(
+                            fit: BoxFit.fitHeight,
+                            image: NetworkImage(widget.partner.profileImage!)
+                        )
+                    ),
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -456,7 +487,7 @@ class _ChattingPageState extends State<ChattingPage> {
                       ),
                     ),
                     Text(
-                      '${widget.partner.roomId}',
+                      '${widget.partner.nationality}',
                       style: TextStyle(
                         color: Color(0xff626262),
                         fontSize: 12,
@@ -472,62 +503,7 @@ class _ChattingPageState extends State<ChattingPage> {
                   //print(arguments.partners);
                   showDialog(
                       context: context,
-                      builder: (builder) => Dialog(
-                        elevation: 0,
-                        backgroundColor: Color(0xffffffff),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5.0),
-                        ),
-                        child: Container(
-                          padding: EdgeInsets.all(30),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                "어떤 서비스를 원하세요?",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(25.0),
-                                child: Text(
-                                  "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(13),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff7898FF),
-                                    borderRadius: BorderRadius.circular(5)),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "신고하기",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: EdgeInsets.all(13),
-                                decoration: BoxDecoration(
-                                    color: Color(0xff7898FF),
-                                    borderRadius: BorderRadius.circular(5)),
-                                alignment: Alignment.center,
-                                child: Text(
-                                  "차단하기",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ));
+                      builder: (builder) => ChatDialog(partner: widget.partner, context: context,));
                 },
                 //아이콘 수정 필요
                 icon: SvgPicture.asset(
@@ -748,7 +724,7 @@ class _ChattingPageState extends State<ChattingPage> {
                         ),
                       ),
                       Text(
-                        '밸런스게임\n제안하기',
+                        'chatting4'.tr(),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Color(0xff888888),
@@ -763,7 +739,7 @@ class _ChattingPageState extends State<ChattingPage> {
           ]) : Container(
             alignment: Alignment.center,
             color: Color(0xffF5F7FF),
-            child: Text(''),
+            child: Text('chatting2'.tr(), style: TextStyle(color: Color(0xff888888)),),
           )
         ),
       ),
@@ -780,12 +756,7 @@ class _ChattingPageState extends State<ChattingPage> {
           ),
           padding: EdgeInsets.symmetric(horizontal: 20),
           margin: EdgeInsets.only(top: 20, bottom: 15),
-          child: index == 0
-              ? Text(
-            '${DateFormat('yyyy/MM/dd').format(DateTime.parse(createdDate))}',
-            style: TextStyle(color: Colors.white),
-          )
-              : Text(
+          child: Text(
             '${DateFormat('yyyy/MM/dd').format(DateTime.parse(date))}',
             style: TextStyle(color: Colors.white),
           ),
@@ -794,7 +765,7 @@ class _ChattingPageState extends State<ChattingPage> {
           Padding(
             padding: const EdgeInsets.only(bottom: 10.0),
             child: Text(
-              "새로운 대화를 시작합니다.",
+              'chatting3'.tr(),
               style: TextStyle(color: Color(0xff717171), fontSize: 12),
             ),
           )

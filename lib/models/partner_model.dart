@@ -39,7 +39,7 @@ class Partner {
     gender = json['gender'];
     nationality = json['nationality'];
     profileImage = json['profileImage'];
-    selfIntroduction = json['selfIntrodcution'];
+    selfIntroduction = json['selfIntroduction'];
     firstPreferLanguage = json['firstPreferLanguage'];
     secondPreferLanguage = json['secondPreferLanguage'];
   }

@@ -3,6 +3,7 @@ import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/signup_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:path/path.dart';
@@ -112,6 +113,8 @@ class APIs {
 
     if (member.selfIntroduction != null && member.selfIntroduction!.isNotEmpty) {
       request.fields['selfIntroduction'] = member.selfIntroduction!;
+    }else{
+      request.fields['selfIntroduction'] = ' ';
     }
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
@@ -181,7 +184,7 @@ class APIs {
   로그아웃
 
    */
-  static Future<void> logOut(BuildContext context, String fcmToken) async {
+  static Future<void> logOut(BuildContext context) async {
     print('로그아웃 시도');
     const url =
         'http://3.34.2.246:8080/api/v1/auth/logout'; //mocksever
@@ -194,12 +197,13 @@ class APIs {
     refreshToken = json.decode(refreshToken!)['data']['refreshToken'];
 
 
+    final fcmToken = await FirebaseMessaging.instance.getToken();
     var response = await http.delete(Uri.parse(url),
       headers: {
         'Authorization': 'Bearer $accessToken',
         'Content-Type': 'application/json',
         'RefreshToken': '$refreshToken',
-        "FcmToken": fcmToken
+        "FcmToken": '${fcmToken}'
       },
     );
 
@@ -219,7 +223,7 @@ class APIs {
 
       //fail
     } else {
-      print(response.body);
+      print(json.decode(utf8.decode(response.bodyBytes)));
     }
   }
 
@@ -286,6 +290,15 @@ class APIs {
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       return false;
     }
   }
@@ -358,7 +371,16 @@ class APIs {
 
       //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       throw Exception('요청 오류');
     }
   }
@@ -382,14 +404,25 @@ class APIs {
     );
     //success
     if (response.statusCode == 200) {
-      print('매칭 상태 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
       return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
+      print('매칭 상태 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
+
+
 
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-        throw Exception('AT-C-002');
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'MT-C-005'){
+        print('정보 없음');
+        return "NOT_APPLIED";
+      }else{
+
       }
       throw Exception('요청 오류');
     }
@@ -421,7 +454,16 @@ class APIs {
       //fail
     } else {
       //오류 생기면 바디 확인
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       throw Exception('요청 오류');
     }
   }
@@ -454,7 +496,16 @@ class APIs {
       //fail
     } else {
       //오류 생기면 바디 확인
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
 
       //임의로 넣어두겠습니다
       List<Partner> _partners = [
@@ -523,34 +574,34 @@ class APIs {
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      //만료되지 않았다면
+      //발급받은 새로운 accesstoken을 저장
+      await storage.write(
+        key: 'token',
+        value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))),
+      );
+      //Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
+      return true;
 
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       //refresh token이 만료되었다면 재로그인
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-005'){
-        print('리프레시 토큰이 만료되어 자동 로그인 기간이 지났습니다. 다시 로그인해주세요.');
         //start page로 이동
-        return false;
+        throw 'AT-C-005';
       }else if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-006'){
         //start page로 이동
         return false;
       }else {
-        //만료되지 않았다면
-        //발급받은 새로운 accesstoken을 저장
-        await storage.write(
-          key: 'token',
-          value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))),
-        );
-        //Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
-        return true;
-      }
 
-      //fail
-    } else {
+      }
       print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
   }
 
-  static Future<ScreenArguments> getMatchingData() async {
+  static Future<ScreenArguments> getMatchingData(context) async {
     late ScreenArguments _screenArguments;
 
     late MemberDetails _memberDetails;
@@ -561,12 +612,29 @@ class APIs {
     try {
       _status = await APIs.getApplicantStatus();
     } catch (e) {
-      print(e);
       if(e == "AT-C-002"){
-        print('토큰 재발급');
-        getAccessToken();
-        _status = await APIs.getApplicantStatus();
+        try{
+          await APIs.getAccessToken();
+        }catch (e){
+          if(e == "AT-C-005") {
+            //토큰 및 정보 삭제
+            await storage.delete(key: 'auth');
+            await storage.delete(key: 'token');
+            print('로그아웃, 정보 지움');
 
+            //스택 비우고 화면 이동
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+            );
+          }
+            else{
+            _status = await APIs.getApplicantStatus();
+          }
+          }
+      }
+      else if(e == "AT-C-007"){
+        //토큰 및 정보 삭제
+        await APIs.logOut(context);
       }
     }
 
@@ -618,7 +686,7 @@ class APIs {
     }
     //실패
     else {
-      print(json.decode(utf8.decode(response.bodyBytes))['message']);
+      print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
   }
@@ -669,25 +737,72 @@ class APIs {
   static Future<bool> updateSelfIntroduction(String selfIntroduction) async {
     var url = 'http://13.125.205.59:8080/api/v1/member/self-introduction';
 
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    // 액세스 토큰만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    // 업데이트할 MBTI 정보를 담은 Map 생성
+    var requestData = {
+      'selfIntroduction': selfIntroduction,
+    };
+
+    var response = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(requestData),
+    );
+
+    //성공
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+    }
+    //실패
+    else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
+
+  /*
+
+  선호 언어 수정
+
+   */
+  static Future<bool> updatePreferLanguage(String firstPreferLanguage,
+      String secondPreferLanguage) async {
+    var url = 'http://3.34.2.246:8080/api/v1/applicant/prefer-languages';
+
     // 토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
 
     // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['accessToken'];
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
-    // FormData 생성
-    var formData = http.MultipartRequest('PUT', Uri.parse(url));
-    formData.headers['Authorization'] = 'Bearer $jwtToken';
-    formData.fields['selfIntroduction'] = selfIntroduction;
-
-    // 요청 전송
-    var response = await formData.send();
-
+    var response = await http.patch(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        "firstPreferLanguage": firstPreferLanguage,
+        "secondPreferLanguage": secondPreferLanguage,
+      }),
+    );
+    //성공
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      print(json.decode(utf8.decode(response.bodyBytes)));
       return true;
-    } else {
-      print(response.reasonPhrase);
+    }
+    //실패
+    else {
+      print('언어 수정 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
       return false;
     }
   }
@@ -717,7 +832,6 @@ class APIs {
         body: jsonEncode({
           "firstPreferLanguage": firstPreferLanguage,
           "secondPreferLanguage": secondPreferLanguage,
-
         }));
 
     //success
@@ -727,6 +841,15 @@ class APIs {
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
       return false;
     }
   }
@@ -799,7 +922,7 @@ class APIs {
 
    */
 
-  static Future<List<MessageModel>> getMessages(roomId) async {
+  static Future<List<MessageModel>> getMessages(roomId, context) async {
     var _url =
         'http://3.34.2.246:8081/api/v1/chat/${roomId}'; //mocksever
 
@@ -816,7 +939,21 @@ class APIs {
     } catch (e) {
       print(e);
       if(e == "AT-C-002"){
-        await APIs.getAccessToken();
+        try{
+          await APIs.getAccessToken();
+        }catch (e) {
+          if (e == "AT-C-005") {
+            //토큰 및 정보 삭제
+            await storage.delete(key: 'auth');
+            await storage.delete(key: 'token');
+            print('로그아웃, 정보 지움');
+
+            //스택 비우고 화면 이동
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+            );
+          }
+        }
         chatToken = await APIs.getChatToken();
       }
     }
@@ -869,18 +1006,24 @@ class APIs {
 
       //fail
     } else {
+
+      print(json.decode(utf8.decode(response.bodyBytes)));
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
         print('액세스 토큰 만료');
-        throw Exception('AT-C-002');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
       }
-      print(json.decode(utf8.decode(response.bodyBytes)));
 
       throw Exception('요청 오류');
     }
   }
 
   // 채팅 정보 받아오기
-  static Future<Map<String, dynamic>> getChatSummary() async {
+  static Future<Map<String, dynamic>> getChatSummary(context) async {
     var _url = 'http://3.34.2.246:8081/api/v1/chat/summary';
     print('토큰 읽기');
     //토큰 읽어오기
@@ -895,7 +1038,22 @@ class APIs {
     } catch (e) {
       if(e == "AT-C-002"){
         print(e);
-        APIs.getAccessToken();
+        try{
+          await APIs.getAccessToken();
+        }catch (e){
+          if(e == "AT-C-005"){
+            //토큰 및 정보 삭제
+            await storage.delete(key: 'auth');
+            await storage.delete(key: 'token');
+            print('로그아웃, 정보 지움');
+
+            //스택 비우고 화면 이동
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
+            );
+
+          }
+        }
         chatToken = await APIs.getChatToken();
       }
     }
@@ -919,31 +1077,270 @@ class APIs {
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
       if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-        print('토큰 만료');
-        throw Exception('AT-C-002');
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
       }
       throw Exception('요청 오류');
     }
   }
 
-  /*매칭 남은 시간*/
-static Future<void> matchingProfessData() async{
-  final url = Uri.parse('http://3.34.2.246:8080/api/v1/applicant/completion-date');
+  /*
 
-  final response = await http.post(
-    url,
-    body: {'matchingCompletionDate': 'YYYY-MM-DD HH:MM'},
+  매칭 완료 일시
+
+  */
+static Future<String> matchingProfessData() async{
+  var _url = Uri.parse('http://3.34.2.246:8080/api/v1/applicant/completion-date');
+
+  //토큰 읽어오기
+  var jwtToken = await storage.read(key: 'token');
+  //accessToken만 보내기
+  jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+  var response = await http.get(
+    _url,
+    headers: {
+      'Authorization': 'Bearer $jwtToken',
+      'Content-Type': 'application/json',
+    },
   );
 
   if (response.statusCode == 200) {
-
-    print('Response: ${response.body}');
-    final matchingCompletionDate = response.body;
-    final matchingDateResponse = DateTime.parse(matchingCompletionDate);
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    return json.decode(utf8.decode(response.bodyBytes))['data']['matchingCompleteDate'];
 
   } else {
-    print('Error: ${response.statusCode}');
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+      print('액세스 토큰 만료');
+      throw 'AT-C-002';
+    } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+      print('로그아웃된 토큰');
+      throw 'AT-C-007';
+    }else{
+
+    }
+    throw Exception('요청 오류');
   }
 }
+
+  /*
+
+  채팅 알림 설정 조회
+
+   */
+  static Future<void> getChatNotificationStatus() async {
+    const url =
+        'http://3.34.2.246:8080/api/v1/notification/chat'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+
+    var response = await http.get(Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+          "FcmToken": '$fcmToken'
+        });
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+    }
+  }
+
+  /*
+
+  채팅 알림 설정
+
+   */
+  static Future<bool> setChatNotification(bool _notification, bool all) async {
+    const url =
+        'http://3.34.2.246:8080/api/v1/notification/chat'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+
+    //알림값 읽어오기
+    var notification = await storage.read(key: 'notification');
+
+    var allNotification = json.decode(notification!)['allNotification'];
+    var matchingNotification = json.decode(notification!)['matchingNotification'];
+    var chatNotification = json.decode(notification!)['chatNotification'];
+
+
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+
+    var response = await http.post(Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+          "FcmToken": '$fcmToken'
+        },
+        body: jsonEncode({
+          "chatNotification": _notification.toString(),
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      await getChatNotificationStatus();
+      await storage.delete(key: 'notification');
+      if(all){
+        await storage.write(
+          key: 'notification',
+          value: jsonEncode({
+            'allNotification' : _notification,
+            'matchingNotification' : _notification,
+            'chatNotification' : _notification,
+          }),
+        );
+      }
+      else{
+        if(matchingNotification != _notification){
+          allNotification = false;
+        }else if(matchingNotification == _notification){
+          allNotification = true;
+        }
+        await storage.write(
+          key: 'notification',
+          value: jsonEncode({
+            'allNotification' : allNotification,
+            'matchingNotification' : matchingNotification,
+            'chatNotification' : _notification,
+          }),
+        );
+      }
+
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      return false;
+    }
+  }
+
+  /*
+
+  신고하기
+
+   */
+
+  static Future<bool> reportPartner(String reportCategory, String reportContent, int memberId) async {
+    var _url =
+        'http://3.34.2.246:8080/api/v1/report/${memberId}'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.post(Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "reportCategory": reportCategory,
+          "reportContent": reportContent,
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      return false;
+    }
+  }
+
+  /*
+
+  신고하기
+
+   */
+
+  static Future<bool> blockPartner(Partner partner) async {
+    var _url =
+        'http://3.34.2.246:8080/api/v1/block/${partner.memberId}'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.post(Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "roomId": '${partner.roomId}',
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      return false;
+    }
+  }
 
 }

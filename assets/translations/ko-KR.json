@@ -9,6 +9,8 @@
   "password": "비밀번호",
   "findpassword1": "비밀번호를 잊으셨나요?",
   "findpassword2": "비밀번호 찾기",
+  "login4": "로그인 실패",
+  "login5": "이메일 및 비밀번호를 확인해주세요!",
 
   "next": "다음",
   "confirm": "확인",
@@ -150,7 +152,7 @@
   "setting-notichat": "채팅 알림",
   "setting-notiinapp": "앱 내부 알림",
   "setting-changepass": "비밀번호 변경",
-  "setting-withdrawal": "탈퇴",
+  "setting-withdrawal": "탈퇴하기",
   "setting-memwithdrawal": "회원탈퇴",
   "setting-findpas": "비밀번호를 변경하기 위해\n기존 비밀번호를 입력해주세요.",
   "setting-authen": "인증완료",
@@ -179,6 +181,8 @@
   "setting-real": "정말 탈퇴하시겠어요?",
   "setting-withdrawaldone": "탈퇴 완료",
   "setting-fail" : "탈퇴 실패",
+  "setting-okay" : "네, 탈퇴할래요.",
+  "setting-cancel" : "아니요. 괜찮습니다.",
   "setting-failwhy": "비밀번호 입력 미일치로 인해\n탈퇴에 실패하였습니다.",
   "setting-delete5": "채팅내역, 매칭 내역 등 이제까지 사용된 데이터들은 복구되지 않아요.",
   "setting-thank": "그동안 이용해주셔서 감사합니다.\n회원가입을 통해\n언제든지 다시 시작할 수 있어요!",
@@ -209,7 +213,26 @@
   "matchinglan" : "매칭 선호 언어",
   "first": "1순위",
   "second": "2순위",
-  "matchingpreferlan": "매칭 선호 언어"
+  "matchingpreferlan": "매칭 선호 언어",
+
+
+  "chatting1": "메세지를 보낼 수 없습니다.",
+  "chatting2": "대화할 수 없는 상대입니다!",
+  "chatting3": "새로운 대화를 시작합니다.",
+  "chatting4": "밸런스게임\n제안하기",
+  "chatting-dialog1": "어떤 서비스를 원하세요?",
+  "chatting-dialog2": "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
+  "chatting-report1": "신고하기",
+  "chatting-report2": "성희롱",
+  "chatting-report3": "욕설/폭력",
+  "chatting-report4": "스팸/광고",
+  "chatting-report5": "사기",
+  "chatting-report6": "기타",
+  "chatting-report7": "신고 사유를 적어주세요.",
+  "chatting-report8": "신고가 접수되었습니다.",
+  "chatting-block1": "차단하기",
+  "chatting-block2": "사용자를 차단하시겠습니까?",
+  "chatting-block3": "메세지 수신 및 발신이 모두 차단되며, 차단된 상대방과는 재매칭이 불가합니다."
 
 
 

@@ -80,19 +80,13 @@ void main() async {
 
   // fcm 초기화 부분
   await initializeDefault();
-  setupInteractedMessage();
-  //final fcmToken = await FirebaseMessaging.instance.getToken();
+  final fcmToken = await FirebaseMessaging.instance.getToken();
   // fcm 토큰 출력
-  //print(fcmToken);
+  print(fcmToken);
 
-  //백그라운드 메세지 처리 핸들러 연결
-  //FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
-/*
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(FirebaseAPIs.channel);
-*/
+  FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
+
+
   runApp(EasyLocalization(
     path: 'assets/translations',
     fallbackLocale: Locale('en', 'US'),
@@ -110,21 +104,10 @@ Future<void> initializeDefault() async {
   print(fcmToken);
 }
 
-Future<void> setupInteractedMessage() async {
-  RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
-  if (initialMessage != null) {
-    _handleMessage(initialMessage);
-  }
-  FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-}
-
-void _handleMessage(RemoteMessage message) {
-  //앱 실행시
-}
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
 
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -155,12 +138,12 @@ class MyApp extends StatelessWidget {
         '/apply/done' : (context) => MatchingApplyDonePage(),
         '/info/my' : (conext) => MatchingInfoPage(),
         '/info/your' : (context) => MatchingPartnerInfoPage(),
-        '/edit' : (context) => MatchingEditPage(),
+        //'/edit' : (context) => MatchingEditPage(),
 
         //setting
         '/setting/edit' : (context) => SettingEditPage(),
-        '/setting/lan/edit':(context) => SettingLanEditPage(),
-        '/setting/MBTI/edit' : (context) => SettingMBTIEditPage(),
+        //'/setting/lan/edit':(context) => SettingLanEditPage(),
+        //'/setting/MBTI/edit' : (context) => SettingMBTIEditPage(),
         '/setting/notification' : (context) => SettingNotificationPage(),
         '/setting/terms': (context) => SettingTermsPage(),
         '/setting/terms/use' : (context) => SettingTermsUsePage(),

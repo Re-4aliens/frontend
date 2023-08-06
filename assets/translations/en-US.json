@@ -9,6 +9,8 @@
   "password": "Password",
   "findpassword1": "Forgot password?",
   "findpassword2": "here",
+  "login4": "Login failed",
+  "login5": "Check the email and password!",
 
   "next": "Next",
   "confirm": "Confirm",
@@ -180,6 +182,8 @@
   "setting-real":"Are you sure you want to withdraw?",
   "setting-withdrawaldone":"Withdrawal completed.",
   "setting-fail": "fail",
+  "setting-okay" : "Yes, I wanna withdraw",
+  "setting-cancel" : "No, I don't want",
   "setting-failwhy": "Withdrawal failed\ndue to password mismatch",
   "setting-delete5": "Chat history, matching records, and other data used so far cannot be recovered.",
   "setting-thank": "Thank you for using our service so far.\nThrough membership registration,\nyou can start again anytime!",
@@ -211,9 +215,23 @@
   "matchinglan": "Matching preferred languages",
   "first": "First priority",
   "second": "Second priority",
-  "matchingpreferlan": "Matching preferred\nlanguages"
+  "matchingpreferlan": "Matching preferred\nlanguages",
 
-
-
-
+  "chatting1": "Closed chat room",
+  "chatting2": "Unable to talk!",
+  "chatting3": "Start a new conversation",
+  "chatting4": "Send\nwould you rather game",
+  "chatting-dialog1": "Which service do you want?",
+  "chatting-dialog2": "Click the button below to report or block.",
+  "chatting-report1": "Report",
+  "chatting-report2": "Sexual harassment",
+  "chatting-report3": "Violence",
+  "chatting-report4": "Spam",
+  "chatting-report5": "Scam",
+  "chatting-report6": "Etc",
+  "chatting-report7": "Please write down the reason for reporting.",
+  "chatting-report8": "A report is received",
+  "chatting-block1": "Block",
+  "chatting-block2": "Do you want to block this user?",
+  "chatting-block3": "You can't receive or send messages, and can't rematch with blocked users."
 }
