@@ -54,7 +54,7 @@ class _StartPageState extends State<StartPage> {
 
 
   _isValid() async {
-    userInfo = await storage.read(key: 'auth');
+    userInfo = await storage.read(key: 'token');
     //저장된 정보가 있다면
     if (userInfo != null){
       //토큰 저장 시간
@@ -63,8 +63,8 @@ class _StartPageState extends State<StartPage> {
       Duration diff = DateTime.now().difference(timestamp);
 
       print('지금 시간: ${DateTime.now()}\n토큰 저장 시간: ${timestamp}\n 차이: ${diff}');
-      //리프레시 토큰 기간(60s)이 지났다면
-      if(diff > Duration(days: 6)){
+      //리프레시 토큰 기간이 지났다면
+      if(diff >= Duration(days: 7)){
         //토큰 및 정보 지움
         //자동로그인 해제
         await storage.delete(key: 'auth');
@@ -77,7 +77,7 @@ class _StartPageState extends State<StartPage> {
         await storage.delete(key: 'auth');
         await storage.delete(key: 'token');
       }else if (diff <= Duration(days: 6) && diff >= Duration(minutes: 30)){
-        //액세스 토큰 기간(30s)이 지났다면
+        //액세스 토큰 기간이 지났다면
         //액세스 토큰 재발급
         print('액세스 토큰 재발급');
 

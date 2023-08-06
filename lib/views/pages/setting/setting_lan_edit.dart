@@ -175,7 +175,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
             ),
 
             //신청이 안된 상태일때는 빈공간
-            widget.screenArguments!.status == 'NOT_APPLIED'
+            widget.screenArguments!.status != 'PENDING'
                 ? SizedBox(child: Container(),)
                 : Container(
               child: Column(
@@ -280,7 +280,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                               '/loading', (Route<dynamic> route) => false);
                           if (_selectedLanguage == '한국어') {
                             EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
-                          } else if (_selectedLanguage == 'English') {
+                          } else {
                             EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
                           }
                         }
@@ -288,6 +288,11 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                       else {
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             '/loading', (Route<dynamic> route) => false);
+                        if (_selectedLanguage == '한국어') {
+                          EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
+                        } else if (_selectedLanguage == 'English') {
+                          EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
+                        }
                       }
                     }
 
