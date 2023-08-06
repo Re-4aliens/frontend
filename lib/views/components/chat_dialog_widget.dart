@@ -2,6 +2,7 @@ import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/views/components/block_dialog_widget.dart';
 import 'package:aliens/views/components/report_dialog_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
@@ -39,7 +40,7 @@ class ChatDialog extends StatelessWidget{
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "어떤 서비스를 원하세요?",
+              'chatting-dialog1'.tr(),
               style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold),
@@ -47,7 +48,7 @@ class ChatDialog extends StatelessWidget{
             Padding(
               padding: const EdgeInsets.all(25.0),
               child: Text(
-                "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
+                'chatting-dialog2'.tr(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,
@@ -68,7 +69,7 @@ class ChatDialog extends StatelessWidget{
                     borderRadius: BorderRadius.circular(5)),
                 alignment: Alignment.center,
                 child: Text(
-                  "신고하기",
+                  'chatting-report1'.tr(),
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -89,8 +90,7 @@ class ChatDialog extends StatelessWidget{
                     color: Color(0xff7898FF),
                     borderRadius: BorderRadius.circular(5)),
                 alignment: Alignment.center,
-                child: Text(
-                  "차단하기",
+                child: Text('chatting-block1'.tr(),
                   style: TextStyle(color: Colors.white),
                 ),
               ),

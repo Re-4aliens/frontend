@@ -1,5 +1,6 @@
 import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/models/screenArgument.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
@@ -34,18 +35,18 @@ class _ReportDialogState extends State<ReportDialog>{
   }
 
   List<List<String>> reportList = [
-    ["SEXUAL_HARASSMENT", "성희롱"],
-  ["VIOLENCE", "욕설/폭력"],
-  ["SPAM", "스팸/광고"],
-  ["SCAM", "사기"],
-  ["ETC", "기타"]
+    ["SEXUAL_HARASSMENT", 'chatting-report2'.tr()],
+  ["VIOLENCE", 'chatting-report3'.tr()],
+  ["SPAM", 'chatting-report4'.tr()],
+  ["SCAM", 'chatting-report5'.tr()],
+  ["ETC", 'chatting-report6'.tr()]
   ];
   final TextEditingController _textEditingController = TextEditingController(text: ' ');
 
-  String? _reportReason = '성희롱';
+  String? _reportReason = 'chatting-report2'.tr();
   Widget androidReport(){
     return AlertDialog(
-      title: Text('신고하기'),
+      title: Text('chatting-report1'.tr()),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -120,7 +121,7 @@ class _ReportDialogState extends State<ReportDialog>{
                   controller: _textEditingController,
                   maxLines: 2,
                   decoration: InputDecoration(
-                    hintText: '신고 사유를 입력해주세요',
+                    hintText: 'chatting-report7'.tr(),
                     border: InputBorder.none,
                   ),
                 ),
@@ -132,7 +133,7 @@ class _ReportDialogState extends State<ReportDialog>{
       actions: [
         TextButton(onPressed: (){
           Navigator.pop(context);
-        }, child: Text('취소')),
+        }, child: Text('cancel'.tr())),
         TextButton(onPressed: ()async {
           var reportCategory;
           for(int i = 0; i < reportList.length; i ++){
@@ -145,14 +146,14 @@ class _ReportDialogState extends State<ReportDialog>{
             Navigator.pop(context);
             showDialog(context: context, builder: (context){
               return AlertDialog(
-                title: Text('신고가 접수되었습니다.', style: TextStyle(
+                title: Text('chatting-report8'.tr(), style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold
                 ),),
               );
             });
           }
-        }, child: Text('신고하기')),
+        }, child: Text('chatting-report1'.tr())),
       ],
     );
   }

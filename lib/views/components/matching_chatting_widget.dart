@@ -58,7 +58,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
 
     for (int i = 0; i < _chatRoomList.length; i++) {
       if(_chatRoomList[i].partner!.roomState == 'CLOSE'){
-        _chatRoomList[i].lastChatContent = '메세지를 보낼 수 없습니다.';
+        _chatRoomList[i].lastChatContent = 'chatting1'.tr();
         _chatRoomList[i].lastChatTime = '기록 없음';
         _chatRoomList[i].numberOfUnreadChat = 0;
       }
@@ -143,7 +143,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                           "assets/illustration/loading_01.gif")));
             else if(snapshot.data == null){
               return Center(
-                child: Text('불러올 매칭 상대가 없습니다.',
+                child: Text('',
                   style: TextStyle(
                       fontSize: 16,
                       color: Color(0xff616161)
