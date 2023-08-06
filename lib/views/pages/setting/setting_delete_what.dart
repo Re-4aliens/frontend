@@ -60,212 +60,215 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
           padding: EdgeInsets.only(right: 20, left:20, top: MediaQuery.of(context).size.height * 0.06),
           child:
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text('${'setting-withdrawal'.tr()}',
+                    style: TextStyle(
+                        fontSize: isSmallScreen?22:24,
+                        fontWeight: FontWeight.bold
+                    ),),
+                  Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      child: Text('${'setting-deletewhat'.tr()}',
+                        style: TextStyle(
+                          fontSize: isSmallScreen?12:14,
+                          color: Color(0xff888888),
+                        ),)),
+                  SizedBox(height: 10),
                   Expanded(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('${'setting-withdrawal'.tr()}',
-                          style: TextStyle(
-                              fontSize: isSmallScreen?22:24,
-                              fontWeight: FontWeight.bold
-                          ),),
-                        Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            child: Text('${'setting-deletewhat'.tr()}',
-                              style: TextStyle(
-                                fontSize: isSmallScreen?12:14,
-                                color: Color(0xff888888),
-                              ),)),
-                        SizedBox(height: 10),
-                        Container(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        margin: EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width * 11/35,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 10,
+                                      spreadRadius: 0.5,
+                                      offset: const Offset(0, 4)),
+                                ],
+                                gradient: LinearGradient(colors: [Colors.white, Colors.white]),
+                              ),
+                              child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height * 0.15,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [
+                                          //내부 그림자
+                                          BoxShadow(
+                                            color: Color(0xff7898FF).withOpacity(0.3),
+                                          ),
 
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.width * 11/35,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 10,
-                                  spreadRadius: 0.5,
-                                  offset: const Offset(0, 4)),
-                            ],
-                            gradient: LinearGradient(colors: [Colors.white, Colors.white]),
-                          ),
-                          child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: MediaQuery.of(context).size.height * 0.15,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    boxShadow: [
-                                      //내부 그림자
-                                      BoxShadow(
-                                        color: Color(0xff7898FF).withOpacity(0.3),
-                                      ),
+                                          BoxShadow(
+                                            blurRadius: 10,
+                                            color: Colors.white,
+                                            offset: const Offset(-5, -5),
+                                          )
+                                        ]),
+                                    padding: EdgeInsets.only(left: 20, right: 30),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text('${'setting-delete1'.tr()}',
+                                          style: TextStyle(
+                                              fontSize: isSmallScreen?12:14,
+                                              fontWeight: FontWeight.bold
+                                          ),),
+                                        SizedBox(height: 5),
+                                        Text('${'setting-delete1.1'.tr()}',
+                                          style: TextStyle(
+                                              fontSize: isSmallScreen?10:12,
+                                            color: Color(0xff888888)
+                                          ),)
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ),
+                            Container(
 
-                                      BoxShadow(
-                                        blurRadius: 10,
-                                        color: Colors.white,
-                                        offset: const Offset(-5, -5),
-                                      )
-                                    ]),
-                                padding: EdgeInsets.only(left: 20, right: 30),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text('${'setting-delete1'.tr()}',
-                                      style: TextStyle(
-                                          fontSize: isSmallScreen?12:14,
-                                          fontWeight: FontWeight.bold
-                                      ),),
-                                    SizedBox(height: 5),
-                                    Text('${'setting-delete1.1'.tr()}',
-                                      style: TextStyle(
-                                          fontSize: isSmallScreen?10:12,
-                                        color: Color(0xff888888)
-                                      ),)
-                                  ],
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.width * 11/35,
+                              margin: EdgeInsets.symmetric(vertical: isSmallScreen ? 10 : 20),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 10,
+                                      spreadRadius: 0.5,
+                                      offset: const Offset(0, 4)),
+                                ],
+                                gradient: LinearGradient(colors: [Colors.white, Colors.white]),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height * 0.15,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        //내부 그림자
+                                        BoxShadow(
+                                          color: Color(0xff7898FF).withOpacity(0.3),
+                                        ),
+
+                                        BoxShadow(
+                                          blurRadius: 10,
+                                          color: Colors.white,
+                                          offset: const Offset(-5, -5),
+                                        )
+                                      ]),
+                                  padding: EdgeInsets.only(left: 20, right: 30),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('${'setting-delete2'.tr()}',
+                                        style: TextStyle(
+                                            fontSize: isSmallScreen?12:14,
+                                            fontWeight: FontWeight.bold
+                                        ),),
+                                      SizedBox(height: 5),
+                                      Text('${'setting-delete2.1'.tr()}',
+                                        style: TextStyle(
+                                            fontSize: isSmallScreen?10:12,
+                                            color: Color(0xff888888)
+                                        ),)
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                        ),
-                        Container(
+                            Container(
 
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.width * 11/35,
-                          margin: EdgeInsets.symmetric(vertical: isSmallScreen ? 10 : 20),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 10,
-                                  spreadRadius: 0.5,
-                                  offset: const Offset(0, 4)),
-                            ],
-                            gradient: LinearGradient(colors: [Colors.white, Colors.white]),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Container(
                               width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.15,
+                              height: MediaQuery.of(context).size.width * 11/35,
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    //내부 그림자
-                                    BoxShadow(
-                                      color: Color(0xff7898FF).withOpacity(0.3),
-                                    ),
-
-                                    BoxShadow(
+                                borderRadius: BorderRadius.circular(20),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
                                       blurRadius: 10,
-                                      color: Colors.white,
-                                      offset: const Offset(-5, -5),
-                                    )
-                                  ]),
-                              padding: EdgeInsets.only(left: 20, right: 30),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('${'setting-delete2'.tr()}',
-                                    style: TextStyle(
-                                        fontSize: isSmallScreen?12:14,
-                                        fontWeight: FontWeight.bold
-                                    ),),
-                                  SizedBox(height: 5),
-                                  Text('${'setting-delete2.1'.tr()}',
-                                    style: TextStyle(
-                                        fontSize: isSmallScreen?10:12,
-                                        color: Color(0xff888888)
-                                    ),)
+                                      spreadRadius: 0.5,
+                                      offset: const Offset(0, 4)),
                                 ],
+                                gradient: LinearGradient(colors: [Colors.white, Colors.white]),
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: MediaQuery.of(context).size.height * 0.15,
+
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      boxShadow: [
+                                        //내부 그림자
+                                        BoxShadow(
+                                          color: Color(0xff7898FF).withOpacity(0.3),
+                                        ),
+
+                                        BoxShadow(
+                                          blurRadius: 10,
+                                          color: Colors.white,
+                                          offset: const Offset(-5, -5),
+                                        )
+                                      ]),
+                                  padding: EdgeInsets.only(left: 20, right: 30),
+
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text('${'setting-delete3'.tr()}',
+                                        style: TextStyle(
+                                            fontSize: isSmallScreen?12:14,
+                                            fontWeight: FontWeight.bold
+                                        ),),
+                                      SizedBox(height: 5),
+                                      Text('${'setting-delete3.1'.tr()}',
+                                        style: TextStyle(
+                                            fontSize: isSmallScreen?10:12,
+                                            color: Color(0xff888888)
+                                        ),)
+                                    ],
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                        Container(
-
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.width * 11/35,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withOpacity(0.1),
-                                  blurRadius: 10,
-                                  spreadRadius: 0.5,
-                                  offset: const Offset(0, 4)),
-                            ],
-                            gradient: LinearGradient(colors: [Colors.white, Colors.white]),
-                          ),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height * 0.15,
-
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  boxShadow: [
-                                    //내부 그림자
-                                    BoxShadow(
-                                      color: Color(0xff7898FF).withOpacity(0.3),
-                                    ),
-
-                                    BoxShadow(
-                                      blurRadius: 10,
-                                      color: Colors.white,
-                                      offset: const Offset(-5, -5),
-                                    )
-                                  ]),
-                              padding: EdgeInsets.only(left: 20, right: 30),
-
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('${'setting-delete3'.tr()}',
-                                    style: TextStyle(
-                                        fontSize: isSmallScreen?12:14,
-                                        fontWeight: FontWeight.bold
-                                    ),),
-                                  SizedBox(height: 5),
-                                  Text('${'setting-delete3.1'.tr()}',
-                                    style: TextStyle(
-                                        fontSize: isSmallScreen?10:12,
-                                        color: Color(0xff888888)
-                                    ),)
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(child: SizedBox()),
-                        Container(
-                          alignment: Alignment.center,
-                          child: Text('${'setting-onemore'.tr()}',
-                              style: TextStyle(
-                                  fontSize: isSmallScreen?12:14,
-                                  color: Color(0xff888888)
-                              )),
-                        )
-                      ],
+                      ),
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                        alignment: Alignment.bottomCenter,
-                        padding: EdgeInsets.only(bottom: 40),
-                        child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    alignment: Alignment.center,
+                    child: Text('${'setting-onemore'.tr()}',
+                        style: TextStyle(
+                            fontSize: isSmallScreen?12:14,
+                            color: Color(0xff888888)
+                        )),
+                  ),
+                  Container(
+                      alignment: Alignment.bottomCenter,
+                      padding: EdgeInsets.only(bottom: 40),
+                      child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 0.0),
                           child: Row(
                             children: [
                               Container(
@@ -291,10 +294,10 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                 height: MediaQuery.of(context).size.height*0.06,
                                 width: MediaQuery.of(context).size.width * 0.43,
                                 child: ElevatedButton(
-                                  onPressed: (){
-                                    Navigator.pushNamed(context, '/setting/delete', arguments: screenArguments.memberDetails);
-                                  },
-                                  child: Text('${'setting-withdrawal'.tr()}'),
+                                    onPressed: (){
+                                      Navigator.pushNamed(context, '/setting/delete', arguments: screenArguments.memberDetails);
+                                    },
+                                    child: Text('${'setting-withdrawal'.tr()}'),
                                     style: ElevatedButton.styleFrom(
                                         textStyle: TextStyle(fontSize: isSmallScreen?14:16),
                                         backgroundColor: Color(0xff7898FF),
@@ -305,33 +308,9 @@ class _SettingDeleteWhatPageState extends State<SettingDeleteWhatPage> {
                                 ),
                               )
                             ],
-                    )
-                    )
-                      /*Row(
-                      children: [
-                        Button(child: Text('탈퇴하기'), onPressed: (){})
-                      ],
-                    )*/
-                    /*Container(
-                      width: double.maxFinite,
-                      height: 20,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamedAndRemoveUntil('/setting/delete', (Route<dynamic> route) => false
-                          );
-                        },
-                        child: Text(
-                          '탈퇴하기',
-                          style: TextStyle(color: Color(0xffA7A7A7), fontSize: isSmallScreen?14:16),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xffEBEBEB),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(40))),
-                      ),
-                    ),*/
-                    ),
-            )],
+                          )
+                      )
+                  )],
               )
 
 
