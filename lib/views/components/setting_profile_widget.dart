@@ -90,34 +90,42 @@ Widget buildProfileList(context, index, screenArgument){
             fontSize: isSmallScreen?16:18,
           ),
         ),
-        Expanded(child: Container()),
-        if (index < 2)
-          Text(
-            '${memberInfo.elementAt(index)}',
-            style: TextStyle(
-                fontSize: isSmallScreen?16:18, color: Color(0xff7898FF)),
-          )
-        else if(index == 2)
-          Row(children: [
-            Text(
-              '${memberInfo.elementAt(index)}',
-              style: TextStyle(
-                  fontSize: isSmallScreen?16:18, color: Color(0xff7898FF)),
-            ),
-            SizedBox(width: 1),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: isSmallScreen?16:18,
-              color: Color(0xff4D4D4D),
-            )
-          ],
-          )
-        else
-          Icon(
-            Icons.arrow_forward_ios,
-            size: isSmallScreen?16:18,
-            color: Color(0xff4d4d4d),
-          ),
+        Expanded(child: SizedBox()),
+        Container(
+          alignment: Alignment.centerRight,
+          width: 100,
+          child:
+            index < 2 ?
+              Text(
+                '${memberInfo.elementAt(index)}',
+                style: TextStyle(
+                    fontSize: isSmallScreen?16:18, color: Color(0xff7898FF), overflow: TextOverflow.ellipsis),
+              )
+            :index == 2 ?
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                Text(
+                  '${memberInfo.elementAt(index)}',
+                  style: TextStyle(
+                      fontSize: isSmallScreen?16:18, color: Color(0xff7898FF)),
+                ),
+                SizedBox(width: 1),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: isSmallScreen?16:18,
+                  color: Color(0xff4D4D4D),
+                )
+              ],
+              )
+            :
+              Icon(
+                Icons.arrow_forward_ios,
+                size: isSmallScreen?16:18,
+                color: Color(0xff4d4d4d),
+              ),
+
+        )
       ],
     ),
   );

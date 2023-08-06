@@ -28,17 +28,18 @@ class _SignUpBioState extends State<SignUpBio>{
     dynamic member = ModalRoute.of(context)!.settings.arguments;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      //resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: CustomAppBar(appBar: AppBar(), title: '', backgroundColor: Colors.white, infookay: false, infocontent: '',),
       body: Padding(
-        padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
+        padding: EdgeInsets.only(right: 24,left: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Expanded(child: SizedBox()),
             Text('signup-bio1'.tr(),
               style: TextStyle(fontSize: isSmallScreen ?22:24, fontWeight: FontWeight.bold),),
-            SizedBox(height: MediaQuery.of(context).size.height * 0.05),
+             Expanded(child: SizedBox()),
              Padding(
                padding: const EdgeInsets.only(bottom: 15.0),
                child: Form(
@@ -56,8 +57,11 @@ class _SignUpBioState extends State<SignUpBio>{
                      ),
                  ),
              ),
+
+            Text(constraintsText),
             Text('${'signup-bio3'.tr()}\n${'signup-bio4'.tr()}', style: TextStyle(color: Color(0xff626262)),),
-            Expanded(child: SizedBox()),
+
+            Expanded(flex:8, child: SizedBox()),
             Button(
               isEnabled: _isButtonEnabled,
                 child: Text('next'.tr()),
@@ -65,7 +69,7 @@ class _SignUpBioState extends State<SignUpBio>{
                   if(_isButtonEnabled){
                     member.selfIntroduction = _bioController.text;
                     print(member.toJson());
-                    Navigator.pushNamed(context, '/email', arguments: member);
+                    Navigator.pushNamed(context, '/password', arguments: member);
                   }
                 }),
             Center(
@@ -83,6 +87,7 @@ class _SignUpBioState extends State<SignUpBio>{
                 ),
               ),
             ),
+            Expanded(child: SizedBox()),
           ],
         ),
       ),
@@ -92,11 +97,19 @@ class _SignUpBioState extends State<SignUpBio>{
     if (value.isEmpty) {
       setState(() {
         _isButtonEnabled = false;
+        constraintsText = '';
       });
-    } else {
-        setState(() {
-          _isButtonEnabled = true;
-        });
+    } else if(value.length > 15){
+      setState(() {
+        _isButtonEnabled = false;
+        constraintsText = 'signup-bio5'.tr();
+      });
+    }
+    else {
+      setState(() {
+        _isButtonEnabled = true;
+        constraintsText = '';
+      });
     }
   }
 }
