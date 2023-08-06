@@ -117,6 +117,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             activeColor: Color(0xff7898FF),
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
+
                               bool success;
                               print('값: $value');
                               try{
@@ -211,6 +212,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
                               bool success;
+
                               try{
                                 success = await APIs.setChatNotification(value, false);
                               }catch (e){

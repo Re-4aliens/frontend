@@ -39,6 +39,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
 
 
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
       appBar: CustomAppBar(
         appBar: AppBar(),
