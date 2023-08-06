@@ -27,7 +27,6 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isSmallScreen = screenWidth <= 600;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         appBar: AppBar(),
         title: '',
@@ -80,32 +79,40 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                     var _email = _EmailController.text;
                     var _name = _NameController.text;
                     //임시 비밀번호 발급 요청
+                    showDialog(
+                        context: context,
+                        builder: (_) => FutureBuilder(
+                            future: APIs.temporaryPassword(_email, _name),
+                            builder: (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.connectionState == ConnectionState.waiting || snapshot.data == null) {
+                                //받아오는 동안
+                                return Container(
+                                    child: Image(
+                                        image: AssetImage(
+                                            "assets/illustration/loading_01.gif")));
+                              } else{
+                                if(snapshot.data == true){
+                                  //받아온 후
+                                  WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                    Navigator.popAndPushNamed(context,'/login/checkemail');
+                                  });
+                                  return Container(
+                                      child: Image(
+                                          image: AssetImage(
+                                              "assets/illustration/loading_01.gif")));
+                                }
+                                else {
+                                  print('실패');
+                                  Navigator.pop(context);
+                                  return Container(
+                                      child: Image(
+                                          image: AssetImage(
+                                              "assets/illustration/loading_01.gif")));
+                                }
+                              }
 
-                    await APIs.temporaryPassword(_email, _name);
-                    //success
-                    if (true) {
-                      Navigator.pushNamed(context,'/login/checkemail');
-                      //fail
-                    } else {
-                      showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
+                            }));
 
-                        title: Text('이메일과 이름 미일치',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        content: const Text('이메일 및 이름을 다시 확인해주세요.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: Text('${'confirm'.tr()}',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                )),
-                          ),
-                        ],
-                      ));
-                    }
                   }
                 })
           ],
