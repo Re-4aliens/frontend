@@ -123,63 +123,50 @@ class _MatchingListPageState extends State<MatchingListPage> {
                       },
                       isClicked: selectedIndex == i,
                     ),
+                  SizedBox(height: 20,),
+                  Container(
+                    width: double.maxFinite,
+                    height: 50,
+                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (selectedIndex != -1) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ChattingPage(
+                                  applicant:
+                                  widget.screenArguments.applicant,
+                                  partner: widget.screenArguments
+                                      .partners![selectedIndex],
+                                  memberDetails: widget.screenArguments.memberDetails!,
+                                )),
+                          );
+                        }
+                      },
+                      child: Text(
+                        'matched6'.tr(),
+                        style: TextStyle(
+                          color: selectedIndex == -1
+                              ? Color(0xff888888)
+                              : Colors.white,
+                          fontSize: isSmallScreen ? 14 : 16,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0.0,
+                          backgroundColor: selectedIndex == -1
+                              ? Color(0xffEBEBEB)
+                              : Color(0xff7898FF),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40))),
+                    ),
+                  ),
                 ],
               ),
               Spacer(
                 flex: isSmallScreen ? 6 : 8,
               ),
-            ],
-          ),
-          Column(
-            children: [
-              Expanded(flex: isSmallScreen ? 8 : 6, child: Container()),
-              Expanded(
-                  flex: 2,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 25, left: 25),
-                      child: Positioned(
-                        child: Container(
-                          width: double.maxFinite,
-                          height: 50,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              if (selectedIndex != -1) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ChattingPage(
-                                        applicant:
-                                        widget.screenArguments.applicant,
-                                        partner: widget.screenArguments
-                                            .partners![selectedIndex],
-                                        memberDetails: widget.screenArguments.memberDetails!,
-                                      )),
-                                );
-                              }
-                            },
-                            child: Text(
-                              'matched6'.tr(),
-                              style: TextStyle(
-                                color: selectedIndex == -1
-                                    ? Color(0xff888888)
-                                    : Colors.white,
-                                fontSize: isSmallScreen ? 14 : 16,
-                              ),
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                elevation: 0.0,
-                                backgroundColor: selectedIndex == -1
-                                    ? Color(0xffEBEBEB)
-                                    : Color(0xff7898FF),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(40))),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )),
             ],
           ),
         ],
