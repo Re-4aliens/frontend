@@ -153,8 +153,11 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                                       ),
                                     ),
                                     InkWell(
-                                      onTap: (){
-
+                                      onTap: () async {
+                                        if (await APIs.withdraw(
+                                        passwordController.text)){
+                                        Navigator.pushNamed(context, '/setting/delete/done');
+                                        }
                                       },
                                       child: Container(
                                         padding: EdgeInsets.all(13),
