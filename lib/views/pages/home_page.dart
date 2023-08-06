@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Color(0xff888888),
                                   height: 2)),
                           TextSpan(
-                              text: '${'homepage-positive1 '.tr()}',
+                              text: '${'homepage-positive1'.tr()} ',
                               style: TextStyle(
                                   fontSize: 12,
                                   color: Color(0xff888888),
