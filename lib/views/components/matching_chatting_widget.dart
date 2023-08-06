@@ -271,12 +271,16 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        '${chatRoom.lastChatContent}',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Color(0xffA4A4A4),
+                      Container(
+                        child: Text(
+                          '${chatRoom.lastChatContent}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Color(0xffA4A4A4),
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
+                        width: 210,
                       ),
                       chatRoom.numberOfUnreadChat == 0  || chatRoom.numberOfUnreadChat == null?
                             SizedBox(
