@@ -37,7 +37,7 @@ Widget buildProfileList(context, index, screenArgument){
       color: Colors.black,
     ),
     Icon(
-      Icons.sentiment_very_satisfied,
+      Icons.language,
       size: isSmallScreen?18:20,
       color: Colors.black,
     ),
