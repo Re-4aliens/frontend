@@ -305,7 +305,7 @@ class _MatchingListState extends State<MatchingList> {
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: 36,
+                                                      fontSize: isSmallScreen ? 30 : 36,
                                                     ),
                                                   ),
                                                   Padding(
@@ -485,7 +485,7 @@ class _MatchingListState extends State<MatchingList> {
                                 Text(
                                   '${widget.partner.name}',
                                   style: TextStyle(
-                                    fontSize: isSmallScreen ? 18 : 20,
+                                    fontSize: isSmallScreen ? 16 : 20,
                                     fontWeight: FontWeight.bold,
                                     color: widget.isClicked
                                         ? Colors.white

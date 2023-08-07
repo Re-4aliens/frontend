@@ -1386,7 +1386,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: ListView.builder(
-                  itemCount: 5,
+                  itemCount: 4,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == 0) {
                       return Container(

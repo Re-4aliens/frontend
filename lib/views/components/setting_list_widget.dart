@@ -13,7 +13,7 @@ Widget buildSettingList(context, index, screenArguments) {
     '${'setting-security'.tr()}',
     '${'setting-noti'.tr()}',
     '${'setting-terms'.tr()}',
-    '${'setting-inqury'.tr()}',
+    //'${'setting-inqury'.tr()}',
   ];
 
   List settingIcon = [
@@ -32,11 +32,14 @@ Widget buildSettingList(context, index, screenArguments) {
       size: isSmallScreen?18:20,
       color: Colors.black,
     ),
+    /*
     Icon(
       Icons.contact_support,
       size: isSmallScreen?18:20,
       color: Colors.black,
     ),
+
+     */
 
   ];
 
