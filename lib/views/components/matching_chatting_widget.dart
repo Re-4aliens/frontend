@@ -280,7 +280,7 @@ class _matchingChattingWidgetState extends State<matchingChattingWidget> {
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
-                        width: 210,
+                        width: 200,
                       ),
                       chatRoom.numberOfUnreadChat == 0  || chatRoom.numberOfUnreadChat == null?
                             SizedBox(
