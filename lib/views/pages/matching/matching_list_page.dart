@@ -474,7 +474,7 @@ class _MatchingListState extends State<MatchingList> {
                           child: Container(
                         margin: EdgeInsets.symmetric(
                           vertical: 5,
-                          horizontal: 20,
+                          horizontal: 10,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
