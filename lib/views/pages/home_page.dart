@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aliens/models/memberDetails_model.dart';
+import 'package:aliens/views/components/board_tab_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
@@ -59,6 +60,7 @@ class _HomePageState extends State<HomePage> {
     List _pageTitle = [
       '',
       '',
+      '전체게시판',
       '${'setting'.tr()}',
     ];
 
@@ -247,6 +249,7 @@ class _HomePageState extends State<HomePage> {
               screenArguments: args,
             )
           : chattingWidget(context, args.partners),
+      TotalBoardWidget(screenArguments: args),
       settingWidget(context, args)
     ];
 
@@ -345,12 +348,19 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Padding(
               padding: const EdgeInsets.all(5.0),
+              child: Icon(Icons.article),
+            ),
+            label:'게시판' ,
+          ),
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: const EdgeInsets.all(5.0),
               child: SvgPicture.asset(
                 'assets/icon/icon_setting.svg',
                 width: 25,
                 height: 25,
                 color:
-                    selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
+                    selectedIndex == 3 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
             label: '${'homepage-setting'.tr()}',
