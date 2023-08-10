@@ -187,7 +187,8 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                       children: [
                         Text('${'matchingpreferlan'.tr()}',
                           style: TextStyle(
-                            fontSize: isSmallScreen?14:16,
+                            fontSize: isSmallScreen?16:18,
+                            fontWeight: FontWeight.bold
                           ),),
                         Column(
                           children: [
@@ -195,7 +196,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                               children: [
                                 Text('${'first'.tr()}',
                                   style: TextStyle(
-                                    color: Colors.black,
+                                    color: Color(0xff7898ff),
                                     fontSize: isSmallScreen?12:14,
                                   ),),
                                 SizedBox(
@@ -232,7 +233,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                     children: [
                       Text('${'second'.tr()}',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Color(0xff7898ff),
                           fontSize:isSmallScreen?12:14,
                         ),),
                       SizedBox(
