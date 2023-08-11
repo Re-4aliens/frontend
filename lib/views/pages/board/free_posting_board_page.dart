@@ -11,8 +11,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../components/board_drawer_widget.dart';
+
 class FreePostingBoardPage extends StatefulWidget {
-  const FreePostingBoardPage({super.key});
+  const FreePostingBoardPage({super.key, required this.screenArguments});
+  final ScreenArguments screenArguments;
 
   @override
   State<StatefulWidget> createState() => _FreePostingBoardPageState();
@@ -20,15 +23,59 @@ class FreePostingBoardPage extends StatefulWidget {
 
 class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
 
+  bool isDrawerStart = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('자유게시판'),
-          backgroundColor: Color(0xff7898ff),
+          centerTitle: true,
+          title: Text(
+            '자유게시판',
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.white,
+            ),
+          ),
+          toolbarHeight: 56,
           elevation: 0,
+          shadowColor: Colors.black26,
+          backgroundColor: Color(0xff7898ff),
+          leadingWidth: 100,
+          leading: Column(
+            children: [
+              Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: SvgPicture.asset(
+                          'assets/icon/icon_back.svg',
+                          color: Colors.white,
+                          width: 24,
+                          height: MediaQuery.of(context).size.height * 0.02,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isDrawerStart = !isDrawerStart;
+                          });
+                        },
+                        icon: Icon(Icons.format_list_bulleted_outlined),
+                        color: Colors.white,
+                      ),
+                    ],
+                  )
+            ],
+          ),
+          actions: [
+            IconButton(onPressed: (){}, icon: Icon(Icons.notifications_none)),
+            IconButton(onPressed: (){}, icon: Icon(Icons.search)),
+          ],
         ),
-        body: Container(
+        body: isDrawerStart ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,) :Container(
           decoration: BoxDecoration(color: Colors.white),
           child: ListView.builder(
               itemCount: freePostingBoardList.length,
