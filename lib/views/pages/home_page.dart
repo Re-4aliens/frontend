@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:aliens/models/memberDetails_model.dart';
+import 'package:aliens/views/components/board_tab_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
@@ -17,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../providers/auth_provider.dart';
+import '../components/board_drawer_widget.dart';
 import '../components/matching_widget.dart' as matching;
 import '../components/setting_list_widget.dart';
 import '../components/chatting_widget.dart';
@@ -24,6 +26,7 @@ import '../components/matching_chatting_widget.dart';
 import '../components/setting_profile_widget.dart';
 
 int selectedIndex = 0;
+bool isDrawerStart = false;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -59,6 +62,7 @@ class _HomePageState extends State<HomePage> {
     List _pageTitle = [
       '',
       '',
+      '전체게시판',
       '${'setting'.tr()}',
     ];
 
@@ -247,6 +251,7 @@ class _HomePageState extends State<HomePage> {
               screenArguments: args,
             )
           : chattingWidget(context, args.partners),
+      isDrawerStart ? BoardDrawerWidget(screenArguments: args) : TotalBoardWidget(screenArguments: args),
       settingWidget(context, args)
     ];
 
@@ -258,18 +263,18 @@ class _HomePageState extends State<HomePage> {
           _pageTitle.elementAt(selectedIndex),
           style: TextStyle(
             fontSize: isSmallScreen ? 16 : 18,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+            color: selectedIndex == 2 ? Colors.white : Colors.black,
+            fontWeight: selectedIndex == 2 ? FontWeight.normal : FontWeight.bold,
           ),
         ),
         toolbarHeight: selectedIndex == 1 ? 90 : 56,
         elevation: selectedIndex == 1 ? 7 : 0,
         shadowColor: Colors.black26,
-        backgroundColor: selectedIndex == 1 ? Colors.white : Color(0xffF2F5FF),
+        backgroundColor: selectedIndex == 1 ? Colors.white : (selectedIndex == 2 ? Color(0xff7898ff) : Color(0xffF2F5FF)),
         leadingWidth: 100,
         leading: Column(
           children: [
-            if (selectedIndex == 2)
+            if (selectedIndex == 3)
               Row(
                 children: [
                   IconButton(
@@ -282,7 +287,7 @@ class _HomePageState extends State<HomePage> {
                       'assets/icon/icon_back.svg',
                       color: Color(0xff4D4D4D),
                       width: 24,
-                      height: MediaQuery.of(context).size.height * 0.029,
+                      height: MediaQuery.of(context).size.height * 0.02,
                     ),
                     color: Colors.black,
                   ),
@@ -301,10 +306,41 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               )
+            else if(selectedIndex == 2)
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          selectedIndex = 0;
+                        });
+                      },
+                      icon: SvgPicture.asset(
+                        'assets/icon/icon_back.svg',
+                        color: Colors.white,
+                        width: 24,
+                        height: MediaQuery.of(context).size.height * 0.02,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          isDrawerStart = !isDrawerStart;
+                        });
+                      },
+                      icon: Icon(Icons.format_list_bulleted_outlined),
+                      color: Colors.white,
+                    ),
+                  ],
+                )
             else
-              Container(),
+                Container(),
           ],
         ),
+        actions: selectedIndex == 2 ? [
+          IconButton(onPressed: (){}, icon: Icon(Icons.notifications_none)),
+          IconButton(onPressed: (){}, icon: Icon(Icons.search)),
+        ] : null,
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: selectedIndex,
@@ -313,6 +349,7 @@ class _HomePageState extends State<HomePage> {
         onTap: (int index) {
           setState(() {
             selectedIndex = index;
+            isDrawerStart = false;
           });
         },
         items: [
@@ -345,12 +382,19 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Padding(
               padding: const EdgeInsets.all(5.0),
+              child: Icon(Icons.article),
+            ),
+            label:'게시판' ,
+          ),
+          BottomNavigationBarItem(
+            icon: Padding(
+              padding: const EdgeInsets.all(5.0),
               child: SvgPicture.asset(
                 'assets/icon/icon_setting.svg',
                 width: 25,
                 height: 25,
                 color:
-                    selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
+                    selectedIndex == 3 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
             label: '${'homepage-setting'.tr()}',
