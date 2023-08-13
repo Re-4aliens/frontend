@@ -243,5 +243,10 @@
   "chatting-report8": "A report is received",
   "chatting-block1": "Block",
   "chatting-block2": "Do you want to block this user?",
-  "chatting-block3": "You can't receive or send messages, and can't rematch with blocked users."
+  "chatting-block3": "You can't receive or send messages, and can't rematch with blocked users.",
+
+  "market": "Market Board",
+  "market-noti": "Precautions when using the market board.",
+  "modity": "Modify"
+
 }
