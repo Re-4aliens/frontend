@@ -251,7 +251,7 @@ class _HomePageState extends State<HomePage> {
               screenArguments: args,
             )
           : chattingWidget(context, args.partners),
-      isDrawerStart ? BoardDrawerWidget(screenArguments: args) : TotalBoardWidget(screenArguments: args),
+      isDrawerStart ? BoardDrawerWidget(screenArguments: args, isTotalBoard: true,) : TotalBoardWidget(screenArguments: args),
       settingWidget(context, args)
     ];
 
@@ -311,8 +311,13 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     IconButton(
                       onPressed: () {
+
                         setState(() {
-                          selectedIndex = 0;
+                          if(isDrawerStart){
+                            isDrawerStart = false;
+                          }else{
+                            selectedIndex = 0;
+                          }
                         });
                       },
                       icon: SvgPicture.asset(
