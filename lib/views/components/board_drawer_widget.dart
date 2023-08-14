@@ -23,9 +23,10 @@ import '../../apis/apis.dart';
 import '../../repository/sql_message_repository.dart';
 
 class BoardDrawerWidget extends StatefulWidget {
-  const BoardDrawerWidget({super.key, required this.screenArguments});
+  const BoardDrawerWidget({super.key, required this.screenArguments, required this.isTotalBoard});
 
   final ScreenArguments screenArguments;
+  final bool isTotalBoard;
 
   @override
   State<StatefulWidget> createState() => _BoardDrawerWidgetState();
@@ -46,11 +47,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
         children: [
           InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => NoticeBoardPage()),
-              );
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NoticeBoardPage()),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => NoticeBoardPage()),
+                );
+              }
             },
             child: Container(
               color: Colors.white,
@@ -78,11 +89,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => PostBoardPage()),
-            );
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PostBoardPage()),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => PostBoardPage()),
+                );
+              }
           },
             child: Container(
               color: Colors.white,
@@ -113,11 +134,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyArticlePage()),
-              );
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyArticlePage()),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyArticlePage()),
+                );
+              }
             },
             child: Container(
               color: Colors.white,
@@ -213,11 +244,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FreePostingBoardPage()),
-              );
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FreePostingBoardPage(screenArguments: widget.screenArguments)),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FreePostingBoardPage(screenArguments: widget.screenArguments)),
+                );
+              }
             },
             child: Container(
               color: Colors.white,
@@ -244,11 +285,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MarketBoardPage()),
-              );
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MarketBoardPage()),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MarketBoardPage()),
+                );
+              }
             },
             child: Container(
               color: Colors.white,
@@ -275,11 +326,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => GameBoardPage()),
-              );
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GameBoardPage(screenArguments: widget.screenArguments,)),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => GameBoardPage(screenArguments: widget.screenArguments,)),
+                );
+              }
             },
             child: Container(
               color: Colors.white,
@@ -306,11 +367,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FashionBoardPage()),
-              );
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FashionBoardPage(screenArguments: widget.screenArguments,)),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FashionBoardPage(screenArguments: widget.screenArguments,)),
+                );
+              }
             },
             child: Container(
               color: Colors.white,
@@ -337,11 +408,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FashionBoardPage()),
-              );
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FoodBoardPage(screenArguments: widget.screenArguments,)),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FoodBoardPage(screenArguments: widget.screenArguments,)),
+                );
+              }
             },
             child: Container(
               color: Colors.white,
@@ -368,11 +449,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => FoodBoardPage()),
-              );
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MusicBoardPage(screenArguments: widget.screenArguments,)),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MusicBoardPage(screenArguments: widget.screenArguments,)),
+                );
+              }
             },
             child: Container(
               color: Colors.white,
@@ -399,11 +490,6 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MusicBoardPage()),
-              );
             },
             child: Container(
               color: Colors.white,
