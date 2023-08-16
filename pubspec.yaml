@@ -28,6 +28,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  chips_choice: ^3.0.0
   flutter_neumorphic: ^3.0.3
   dio: ^5.0.1
   percent_indicator: ^4.2.3
