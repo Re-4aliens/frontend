@@ -3,14 +3,18 @@ import 'dart:async';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
+import 'package:aliens/views/components/report_and_block_iOS_dialog_widget.dart';
+import 'package:aliens/views/components/report_iOS_dialog_widget.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../apis/apis.dart';
 import '../../mockdatas/board_mockdata.dart';
+import '../../models/countries.dart';
 import '../../repository/sql_message_repository.dart';
 import '../pages/board/article_page.dart';
 
@@ -105,36 +109,83 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
       child: ListView.builder(
           itemCount: totalBoardList.length,
           itemBuilder: (context, index) {
+            var nationCode = '';
+            for (Map<String, String> country in countries) {
+              if (country['name'] == totalBoardList[index].member!.nationality.toString()) {
+                nationCode = country['code']!;
+                break;
+              }
+            }
             return Column(
               children: [
                 ListTile(
                   //제목
                   title: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: SvgPicture.asset(
-                          'assets/icon/icon_profile.svg',
-                          width: 35,
-                          color: Color(0xff7898ff),
-                        ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: SvgPicture.asset(
+                              'assets/icon/icon_profile.svg',
+                              width: 35,
+                              color: Color(0xff7898ff),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    '${totalBoardList[index].member!.name}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold, fontSize: 18),
+                                  ),
+                                  Text(
+                                    '/',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold, fontSize: 18),
+                                  ),
+                                  Text(
+                                    '${nationCode}',
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold, fontSize: 18),
+                                  )
+                                ],
+                              ),
+                              Text(
+                                '[${totalBoardList[index].category}]',
+                                style: TextStyle(color: Color(0xff888888), fontSize: 12),
+                              )
+                            ],
+                          )
+                        ],
                       ),
-                      Text(
-                        '${totalBoardList[index].member!.nickname}',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                        '1분 전',
+                            style: TextStyle(
+                                fontSize: 16, color: Color(0xffc1c1c1)),
+                          ),
+                          InkWell(
+                            onTap: (){
+                              showDialog(context: context, builder: (context){
+                                return iOSReportDialog();
+                              });
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child:
+                              Icon(Icons.more_vert, color: Color(0xffc1c1c1)),
+                            ),
+                          )
+                        ],
                       ),
-                      Text(
-                        '/',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      ),
-                      Text(
-                        'KR',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 18),
-                      )
                     ],
                   ),
 
@@ -145,6 +196,10 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Text('${totalBoardList[index].title}', style: TextStyle(fontSize: 14, color: Color(0xff444444), fontWeight: FontWeight.bold),),
+                        ),
                         totalBoardList[index].imageUrls == null ?
                         SizedBox():
                         Container(
@@ -171,7 +226,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 10, bottom: 25.0),
-                          child: Text('${totalBoardList[index].title}', style: TextStyle(fontSize: 16),),
+                          child: Text('${totalBoardList[index].content}', style: TextStyle(fontSize: 14, color: Color(0xff616161)),),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -210,26 +265,10 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
                     ),
                   ),
 
-                  //더보기
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        '1분 전',
-                        style: TextStyle(
-                            fontSize: 16, color: Color(0xffc1c1c1)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child:
-                        Icon(Icons.more_vert, color: Color(0xffc1c1c1)),
-                      )
-                    ],
-                  ),
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ArticlePage(board: totalBoardList[index], boardCategory: "자유게시판")),
+                      MaterialPageRoute(builder: (context) => ArticlePage(board: totalBoardList[index])),
 
                     );
                   },
