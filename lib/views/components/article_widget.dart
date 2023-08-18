@@ -9,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../models/board_model.dart';
 import '../pages/board/article_page.dart';
+import 'board_dialog_widget.dart';
 
 class ArticleWidget extends StatefulWidget {
 
@@ -102,10 +103,17 @@ class _ArticleWidgetState extends State<ArticleWidget>{
                 style: TextStyle(
                     fontSize: 16, color: Color(0xffc1c1c1)),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child:
-                Icon(Icons.more_vert, color: Color(0xffc1c1c1)),
+              InkWell(
+                onTap: (){
+                  showDialog(context: context, builder: (builder){
+                    return BoardDialog(context: context,);
+                  });
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child:
+                  Icon(Icons.more_vert, color: Color(0xffc1c1c1)),
+                ),
               )
             ],
           )

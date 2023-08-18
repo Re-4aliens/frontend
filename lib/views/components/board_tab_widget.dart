@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
+import 'package:aliens/views/components/board_dialog_widget.dart';
 import 'package:aliens/views/components/report_and_block_iOS_dialog_widget.dart';
 import 'package:aliens/views/components/report_iOS_dialog_widget.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
@@ -49,10 +50,13 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
 
      */
   }
+  /*
   @override
   void dispose() {
-    //_messageStreamSubscription?.cancel();
+    _messageStreamSubscription?.cancel();
   }
+
+   */
 
   /*
   Future<List<ChatRoom>> _getChatRoomList() async {
@@ -174,8 +178,8 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
                           ),
                           InkWell(
                             onTap: (){
-                              showDialog(context: context, builder: (context){
-                                return iOSReportDialog();
+                              showDialog(context: context, builder: (builder){
+                                return BoardDialog(context: context,);
                               });
                             },
                             child: Padding(
