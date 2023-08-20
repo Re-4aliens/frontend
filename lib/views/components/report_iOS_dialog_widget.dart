@@ -4,6 +4,7 @@ import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../models/message_model.dart';
@@ -36,119 +37,119 @@ class _iOSReportDialogState extends State<iOSReportDialog> {
       elevation: 0,
       backgroundColor: Color(0xffffffff),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(20.0).w,
       ),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20).r,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Padding(padding: EdgeInsets.all(40), child: Text("chatting-report1".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),)),
-            SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  ListTile(
-                    title: Text('${reportList[0][1]}'),
-                    leading: Radio<String>(
-                      value: reportList[0][1],
-                      groupValue: _reportReason,
-                      onChanged: (String? value) {
-                        setState(() {
-                          _reportReason = value;
-                        });
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('${reportList[1][1]}'),
-                    leading: Radio<String>(
-                      value: reportList[1][1],
-                      groupValue: _reportReason,
-                      onChanged: (String? value) {
-                        setState(() {
-                          _reportReason = value;
-                        });
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('${reportList[2][1]}'),
-                    leading: Radio<String>(
-                      value: reportList[2][1],
-                      groupValue: _reportReason,
-                      onChanged: (String? value) {
-                        setState(() {
-                          _reportReason = value;
-                        });
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('${reportList[3][1]}'),
-                    leading: Radio<String>(
-                      value: reportList[3][1],
-                      groupValue: _reportReason,
-                      onChanged: (String? value) {
-                        setState(() {
-                          _reportReason = value;
-                        });
-                      },
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('${reportList[4][1]}'),
-                    leading: Radio<String>(
-                      value: reportList[4][1],
-                      groupValue: _reportReason,
-                      onChanged: (String? value) {
-                        setState(() {
-                          _reportReason = value;
-                          print('$_reportReason');
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xFFD2D2D2), width: 1),
-                    ),
-                    margin: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0),
-                    child: TextFormField(
-                      controller: _textEditingController,
-                      maxLines: 4,
-                      decoration: InputDecoration(
-                        hintText: 'chatting-report7'.tr(),
-                        border: InputBorder.none,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Padding(padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 40.w), child: Text("chatting-report1".tr(), style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),)),
+                    ListTile(
+                      title: Text('${reportList[0][1]}'),
+                      leading: Radio<String>(
+                        value: reportList[0][1],
+                        groupValue: _reportReason,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _reportReason = value;
+                          });
+                        },
                       ),
                     ),
-                  )
-                ],
+                    ListTile(
+                      title: Text('${reportList[1][1]}'),
+                      leading: Radio<String>(
+                        value: reportList[1][1],
+                        groupValue: _reportReason,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _reportReason = value;
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('${reportList[2][1]}'),
+                      leading: Radio<String>(
+                        value: reportList[2][1],
+                        groupValue: _reportReason,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _reportReason = value;
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('${reportList[3][1]}'),
+                      leading: Radio<String>(
+                        value: reportList[3][1],
+                        groupValue: _reportReason,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _reportReason = value;
+                          });
+                        },
+                      ),
+                    ),
+                    ListTile(
+                      title: Text('${reportList[4][1]}'),
+                      leading: Radio<String>(
+                        value: reportList[4][1],
+                        groupValue: _reportReason,
+                        onChanged: (String? value) {
+                          setState(() {
+                            _reportReason = value;
+                            print('$_reportReason');
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Color(0xFFD2D2D2), width: 1.w),
+                      ),
+                      margin: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10).r,
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 0).r,
+                      child: TextFormField(
+                        controller: _textEditingController,
+                        maxLines: 4,
+                        decoration: InputDecoration(
+                          hintText: 'chatting-report7'.tr(),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      height: 2.h,
+                    ),
+                  ],
+                ),
               ),
             ),
-            Divider(
-              height: 2,
-            ),
             Container(
-              height: 60,
+              height: 60.h,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(child: InkWell(
-                    child: Center(child: Text("취소")),
+                    child: Center(child: Text('cancle'.tr())),
                     onTap: () {
                       Navigator.of(context).pop();
                     },
                   ),),
                   VerticalDivider(
-                    width: 2,
+                    width: 2.w,
                   ),
                   Expanded(
                     child: InkWell(
-                      child: Center(child: Text("신고")),
+                      child: Center(child: Text("chatting-report1".tr())),
                       onTap: () {
-                        print('cnlth');
                       },
                     ),
                   )
