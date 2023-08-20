@@ -1,12 +1,15 @@
 import 'package:aliens/models/board_model.dart';
 
 List<Board> totalBoardList = [
+  infoBoard1,
   freePostingBoard1,
   freePostingBoard2,
   gameBoard1,
   foodBoard1,
   musicBoard1,
   musicBoard2,
+  infoBoard2,
+  infoBoard3,
   musicBoard3,
   gameBoard2,
   freePostingBoard3,
@@ -42,6 +45,12 @@ List<Board> musicBoardList = [
   musicBoard3
 ];
 
+List<Board> infoBoardList = [
+  infoBoard1,
+  infoBoard2,
+  infoBoard3
+];
+
 
 Board freePostingBoard1 = Board(
   boardArticleId: 1,
@@ -72,7 +81,7 @@ Board freePostingBoard2 = Board(
     member: Member(
       memberId: 1,
       name: "ゆうき",
-      nationality: 'South Korea',
+      nationality: 'Japan',
       profileImageUrl: "",
     )
 );
@@ -110,7 +119,7 @@ Board freePostingBoard4 = Board(
     member: Member(
       memberId: 1,
       name: "햄버거",
-      nationality: 'South Korea',
+      nationality: 'China',
       profileImageUrl: "",
     )
 );
@@ -147,7 +156,7 @@ Board fashionBoard2 = Board(
     member: Member(
       memberId: 1,
       name: "윤정하",
-      nationality: 'South Korea',
+      nationality: 'Australia',
       profileImageUrl: "",
     )
 );
@@ -181,7 +190,7 @@ Board gameBoard2 = Board(
     member: Member(
       memberId: 1,
       name: "치킨보이",
-      nationality: 'South Korea',
+      nationality: 'Australia',
       profileImageUrl: "",
     )
 );
@@ -218,7 +227,7 @@ Board musicBoard1 = Board(
     member: Member(
       memberId: 1,
       name: "햄버거",
-      nationality: 'South Korea',
+      nationality: 'Japan',
       profileImageUrl: "",
     )
 );
@@ -236,7 +245,7 @@ Board musicBoard2 = Board(
     member: Member(
       memberId: 1,
       name: "Daisy",
-      nationality: 'South Korea',
+      nationality: 'Australia',
       profileImageUrl: "",
     )
 );
@@ -258,5 +267,57 @@ Board musicBoard3 = Board(
       profileImageUrl: "",
     )
 );
+
+Board infoBoard1 = Board(
+    boardArticleId: 4,
+    title: "2023년 부산 내 거주하는 외국인 비자 지원",
+    category: "정보게시판",
+    content: "안녕하세요.\n\n부경대학교 외국인 유학생 지원팀\nOOO입니다.\n\n2023년도 부산 내 거주하는 외국인 유학생\n비자 비용 지원 안내에 대해서 공유합니다.",
+    likeCount: 2,
+    commentCount: 10,
+    createdAt: "2023-08-06 14:30:33",
+    imageUrls: null,
+    member: Member(
+      memberId: 1,
+      name: "윤정하",
+      nationality: 'South Korea',
+      profileImageUrl: "",
+    )
+);
+
+Board infoBoard2 = Board(
+    boardArticleId: 4,
+    title: "외국인학생 수강신청 방법 공유",
+    category: "정보게시판",
+    content: "안녕하세요.\n\n부경대학교 외국인 유학생 지원팀\nOOO입니다.\n\n2023년도 부산 내 거주하는 외국인 유학생\n비자 비용 지원 안내에 대해서 공유합니다.",
+    likeCount: 2,
+    commentCount: 10,
+    createdAt: "2023-08-06 14:30:33",
+    imageUrls: ["url"],
+    member: Member(
+      memberId: 1,
+      name: "윤정하",
+      nationality: 'South Korea',
+      profileImageUrl: "",
+    )
+);
+
+Board infoBoard3 = Board(
+    boardArticleId: 4,
+    title: "가을학기 외국인 한정 교류회 실시",
+    category: "정보게시판",
+    content: "안녕하세요.\n\n부경대학교 외국인 유학생 지원팀\nOOO입니다.\n\n2023년도 부산 내 거주하는 외국인 유학생\n비자 비용 지원 안내에 대해서 공유합니다.",
+    likeCount: 2,
+    commentCount: 10,
+    createdAt: "2023-08-06 14:30:33",
+    imageUrls: null,
+    member: Member(
+      memberId: 1,
+      name: "윤정하",
+      nationality: 'South Korea',
+      profileImageUrl: "",
+    )
+);
+
 
 
