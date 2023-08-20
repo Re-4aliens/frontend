@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class CommentDialog extends StatelessWidget{
@@ -35,58 +36,72 @@ class CommentDialog extends StatelessWidget{
       elevation: 0,
       backgroundColor: Color(0xffffffff),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(5.0).r,
       ),
       child: Container(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.all(30).r,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               'chatting-dialog1'.tr(),
               style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.bold),
             ),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Text(
-                'chatting-dialog2'.tr(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
+            SizedBox(
+              height: 20.h,
             ),
+            isNestedComment ? SizedBox():
             InkWell(
-              onTap: (){
-              },
+              onTap: onpressed,
               child: Container(
-                padding: EdgeInsets.all(13),
+                padding: EdgeInsets.all(13).r,
                 decoration: BoxDecoration(
                     color: Color(0xff7898FF),
-                    borderRadius: BorderRadius.circular(5)),
+                    borderRadius: BorderRadius.circular(5).r),
                 alignment: Alignment.center,
-                child: Text(
-                  'chatting-report1'.tr(),
+                child: Text('comment3'.tr(),
                   style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
             SizedBox(
-              height: 10,
+              height: 10.h,
             ),
             InkWell(
               onTap: (){
                 Navigator.pop(context);
               },
               child: Container(
-                padding: EdgeInsets.all(13),
+                padding: EdgeInsets.all(13).r,
                 decoration: BoxDecoration(
                     color: Color(0xff7898FF),
-                    borderRadius: BorderRadius.circular(5)),
+                    borderRadius: BorderRadius.circular(5).r),
                 alignment: Alignment.center,
-                child: Text('chatting-block1'.tr(),
+                child: Text('delete'.tr(),
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            InkWell(
+              onTap: (){
+                Navigator.pop(context);
+                showDialog(
+                    context: context,
+                    builder: (builder) => ReportDialog(partner: Partner(), context: context));
+
+              },
+              child: Container(
+                padding: EdgeInsets.all(13).r,
+                decoration: BoxDecoration(
+                    color: Color(0xff7898FF),
+                    borderRadius: BorderRadius.circular(5).r),
+                alignment: Alignment.center,
+                child: Text('chatting-report1'.tr(),
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -118,7 +133,7 @@ class CommentDialog extends StatelessWidget{
               height: 80,
               alignment: Alignment.center,
               child: Text(
-                "대댓글달기",
+                "comment3".tr(),
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -133,23 +148,7 @@ class CommentDialog extends StatelessWidget{
               height: 80,
               alignment: Alignment.center,
               child: Text(
-                "삭제하기",
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Container(
-              height: 80,
-              alignment: Alignment.center,
-              child: Text(
-                "수정하기",
+                "delete".tr(),
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
@@ -172,7 +171,7 @@ class CommentDialog extends StatelessWidget{
               height: 80,
               alignment: Alignment.center,
               child: Text(
-                "신고하기",
+                "chatting-report1".tr(),
                 style: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
