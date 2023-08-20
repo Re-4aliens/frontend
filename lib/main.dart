@@ -29,6 +29,7 @@ import 'package:flutter/material.dart';
 import 'package:aliens/views/pages/signup/signup_name.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 import 'package:provider/provider.dart';
@@ -111,15 +112,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: context.localizationDelegates,
-     supportedLocales: context.supportedLocales,
-     locale: context.locale,
-     theme: ThemeData(fontFamily: 'NotoSans'),
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/splash',
-      routes: {
+    return ScreenUtilInit(
+      designSize: const Size(390, 844),
+      builder: (context, child){
+        return MaterialApp(
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            theme: ThemeData(fontFamily: 'NotoSans'),
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/splash',
+        routes: {
 
 
         '/' : (context)=> StartPage(),
@@ -183,6 +187,8 @@ class MyApp extends StatelessWidget {
         //'/loading' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: LoadingPage()),
         '/loading' : (context) => LoadingPage(),
 
+        },
+        );
       },
     );
   }
