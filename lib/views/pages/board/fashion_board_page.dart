@@ -37,7 +37,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
           title: Text(
             'fashion'.tr(),
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.spMin,
               color: Colors.white,
             ),
           ),

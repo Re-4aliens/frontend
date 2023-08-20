@@ -38,7 +38,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
           title: Text(
             'game'.tr(),
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.spMin,
               color: Colors.white,
             ),
           ),

@@ -46,7 +46,7 @@ class CommentDialog extends StatelessWidget{
             Text(
               'chatting-dialog1'.tr(),
               style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.spMin,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(

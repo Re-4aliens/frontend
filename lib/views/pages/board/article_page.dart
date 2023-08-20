@@ -102,7 +102,7 @@ class _ArticlePageState extends State<ArticlePage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text(boardCategory, style: TextStyle(fontSize: 16.sp),),
+          title: Text(boardCategory, style: TextStyle(fontSize: 16.spMin),),
           backgroundColor: Color(0xff7898ff),
           elevation: 0,
         ),
@@ -120,7 +120,7 @@ class _ArticlePageState extends State<ArticlePage> {
                           padding: const EdgeInsets.only(top: 15.0, bottom: 15, left: 10, right: 15).r,
                           child: SvgPicture.asset(
                             'assets/icon/icon_profile.svg',
-                            width: 34.w,
+                            width: 34.r,
                             color: Color(0xff7898ff),
                           ),
                         ),
@@ -132,14 +132,14 @@ class _ArticlePageState extends State<ArticlePage> {
                               '${widget.board.member!.name}/${getNationCode(widget.board.member!.nationality)}',
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16.sp),
+                                  fontWeight: FontWeight.bold, fontSize: 16.spMin),
                             ),
                           ),
                         ),
                         Text(
                           DataUtils.getTime(widget.board.createdAt),
                           style: TextStyle(
-                              fontSize: 16.sp, color: Color(0xffc1c1c1)),
+                              fontSize: 16.spMin, color: Color(0xffc1c1c1)),
                         ),
                         InkWell(
                           onTap: (){
@@ -167,7 +167,7 @@ class _ArticlePageState extends State<ArticlePage> {
                             padding: const EdgeInsets.only(top: 10,).h,
                             child: Text(
                               '${widget.board.title}',
-                              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.bold, color: Color(0xff444444)),
+                              style: TextStyle(fontSize: 14.spMin, fontWeight: FontWeight.bold, color: Color(0xff444444)),
                             ),
                           ),
                           widget.board.imageUrls == null
@@ -199,7 +199,7 @@ class _ArticlePageState extends State<ArticlePage> {
                             padding: const EdgeInsets.only(top: 10, bottom: 25.0).h,
                             child: Text(
                               '${widget.board.content}',
-                              style: TextStyle(fontSize: 14.sp),
+                              style: TextStyle(fontSize: 14.spMin),
                             ),
                           ),
                           Row(
@@ -267,24 +267,24 @@ class _ArticlePageState extends State<ArticlePage> {
                                         padding: const EdgeInsets.only(right: 10.0).r,
                                         child: SvgPicture.asset(
                                           'assets/icon/icon_profile.svg',
-                                          width: 25.w,
+                                          width: 25.r,
                                           color: Color(0xffc1c1c1),
                                         ),
                                       ),
                                       Text(
                                         '${commentListMock[i].member!.name}',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 14.sp),
+                                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
                                       ),
                                       Text(
                                         '/',
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 14.sp),
+                                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
                                       ),
                                       Text(
                                         getNationCode(commentListMock[i].member!.nationality),
                                         style: TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 14.sp),
+                                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
                                       )
                                     ],
                                   ),
@@ -295,7 +295,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                       Text(
                                         DataUtils.getTime(commentListMock[i].createdAt),
                                         style: TextStyle(
-                                            fontSize: 12.sp, color: Color(0xffc1c1c1)),
+                                            fontSize: 12.spMin, color: Color(0xffc1c1c1)),
                                       ),
                                       InkWell(
                                         onTap: (){
@@ -326,7 +326,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                     top: 13).r,
                                 child: Text(
                                   '${commentListMock[i].content}',
-                                  style: TextStyle(fontSize: 14.sp, color: Color(0xff616161)),
+                                  style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
                                 ),
                               ),
                             ],
@@ -370,7 +370,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                     padding: const EdgeInsets.only(right: 10.0).w,
                                                     child: SvgPicture.asset(
                                                       'assets/icon/icon_profile.svg',
-                                                      width: 25.w,
+                                                      width: 25.r,
                                                       color: Color(0xffc1c1c1),
                                                     ),
                                                   ),
@@ -382,14 +382,14 @@ class _ArticlePageState extends State<ArticlePage> {
                                                         '${commentListMock[i].childs![j].member!.name}/${getNationCode(commentListMock[i].childs![j].member!.nationality)}',
                                                         overflow: TextOverflow.ellipsis,
                                                         style: TextStyle(
-                                                            fontWeight: FontWeight.bold, fontSize: 14.sp),
+                                                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
                                                       ),
                                                     ),
                                                   ),
                                                   Text(
                                                     DataUtils.getTime(commentListMock[i].childs![j].createdAt),
                                                     style: TextStyle(
-                                                        fontSize: 12.sp, color: Color(0xffc1c1c1)),
+                                                        fontSize: 12.spMin, color: Color(0xffc1c1c1)),
                                                   ),
                                                   InkWell(
                                                     onTap: (){
@@ -416,7 +416,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                     top: 5).h,
                                                 child: Text(
                                                   '${commentListMock[i].childs![j].content}',
-                                                  style: TextStyle(fontSize: 14.sp, color: Color(0xff616161)),
+                                                  style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
                                                 ),
                                               ),
                                             ],
@@ -504,7 +504,7 @@ class _ArticlePageState extends State<ArticlePage> {
                         },
                         icon: SvgPicture.asset(
                           'assets/icon/icon_send.svg',
-                          height: 22.h,
+                          height: 22.r,
                           color: _newComment.trim().isEmpty
                               ? Color(0xffc1c1c1)
                               : Color(0xff7898ff),

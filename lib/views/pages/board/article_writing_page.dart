@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/board_model.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../models/countries.dart';
 import '../../components/board_drawer_widget.dart';
@@ -33,6 +35,18 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
   String boardCategory = "카테고리를 선택해주세요.";
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
+
+  File? _profileImage;
+  final picker = ImagePicker();
+
+  //비동기 처리를 통해 이미지 가져오기
+  Future getImage(ImageSource imageSource) async {
+    final image = await picker.pickImage(source: imageSource);
+    setState(() {
+      _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
+    });
+  }
+
 
   @override
   void initState() {
@@ -65,7 +79,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
           title: Text(
             'post'.tr(),
             style: TextStyle(
-              fontSize: 18.sp,
+              fontSize: 18.spMin,
               color: Colors.black,
             ),
           ),
@@ -82,7 +96,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                 "cancel".tr(),
                 style: TextStyle(
                   color: Color(0xff888888),
-                  fontSize: 14.sp,
+                  fontSize: 14.spMin,
                 ),
               ),
             ),
@@ -119,13 +133,13 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                             children: <Widget>[
                                               Padding(
                                                 padding: const EdgeInsets.only(top: 30, left: 16.0, bottom: 25 ).r,
-                                                child: Text("post4".tr(), style: TextStyle(color: Color(0xff121212), fontSize: 18.sp, fontWeight: FontWeight.bold)),
+                                                child: Text("post4".tr(), style: TextStyle(color: Color(0xff121212), fontSize: 18.spMin, fontWeight: FontWeight.bold)),
                                               ),
                                              Expanded(child: SingleChildScrollView(
                                                child: Column(
                                                  children: [
                                                    ListTile(
-                                                     title: Text("free-posting".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.sp),),
+                                                     title: Text("free-posting".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin),),
                                                      onTap: (){
                                                        setState(() {
                                                          boardCategory = "free-posting".tr();
@@ -143,7 +157,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                                      },
                                                    ),
                                                    ListTile(
-                                                     title: Text("fashion".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.sp)),
+                                                     title: Text("fashion".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
                                                      onTap: (){
                                                        setState(() {
                                                          boardCategory = "fashion".tr();
@@ -152,7 +166,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                                      },
                                                    ),
                                                    ListTile(
-                                                     title: Text("food".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.sp)),
+                                                     title: Text("food".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
                                                      onTap: (){
                                                        setState(() {
                                                          boardCategory = "food".tr();
@@ -161,7 +175,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                                      },
                                                    ),
                                                    ListTile(
-                                                     title: Text("music".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.sp)),
+                                                     title: Text("music".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
                                                      onTap: (){
                                                        setState(() {
                                                          boardCategory = "music".tr();
@@ -170,7 +184,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                                      },
                                                    ),
                                                    ListTile(
-                                                     title: Text("info".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.sp)),
+                                                     title: Text("info".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
                                                      onTap: (){
                                                        setState(() {
                                                          boardCategory = "info".tr();
@@ -197,7 +211,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                   ).r,
                                   child: Text(boardCategory, style: TextStyle(
                                     color: Color(0xff616161),
-                                    fontSize: 16.sp
+                                    fontSize: 16.spMin
                                   ),),
                                 ),
                                 Icon(Icons.arrow_drop_down, size: 40.w, color: Color(0xff888888),)
@@ -219,7 +233,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                 counterText: '',
                                 hintStyle: TextStyle(
                                   color: Color(0xffd9d9d9),
-                                  fontSize: 18.sp,
+                                  fontSize: 18.spMin,
                                 )
                               ),
                               maxLength: 30,
@@ -236,6 +250,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             child: ListView(
                                 scrollDirection: Axis.horizontal,
                                 children: [
+                                  _profileImage == null ?
                                   Container(
                                     margin: EdgeInsets.only(right: 20).r,
                                     height: 130.h,
@@ -249,6 +264,22 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                       children: [
                                         Icon(
                                             Icons.add_photo_alternate_outlined, color: Color(0xffaeaeae),),
+                                        Text('0/3', style: TextStyle(color: Color(0xffaeaeae)),)
+                                      ],
+                                    ),
+                                  ) : Container(
+                                    margin: EdgeInsets.only(right: 20).r,
+                                    height: 130.h,
+                                    width: 130.h,
+                                    decoration: BoxDecoration(
+                                        color: Color(0xfff8f8f8),
+                                        borderRadius:
+                                        BorderRadius.circular(10).r),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add_photo_alternate_outlined, color: Color(0xffaeaeae),),
                                         Text('0/3', style: TextStyle(color: Color(0xffaeaeae)),)
                                       ],
                                     ),
@@ -296,7 +327,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   helperStyle: TextStyle(
-                                      color: Color(0xffc1c1c1), fontSize: 16.sp)),
+                                      color: Color(0xffc1c1c1), fontSize: 16.spMin)),
                               maxLines: 10,
                               maxLength: 200, // 글자 길이 제한
                               keyboardType: TextInputType.multiline,

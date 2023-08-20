@@ -42,7 +42,7 @@ class BoardDialog extends StatelessWidget{
             Text(
               'chatting-dialog1'.tr(),
               style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: 16.spMin,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(height: 25.h,),
@@ -97,7 +97,7 @@ class BoardDialog extends StatelessWidget{
           child: Text(
             'chatting-report1'.tr(),
             style: TextStyle(
-              fontSize: 16.0.sp,
+              fontSize: 16.0.spMin,
               fontWeight: FontWeight.bold,
             ),
           ),

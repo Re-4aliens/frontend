@@ -44,7 +44,7 @@ class _ArticleWidgetState extends State<ArticleWidget>{
             padding: const EdgeInsets.only(top: 15.0, bottom: 15, left: 10, right: 15).r,
             child: SvgPicture.asset(
               'assets/icon/icon_profile.svg',
-              width: 34.w,
+              width: 34.r,
               color: Color(0xff7898ff),
             ),
           ),
@@ -56,14 +56,14 @@ class _ArticleWidgetState extends State<ArticleWidget>{
                 '${widget.board.member!.name}/${widget.nationCode}',
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 16.sp),
+                    fontWeight: FontWeight.bold, fontSize: 16.spMin),
               ),
             ),
           ),
           Text(
             DataUtils.getTime(widget.board.createdAt),
             style: TextStyle(
-                fontSize: 16.sp, color: Color(0xffc1c1c1)),
+                fontSize: 16.spMin, color: Color(0xffc1c1c1)),
           ),
           InkWell(
             onTap: (){
@@ -89,7 +89,7 @@ class _ArticleWidgetState extends State<ArticleWidget>{
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 8).h,
-              child: Text('${widget.board.title}', style: TextStyle(fontSize: 14.sp, color: Color(0xff444444), fontWeight: FontWeight.bold)),
+              child: Text('${widget.board.title}', style: TextStyle(fontSize: 14.spMin, color: Color(0xff444444), fontWeight: FontWeight.bold)),
             ),
             widget.board.imageUrls == null ?
             SizedBox():
@@ -117,7 +117,7 @@ class _ArticleWidgetState extends State<ArticleWidget>{
             ),
             Padding(
               padding: EdgeInsets.only(top: 10.h, bottom: 15.0.h),
-              child: Text('${widget.board.content}', style: TextStyle(fontSize: 14.sp, color: Color(0xff616161)),),
+              child: Text('${widget.board.content}', style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),),
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,

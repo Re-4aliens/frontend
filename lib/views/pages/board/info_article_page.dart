@@ -53,7 +53,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('info'.tr(), style: TextStyle(fontSize: 16.sp),),
+          title: Text('info'.tr(), style: TextStyle(fontSize: 16.spMin),),
           backgroundColor: Color(0xff7898ff),
           elevation: 0,
         ),
@@ -72,7 +72,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                         Container(
                           width: MediaQuery.of(context).size.width * 0.7,
                           child: Text("${widget.board.title}", style: TextStyle(
-                              fontSize: 16.sp,
+                              fontSize: 16.spMin,
                               fontWeight: FontWeight.bold
                           ),
                             overflow: TextOverflow.visible,
@@ -88,7 +88,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                       Padding(
                         padding: EdgeInsets.only(right: 20.w , top: 25.0.h),
                         child: Text(DataUtils.getTime(widget.board.createdAt), style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize: 14.spMin,
                           color: Color(0xff888888)
                         ),),
                       )
@@ -123,7 +123,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                   Padding(
                     padding: EdgeInsets.only(left: 20),
                     child: Text("${widget.board.content}", style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 16.spMin,
                     ),),
                   ),
                 ],
