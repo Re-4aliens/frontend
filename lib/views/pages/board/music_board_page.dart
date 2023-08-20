@@ -38,7 +38,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
           title: Text(
             'music'.tr(),
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.spMin,
               color: Colors.white,
             ),
           ),

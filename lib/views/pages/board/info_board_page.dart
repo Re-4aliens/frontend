@@ -39,7 +39,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
           title: Text(
             'info'.tr(),
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.spMin,
               color: Colors.white,
             ),
           ),

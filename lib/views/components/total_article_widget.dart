@@ -70,7 +70,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                 padding: const EdgeInsets.only(top: 15.0, bottom: 15, left: 10, right: 15).r,
                 child: SvgPicture.asset(
                   'assets/icon/icon_profile.svg',
-                  width: 35.w,
+                  width: 35.r,
                   color: Color(0xff7898ff),
                 ),
               ),
@@ -84,23 +84,23 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                         '${widget.board.member!.name}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16.sp),
+                            fontWeight: FontWeight.bold, fontSize: 16.spMin),
                       ),
                       Text(
                         '/',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16.sp),
+                            fontWeight: FontWeight.bold, fontSize: 16.spMin),
                       ),
                       Text(
                         '${widget.nationCode}',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 16.sp),
+                            fontWeight: FontWeight.bold, fontSize: 16.spMin),
                       )
                     ],
                   ),
                   Text(
                     '[${boardCategory}]',
-                    style: TextStyle(color: Color(0xff888888), fontSize: 12.sp),
+                    style: TextStyle(color: Color(0xff888888), fontSize: 12.spMin),
                   )
                 ],
               )
@@ -112,7 +112,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
               Text(
                 DataUtils.getTime(widget.board.createdAt),
                 style: TextStyle(
-                    fontSize: 16.sp, color: Color(0xffc1c1c1)),
+                    fontSize: 16.spMin, color: Color(0xffc1c1c1)),
               ),
               InkWell(
                 onTap: (){
@@ -140,7 +140,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 8).h,
-              child: Text('${widget.board.title}', style: TextStyle(fontSize: 14.sp, color: Color(0xff444444), fontWeight: FontWeight.bold),),
+              child: Text('${widget.board.title}', style: TextStyle(fontSize: 14.spMin, color: Color(0xff444444), fontWeight: FontWeight.bold),),
             ),
             widget.board.imageUrls == null ?
             SizedBox():
@@ -168,7 +168,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
             ),
             Padding(
               padding: const EdgeInsets.only(top: 10, bottom: 15.0).h,
-              child: Text('${widget.board.content}', style: TextStyle(fontSize: 14.sp, color: Color(0xff616161)),),
+              child: Text('${widget.board.content}', style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),),
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -178,7 +178,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                   child: Icon(
                     Icons.thumb_up_alt_sharp,
                     color: Color(0xffc1c1c1),
-                    size: 20.w,
+                    size: 20.r,
                   ),
                 ),
                 Padding(
@@ -193,7 +193,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                   child: Icon(
                     Icons.chat_bubble,
                     color: Color(0xffc1c1c1),
-                    size: 20.w,
+                    size: 20.r,
                   ),
                 ),
                 Padding(

@@ -38,7 +38,7 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
           title: Text(
             'food'.tr(),
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.spMin,
               color: Colors.white,
             ),
           ),

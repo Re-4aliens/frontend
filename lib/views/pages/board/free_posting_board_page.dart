@@ -37,7 +37,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
           title: Text(
             'free-posting'.tr(),
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: 16.spMin,
               color: Colors.white,
             ),
           ),

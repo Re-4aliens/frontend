@@ -48,7 +48,7 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
                   '${widget.board.title}',
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                      color: Color(0xff616161), fontSize: 16.sp),
+                      color: Color(0xff616161), fontSize: 16.spMin),
                 ),
               ),
             ),
@@ -57,7 +57,7 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
                 Text(
                   DataUtils.getTime(widget.board.createdAt),
                   style: TextStyle(
-                      fontSize: 16.sp, color: Color(0xffc1c1c1)),
+                      fontSize: 16.spMin, color: Color(0xffc1c1c1)),
                 ),
                 InkWell(
                   onTap: (){
