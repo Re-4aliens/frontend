@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 class BoardDialog extends StatelessWidget{
@@ -31,37 +32,32 @@ class BoardDialog extends StatelessWidget{
       elevation: 0,
       backgroundColor: Color(0xffffffff),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(5.0),
+        borderRadius: BorderRadius.circular(5.0).r,
       ),
       child: Container(
-        padding: EdgeInsets.all(30),
+        padding: EdgeInsets.all(30).r,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               'chatting-dialog1'.tr(),
               style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 16.sp,
                   fontWeight: FontWeight.bold),
             ),
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Text(
-                'chatting-dialog2'.tr(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            ),
+            SizedBox(height: 25.h,),
             InkWell(
               onTap: (){
+                Navigator.pop(context);
+                showDialog(
+                    context: context,
+                    builder: (builder) => ReportDialog(partner: Partner(), context: context));
               },
               child: Container(
-                padding: EdgeInsets.all(13),
+                padding: EdgeInsets.all(13).r,
                 decoration: BoxDecoration(
                     color: Color(0xff7898FF),
-                    borderRadius: BorderRadius.circular(5)),
+                    borderRadius: BorderRadius.circular(5).r),
                 alignment: Alignment.center,
                 child: Text(
                   'chatting-report1'.tr(),
@@ -69,24 +65,6 @@ class BoardDialog extends StatelessWidget{
                 ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            InkWell(
-              onTap: (){
-                Navigator.pop(context);
-              },
-              child: Container(
-                padding: EdgeInsets.all(13),
-                decoration: BoxDecoration(
-                    color: Color(0xff7898FF),
-                    borderRadius: BorderRadius.circular(5)),
-                alignment: Alignment.center,
-                child: Text('chatting-block1'.tr(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            )
           ],
         ),
       ),
@@ -98,7 +76,7 @@ class BoardDialog extends StatelessWidget{
       elevation: 0,
       backgroundColor: Color(0xffffffff),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
+        borderRadius: BorderRadius.circular(20.0).r,
       ),
       child: InkWell(
         borderRadius: BorderRadius.only(
@@ -106,7 +84,7 @@ class BoardDialog extends StatelessWidget{
           topRight: Radius.circular(20.0),
           bottomLeft: Radius.circular(20.0),
           bottomRight: Radius.circular(20.0),
-        ),
+        ).r,
         onTap: () {
           Navigator.pop(context);
           showDialog(
@@ -114,12 +92,12 @@ class BoardDialog extends StatelessWidget{
               builder: (builder) => iOSReportDialog());
         },
         child: Container(
-          height: 80,
+          height: 80.h,
           alignment: Alignment.center,
           child: Text(
             'chatting-report1'.tr(),
             style: TextStyle(
-              fontSize: 16.0,
+              fontSize: 16.0.sp,
               fontWeight: FontWeight.bold,
             ),
           ),

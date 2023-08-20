@@ -8,12 +8,14 @@ import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../models/countries.dart';
 import '../../components/article_widget.dart';
 import '../../components/board_drawer_widget.dart';
 import 'article_page.dart';
+import 'article_writing_page.dart';
 
 class FashionBoardPage extends StatefulWidget {
   const FashionBoardPage({super.key, required this.screenArguments});
@@ -35,7 +37,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
           title: Text(
             'fashion'.tr(),
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16.sp,
               color: Colors.white,
             ),
           ),
@@ -55,8 +57,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                     icon: SvgPicture.asset(
                       'assets/icon/icon_back.svg',
                       color: Colors.white,
-                      width: 24,
-                      height: MediaQuery.of(context).size.height * 0.02,
+                      height: 18.h
                     ),
                   ),
                   IconButton(
@@ -81,6 +82,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
             ? BoardDrawerWidget(
                 screenArguments: widget.screenArguments,
                 isTotalBoard: false,
+                onpressd: (){},
               )
             : Container(
                 decoration: BoxDecoration(color: Colors.white),
@@ -105,6 +107,21 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                         ],
                       );
                     }),
-              ));
+              ),
+      floatingActionButton:
+      isDrawerStart ? null : FloatingActionButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ArticleWritingPage(screenArguments: widget.screenArguments, category: "패션게시판",)),
+          ).then((value) {
+            setState(() {
+            });
+          });
+        },
+        child: Icon(Icons.edit),
+        backgroundColor: Color(0xff7898ff),
+      ),
+    );
   }
 }
