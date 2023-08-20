@@ -259,5 +259,6 @@
   "market-posting-title": "Please enter a title.",
   "market-posting-price": "Please eneter price",
   "market-posting-content": "• Product name\n• Detailed information (wear and tear, defects, etc.)\n• Mobile phone number or KakaoTalk ID\n* To establish trust for a successful transaction,\n  please provide detailed information and various angles of product photos.",
-  "market-posting-content1": "Please enter contents."
+  "market-posting-content1": "Please enter contents.",
+  "market-posting-title-error": "Up to 30 characters are allowed."
 }
