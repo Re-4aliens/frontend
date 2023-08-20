@@ -8,12 +8,14 @@ import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../models/countries.dart';
 import '../../components/article_widget.dart';
 import '../../components/board_drawer_widget.dart';
 import 'article_page.dart';
+import 'article_writing_page.dart';
 
 
 class MusicBoardPage extends StatefulWidget {
@@ -36,7 +38,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
           title: Text(
             'music'.tr(),
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 16.sp,
               color: Colors.white,
             ),
           ),
@@ -56,8 +58,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                     icon: SvgPicture.asset(
                       'assets/icon/icon_back.svg',
                       color: Colors.white,
-                      width: 24,
-                      height: MediaQuery.of(context).size.height * 0.02,
+                      height: 18.h,
                     ),
                   ),
                   IconButton(
@@ -78,7 +79,8 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
             IconButton(onPressed: (){}, icon: Icon(Icons.search)),
           ],
         ),
-        body: isDrawerStart ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,) :Container(
+        body: isDrawerStart ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,
+          onpressd: (){},) :Container(
           decoration: BoxDecoration(color: Colors.white),
           child: ListView.builder(
               itemCount: musicBoardList.length,
@@ -100,6 +102,19 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                   ],
                 );
               }),
-        ));
+        ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ArticleWritingPage(screenArguments: widget.screenArguments, category: "음악게시판",)),
+          ).then((value) {
+            setState(() {
+            });
+          });
+        },
+        child: Icon(Icons.edit),
+        backgroundColor: Color(0xff7898ff),
+      ),);
   }
 }
