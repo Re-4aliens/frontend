@@ -62,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     List _pageTitle = [
       '',
       '',
-      '전체게시판',
+      '${'total-board'.tr()}',
       '${'setting'.tr()}',
     ];
 

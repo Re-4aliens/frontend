@@ -117,7 +117,7 @@ class BoardDialog extends StatelessWidget{
           height: 80,
           alignment: Alignment.center,
           child: Text(
-            "신고하기",
+            'chatting-report1'.tr(),
             style: TextStyle(
               fontSize: 16.0,
               fontWeight: FontWeight.bold,

@@ -34,7 +34,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            '게임게시판',
+            'game'.tr(),
             style: TextStyle(
               fontSize: 18,
               color: Colors.white,

@@ -34,7 +34,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            '음악 게시판',
+            'music'.tr(),
             style: TextStyle(
               fontSize: 18,
               color: Colors.white,
