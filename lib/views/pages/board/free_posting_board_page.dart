@@ -34,7 +34,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            '자유게시판',
+            'free-posting'.tr(),
             style: TextStyle(
               fontSize: 18,
               color: Colors.white,

@@ -33,7 +33,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            '패션 게시판',
+            'fashion'.tr(),
             style: TextStyle(
               fontSize: 18,
               color: Colors.white,

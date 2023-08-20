@@ -51,10 +51,31 @@ class _ArticlePageState extends State<ArticlePage> {
 
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    switch (widget.board.category){
+      case '자유게시판':
+        boardCategory = 'free-posting'.tr();
+        break;
+      case '음식게시판':
+        boardCategory = 'food'.tr();
+        break;
+      case '음악게시판':
+        boardCategory = 'music'.tr();
+        break;
+      case '패션게시판':
+        boardCategory = 'fashion'.tr();
+        break;
+      case '게임게시판':
+        boardCategory = 'game'.tr();
+        break;
+      default:
+    }
+  }
+
+  String getNationCode(_nationality){
     var nationCode = '';
     for (Map<String, String> country in countries) {
-      if (country['name'] == widget.board.member!.nationality.toString()) {
+      if (country['name'] == _nationality) {
         nationCode = country['code']!;
         break;
       }
@@ -441,7 +462,7 @@ class _ArticlePageState extends State<ArticlePage> {
                             ],
                         keyboardType: TextInputType.multiline,
                         decoration: InputDecoration(
-                          hintText: isNestedComments? "대댓글을 입력하세요." : "댓글을 입력하세요.",
+                          hintText: isNestedComments? "comment2".tr() : "comment1".tr(),
                           hintStyle: TextStyle(color: Color(0xffb1b1b1)),
                           border: InputBorder.none,
                         ),

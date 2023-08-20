@@ -7,6 +7,8 @@ import 'package:aliens/views/pages/board/fashion_board_page.dart';
 import 'package:aliens/views/pages/board/food_board_page.dart';
 import 'package:aliens/views/pages/board/free_posting_board_page.dart';
 import 'package:aliens/views/pages/board/game_board_page.dart';
+import 'package:aliens/views/pages/board/info_article_page.dart';
+import 'package:aliens/views/pages/board/info_board_page.dart';
 import 'package:aliens/views/pages/board/market_board_page.dart';
 import 'package:aliens/views/pages/board/music_board_page.dart';
 import 'package:aliens/views/pages/board/my_article_page.dart';
@@ -23,10 +25,11 @@ import '../../apis/apis.dart';
 import '../../repository/sql_message_repository.dart';
 
 class BoardDrawerWidget extends StatefulWidget {
-  const BoardDrawerWidget({super.key, required this.screenArguments, required this.isTotalBoard});
+  const BoardDrawerWidget({super.key, required this.screenArguments, required this.isTotalBoard, required this.onpressd});
 
   final ScreenArguments screenArguments;
   final bool isTotalBoard;
+  final VoidCallback onpressd;
 
   @override
   State<StatefulWidget> createState() => _BoardDrawerWidgetState();
@@ -89,6 +92,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
+
               if(widget.isTotalBoard){
                 Navigator.push(
                   context,
@@ -218,6 +222,10 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
             color: Colors.white,
           ),
           InkWell(
+            onTap: widget.isTotalBoard ?
+            widget.onpressd : (){
+              Navigator.pop(context);
+            },
 
             child: Container(
               color: Colors.white,
@@ -231,7 +239,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '전체 게시판',
+                    'total-board'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(
@@ -272,7 +280,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '자유 게시판',
+                    'free-posting'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(
@@ -354,7 +362,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '게임 게시판',
+                    'game'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(
@@ -395,7 +403,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '패션 게시판',
+                    'fashion'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(
@@ -436,7 +444,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '음식 게시판',
+                    'food'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(
@@ -477,7 +485,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '음악 게시판',
+                    'music'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(
@@ -490,6 +498,21 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
+              if(widget.isTotalBoard){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => InfoBoardPage(screenArguments: widget.screenArguments)),
+                );
+              }
+              else{
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => InfoBoardPage(screenArguments: widget.screenArguments)),
+                );
+              }
             },
             child: Container(
               color: Colors.white,
@@ -503,7 +526,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '정보 게시판',
+                    'info'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(

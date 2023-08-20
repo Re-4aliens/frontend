@@ -34,7 +34,7 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            '음식 게시판',
+            'food'.tr(),
             style: TextStyle(
               fontSize: 18,
               color: Colors.white,
