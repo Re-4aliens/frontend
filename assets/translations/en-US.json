@@ -249,6 +249,7 @@
   "market": "Market Board",
   "market-noti": "Precautions when using the market board.",
   "modity": "Modify",
+<<<<<<< HEAD
   "market-noti1": "Hello, this is the Friend Ship administrator.\nIn order to ensure safe transactions on the marketplace bulletin board, please take note of the following precautions.",
   "market-noti2": "[Prohibited Items for Sale]\nSelling illegal items and harmful products that are not allowed under current law is prohibited.",
   "market-noti3": "- Alcohol, tobacco, drugs\n- Glasses, contact lenses, medicines, blood donations, health functional foods, medical devices\n- Unapproved overseas-purchased electronic devices\n- Imitation products, copyrighted material copies\n- Materials harmful to minors\n- Dollars/foreign currency over $2000\n- Resale for profit, such as tickets\n- Other items prohibited by medical law, pharmacy law, customs law, broadcasting law, foreign exchange transaction law, etc., or items prohibited for online trading",
@@ -261,4 +262,33 @@
   "market-posting-content": "• Product name\n• Detailed information (wear and tear, defects, etc.)\n• Mobile phone number or KakaoTalk ID\n* To establish trust for a successful transaction,\n  please provide detailed information and various angles of product photos.",
   "market-posting-content1": "Please enter contents.",
   "market-posting-title-error": "Up to 30 characters are allowed."
+=======
+
+
+  "board": "Board",
+  "total-board": "Total Board",
+
+
+  "time1": "Just before",
+  "time2": "m",
+  "time3": "h",
+
+  "free-posting": "Free Posting Board",
+  "music": "Music Board",
+  "food": "Food Board",
+  "fashion": "Fashion Board",
+  "game": "Game Board",
+  "info": "Information Board",
+
+  "delete": "Delete",
+
+  "comment1": "Please enter a comment.",
+  "comment2": "Please enter a reply to a comment.",
+  "comment3": "Reply to a comment",
+
+  "post": "Create a post",
+  "post2": "Write your post title here",
+  "post3": "Publish",
+  "post4": "Board category"
+>>>>>>> c09efe068d128ee0553b7508207babe030759d40
 }
