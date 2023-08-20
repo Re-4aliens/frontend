@@ -1,16 +1,18 @@
 class Comment {
   int? boardArticleCommentId;
   String? content;
-  Member? member;
+  CommentMember? member;
+  String? createdAt;
   List<Comment>? childs;
 
-  Comment({this.boardArticleCommentId, this.content, this.member, this.childs});
+  Comment({this.boardArticleCommentId, this.content, this.member, this.childs, this.createdAt});
 
   Comment.fromJson(Map<String, dynamic> json) {
     boardArticleCommentId = json['boardArticleCommentId'];
     content = json['content'];
+    createdAt = json['createdAt'];
     member =
-    json['member'] != null ? new Member.fromJson(json['member']) : null;
+    json['member'] != null ? new CommentMember.fromJson(json['member']) : null;
     childs = json['child'].cast<Comment>();
   }
 
@@ -19,6 +21,7 @@ class Comment {
     data['boardArticleCommentId'] = this.boardArticleCommentId;
     data['content'] = this.content;
     data['childs'] = this.childs;
+    data['createdAt'] = this.createdAt;
     if (this.member != null) {
       data['member'] = this.member!.toJson();
     }
@@ -26,21 +29,21 @@ class Comment {
   }
 }
 
-class Member {
+class CommentMember {
   int? memberId;
   String? email;
   String? name;
   String? profileImageUrl;
   String? nationality;
 
-  Member(
+  CommentMember(
       {this.memberId,
         this.email,
         this.name,
         this.profileImageUrl,
         this.nationality});
 
-  Member.fromJson(Map<String, dynamic> json) {
+  CommentMember.fromJson(Map<String, dynamic> json) {
     memberId = json['memberId'];
     email = json['email'];
     name = json['name'];
