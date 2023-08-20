@@ -1,4 +1,5 @@
 import 'package:aliens/repository/sql_message_database.dart';
+import 'package:aliens/views/pages/board/market_notice_page.dart';
 import 'package:aliens/views/pages/loading_page.dart';
 import 'package:aliens/views/pages/login/login_checkmail_page.dart';
 import 'package:aliens/views/pages/login/login_findpassword_page.dart';
@@ -187,8 +188,12 @@ class MyApp extends StatelessWidget {
         //'/loading' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: LoadingPage()),
         '/loading' : (context) => LoadingPage(),
 
+        //market board
+        '/market/notice' : (context) => MarketNoticePage()
+
         },
         );
+
       },
     );
   }

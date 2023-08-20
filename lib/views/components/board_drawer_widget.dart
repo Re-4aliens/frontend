@@ -23,6 +23,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../apis/apis.dart';
 import '../../repository/sql_message_repository.dart';
+import '../pages/board/market_posting_board_page.dart';
 
 class BoardDrawerWidget extends StatefulWidget {
   const BoardDrawerWidget({super.key, required this.screenArguments, required this.isTotalBoard, required this.onpressd});
@@ -90,6 +91,87 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
             ),
           ),
           Divider(height: 0, thickness: 1,),
+          ExpansionTile(
+            backgroundColor: Colors.white,
+            tilePadding: EdgeInsets.only(right: 10,left: 10),
+            initiallyExpanded:false,
+            collapsedBackgroundColor: Colors.white,
+            title:Row(
+              children: [
+                SizedBox(
+                  width: 20,
+                ), 
+                Text(
+                  '글쓰기', 
+                  style: TextStyle(color: Color(0xff888888), fontSize: 16),
+                ), 
+                SizedBox(width: 10,), 
+                Icon(
+                  Icons.edit, 
+                  color: Color(0xff888888),
+                ),
+              ],
+            ),
+            children: [
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MarketBoardPostPage(screenArguments: widget.screenArguments)),
+                  );
+                },
+                child: Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  height: 60,
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        '장터게시판 글쓰기',
+                        style:
+                        TextStyle(color: Color(0xff888888), fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => PostBoardPage()),
+                  );
+                },
+                child: Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  height: 60,
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        '일반게시판 글쓰기',
+                        style:
+                        TextStyle(color: Color(0xff888888), fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          /*InkWell(
+            onTap: (){},
+=======
           InkWell(
             onTap: (){
 
@@ -109,6 +191,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 );
               }
           },
+>>>>>>> c09efe068d128ee0553b7508207babe030759d40
             child: Container(
               color: Colors.white,
               width: double.infinity,
@@ -134,7 +217,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 ],
               ),
             ),
-          ),
+          ),*/
           Divider(height: 0, thickness: 1,),
           InkWell(
             onTap: (){
@@ -297,7 +380,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MarketBoardPage()),
+                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments)),
                 );
               }
               else{
@@ -305,7 +388,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MarketBoardPage()),
+                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments)),
                 );
               }
             },
@@ -543,3 +626,5 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
 
 
 }
+
+
