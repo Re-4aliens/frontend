@@ -245,9 +245,22 @@
   "chatting-block2": "Do you want to block this user?",
   "chatting-block3": "You can't receive or send messages, and can't rematch with blocked users.",
 
+  "write" : "Writing",
   "market": "Market Board",
   "market-noti": "Precautions when using the market board.",
   "modity": "Modify",
+  "market-noti1": "Hello, this is the Friend Ship administrator.\nIn order to ensure safe transactions on the marketplace bulletin board, please take note of the following precautions.",
+  "market-noti2": "[Prohibited Items for Sale]\nSelling illegal items and harmful products that are not allowed under current law is prohibited.",
+  "market-noti3": "- Alcohol, tobacco, drugs\n- Glasses, contact lenses, medicines, blood donations, health functional foods, medical devices\n- Unapproved overseas-purchased electronic devices\n- Imitation products, copyrighted material copies\n- Materials harmful to minors\n- Dollars/foreign currency over $2000\n- Resale for profit, such as tickets\n- Other items prohibited by medical law, pharmacy law, customs law, broadcasting law, foreign exchange transaction law, etc., or items prohibited for online trading",
+  "market-noti4": "[Transaction precautions]",
+  "market-noti5": "• All transactions within the 'Marketplace Board' are conducted through comments, mobile phone numbers, or KakaoTalk IDs.\n• Please provide your actual and current information.\n• For trust between the seller and the buyer, please provide detailed and accurate descriptions with photos you have taken yourself.\n• Once the sale is completed, please change the product status to '[Sold]'.\n• 'Friend Ship' does not take responsibility for transactions within the marketplace board. For safe transactions, we recommend using face-to-face transactions rather than non-face-to-face transactions.\n• Opting for face-to-face transactions instead of delivery can minimize the risk of potential issues. Please be cautious of the other party who might avoid face-to-face transactions for various reasons.\n• Posting prohibited items for sale may result in punishment based on reports from other users.",
+  "market-noti6": "[Dealing with Fraud and Damages]",
+  "market-noti7": "If you experience fraud or any harm during the transaction process, please visit the appropriate law enforcement agency immediately for assistance.\n'FRIENDSHIP' actively cooperates with law enforcement authorities upon their request to prevent further harm and facilitate issue resolution.",
+  "market-posting-title": "Please enter a title.",
+  "market-posting-price": "Please eneter price",
+  "market-posting-content": "• Product name\n• Detailed information (wear and tear, defects, etc.)\n• Mobile phone number or KakaoTalk ID\n* To establish trust for a successful transaction,\n  please provide detailed information and various angles of product photos.",
+  "market-posting-content1": "Please enter contents.",
+  "market-posting-title-error": "Up to 30 characters are allowed.",
 
 
   "board": "Board",

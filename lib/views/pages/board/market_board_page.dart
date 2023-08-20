@@ -11,9 +11,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../components/board_drawer_widget.dart';
+
 
 class MarketBoardPage extends StatefulWidget {
-  const MarketBoardPage({super.key});
+  const MarketBoardPage({super.key, required this.screenArguments});
+  final ScreenArguments screenArguments;
+
 
 
   @override
@@ -21,6 +25,7 @@ class MarketBoardPage extends StatefulWidget {
 }
 
 class _MarketBoardPageState extends State<MarketBoardPage> {
+  bool isDrawerStart = false;
 
   @override
   Widget build(BuildContext context) {
@@ -71,10 +76,14 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
 
       ),
-      body:Column(
+      body:isDrawerStart
+          ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false, onpressd: () {  },
+      )
+          :Column(
         children: [
           InkWell(
             onTap: (){
+              Navigator.pushNamed(context,'/market/notice');
             },
             child: Container(
               margin: EdgeInsets.only(right: 10,left: 10, top: 10, bottom: 10),
@@ -161,7 +170,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                           child: Container(
                             height: 20,
                             child: Text(
-                              '거의 새 것', //상태에 따라 글자 바뀌게
+                              '거의 새 것', //productstatus
                               style: TextStyle(fontSize: 10, color: Colors.white),
                               textAlign: TextAlign.center,
                             ),
@@ -187,7 +196,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              '[판매중]',
+                              '[판매중]', //status
                               style: TextStyle(
                                 color: Color(0xff616161),
                                 fontSize: 16,
@@ -198,7 +207,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text('23.08.06',
+                                Text('23.08.06',//createdAt
                                   style: TextStyle(
                                     color: Color(0xffC1C1C1),
                                     fontSize: 12,
@@ -244,11 +253,11 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                           ],
                         ),
                         SizedBox(height: 20),
-                        Text('가죽쪼리 250 팔아요',
+                        Text('가죽쪼리 250 팔아요', //title
                           style: TextStyle(fontSize: 16),
                         ),
                         SizedBox(height: 5,),//제목
-                        Text('25,000원',
+                        Text('25,000원', //price
                           style: TextStyle(fontSize: 16,
                           fontWeight: FontWeight.w700),
                         ), //가격
@@ -256,14 +265,14 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             Icon(Icons.thumb_up, color: Color(0xffC1C1C1),size: 16,),
-                            Text(' 10  ',
+                            Text(' 10  ',//likeCount
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Color(0xffc1c1c1)
                               ),
                             ),
                             Icon(Icons.sms, color: Color(0xffC1C1C1),size: 16,),
-                            Text(' 10',
+                            Text(' 10',//commentCount
                               style: TextStyle(
                                   fontSize: 14,
                                   color: Color(0xffc1c1c1)
