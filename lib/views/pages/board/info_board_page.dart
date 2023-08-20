@@ -14,20 +14,21 @@ import 'package:flutter_svg/svg.dart';
 import '../../../models/countries.dart';
 import '../../components/article_widget.dart';
 import '../../components/board_drawer_widget.dart';
+import '../../components/info_article_widget.dart';
 import 'article_page.dart';
 import 'article_writing_page.dart';
 
 
-class GameBoardPage extends StatefulWidget {
-  const GameBoardPage({super.key, required this.screenArguments});
+class InfoBoardPage extends StatefulWidget {
+  const InfoBoardPage({super.key, required this.screenArguments});
   final ScreenArguments screenArguments;
 
 
   @override
-  State<StatefulWidget> createState() => _GameBoardPageState();
+  State<StatefulWidget> createState() => _InfoBoardPageState();
 }
 
-class _GameBoardPageState extends State<GameBoardPage> {
+class _InfoBoardPageState extends State<InfoBoardPage> {
   bool isDrawerStart = false;
 
   @override
@@ -36,7 +37,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'game'.tr(),
+            'info'.tr(),
             style: TextStyle(
               fontSize: 16.spMin,
               color: Colors.white,
@@ -83,19 +84,18 @@ class _GameBoardPageState extends State<GameBoardPage> {
           onpressd: (){},) :Container(
           decoration: BoxDecoration(color: Colors.white),
           child: ListView.builder(
-              itemCount: gameBoardList.length,
+              itemCount: musicBoardList.length,
               itemBuilder: (context, index) {
-
                 var nationCode = '';
                 for (Map<String, String> country in countries) {
-                  if (country['name'] == gameBoardList[index].member!.nationality.toString()) {
+                  if (country['name'] == infoBoardList[index].member!.nationality.toString()) {
                     nationCode = country['code']!;
                     break;
                   }
                 }
                 return Column(
                   children: [
-                    ArticleWidget(board: gameBoardList[index], nationCode: nationCode,),
+                    InfoArticleWidget(board: infoBoardList[index], nationCode: nationCode,),
                     Divider(
                       thickness: 2,
                       color: Color(0xffE5EBFF),
@@ -108,7 +108,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
         onPressed: (){
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ArticleWritingPage(screenArguments: widget.screenArguments, category: "게임게시판",)),
+            MaterialPageRoute(builder: (context) => ArticleWritingPage(screenArguments: widget.screenArguments, category: "정보게시판",)),
           ).then((value) {
             setState(() {
             });
