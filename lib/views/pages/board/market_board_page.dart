@@ -77,7 +77,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
       ),
       body:isDrawerStart
-          ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,
+          ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false, onpressd: () {  },
       )
           :Column(
         children: [

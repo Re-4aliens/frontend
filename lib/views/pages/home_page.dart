@@ -6,6 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -62,7 +63,7 @@ class _HomePageState extends State<HomePage> {
     List _pageTitle = [
       '',
       '',
-      '전체게시판',
+      '${'total-board'.tr()}',
       '${'setting'.tr()}',
     ];
 
@@ -251,7 +252,11 @@ class _HomePageState extends State<HomePage> {
               screenArguments: args,
             )
           : chattingWidget(context, args.partners),
-      isDrawerStart ? BoardDrawerWidget(screenArguments: args, isTotalBoard: true,) : TotalBoardWidget(screenArguments: args),
+      isDrawerStart ? BoardDrawerWidget(screenArguments: args, isTotalBoard: true, onpressd: (){
+        setState(() {
+          isDrawerStart = false;
+        });
+      },) : TotalBoardWidget(screenArguments: args),
       settingWidget(context, args)
     ];
 
@@ -262,7 +267,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           _pageTitle.elementAt(selectedIndex),
           style: TextStyle(
-            fontSize: isSmallScreen ? 16 : 18,
+            fontSize: selectedIndex == 2 ? 16 : 18,
             color: selectedIndex == 2 ? Colors.white : Colors.black,
             fontWeight: selectedIndex == 2 ? FontWeight.normal : FontWeight.bold,
           ),
@@ -389,7 +394,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(5.0),
               child: Icon(Icons.article),
             ),
-            label:'게시판' ,
+            label: "board".tr() ,
           ),
           BottomNavigationBarItem(
             icon: Padding(
