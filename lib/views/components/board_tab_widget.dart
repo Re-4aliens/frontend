@@ -3,14 +3,23 @@ import 'dart:async';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
+import 'package:aliens/views/components/board_dialog_widget.dart';
+import 'package:aliens/views/components/info_article_widget.dart';
+import 'package:aliens/views/components/report_and_block_iOS_dialog_widget.dart';
+import 'package:aliens/views/components/report_iOS_dialog_widget.dart';
+import 'package:aliens/views/components/total_article_widget.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../apis/apis.dart';
+import '../../mockdatas/board_mockdata.dart';
+import '../../models/countries.dart';
 import '../../repository/sql_message_repository.dart';
+import '../pages/board/article_page.dart';
 
 class TotalBoardWidget extends StatefulWidget {
   const TotalBoardWidget({super.key, required this.screenArguments});
@@ -43,10 +52,13 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
 
      */
   }
+  /*
   @override
   void dispose() {
-    //_messageStreamSubscription?.cancel();
+    _messageStreamSubscription?.cancel();
   }
+
+   */
 
   /*
   Future<List<ChatRoom>> _getChatRoomList() async {
@@ -99,16 +111,27 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
   Widget build(BuildContext context) {
 
     return Container(
-      decoration: BoxDecoration(
-        color: Color(0xffF5F7FF),
-      ),
+      decoration: BoxDecoration(color: Colors.white),
       child: ListView.builder(
-          itemCount: 1,
+          itemCount: totalBoardList.length,
           itemBuilder: (context, index) {
+            var nationCode = '';
+            for (Map<String, String> country in countries) {
+              if (country['name'] == totalBoardList[index].member!.nationality.toString()) {
+                nationCode = country['code']!;
+                break;
+              }
+            }
             return Column(
               children: [
-                Text('게시물 리스트')
-             ],
+                totalBoardList[index].category == "정보게시판" ? InfoArticleWidget(
+                    board: totalBoardList[index], nationCode: nationCode
+                ):TotalArticleWidget(board: totalBoardList[index], nationCode: nationCode),
+                Divider(
+                  thickness: 2,
+                  color: Color(0xffE5EBFF),
+                )
+              ],
             );
           }),
     );
