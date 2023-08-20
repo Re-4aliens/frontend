@@ -261,5 +261,6 @@
   "market-posting-title": "제목을 입력하세요.",
   "market-posting-price": "가격을 입력하세요.",
   "market-posting-content": "• 제품명\n• 상세정보 (사용감, 하자 유무 등)\n• 휴대폰 번호 or 카카오톡 ID\n* 서로가 믿고 거래할 수 있도록, \n  자세한 정보와 다양한 각도의 상품 사진을 올려주세요.",
-  "market-posting-content1": "내용을 입력해주세요."
+  "market-posting-content1": "내용을 입력해주세요.",
+  "market-posting-title-error": "최대 30자까지 입력가능합니다."
 }
