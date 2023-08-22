@@ -6,8 +6,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../../apis/apis.dart';
 import '../../../models/members.dart';
+import '../../../permissions.dart';
 import '../../components/button.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -26,12 +28,26 @@ class _SignUpProfileState extends State<SignUpProfile> {
 
   //비동기 처리를 통해 이미지 가져오기
   Future getImage(ImageSource imageSource) async {
-    final image = await picker.pickImage(source: imageSource);
-    setState(() {
-      _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
-      _isButtonEnabled = true;
-    });
+    if(imageSource == ImageSource.gallery){
+      if(await Permissions.getPhotosPermission()){
+        final image = await picker.pickImage(source: imageSource);
+        setState(() {
+          _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
+          _isButtonEnabled = true;
+        });
+      }
+    }
+    else{
+      if(await Permissions.getCameraPermission()){
+        final image = await picker.pickImage(source: imageSource);
+        setState(() {
+          _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
+          _isButtonEnabled = true;
+        });
+      }
+    }
   }
+
 
   @override
   void initState() {
