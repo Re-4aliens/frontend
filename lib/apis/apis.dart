@@ -1187,13 +1187,6 @@ static Future<String> matchingProfessData() async{
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
 
-    //알림값 읽어오기
-    var notification = await storage.read(key: 'notification');
-
-    var allNotification = json.decode(notification!)['allNotification'];
-    var matchingNotification = json.decode(notification!)['matchingNotification'];
-    var chatNotification = json.decode(notification!)['chatNotification'];
-
 
     final fcmToken = await FirebaseMessaging.instance.getToken();
 
@@ -1210,32 +1203,21 @@ static Future<String> matchingProfessData() async{
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      //알림값 읽어오기
+      var notification = await storage.read(key: 'notification');
+
+      var allNotification = json.decode(notification!)['allNotification'];
+      var matchingNotification = json.decode(notification!)['matchingNotification'];
+      var chatNotification = json.decode(notification!)['chatNotification'];
+
+
       await getChatNotificationStatus();
       await storage.delete(key: 'notification');
       if(all){
-        await storage.write(
-          key: 'notification',
-          value: jsonEncode({
-            'allNotification' : _notification,
-            'matchingNotification' : _notification,
-            'chatNotification' : _notification,
-          }),
-        );
+
       }
       else{
-        if(matchingNotification == _notification && _notification == true){
-          allNotification = true;
-        }else {
-          allNotification = false;
-        }
-        await storage.write(
-          key: 'notification',
-          value: jsonEncode({
-            'allNotification' : allNotification,
-            'matchingNotification' : matchingNotification,
-            'chatNotification' : _notification,
-          }),
-        );
+
       }
 
       return true;
