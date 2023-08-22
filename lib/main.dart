@@ -44,7 +44,6 @@ import './views/pages/matching/matching_edit_page.dart';
 
 import './views/pages/home_page.dart';
 
-import './views/pages/setting/setting_edit_page.dart';
 import './views/pages/setting/setting_notification_page.dart';
 import './views/pages/setting/setting_terms_page.dart';
 import './views/pages/setting/setting_terms_private.dart';
@@ -146,7 +145,6 @@ class MyApp extends StatelessWidget {
         //'/edit' : (context) => MatchingEditPage(),
 
         //setting
-        '/setting/edit' : (context) => SettingEditPage(),
         //'/setting/lan/edit':(context) => SettingLanEditPage(),
         //'/setting/MBTI/edit' : (context) => SettingMBTIEditPage(),
         '/setting/notification' : (context) => SettingNotificationPage(),
