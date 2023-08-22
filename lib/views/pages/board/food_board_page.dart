@@ -104,7 +104,7 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
                 );
               }),
         ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: isDrawerStart ? null : FloatingActionButton(
         onPressed: (){
           Navigator.push(
             context,

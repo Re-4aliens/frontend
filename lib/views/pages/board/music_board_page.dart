@@ -103,7 +103,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                 );
               }),
         ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: isDrawerStart ? null : FloatingActionButton(
         onPressed: (){
           Navigator.push(
             context,
