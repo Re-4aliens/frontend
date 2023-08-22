@@ -10,9 +10,11 @@ import 'package:aliens/models/auth_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../apis/apis.dart';
 import '../../../models/screenArgument.dart';
+import '../../../permissions.dart';
 
 class SettingNotificationPage extends StatefulWidget {
   const SettingNotificationPage({super.key});
@@ -34,7 +36,6 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
 
  @override
   void initState() {
-    //getNotification();
   }
 
   Future<void> getNotification() async {
@@ -75,7 +76,6 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
               );
             }
             else {
-              //chatNotifacion = snapshot.data!;
               return Container(
                 margin: EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
@@ -117,27 +117,20 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             activeColor: Color(0xff7898FF),
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
+                              if(await Permissions.getNotificationPermission()){
+                                await storage.delete(key: 'notification');
 
-                              bool success;
-                              print('값: $value');
-                              try{
-                                success = await APIs.setChatNotification(value, true);
-                              }catch (e){
-                                print(e);
-                                await APIs.getAccessToken();
-                                success = await APIs.setChatNotification(value, true);
-                              }
-                              if(success){
+                                await storage.write(
+                                  key: 'notification',
+                                  value: jsonEncode({
+                                    'allNotification' : value,
+                                    'matchingNotification' : value,
+                                    'chatNotification' : value,
+                                  }),
+                                );
                                 setState(() {
 
-                                  print('설정 중 $value');
-                                  this.allNotification = value;
-                                  this.matchingNotification = value;
-                                  this.chatNotification = value;
                                 });
-                              }
-                              else{
-
                               }
                             },
                           ),
@@ -165,31 +158,24 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             activeColor: Color(0xff7898FF),
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
-                              //알림값 읽어오기
-                              var notification = await storage.read(key: 'notification');
+                              if(await Permissions.getNotificationPermission()){
+                                await storage.delete(key: 'notification');
+                                if (value == true && chatNotification == true) {
+                                  allNotification = true;
+                                } else {
+                                  allNotification = false;
+                                }
 
-                              var allNotification = json.decode(notification!)['allNotification'];
-                              var matchingNotification = json.decode(notification!)['matchingNotification'];
-                              var chatNotification = json.decode(notification!)['chatNotification'];
-
-
-                              await storage.delete(key: 'notification');
-                              if(chatNotification != value){
-                                allNotification = false;
-                              }else if(chatNotification == true && matchingNotification == true){
-                                allNotification = true;
+                                await storage.write(
+                                  key: 'notification',
+                                  value: jsonEncode({
+                                    'allNotification': allNotification,
+                                    'matchingNotification': value,
+                                    'chatNotification': chatNotification,
+                                  }),
+                                );
+                                setState(() {});
                               }
-                              await storage.write(
-                                key: 'notification',
-                                value: jsonEncode({
-                                  'allNotification' : allNotification,
-                                  'matchingNotification' : value,
-                                  'chatNotification' : chatNotification,
-                                }),
-                              );
-                              setState(() {
-
-                              });
                             },
                           ),
                         ],
@@ -211,15 +197,25 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             activeColor: Color(0xff7898FF),
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
-                              bool success;
-                              try{
-                                success = await APIs.setChatNotification(value, false);
-                              }catch (e){
-                                await APIs.getAccessToken();
-                                success = await APIs.setChatNotification(value, false);
+                              if(await Permissions.getNotificationPermission()){
+                                await storage.delete(key: 'notification');
+                                if (matchingNotification == true &&
+                                    value == true) {
+                                  allNotification = true;
+                                } else {
+                                  allNotification = false;
+                                }
+                                await storage.write(
+                                  key: 'notification',
+                                  value: jsonEncode({
+                                    'allNotification': allNotification,
+                                    'matchingNotification':
+                                        matchingNotification,
+                                    'chatNotification': value,
+                                  }),
+                                );
+                                setState(() {});
                               }
-                              setState(() {
-                              });
                             },
                           ),
                         ],

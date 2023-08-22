@@ -40,16 +40,14 @@ class FirebaseAPIs {
 
     var notification = await storage.read(key: 'notification');
 
-    if(message.data['type'] != 'bulkRead'){
-      // 알림 표시
-      flutterLocalNotificationsPlugin.show(
-        0, // 알림 ID
-        '${message.data['title']}', // 제목
-        '${message.data['body']}', // 본문
-        platformDetails, // 알림 설정
-      );
+    //상대방의 일괄 읽음 알림 (상대방이 채팅창 들어왔을 때의 알림)
+    //상대방이 채팅 읽었을 때의 알림
+    if(message.data['type'] == 'bulkRead' && message.data['type'] == 'bulkRead'){
+      //알림 안보냄
     }
+    //일괄적으로 보내는 notice
     else if(message.data['type'] == 'notice'){
+      //매칭 알림이 켜져있는 경우에만 보냄
       if(json.decode(notification!)['matchingNotification'] == true){
         // 알림 표시
         flutterLocalNotificationsPlugin.show(
@@ -61,6 +59,16 @@ class FirebaseAPIs {
       }
       else{
         return;
+      }
+    }else if(message.data['type'] == 'chat'){
+      // 알림 표시
+      if(json.decode(notification!)['chattingNotification'] == true){
+        flutterLocalNotificationsPlugin.show(
+          0, // 알림 ID
+          '${message.data['title']}', // 제목
+          '${message.data['body']}', // 본문
+          platformDetails, // 알림 설정
+        );
       }
     }
 

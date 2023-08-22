@@ -214,6 +214,7 @@ class APIs {
       //토큰 및 정보 삭제
       await storage.delete(key: 'auth');
       await storage.delete(key: 'token');
+      await storage.delete(key: 'notification');
       print('로그아웃, 정보 지움');
 
       //스택 비우고 화면 이동
