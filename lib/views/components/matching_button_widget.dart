@@ -1,60 +1,66 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../models/screenArgument.dart';
 
-class MatchingButton extends StatefulWidget {
-  const MatchingButton({super.key, required this.isSmallScreen,
-    required this.isClick,});
+class MatchingButton extends StatelessWidget {
+  MatchingButton({super.key, required this.isClick, required this.screenArguments});
 
-  final bool isSmallScreen;
   final bool isClick;
+  final ScreenArguments screenArguments;
 
-  @override
-  State<MatchingButton> createState() => _MatchingButtonState();
-}
-
-class _MatchingButtonState extends State<MatchingButton> {
 @override
 Widget build(BuildContext context) {
   return ClipRRect(
     borderRadius: BorderRadius.circular(30),
     child: Container(
       decoration: BoxDecoration(boxShadow: [
+        //내부 그림자
         BoxShadow(
-          color: Color(0xff678CFF),
+          color:
+          screenArguments.status != 'NOT_APPLIED' ? Color(0xffCBCBCB) : Color(0xff678CFF),
         ),
+        //버튼색
         BoxShadow(
           blurRadius: 7,
-          color: Color(0xffAEC1FF),
+          color:
+          screenArguments.status != 'NOT_APPLIED' ? Color(0xffE0E0E0) : Color(0xffAEC1FF),
           spreadRadius: 14,
           offset: const Offset(-20, -20),
         ),
       ]),
       child: Stack(
         children: [
+          //큰원
           Positioned(
             right: -35,
             bottom: -25,
             child: Container(
               decoration: BoxDecoration(
-                color: Color(0xFFCAD6FE),
                 borderRadius: BorderRadius.circular(75),
               ),
-              width: this.widget.isSmallScreen ? 130 : 150,
-              height: this.widget.isSmallScreen ? 130 : 150,
+              width: 150,
+              height: 150,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(75),
                 child: Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(25),
                       boxShadow: [
+                        //큰원 내부그림자
                         BoxShadow(
-                          color: Color(0xff678CFF),
+                          color: screenArguments.status != 'NOT_APPLIED'
+                              ? Color(0xffCBCBCB)
+                              : Color(0xff678CFF),
                         ),
+                        //큰원색
                         BoxShadow(
                           blurRadius: 7,
-                          color: Color(0xFFCAD6FE),
+                          color: screenArguments.status != 'NOT_APPLIED'
+                              ? Color(0xffEBEBEB)
+                              : Color(0xFFCAD6FE),
                           spreadRadius: -2,
                           offset: const Offset(-40, -30),
                         ),
@@ -63,21 +69,24 @@ Widget build(BuildContext context) {
               ),
             ),
           ),
+          //작은 원
           Positioned(
             left: -25,
             top: -25,
             child: Container(
               decoration: BoxDecoration(
-                color: this.widget.isClick ? Color(0xff3762EC) : Color(0xFF99B1FF),
+                color: screenArguments.status != 'NOT_APPLIED'
+                    ? Color(0xffD7D7D7) // 회색
+                    : Color(0xFF99B1FF), //하늘
                 borderRadius: BorderRadius.circular(50),
               ),
-              width: this.widget.isSmallScreen ? 90 : 100,
-              height: this.widget.isSmallScreen ? 90 : 100,
+              width: 95,
+              height: 95,
             ),
           ),
           Container(
-            height: this.widget.isSmallScreen ? 210 : 240,
-            padding: EdgeInsets.all(25),
+            height: 240,
+            padding: EdgeInsets.only(left:25, top:20, right:6),
             decoration: BoxDecoration(),
             width: double.infinity,
             child: Column(
@@ -85,17 +94,38 @@ Widget build(BuildContext context) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '매칭신청',
+                  screenArguments.status != 'NOT_APPLIED' ? '${'homepage-applydone'.tr()}' : '${'homepage-apply'.tr()}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    color: Colors.white,
+                    fontSize: 18,
+                    color: screenArguments.status != 'NOT_APPLIED'
+                        ? Color(0xffACACAC)
+                        : Colors.white,
                   ),
                 ),
                 Text(
                   'How to Use?',
-                  style: TextStyle(fontSize: 12, color: Color(0xff7898FF)),
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: screenArguments.status != 'NOT_APPLIED'
+                          ? Color(0xff888888)
+                          : Color(0xff7898FF)),
                 ),
+                SizedBox(height: 40),
+                Row(
+                  children: [
+                    Expanded(
+                        flex : 3,
+                        child: SizedBox()),
+                    Expanded(
+                        flex: 8,
+                        child: screenArguments.status != 'NOT_APPLIED'
+                            ? SvgPicture.asset('assets/character/none_puzzle.svg')
+                            :SvgPicture.asset('assets/character/matching_puzzle.svg',
+                        )
+                    )
+                  ],
+                )
               ],
             ),
           ),
