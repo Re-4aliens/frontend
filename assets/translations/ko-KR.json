@@ -9,6 +9,8 @@
   "password": "비밀번호",
   "findpassword1": "비밀번호를 잊으셨나요?",
   "findpassword2": "비밀번호 찾기",
+  "findpassword3": "이름 및 이메일을 확인해주세요!",
+  "findpassword4": "비밀번호 찾기 실패",
   "login4": "로그인 실패",
   "login5": "이메일 및 비밀번호를 확인해주세요!",
 
