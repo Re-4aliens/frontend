@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:aliens/models/memberDetails_model.dart';
@@ -18,6 +19,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../permissions.dart';
 import '../../providers/auth_provider.dart';
 import '../components/board_drawer_widget.dart';
 import '../components/matching_widget.dart' as matching;
@@ -39,7 +41,57 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
   MemberDetails memberDetails = MemberDetails();
+  static final storage = FlutterSecureStorage();
+  dynamic notification = null;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+
+    //알림 설정
+    _setNotification();
+  }
+
+  _setNotification() async {
+    notification = await storage.read(key: 'notification');
+
+    //알림 허용 팝업을 띄움
+
+    //허용하면
+    if(await Permissions.getNotificationPermission()){
+      print('알림 허용 상태');
+      //저장된 설정 정보가 없다면
+      if (notification != null){
+      }else{
+        //true로 설정
+        await storage.write(
+          key: 'notification',
+          value: jsonEncode({
+            'allNotification': true,
+            'matchingNotification': true,
+            'chatNotification': true,
+          }),
+        );
+      }
+    }else{
+      print('알림 불허 상태');
+      //저장된 설정 정보가 없다면
+      if (notification != null){
+      }else{
+        //false로 설정
+        await storage.write(
+          key: 'notification',
+          value: jsonEncode({
+            'allNotification': false,
+            'matchingNotification': false,
+            'chatNotification': false,
+          }),
+        );
+      }
+    }
+
+
+  }
 
   @override
   File? _profileImage;
@@ -47,10 +99,20 @@ class _HomePageState extends State<HomePage> {
 
   //비동기 처리를 통해 이미지 가져오기
   Future getImage(ImageSource imageSource) async {
-    final image = await picker.pickImage(source: imageSource);
-    setState(() {
-      _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
-    });
+    if(imageSource == ImageSource.gallery){
+      if(await Permissions.getPhotosPermission()){
+        final image = await picker.pickImage(source: imageSource);
+        setState(() {
+          _profileImage = File(image!.path);
+        });
+      }
+    }
+    else{
+      final image = await picker.pickImage(source: imageSource);
+      setState(() {
+        _profileImage = File(image!.path);
+      });
+    }
   }
 
   Widget build(BuildContext context) {

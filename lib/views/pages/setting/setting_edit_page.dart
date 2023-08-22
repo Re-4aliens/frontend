@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:permission_handler/permission_handler.dart';
+import '../../../permissions.dart';
 import '../../../providers/auth_provider.dart';
 import '../../components/button.dart';
 import 'package:image_picker/image_picker.dart';
@@ -27,10 +29,22 @@ class _SettingEditPageState extends State<SettingEditPage> {
   final picker = ImagePicker();
   //비동기 처리를 통해 이미지 가져오기
   Future getImage(ImageSource imageSource) async {
-    final image = await picker.pickImage(source: imageSource);
-    setState(() {
-      _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
-    });
+    if(imageSource == ImageSource.gallery){
+      if(await Permissions.getPhotosPermission()){
+        final image = await picker.pickImage(source: imageSource);
+        setState(() {
+          _profileImage = File(image!.path);
+        });
+      }
+    }
+    else{
+      if(await Permissions.getCameraPermission()){
+        final image = await picker.pickImage(source: imageSource);
+        setState(() {
+          _profileImage = File(image!.path);
+        });
+      }
+    }
   }
 
   Widget build(BuildContext context) {
