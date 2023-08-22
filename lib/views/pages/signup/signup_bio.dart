@@ -69,7 +69,7 @@ class _SignUpBioState extends State<SignUpBio>{
                   if(_isButtonEnabled){
                     member.selfIntroduction = _bioController.text;
                     print(member.toJson());
-                    Navigator.pushNamed(context, '/password', arguments: member);
+                    Navigator.pushNamed(context, '/email', arguments: member);
                   }
                 }),
             Center(
