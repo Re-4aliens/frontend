@@ -7,6 +7,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -57,7 +58,7 @@ class _SettingWidgetState extends State<SettingWidget>{
             flex: 3,
             child: Container(
                 padding:
-                EdgeInsets.only(right: 5, left: 0, top: 17, bottom: 17),
+                EdgeInsets.only(right: 5, left: 0, top: 17, bottom: 17).r,
                 decoration: BoxDecoration(
                   color: Color(0xff7898FF),
                   borderRadius: BorderRadius.circular(20),
@@ -74,7 +75,7 @@ class _SettingWidgetState extends State<SettingWidget>{
                           text: TextSpan(
                             text: widget.screenArguments.memberDetails!.name.toString(),
                             style: TextStyle(
-                              fontSize: 32,
+                              fontSize: 32.spMin,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
@@ -82,7 +83,7 @@ class _SettingWidgetState extends State<SettingWidget>{
                               TextSpan(
                                 text: '${'setting-nim'.tr()}',
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 14.spMin,
                                   color: Colors.white,
                                 ),
                               ),
@@ -95,12 +96,12 @@ class _SettingWidgetState extends State<SettingWidget>{
                             Text(
                               widget.screenArguments.memberDetails!.birthday.toString(),
                               style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 14.spMin,
                                   color: Colors.white),
                             ),
                             Text(widget.screenArguments.memberDetails!.email.toString(),
                                 style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 14.spMin,
                                     color: Colors.white)),
                           ],
                         )
@@ -111,8 +112,8 @@ class _SettingWidgetState extends State<SettingWidget>{
                       child: Stack(
                         children: [
                           Container(
-                            height: 90,
-                            width: 90,
+                            height: 90.r,
+                            width: 90.r,
                             decoration: BoxDecoration(
                                 color: widget.screenArguments.memberDetails!.profileImage != ""
                                     ? Colors.white

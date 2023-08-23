@@ -2,6 +2,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../models/screenArgument.dart';
@@ -16,10 +17,10 @@ class ChattingButton extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.circular(30).r,
       child: Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular((25)),
+            borderRadius: BorderRadius.circular((25).r),
             boxShadow: [
               //내부그림자
               BoxShadow(
@@ -87,8 +88,8 @@ class ChattingButton extends StatelessWidget{
               ),
             ),
             Container(
-              height: 240,
-              padding: EdgeInsets.only(left:25, top:20, right:6),
+              height: 240.h,
+              padding: EdgeInsets.only(left:25, top:20, right:6).r,
               decoration: BoxDecoration(),
               width: double.infinity,
               child: Column(
@@ -99,7 +100,7 @@ class ChattingButton extends StatelessWidget{
                     screenArguments.status == 'PENDING' ? '${'homepage-progress'.tr()}' : '${'homepage-chatting'.tr()}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 18.spMin,
                       color: screenArguments.status == 'NOT_APPLIED'
                           ? Color(0xffACACAC)
                           : Colors.white,
@@ -108,26 +109,22 @@ class ChattingButton extends StatelessWidget{
                   Text(
                     'How to Use?',
                     style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 12.spMin,
                         color: screenArguments.status == 'NOT_APPLIED'
                             ? Color(0xff888888)
                             : Color(0xffFF8F8F)),
                   ),
-                  SizedBox(height: 50),
+                  Expanded(flex: 3, child: SizedBox()),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Expanded(
-                          flex : 3,
-                          child: SizedBox()),
-                      Expanded(
-                          flex: 8,
-                          child: screenArguments.status == 'NOT_APPLIED'?
-                          SvgPicture.asset('assets/character/none_speech_bubble.svg')
-                              :SvgPicture.asset('assets/character/speech_bubble.svg',
-                          )
+                      screenArguments.status == 'NOT_APPLIED'?
+                      SvgPicture.asset('assets/character/none_speech_bubble.svg', width: 100.r,)
+                          :SvgPicture.asset('assets/character/speech_bubble.svg', width: 100.r,
                       )
                     ],
-                  )
+                  ),
+                  Expanded(flex: 1, child: SizedBox()),
                 ],
               ),
             ),

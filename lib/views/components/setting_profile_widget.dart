@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../pages/setting/setting_lan_edit.dart';
 import '../pages/setting/setting_mbti_edit.dart';
@@ -84,16 +85,16 @@ Widget buildProfileList(context, index, screenArgument){
             child: settingIcon.elementAt(index),
           ),
         Text(
-          '${settingList.elementAt(index)}',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: isSmallScreen?16:18,
-          ),
+            '${settingList.elementAt(index)}',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16.spMin,
+            ),
+            overflow: TextOverflow.fade,
         ),
         Expanded(child: SizedBox()),
         Container(
           alignment: Alignment.centerRight,
-          width: 100,
           child:
             index < 2 ?
               Text(

@@ -224,8 +224,8 @@
   "country" : "country",
   "Age(years)": "Age(years)",
   "matchinglan": "Matching preferred languages",
-  "first": "First priority",
-  "second": "Second priority",
+  "first": "First",
+  "second": "Second",
   "matchingpreferlan": "Matching preferred\nlanguages",
 
   "chatting1": "Closed chat room",
