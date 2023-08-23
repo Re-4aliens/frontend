@@ -803,8 +803,19 @@ class APIs {
     }
     //실패
     else {
-      print('언어 수정 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
-      return false;
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'MT-C-005'){
+        print('정보 없음');
+        return false;
+      }else{
+
+      }
+      throw Exception('요청 오류');
     }
   }
 
