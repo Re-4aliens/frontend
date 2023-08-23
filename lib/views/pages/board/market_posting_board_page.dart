@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:io';
+import 'package:aliens/permissions.dart';
 import 'package:chips_choice/chips_choice.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
@@ -10,6 +10,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../components/board_drawer_widget.dart';
@@ -45,7 +46,6 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
 
   final picker = ImagePicker();
   File? _profileImage;
-  final picker = ImagePicker();
   List<XFile> _images = [];
 
   Future getImages(int i) async {
@@ -185,14 +185,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                             right: 14, left: 14)
                                     ),
                                     maxLength: 30,
-                                    validator: (value) {
+                                    /*validator: (value) {
                                       if (value == null || value.isEmpty) {
                                         return '${'market-posting-title'.tr()}';
                                       }else if (value.length > 30) {
                                         return '${'market-posting-title-error'.tr()}';
                                       }
                                       return null;
-                                    },
+                                    },*/
                                     onSaved: (value) {
                                       _title = value ?? '';
                                     },
@@ -259,12 +259,12 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                   ),
                                   contentPadding: EdgeInsets.only(right: 14, left: 14),
                                 ),
-                                validator: (value) {
+                                /*validator: (value) {
                                   if (value == null || value.isEmpty) {
                                     return '${'market-posting-price'.tr()}';
                                   }
                                   return null;
-                                },
+                                },*/
                                 onSaved: (value) {
                                   _price = value ?? '';
                                 },
@@ -345,50 +345,43 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           scrollDirection: Axis.horizontal,
                           child: Row(
                             children: [
-                              for (int i = 0; i < images.length + 1; i++)
-                                GestureDetector(
-                                  onTap: i < images.length ? null : pickImages,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(
-                                      left: i == 0 ? 14 : 5,
-                                      right: 5,
+                              for(int i = 0; i < 3; i++)
+                                InkWell(
+                                  onTap: (){
+                                    getImages(i);
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 20).r,
+                                    height: 130.h,
+                                    width: 130.h,
+                                    decoration: BoxDecoration(
+                                      color: Color(0xfff8f8f8),
+                                      borderRadius:
+                                      BorderRadius.circular(10).r,
+                                      image: i < _images.length ? DecorationImage(
+                                        image: FileImage(File(_images[i].path)),
+                                        fit: BoxFit.cover,
+                                      ): null,
                                     ),
-                                    child: Container(
-                                      width: 130,
-                                      height: 130,
+                                    alignment: Alignment.center,
+                                    child: i < _images.length ? SizedBox() : i == _images.length ? Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add_photo_alternate_outlined, color: Color(0xffaeaeae),),
+                                        Text('${_images.length}/3', style: TextStyle(color: Color(0xffaeaeae)),)
+                                      ],
+                                    ): Container(
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        image: i < images.length
-                                            ? DecorationImage(
-                                          image: FileImage(
-                                            File(images[i]!.path),
-                                          ),
-                                          fit: BoxFit.cover,
-                                        )
-                                            : null,
+                                        shape: BoxShape.circle,
+                                        color: Color(0xffebebeb),
                                       ),
-                                      child: i == images.length
-                                          ? Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.add_photo_alternate,
-                                            color: Color(0xffAEAEAE),
-                                            size: 42,
-                                          ),
-                                          Text(
-                                            '${images.length}/3',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              color: Color(0xffAEAEAE),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                          : null,
+                                      child: Icon(Icons.add, color: Color(0xffd2d2d2),),
                                     ),
                                   ),
                                 ),
+
+
                             ],
                           ),
                         ),
@@ -420,12 +413,12 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               contentPadding: EdgeInsets.only(
                                   right: 14, left: 14)
                           ),
-                          validator: (value) {
+                          /*validator: (value) {
                             if (value == null || value.isEmpty) {
                               return '${'market-posting-content1'.tr()}';
                             }
                             return null;
-                          },
+                          },*/
                           onSaved: (value) {
                             _content = value ?? '';
                           },
@@ -433,17 +426,18 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                         ), //상품 내용
                         SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                         Button(
-                          isEnabled: _isButtonEnabled,
-                          child: Text(
+                            child: Text(
                               'post3'.tr(), style: TextStyle(color: _isButtonEnabled ? Colors.white : Color(0xff888888))),
                             onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              setState(() {
-                                _isButtonEnabled = true; // Set to true when validation passes
-                              });
+                              FocusScope.of(context).unfocus();
                               _formKey.currentState!.save();
                             }
-                          })
+                            },
+                          isEnabled: _formKey.currentState?.validate() == true &&
+                              productStatus.isNotEmpty &&
+                              _images.isNotEmpty,
+                            )
 
                       ],
                     ),
