@@ -104,7 +104,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                 );
               }),
         ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: isDrawerStart ? null : FloatingActionButton(
         onPressed: (){
           Navigator.push(
             context,

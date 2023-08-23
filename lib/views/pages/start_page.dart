@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../apis/apis.dart';
 import '../../models/chatRoom_model.dart';
+import '../../permissions.dart';
 import '../components/button.dart';
 import '../components/button_big.dart';
 
@@ -31,7 +32,6 @@ class _StartPageState extends State<StartPage> {
 
   //storage로부터 읽을 모델
   dynamic userInfo = null;
-  dynamic notification = null;
   dynamic token = null;
 
 
@@ -46,8 +46,6 @@ class _StartPageState extends State<StartPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //토큰 유효성 검사
       _isValid();
-      //알림 설정
-      _setNotification();
     });
 
   }
@@ -93,22 +91,6 @@ class _StartPageState extends State<StartPage> {
     }
   }
 
-  _setNotification() async {
-    notification = await storage.read(key: 'notification');
-    //저장된 설정 정보가 있다면
-    if (notification != null){
-    }else{
-      //true로 설정
-      await storage.write(
-        key: 'notification',
-        value: jsonEncode({
-          'allNotification': true,
-          'matchingNotification': true,
-          'chatNotification': true,
-        }),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,145 +1,186 @@
+
+import 'package:aliens/models/screenArgument.dart';
+import 'package:aliens/views/components/build_button_widget.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
-import '../pages/home_page.dart';
+class HomeWidget extends StatelessWidget{
 
+  HomeWidget({super.key, required this.screenArguments});
 
-Widget homeWidget(BuildContext context, memberDetails, selectedIndex) {
+  final ScreenArguments screenArguments;
 
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.grey.shade100,
-    ),
-    child: Stack(children: [
-      Column(
-        children: [
-          Expanded(
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Color(0xffF2F5FF),
+      ),
+      child: Stack(children: [
+        Column(
+          children: [
+            Expanded(
+              flex: 3,
               child: Container(
-            padding: EdgeInsets.symmetric(
-              vertical: 30,
-              horizontal: 20,
-            ),
-            alignment: Alignment.topLeft,
-            child: Text(
-              '로고 또는 어플 이름',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
-            ),
-          )),
-          Expanded(
-              flex: 4,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xffefefef),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                alignment: Alignment.topLeft,
                 padding: EdgeInsets.symmetric(
-                  vertical: 30,
-                  horizontal: 20,
+                  horizontal: 25.w,
                 ),
+                alignment: Alignment.centerLeft,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'HI, ${memberDetails['name']}',
+                    RichText(
+                      text: TextSpan(children: [
+                        TextSpan(
+                          text: '${'homepage-welcome'.tr()}\n',
                           style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                              fontSize: 20.spMin, color: Color(0xff5A5A5A), height: 1),
                         ),
-                        Text('어플 메인 문구'),
-                      ],
-                    ),
-                    Center(
-                      child: Container(
-                        //alignment: Alignment.center,
-                        height: 245,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            buildButton(
-                                '매칭', selectedIndex, 1, context, memberDetails),
-                            SizedBox(
-                              width: 20,
-                            ),
-                            buildButton(
-                                '채팅', selectedIndex, 2, context, memberDetails),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 100,
-                      alignment: Alignment.topRight,
+                        EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
+                        TextSpan(children: [
+                          TextSpan(
+                              text: '${'homepage-welcome1.1'.tr()}',
+                              style: TextStyle(
+                                  fontSize: 24.spMin,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  height: 1.5)),
+                          TextSpan(
+                              text: '${'homepage-welcome1.2'.tr()}\n',
+                              style: TextStyle(
+                                  fontSize: 24.spMin, color: Color(0xff5A5A5A))),
+                        ]) :
+                        TextSpan(children: [
+                          TextSpan(
+                              text: '${'homepage-welcome1.1'.tr()}',
+                              style: TextStyle(
+                                  fontSize: 24.spMin, color: Color(0xff5A5A5A))),
+                          TextSpan(
+                              text: '${'homepage-welcome1.2'.tr()}\n',
+                              style: TextStyle(
+                                  fontSize: 24.spMin,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  height: 1.5)),
+                        ]),
+                        TextSpan(
+                            text: '${'homepage-happy'.tr()}\n',
+                            style: TextStyle(
+                                fontSize: 12.spMin,
+                                color: Color(0xff888888),
+                                height: 2)),
+                        TextSpan(
+                            text: '${'homepage-positive1'.tr()} ',
+                            style: TextStyle(
+                                fontSize: 12.spMin,
+                                color: Color(0xff888888),
+                                height: 1.5)),
+                        TextSpan(
+                            text: '${'homepage-positive2'.tr()}'
+                            /*'${args.memberDetails?.mbti}'*/,
+                            style: TextStyle(
+                                fontSize: 12.spMin, color: Color(0xff7898ff))),
+                        TextSpan(
+                            text: '${'homepage-positive3'.tr()}',
+                            style: TextStyle(
+                                fontSize: 12.spMin, color: Color(0xff888888))),
+                        TextSpan(
+                            text: '${'homepage-positive4'.tr()}',
+                            style: TextStyle(
+                                fontSize: 12.spMin, color: Color(0xff7898ff))),
+                        TextSpan(
+                            text: '${'homepage-positive5'.tr()}\n',
+                            style: TextStyle(
+                                fontSize: 12.spMin, color: Color(0xff888888))),
+                        TextSpan(
+                          text: '${'homepage-more'.tr()}\n',
+                          style: TextStyle(
+                              fontSize: 12.spMin, color: Colors.black, height: 2.5),
+
+                          recognizer: new TapGestureRecognizer()..onTap = () {
+                            showDialog(context: context, builder: (context){
+                              return InteractiveViewer(
+                                child: Image.asset(
+                                    EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
+                                    'assets/character/${screenArguments.memberDetails!.mbti}_ko.PNG' :
+                                    'assets/character/${screenArguments.memberDetails!.mbti}_en.PNG'
+                                ),
+                              );
+                            });
+                          },
+                        )
+                      ]),
                     ),
                   ],
                 ),
-              ))
-        ],
-      ),
-      Positioned(
-        top: MediaQuery.of(context).size.height / 15,
-        right: 0,
-        child: Container(
-          height: 150,
-          width: 150,
-          child: Text('캐릭터/일러스트'),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(100),
+              ),
+            ),
+            Expanded(
+                flex: 7,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  alignment: Alignment.topLeft,
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 25.w,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 1, child: SizedBox()),
+                      Text(
+                        '${'homepage-start'.tr()}',
+                        style: TextStyle(
+                          fontSize: 20.spMin,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff5C5C5C),
+                        ),
+                      ),
+                      Text(
+                        '${'homepage-meet'.tr()}',
+                        style: TextStyle(
+                          fontSize: 16.spMin,
+                          color: Color(0xffababab),
+                        ),
+                      ),
+                      Expanded(flex: 1, child: SizedBox()),
+                      Center(
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 240.h,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              buildButton(context: context, screenArguments: screenArguments, index: 0, clicked: true),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                              buildButton(context: context, screenArguments: screenArguments, index: 1, clicked: true),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(flex: 2, child: SizedBox()),
+                    ],
+                  ),
+                ))
+          ],
+        ),
+        Positioned(
+          top: MediaQuery.of(context).size.height / 13,
+          right: 0,
+          child: SvgPicture.asset('assets/character/handsup1.svg',
+            height: 300.r,
+            width: 300.r,
+            //color: Color(0xffFFB5B5),
           ),
         ),
-      ),
-    ]),
-  );
-}
+      ]),
+    );
+  }
 
-Widget buildButton(String _title, int selectedIndex, int index,
-    BuildContext context, memberDetails) {
-  return MaterialButton(
-    minWidth: 165,
-    height: 245,
-    elevation: 3.0,
-    highlightElevation: 1.0,
-    onPressed: () {
-    },
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(25),
-    ),
-    color: Colors.white,
-    textColor: Colors.black,
-    child: Column(
-      children: [
-        SizedBox(
-          height: 40,
-        ),
-        Container(
-          decoration: BoxDecoration(
-            color: Color(0xFFD9D9D9),
-            borderRadius: BorderRadius.circular(54),
-          ),
-          width: 108,
-          height: 108,
-        ),
-        SizedBox(
-          height: 40,
-        ),
-        Text(
-          _title,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
-      ],
-    ),
-  );
 }
-
