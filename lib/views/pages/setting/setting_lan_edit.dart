@@ -272,16 +272,41 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                   child: Text('${'confirm'.tr()}'),
                   onPressed: ()async{
                     if(_firstPreferLanguage != _secondPreferLanguage){
-                      _firstPreferLanguage = _nationlist.firstWhere((element) => element['language'] == _firstPreferLanguage)['value'];
-                      _secondPreferLanguage = _nationlist.firstWhere((element) => element['language'] == _secondPreferLanguage)['value'];
+
+                      String _firstPreferLanguageArgs = _nationlist.firstWhere((element) => element['language'] == _firstPreferLanguage)['value'];
+                      String _secondPreferLanguageArgs = _nationlist.firstWhere((element) => element['language'] == _secondPreferLanguage)['value'];
                       //펜딩일때만 수정
                       if(widget.screenArguments!.status == 'PENDING'){
-                        if(await APIs.updatePreferLanguage(_firstPreferLanguage, _secondPreferLanguage)){
+                        bool isSuccess = false;
+                        try {
+                         isSuccess = await APIs.updatePreferLanguage(_firstPreferLanguageArgs, _secondPreferLanguageArgs);
+                        } catch (e) {
+                          if(e == "AT-C-002"){
+                            try{
+                              await APIs.getAccessToken();
+                            }catch (e){
+                              if(e == "AT-C-005") {
+
+                                //토큰 및 정보 삭제
+                                await APIs.logOut(context);
+                              }
+                              else{
+                                isSuccess = await APIs.updatePreferLanguage(_firstPreferLanguageArgs, _secondPreferLanguageArgs);
+                              }
+                            }
+                          }
+                          else if(e == "AT-C-007"){
+                            //토큰 및 정보 삭제
+                            await APIs.logOut(context);
+                          }
+                        }
+
+                        if(isSuccess){
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/loading', (Route<dynamic> route) => false);
                           if (_selectedLanguage == '한국어') {
                             EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
-                          } else {
+                          } else if (_selectedLanguage == 'English') {
                             EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
                           }
                         }
