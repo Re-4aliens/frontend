@@ -127,15 +127,11 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
                                         Expanded(flex: 6, child: Container()),
-                                        Positioned(
-                                          left: 0,
-                                          right: 0,
-                                          child: Text(
-                                            '${args.applicant?.member?.name}',
-                                            //'${args.applicant['member']['name']}      '
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold, fontSize: isSmallScreen ? 34 : 36, color: Colors.black),
-                                          ),
+                                        Text(
+                                          '${args.applicant?.member?.name}',
+                                          //'${args.applicant['member']['name']}      '
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold, fontSize: isSmallScreen ? 34 : 36, color: Colors.black),
                                         ),
                                         Expanded(flex:2, child:Container()),
                                         Row(
@@ -538,10 +534,9 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                 ],
               ),
             ),
-            Positioned(
-              top: MediaQuery.of(context).size.height * 0.15,
-              right: 0,
-              left: 0,
+            Container(
+              padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
+              alignment: Alignment.topCenter,
               child:
                 args.memberDetails!.profileImage == null ?
                 Container(
@@ -553,8 +548,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                   ),
                 ):
                 Container(
-                  height: isSmallScreen ? 100 : 120,
-                  width: isSmallScreen ? 100 : 120,
+                  height: 120,
+                  width: 120,
                   margin: EdgeInsetsDirectional.symmetric(vertical: 20),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -562,7 +557,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                       image: NetworkImage(
                         args.memberDetails!.profileImage!
                       ),
-                      fit: BoxFit.cover
+                      fit: BoxFit.cover,
                     )
                   ),
                 ),
