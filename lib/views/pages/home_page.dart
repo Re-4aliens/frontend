@@ -24,7 +24,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../../permissions.dart';
 import '../../providers/auth_provider.dart';
 import '../components/board_drawer_widget.dart';
-import '../components/matching_widget.dart' as matching;
 import '../components/setting_list_widget.dart';
 import '../components/chatting_widget.dart';
 import '../components/matching_chatting_widget.dart';

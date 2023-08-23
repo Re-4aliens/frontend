@@ -5,6 +5,7 @@ import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../apis/apis.dart';
@@ -131,18 +132,18 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                 children: [
                   Text('${'setting-displaylan'.tr()}',
                     style: TextStyle(
-                      fontSize: isSmallScreen?16:18,
+                      fontSize: 18.spMin,
                       fontWeight: FontWeight.bold
                     ),),
                   Container(
-                    width: 110,
+                    width: 110.w,
                     child: DropdownButton<String>(
                       isExpanded: true,
                       value: _selectedLanguage,
                       hint: Text(
                         _selectedLanguage!,
                         style: TextStyle(
-                          fontSize: isSmallScreen ? 20 : 22,
+                          fontSize: 22.spMin,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
                         ),
@@ -185,11 +186,15 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('${'matchingpreferlan'.tr()}',
-                          style: TextStyle(
-                            fontSize: isSmallScreen?16:18,
-                            fontWeight: FontWeight.bold
-                          ),),
+                        Flexible(
+                          child: Text('${'matchingpreferlan'.tr()}',
+                            style: TextStyle(
+                              fontSize: 18.spMin,
+                              fontWeight: FontWeight.bold
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                         Column(
                           children: [
                             Row(
@@ -197,21 +202,20 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                                 Text('${'first'.tr()}',
                                   style: TextStyle(
                                     color: Color(0xff7898ff),
-                                    fontSize: isSmallScreen?12:14,
+                                    fontSize: 14.spMin,
                                   ),),
                                 SizedBox(
                                   width: 5,
                                 ),
                                 Container(
-                                  width: 110,
+                                  width: 110.w,
 
                                   child: DropdownButton(
                                       isExpanded: true,
-
                                       items: _nationlist.map((value){
                                         return DropdownMenuItem(
                                             child: Text(value['language'],
-                                              style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
+                                              style: TextStyle(fontSize: 22.spMin, fontWeight: FontWeight.bold),),
                                             value: value['language']);
                                       }).toList(),
                                       value: _firstPreferLanguage,
@@ -234,19 +238,19 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                       Text('${'second'.tr()}',
                         style: TextStyle(
                           color: Color(0xff7898ff),
-                          fontSize:isSmallScreen?12:14,
+                          fontSize: 14.spMin ,
                         ),),
                       SizedBox(
-                        width: 5,
+                        width: 5.w,
                       ),
                       Container(
-                        width: 110,
+                        width: 110.w,
                         child: DropdownButton(
                             isExpanded: true,
                             items: _nationlist.map((value){
                               return DropdownMenuItem(
                                   child: Text(value['language'],
-                                    style: TextStyle(fontSize: isSmallScreen?20:22, fontWeight: FontWeight.bold),),
+                                    style: TextStyle(fontSize: 22.spMin, fontWeight: FontWeight.bold),),
                                   value: value['language']);
                             }).toList(),
                             value: _secondPreferLanguage,

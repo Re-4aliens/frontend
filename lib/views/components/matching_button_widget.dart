@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../models/screenArgument.dart';
@@ -14,7 +15,7 @@ class MatchingButton extends StatelessWidget {
 @override
 Widget build(BuildContext context) {
   return ClipRRect(
-    borderRadius: BorderRadius.circular(30),
+    borderRadius: BorderRadius.circular(30).r,
     child: Container(
       decoration: BoxDecoration(boxShadow: [
         //내부 그림자
@@ -41,8 +42,8 @@ Widget build(BuildContext context) {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(75),
               ),
-              width: 150,
-              height: 150,
+              width: 150.r,
+              height: 150.r,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(75),
                 child: Container(
@@ -85,8 +86,8 @@ Widget build(BuildContext context) {
             ),
           ),
           Container(
-            height: 240,
-            padding: EdgeInsets.only(left:25, top:20, right:6),
+            height: 240.h,
+            padding: EdgeInsets.only(left:25, top:20, right:6).r,
             decoration: BoxDecoration(),
             width: double.infinity,
             child: Column(
@@ -97,7 +98,7 @@ Widget build(BuildContext context) {
                   screenArguments.status != 'NOT_APPLIED' ? '${'homepage-applydone'.tr()}' : '${'homepage-apply'.tr()}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: 18.spMin,
                     color: screenArguments.status != 'NOT_APPLIED'
                         ? Color(0xffACACAC)
                         : Colors.white,
@@ -106,26 +107,22 @@ Widget build(BuildContext context) {
                 Text(
                   'How to Use?',
                   style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.spMin,
                       color: screenArguments.status != 'NOT_APPLIED'
                           ? Color(0xff888888)
                           : Color(0xff7898FF)),
                 ),
-                SizedBox(height: 40),
+                Expanded(flex: 3, child: SizedBox()),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Expanded(
-                        flex : 3,
-                        child: SizedBox()),
-                    Expanded(
-                        flex: 8,
-                        child: screenArguments.status != 'NOT_APPLIED'
-                            ? SvgPicture.asset('assets/character/none_puzzle.svg')
-                            :SvgPicture.asset('assets/character/matching_puzzle.svg',
-                        )
+                    screenArguments.status != 'NOT_APPLIED'
+                        ? SvgPicture.asset('assets/character/none_puzzle.svg', width: 100.r,)
+                        :SvgPicture.asset('assets/character/matching_puzzle.svg', width: 100.r,
                     )
                   ],
-                )
+                ),
+                Expanded(flex: 1, child: SizedBox()),
               ],
             ),
           ),

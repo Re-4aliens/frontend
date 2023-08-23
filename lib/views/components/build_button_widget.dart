@@ -3,6 +3,7 @@ import 'package:aliens/views/components/matching_button_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../models/screenArgument.dart';
@@ -38,21 +39,22 @@ class _buildButtonState extends State<buildButton>{
         ),
       ]),
       child: Material(
-        borderRadius: const BorderRadius.all(
-          Radius.circular(30),
+        borderRadius: BorderRadius.all(
+          Radius.circular(30).r,
         ),
         child: Ink(
-          width: 160,
+          width: 160.r,
           decoration: BoxDecoration(
             color: widget.index == 0 ? Color(0xffAEC1FF) : Color(0xffFFB5B5),
             borderRadius: BorderRadius.all(
-              Radius.circular(30),
+              Radius.circular(30).r,
             ),
           ),
           child: InkWell(
               onTap: () {
                 print(widget.clicked);
                 if (widget.screenArguments.status == 'NOT_APPLIED' && widget.index == 1 && widget.clicked) {
+                  /*
                   showDialog(
                       context: context,
                       builder: (_) => Stack(
@@ -219,8 +221,10 @@ class _buildButtonState extends State<buildButton>{
                           ),
                         ],
                       ));
+                  */
                 }
                 else if (widget.screenArguments.status == 'PENDING' && widget.index == 0 && widget.clicked) {
+                  /*
                   showDialog(
                       context: context,
                       builder: (_) => Stack(
@@ -389,8 +393,10 @@ class _buildButtonState extends State<buildButton>{
                           ),
                         ],
                       ));
+                  */
                 }
                 else if (widget.screenArguments.status == 'MATCHED' && widget.index == 0 && widget.clicked) {
+                  /*
                   showDialog(
                       context: context,
                       builder: (_) => Stack(
@@ -559,6 +565,7 @@ class _buildButtonState extends State<buildButton>{
                           ),
                         ],
                       ));
+                  */
                 }
                 else if (widget.screenArguments.status == 'PENDING' && widget.index == 1 && widget.clicked) {
                   Navigator.pushNamed(context, '/state', arguments: widget.screenArguments);
@@ -582,8 +589,8 @@ class _buildButtonState extends State<buildButton>{
                   isClick = false;
                 });
               },
-              borderRadius: const BorderRadius.all(
-                Radius.circular(30),
+              borderRadius: BorderRadius.all(
+                Radius.circular(30).r,
               ),
               child: widget.index == 0
                   ? MatchingButton(isClick: isClick,screenArguments: widget.screenArguments,)
