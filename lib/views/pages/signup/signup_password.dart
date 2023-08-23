@@ -32,12 +32,12 @@ class _SignUpPasswordState extends State<SignUpPassword>{
   bool _isCheckedPrivate = false;
 
   List koUrl = [
-    'https://www.notion.so/b9f482dffc8e4bec9a00a0995ea94c8e?pvs=4',
-    'https://www.notion.so/5b22067f1f474dd6b77bf2d0f6110308?pvs=4'
+    'https://sites.google.com/view/friendship-termsofserive/%ED%95%9C%EA%B5%AD%EC%96%B4',
+    'https://sites.google.com/view/friendship-policy-privacy/%ED%95%9C%EA%B5%AD%EC%96%B4'
   ];
   List enUrl = [
-    'https://www.notion.so/Terms-of-service-9dec964585be45f899b9ce78762666d3?pvs=4',
-    'https://www.notion.so/privacy-policy-b267f77f0b264ec48eaf6ca5b8a9511b?pvs=4'
+    'https://sites.google.com/view/friendship-termsofserive/english',
+    'https://sites.google.com/view/friendship-policy-privacy/english'
   ];
 
   List termsList = [

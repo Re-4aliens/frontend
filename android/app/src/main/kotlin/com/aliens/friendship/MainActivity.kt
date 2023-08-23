@@ -1,4 +1,4 @@
-package com.example.aliens
+package com.aliens.friendship
 
 import io.flutter.embedding.android.FlutterActivity
 

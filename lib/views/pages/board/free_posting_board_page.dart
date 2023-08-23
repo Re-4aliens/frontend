@@ -103,7 +103,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                 );
               }),
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton:isDrawerStart ? null : FloatingActionButton(
           onPressed: (){
             Navigator.push(
               context,

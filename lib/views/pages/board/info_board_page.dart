@@ -104,7 +104,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
                 );
               }),
         ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: isDrawerStart ? null : FloatingActionButton(
         onPressed: (){
           Navigator.push(
             context,

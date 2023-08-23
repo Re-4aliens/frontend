@@ -9,6 +9,8 @@
   "password": "비밀번호",
   "findpassword1": "비밀번호를 잊으셨나요?",
   "findpassword2": "비밀번호 찾기",
+  "findpassword3": "이름 및 이메일을 확인해주세요!",
+  "findpassword4": "비밀번호 찾기 실패",
   "login4": "로그인 실패",
   "login5": "이메일 및 비밀번호를 확인해주세요!",
 
@@ -290,5 +292,7 @@
   "post1": "글쓰기",
   "post2": "제목을 입력하세요.",
   "post3": "작성 완료",
-  "post4": "카테고리를 선택해주세요."
+  "post4": "카테고리를 선택해주세요.",
+
+  "general-board-post" : "일반게시판 글쓰기"
 }
