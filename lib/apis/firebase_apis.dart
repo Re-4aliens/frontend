@@ -5,6 +5,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
+import '../repository/sql_message_database.dart';
+
 
 
 
@@ -56,6 +58,7 @@ class FirebaseAPIs {
           '${message.data['body']}', // 본문
           platformDetails, // 알림 설정
         );
+        SqlMessageDataBase.instance.deleteDB();
       }
       else{
         return;
