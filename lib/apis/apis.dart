@@ -214,6 +214,7 @@ class APIs {
       //토큰 및 정보 삭제
       await storage.delete(key: 'auth');
       await storage.delete(key: 'token');
+      await storage.delete(key: 'notification');
       print('로그아웃, 정보 지움');
 
       //스택 비우고 화면 이동
@@ -802,8 +803,19 @@ class APIs {
     }
     //실패
     else {
-      print('언어 수정 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
-      return false;
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'MT-C-005'){
+        print('정보 없음');
+        return false;
+      }else{
+
+      }
+      throw Exception('요청 오류');
     }
   }
 
@@ -1186,13 +1198,6 @@ static Future<String> matchingProfessData() async{
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
 
-    //알림값 읽어오기
-    var notification = await storage.read(key: 'notification');
-
-    var allNotification = json.decode(notification!)['allNotification'];
-    var matchingNotification = json.decode(notification!)['matchingNotification'];
-    var chatNotification = json.decode(notification!)['chatNotification'];
-
 
     final fcmToken = await FirebaseMessaging.instance.getToken();
 
@@ -1209,32 +1214,21 @@ static Future<String> matchingProfessData() async{
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
+      //알림값 읽어오기
+      var notification = await storage.read(key: 'notification');
+
+      var allNotification = json.decode(notification!)['allNotification'];
+      var matchingNotification = json.decode(notification!)['matchingNotification'];
+      var chatNotification = json.decode(notification!)['chatNotification'];
+
+
       await getChatNotificationStatus();
       await storage.delete(key: 'notification');
       if(all){
-        await storage.write(
-          key: 'notification',
-          value: jsonEncode({
-            'allNotification' : _notification,
-            'matchingNotification' : _notification,
-            'chatNotification' : _notification,
-          }),
-        );
+
       }
       else{
-        if(matchingNotification == _notification && _notification == true){
-          allNotification = true;
-        }else {
-          allNotification = false;
-        }
-        await storage.write(
-          key: 'notification',
-          value: jsonEncode({
-            'allNotification' : allNotification,
-            'matchingNotification' : matchingNotification,
-            'chatNotification' : _notification,
-          }),
-        );
+
       }
 
       return true;

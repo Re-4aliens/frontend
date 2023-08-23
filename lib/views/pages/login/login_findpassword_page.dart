@@ -102,12 +102,25 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                                               "assets/illustration/loading_01.gif")));
                                 }
                                 else {
-                                  print('실패');
-                                  Navigator.pop(context);
-                                  return Container(
-                                      child: Image(
-                                          image: AssetImage(
-                                              "assets/illustration/loading_01.gif")));
+                                  return CupertinoAlertDialog(
+                                    title: Text(
+                                      'findpassword4'.tr(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    content: Text('findpassword3'.tr()),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        child: Text('${'confirm'.tr()}',
+                                            style: TextStyle(
+                                              color: Colors.black,
+                                            )),
+                                      ),
+                                    ],
+                                  );
                                 }
                               }
 

@@ -9,6 +9,8 @@
   "password": "Password",
   "findpassword1": "Forgot password?",
   "findpassword2": "here",
+  "findpassword3": "Check name and email!",
+  "findpassword4": "Fail",
   "login4": "Login failed",
   "login5": "Check the email and password!",
 
@@ -222,8 +224,8 @@
   "country" : "country",
   "Age(years)": "Age(years)",
   "matchinglan": "Matching preferred languages",
-  "first": "First priority",
-  "second": "Second priority",
+  "first": "First",
+  "second": "Second",
   "matchingpreferlan": "Matching preferred\nlanguages",
 
   "chatting1": "Closed chat room",
@@ -287,5 +289,8 @@
   "post": "Create a post",
   "post2": "Write your post title here",
   "post3": "Publish",
-  "post4": "Board category"
+  "post4": "Board category",
+
+
+  "general-board-post" : "General Board New Post"
 }

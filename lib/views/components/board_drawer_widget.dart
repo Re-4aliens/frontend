@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
+import 'package:aliens/views/pages/board/article_writing_page.dart';
 import 'package:aliens/views/pages/board/fashion_board_page.dart';
 import 'package:aliens/views/pages/board/food_board_page.dart';
 import 'package:aliens/views/pages/board/free_posting_board_page.dart';
@@ -142,10 +143,20 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => PostBoardPage()),
-                  );
+                  if(widget.isTotalBoard){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ArticleWritingPage(screenArguments: widget.screenArguments, category: "")),
+                    );
+                  }
+                  else{
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ArticleWritingPage(screenArguments: widget.screenArguments, category: "")),
+                    );
+                  }
+
                 },
                 child: Container(
                   color: Colors.white,
@@ -159,7 +170,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                         width: 20,
                       ),
                       Text(
-                        '일반게시판 글쓰기',
+                        "general-board-post".tr(),
                         style:
                         TextStyle(color: Color(0xff888888), fontSize: 16),
                       ),

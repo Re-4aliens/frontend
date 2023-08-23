@@ -13,9 +13,11 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../models/countries.dart';
+import '../../../permissions.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/button.dart';
 import 'article_page.dart';
@@ -32,19 +34,87 @@ class ArticleWritingPage extends StatefulWidget {
 
 class _ArticleWritingPageState extends State<ArticleWritingPage> {
 
-  String boardCategory = "카테고리를 선택해주세요.";
+  String boardCategory = "post4".tr();
   TextEditingController _titleController = TextEditingController();
   TextEditingController _contentController = TextEditingController();
+  final GlobalKey<FormState> _formKeyFirst = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeySecond = GlobalKey<FormState>();
+
+  bool isEnabled = false;
 
   File? _profileImage;
   final picker = ImagePicker();
+  List<XFile> _images = [];
 
   //비동기 처리를 통해 이미지 가져오기
-  Future getImage(ImageSource imageSource) async {
-    final image = await picker.pickImage(source: imageSource);
-    setState(() {
-      _profileImage = File(image!.path); // 가져온 이미지를 _image에 저장
-    });
+  Future getImages(int i) async {
+    if(await Permissions.getPhotosPermission()){
+      List<XFile> resultList = <XFile>[];
+      String error = 'No Error Detected';
+
+      try {
+        resultList = await picker.pickMultiImage();
+      } on Exception catch (e) {
+        error = e.toString();
+      }
+
+      if (!mounted) return;
+
+      setState(() {
+        if(resultList.length == 0){
+          //하나만 선택한 경우
+        }else if(resultList.length == 1){
+          if(_images.length <= i){
+            _images.add(resultList[0]);
+          }else{
+            _images[i] = resultList[0];
+          }
+          //두 개 선택한 경우
+        }else if(resultList.length == 2){
+          if(_images.length <= i && i != 2){
+            _images.add(resultList[0]);
+            _images.add(resultList[1]);
+          }else if(_images.length - i == 1 && i != 2){
+            _images[i] = resultList[0];
+            _images.add(resultList[1]);
+          }else if(_images.length - i >= 2){
+            _images[i] = resultList[0];
+            _images[i+1] = resultList[1];
+          }else{
+          }
+          //세 개 선택한 경우
+        }else if(resultList.length == 3){
+          if(_images.length == 0){
+            _images = resultList;
+          }else if(_images.length == 1 && i == 0){
+            _images[0] = resultList[0];
+            _images.add(resultList[1]);
+            _images.add(resultList[2]);
+          }else if(_images.length == 2 && i == 0){
+            _images[0] = resultList[0];
+            _images[1] = resultList[1];
+            _images.add(resultList[2]);
+          }else if(_images.length == 3 && i == 0){
+            _images[0] = resultList[0];
+            _images[1] = resultList[1];
+            _images[2] = resultList[2];
+          }else{
+            showDialog(context: context, builder: (builder){
+              return AlertDialog(
+                title: Text('이미지 세 개 넘어감'),
+              );
+            });
+          }
+        }else{
+          showDialog(context: context, builder: (builder){
+            return AlertDialog(
+              title: Text('이미지 세 개 넘어감'),
+            );
+          });
+        }
+
+      });
+    }
   }
 
 
@@ -222,24 +292,27 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             thickness: 1,
                             color: Color(0xffebebeb),
                           ),
-                          Container(
-                            height: 65.h,
-                            child: TextFormField(
-                              controller: _titleController,
-                                textAlign: TextAlign.center,
-                              decoration: InputDecoration(
-                                hintText: "post2".tr(),
-                                border: InputBorder.none,
-                                counterText: '',
-                                hintStyle: TextStyle(
-                                  color: Color(0xffd9d9d9),
-                                  fontSize: 18.spMin,
-                                )
+                            Container(
+                              height: 65.h,
+                              child: Form(
+                                key: _formKeyFirst,
+                                child: TextFormField(
+                                  controller: _titleController,
+                                    textAlign: TextAlign.center,
+                                  decoration: InputDecoration(
+                                    hintText: "post2".tr(),
+                                    border: InputBorder.none,
+                                    counterText: '',
+                                    hintStyle: TextStyle(
+                                      color: Color(0xffd9d9d9),
+                                      fontSize: 18.spMin,
+                                    )
+                                  ),
+                                  maxLength: 30,
+                                ),
                               ),
-                              maxLength: 30,
+                              alignment: Alignment.center,
                             ),
-                            alignment: Alignment.center,
-                          ),
                           Divider(
                             thickness: 1,
                             color: Color(0xffebebeb),
@@ -247,92 +320,66 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                           Container(
                             padding: EdgeInsets.all(10).r,
                             height: 150.h,
-                            child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  _profileImage == null ?
-                                  Container(
-                                    margin: EdgeInsets.only(right: 20).r,
-                                    height: 130.h,
-                                    width: 130.h,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xfff8f8f8),
-                                        borderRadius:
-                                        BorderRadius.circular(10).r),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                            Icons.add_photo_alternate_outlined, color: Color(0xffaeaeae),),
-                                        Text('0/3', style: TextStyle(color: Color(0xffaeaeae)),)
-                                      ],
-                                    ),
-                                  ) : Container(
-                                    margin: EdgeInsets.only(right: 20).r,
-                                    height: 130.h,
-                                    width: 130.h,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xfff8f8f8),
-                                        borderRadius:
-                                        BorderRadius.circular(10).r),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.add_photo_alternate_outlined, color: Color(0xffaeaeae),),
-                                        Text('0/3', style: TextStyle(color: Color(0xffaeaeae)),)
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(right: 20).r,
-                                    height: 130.h,
-                                    width: 130.h,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xfff8f8f8),
-                                        borderRadius:
-                                        BorderRadius.circular(10).r),
-                                    alignment: Alignment.center,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xffebebeb),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                  children: [
+                                    for(int i = 0; i < 3; i++)
+                                      InkWell(
+                                        onTap: (){
+                                          getImages(i);
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 20).r,
+                                          height: 130.h,
+                                          width: 130.h,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xfff8f8f8),
+                                              borderRadius:
+                                              BorderRadius.circular(10).r,
+                                            image: i < _images.length ? DecorationImage(
+                                              image: FileImage(File(_images[i].path)),
+                                              fit: BoxFit.cover,
+                                            ): null,
+                                          ),
+                                          alignment: Alignment.center,
+                                          child: i < _images.length ? SizedBox() : i == _images.length ? Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.add_photo_alternate_outlined, color: Color(0xffaeaeae),),
+                                              Text('${_images.length}/3', style: TextStyle(color: Color(0xffaeaeae)),)
+                                            ],
+                                          ): Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Color(0xffebebeb),
+                                            ),
+                                            child: Icon(Icons.add, color: Color(0xffd2d2d2),),
+                                          ),
+                                        ),
                                       ),
-                                      child: Icon(Icons.add, color: Color(0xffd2d2d2),),
-                                    ),
+
+
+                                  ],
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(right: 20).r,
-                                    height: 130.h,
-                                    width: 130.h,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xfff8f8f8),
-                                        borderRadius:
-                                        BorderRadius.circular(10).r),
-                                    alignment: Alignment.center,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xffebebeb),
-                                      ),
-                                      child: Icon(Icons.add, color: Color(0xffd2d2d2),),
-                                    ),
-                                  ),
-                                ],
-                                ),
-                          ),
-                          Container(
-                            child: TextFormField(
-                              controller: _contentController,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  helperStyle: TextStyle(
-                                      color: Color(0xffc1c1c1), fontSize: 16.spMin)),
-                              maxLines: 10,
-                              maxLength: 200, // 글자 길이 제한
-                              keyboardType: TextInputType.multiline,
                             ),
-                            )
+                          ),
+                          Form(
+                            key: _formKeySecond,
+                            child: Container(
+                              child: TextFormField(
+                                controller: _contentController,
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    helperStyle: TextStyle(
+                                        color: Color(0xffc1c1c1), fontSize: 16.spMin)),
+                                maxLines: 10,
+                                maxLength: 200, // 글자 길이 제한
+                                keyboardType: TextInputType.multiline,
+                              ),
+                              ),
+                          )
                         ],
                       ),
                     ),
@@ -345,51 +392,53 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                     child: Button(
                       child: Text('post3'.tr()),
                       onPressed: () {
-                        FocusScope.of(context).unfocus();
-                        switch (boardCategory){
-                          case 'Free Posting Board':
-                            boardCategory = '자유게시판';
-                            break;
-                          case 'Food Board':
-                            boardCategory = '음식게시판';
-                            break;
-                          case 'Music Board':
-                            boardCategory = '음악게시판';
-                            break;
-                          case 'Fashion Board':
-                            boardCategory = '패션게시판';
-                            break;
-                          case 'Game Board':
-                            boardCategory = '게임게시판';
-                            break;
-                          case 'Information Board':
-                            boardCategory = '정보게시판';
-                            break;
-                          default:
+                        if(_formKeyFirst.currentState!.validate() && _formKeySecond.currentState!.validate() && boardCategory != 'post4'.tr()){
+                          FocusScope.of(context).unfocus();
+                          switch (boardCategory){
+                            case 'Free Posting Board':
+                              boardCategory = '자유게시판';
+                              break;
+                            case 'Food Board':
+                              boardCategory = '음식게시판';
+                              break;
+                            case 'Music Board':
+                              boardCategory = '음악게시판';
+                              break;
+                            case 'Fashion Board':
+                              boardCategory = '패션게시판';
+                              break;
+                            case 'Game Board':
+                              boardCategory = '게임게시판';
+                              break;
+                            case 'Information Board':
+                              boardCategory = '정보게시판';
+                              break;
+                            default:
+                          }
+
+                          Board _newBoard = Board(
+                              boardArticleId: 1,
+                              category: boardCategory,
+                              title: _titleController.text,
+                              content: _contentController.text,
+                              likeCount: 0,
+                              commentCount: 0,
+                              imageUrls: null,
+                              member: Member(
+                                memberId: 1,
+                                nationality: "South Korea",
+                                name: "Daisy",
+                                profileImageUrl: "",
+                              ),
+                              createdAt: DateTime.now().toString()
+                          );
+
+                          BoardRepository.addPost(_newBoard);
+
+                          Navigator.pop(context);
                         }
-
-                        Board _newBoard = Board(
-                          boardArticleId: 1,
-                          category: boardCategory,
-                          title: _titleController.text,
-                          content: _contentController.text,
-                          likeCount: 0,
-                          commentCount: 0,
-                          imageUrls: null,
-                          member: Member(
-                            memberId: 1,
-                            nationality: "South Korea",
-                            name: "Daisy",
-                            profileImageUrl: "",
-                          ),
-                          createdAt: DateTime.now().toString()
-                        );
-
-                        BoardRepository.addPost(_newBoard);
-
-                        Navigator.pop(context);
                         },
-                      isEnabled: true,
+                      isEnabled: _formKeyFirst.currentState?.validate() == true && _formKeySecond.currentState?.validate() == true && boardCategory != 'post4'.tr(),
                     ),
                   )),
             ],
