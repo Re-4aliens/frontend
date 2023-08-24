@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../mockdatas/comment_mockdata.dart';
 import '../../../mockdatas/market_comment_mockdata.dart';
 import '../../../models/comment_model.dart';
@@ -22,11 +21,14 @@ import 'package:flutter/services.dart';
 
 import '../../../models/message_model.dart';
 import '../../components/board_dialog_widget.dart';
+import '../../components/board_drawer_widget.dart';
 import '../../components/comment_dialog_widget.dart';
+import '../home_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
-  {super.key});
+  {super.key, required this.screenArguments});
+  final ScreenArguments screenArguments;
 
 
   @override
@@ -84,11 +86,50 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('market'.tr(), style: TextStyle(fontSize: 16.spMin),),
-          backgroundColor: Color(0xff7898ff),
-          elevation: 0,
+          backgroundColor:Color(0xff7898ff),
+          toolbarHeight:56,
+          leadingWidth: 100,
+          leading: Row(
+            children: [
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    Navigator.of(context).pop();
+                  });
+                },
+                icon: SvgPicture.asset(
+                  'assets/icon/icon_back.svg',
+                  color: Colors.white,
+                  width: 18.w,
+                  height: MediaQuery.of(context).size.height * 0.02,
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  setState(() {
+                    isDrawerStart = !isDrawerStart;
+                  });
+                },
+                icon: Icon(Icons.format_list_bulleted_outlined),
+                color: Colors.white,
+
+              ),
+            ],
+          ),
+          title: Text('market'.tr(),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20.spMin,
+              )
+          ),
+          centerTitle: true,
+
+
         ),
-        body: Column(
+        body:isDrawerStart
+            ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false, onpressd: () {  },
+        )
+            :Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
@@ -168,12 +209,12 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                         condition;
                                     return Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 4),
+                                          horizontal: 4.w),
                                       child: ChoiceChip(
                                         label: Text(
                                           condition,
                                           style: TextStyle(
-                                            fontSize: 12.h,
+                                            fontSize: 14.h,
                                             color: isSelected
                                                 ? Colors.white
                                                 : Color(0xffC1C1C1),
@@ -190,7 +231,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                           });
                                         },
                                         labelPadding: EdgeInsets.only(
-                                            left: 12, right: 12),
+                                            left: 12.w, right: 12.w),
                                         // 선택 영역 패딩 조절
                                         shape: RoundedRectangleBorder(
                                           side: BorderSide(
@@ -198,7 +239,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                 0xff7898FF) : Color(
                                                 0xffC1C1C1),
                                           ),
-                                          borderRadius: BorderRadius.circular(20.0), // 선택 테두리 둥글기 조절
+                                          borderRadius: BorderRadius.circular(20), // 선택 테두리 둥글기 조절
                                         ),
                                       ),
                                     );

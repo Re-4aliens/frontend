@@ -133,7 +133,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                         width: 20,
                       ),
                       Text(
-                        '장터게시판 글쓰기',
+                        'market-board-post'.tr(),
                         style:
                         TextStyle(color: Color(0xff888888), fontSize: 16),
                       ),
@@ -415,7 +415,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '장터 게시판',
+                    'market'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(

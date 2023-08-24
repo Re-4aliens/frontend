@@ -126,7 +126,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           toolbarHeight: 56,
-          leadingWidth: 100,
+          leadingWidth: 80.w,
           leading: TextButton(
             onPressed: () {
               Navigator.pop(context);
@@ -136,14 +136,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Color(0xff888888),
-                    fontSize: isSmallScreen ? 16 : 18
+                    fontSize: 18.h
                 )
             ),),
           title: Text('write'.tr(),
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: isSmallScreen ? 22 : 24,
+                fontSize: 20.h,
               )
           ),
           centerTitle: true,
@@ -155,7 +155,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
             Container(
                 width: double.infinity,
                 color: Colors.white,
-              padding: const EdgeInsets.only(right: 10.0, left: 10, top: 12, bottom: 50),
+              padding: EdgeInsets.only(right: 10.w, left: 10.w, top: 12.h, bottom: 50),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -165,14 +165,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                             Expanded(
                               child: TextFormField(
                                     style: TextStyle(
-                                        fontSize: isSmallScreen ? 18 : 20,
+                                        fontSize: 20.h,
                                         color: Color(0xff616161)
                                     ),
                                     decoration: InputDecoration(
                                         counterText: '',
                                         hintText: '${'market-posting-title'.tr()}',
                                         hintStyle: TextStyle(
-                                            fontSize: isSmallScreen ? 18 : 20,
+                                            fontSize: 20.h,
                                             color: Color(0xff616161)
                                         ),
                                         enabledBorder: UnderlineInputBorder(
@@ -182,7 +182,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                             borderSide: BorderSide(color: Colors.transparent)
                                         ),
                                         contentPadding: EdgeInsets.only(
-                                            right: 14, left: 14)
+                                            right: 14.w, left: 14.w)
                                     ),
                                     maxLength: 30,
                                     /*validator: (value) {
@@ -199,8 +199,8 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                   ),
                             ),
                             Container(
-                              width: 95,
-                              height: 35,
+                              width: 95.w,
+                              height: 37.h,
                               decoration: BoxDecoration(
                                 color: Colors.transparent,
                                 border: Border.all(color: Color(0xFFEBEBEB)),
@@ -208,15 +208,15 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               ),
                               child: Row(
                                 children: [
-                                   SizedBox(width: 15),
+                                   SizedBox(width: 15.w),
                                   Icon(Icons.arrow_drop_down,
                                     color: Color(0xff888888),
-                                    size: isSmallScreen?18:20,
+                                    size: 20.h,
                                   ),
                                   Text('판매중',
                                     style: TextStyle(
                                       color: Color(0xff888888),
-                                      fontSize: isSmallScreen?12:14
+                                      fontSize:14.spMin
                                     ),
                                   ),
                                 ],
@@ -224,16 +224,15 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                             )
                           ],
                         ), //제목
-                        Divider(thickness: 1,color:Color(0xffEBEBEB)),
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.01),
+                        Divider(thickness: 1.h,color:Color(0xffEBEBEB)),
                         Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 14),
+                              padding: EdgeInsets.only(left: 14.w),
                               child: Text(
                                 '₩',
                                 style: TextStyle(
-                                  fontSize: isSmallScreen ? 14 : 16,
+                                  fontSize: 16.h,
                                   color: Color(0xff888888),
                                 ),
                               ),
@@ -242,13 +241,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               child: TextFormField(
                                 keyboardType: TextInputType.numberWithOptions(),
                                 style: TextStyle(
-                                  fontSize: isSmallScreen ? 14 : 16,
+                                  fontSize: 16.spMin,
                                   color: Color(0xff888888),
                                 ),
                                 decoration: InputDecoration(
                                   hintText: '${'market-posting-price'.tr()}',
                                   hintStyle: TextStyle(
-                                    fontSize: isSmallScreen ? 14 : 16,
+                                    fontSize: 16.h,
                                     color: Color(0xff888888),
                                   ),
                                   enabledBorder: UnderlineInputBorder(
@@ -257,14 +256,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                   focusedBorder: UnderlineInputBorder(
                                     borderSide: BorderSide(color: Colors.transparent)
                                   ),
-                                  contentPadding: EdgeInsets.only(right: 14, left: 14),
+                                  contentPadding: EdgeInsets.only(right: 14.w, left: 14.w),
                                 ),
-                                /*validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return '${'market-posting-price'.tr()}';
-                                  }
-                                  return null;
-                                },*/
+
                                 onSaved: (value) {
                                   _price = value ?? '';
                                 },
@@ -273,8 +267,6 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           ],
                         ), //가격
                         Divider(thickness: 1,color:Color(0xffEBEBEB)),
-
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.014),
                         Row(
                           children: [
                             Padding(
@@ -282,7 +274,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               child: Text(
                                 '상품상태',
                                 style: TextStyle(
-                                  fontSize: isSmallScreen ? 14 : 16,
+                                  fontSize:  16.spMin,
                                   color: Color(0xff888888),
                                 ),
                               ),
@@ -297,7 +289,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                         condition;
                                     return Padding(
                                       padding: EdgeInsets.symmetric(
-                                          horizontal: 4),
+                                          horizontal: 4.w),
                                       child: ChoiceChip(
                                         label: Text(
                                           condition,
@@ -385,16 +377,16 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 50),
+                        SizedBox(height: 45.h),
                         TextFormField(
                           style: TextStyle(
-                              fontSize: isSmallScreen ? 12 : 14,
+                              fontSize: 14.h,
                               color: Color(0xff888888)
                           ),
                           decoration: InputDecoration(
                               hintText: '${'market-posting-content'.tr()}',
                               hintStyle: TextStyle(
-                                  fontSize: isSmallScreen ? 12 : 14,
+                                  fontSize: 14.h,
                                   color: Color(0xffC0C0C0)
                               ),
                               enabledBorder: UnderlineInputBorder(
@@ -411,14 +403,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                       color: Colors.transparent)
                               ),
                               contentPadding: EdgeInsets.only(
-                                  right: 14, left: 14)
+                                  right: 14.w, left: 14.w)
                           ),
-                          /*validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return '${'market-posting-content1'.tr()}';
-                            }
-                            return null;
-                          },*/
+
                           onSaved: (value) {
                             _content = value ?? '';
                           },
