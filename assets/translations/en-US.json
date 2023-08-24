@@ -292,5 +292,7 @@
   "post4": "Board category",
 
 
-  "general-board-post" : "General Board New Post"
+  "general-board-post" : "General Board New Post",
+  "market-board-post": "Market Board New Post"
+
 }

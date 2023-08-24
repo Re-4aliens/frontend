@@ -11,7 +11,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../components/board_drawer_widget.dart';
 
 
@@ -48,7 +48,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
               icon: SvgPicture.asset(
                 'assets/icon/icon_back.svg',
                 color: Colors.white,
-                width: 24,
+                width: 18.w,
                 height: MediaQuery.of(context).size.height * 0.02,
               ),
             ),
@@ -60,14 +60,14 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
               },
               icon: Icon(Icons.format_list_bulleted_outlined),
               color: Colors.white,
+
             ),
           ],
         ),
         title: Text('market'.tr(),
             style: TextStyle(
               color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
+              fontSize: 20.spMin,
             )
         ),
         centerTitle: true,
@@ -90,7 +90,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
               margin: EdgeInsets.only(right: 10,left: 10, top: 10, bottom: 10),
               padding: EdgeInsets.only(right: 10,left: 10),
               width: double.infinity,
-              height: 42,
+              height: 42.h,
               decoration: BoxDecoration(
                 color: Color(0xffE7E7E7),
                 borderRadius: BorderRadius.circular(10), // 모서리를 둥글게 만듦
@@ -104,13 +104,13 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                       SvgPicture.asset(
                         'assets/icon/icon_info.svg',
                         color: Color(0xff616161),
-                        width: isSmallScreen?16:18,
-                        height: isSmallScreen?16:18,
+                        width: 18.h,
+                        height: 18.h,
                       ),
                       Text(
                         '  ${'market-noti'.tr()}',
                         style: TextStyle(
-                            fontSize: isSmallScreen?12:14,
+                            fontSize: 14.h,
                             fontWeight: FontWeight.w600,
                             color: Color(0xff616161)
                         ),
@@ -119,7 +119,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                   ),
                   Icon(
                     Icons.arrow_forward_ios,
-                    size: isSmallScreen?16:18,
+                    size: 18.h,
                     color: Color(0xffC1C1C1),
                   )
                 ],
@@ -144,17 +144,17 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => MarketDetailPage(/*screenArguments: widget.screenArguments*/)),
+                MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments)),
               );
             },
             child: Container(
-              padding: EdgeInsets.only(right: 20,left: 20,top:12,bottom: 12),
+              padding: EdgeInsets.only(right: 20.w,left: 20.w,top:12.h,bottom: 12.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Container(
                       //여기 사진 넣기
-                      width: 120, height: 120,
+                      width: 120.h, height: 120.h,
                       decoration: BoxDecoration(
                         color: Color(0xffF8F8F8),
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -167,19 +167,19 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                               borderRadius: BorderRadius.all(Radius.circular(10)),
                               child: Icon(Icons.add_photo_alternate,
                                 color: Colors.grey,
-                                size: 44,
+                                size: 44.h,
                               ),
                             ),
                           ),
                           Positioned(
-                            left:25,
-                            right:25,
-                            bottom: 10, // 아래로 0만큼 위치
+                            left:25.h,
+                            right:25.h,
+                            bottom: 10.h, // 아래로 0만큼 위치
                             child: Container(
-                              height: 20,
+                              height: 22.h,
                               child: Text(
                                 '거의 새 것', //productstatus
-                                style: TextStyle(fontSize: 10, color: Colors.white),
+                                style: TextStyle(fontSize: 10.spMin, color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
                               decoration: BoxDecoration(
@@ -192,9 +192,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         ],
                       ),
                     ), //물건 사진
-                    SizedBox(width: 10,),
+                    SizedBox(width: 10.w),
                     Container(
-                      width: MediaQuery.of(context).size.width -170 ,
+                      width: MediaQuery.of(context).size.width -150.w ,
                       height: 120, //높이를 물건사진의 높이와 같게
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,7 +207,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                 '[판매중]', //status
                                 style: TextStyle(
                                   color: Color(0xff616161),
-                                  fontSize: 16,
+                                  fontSize: 16.spMin,
                                   fontWeight: FontWeight.w600
                                 ),
                               ),
@@ -218,7 +218,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                   Text('23.08.06',//createdAt
                                     style: TextStyle(
                                       color: Color(0xffC1C1C1),
-                                      fontSize: 12,
+                                      fontSize: 12.spMin,
                                     ),
                                   ),
                                   InkWell(
@@ -252,7 +252,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                     },
                                     child: Icon(
                                       Icons.more_vert,
-                                      size: 16,
+                                      size: 16.w,
                                       color: Color(0xffC1C1C1),
                                     ),
                                   )
@@ -260,33 +260,32 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                               )
                             ],
                           ),
-                          SizedBox(height: 20),
+                          SizedBox(height: 20.h),
                           Text('가죽쪼리 250 팔아요', //title
-                            style: TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 16.spMin),
                           ),
-                          SizedBox(height: 5,),//제목
+                          SizedBox(height: 5.h),//제목
                           Text('25,000원', //price
-                            style: TextStyle(fontSize: 16,
+                            style: TextStyle(fontSize: 16.spMin,
                             fontWeight: FontWeight.w700),
                           ), //가격
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Icon(Icons.thumb_up, color: Color(0xffC1C1C1),size: 16,),
+                              Icon(Icons.thumb_up, color: Color(0xffC1C1C1),size: 16.w),
                               Text(' 10  ',//likeCount
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 14.spMin,
                                   color: Color(0xffc1c1c1)
                                 ),
                               ),
-                              Icon(Icons.sms, color: Color(0xffC1C1C1),size: 16,),
+                              Icon(Icons.sms, color: Color(0xffC1C1C1),size: 16.w),
                               Text(' 10',//commentCount
                                 style: TextStyle(
-                                    fontSize: 14,
+                                    fontSize: 14.spMin,
                                     color: Color(0xffc1c1c1)
                                 ),
                               ),
-
                             ],
                           )
                        ],
@@ -300,7 +299,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
         },
         separatorBuilder: (BuildContext context, int index){
           return Container(
-            height: 1, color: Color(0xffE5EBFF),
+            height: 1.h, color: Color(0xffE5EBFF),
           );
         },
         itemCount:10
