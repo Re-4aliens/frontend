@@ -290,9 +290,13 @@
   "comment3": "대댓글달기",
 
   "post1": "글쓰기",
+  "notice": "공지사항",
+  "notification": "알림",
+  "my_posts": "나의 게시글",
   "post2": "제목을 입력하세요.",
   "post3": "작성 완료",
   "post4": "카테고리를 선택해주세요.",
 
-  "general-board-post" : "일반게시판 글쓰기"
+  "general-board-post" : "일반게시판 글쓰기",
+  "market-board-post": "장터게시판 글쓰기"
 }
