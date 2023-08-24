@@ -80,7 +80,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '공지사항',
+                    'notice'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   Icon(
@@ -103,7 +103,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                   width: 20,
                 ), 
                 Text(
-                  '글쓰기', 
+                  'post1'.tr(),
                   style: TextStyle(color: Color(0xff888888), fontSize: 16),
                 ), 
                 SizedBox(width: 10,), 
@@ -260,7 +260,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '나의 게시글',
+                    'my_posts'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(
@@ -295,7 +295,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     width: 20,
                   ),
                   Text(
-                    '알림',
+                    'notification'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
                   SizedBox(
