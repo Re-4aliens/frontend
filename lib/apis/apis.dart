@@ -6,7 +6,9 @@ import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import '../models/applicant_model.dart';
 import '../models/auth_model.dart';
 import 'dart:io';
@@ -1337,4 +1339,57 @@ static Future<String> matchingProfessData() async{
     }
   }
 
+  /*장터*/
+/*  static Future<void> postDataWithImages({
+    required String title,
+    required String status,
+    required int price,
+    required String productStatus,
+    required List<Asset> images,
+    required String content,
+  }) async {
+    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
+    request.fields['title'] = title;
+    request.fields['status'] = status;
+    request.fields['price'] = price.toString();
+    request.fields['productStatus'] = productStatus;
+    request.fields['content'] = content;
+
+    List<File> files = await convertAssetsToFiles(images);
+
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      var stream = http.ByteStream(Stream.castFrom(file.openRead()));
+      var length = await file.length();
+
+      var multipartFile = http.MultipartFile('image$i', stream, length,
+          filename: 'image$i.jpg');
+
+      request.files.add(multipartFile);
+    }
+
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      print('API Response: ${await response.stream.bytesToString()}');
+    } else {
+      print('API Request failed with status ${response.statusCode}');
+    }
+  }
+
+  static Future<List<File>> convertAssetsToFiles(List<Asset> assets) async {
+    List<File> files = [];
+
+    for (var asset in assets) {
+      final byteData = await asset.getByteData();
+      final buffer = byteData.buffer.asUint8List();
+      final tempFile = File('${(await getTemporaryDirectory()).path}/${asset.name}');
+      await tempFile.writeAsBytes(buffer);
+      files.add(tempFile);
+    }
+
+    return files;
+  }*/
+
 }
+
+
