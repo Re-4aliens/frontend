@@ -75,7 +75,7 @@ class _SettingWidgetState extends State<SettingWidget>{
                           text: TextSpan(
                             text: widget.screenArguments.memberDetails!.name.toString(),
                             style: TextStyle(
-                              fontSize: 32.spMin,
+                              fontSize: 32.h,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
@@ -83,7 +83,7 @@ class _SettingWidgetState extends State<SettingWidget>{
                               TextSpan(
                                 text: '${'setting-nim'.tr()}',
                                 style: TextStyle(
-                                  fontSize: 14.spMin,
+                                  fontSize: 14.h,
                                   color: Colors.white,
                                 ),
                               ),
@@ -96,12 +96,12 @@ class _SettingWidgetState extends State<SettingWidget>{
                             Text(
                               widget.screenArguments.memberDetails!.birthday.toString(),
                               style: TextStyle(
-                                  fontSize: 14.spMin,
+                                  fontSize: 14.h,
                                   color: Colors.white),
                             ),
                             Text(widget.screenArguments.memberDetails!.email.toString(),
                                 style: TextStyle(
-                                    fontSize: 14.spMin,
+                                    fontSize: 14.h,
                                     color: Colors.white)),
                           ],
                         )
@@ -131,8 +131,8 @@ class _SettingWidgetState extends State<SettingWidget>{
                                 ? SvgPicture.asset(
                               'assets/icon/icon_profile.svg',
                               color:Colors.white,
-                              height: 90,
-                              width: 90,
+                              height: 90.h,
+                              width: 90.w,
                             ) : SizedBox(),
                           ),
                           Positioned(
@@ -141,7 +141,7 @@ class _SettingWidgetState extends State<SettingWidget>{
                               child: Container(
                                 height:
                                 MediaQuery.of(context).size.height * 0.038,
-                                width: 30,
+                                width: 30.w,
                                 child: FloatingActionButton(
                                     backgroundColor: Color(0xffE5EBFF),
                                     onPressed: () {
@@ -215,7 +215,7 @@ class _SettingWidgetState extends State<SettingWidget>{
               child: Container(
                 width: MediaQuery.of(context).size.width * 0.87,
                 padding:
-                EdgeInsets.only(top: 17, bottom: 17),
+                EdgeInsets.only(top: 17.h, bottom: 17.h),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
@@ -231,7 +231,7 @@ class _SettingWidgetState extends State<SettingWidget>{
                           '${'setting-profile'.tr()}',
                           style: TextStyle(
                             color: Color(0xffC1C1C1),
-                            fontSize: 16,
+                            fontSize: 16.h,
                           ),
                         ),
                       );
@@ -253,13 +253,13 @@ class _SettingWidgetState extends State<SettingWidget>{
                 width: MediaQuery.of(context).size.width * 0.87,
                 //margin: EdgeInsets.only(right: 24, left: 24),
                 padding:
-                EdgeInsets.only(top: 17, bottom: 17),
+                EdgeInsets.only(top: 17.h, bottom: 17.h),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: ListView.builder(
-                  itemCount: 4,
+                  itemCount: 5,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == 0) {
                       return Container(
@@ -269,7 +269,7 @@ class _SettingWidgetState extends State<SettingWidget>{
                           '${'setting-account'.tr()}',
                           style: TextStyle(
                             color: Color(0xffC1C1C1),
-                            fontSize: 16,
+                            fontSize: 16.h,
                           ),
                         ),
                       );
@@ -305,7 +305,7 @@ class _SettingWidgetState extends State<SettingWidget>{
                       '${'setting-logout'.tr()}',
                       style: TextStyle(
                         color: Color(0xFF7898FF),
-                        fontSize: 14,
+                        fontSize: 14.h,
                       ),
                     ),
                   ),
