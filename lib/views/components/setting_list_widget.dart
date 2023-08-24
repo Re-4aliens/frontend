@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 
@@ -13,33 +14,31 @@ Widget buildSettingList(context, index, screenArguments) {
     '${'setting-security'.tr()}',
     '${'setting-noti'.tr()}',
     '${'setting-terms'.tr()}',
-    //'${'setting-inqury'.tr()}',
+    '${'setting-inqury'.tr()}',
   ];
 
   List settingIcon = [
     Icon(
       Icons.lock_outline,
-      size: isSmallScreen?18:20,
+      size: 20.h,
       color: Colors.black,
     ),
     Icon(
       Icons.notifications_none,
-      size: isSmallScreen?18:20,
+      size: 20.h,
       color: Colors.black,
     ),
     Icon(
       Icons.assignment_outlined,
-      size: isSmallScreen?18:20,
+      size: 20.h,
       color: Colors.black,
     ),
-    /*
     Icon(
       Icons.contact_support,
-      size: isSmallScreen?18:20,
+      size:20.h,
       color: Colors.black,
     ),
 
-     */
 
   ];
 
@@ -48,7 +47,7 @@ Widget buildSettingList(context, index, screenArguments) {
     '/setting/security',
     '/setting/notification',
     '/setting/terms',
-    ''
+
   ];
 
   return ListTile(
@@ -65,14 +64,13 @@ Widget buildSettingList(context, index, screenArguments) {
         Text(
           '${settingList.elementAt(index)}',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: isSmallScreen?16:18,
+            fontSize: 18.h,
           ),
         ),
         Expanded(child: Container()),
         Icon(
           Icons.arrow_forward_ios,
-          size: isSmallScreen?16:18,
+          size: 18.h,
           color: Color(0xffC1C1C1),
         ),
       ],
