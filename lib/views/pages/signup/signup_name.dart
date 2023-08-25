@@ -3,6 +3,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../models/signup_model.dart';
 import '../../components/button.dart';
@@ -45,7 +46,7 @@ class _SignUpNameState extends State<SignUpName>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('signup-name'.tr(),
-              style: TextStyle(fontSize: isSmallScreen ?22:24, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24.spMin, fontWeight: FontWeight.bold),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
