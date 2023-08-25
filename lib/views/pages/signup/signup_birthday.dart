@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../components/button.dart';
@@ -36,7 +37,7 @@ class _SignUpBirthdayState extends State<SignUpBirthday>{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('signup-birthday'.tr(),
-              style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
+              style: TextStyle(fontSize: 24.spMin, fontWeight: FontWeight.bold),),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
              Form(
                key: _formKey,
