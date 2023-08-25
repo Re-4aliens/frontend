@@ -286,11 +286,16 @@
   "comment2": "Please enter a reply to a comment.",
   "comment3": "Reply to a comment",
 
-  "post": "Create a post",
+  "post1": "Create a post",
+  "notice": "Notice",
+  "notification": "Notification",
+  "my_posts": "My Posts",
   "post2": "Write your post title here",
   "post3": "Publish",
   "post4": "Board category",
 
 
-  "general-board-post" : "General Board New Post"
+  "general-board-post" : "General Board New Post",
+  "market-board-post": "Market Board New Post"
+
 }

@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
@@ -42,7 +42,7 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
                 icon: SvgPicture.asset(
                   'assets/icon/icon_back.svg',
                   color: Colors.white,
-                  width: 24,
+                  width: 24.w,
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
               ),
@@ -60,8 +60,8 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
           title: Text('market'.tr(),
               style: TextStyle(
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
+
+                fontSize: 20.spMin,
               )
           ),
           centerTitle: true,
@@ -74,14 +74,14 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
         body: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(left: 21, right: 21),
+              padding: EdgeInsets.only(left: 21.w, right: 21.w),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height * 0.09,
               child: Row(
                 children: [
                   Icon(
                     Icons.volume_mute,
-                    size: isSmallScreen?26:28,
+                    size: 28.h,
                     color: Color(0xff7898FF),
                   ),
                   Expanded(
@@ -89,7 +89,7 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
                       'market-noti'.tr(),
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: isSmallScreen?14:16,
+                        fontSize: 16.spMin,
                         fontWeight: FontWeight.w700
                       ),
                     ),
@@ -99,7 +99,7 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
               ),
             ),
             Container(
-              height: 1, color: Color(0xffE5EBFF),
+              height: 1.h, color: Color(0xffE5EBFF),
             ),
             Expanded(
               child: SingleChildScrollView(
@@ -108,45 +108,56 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
                   child:Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text('23.08.06',
+                            style: TextStyle(
+                              fontSize: 14.h,
+                              color: Color(0xff888888)
+                            ),
+                          )
+                        ],
+                      ),
                       Text('market-noti1'.tr(),
                         style: TextStyle(
-                            fontSize: isSmallScreen?12:14),
+                            fontSize: 14.h),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height *0.04),
                       Text('market-noti2'.tr(),
                         style: TextStyle(
-                            fontSize: isSmallScreen?12:14,
+                            fontSize: 14.h,
                             color: Color(0xffFF506F),
                             fontWeight: FontWeight.bold),
                       ),
                       Text('market-noti3'.tr(),
                         style: TextStyle(
-                          fontSize: isSmallScreen?12:14,
+                          fontSize: 14.h,
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height *0.03),
                       Text('market-noti4'.tr(),
                         style: TextStyle(
-                            fontSize: isSmallScreen?12:14,
+                            fontSize: 14.h,
                             fontWeight: FontWeight.bold
                         ),
                       ),
                       Text(
                         'market-noti5'.tr(),
                         style: TextStyle(
-                            fontSize: isSmallScreen?12:14
+                            fontSize: 14.h,
                         ),
                       ),
                       SizedBox(height: MediaQuery.of(context).size.height *0.03),
                       Text('market-noti6'.tr(),
                         style: TextStyle(
-                            fontSize: isSmallScreen?12:14,
+                            fontSize:14.h,
                             fontWeight: FontWeight.bold
                         ),
                       ),
                       Text('market-noti7'.tr(),
                         style: TextStyle(
-                          fontSize: isSmallScreen?12:14
+                          fontSize: 14.h
                         ),
                       )
                     ],
