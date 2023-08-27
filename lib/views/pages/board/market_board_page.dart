@@ -154,7 +154,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                   children: [
                     Container(
                       //여기 사진 넣기
-                      width: 120.h, height: 120.h,
+                      width: 124.h, height: 124.h,
                       decoration: BoxDecoration(
                         color: Color(0xffF8F8F8),
                         borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -195,7 +195,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                     SizedBox(width: 10.w),
                     Container(
                       width: MediaQuery.of(context).size.width -150.w ,
-                      height: 120, //높이를 물건사진의 높이와 같게
+                      height: 124.h, //높이를 물건사진의 높이와 같게
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -207,7 +207,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                 '[판매중]', //status
                                 style: TextStyle(
                                   color: Color(0xff616161),
-                                  fontSize: 16.spMin,
+                                  fontSize: 16.h,
                                   fontWeight: FontWeight.w600
                                 ),
                               ),
@@ -218,7 +218,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                   Text('23.08.06',//createdAt
                                     style: TextStyle(
                                       color: Color(0xffC1C1C1),
-                                      fontSize: 12.spMin,
+                                      fontSize: 12.h,
                                     ),
                                   ),
                                   InkWell(
@@ -262,11 +262,11 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                           ),
                           SizedBox(height: 20.h),
                           Text('가죽쪼리 250 팔아요', //title
-                            style: TextStyle(fontSize: 16.spMin),
+                            style: TextStyle(fontSize: 16.h),
                           ),
                           SizedBox(height: 5.h),//제목
                           Text('25,000원', //price
-                            style: TextStyle(fontSize: 16.spMin,
+                            style: TextStyle(fontSize: 16.h,
                             fontWeight: FontWeight.w700),
                           ), //가격
                           Row(
@@ -275,14 +275,14 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                               Icon(Icons.thumb_up, color: Color(0xffC1C1C1),size: 16.w),
                               Text(' 10  ',//likeCount
                                 style: TextStyle(
-                                  fontSize: 14.spMin,
+                                  fontSize: 14.h,
                                   color: Color(0xffc1c1c1)
                                 ),
                               ),
                               Icon(Icons.sms, color: Color(0xffC1C1C1),size: 16.w),
                               Text(' 10',//commentCount
                                 style: TextStyle(
-                                    fontSize: 14.spMin,
+                                    fontSize: 14.h,
                                     color: Color(0xffc1c1c1)
                                 ),
                               ),

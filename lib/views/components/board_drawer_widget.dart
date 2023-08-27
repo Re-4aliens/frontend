@@ -56,7 +56,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => NoticeBoardPage()),
+                      builder: (context) => NoticeBoardPage(screenArguments: widget.screenArguments)),
                 );
               }
               else{
@@ -64,7 +64,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => NoticeBoardPage()),
+                      builder: (context) => NoticeBoardPage(screenArguments: widget.screenArguments)),
                 );
               }
             },
