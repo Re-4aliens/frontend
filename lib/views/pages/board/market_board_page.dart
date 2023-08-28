@@ -48,9 +48,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
               icon: SvgPicture.asset(
                 'assets/icon/icon_back.svg',
                 color: Colors.white,
-                width: 18.w,
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
+                width: 17.r,
+                height: 17.r,
+              )
             ),
             IconButton(
               onPressed: () {
