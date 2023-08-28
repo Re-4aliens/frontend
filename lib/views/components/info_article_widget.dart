@@ -16,10 +16,12 @@ import 'board_dialog_widget.dart';
 
 class InfoArticleWidget extends StatefulWidget {
 
-  InfoArticleWidget({super.key, required this.board, required this.nationCode});
+  InfoArticleWidget({super.key, required this.board, required this.nationCode, required this.isTotal});
 
   final Board board;
   final String nationCode;
+  final bool isTotal;
+
   @override
   State<StatefulWidget> createState() => _InfoArticleWidgetState();
 }
