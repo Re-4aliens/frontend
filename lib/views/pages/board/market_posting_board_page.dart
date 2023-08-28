@@ -209,7 +209,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               child: Row(
                                 children: [
                                    SizedBox(width: 15.w),
-                                  Icon(Icons.arrow_drop_down,
+                                  SvgPicture.asset(
+                                    'assets/icon/icon_dropdown.svg',
+                                    width: 4.r,
+                                    height: 4.r,
                                     color: Color(0xff888888),
                                     size: 20.h,
                                   ),
@@ -229,12 +232,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           children: [
                             Padding(
                               padding: EdgeInsets.only(left: 14.w),
-                              child: Text(
-                                '₩',
-                                style: TextStyle(
-                                  fontSize: 16.h,
-                                  color: Color(0xff888888),
-                                ),
+                              child: SvgPicture.asset(
+                                'assets/icon/ICON_won.svg',
+                                width: 23.r,
+                                height: 23.r,
                               ),
                             ),
                             Expanded(
@@ -359,17 +360,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                     child: i < _images.length ? SizedBox() : i == _images.length ? Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(
-                                          Icons.add_photo_alternate_outlined, color: Color(0xffaeaeae),),
+                                        Image.asset('assets/icon/ICON_photo_1.png', width: 30.r, height: 30.r,),
                                         Text('${_images.length}/3', style: TextStyle(color: Color(0xffaeaeae)),)
                                       ],
-                                    ): Container(
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: Color(0xffebebeb),
-                                      ),
-                                      child: Icon(Icons.add, color: Color(0xffd2d2d2),),
-                                    ),
+                                    ): SvgPicture.asset(
+                                      'assets/icon/ICON_photo_2.svg',
+                                      width: 25.r,
+                                      height: 25.r,
+                                    )
                                   ),
                                 ),
 

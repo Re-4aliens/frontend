@@ -150,7 +150,12 @@ class _ArticlePageState extends State<ArticlePage> {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0).w,
                             child:
-                            Icon(Icons.more_vert, color: Color(0xffc1c1c1)),
+                            SvgPicture.asset(
+                              'assets/icon/icon_more.svg',
+                              width: 25.r,
+                              height: 25.r,
+                              color: Color(0xffc1c1c1)
+                            ),
                           ),
                         )
                       ],
@@ -207,11 +212,12 @@ class _ArticlePageState extends State<ArticlePage> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
-                                child: Icon(
-                                  Icons.thumb_up_alt_sharp,
+                                child: SvgPicture.asset(
+                                  'assets/icon/ICON_good.svg',
+                                  width: 25.r,
+                                  height: 25.r,
                                   color: Color(0xffc1c1c1),
-                                  size: 20.h,
-                                ),
+                                )
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 4, right: 15).r,
@@ -221,10 +227,11 @@ class _ArticlePageState extends State<ArticlePage> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
-                                child: Icon(
-                                  Icons.chat_bubble,
+                                child: SvgPicture.asset(
+                                  'assets/icon/icon_comment.svg',
+                                  width: 25.r,
+                                  height: 25.r,
                                   color: Color(0xffc1c1c1),
-                                  size: 20.h,
                                 ),
                               ),
                               Padding(
@@ -312,8 +319,12 @@ class _ArticlePageState extends State<ArticlePage> {
                                         },
                                         child: Padding(
                                           padding: const EdgeInsets.only(left: 8.0).r,
-                                          child: Icon(Icons.more_vert,
-                                              color: Color(0xffc1c1c1)),
+                                          child: SvgPicture.asset(
+                                            'assets/icon/ICON_more.svg',
+                                            width: 25.r,
+                                            height: 25.r,
+                                            color: Color(0xffc1c1c1),
+                                          ),
                                         ),
                                       )
                                     ],
@@ -345,9 +356,10 @@ class _ArticlePageState extends State<ArticlePage> {
                                           child: Container(
                                             padding: EdgeInsets.all(10).r,
                                             alignment: Alignment.centerRight,
-                                            child: Icon(
-                                              Icons.subdirectory_arrow_right,
-                                              size: 20.h,
+                                            child: SvgPicture.asset(
+                                              'assets/icon/ICON_reply.svg',
+                                              width: 15.r,
+                                              height: 15.r,
                                               color: Color(0xffc1c1c1),
                                             ),
                                           ),
@@ -405,8 +417,12 @@ class _ArticlePageState extends State<ArticlePage> {
                                                     },
                                                     child: Padding(
                                                       padding: const EdgeInsets.only(left: 8.0).w,
-                                                      child: Icon(Icons.more_vert,
-                                                          color: Color(0xffc1c1c1)),
+                                                      child: SvgPicture.asset(
+                                                        'assets/icon/ICON_more.svg',
+                                                        width: 22.r,
+                                                        height: 22.r,
+                                                        color: Color(0xffc1c1c1),
+                                                      ),
                                                     ),
                                                   )
                                                 ],

@@ -20,6 +20,7 @@ import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../apis/apis.dart';
@@ -105,12 +106,12 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Text(
                   'post1'.tr(),
                   style: TextStyle(color: Color(0xff888888), fontSize: 16),
-                ), 
-                SizedBox(width: 10,), 
-                Icon(
-                  Icons.edit, 
-                  color: Color(0xff888888),
                 ),
+                SvgPicture.asset(
+                  'assets/icon/ICON_post.svg',
+                  height: 23.spMin,
+                  color: Color(0xff888888),
+                )
               ],
             ),
             children: [
@@ -266,10 +267,11 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                   SizedBox(
                     width: 10,
                   ),
-                  Icon(
-                    Icons.article_outlined,
+                  SvgPicture.asset(
+                    'assets/icon/ICON_board.svg',
+                    height: 16.spMin,
                     color: Color(0xff888888),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -298,13 +300,11 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     'notification'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Icon(
-                    Icons.notifications_none,
+                  SvgPicture.asset(
+                    'assets/icon/ICON_notification.svg',
+                    height: 23.spMin,
                     color: Color(0xff888888),
-                  ),
+                  )
                 ],
               ),
             ),
