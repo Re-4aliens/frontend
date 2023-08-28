@@ -84,10 +84,6 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                     'notice'.tr(),
                     style: TextStyle(color: Color(0xff888888), fontSize: 16),
                   ),
-                  Icon(
-                    Icons.account_circle,
-                    color: Colors.white,
-                  ),
                 ],
               ),
             ),
@@ -99,6 +95,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
             initiallyExpanded:false,
             collapsedBackgroundColor: Colors.white,
             title:Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
                   width: 20,
@@ -256,6 +253,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.all(10),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     width: 20,
@@ -292,6 +290,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.all(10),
               child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(
                     width: 20,
@@ -309,8 +308,10 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
               ),
             ),
           ),
-          Divider(height: 30, thickness: 0,),
-
+          Container(
+            height: 30.h,
+            color: Color(0xffebebeb),
+          ),
           Container(
             height: 20,
             color: Colors.white,
