@@ -59,7 +59,8 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
                     icon: SvgPicture.asset(
                       'assets/icon/icon_back.svg',
                       color: Colors.white,
-                      height: 18.h,
+                      height: 17.r,
+                      width: 17.r,
                     ),
                   ),
                   IconButton(
@@ -68,7 +69,12 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
                         isDrawerStart = !isDrawerStart;
                       });
                     },
-                    icon: Icon(Icons.format_list_bulleted_outlined),
+                    icon: SvgPicture.asset(
+                      'assets/icon/ICON_list.svg',
+                      color: Colors.white,
+                      height: 20.r,
+                      width: 20.r,
+                    ),
                     color: Colors.white,
                   ),
                 ],
@@ -76,8 +82,18 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
             ],
           ),
           actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.notifications_none)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.search)),
+            Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
+              'assets/icon/ICON_notification.svg',
+              width: 28.r,
+              height: 28.r,
+              color: Colors.white,
+            ),),
+            Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
+              'assets/icon/icon_search.svg',
+              width: 25.r,
+              height: 25.r,
+              color: Colors.white,
+            ),),
           ],
         ),
         body: isDrawerStart ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,

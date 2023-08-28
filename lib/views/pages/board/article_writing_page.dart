@@ -275,16 +275,23 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                               children: [
                                 Container(
                                   height: 65.h,
-                                  padding: EdgeInsets.only(
-                                    top: 25,
-                                    bottom: 17,
-                                  ).r,
-                                  child: Text(boardCategory, style: TextStyle(
-                                    color: Color(0xff616161),
-                                    fontSize: 16.spMin
-                                  ),),
+                                  alignment: Alignment.center,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(top: 10.h),
+                                    child: Text(boardCategory, style: TextStyle(
+                                      color: Color(0xff616161),
+                                      fontSize: 16.spMin
+                                    ),),
+                                  ),
+                                ),Padding(
+                                  padding: EdgeInsets.only(right: 10.0).w,
+                                  child: SvgPicture.asset(
+                                    'assets/icon/icon_dropdown.svg',
+                                    width: 10.r,
+                                    height: 10.r,
+                                    color: Color(0xff888888),
+                                  ),
                                 ),
-                                Icon(Icons.arrow_drop_down, size: 40.w, color: Color(0xff888888),)
                               ],
                             ),
                           ),
@@ -346,16 +353,13 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                           child: i < _images.length ? SizedBox() : i == _images.length ? Column(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              Icon(
-                                                Icons.add_photo_alternate_outlined, color: Color(0xffaeaeae),),
+                                              Image.asset('assets/icon/ICON_photo_1.png', width: 30.r, height: 30.r,),
                                               Text('${_images.length}/3', style: TextStyle(color: Color(0xffaeaeae)),)
                                             ],
-                                          ): Container(
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color: Color(0xffebebeb),
-                                            ),
-                                            child: Icon(Icons.add, color: Color(0xffd2d2d2),),
+                                          ): SvgPicture.asset(
+                                            'assets/icon/ICON_photo_2.svg',
+                                            width: 25.r,
+                                            height: 25.r,
                                           ),
                                         ),
                                       ),
