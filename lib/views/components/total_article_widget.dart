@@ -232,21 +232,23 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                 ),
               ),
 
-      onTap: () {
-
-        if(widget.board.category == "정보게시판"){
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => InfoArticlePage(board: widget.board)),
-          );
-        }
-        else{
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board)),
-          );
-        }
-      },
+              onTap: () {
+                if (widget.board.category == "정보게시판") {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            InfoArticlePage(board: widget.board)),
+                  );
+                } else {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ArticlePage(board: widget.board)),
+                  );
+                }
+              },
+            ),
     );
   }
 }
