@@ -259,7 +259,7 @@ class _SettingWidgetState extends State<SettingWidget>{
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: ListView.builder(
-                  itemCount: 4,
+                  itemCount: 5,
                   itemBuilder: (BuildContext context, int index) {
                     if (index == 0) {
                       return Container(
