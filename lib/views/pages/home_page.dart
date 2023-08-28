@@ -212,7 +212,9 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: selectedIndex == 2 ? [
           IconButton(onPressed: (){}, icon: Icon(Icons.notifications_none)),
-          IconButton(onPressed: (){}, icon: Icon(Icons.search)),
+          IconButton(onPressed: (){
+
+          }, icon: Icon(Icons.search)),
         ] : null,
       ),
       bottomNavigationBar: BottomNavigationBar(
