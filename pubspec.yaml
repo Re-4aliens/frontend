@@ -32,7 +32,10 @@ dependencies:
   multi_image_picker_view: ^0.0.16
   multiple_images_picker: ^1.0.0
   chips_choice: ^3.0.0
-  flutter_neumorphic: ^3.0.3
+  flutter_neumorphic:
+    git:
+      url: https://github.com/den0206/Flutter-Neumorphic.git
+      ref: feature/remoce_accentcolor
   dio: ^5.0.1
   percent_indicator: ^4.2.3
   flutter_svg: ^2.0.4

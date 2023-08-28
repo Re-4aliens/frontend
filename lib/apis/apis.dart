@@ -1390,6 +1390,37 @@ static Future<String> matchingProfessData() async{
     return files;
   }*/
 
+/*전체게시판 글 전부 조회*/
+  Future<void> TotalArticles() async {
+    final _url = 'http://3.34.2.246:8080/api/v2/articles';
+
+    // 토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      final data = json.decode(utf8.decode(response.bodyBytes));
+    }
+
+    //fail
+    else {
+      // API 요청이 실패한 경우
+      print(' ${response.statusCode}');
+    }
+  }
+
+/*전체 게시판 검색*/
+
+
 }
 
 
