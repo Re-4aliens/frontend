@@ -136,6 +136,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                   child: Container(
                     padding: const EdgeInsets.only(right:24, left: 24, top: 12),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
                           children: [

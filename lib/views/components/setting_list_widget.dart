@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../apis/apis.dart';
 
 
@@ -47,7 +46,7 @@ Widget buildSettingList(context, index, screenArguments) {
     '/setting/security',
     '/setting/notification',
     '/setting/terms',
-    ''
+
   ];
 
   return ListTile(
@@ -150,7 +149,6 @@ Widget buildSettingList(context, index, screenArguments) {
         Text(
           '${settingList.elementAt(index)}',
           style: TextStyle(
-            fontWeight: FontWeight.bold,
             fontSize: 18.spMin,
           ),
         ),
