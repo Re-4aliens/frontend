@@ -99,18 +99,10 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
             _images[1] = resultList[1];
             _images[2] = resultList[2];
           }else{
-            showDialog(context: context, builder: (builder){
-              return AlertDialog(
-                title: Text('이미지 세 개 넘어감'),
-              );
-            });
+
           }
         }else{
-          showDialog(context: context, builder: (builder){
-            return AlertDialog(
-              title: Text('이미지 세 개 넘어감'),
-            );
-          });
+
         }
 
       });
@@ -149,7 +141,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
           title: Text(
             'post'.tr(),
             style: TextStyle(
-              fontSize: 18.spMin,
+              fontSize: 20.spMin,
               color: Colors.black,
             ),
           ),
@@ -166,7 +158,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                 "cancel".tr(),
                 style: TextStyle(
                   color: Color(0xff888888),
-                  fontSize: 14.spMin,
+                  fontSize: 17.spMin,
                 ),
               ),
             ),
@@ -205,64 +197,66 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                                 padding: const EdgeInsets.only(top: 30, left: 16.0, bottom: 25 ).r,
                                                 child: Text("post4".tr(), style: TextStyle(color: Color(0xff121212), fontSize: 18.spMin, fontWeight: FontWeight.bold)),
                                               ),
-                                             Expanded(child: SingleChildScrollView(
-                                               child: Column(
-                                                 children: [
-                                                   ListTile(
-                                                     title: Text("free-posting".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin),),
-                                                     onTap: (){
-                                                       setState(() {
-                                                         boardCategory = "free-posting".tr();
-                                                       });
-                                                       Navigator.pop(context);
-                                                     },
-                                                   ),
-                                                   ListTile(
-                                                     title: Text("game".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.sp)),
-                                                     onTap: (){
-                                                       setState(() {
-                                                         boardCategory = "game".tr();
-                                                       });
-                                                       Navigator.pop(context);
-                                                     },
-                                                   ),
-                                                   ListTile(
-                                                     title: Text("fashion".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
-                                                     onTap: (){
-                                                       setState(() {
-                                                         boardCategory = "fashion".tr();
-                                                       });
-                                                       Navigator.pop(context);
-                                                     },
-                                                   ),
-                                                   ListTile(
-                                                     title: Text("food".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
-                                                     onTap: (){
-                                                       setState(() {
-                                                         boardCategory = "food".tr();
-                                                       });
-                                                       Navigator.pop(context);
-                                                     },
-                                                   ),
-                                                   ListTile(
-                                                     title: Text("music".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
-                                                     onTap: (){
-                                                       setState(() {
-                                                         boardCategory = "music".tr();
-                                                       });
-                                                       Navigator.pop(context);
-                                                     },
-                                                   ),
-                                                   ListTile(
-                                                     title: Text("info".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
-                                                     onTap: (){
-                                                       setState(() {
-                                                         boardCategory = "info".tr();
-                                                       });
-                                                       Navigator.pop(context);
-                                                     },
-                                                   )
-                                                 ],
+                                             Expanded(child: Scrollbar(
+                                               child: SingleChildScrollView(
+                                                 child: Column(
+                                                   children: [
+                                                     ListTile(
+                                                       title: Text("free-posting".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin),),
+                                                       onTap: (){
+                                                         setState(() {
+                                                           boardCategory = "free-posting".tr();
+                                                         });
+                                                         Navigator.pop(context);
+                                                       },
+                                                     ),
+                                                     ListTile(
+                                                       title: Text("game".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                       onTap: (){
+                                                         setState(() {
+                                                           boardCategory = "game".tr();
+                                                         });
+                                                         Navigator.pop(context);
+                                                       },
+                                                     ),
+                                                     ListTile(
+                                                       title: Text("fashion".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                       onTap: (){
+                                                         setState(() {
+                                                           boardCategory = "fashion".tr();
+                                                         });
+                                                         Navigator.pop(context);
+                                                       },
+                                                     ),
+                                                     ListTile(
+                                                       title: Text("food".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                       onTap: (){
+                                                         setState(() {
+                                                           boardCategory = "food".tr();
+                                                         });
+                                                         Navigator.pop(context);
+                                                       },
+                                                     ),
+                                                     ListTile(
+                                                       title: Text("music".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                       onTap: (){
+                                                         setState(() {
+                                                           boardCategory = "music".tr();
+                                                         });
+                                                         Navigator.pop(context);
+                                                       },
+                                                     ),
+                                                     ListTile(
+                                                       title: Text("info".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                       onTap: (){
+                                                         setState(() {
+                                                           boardCategory = "info".tr();
+                                                         });
+                                                         Navigator.pop(context);
+                                                       },
+                                                     )
+                                                   ],
+                                                 ),
                                                ),
                                              ))
                                             ],
