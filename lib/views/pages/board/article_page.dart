@@ -102,7 +102,7 @@ class _ArticlePageState extends State<ArticlePage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text(boardCategory, style: TextStyle(fontSize: 16.spMin),),
+          title: Text(boardCategory, style: TextStyle(fontSize: 18.spMin),),
           backgroundColor: Color(0xff7898ff),
           elevation: 0,
         ),

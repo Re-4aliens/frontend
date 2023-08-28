@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           _pageTitle.elementAt(selectedIndex),
           style: TextStyle(
-            fontSize: selectedIndex == 2 ? 16 : 18,
+            fontSize: 18.spMin,
             color: selectedIndex == 2 ? Colors.white : Colors.black,
             fontWeight: selectedIndex == 2 ? FontWeight.normal : FontWeight.bold,
           ),
@@ -142,6 +142,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: selectedIndex == 1 ? Colors.white : (selectedIndex == 2 ? Color(0xff7898ff) : Color(0xffF2F5FF)),
         leadingWidth: 100,
         leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (selectedIndex == 3)
               Row(
