@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/views/components/board_tab_widget.dart';
 import 'package:aliens/views/components/home_widget.dart';
@@ -232,8 +231,8 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(5.0),
               child: SvgPicture.asset(
                 'assets/icon/icon_home.svg',
-                width: 25,
-                height: 25,
+                width: 25.w,
+                height: 25.h,
                 color:
                     selectedIndex == 0 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
@@ -245,8 +244,8 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(5.0),
               child: SvgPicture.asset(
                 'assets/icon/icon_chatting.svg',
-                width: 25,
-                height: 25,
+                width: 25.w,
+                height: 25.h,
                 color:
                     selectedIndex == 1 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
@@ -265,8 +264,8 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(5.0),
               child: SvgPicture.asset(
                 'assets/icon/icon_setting.svg',
-                width: 25,
-                height: 25,
+                width: 25.w,
+                height: 25.h,
                 color:
                     selectedIndex == 3 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
