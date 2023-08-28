@@ -207,6 +207,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                    SizedBox(width: 15.w),
                                   SvgPicture.asset(
@@ -214,7 +215,6 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                     width: 4.r,
                                     height: 4.r,
                                     color: Color(0xff888888),
-                                    size: 20.h,
                                   ),
                                   Text('판매중',
                                     style: TextStyle(
@@ -222,6 +222,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                       fontSize:14.spMin
                                     ),
                                   ),
+                                  SizedBox(width: 15.w),
                                 ],
                               ),
                             )
