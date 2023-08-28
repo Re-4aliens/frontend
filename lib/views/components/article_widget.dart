@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../models/board_model.dart';
 import '../pages/board/article_page.dart';
+import '../pages/board/info_article_page.dart';
 import 'board_dialog_widget.dart';
 
 class ArticleWidget extends StatefulWidget {
@@ -96,9 +97,7 @@ class _ArticleWidgetState extends State<ArticleWidget>{
               padding: const EdgeInsets.only(top: 8).h,
               child: Text('${widget.board.title}', style: TextStyle(fontSize: 14.spMin, color: Color(0xff444444), fontWeight: FontWeight.bold)),
             ),
-            widget.board.imageUrls == null ?
-            SizedBox():
-            Container(
+            if (widget.board.imageUrls == null) SizedBox() else Container(
               height: 90.h,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
@@ -114,7 +113,11 @@ class _ArticleWidgetState extends State<ArticleWidget>{
                               color: Color(0xfff8f8f8),
                               borderRadius: BorderRadius.circular(10).r
                           ),
-                          child: Icon(Icons.add_photo_alternate_outlined),
+                          child:
+                          Padding(
+                            padding: const EdgeInsets.all(25.0).r,
+                            child: Image.asset('assets/icon/ICON_photo_1.png'),
+                          ),
                         ),
                       ],
                     );
@@ -162,7 +165,11 @@ class _ArticleWidgetState extends State<ArticleWidget>{
       ),
 
       onTap: () {
+        widget.board.category == "정보게시판"?
         Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => InfoArticlePage(board: widget.board)),
+        ):Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board)),
         );
