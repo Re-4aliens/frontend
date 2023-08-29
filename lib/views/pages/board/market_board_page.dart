@@ -48,9 +48,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
               icon: SvgPicture.asset(
                 'assets/icon/icon_back.svg',
                 color: Colors.white,
-                width: 18.w,
-                height: MediaQuery.of(context).size.height * 0.02,
-              ),
+                width: 17.r,
+                height: 17.r,
+              )
             ),
             IconButton(
               onPressed: () {
@@ -58,7 +58,12 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                   isDrawerStart = !isDrawerStart;
                 });
               },
-              icon: Icon(Icons.format_list_bulleted_outlined),
+              icon: SvgPicture.asset(
+                'assets/icon/ICON_list.svg',
+                width: 20.r,
+                height: 20.r,
+                color: Colors.white,
+              ),
               color: Colors.white,
 
             ),
@@ -72,7 +77,12 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.search))
+          Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
+            'assets/icon/icon_search.svg',
+            width: 25.r,
+            height: 25.r,
+            color: Colors.white,
+          ),),
         ],
 
 
@@ -165,10 +175,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             child: ClipRRect(
                               //사진이 있으면 없어질 것들
                               borderRadius: BorderRadius.all(Radius.circular(10)),
-                              child: Icon(Icons.add_photo_alternate,
-                                color: Colors.grey,
-                                size: 44.h,
-                              ),
+                              child:
+                              Image.asset('assets/icon/ICON_photo_1.png', height: 44.r,),
                             ),
                           ),
                           Positioned(
@@ -250,11 +258,11 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                           });
 
                                     },
-                                    child: Icon(
-                                      Icons.more_vert,
-                                      size: 16.w,
-                                      color: Color(0xffC1C1C1),
-                                    ),
+                                    child: SvgPicture.asset(
+                                      'assets/icon/ICON_more.svg',
+                                      width: 16.r,
+                                      height: 16.r,
+                                    )
                                   )
                                 ],
                               )
@@ -272,14 +280,24 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Icon(Icons.thumb_up, color: Color(0xffC1C1C1),size: 16.w),
+                              SvgPicture.asset(
+                                'assets/icon/ICON_good.svg',
+                                width: 16.r,
+                                height: 16.r,
+                                  color: Color(0xffc1c1c1)
+                              ),
                               Text(' 10  ',//likeCount
                                 style: TextStyle(
                                   fontSize: 14.h,
                                   color: Color(0xffc1c1c1)
                                 ),
                               ),
-                              Icon(Icons.sms, color: Color(0xffC1C1C1),size: 16.w),
+                              SvgPicture.asset(
+                                'assets/icon/ICON_comment.svg',
+                                width: 16.r,
+                                height: 16.r,
+                                  color: Color(0xffc1c1c1)
+                              ),
                               Text(' 10',//commentCount
                                 style: TextStyle(
                                     fontSize: 14.h,

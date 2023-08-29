@@ -3,6 +3,7 @@ import 'package:dash_flags/dash_flags.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -58,7 +59,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
             Text(
               'signup-nationality'.tr(),
               style: TextStyle(
-                  fontSize: isSmallScreen?22:24,
+                  fontSize: 24.spMin,
                   fontWeight: FontWeight.bold),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.05),
@@ -77,7 +78,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                               suffixIcon: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Container(alignment: Alignment.centerRight, width: 180, child: Text("${_selectedNationality}", style: TextStyle(fontSize: isSmallScreen? 16:20, fontWeight: FontWeight.bold),)),
+                                  Container(alignment: Alignment.centerRight, width: 180, child: Text("${_selectedNationality}", style: TextStyle(fontSize: 20.spMin, fontWeight: FontWeight.bold),)),
                                   IconButton(
                                     icon: SvgPicture.asset(
                                       'assets/icon/icon_dropdown.svg',
@@ -87,7 +88,7 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                                   ),
                                 ],
                               ),
-                              hintStyle: TextStyle(fontSize: isSmallScreen?14:16, color: Colors.black)
+                              hintStyle: TextStyle(fontSize: 16.spMin, color: Colors.black)
                           ),
                           //validator : (value) => value!.isEmpty? "Please enter some text" : null,
                           enabled: false,
