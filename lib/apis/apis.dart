@@ -226,6 +226,11 @@ class APIs {
 
       //fail
     } else {
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        await APIs.getAccessToken();
+        await APIs.logOut(context);
+      }
       print(json.decode(utf8.decode(response.bodyBytes)));
     }
   }
@@ -407,9 +412,8 @@ class APIs {
     );
     //success
     if (response.statusCode == 200) {
+      print('${json.decode(utf8.decode(response.bodyBytes))}');
       return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
-      print('매칭 상태 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
-
 
 
       //fail
