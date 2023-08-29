@@ -130,7 +130,7 @@ class _HomePageState extends State<HomePage> {
         title: Text(
           _pageTitle.elementAt(selectedIndex),
           style: TextStyle(
-            fontSize: selectedIndex == 2 ? 16 : 18,
+            fontSize: 18.spMin,
             color: selectedIndex == 2 ? Colors.white : Colors.black,
             fontWeight: selectedIndex == 2 ? FontWeight.normal : FontWeight.bold,
           ),
@@ -141,6 +141,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: selectedIndex == 1 ? Colors.white : (selectedIndex == 2 ? Color(0xff7898ff) : Color(0xffF2F5FF)),
         leadingWidth: 100,
         leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             if (selectedIndex == 3)
               Row(
@@ -191,8 +192,8 @@ class _HomePageState extends State<HomePage> {
                       icon: SvgPicture.asset(
                         'assets/icon/icon_back.svg',
                         color: Colors.white,
-                        width: 24,
-                        height: MediaQuery.of(context).size.height * 0.02,
+                        width: 17.r,
+                        height: 17.r,
                       ),
                     ),
                     IconButton(
@@ -201,7 +202,12 @@ class _HomePageState extends State<HomePage> {
                           isDrawerStart = !isDrawerStart;
                         });
                       },
-                      icon: Icon(Icons.format_list_bulleted_outlined),
+                      icon: SvgPicture.asset(
+                        'assets/icon/ICON_list.svg',
+                        width: 20.r,
+                        height: 20.r,
+                        color: Colors.white,
+                      ),
                       color: Colors.white,
                     ),
                   ],
@@ -211,10 +217,18 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         actions: selectedIndex == 2 ? [
-          IconButton(onPressed: (){}, icon: Icon(Icons.notifications_none)),
-          IconButton(onPressed: (){
-
-          }, icon: Icon(Icons.search)),
+          Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
+            'assets/icon/ICON_notification.svg',
+            width: 28.r,
+            height: 28.r,
+            color: Colors.white,
+          ),),
+          Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
+            'assets/icon/icon_search.svg',
+            width: 25.r,
+            height: 25.r,
+            color: Colors.white,
+          ),),
         ] : null,
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -233,8 +247,8 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(5.0),
               child: SvgPicture.asset(
                 'assets/icon/icon_home.svg',
-                width: 25.w,
-                height: 25.h,
+                width: 25.r,
+                height: 25.r,
                 color:
                     selectedIndex == 0 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
@@ -246,8 +260,8 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(5.0),
               child: SvgPicture.asset(
                 'assets/icon/icon_chatting.svg',
-                width: 25.w,
-                height: 25.h,
+                width: 25.r,
+                height: 25.r,
                 color:
                     selectedIndex == 1 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
@@ -255,10 +269,13 @@ class _HomePageState extends State<HomePage> {
             label:'${'homepage-chatting1'.tr()}' ,
           ),
           BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Icon(Icons.article),
-            ),
+            icon: Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
+              'assets/icon/ICON_board.svg',
+              width: 25.r,
+              height: 25.r,
+              color:
+              selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
+            ),),
             label: "board".tr() ,
           ),
           BottomNavigationBarItem(
@@ -266,8 +283,8 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(5.0),
               child: SvgPicture.asset(
                 'assets/icon/icon_setting.svg',
-                width: 25.w,
-                height: 25.h,
+                width: 25.r,
+                height: 25.r,
                 color:
                     selectedIndex == 3 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),

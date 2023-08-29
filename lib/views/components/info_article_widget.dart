@@ -16,10 +16,12 @@ import 'board_dialog_widget.dart';
 
 class InfoArticleWidget extends StatefulWidget {
 
-  InfoArticleWidget({super.key, required this.board, required this.nationCode});
+  InfoArticleWidget({super.key, required this.board, required this.nationCode, required this.isTotal});
 
   final Board board;
   final String nationCode;
+  final bool isTotal;
+
   @override
   State<StatefulWidget> createState() => _InfoArticleWidgetState();
 }
@@ -68,7 +70,11 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
                   child: Padding(
                     padding: EdgeInsets.only(left: 8.w, top: 0.h),
                     child:
-                    Icon(Icons.more_vert, color: Color(0xffc1c1c1)),
+                    SvgPicture.asset(
+                      'assets/icon/ICON_more.svg',
+                      width: 25.r,
+                      height: 25.r,
+                    ),
                   ),
                 )
               ],
@@ -88,11 +94,12 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,
-                    child: Icon(
-                      Icons.thumb_up_alt_sharp,
-                      color: Color(0xffc1c1c1),
-                      size: 20.r,
-                    ),
+                    child: SvgPicture.asset(
+                      'assets/icon/ICON_good.svg',
+                      width: 25.r,
+                      height: 25.r,
+                      color: Color(0xffc1c1c1)
+                    )
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 4, right: 15).w,
@@ -103,11 +110,12 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
                   ),
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,
-                    child: Icon(
-                      Icons.chat_bubble,
-                      color: Color(0xffc1c1c1),
-                      size: 20.r,
-                    ),
+                    child: SvgPicture.asset(
+                      'assets/icon/icon_comment.svg',
+                      width: 25.r,
+                      height: 25.r,
+                        color: Color(0xffc1c1c1)
+                    )
                   ),
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,

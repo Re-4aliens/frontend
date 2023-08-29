@@ -115,7 +115,7 @@
   "matched5": "You've got {num} matches!",
   "matched6": "Send message",
 
-  "homepage-welcome" : "Welcome!",
+  "homepage-welcome" : "Nice to see you!",
   "homepage-welcome1.1" : "Welcome to ",
   "homepage-welcome1.2" : "Friendship.",
   "homepage-happy" : "Today, I'm happy!",
@@ -200,6 +200,8 @@
   "setting-thank": "Thank you for using our service so far.\nThrough membership registration,\nyou can start again anytime!",
   "setting-private": "Privacy Policy",
   "setting-inqury": "Inquiry",
+  "setting-inquiry-detail": "How we can help you? \nDescribe here your problem.",
+  "setting-inquiry-submit": "submit",
 
 
   "matching-soon" : "Matching applications\nwill start soon!",
@@ -284,7 +286,7 @@
 
   "comment1": "Please enter a comment.",
   "comment2": "Please enter a reply to a comment.",
-  "comment3": "Reply to a comment",
+  "comment3": "Reply",
 
   "post1": "Create a post",
   "notice": "Notice",

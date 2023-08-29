@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>264201677004-n90is9fa7ee1ege99d3vh4dfjgrcior9.apps.googleusercontent.com</string>
+	<string>101096502511-9u0htr73hlptae6797tq6ricj32oub9a.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.264201677004-n90is9fa7ee1ege99d3vh4dfjgrcior9</string>
+	<string>com.googleusercontent.apps.101096502511-9u0htr73hlptae6797tq6ricj32oub9a</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBzhOokivfa-BPLa__64xB5kl54C-gqbQU</string>
+	<string>AIzaSyA1VEVZbiXsmfsu8E8Ul4Lj3AgGT9dU8Do</string>
 	<key>GCM_SENDER_ID</key>
-	<string>264201677004</string>
+	<string>101096502511</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.aliens</string>
+	<string>com.aliens.friendship</string>
 	<key>PROJECT_ID</key>
-	<string>friend-ship-23487</string>
+	<string>friendship-aefec</string>
 	<key>STORAGE_BUCKET</key>
-	<string>friend-ship-23487.appspot.com</string>
+	<string>friendship-aefec.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:264201677004:ios:a6734608673249d7093a69</string>
+	<string>1:101096502511:ios:6c8238b88c31d399bad71a</string>
 </dict>
 </plist>
