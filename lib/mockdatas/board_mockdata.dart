@@ -52,6 +52,12 @@ List<Board> infoBoardList = [
 ];
 
 
+List<Board> MyPostingBoardList = [
+  MyPostingBoard1,
+
+];
+
+
 Board freePostingBoard1 = Board(
   articleId: 1,
     category: "자유게시판",
@@ -314,6 +320,20 @@ Board infoBoard3 = Board(
     member: Member(
       memberId: 1,
       name: "윤정하",
+      nationality: 'South Korea',
+      profileImageUrl: "",
+    )
+);
+
+Board MyPostingBoard1 = Board(
+    boardArticleId: 1,
+    title: "낼 점심은 닭가슴살. 신난다.",
+    createdAt: "2023-08-17 23:53:00",
+    category: "음악게시판",
+    imageUrls: null,
+    member: Member(
+      memberId: 1,
+      name: "MM",
       nationality: 'South Korea',
       profileImageUrl: "",
     )
