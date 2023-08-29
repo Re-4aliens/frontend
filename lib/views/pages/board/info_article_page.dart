@@ -128,14 +128,14 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                       ],
                     ),
                   ),
-                  widget.board.imageUrls == null
+                  widget.board.images == null
                       ? SizedBox()
                       : Container(
                     height: 100.h,
                     padding: const EdgeInsets.only(left: 20.0, right: 15).w,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: widget.board.imageUrls!.length,
+                        itemCount: widget.board.images!.length,
                         itemBuilder: (context, index) {
                           return Row(
                             children: [

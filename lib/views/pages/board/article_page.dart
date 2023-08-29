@@ -175,13 +175,13 @@ class _ArticlePageState extends State<ArticlePage> {
                               style: TextStyle(fontSize: 14.spMin, fontWeight: FontWeight.bold, color: Color(0xff444444)),
                             ),
                           ),
-                          widget.board.imageUrls == null
+                          widget.board.images == null
                               ? SizedBox()
                               : Container(
                                   height: 100.h,
                                   child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: widget.board.imageUrls!.length,
+                                      itemCount: widget.board.images!.length,
                                       itemBuilder: (context, index) {
                                         return Row(
                                           children: [
