@@ -41,14 +41,18 @@ class FirebaseAPIs {
     var platformDetails = NotificationDetails(android: androidDetails);
 
     var notification = await storage.read(key: 'notification');
+    print('알림 도착 ${message.data}');
 
     //상대방의 일괄 읽음 알림 (상대방이 채팅창 들어왔을 때의 알림)
     //상대방이 채팅 읽었을 때의 알림
-    if(message.data['type'] == 'bulkRead' && message.data['type'] == 'bulkRead'){
+    if(message.data['type'] == 'bulkRead' && message.data['type'] == 'read'){
       //알림 안보냄
+      print('일괄읽음 도착 ${message.data}');
     }
     //일괄적으로 보내는 notice
     else if(message.data['type'] == 'notice'){
+
+      print('notice 도착 ${message.data}');
       //매칭 알림이 켜져있는 경우에만 보냄
       if(json.decode(notification!)['matchingNotification'] == true){
         // 알림 표시
@@ -64,8 +68,10 @@ class FirebaseAPIs {
         return;
       }
     }else if(message.data['type'] == 'chat'){
+
+      print('채팅 도착 ${message.data}');
       // 알림 표시
-      if(json.decode(notification!)['chattingNotification'] == true){
+      if(json.decode(notification!)['chatNotification'] == true){
         flutterLocalNotificationsPlugin.show(
           0, // 알림 ID
           '${message.data['title']}', // 제목
@@ -74,7 +80,6 @@ class FirebaseAPIs {
         );
       }
     }
-
   }
 
 }
