@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../pages/setting/setting_lan_edit.dart';
 import '../pages/setting/setting_mbti_edit.dart';
 
@@ -24,22 +24,22 @@ Widget buildProfileList(context, index, screenArgument){
   List settingIcon = [
     Icon(
       Icons.sentiment_very_satisfied,
-      size: isSmallScreen?18:20,
+      size: 20.h,
       color: Colors.black,
     ),
     Icon(
       Icons.favorite_border,
-      size: isSmallScreen?18:20,
+      size: 20.h,
       color: Colors.black,
     ),
     Icon(
       Icons.drafts,
-      size: isSmallScreen?18:20,
+      size: 20.h,
       color: Colors.black,
     ),
     Icon(
       Icons.language,
-      size: isSmallScreen?18:20,
+      size: 20.h,
       color: Colors.black,
     ),
   ];
@@ -81,14 +81,13 @@ Widget buildProfileList(context, index, screenArgument){
         ),
         if (index > 3)
           Container(
-            padding: EdgeInsets.only(right: 20),
+            padding: EdgeInsets.only(right: 20.w),
             child: settingIcon.elementAt(index),
           ),
         Text(
             '${settingList.elementAt(index)}',
             style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16.spMin,
+              fontSize: 18.h,
             ),
             overflow: TextOverflow.fade,
         ),
@@ -100,7 +99,7 @@ Widget buildProfileList(context, index, screenArgument){
               Text(
                 '${memberInfo.elementAt(index)}',
                 style: TextStyle(
-                    fontSize: isSmallScreen?16:18, color: Color(0xff7898FF), overflow: TextOverflow.ellipsis),
+                    fontSize:18.h, color: Color(0xff7898FF), overflow: TextOverflow.ellipsis),
               )
             :index == 2 ?
               Row(
@@ -109,12 +108,12 @@ Widget buildProfileList(context, index, screenArgument){
                 Text(
                   '${memberInfo.elementAt(index)}',
                   style: TextStyle(
-                      fontSize: isSmallScreen?16:18, color: Color(0xff7898FF)),
+                      fontSize: 18.h, color: Color(0xff7898FF)),
                 ),
-                SizedBox(width: 1),
+                SizedBox(width: 1.h),
                 Icon(
                   Icons.arrow_forward_ios,
-                  size: isSmallScreen?16:18,
+                  size: 18.h,
                   color: Color(0xff4D4D4D),
                 )
               ],
@@ -122,7 +121,7 @@ Widget buildProfileList(context, index, screenArgument){
             :
               Icon(
                 Icons.arrow_forward_ios,
-                size: isSmallScreen?16:18,
+                size: 18.h,
                 color: Color(0xff4d4d4d),
               ),
 
