@@ -1,36 +1,50 @@
 class Board {
-  int? articleId;
+  int? boardArticleId;
   String? category;
   String? title;
   String? content;
   int? likeCount;
-  int? commentsCount; // commentsCount 추가
-  List<String>? images; // images 추가
-  DateTime? createdAt;
+  int? commentCount;
+  List<String>? imageUrls;
   Member? member;
+  String? createdAt;
 
-  Board({
-    this.articleId,
-    this.category,
-    this.title,
-    this.content,
-    this.likeCount,
-    this.commentsCount,
-    this.images,
-    this.createdAt,
-    this.member,
-  });
+  Board(
+      {this.boardArticleId,
+        this.category,
+        this.title,
+        this.content,
+        this.likeCount,
+        this.commentCount,
+        this.imageUrls,
+        this.member,
+        this.createdAt});
 
   Board.fromJson(Map<String, dynamic> json) {
-    articleId = json['articleId'];
+    boardArticleId = json['boardArticleId'];
     category = json['category'];
     title = json['title'];
-    content = json['content'];
     likeCount = json['likeCount'];
-    commentsCount = json['commentsCount'];
-    images = List<String>.from(json['images']);
-    createdAt = DateTime.parse(json['createdAt']);
-    member = Member.fromJson(json['member']);
+    content = json['content'];
+    imageUrls = json['imageUrls'].cast<String>();
+    member =
+    json['member'] != null ? new Member.fromJson(json['member']) : null;
+    createdAt = json['createdAt'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['boardArticleId'] = this.boardArticleId;
+    data['category'] = this.category;
+    data['title'] = this.title;
+    data['content'] = this.content;
+    data['likeCount'] = this.likeCount;
+    data['imageUrls'] = this.imageUrls;
+    if (this.member != null) {
+      data['member'] = this.member!.toJson();
+    }
+    data['createdAt'] = this.createdAt;
+    return data;
   }
 }
 
@@ -38,22 +52,26 @@ class Member {
   int? memberId;
   String? email;
   String? name;
-  String? profileImageUrl;
   String? nationality;
+  String? profileImageUrl;
 
-  Member({
-    this.memberId,
-    this.email,
-    this.name,
-    this.profileImageUrl,
-    this.nationality,
-  });
+  Member({this.memberId, this.email, this.name, this.nationality, this.profileImageUrl});
 
   Member.fromJson(Map<String, dynamic> json) {
     memberId = json['memberId'];
     email = json['email'];
     name = json['name'];
-    profileImageUrl = json['profileImageUrl'];
     nationality = json['nationality'];
+    profileImageUrl = json['profileImageUrl'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['memberId'] = this.memberId;
+    data['email'] = this.email;
+    data['name'] = this.name;
+    data['nationality'] = this.nationality;
+    data['profileImageUrl'] = this.profileImageUrl;
+    return data;
   }
 }

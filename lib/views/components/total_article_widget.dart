@@ -24,7 +24,6 @@ class TotalArticleWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _TotalArticleWidgetState();
 }
 class _TotalArticleWidgetState extends State<TotalArticleWidget>{
-  List<Map<String, dynamic>> articles = []; // 전체 게시글 데이터 저장
 
   String createdAt = '';
   String boardCategory = '';
@@ -32,7 +31,27 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
   @override
   void initState() {
     super.initState();
-    APIs.TotalArticles();
+    switch (widget.board.category){
+      case '자유게시판':
+        boardCategory = 'free-posting'.tr();
+        break;
+      case '음식게시판':
+        boardCategory = 'food'.tr();
+        break;
+      case '음악게시판':
+        boardCategory = 'music'.tr();
+        break;
+      case '패션게시판':
+        boardCategory = 'fashion'.tr();
+        break;
+      case '게임게시판':
+        boardCategory = 'game'.tr();
+        break;
+      case '정보게시판':
+        boardCategory = 'info'.tr();
+        break;
+      default:
+    }
 
   }
 
