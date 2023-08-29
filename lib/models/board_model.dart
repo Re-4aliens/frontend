@@ -1,32 +1,32 @@
 class Board {
-  int? boardArticleId;
+  int? articleId; //articleId
   String? category;
   String? title;
   String? content;
   int? likeCount;
   int? commentCount;
-  List<String>? imageUrls;
+  List<String>? images; //images
   Member? member;
   String? createdAt;
 
   Board(
-      {this.boardArticleId,
+      {this.articleId,
         this.category,
         this.title,
         this.content,
         this.likeCount,
         this.commentCount,
-        this.imageUrls,
+        this.images,
         this.member,
         this.createdAt});
 
   Board.fromJson(Map<String, dynamic> json) {
-    boardArticleId = json['boardArticleId'];
+    articleId = json['articleId'];
     category = json['category'];
     title = json['title'];
     likeCount = json['likeCount'];
     content = json['content'];
-    imageUrls = json['imageUrls'].cast<String>();
+    images = json['images'].cast<String>();
     member =
     json['member'] != null ? new Member.fromJson(json['member']) : null;
     createdAt = json['createdAt'];
@@ -34,12 +34,12 @@ class Board {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['boardArticleId'] = this.boardArticleId;
+    data['articleId'] = this.articleId;
     data['category'] = this.category;
     data['title'] = this.title;
     data['content'] = this.content;
     data['likeCount'] = this.likeCount;
-    data['imageUrls'] = this.imageUrls;
+    data['images'] = this.images;
     if (this.member != null) {
       data['member'] = this.member!.toJson();
     }
