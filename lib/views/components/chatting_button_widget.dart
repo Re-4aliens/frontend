@@ -89,7 +89,7 @@ class ChattingButton extends StatelessWidget{
             ),
             Container(
               height: 240.h,
-              padding: EdgeInsets.only(left:25, top:20, right:6).r,
+              padding: EdgeInsets.only(left:25.r, top:20.r, right:15.r).r,
               decoration: BoxDecoration(),
               width: double.infinity,
               child: Column(
