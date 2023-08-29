@@ -52,7 +52,12 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
                     isDrawerStart = !isDrawerStart;
                   });
                 },
-                icon: Icon(Icons.format_list_bulleted_outlined),
+                icon: SvgPicture.asset(
+                  'assets/icon/ICON_list.svg',
+                  width: 20.r,
+                  height: 20.r,
+                  color: Colors.white,
+                ),
                 color: Colors.white,
               ),
             ],
@@ -66,7 +71,12 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
           ),
           centerTitle: true,
           actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.search))
+            Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
+              'assets/icon/icon_search.svg',
+              width: 25.r,
+              height: 25.r,
+              color: Colors.white,
+            ),),
           ],
 
 
@@ -79,10 +89,11 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
               height: MediaQuery.of(context).size.height * 0.09,
               child: Row(
                 children: [
-                  Icon(
-                    Icons.volume_mute,
-                    size: 28.h,
-                    color: Color(0xff7898FF),
+                  SvgPicture.asset(
+                    'assets/icon/ICON_notice.svg',
+                    width: 20.r,
+                    height: 20.r,
+                    color: Color(0xff7898ff)
                   ),
                   Expanded(
                     child: Text(

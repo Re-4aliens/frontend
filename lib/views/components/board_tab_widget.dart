@@ -124,9 +124,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
             }
             return Column(
               children: [
-                totalBoardList[index].category == "정보게시판" ? InfoArticleWidget(
-                    board: totalBoardList[index], nationCode: nationCode
-                ):TotalArticleWidget(board: totalBoardList[index], nationCode: nationCode),
+                TotalArticleWidget(board: totalBoardList[index], nationCode: nationCode),
                 Divider(
                   thickness: 2,
                   color: Color(0xffE5EBFF),

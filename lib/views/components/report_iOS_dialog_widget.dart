@@ -44,7 +44,7 @@ class _iOSReportDialogState extends State<iOSReportDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
+            Flexible(
               child: SingleChildScrollView(
                 child: Column(
                   children: [
