@@ -162,13 +162,13 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                             fontWeight: FontWeight.bold),
                       ),
                     ),
-                    widget.board.imageUrls == null
+                    widget.board.images == null
                         ? SizedBox()
                         : Container(
                             height: 90.h,
                             child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: widget.board.imageUrls!.length,
+                                itemCount: widget.board.images!.length,
                                 itemBuilder: (context, index) {
                                   return Row(
                                     children: [
