@@ -415,13 +415,13 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                           }
 
                           Board _newBoard = Board(
-                              boardArticleId: 1,
+                              articleId: 1,
                               category: boardCategory,
                               title: _titleController.text,
                               content: _contentController.text,
                               likeCount: 0,
                               commentCount: 0,
-                              imageUrls: null,
+                              images: null,
                               member: Member(
                                 memberId: 1,
                                 nationality: "South Korea",
