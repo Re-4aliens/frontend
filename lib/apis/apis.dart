@@ -1437,34 +1437,38 @@ static Future<String> matchingProfessData() async{
   }*/
 
 /*전체게시판 글 전부 조회*/
-  static Future<Map<String, dynamic>> TotalArticles() async {
+  static Future<List<dynamic>> TotalArticles() async {
     final _url = 'http://3.34.2.246:8080/api/v2/articles';
 
-    // 토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    try {
+      // 토큰 읽어오기
+      var jwtToken = await storage.read(key: 'token');
+      jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
-    final response = await http.get(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-      },
-    );
+      final response = await http.get(
+        Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+        },
+      );
 
-    //success
-    if (response.statusCode == 200) {
-      final data = json.decode(utf8.decode(response.bodyBytes));
-      return data; // 응답 데이터를 반환
-    }
+      if (response.statusCode == 200) {
+        final responseData = json.decode(utf8.decode(response.bodyBytes));
+        final data = responseData['data'];
+        if (data != null && data is List) {
+          return data; // 응답 데이터 리스트를 반환
+        }
+      }
 
-    //fail
-    else {
-      // API 요청이 실패한 경우
       print('API request failed: ${response.statusCode}');
-      return {}; // 빈 맵을 반환하여 오류 시도 처리
+      return []; // 빈 리스트 반환하여 오류 시도 처리
+    } catch (error) {
+      print('Error fetching article data: $error');
+      return []; // 빈 리스트 반환하여 오류 시도 처리
     }
   }
+
 
 /*전체 게시판 검색*/
   static Future<List<Board>> TotalSearch(String keyword) async {
