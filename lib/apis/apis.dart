@@ -12,12 +12,13 @@ import 'package:path_provider/path_provider.dart';
 import '../models/applicant_model.dart';
 import '../models/auth_model.dart';
 import 'dart:io';
-
+import 'package:aliens/lib/views/components/total_article_widget.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 
+import '../models/board_model.dart';
 import '../models/memberDetails_model.dart';
 import '../models/message_model.dart';
 import '../models/partner_model.dart';
@@ -1436,7 +1437,7 @@ static Future<String> matchingProfessData() async{
   }*/
 
 /*전체게시판 글 전부 조회*/
-  Future<void> TotalArticles() async {
+  static Future<Map<String, dynamic>> TotalArticles() async {
     final _url = 'http://3.34.2.246:8080/api/v2/articles';
 
     // 토큰 읽어오기
@@ -1454,16 +1455,53 @@ static Future<String> matchingProfessData() async{
     //success
     if (response.statusCode == 200) {
       final data = json.decode(utf8.decode(response.bodyBytes));
+      return data; // 응답 데이터를 반환
     }
 
     //fail
     else {
       // API 요청이 실패한 경우
-      print(' ${response.statusCode}');
+      print('API request failed: ${response.statusCode}');
+      return {}; // 빈 맵을 반환하여 오류 시도 처리
     }
   }
 
 /*전체 게시판 검색*/
+  static Future<List<Board>> TotalSearch(String keyword) async {
+    try {
+      var jwtToken = await storage.read(key: 'token');
+      jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+      final response = await http.get(
+        Uri.parse('http://3.34.2.246:8080/api/v2/articles?search-keyword=$keyword'),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(utf8.decode(response.bodyBytes));
+        final List<dynamic> articlesData = data['data'];
+
+        //데이터를 list<board>객체로 반환
+        List<Board> articles = articlesData.map((articleData) {
+          return Board.fromJson(articleData);
+        }).toList();
+
+        return articles;
+      } else {
+        print('API request failed: ${response.statusCode}');
+        return []; // Empty list on failure
+      }
+    } catch (error) {
+      print('Error fetching search results: $error');
+      return []; // Empty list on error
+    }
+  }
+
+/*전체 게시판 게시글 상세 조회*/
+
 
 
 }

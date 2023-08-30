@@ -11,7 +11,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:aliens/views/components/total_article_widget.dart';
 import '../../../apis/apis.dart';
 import '../../main.dart';
 import '../../mockdatas/mockdata_model.dart';
@@ -223,7 +223,8 @@ class _HomePageState extends State<HomePage> {
             height: 28.r,
             color: Colors.white,
           ),),
-          Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
+          Padding(padding: EdgeInsets.all(8),
+            child: SvgPicture.asset(
             'assets/icon/icon_search.svg',
             width: 25.r,
             height: 25.r,
@@ -269,14 +270,27 @@ class _HomePageState extends State<HomePage> {
             label:'${'homepage-chatting1'.tr()}' ,
           ),
           BottomNavigationBarItem(
-            icon: Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
-              'assets/icon/ICON_board.svg',
-              width: 25.r,
-              height: 25.r,
-              color:
-              selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
-            ),),
-            label: "board".tr() ,
+            icon: Padding(
+              padding: EdgeInsets.all(8),
+              child: GestureDetector(
+                onTap: () async {
+                  try {
+                    final articles = await APIs.TotalArticles();
+                    setState(() {
+                    });
+                  } catch (e) {
+                    print('API 호출 오류: $e');
+                  }
+                },
+                child: SvgPicture.asset(
+                  'assets/icon/ICON_board.svg',
+                  width: 25.r,
+                  height: 25.r,
+                  color: selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
+                ),
+              ),
+            ),
+            label: "board".tr(),
           ),
           BottomNavigationBarItem(
             icon: Padding(
