@@ -128,7 +128,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                       ],
                     ),
                   ),
-                  widget.board.images == null
+                  widget.board.images!.isEmpty
                       ? SizedBox()
                       : Container(
                     height: 100.h,

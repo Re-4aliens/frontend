@@ -175,7 +175,7 @@ class _ArticlePageState extends State<ArticlePage> {
                               style: TextStyle(fontSize: 14.spMin, fontWeight: FontWeight.bold, color: Color(0xff444444)),
                             ),
                           ),
-                          widget.board.images == null
+                          widget.board.images!.isEmpty
                               ? SizedBox()
                               : Container(
                                   height: 100.h,
