@@ -64,8 +64,10 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
       final dataList = response as List<dynamic>; // 변환된 리스트 데이터
 
       setState(() {
+        print('1');
         articles = dataList.map((article) =>
             Board.fromJson(article)).toList();
+        print('2');
       });
     } catch (error) {
       print('Error fetching article data: $error');
@@ -78,16 +80,10 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: fetchArticlesData(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-          return Text('Error loading data: ${snapshot.error}');
-        } else {
-          return articles != null
-              ?
+    return ListView.builder(
+      itemCount: articles.length,
+      itemBuilder: (context, index) {
+
           Padding(
             padding: EdgeInsets.only(top: 10.h),
             child: ListTile(
@@ -280,10 +276,10 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
               }
               },
             ),
-          )
-          : CircularProgressIndicator();
+          );
+
     }
-    },
+
     );
   }
 }
