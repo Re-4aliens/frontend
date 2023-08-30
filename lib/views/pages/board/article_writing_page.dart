@@ -15,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/countries.dart';
 import '../../../permissions.dart';
@@ -39,6 +40,9 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
   TextEditingController _contentController = TextEditingController();
   final GlobalKey<FormState> _formKeyFirst = GlobalKey<FormState>();
   final GlobalKey<FormState> _formKeySecond = GlobalKey<FormState>();
+
+  String title = '';
+  String content = '';
 
   bool isEnabled = false;
 
@@ -135,6 +139,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
 
   @override
   Widget build(BuildContext context) {
+    final boardProvider = Provider.of<BoardProvider>(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -298,6 +303,11 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                               child: Form(
                                 key: _formKeyFirst,
                                 child: TextFormField(
+                                  onChanged: (value){
+                                    setState(() {
+                                      title = value;
+                                    });
+                                  },
                                   controller: _titleController,
                                     textAlign: TextAlign.center,
                                   decoration: InputDecoration(
@@ -367,6 +377,11 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             key: _formKeySecond,
                             child: Container(
                               child: TextFormField(
+                                onChanged: (value){
+                                  setState(() {
+                                    content = value;
+                                  });
+                                },
                                 controller: _contentController,
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
@@ -390,7 +405,8 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                     child: Button(
                       child: Text('post3'.tr()),
                       onPressed: () {
-                        if(_formKeyFirst.currentState!.validate() && _formKeySecond.currentState!.validate() && boardCategory != 'post4'.tr()){
+                        print(boardCategory);
+                        if(title != '' && content != '' && boardCategory != 'post4'.tr()){
                           FocusScope.of(context).unfocus();
                           switch (boardCategory){
                             case 'Free Posting Board':
@@ -414,33 +430,59 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             default:
                           }
 
+                          //
+                          List<String> requestImages = [];
+
+                          for(int i = 0; i < _images.length; i++){
+                            requestImages.add(_images[i].path.toString());
+                          }
+
                           Board _newBoard = Board(
-                              articleId: 1,
                               category: boardCategory,
-                              title: _titleController.text,
-                              content: _contentController.text,
-                              likeCount: 0,
-                              commentsCount: 0,
-                              images: null,
-                              member: Member(
-                                memberId: 1,
-                                nationality: "South Korea",
-                                name: "Daisy",
-                                profileImageUrl: "",
-                              ),
-                              createdAt: DateTime.now().toString()
+                              title: title,
+                              content: content,
+                              images: requestImages,
                           );
 
-                          //BoardRepository.addPost(_newBoard);
+                          showDialog(
+                              context: context,
+                              builder: (_) => FutureBuilder(
+                                  future: boardProvider.addPost(_newBoard),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    if (snapshot.hasData == false) {
+                                      //받아오는 동안
+                                      return Container(
+                                          child: Image(
+                                              image: AssetImage(
+                                                  "assets/illustration/loading_01.gif")));
+                                    } else if(snapshot.data == true){
+                                      //받아온 후
+                                      WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      });
+                                      return Container(
+                                          child: Image(
+                                              image: AssetImage(
+                                                  "assets/illustration/loading_01.gif")));
+                                    }else {
+                                      return AlertDialog(
+                                        title: Text('업로드 실패'),
+                                      );
+                                    }
 
-                          Navigator.pop(context);
+                                  }));
                         }
                         },
-                      isEnabled: _formKeyFirst.currentState?.validate() == true && _formKeySecond.currentState?.validate() == true && boardCategory != 'post4'.tr(),
+                      isEnabled: title != '' && content != '' && boardCategory != 'post4'.tr(),
                     ),
                   )),
             ],
           ),
         ));
   }
+
 }
+
+
