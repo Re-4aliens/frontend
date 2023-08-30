@@ -10,8 +10,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/countries.dart';
+import '../../../repository/board_repository.dart';
 import '../../components/article_widget.dart';
 import '../../components/board_drawer_widget.dart';
 import 'article_page.dart';
@@ -29,9 +31,15 @@ class MusicBoardPage extends StatefulWidget {
 
 class _MusicBoardPageState extends State<MusicBoardPage> {
   bool isDrawerStart = false;
-
+  @override
+  void initState() {
+    super.initState();
+    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+    boardProvider.getArticles('음악게시판');
+  }
   @override
   Widget build(BuildContext context) {
+    final boardProvider = Provider.of<BoardProvider>(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -99,19 +107,23 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
         body: isDrawerStart ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,
           onpressd: (){},) :Container(
           decoration: BoxDecoration(color: Colors.white),
-          child: ListView.builder(
-              itemCount: musicBoardList.length,
+          child: boardProvider.loading? Container(
+              alignment: Alignment.center,
+              child: Image(
+                  image: AssetImage(
+                      "assets/illustration/loading_01.gif"))):ListView.builder(
+              itemCount: boardProvider.articleList!.length,
               itemBuilder: (context, index) {
                 var nationCode = '';
                 for (Map<String, String> country in countries) {
-                  if (country['name'] == musicBoardList[index].member!.nationality.toString()) {
+                  if (country['name'] == boardProvider.articleList![index].member!.nationality.toString()) {
                     nationCode = country['code']!;
                     break;
                   }
                 }
                 return Column(
                   children: [
-                    ArticleWidget(board: musicBoardList[index], nationCode: nationCode,),
+                    ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode,),
                     Divider(
                       thickness: 2,
                       color: Color(0xffE5EBFF),

@@ -3,12 +3,33 @@
 
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/board_model.dart';
+import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
-class BoardRepository{
-  static void addPost(Board _board) {
+import '../apis/apis.dart';
+
+class BoardProvider with ChangeNotifier{
+
+  //notifyListeners();
+
+  List<Board>? articleList;
+  bool loading = false;
+
+
+  getArticles(String boardCategory) async {
+    loading = true;
+    articleList = await APIs.getArticles(boardCategory);
+    loading = false;
+
+    notifyListeners();
+  }
+
+/*
+
+  void addPost(Board _board) {
     switch (_board.category){
       case '자유게시판':
-        freePostingBoardList.insert(0, _board);
+        freePostingArticleList!.insert(0, _board);
         totalBoardList.insert(0, _board);
         break;
       case '음식게시판':
@@ -36,5 +57,7 @@ class BoardRepository{
         totalBoardList.add(_board);
     }
   }
+
+ */
 }
 
