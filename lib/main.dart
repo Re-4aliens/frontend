@@ -1,3 +1,4 @@
+import 'package:aliens/repository/board_repository.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/board/market_notice_page.dart';
 import 'package:aliens/views/pages/loading_page.dart';
@@ -88,11 +89,14 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
 
 
-  runApp(EasyLocalization(
-    path: 'assets/translations',
-    fallbackLocale: Locale('en', 'US'),
-    supportedLocales: supportedLocales,
-      child: const MyApp()
+  runApp(ChangeNotifierProvider(
+    create: (_) => BoardProvider(),
+    child: EasyLocalization(
+      path: 'assets/translations',
+      fallbackLocale: Locale('en', 'US'),
+      supportedLocales: supportedLocales,
+        child: const MyApp()
+    ),
   ));
 
 }
