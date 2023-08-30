@@ -61,14 +61,17 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
   Future<void> fetchArticlesData() async {
     try {
       final response = await APIs.TotalArticles(); // TotalArticles 함수 호출
+      final dataList = response as List<dynamic>; // 변환된 리스트 데이터
+
       setState(() {
-        articles = List<Board>.from(response['data'].map((article) =>
-            Board.fromJson(article)));
+        articles = dataList.map((article) =>
+            Board.fromJson(article)).toList();
       });
     } catch (error) {
       print('Error fetching article data: $error');
     }
   }
+
 
   @override
 
