@@ -18,15 +18,33 @@ class BoardProvider with ChangeNotifier{
 
   getArticles(String boardCategory) async {
     loading = true;
-    articleList = await APIs.getArticles(boardCategory);
+    try{
+      articleList = await APIs.getArticles(boardCategory);
+    }catch (e){
+      await APIs.getAccessToken();
+      articleList = await APIs.getArticles(boardCategory);
+    }
     loading = false;
 
     notifyListeners();
   }
 
-/*
+  addPost(Board _board) async {
+    try {
+      await APIs.postArticles(_board);
+    } catch (e){
+      if(e == "AT-C-002"){
+        await APIs.getAccessToken();
+        await APIs.postArticles(_board);
+      }
+      else{
+        return false;
+      }
+    }
 
-  void addPost(Board _board) {
+    return true;
+    /*
+
     switch (_board.category){
       case '자유게시판':
         freePostingArticleList!.insert(0, _board);
@@ -58,6 +76,9 @@ class BoardProvider with ChangeNotifier{
     }
   }
 
- */
+     */
+
 }
 
+
+}

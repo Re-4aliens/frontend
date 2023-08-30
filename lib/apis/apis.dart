@@ -1487,6 +1487,47 @@ static Future<String> matchingProfessData() async{
       throw Exception('요청 오류');
     }
   }
+
+  /*
+
+  게시물 생성
+
+  */
+  static Future<bool> postArticles(Board board) async {
+    const url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles';
+
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    // FormData 텍스트 필드 추가
+    request.fields['title'] = board.title!;
+    request.fields['content'] = board.content!;
+    request.fields['category'] = board.category!;
+
+
+    // FormData 파일 필드 추가
+    if (board.images != null && board.images!.isNotEmpty) {
+      for (String imagePath in board.images!) {
+        if (imagePath.isNotEmpty) {
+          var file = await http.MultipartFile.fromPath('imageUrls', imagePath);
+          request.files.add(file);
+        }
+      }
+    }
+
+    // request 전송
+    var response = await request.send();
+
+    // success
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      return true;
+      // fail
+    } else {
+      print(await response.stream.bytesToString());
+      return false;
+    }
+  }
 }
+
 
 
