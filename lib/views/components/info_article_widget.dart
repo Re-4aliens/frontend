@@ -120,7 +120,7 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,
                     child: Text(
-                        '${widget.board.commentCount}'),
+                        '${widget.board.commentsCount}'),
                   ),
                 ],
               )
