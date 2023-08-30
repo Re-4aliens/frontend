@@ -155,8 +155,10 @@ class _ArticleWidgetState extends State<ArticleWidget>{
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0).r,
-                  child: Text(
-                      '${widget.board.commentCount}'),
+                  child: widget.board.commentsCount == 0
+                      ? Text('')
+                      : Text(
+                      '${widget.board.commentsCount}'),
                 ),
               ],
             )

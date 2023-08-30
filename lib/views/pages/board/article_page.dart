@@ -236,7 +236,7 @@ class _ArticlePageState extends State<ArticlePage> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
-                                child: Text('${widget.board.commentCount}'),
+                                child: Text('${widget.board.commentsCount}'),
                               ),
                             ],
                           )

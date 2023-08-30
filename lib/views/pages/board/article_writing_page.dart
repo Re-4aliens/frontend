@@ -420,7 +420,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                               title: _titleController.text,
                               content: _contentController.text,
                               likeCount: 0,
-                              commentCount: 0,
+                              commentsCount: 0,
                               images: null,
                               member: Member(
                                 memberId: 1,
@@ -431,7 +431,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                               createdAt: DateTime.now().toString()
                           );
 
-                          BoardRepository.addPost(_newBoard);
+                          //BoardRepository.addPost(_newBoard);
 
                           Navigator.pop(context);
                         }
