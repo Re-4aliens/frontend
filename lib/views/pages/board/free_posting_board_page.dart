@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
-import 'package:aliens/repository/board_repository.dart';
+import 'package:aliens/repository/board_provider.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/components/article_widget.dart';
 import 'package:aliens/views/pages/board/article_page.dart';
