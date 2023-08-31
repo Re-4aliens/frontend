@@ -13,7 +13,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/countries.dart';
-import '../../../repository/board_repository.dart';
+import '../../../repository/board_provider.dart';
 import '../../components/article_widget.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/info_article_widget.dart';
