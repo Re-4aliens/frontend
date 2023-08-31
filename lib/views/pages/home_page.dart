@@ -11,7 +11,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:aliens/views/components/total_article_widget.dart';
+
 import '../../../apis/apis.dart';
 import '../../main.dart';
 import '../../mockdatas/mockdata_model.dart';
@@ -27,6 +27,7 @@ import '../components/setting_list_widget.dart';
 import '../components/chatting_widget.dart';
 import '../components/matching_chatting_widget.dart';
 import '../components/setting_profile_widget.dart';
+import 'board/notification_page.dart';
 
 int selectedIndex = 0;
 bool isDrawerStart = false;
@@ -217,14 +218,28 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         actions: selectedIndex == 2 ? [
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationBoardWidget(
+                      screenArguments: args,
+                    ),
+                  ),
+                );
+              },
+              child: SvgPicture.asset(
+                'assets/icon/ICON_notification.svg',
+                width: 28.r,
+                height: 28.r,
+                color: Colors.white,
+              ),
+            ),
+          ),
           Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
-            'assets/icon/ICON_notification.svg',
-            width: 28.r,
-            height: 28.r,
-            color: Colors.white,
-          ),),
-          Padding(padding: EdgeInsets.all(8),
-            child: SvgPicture.asset(
             'assets/icon/icon_search.svg',
             width: 25.r,
             height: 25.r,
@@ -275,7 +290,7 @@ class _HomePageState extends State<HomePage> {
               child: GestureDetector(
                 onTap: () async {
                   try {
-                    final articles = await APIs.TotalArticles();
+                    final totalarticles = await APIs.TotalArticles();
                     setState(() {
                     });
                   } catch (e) {
