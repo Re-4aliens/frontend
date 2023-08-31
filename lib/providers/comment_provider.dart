@@ -26,4 +26,41 @@ class CommentProvider with ChangeNotifier {
     loading = false;
     notifyListeners();
   }
+
+
+  addComment(String content, int articleId) async {
+    try {
+      await APIs.postComment(content, articleId);
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        await APIs.postComment(content, articleId);
+      } else {
+        return false;
+      }
+    }
+    //TODO fcm 전송
+
+
+    notifyListeners();
+    return true;
+  }
+
+  addNestedComment(String content, int commentId) async {
+    try {
+      await APIs.postNestedComment(content, commentId);
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        await APIs.postNestedComment(content, commentId);
+      } else {
+        return false;
+      }
+    }
+    //TODO fcm 전송
+
+
+    notifyListeners();
+    return true;
+  }
 }
