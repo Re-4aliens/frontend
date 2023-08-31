@@ -57,6 +57,10 @@ List<Board> MyPostingBoardList = [
 
 ];
 
+List<Board> NotificationList=[
+  Notification1,
+  Notification2
+];
 
 Board freePostingBoard1 = Board(
     articleId: 1,
@@ -339,5 +343,31 @@ Board MyPostingBoard1 = Board(
     )
 );
 
+Board Notification1= Board(
+    articleId: 1,
+    content: "낼 점심은 닭가슴살. 신난다.",
+    createdAt: "2023-08-17 23:53:00",
+    category: "음악게시판",
+    images: null,
 
+    member: Member(
+      memberId: 1,
+      name: "Jenny",
+      nationality: 'South Korea',
+      profileImageUrl: "",
+    )
+);
+Board Notification2= Board(
+    articleId: 1,
+    content: "요기가 알림기능인가....",
+    createdAt: "2023-08-31 23:53:00",
+    category: "정보게시판",
+    images: null,
 
+    member: Member(
+      memberId: 1,
+      name: "MM",
+      nationality: 'South Korea',
+      profileImageUrl: "",
+    )
+);
