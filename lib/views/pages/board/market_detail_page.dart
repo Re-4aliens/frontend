@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
-import 'package:aliens/repository/comment_repository.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -581,7 +580,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                       onPressed: () {
                         if(isNestedComments){
                           Comment newValue = Comment(
-                              boardArticleCommentId: 1,
+                              articleCommentId: 1,
                               content: _newComment,
                               createdAt: DateTime.now().toString(),
                               childs: [],
@@ -591,13 +590,13 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   profileImageUrl: ""
                               )
                           );
-                          CommentRepository.addCommentChilds(parentsCommentIndex, newValue);
+                          //CommentRepository.addCommentChilds(parentsCommentIndex, newValue);
                           parentsCommentIndex = -1;
                           isNestedComments = false;
                         }
                         else{
                           Comment newValue = Comment(
-                              boardArticleCommentId: 1,
+                              articleCommentId: 1,
                               content: _newComment,
                               createdAt: DateTime.now().toString(),
                               childs: [],
@@ -607,12 +606,12 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   profileImageUrl: ""
                               )
                           );
-                          CommentRepository.addComment(newValue);
+                          //CommentRepository.addComment(newValue);
                         }
                         updateUi();
                       },
                       icon: SvgPicture.asset(
-                        'assets/icon/icon_send.svg',
+                        'assets/icon/ICON_send.svg',
                         height: 22.r,
                         color: _newComment.trim().isEmpty
                             ? Color(0xffc1c1c1)
