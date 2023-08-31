@@ -513,33 +513,12 @@ class _ArticlePageState extends State<ArticlePage> {
                       IconButton(
                         onPressed: () {
                           if(isNestedComments){
-                            Comment newValue = Comment(
-                                articleCommentId: 1,
-                                content: _newComment,
-                                createdAt: DateTime.now().toString(),
-                                childs: [],
-                                member: CommentMember(
-                                    name: "daisy",
-                                    nationality: "Japan",
-                                    profileImageUrl: ""
-                                )
-                            );
-                            //CommentRepository.addCommentChilds(parentsCommentIndex, newValue);
+                            commentProvider.addComment(_newComment, parentsCommentIndex);
                             parentsCommentIndex = -1;
                             isNestedComments = false;
                           }
                           else{
-                            Comment newValue = Comment(
-                              articleCommentId: 1,
-                              content: _newComment,
-                              createdAt: DateTime.now().toString(),
-                              childs: [],
-                              member: CommentMember(
-                                name: "daisy",
-                                nationality: "Japan",
-                                profileImageUrl: ""
-                              )
-                            );
+                            commentProvider.addComment(_newComment, widget.board.articleId!);
                             //CommentRepository.addComment(newValue);
                           }
                           updateUi();
