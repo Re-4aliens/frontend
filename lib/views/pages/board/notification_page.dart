@@ -78,10 +78,6 @@ class _NotificationBoardWidgetState extends State<NotificationBoardWidget> {
               )
             ],
           ),
-          actions: [
-            IconButton(onPressed: (){}, icon: Icon(Icons.notifications_none, size: 30.h,)),
-            IconButton(onPressed: (){}, icon: Icon(Icons.search, size: 30.h,)),
-          ],
         ),
         body: isDrawerStart
             ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,
