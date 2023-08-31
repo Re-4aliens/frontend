@@ -136,14 +136,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: Color(0xff888888),
-                    fontSize: 18.h
+                    fontSize: 16.spMin
                 )
             ),),
           title: Text('write'.tr(),
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
-                fontSize: 20.h,
+                fontSize: 18.spMin,
               )
           ),
           centerTitle: true,
