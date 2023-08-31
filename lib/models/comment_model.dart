@@ -1,11 +1,11 @@
 class Comment {
-  int? boardArticleCommentId;
+  int? articleCommentId;
   String? content;
   CommentMember? member;
   String? createdAt;
   List<Comment>? childs;
 
-  Comment({this.boardArticleCommentId, this.content, this.member, this.childs, this.createdAt});
+  Comment({this.articleCommentId, this.content, this.member, this.childs, this.createdAt});
 
   Comment.fromJson(Map<String, dynamic> json) {
     boardArticleCommentId = json['boardArticleCommentId'];
@@ -18,7 +18,7 @@ class Comment {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['boardArticleCommentId'] = this.boardArticleCommentId;
+    data['articleCommentId'] = this.articleCommentId;
     data['content'] = this.content;
     data['childs'] = this.childs;
     data['createdAt'] = this.createdAt;

@@ -684,7 +684,7 @@ class _ChattingPageState extends State<ChattingPage> {
                                         : sendMessage
                                   ,
                                   icon: SvgPicture.asset(
-                                    'assets/icon/icon_send.svg',
+                                    'assets/icon/ICON_send.svg',
                                     height: 22,
                                     color: Color(0xff7898ff),
                                   ),

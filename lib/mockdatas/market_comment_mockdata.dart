@@ -7,7 +7,7 @@ List<Comment> MarketcommentListMock = [
 ];
 
 Comment comment1 = Comment(
-  boardArticleCommentId: 1,
+  articleCommentId: 1,
   content: "새거 맞나요? 아닌 거 같은데...",
   member: CommentMember(
       memberId: 1,
@@ -18,7 +18,7 @@ Comment comment1 = Comment(
   ),
   childs: [
     Comment(
-      boardArticleCommentId: 1,
+      articleCommentId: 1,
       content: "아맞다구요ㅡㅡ",
       member: CommentMember(
           memberId: 1,
@@ -30,7 +30,7 @@ Comment comment1 = Comment(
       createdAt: "2023-08-06 14:30:33",
     ),
     Comment(
-      boardArticleCommentId: 1,
+      articleCommentId: 1,
       content: "더워죽는중",
       member: CommentMember(
           memberId: 1,
