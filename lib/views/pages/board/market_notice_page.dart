@@ -66,7 +66,7 @@ class _MarketNoticePageState extends State<MarketNoticePage> {
               style: TextStyle(
                 color: Colors.white,
 
-                fontSize: 20.spMin,
+                fontSize: 18.spMin,
               )
           ),
           centerTitle: true,
