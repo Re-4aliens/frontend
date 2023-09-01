@@ -36,7 +36,7 @@ class _ArticleWidgetState extends State<ArticleWidget>{
 
   @override
   Widget build(BuildContext context) {
-    final boardProvider = Provider.of<BoardZProvider>(context);
+    final boardProvider = Provider.of<BoardProvider>(context);
 
     return ListTile(
       //제목
