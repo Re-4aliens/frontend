@@ -10,7 +10,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:aliens/apis/apis.dart';
+import 'package:aliens/models/noticeArticle.dart';
+import '../../../apis/apis.dart';
 import '../../../mockdatas/market_comment_mockdata.dart';
 import '../../../models/countries.dart';
 import '../../components/article_widget.dart';
@@ -35,6 +37,26 @@ class NoticeBoardPage extends StatefulWidget {
 
 class _NoticeBoardPageState extends State<NoticeBoardPage> {
   bool isDrawerStart = false;
+  List<NoticeArticle> noticearticles = []; //공지사항 저장
+
+  void initState() {
+    super.initState();
+    fetchNoticeData();
+  }
+
+  Future<void> fetchNoticeData() async {
+    try {
+      final response = await APIs.BoardNotice();
+      final dataList = response as List<dynamic>;
+
+      setState(() {
+        // API 데이터를 공지사항 목록으로 변환하여 업데이트
+        noticearticles = dataList.map((article) => NoticeArticle.fromJson(article)).toList();
+      });
+    } catch (error) {
+      print('Error fetching notice data: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,15 +153,16 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
             child: Container(
               decoration: BoxDecoration(color: Colors.white),
               child: ListView.builder(
-                  itemCount: NotiList.length,
+                  itemCount:  noticearticles.length,
                   itemBuilder: (context, index) {
+                    final noticeArticle = noticearticles[index];
                     return Column(
                       children: [
                         Divider(
                         thickness: 1.h,
                         color: Color(0xffCECECE),
                       ),
-                        NoticeWidget(noticeArticle: NotiList[index], screenArguments: widget.screenArguments),
+                        NoticeWidget(noticeArticle: noticeArticle, screenArguments: widget.screenArguments),
 
                       ],
                     );

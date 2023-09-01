@@ -1539,7 +1539,6 @@ static Future<String> matchingProfessData() async{
     }
   }
 
-  /*공지사항 상세조회*/
 
 
 }
