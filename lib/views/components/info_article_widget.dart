@@ -13,7 +13,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../models/board_model.dart';
 import '../pages/board/article_page.dart';
 import 'board_dialog_widget.dart';
-
+/*
 class InfoArticleWidget extends StatefulWidget {
 
   InfoArticleWidget({super.key, required this.board, required this.nationCode, required this.isTotal});
@@ -64,7 +64,7 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
                 InkWell(
                   onTap: (){
                     showDialog(context: context, builder: (builder){
-                      return BoardDialog(context: context,);
+                      return BoardDialog(context: context, board: widget.board);
                     });
                   },
                   child: Padding(
@@ -120,7 +120,7 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,
                     child: Text(
-                        '${widget.board.commentCount}'),
+                        '${widget.board.commentsCount}'),
                   ),
                 ],
               )
@@ -138,3 +138,5 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
     );
   }
 }
+
+*/

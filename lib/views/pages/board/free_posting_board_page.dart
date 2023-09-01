@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
+import 'package:aliens/repository/board_provider.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/components/article_widget.dart';
 import 'package:aliens/views/pages/board/article_page.dart';
@@ -13,6 +14,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/countries.dart';
 import '../../components/board_drawer_widget.dart';
@@ -31,7 +33,14 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
   bool isDrawerStart = false;
 
   @override
+  void initState() {
+    super.initState();
+    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+    boardProvider.getArticles('자유게시판');
+  }
+  @override
   Widget build(BuildContext context) {
+    final boardProvider = Provider.of<BoardProvider>(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -112,19 +121,23 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
           onpressd: (){},) :
         Container(
           decoration: BoxDecoration(color: Colors.white),
-          child: ListView.builder(
-              itemCount: freePostingBoardList.length,
+          child: boardProvider.loading? Container(
+              alignment: Alignment.center,
+              child: Image(
+                  image: AssetImage(
+                      "assets/illustration/loading_01.gif"))):ListView.builder(
+              itemCount: boardProvider.articleList!.length,
               itemBuilder: (context, index) {
                 var nationCode = '';
                 for (Map<String, String> country in countries) {
-                  if (country['name'] == freePostingBoardList[index].member!.nationality.toString()) {
+                  if (country['name'] == boardProvider.articleList![index].member!.nationality.toString()) {
                     nationCode = country['code']!;
                     break;
                   }
                 }
                 return Column(
                   children: [
-                    ArticleWidget(board: freePostingBoardList[index], nationCode: nationCode),
+                    ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode),
                     Divider(
                       thickness: 2,
                       color: Color(0xffE5EBFF),
