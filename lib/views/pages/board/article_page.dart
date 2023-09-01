@@ -96,6 +96,7 @@ class _ArticlePageState extends State<ArticlePage> {
   @override
   Widget build(BuildContext context) {
     final commentProvider = Provider.of<CommentProvider>(context);
+    final boardProvider = Provider.of<BoardProvider>(context);
     return GestureDetector(
       onTap: (){
         FocusScope.of(context).unfocus();
@@ -217,11 +218,16 @@ class _ArticlePageState extends State<ArticlePage> {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
-                                child: SvgPicture.asset(
-                                  'assets/icon/ICON_good.svg',
-                                  width: 25.r,
-                                  height: 25.r,
-                                  color: Color(0xffc1c1c1),
+                                child: InkWell(
+                                  child: SvgPicture.asset(
+                                    'assets/icon/ICON_good.svg',
+                                    width: 25.r,
+                                    height: 25.r,
+                                    color: Color(0xffc1c1c1),
+                                  ),
+                                  onTap: (){
+                                    boardProvider.addLike(widget.board.articleId!);
+                                  },
                                 )
                               ),
                               Padding(

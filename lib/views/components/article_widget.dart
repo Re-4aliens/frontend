@@ -8,8 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../models/board_model.dart';
+import '../../repository/board_provider.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/info_article_page.dart';
 import 'board_dialog_widget.dart';
@@ -34,7 +36,7 @@ class _ArticleWidgetState extends State<ArticleWidget>{
 
   @override
   Widget build(BuildContext context) {
-
+    final boardProvider = Provider.of<BoardZProvider>(context);
 
     return ListTile(
       //제목
@@ -132,11 +134,17 @@ class _ArticleWidgetState extends State<ArticleWidget>{
               children: [
                 Padding(
                   padding: const EdgeInsets.all(4.0).r,
-                  child: SvgPicture.asset(
-                    'assets/icon/ICON_good.svg',
-                    width: 25.r,
-                    height: 25.r,
-                  ),
+                  child: InkWell(
+                    child: SvgPicture.asset(
+                      'assets/icon/ICON_good.svg',
+                      width: 25.r,
+                      height: 25.r,
+                      color: Color(0xffc1c1c1),
+                    ),
+                    onTap: (){
+                      boardProvider.addLike(widget.board.articleId!);
+                    },
+                  )
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 4, right: 15).w,
