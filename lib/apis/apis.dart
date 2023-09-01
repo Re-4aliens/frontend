@@ -12,7 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import '../models/applicant_model.dart';
 import '../models/auth_model.dart';
 import 'dart:io';
-
+import 'package:aliens/lib/views/components/total_article_widget.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -636,10 +636,10 @@ class APIs {
                 .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
             );
           }
-            else{
+          else{
             _status = await APIs.getApplicantStatus();
           }
-          }
+        }
       }
       else if(e == "AT-C-007"){
         //토큰 및 정보 삭제
@@ -1114,40 +1114,40 @@ class APIs {
   매칭 완료 일시
 
   */
-static Future<String> matchingProfessData() async{
-  var _url = Uri.parse('http://3.34.2.246:8080/api/v1/applicant/completion-date');
+  static Future<String> matchingProfessData() async{
+    var _url = Uri.parse('http://3.34.2.246:8080/api/v1/applicant/completion-date');
 
-  //토큰 읽어오기
-  var jwtToken = await storage.read(key: 'token');
-  //accessToken만 보내기
-  jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
-  var response = await http.get(
-    _url,
-    headers: {
-      'Authorization': 'Bearer $jwtToken',
-      'Content-Type': 'application/json',
-    },
-  );
+    var response = await http.get(
+      _url,
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    print(json.decode(utf8.decode(response.bodyBytes)));
-    return json.decode(utf8.decode(response.bodyBytes))['data']['matchingCompleteDate'];
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return json.decode(utf8.decode(response.bodyBytes))['data']['matchingCompleteDate'];
 
-  } else {
-    print(json.decode(utf8.decode(response.bodyBytes)));
-    if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-      print('액세스 토큰 만료');
-      throw 'AT-C-002';
-    } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
-      print('로그아웃된 토큰');
-      throw 'AT-C-007';
-    }else{
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
 
+      }
+      throw Exception('요청 오류');
     }
-    throw Exception('요청 오류');
   }
-}
 
   /*
 
@@ -1442,6 +1442,79 @@ static Future<String> matchingProfessData() async{
   }*/
 
 
+  /*전체게시판 글 전부 조회*/
+  static Future<List<dynamic>> TotalArticles() async {
+    final _url = 'http://3.34.2.246:8080/api/v2/articles';
+
+    try {
+      // 토큰 읽어오기
+      var jwtToken = await storage.read(key: 'token');
+      jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+      final response = await http.get(
+        Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(utf8.decode(response.bodyBytes));
+        final data = responseData['data'];
+        if (data != null && data is List) {
+          return data; // 응답 데이터 리스트를 반환
+        }
+      }
+
+      print('API request failed: ${response.statusCode}');
+      return []; // 빈 리스트 반환하여 오류 시도 처리
+    } catch (error) {
+      print('Error fetching article data: $error');
+      return []; // 빈 리스트 반환하여 오류 시도 처리
+    }
+  }
+
+
+/*전체 게시판 검색*/
+  static Future<List<Board>> TotalSearch(String keyword) async {
+    try {
+      var jwtToken = await storage.read(key: 'token');
+      jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+      final response = await http.get(
+        Uri.parse('http://3.34.2.246:8080/api/v2/articles?search-keyword=$keyword'),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(utf8.decode(response.bodyBytes));
+        final List<dynamic> articlesData = data['data'];
+
+        //데이터를 list<board>객체로 반환
+        List<Board> articles = articlesData.map((articleData) {
+          return Board.fromJson(articleData);
+        }).toList();
+
+        return articles;
+      } else {
+        print('API request failed: ${response.statusCode}');
+        return []; // Empty list on failure
+      }
+    } catch (error) {
+      print('Error fetching search results: $error');
+      return []; // Empty list on error
+    }
+  }
+
+/*전체 게시판 게시글 상세 조회*/
+
+
+
+
 
   /*
 
@@ -1544,11 +1617,11 @@ static Future<String> matchingProfessData() async{
 
 
     var response = await http.delete(
-        Uri.parse(_url),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-        },
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
     );
 
     //success
@@ -1743,9 +1816,9 @@ static Future<String> matchingProfessData() async{
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var response = await http.post(Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'},
     );
 
     //success

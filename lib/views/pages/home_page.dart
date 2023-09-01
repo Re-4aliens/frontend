@@ -27,6 +27,7 @@ import '../components/setting_list_widget.dart';
 import '../components/chatting_widget.dart';
 import '../components/matching_chatting_widget.dart';
 import '../components/setting_profile_widget.dart';
+import 'board/notification_page.dart';
 
 int selectedIndex = 0;
 bool isDrawerStart = false;
@@ -217,12 +218,27 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         actions: selectedIndex == 2 ? [
-          Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
-            'assets/icon/ICON_notification.svg',
-            width: 28.r,
-            height: 28.r,
-            color: Colors.white,
-          ),),
+          Padding(
+            padding: EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NotificationBoardWidget(
+                      screenArguments: args,
+                    ),
+                  ),
+                );
+              },
+              child: SvgPicture.asset(
+                'assets/icon/ICON_notification.svg',
+                width: 28.r,
+                height: 28.r,
+                color: Colors.white,
+              ),
+            ),
+          ),
           Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
             'assets/icon/icon_search.svg',
             width: 25.r,
@@ -269,14 +285,27 @@ class _HomePageState extends State<HomePage> {
             label:'${'homepage-chatting1'.tr()}' ,
           ),
           BottomNavigationBarItem(
-            icon: Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
-              'assets/icon/ICON_board.svg',
-              width: 25.r,
-              height: 25.r,
-              color:
-              selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
-            ),),
-            label: "board".tr() ,
+            icon: Padding(
+              padding: EdgeInsets.all(8),
+              child: GestureDetector(
+                onTap: () async {
+                  try {
+                    final totalarticles = await APIs.TotalArticles();
+                    setState(() {
+                    });
+                  } catch (e) {
+                    print('API 호출 오류: $e');
+                  }
+                },
+                child: SvgPicture.asset(
+                  'assets/icon/ICON_board.svg',
+                  width: 25.r,
+                  height: 25.r,
+                  color: selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
+                ),
+              ),
+            ),
+            label: "board".tr(),
           ),
           BottomNavigationBarItem(
             icon: Padding(

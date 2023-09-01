@@ -157,10 +157,10 @@ class _ArticlePageState extends State<ArticlePage> {
                             padding: const EdgeInsets.only(left: 8.0).w,
                             child:
                             SvgPicture.asset(
-                              'assets/icon/ICON_more.svg',
-                              width: 25.r,
-                              height: 25.r,
-                              color: Color(0xffc1c1c1)
+                                'assets/icon/ICON_more.svg',
+                                width: 25.r,
+                                height: 25.r,
+                                color: Color(0xffc1c1c1)
                             ),
                           ),
                         )
@@ -184,28 +184,28 @@ class _ArticlePageState extends State<ArticlePage> {
                           widget.board.images!.isEmpty
                               ? SizedBox()
                               : Container(
-                                  height: 100.h,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: widget.board.images!.length,
-                                      itemBuilder: (context, index) {
-                                        return Row(
-                                          children: [
-                                            Container(
-                                              margin: EdgeInsets.only(right: 10.w),
-                                              height: 80.h,
-                                              width: 80.h,
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xfff8f8f8),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10).r),
-                                              child: Icon(Icons
-                                                  .add_photo_alternate_outlined),
-                                            ),
-                                          ],
-                                        );
-                                      }),
-                                ),
+                            height: 100.h,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.board.images!.length,
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 10.w),
+                                        height: 80.h,
+                                        width: 80.h,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xfff8f8f8),
+                                            borderRadius:
+                                            BorderRadius.circular(10).r),
+                                        child: Icon(Icons
+                                            .add_photo_alternate_outlined),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10, bottom: 25.0).h,
                             child: Text(
@@ -217,18 +217,18 @@ class _ArticlePageState extends State<ArticlePage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(4.0).r,
-                                child: InkWell(
-                                  child: SvgPicture.asset(
-                                    'assets/icon/ICON_good.svg',
-                                    width: 25.r,
-                                    height: 25.r,
-                                    color: Color(0xffc1c1c1),
-                                  ),
-                                  onTap: (){
-                                    boardProvider.addLike(widget.board.articleId!);
-                                  },
-                                )
+                                  padding: const EdgeInsets.all(4.0).r,
+                                  child: InkWell(
+                                    child: SvgPicture.asset(
+                                      'assets/icon/ICON_good.svg',
+                                      width: 25.r,
+                                      height: 25.r,
+                                      color: Color(0xffc1c1c1),
+                                    ),
+                                    onTap: (){
+                                      boardProvider.addLike(widget.board.articleId!);
+                                    },
+                                  )
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 4, right: 15).r,
@@ -276,207 +276,207 @@ class _ArticlePageState extends State<ArticlePage> {
                           image: AssetImage(
                               "assets/illustration/loading_01.gif")))
                       :
-                      Column(
-                        children: [
-                          for(int index = 0; index < 5; index++)
-                            Container(
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30).r,
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Column(
+                    children: [
+                      for(int index = 0; index < 5; index++)
+                        Container(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30).r,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
                                       children: [
                                         Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
                                           children: [
-                                            Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              children: [
-                                                Padding(
-                                                  padding: const EdgeInsets.only(right: 10.0).r,
-                                                  child: SvgPicture.asset(
-                                                    'assets/icon/icon_profile.svg',
-                                                    width: 25.r,
-                                                    color: Color(0xffc1c1c1),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${commentProvider.commentListData![index].member!.name}',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                                ),
-                                                Text(
-                                                  '/',
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                                ),
-                                                Text(
-                                                  getNationCode(commentProvider.commentListData![index].member!.nationality),
-                                                  style: TextStyle(
-                                                      fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                                )
-                                              ],
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 10.0).r,
+                                              child: SvgPicture.asset(
+                                                'assets/icon/icon_profile.svg',
+                                                width: 25.r,
+                                                color: Color(0xffc1c1c1),
+                                              ),
                                             ),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
+                                            Text(
+                                              '${commentProvider.commentListData![index].member!.name}',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                            ),
+                                            Text(
+                                              '/',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                            ),
+                                            Text(
+                                              getNationCode(commentProvider.commentListData![index].member!.nationality),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
 
-                                                Text(
-                                                  DataUtils.getTime(commentProvider.commentListData![index].createdAt),
-                                                  style: TextStyle(
-                                                      fontSize: 12.spMin, color: Color(0xffc1c1c1)),
-                                                ),
-                                                InkWell(
-                                                  onTap: (){
+                                            Text(
+                                              DataUtils.getTime(commentProvider.commentListData![index].createdAt),
+                                              style: TextStyle(
+                                                  fontSize: 12.spMin, color: Color(0xffc1c1c1)),
+                                            ),
+                                            InkWell(
+                                              onTap: (){
 
-                                                    print(commentProvider.commentListData!);
-                                                    showDialog(context: context, builder: (builder){
-                                                      return CommentDialog(context: context, onpressed: (){
-                                                        setState(() {
-                                                          isNestedComments = true;
-                                                          parentsCommentIndex = index;
-                                                        });
-                                                        Navigator.pop(context);
-                                                      },
-                                                          isNestedComment: false,
-                                                          comment: commentProvider.commentListData![index],
-                                                      );
+                                                print(commentProvider.commentListData!);
+                                                showDialog(context: context, builder: (builder){
+                                                  return CommentDialog(context: context, onpressed: (){
+                                                    setState(() {
+                                                      isNestedComments = true;
+                                                      parentsCommentIndex = index;
                                                     });
+                                                    Navigator.pop(context);
                                                   },
-                                                  child: Padding(
-                                                    padding: const EdgeInsets.only(left: 8.0).r,
+                                                    isNestedComment: false,
+                                                    comment: commentProvider.commentListData![index],
+                                                  );
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 8.0).r,
+                                                child: SvgPicture.asset(
+                                                  'assets/icon/ICON_more.svg',
+                                                  width: 25.r,
+                                                  height: 25.r,
+                                                  color: Color(0xffc1c1c1),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 13).r,
+                                      child: Text(
+                                        '${commentProvider.commentListData![index].content}',
+                                        style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              //대댓글
+                              commentProvider.commentListData![index].childs == null ? SizedBox() :
+                              Column(
+                                children: [
+                                  for(int j = 0 ; j < commentProvider.commentListData![index].childs!.length; j++)
+                                    Row(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: Container(
+                                            padding: EdgeInsets.all(10).r,
+                                            alignment: Alignment.centerRight,
+                                            child: SvgPicture.asset(
+                                              'assets/icon/ICON_reply.svg',
+                                              width: 15.r,
+                                              height: 15.r,
+                                              color: Color(0xffc1c1c1),
+                                            ),
+                                          ),
+                                        ),
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffF4F4F4),
+                                            borderRadius: BorderRadius.circular(10).r,
+                                          ),
+                                          width: 300.w,
+                                          padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
+                                          margin: EdgeInsets.only(top: 15.h, bottom: 0.h, right: 30.w, left: 0),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Padding(
+                                                    padding: const EdgeInsets.only(right: 10.0).w,
                                                     child: SvgPicture.asset(
-                                                      'assets/icon/ICON_more.svg',
+                                                      'assets/icon/icon_profile.svg',
                                                       width: 25.r,
-                                                      height: 25.r,
                                                       color: Color(0xffc1c1c1),
                                                     ),
                                                   ),
-                                                )
-                                              ],
-                                            )
-                                          ],
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 13).r,
-                                          child: Text(
-                                            '${commentProvider.commentListData![index].content}',
-                                            style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
+                                                  Flexible(
+                                                    child: Container(
+                                                      alignment: Alignment.centerLeft,
+                                                      padding: EdgeInsets.only(right: 10),
+                                                      child: Text(
+                                                        '${commentProvider.commentListData![index].childs![j].member!.name}/${getNationCode(commentProvider.commentListData![index].childs![j].member!.nationality)}',
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(
+                                                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    DataUtils.getTime(commentProvider.commentListData![index].childs![j].createdAt),
+                                                    style: TextStyle(
+                                                        fontSize: 12.spMin, color: Color(0xffc1c1c1)),
+                                                  ),
+                                                  InkWell(
+                                                    onTap: (){
+                                                      showDialog(context: context, builder: (builder){
+                                                        return CommentDialog(context: context, onpressed: (){
+                                                          setState(() {
+                                                            isNestedComments = true;
+                                                          });
+                                                          Navigator.pop(context);
+                                                        },
+                                                          isNestedComment: true,
+                                                          comment: commentProvider.commentListData![index],);
+                                                      });
+                                                    },
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: 8.0).w,
+                                                      child: SvgPicture.asset(
+                                                        'assets/icon/ICON_more.svg',
+                                                        width: 22.r,
+                                                        height: 22.r,
+                                                        color: Color(0xffc1c1c1),
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5).h,
+                                                child: Text(
+                                                  '${commentProvider.commentListData![index].childs![j].content}',
+                                                  style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ),
-
-                                  //대댓글
-                                  commentProvider.commentListData![index].childs == null ? SizedBox() :
-                                  Column(
-                                    children: [
-                                      for(int j = 0 ; j < commentProvider.commentListData![index].childs!.length; j++)
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Container(
-                                                padding: EdgeInsets.all(10).r,
-                                                alignment: Alignment.centerRight,
-                                                child: SvgPicture.asset(
-                                                  'assets/icon/ICON_reply.svg',
-                                                  width: 15.r,
-                                                  height: 15.r,
-                                                  color: Color(0xffc1c1c1),
-                                                ),
-                                              ),
-                                            ),
-                                            Container(
-                                              decoration: BoxDecoration(
-                                                color: Color(0xffF4F4F4),
-                                                borderRadius: BorderRadius.circular(10).r,
-                                              ),
-                                              width: 300.w,
-                                              padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
-                                              margin: EdgeInsets.only(top: 15.h, bottom: 0.h, right: 30.w, left: 0),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Row(
-                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                    children: [
-                                                      Padding(
-                                                        padding: const EdgeInsets.only(right: 10.0).w,
-                                                        child: SvgPicture.asset(
-                                                          'assets/icon/icon_profile.svg',
-                                                          width: 25.r,
-                                                          color: Color(0xffc1c1c1),
-                                                        ),
-                                                      ),
-                                                      Flexible(
-                                                        child: Container(
-                                                          alignment: Alignment.centerLeft,
-                                                          padding: EdgeInsets.only(right: 10),
-                                                          child: Text(
-                                                            '${commentProvider.commentListData![index].childs![j].member!.name}/${getNationCode(commentProvider.commentListData![index].childs![j].member!.nationality)}',
-                                                            overflow: TextOverflow.ellipsis,
-                                                            style: TextStyle(
-                                                                fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Text(
-                                                        DataUtils.getTime(commentProvider.commentListData![index].childs![j].createdAt),
-                                                        style: TextStyle(
-                                                            fontSize: 12.spMin, color: Color(0xffc1c1c1)),
-                                                      ),
-                                                      InkWell(
-                                                        onTap: (){
-                                                          showDialog(context: context, builder: (builder){
-                                                            return CommentDialog(context: context, onpressed: (){
-                                                              setState(() {
-                                                                isNestedComments = true;
-                                                              });
-                                                              Navigator.pop(context);
-                                                            },
-                                                              isNestedComment: true,
-                                                              comment: commentProvider.commentListData![index],);
-                                                          });
-                                                        },
-                                                        child: Padding(
-                                                          padding: const EdgeInsets.only(left: 8.0).w,
-                                                          child: SvgPicture.asset(
-                                                            'assets/icon/ICON_more.svg',
-                                                            width: 22.r,
-                                                            height: 22.r,
-                                                            color: Color(0xffc1c1c1),
-                                                          ),
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsets.only(
-                                                        top: 5).h,
-                                                    child: Text(
-                                                      '${commentProvider.commentListData![index].childs![j].content}',
-                                                      style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                    ],
-                                  ),
-                                  Divider(thickness: 1.5, color: Color(0xfff8f8f8),)
-
-
                                 ],
                               ),
-                            )
-                        ],
-                      )
+                              Divider(thickness: 1.5, color: Color(0xfff8f8f8),)
+
+
+                            ],
+                          ),
+                        )
+                    ],
+                  )
 
 
 
@@ -490,58 +490,58 @@ class _ArticlePageState extends State<ArticlePage> {
               horizontal: 20,
             ).r,
             child: Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xffefefef),
-                    borderRadius: BorderRadius.circular(10).r,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10).w,
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: TextField(
-                            maxLines: null,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(255),
-                            ],
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
-                          hintText: isNestedComments? "comment2".tr() : "comment1".tr(),
-                          hintStyle: TextStyle(color: Color(0xffb1b1b1)),
-                          border: InputBorder.none,
-                        ),
-                        onTap: () {
-                          if (_newComment.trim().isEmpty) {}
-                        },
-                        controller: _controller,
-                        onChanged: (value) {
-                          setState(() {
-                            _newComment = value;
-                          });
-                        },
-                      )),
-                      IconButton(
-                        onPressed: () {
-                          if(isNestedComments){
-                            commentProvider.addComment(_newComment, parentsCommentIndex);
-                            parentsCommentIndex = -1;
-                            isNestedComments = false;
-                          }
-                          else{
-                            commentProvider.addComment(_newComment, widget.board.articleId!);
-                            //CommentRepository.addComment(newValue);
-                          }
-                          updateUi();
-                        },
-                        icon: SvgPicture.asset(
-                          'assets/icon/ICON_send.svg',
-                          height: 22.r,
-                          color: _newComment.trim().isEmpty
-                              ? Color(0xffc1c1c1)
-                              : Color(0xff7898ff),
-                        ),
+                decoration: BoxDecoration(
+                  color: Color(0xffefefef),
+                  borderRadius: BorderRadius.circular(10).r,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10).w,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: TextField(
+                          maxLines: null,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(255),
+                          ],
+                          keyboardType: TextInputType.multiline,
+                          decoration: InputDecoration(
+                            hintText: isNestedComments? "comment2".tr() : "comment1".tr(),
+                            hintStyle: TextStyle(color: Color(0xffb1b1b1)),
+                            border: InputBorder.none,
+                          ),
+                          onTap: () {
+                            if (_newComment.trim().isEmpty) {}
+                          },
+                          controller: _controller,
+                          onChanged: (value) {
+                            setState(() {
+                              _newComment = value;
+                            });
+                          },
+                        )),
+                    IconButton(
+                      onPressed: () {
+                        if(isNestedComments){
+                          commentProvider.addComment(_newComment, parentsCommentIndex);
+                          parentsCommentIndex = -1;
+                          isNestedComments = false;
+                        }
+                        else{
+                          commentProvider.addComment(_newComment, widget.board.articleId!);
+                          //CommentRepository.addComment(newValue);
+                        }
+                        updateUi();
+                      },
+                      icon: SvgPicture.asset(
+                        'assets/icon/ICON_send.svg',
+                        height: 22.r,
+                        color: _newComment.trim().isEmpty
+                            ? Color(0xffc1c1c1)
+                            : Color(0xff7898ff),
                       ),
-                    ],
-                  )),
+                    ),
+                  ],
+                )),
           ),
         ]),
       ),

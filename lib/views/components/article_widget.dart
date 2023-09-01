@@ -133,18 +133,18 @@ class _ArticleWidgetState extends State<ArticleWidget>{
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(4.0).r,
-                  child: InkWell(
-                    child: SvgPicture.asset(
-                      'assets/icon/ICON_good.svg',
-                      width: 25.r,
-                      height: 25.r,
-                      color: Color(0xffc1c1c1),
-                    ),
-                    onTap: (){
-                      boardProvider.addLike(widget.board.articleId!);
-                    },
-                  )
+                    padding: const EdgeInsets.all(4.0).r,
+                    child: InkWell(
+                      child: SvgPicture.asset(
+                        'assets/icon/ICON_good.svg',
+                        width: 25.r,
+                        height: 25.r,
+                        color: Color(0xffc1c1c1),
+                      ),
+                      onTap: (){
+                        boardProvider.addLike(widget.board.articleId!);
+                      },
+                    )
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 4, right: 15).w,

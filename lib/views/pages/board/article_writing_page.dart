@@ -184,88 +184,88 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             onTap: () {
                               showModalBottomSheet(
                                   context: context,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(20).r,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20).r,
+                                    ),
                                   ),
-                                ),
-                                clipBehavior: Clip.antiAliasWithSaveLayer,
+                                  clipBehavior: Clip.antiAliasWithSaveLayer,
                                   barrierColor: Colors.black.withOpacity(0.3),
                                   builder: (BuildContext context) {
                                     return Container(
                                       height: 480.h,
                                       child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: <Widget>[
-                                              Padding(
-                                                padding: const EdgeInsets.only(top: 30, left: 16.0, bottom: 25 ).r,
-                                                child: Text("post4".tr(), style: TextStyle(color: Color(0xff121212), fontSize: 18.spMin, fontWeight: FontWeight.bold)),
-                                              ),
-                                             Expanded(child: Scrollbar(
-                                               child: SingleChildScrollView(
-                                                 child: Column(
-                                                   children: [
-                                                     ListTile(
-                                                       title: Text("free-posting".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin),),
-                                                       onTap: (){
-                                                         setState(() {
-                                                           boardCategory = "free-posting".tr();
-                                                         });
-                                                         Navigator.pop(context);
-                                                       },
-                                                     ),
-                                                     ListTile(
-                                                       title: Text("game".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
-                                                       onTap: (){
-                                                         setState(() {
-                                                           boardCategory = "game".tr();
-                                                         });
-                                                         Navigator.pop(context);
-                                                       },
-                                                     ),
-                                                     ListTile(
-                                                       title: Text("fashion".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
-                                                       onTap: (){
-                                                         setState(() {
-                                                           boardCategory = "fashion".tr();
-                                                         });
-                                                         Navigator.pop(context);
-                                                       },
-                                                     ),
-                                                     ListTile(
-                                                       title: Text("food".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
-                                                       onTap: (){
-                                                         setState(() {
-                                                           boardCategory = "food".tr();
-                                                         });
-                                                         Navigator.pop(context);
-                                                       },
-                                                     ),
-                                                     ListTile(
-                                                       title: Text("music".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
-                                                       onTap: (){
-                                                         setState(() {
-                                                           boardCategory = "music".tr();
-                                                         });
-                                                         Navigator.pop(context);
-                                                       },
-                                                     ),
-                                                     ListTile(
-                                                       title: Text("info".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
-                                                       onTap: (){
-                                                         setState(() {
-                                                           boardCategory = "info".tr();
-                                                         });
-                                                         Navigator.pop(context);
-                                                       },
-                                                     )
-                                                   ],
-                                                 ),
-                                               ),
-                                             ))
-                                            ],
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 30, left: 16.0, bottom: 25 ).r,
+                                            child: Text("post4".tr(), style: TextStyle(color: Color(0xff121212), fontSize: 18.spMin, fontWeight: FontWeight.bold)),
                                           ),
+                                          Expanded(child: Scrollbar(
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                children: [
+                                                  ListTile(
+                                                    title: Text("free-posting".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin),),
+                                                    onTap: (){
+                                                      setState(() {
+                                                        boardCategory = "free-posting".tr();
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  ListTile(
+                                                    title: Text("game".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                    onTap: (){
+                                                      setState(() {
+                                                        boardCategory = "game".tr();
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  ListTile(
+                                                    title: Text("fashion".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                    onTap: (){
+                                                      setState(() {
+                                                        boardCategory = "fashion".tr();
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  ListTile(
+                                                    title: Text("food".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                    onTap: (){
+                                                      setState(() {
+                                                        boardCategory = "food".tr();
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  ListTile(
+                                                    title: Text("music".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                    onTap: (){
+                                                      setState(() {
+                                                        boardCategory = "music".tr();
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  ),
+                                                  ListTile(
+                                                    title: Text("info".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin)),
+                                                    onTap: (){
+                                                      setState(() {
+                                                        boardCategory = "info".tr();
+                                                      });
+                                                      Navigator.pop(context);
+                                                    },
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ))
+                                        ],
+                                      ),
                                     );
                                   });
                             },
@@ -278,8 +278,8 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                   child: Padding(
                                     padding: EdgeInsets.only(top: 10.h),
                                     child: Text(boardCategory, style: TextStyle(
-                                      color: Color(0xff616161),
-                                      fontSize: 16.spMin
+                                        color: Color(0xff616161),
+                                        fontSize: 16.spMin
                                     ),),
                                   ),
                                 ),Padding(
@@ -298,19 +298,19 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             thickness: 1,
                             color: Color(0xffebebeb),
                           ),
-                            Container(
-                              height: 65.h,
-                              child: Form(
-                                key: _formKeyFirst,
-                                child: TextFormField(
-                                  onChanged: (value){
-                                    setState(() {
-                                      title = value;
-                                    });
-                                  },
-                                  controller: _titleController,
-                                    textAlign: TextAlign.center,
-                                  decoration: InputDecoration(
+                          Container(
+                            height: 65.h,
+                            child: Form(
+                              key: _formKeyFirst,
+                              child: TextFormField(
+                                onChanged: (value){
+                                  setState(() {
+                                    title = value;
+                                  });
+                                },
+                                controller: _titleController,
+                                textAlign: TextAlign.center,
+                                decoration: InputDecoration(
                                     hintText: "post2".tr(),
                                     border: InputBorder.none,
                                     counterText: '',
@@ -318,12 +318,12 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                       color: Color(0xffd9d9d9),
                                       fontSize: 18.spMin,
                                     )
-                                  ),
-                                  maxLength: 30,
                                 ),
+                                maxLength: 30,
                               ),
-                              alignment: Alignment.center,
                             ),
+                            alignment: Alignment.center,
+                          ),
                           Divider(
                             thickness: 1,
                             color: Color(0xffebebeb),
@@ -334,43 +334,43 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Row(
-                                  children: [
-                                    for(int i = 0; i < 3; i++)
-                                      InkWell(
-                                        onTap: (){
-                                          getImages(i);
-                                        },
-                                        child: Container(
-                                          margin: EdgeInsets.only(right: 20).r,
-                                          height: 130.h,
-                                          width: 130.h,
-                                          decoration: BoxDecoration(
-                                              color: Color(0xfff8f8f8),
-                                              borderRadius:
-                                              BorderRadius.circular(10).r,
-                                            image: i < _images.length ? DecorationImage(
-                                              image: FileImage(File(_images[i].path)),
-                                              fit: BoxFit.cover,
-                                            ): null,
-                                          ),
-                                          alignment: Alignment.center,
-                                          child: i < _images.length ? SizedBox() : i == _images.length ? Column(
-                                            mainAxisAlignment: MainAxisAlignment.center,
-                                            children: [
-                                              Image.asset('assets/icon/ICON_photo_1.png', width: 30.r, height: 30.r,),
-                                              Text('${_images.length}/3', style: TextStyle(color: Color(0xffaeaeae)),)
-                                            ],
-                                          ): SvgPicture.asset(
-                                            'assets/icon/ICON_photo_2.svg',
-                                            width: 25.r,
-                                            height: 25.r,
-                                          ),
+                                children: [
+                                  for(int i = 0; i < 3; i++)
+                                    InkWell(
+                                      onTap: (){
+                                        getImages(i);
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(right: 20).r,
+                                        height: 130.h,
+                                        width: 130.h,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xfff8f8f8),
+                                          borderRadius:
+                                          BorderRadius.circular(10).r,
+                                          image: i < _images.length ? DecorationImage(
+                                            image: FileImage(File(_images[i].path)),
+                                            fit: BoxFit.cover,
+                                          ): null,
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: i < _images.length ? SizedBox() : i == _images.length ? Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Image.asset('assets/icon/ICON_photo_1.png', width: 30.r, height: 30.r,),
+                                            Text('${_images.length}/3', style: TextStyle(color: Color(0xffaeaeae)),)
+                                          ],
+                                        ): SvgPicture.asset(
+                                          'assets/icon/ICON_photo_2.svg',
+                                          width: 25.r,
+                                          height: 25.r,
                                         ),
                                       ),
+                                    ),
 
 
-                                  ],
-                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           Form(
@@ -391,7 +391,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                 maxLength: 200, // 글자 길이 제한
                                 keyboardType: TextInputType.multiline,
                               ),
-                              ),
+                            ),
                           )
                         ],
                       ),
@@ -438,10 +438,10 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                           }
 
                           Board _newBoard = Board(
-                              category: boardCategory,
-                              title: title,
-                              content: content,
-                              images: requestImages,
+                            category: boardCategory,
+                            title: title,
+                            content: content,
+                            images: requestImages,
                           );
 
                           showDialog(
@@ -474,7 +474,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
 
                                   }));
                         }
-                        },
+                      },
                       isEnabled: title != '' && content != '' && boardCategory != 'post4'.tr(),
                     ),
                   )),
