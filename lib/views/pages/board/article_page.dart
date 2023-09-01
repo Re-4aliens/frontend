@@ -332,7 +332,9 @@ class _ArticlePageState extends State<ArticlePage> {
                                                         });
                                                         Navigator.pop(context);
                                                       },
-                                                          isNestedComment: false);
+                                                          isNestedComment: false,
+                                                          comment: commentProvider.commentListData![index],
+                                                      );
                                                     });
                                                   },
                                                   child: Padding(
@@ -430,7 +432,8 @@ class _ArticlePageState extends State<ArticlePage> {
                                                               });
                                                               Navigator.pop(context);
                                                             },
-                                                              isNestedComment: true,);
+                                                              isNestedComment: true,
+                                                              comment: commentProvider.commentListData![index],);
                                                           });
                                                         },
                                                         child: Padding(

@@ -414,7 +414,9 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                     });
                                                     Navigator.pop(context);
                                                   },
-                                                      isNestedComment: false);
+                                                      isNestedComment: false,
+                                                    comment: MarketcommentListMock[i],
+                                                  );
                                                 });
                                               },
                                               child: Padding(
@@ -507,7 +509,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                           });
                                                           Navigator.pop(context);
                                                         },
-                                                          isNestedComment: true,);
+                                                          isNestedComment: true,
+                                                          comment: MarketcommentListMock[i],);
                                                       });
                                                     },
                                                     child: Padding(

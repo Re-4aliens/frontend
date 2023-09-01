@@ -63,4 +63,23 @@ class CommentProvider with ChangeNotifier {
     notifyListeners();
     return true;
   }
+
+  deleteComment(int articleId) async {
+    bool value = false;
+    loading = true;
+    try {
+      value =  await APIs.deleteComment(articleId);
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        value = await APIs.deleteComment(articleId);
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+    return value;
+  }
+
+
 }

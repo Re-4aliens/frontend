@@ -1655,7 +1655,7 @@ static Future<String> matchingProfessData() async{
 
   */
   static Future<bool> postNestedComment(String content, int commentId) async {
-    var url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${commentId}/comments';
+    var url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-article-comments/${commentId}/comments';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1691,6 +1691,41 @@ static Future<String> matchingProfessData() async{
     }
   }
 
+
+  /*
+
+  댓글 삭제
+
+   */
+  static Future<bool> deleteComment(int articleId) async {
+
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-article-comments/${articleId}'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+
+    var response = await http.delete(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
 
 }
 
