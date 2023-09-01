@@ -1,6 +1,7 @@
 
 import 'dart:async';
-
+import 'package:aliens/apis/apis.dart';
+import 'package:aliens/apis/apis.dart';
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/views/pages/board/article_writing_page.dart';
 import 'package:aliens/views/pages/board/info_article_page.dart';
@@ -10,7 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-
+import 'dart:convert';
 import '../../models/board_model.dart';
 import '../../repository/board_provider.dart';
 import '../pages/board/article_page.dart';
@@ -29,6 +30,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
 
   String createdAt = '';
   String boardCategory = '';
+  List<Board> articles = [];
 
   @override
   void initState() {
@@ -54,14 +56,38 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
         break;
       default:
     }
+
+    fetchArticlesData();
   }
+
+  Future<void> fetchArticlesData() async {
+    try {
+      final response = await APIs.TotalArticles(); // TotalArticles 함수 호출
+      final dataList = response as List<dynamic>; // 변환된 리스트 데이터
+
+      setState(() {
+        print('1');
+        articles = dataList.map((article) =>
+            Board.fromJson(article)).toList();
+        print('2');
+      });
+    } catch (error) {
+      print('Error fetching article data: $error');
+    }
+  }
+
+
+  @override
+
 
   @override
   Widget build(BuildContext context) {
-    final boardProvider = Provider.of<BoardProvider>(context);
-    return Padding(
-      padding: EdgeInsets.only(top: 10.h),
-      child: ListTile(
+    return ListView.builder(
+        itemCount: articles.length,
+        itemBuilder: (context, index) {
+          Padding(
+            padding: EdgeInsets.only(top: 10.h),
+            child: ListTile(
               //제목
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -71,7 +97,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(
-                                top: 10.0, bottom: 10, left: 10, right: 15)
+                            top: 10.0, bottom: 10, left: 10, right: 15)
                             .r,
                         child: SvgPicture.asset(
                           'assets/icon/icon_profile.svg',
@@ -129,7 +155,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                               context: context,
                               builder: (builder) {
                                 return BoardDialog(
-                                  context: context, board: widget.board
+                                  context: context, board: widget.board,
                                 );
                               });
                         },
@@ -168,29 +194,29 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                     widget.board.images == null
                         ? SizedBox()
                         : Container(
-                            height: 90.h,
-                            child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: widget.board.images!.length,
-                                itemBuilder: (context, index) {
-                                  return Row(
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(right: 10).w,
-                                        height: 80.h,
-                                        width: 80.h,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xfff8f8f8),
-                                            borderRadius:
-                                                BorderRadius.circular(10)),
-                                        padding: const EdgeInsets.all(25.0).r,
-                                        child: Image.asset(
-                                            'assets/icon/ICON_photo_1.png'),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                          ),
+                      height: 90.h,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: widget.board.images!.length,
+                          itemBuilder: (context, index) {
+                            return Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 10).w,
+                                  height: 80.h,
+                                  width: 80.h,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xfff8f8f8),
+                                      borderRadius:
+                                      BorderRadius.circular(10)),
+                                  padding: const EdgeInsets.all(25.0).r,
+                                  child: Image.asset(
+                                      'assets/icon/ICON_photo_1.png'),
+                                ),
+                              ],
+                            );
+                          }),
+                    ),
                     widget.board.category == "정보게시판" ? SizedBox(height: 10.h,):
                     Padding(
                       padding: const EdgeInsets.only(top: 10, bottom: 15.0).h,
@@ -205,17 +231,11 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(4.0).r,
-                          child: InkWell(
-                            child: SvgPicture.asset(
-                              'assets/icon/ICON_good.svg',
-                              width: 25.r,
-                              height: 25.r,
-                              color: Color(0xffc1c1c1),
-                            ),
-                            onTap: (){
-                              boardProvider.addLike(widget.board.articleId!);
-                            },
-                          )
+                          child: SvgPicture.asset(
+                            'assets/icon/ICON_good.svg',
+                            width: 25.r,
+                            height: 25.r,
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(left: 4, right: 15).w,
@@ -240,7 +260,6 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                   ],
                 ),
               ),
-
               onTap: () {
                 if (widget.board.category == "정보게시판") {
                   Navigator.push(
@@ -258,6 +277,11 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                 }
               },
             ),
+          );
+
+        }
+
     );
   }
 }
+

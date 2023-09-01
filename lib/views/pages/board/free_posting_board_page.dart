@@ -18,6 +18,7 @@ import 'package:provider/provider.dart';
 
 import '../../../models/countries.dart';
 import '../../components/board_drawer_widget.dart';
+import 'notification_page.dart';
 
 class FreePostingBoardPage extends StatefulWidget {
   const FreePostingBoardPage({super.key, required this.screenArguments});
@@ -90,18 +91,30 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
             ],
           ),
           actions: [
-            Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
-              'assets/icon/ICON_notification.svg',
-              width: 28.r,
-              height: 28.r,
-              color: Colors.white,
-            ),),
+            Padding(
+              padding: EdgeInsets.all(8),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationBoardWidget(screenArguments: widget.screenArguments)),
+                  );
+                },
+                child: SvgPicture.asset(
+                  'assets/icon/ICON_notification.svg',
+                  width: 28.r,
+                  height: 28.r,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
               'assets/icon/icon_search.svg',
               width: 25.r,
               height: 25.r,
               color: Colors.white,
-            ),),
+            ),
+            ),
           ],
         ),
         body: isDrawerStart ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,

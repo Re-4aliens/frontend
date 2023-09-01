@@ -280,7 +280,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => NotificationBoardWidget()),
+                    builder: (context) => NotificationBoardWidget(screenArguments: widget.screenArguments)),
               );
             },
             child: Container(

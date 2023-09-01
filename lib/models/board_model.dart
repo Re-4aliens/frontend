@@ -1,11 +1,11 @@
 class Board {
-  int? articleId; //articleId
+  int? articleId;
   String? category;
   String? title;
   String? content;
   int? likeCount;
   int? commentsCount;
-  List<String>? images; //images
+  List<String>? images;
   Member? member;
   String? createdAt;
 

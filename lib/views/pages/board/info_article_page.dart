@@ -50,118 +50,118 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title: Text('info'.tr(), style: TextStyle(fontSize: 18.spMin),),
-          backgroundColor: Color(0xff7898ff),
-          elevation: 0,
-        ),
-        body:SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text('info'.tr(), style: TextStyle(fontSize: 18.spMin),),
+        backgroundColor: Color(0xff7898ff),
+        elevation: 0,
+      ),
+      body:SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 25.0).h,
+              child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, right: 15).w,
+                      child: SvgPicture.asset(
+                        'assets/icon/ICON_notice.svg',
+                        height: 23.spMin,
+                        color: Color(0xff7898ff),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      child: Text("${widget.board.title}", style: TextStyle(
+                          fontSize: 16.spMin,
+                          fontWeight: FontWeight.bold
+                      ),
+                        overflow: TextOverflow.visible,
+                      ),
+                    ),
+                  ]
+              ),
+            ),
+            Divider(color: Color(0xffF5F7FF), thickness: 2.h),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 15.0.h, horizontal: 20.w),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 25.0).h,
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20.0, right: 15).w,
-                          child: SvgPicture.asset(
-                            'assets/icon/ICON_notice.svg',
-                            height: 23.spMin,
-                            color: Color(0xff7898ff),
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0).r,
+                        child: SvgPicture.asset(
+                          'assets/icon/icon_profile.svg',
+                          width: 25.r,
+                          color: Color(0xffc1c1c1),
                         ),
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          child: Text("${widget.board.title}", style: TextStyle(
-                              fontSize: 16.spMin,
-                              fontWeight: FontWeight.bold
-                          ),
-                            overflow: TextOverflow.visible,
-                          ),
-                        ),
-                      ]
-                    ),
+                      ),
+                      Text(
+                        '${widget.board.member!.name}',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                      ),
+                      Text(
+                        '/',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                      ),
+                      Text(
+                        getNationCode(widget.board.member!.nationality),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                      )
+                    ],
                   ),
-                  Divider(color: Color(0xffF5F7FF), thickness: 2.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15.0.h, horizontal: 20.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10.0).r,
-                              child: SvgPicture.asset(
-                                'assets/icon/icon_profile.svg',
-                                width: 25.r,
-                                color: Color(0xffc1c1c1),
-                              ),
-                            ),
-                            Text(
-                              '${widget.board.member!.name}',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                            ),
-                            Text(
-                              '/',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                            ),
-                            Text(
-                              getNationCode(widget.board.member!.nationality),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                            )
-                          ],
-                        ),
-                        Text(DataUtils.getTime(widget.board.createdAt), style: TextStyle(
-                            fontSize: 14.spMin,
-                            color: Color(0xff888888)
-                        ))
-                      ],
-                    ),
-                  ),
-                  widget.board.images!.isEmpty
-                      ? SizedBox()
-                      : Container(
-                    height: 100.h,
-                    padding: const EdgeInsets.only(left: 20.0, right: 15).w,
-                    child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: widget.board.images!.length,
-                        itemBuilder: (context, index) {
-                          return Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(right: 10.w),
-                                height: 80.h,
-                                width: 80.h,
-                                decoration: BoxDecoration(
-                                    color: Color(0xfff8f8f8),
-                                    borderRadius:
-                                    BorderRadius.circular(10).r),
-                                child: Icon(Icons
-                                    .add_photo_alternate_outlined),
-                              ),
-                            ],
-                          );
-                        }),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 20),
-                    child: Text("${widget.board.content}", style: TextStyle(
-                        fontSize: 16.spMin,
-                    ),),
-                  ),
+                  Text(DataUtils.getTime(widget.board.createdAt), style: TextStyle(
+                      fontSize: 14.spMin,
+                      color: Color(0xff888888)
+                  ))
                 ],
               ),
             ),
-      );
+            widget.board.images!.isEmpty
+                ? SizedBox()
+                : Container(
+              height: 100.h,
+              padding: const EdgeInsets.only(left: 20.0, right: 15).w,
+              child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: widget.board.images!.length,
+                  itemBuilder: (context, index) {
+                    return Row(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(right: 10.w),
+                          height: 80.h,
+                          width: 80.h,
+                          decoration: BoxDecoration(
+                              color: Color(0xfff8f8f8),
+                              borderRadius:
+                              BorderRadius.circular(10).r),
+                          child: Icon(Icons
+                              .add_photo_alternate_outlined),
+                        ),
+                      ],
+                    );
+                  }),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20),
+              child: Text("${widget.board.content}", style: TextStyle(
+                fontSize: 16.spMin,
+              ),),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
