@@ -13,7 +13,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../models/board_model.dart';
 import '../pages/board/article_page.dart';
 import 'board_dialog_widget.dart';
-
+/*
 class InfoArticleWidget extends StatefulWidget {
 
   InfoArticleWidget({super.key, required this.board, required this.nationCode, required this.isTotal});
@@ -138,3 +138,5 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
     );
   }
 }
+
+*/

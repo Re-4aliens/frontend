@@ -60,4 +60,32 @@ class BoardProvider with ChangeNotifier {
     return value;
   }
 
+  addLike(int articleId) async {
+
+    loading = true;
+    try {
+
+      //좋아요 요청
+      await APIs.addLike(articleId);
+
+      //이미 좋아요를 눌렀으면
+      //해제 요청
+      //await APIs.cancleLike(articleId);
+
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        //좋아요 요청
+        await APIs.addLike(articleId);
+
+        //이미 좋아요를 눌렀으면
+        //해제 요청
+        //await APIs.cancleLike(articleId);
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
 }
