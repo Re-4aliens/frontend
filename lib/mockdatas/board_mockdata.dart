@@ -1,5 +1,8 @@
 import 'package:aliens/models/board_model.dart';
-import 'package:aliens/models/noticeArticle.dart';
+
+import '../models/noticeArticle.dart';
+
+
 
 List<Board> totalBoardList = [
   infoBoard1,
@@ -72,18 +75,18 @@ List<NoticeArticle> NotiList = [
 Board freePostingBoard1 = Board(
     articleId: 1,
     category: "자유게시판",
-  title: "아니 왜 이렇게 덥냐고용",
-  content: "가을은 언제 올까요...ㅜㅜ 입추 매직은 거짓말입니다.",
-  likeCount: 109,
-  commentCount: 4,
-  createdAt: "2023-08-17 23:53:00",
-  images: null,
-  member: Member(
-    memberId: 1,
-    name: "아이폰",
-    nationality: 'South Korea',
-    profileImageUrl: "",
-  )
+    title: "아니 왜 이렇게 덥냐고용",
+    content: "가을은 언제 올까요...ㅜㅜ 입추 매직은 거짓말입니다.",
+    likeCount: 109,
+    commentsCount: 4,
+    createdAt: "2023-08-17 23:53:00",
+    images: [],
+    member: Member(
+      memberId: 1,
+      name: "아이폰",
+      nationality: 'South Korea',
+      profileImageUrl: "",
+    )
 );
 
 Board freePostingBoard2 = Board(
@@ -92,9 +95,9 @@ Board freePostingBoard2 = Board(
     title: "なぜだろう",
     content: "ご飯を食べてもお腹が空いた",
     likeCount: 0,
-    commentCount: 4,
+    commentsCount: 4,
     createdAt: "2023-08-17 23:00:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "ゆうき",
@@ -109,7 +112,7 @@ Board freePostingBoard3 = Board(
     category: "자유게시판",
     content: "잘만들었네",
     likeCount: 10,
-    commentCount: 4,
+    commentsCount: 4,
     createdAt: "2023-08-17 14:30:33",
     images: [
       "Url",
@@ -130,9 +133,9 @@ Board freePostingBoard4 = Board(
     content: "마라로제찜닭이 너무 먹고 싶다.",
     category: "자유게시판",
     likeCount: 109,
-    commentCount: 4,
+    commentsCount: 4,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "햄버거",
@@ -147,7 +150,7 @@ Board fashionBoard1 = Board(
     title: "패션 평가 좀",
     content: "패평패평~",
     likeCount: 109,
-    commentCount: 4,
+    commentsCount: 4,
     createdAt: "2023-08-06 14:30:33",
     images: [
       "Url",
@@ -167,9 +170,9 @@ Board fashionBoard2 = Board(
     title: "오늘 뭐 입지",
     content: "이제 가을이야 ㅜ",
     likeCount: 9,
-    commentCount: 4,
+    commentsCount: 4,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -184,9 +187,9 @@ Board gameBoard1 = Board(
     title: "게임 추천",
     content: "요즘 머가 핫하나요",
     likeCount: 9,
-    commentCount: 4,
+    commentsCount: 4,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -201,9 +204,9 @@ Board gameBoard2 = Board(
     title: "크아할 사람",
     content: "자유5 접속 하십쇼",
     likeCount: 9,
-    commentCount: 4,
+    commentsCount: 4,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "치킨보이",
@@ -218,9 +221,9 @@ Board foodBoard1 = Board(
     title: "오늘 뭐먹지",
     content: "마라로제찜닭",
     likeCount: 2,
-    commentCount: 10,
+    commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "찜닭",
@@ -236,7 +239,7 @@ Board musicBoard1 = Board(
     title: "오 노 추",
     content: "이 노래 좋습니다.",
     likeCount: 2,
-    commentCount: 15,
+    commentsCount: 15,
     createdAt: "2023-08-06 14:30:33",
     images: [
       "Url"
@@ -256,9 +259,9 @@ Board musicBoard2 = Board(
     title: "뉴진스 노래 좋아",
     content: "누가 최애임",
     likeCount: 2,
-    commentCount: 10,
+    commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "Daisy",
@@ -274,9 +277,9 @@ Board musicBoard3 = Board(
     category: "음악게시판",
     content: "노래노래노래",
     likeCount: 2,
-    commentCount: 10,
+    commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -291,9 +294,9 @@ Board infoBoard1 = Board(
     category: "정보게시판",
     content: "안녕하세요.\n\n부경대학교 외국인 유학생 지원팀\nOOO입니다.\n\n2023년도 부산 내 거주하는 외국인 유학생\n비자 비용 지원 안내에 대해서 공유합니다.",
     likeCount: 2,
-    commentCount: 10,
+    commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -308,7 +311,7 @@ Board infoBoard2 = Board(
     category: "정보게시판",
     content: "안녕하세요.\n\n부경대학교 외국인 유학생 지원팀\nOOO입니다.\n\n2023년도 부산 내 거주하는 외국인 유학생\n비자 비용 지원 안내에 대해서 공유합니다.",
     likeCount: 2,
-    commentCount: 10,
+    commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
     images: ["url"],
     member: Member(
@@ -325,9 +328,9 @@ Board infoBoard3 = Board(
     category: "정보게시판",
     content: "안녕하세요.\n\n부경대학교 외국인 유학생 지원팀\nOOO입니다.\n\n2023년도 부산 내 거주하는 외국인 유학생\n비자 비용 지원 안내에 대해서 공유합니다.",
     likeCount: 2,
-    commentCount: 10,
+    commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -341,7 +344,7 @@ Board MyPostingBoard1 = Board(
     title: "낼 점심은 닭가슴살. 신난다.",
     createdAt: "2023-08-17 23:53:00",
     category: "음악게시판",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "MM",
@@ -352,11 +355,13 @@ Board MyPostingBoard1 = Board(
 
 Board Notification1= Board(
     articleId: 1,
+    title: "낼 점심은 닭가슴살. 신난다.",
+    likeCount: 2,
+    commentsCount: 10,
     content: "낼 점심은 닭가슴살. 신난다.",
     createdAt: "2023-08-17 23:53:00",
     category: "음악게시판",
-    images: null,
-
+    images: [],
     member: Member(
       memberId: 1,
       name: "Jenny",
@@ -364,13 +369,16 @@ Board Notification1= Board(
       profileImageUrl: "",
     )
 );
+
 Board Notification2= Board(
     articleId: 1,
+    title: "요기가 알림기능인가....",
+    likeCount: 2,
+    commentsCount: 10,
     content: "요기가 알림기능인가....",
     createdAt: "2023-08-31 23:53:00",
     category: "정보게시판",
-    images: null,
-
+    images: [],
     member: Member(
       memberId: 1,
       name: "MM",
@@ -379,11 +387,13 @@ Board Notification2= Board(
     )
 );
 
+
 NoticeArticle Notice1= NoticeArticle (
   noticeId: 1,
     title: '[Friend Ship 이용시 규칙사항]',
     content: "안녕하세요!! \n Friendship 관리자 ㅇㅇㅇ입니다. ~~~~",
     createdAt: "2023-01-31 23:53:00",
+
 
 );
 

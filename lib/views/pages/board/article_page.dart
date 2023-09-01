@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
-import 'package:aliens/repository/comment_repository.dart';
+import 'package:aliens/providers/comment_provider.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -12,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../mockdatas/comment_mockdata.dart';
 import '../../../models/comment_model.dart';
@@ -20,6 +21,7 @@ import '../../../models/countries.dart';
 import 'package:flutter/services.dart';
 
 import '../../../models/message_model.dart';
+import '../../../repository/board_provider.dart';
 import '../../components/board_dialog_widget.dart';
 import '../../components/comment_dialog_widget.dart';
 
@@ -75,6 +77,9 @@ class _ArticlePageState extends State<ArticlePage> {
         break;
       default:
     }
+
+    final commentProvider = Provider.of<CommentProvider>(context, listen: false);
+    commentProvider.getComments(widget.board.articleId!);
   }
 
   String getNationCode(_nationality){
@@ -90,7 +95,8 @@ class _ArticlePageState extends State<ArticlePage> {
 
   @override
   Widget build(BuildContext context) {
-
+    final commentProvider = Provider.of<CommentProvider>(context);
+    final boardProvider = Provider.of<BoardProvider>(context);
     return GestureDetector(
       onTap: (){
         FocusScope.of(context).unfocus();
@@ -144,17 +150,17 @@ class _ArticlePageState extends State<ArticlePage> {
                         InkWell(
                           onTap: (){
                             showDialog(context: context, builder: (builder){
-                              return BoardDialog(context: context,);
+                              return BoardDialog(context: context, board: widget.board);
                             });
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0).w,
                             child:
                             SvgPicture.asset(
-                              'assets/icon/icon_more.svg',
-                              width: 25.r,
-                              height: 25.r,
-                              color: Color(0xffc1c1c1)
+                                'assets/icon/ICON_more.svg',
+                                width: 25.r,
+                                height: 25.r,
+                                color: Color(0xffc1c1c1)
                             ),
                           ),
                         )
@@ -175,31 +181,31 @@ class _ArticlePageState extends State<ArticlePage> {
                               style: TextStyle(fontSize: 14.spMin, fontWeight: FontWeight.bold, color: Color(0xff444444)),
                             ),
                           ),
-                          widget.board.images == null
+                          widget.board.images!.isEmpty
                               ? SizedBox()
                               : Container(
-                                  height: 100.h,
-                                  child: ListView.builder(
-                                      scrollDirection: Axis.horizontal,
-                                      itemCount: widget.board.images!.length,
-                                      itemBuilder: (context, index) {
-                                        return Row(
-                                          children: [
-                                            Container(
-                                              margin: EdgeInsets.only(right: 10.w),
-                                              height: 80.h,
-                                              width: 80.h,
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xfff8f8f8),
-                                                  borderRadius:
-                                                      BorderRadius.circular(10).r),
-                                              child: Icon(Icons
-                                                  .add_photo_alternate_outlined),
-                                            ),
-                                          ],
-                                        );
-                                      }),
-                                ),
+                            height: 100.h,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: widget.board.images!.length,
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 10.w),
+                                        height: 80.h,
+                                        width: 80.h,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xfff8f8f8),
+                                            borderRadius:
+                                            BorderRadius.circular(10).r),
+                                        child: Icon(Icons
+                                            .add_photo_alternate_outlined),
+                                      ),
+                                    ],
+                                  );
+                                }),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(top: 10, bottom: 25.0).h,
                             child: Text(
@@ -211,13 +217,18 @@ class _ArticlePageState extends State<ArticlePage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(4.0).r,
-                                child: SvgPicture.asset(
-                                  'assets/icon/ICON_good.svg',
-                                  width: 25.r,
-                                  height: 25.r,
-                                  color: Color(0xffc1c1c1),
-                                )
+                                  padding: const EdgeInsets.all(4.0).r,
+                                  child: InkWell(
+                                    child: SvgPicture.asset(
+                                      'assets/icon/ICON_good.svg',
+                                      width: 25.r,
+                                      height: 25.r,
+                                      color: Color(0xffc1c1c1),
+                                    ),
+                                    onTap: (){
+                                      boardProvider.addLike(widget.board.articleId!);
+                                    },
+                                  )
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 4, right: 15).r,
@@ -236,7 +247,7 @@ class _ArticlePageState extends State<ArticlePage> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
-                                child: Text('${widget.board.commentCount}'),
+                                child: Text('${widget.board.commentsCount}'),
                               ),
                             ],
                           )
@@ -256,100 +267,115 @@ class _ArticlePageState extends State<ArticlePage> {
                     child: Text('광고'),
                   ),
 
-                  //댓글 위젯
-                  for (int i = 0; i < commentListMock.length; i++)
-                    Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30).r,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(right: 10.0).r,
-                                        child: SvgPicture.asset(
-                                          'assets/icon/icon_profile.svg',
-                                          width: 25.r,
-                                          color: Color(0xffc1c1c1),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${commentListMock[i].member!.name}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                      ),
-                                      Text(
-                                        '/',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                      ),
-                                      Text(
-                                        getNationCode(commentListMock[i].member!.nationality),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                      )
-                                    ],
-                                  ),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
 
-                                      Text(
-                                        DataUtils.getTime(commentListMock[i].createdAt),
-                                        style: TextStyle(
-                                            fontSize: 12.spMin, color: Color(0xffc1c1c1)),
-                                      ),
-                                      InkWell(
-                                        onTap: (){
-                                          showDialog(context: context, builder: (builder){
-                                            return CommentDialog(context: context, onpressed: (){
-                                              setState(() {
-                                                isNestedComments = true;
-                                                parentsCommentIndex = i;
-                                              });
-                                              Navigator.pop(context);
-                                            },
-                                            isNestedComment: false);
-                                          });
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(left: 8.0).r,
-                                          child: SvgPicture.asset(
-                                            'assets/icon/ICON_more.svg',
-                                            width: 25.r,
-                                            height: 25.r,
-                                            color: Color(0xffc1c1c1),
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  )
-                                ],
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              ),
+                  //댓글 위젯
+                  commentProvider.loading?
+                  Container(
+                      alignment: Alignment.center,
+                      child: Image(
+                          image: AssetImage(
+                              "assets/illustration/loading_01.gif")))
+                      :
+                  Column(
+                    children: [
+                      for(int index = 0; index < 5; index++)
+                        Container(
+                          child: Column(
+                            children: [
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 13).r,
-                                child: Text(
-                                  '${commentListMock[i].content}',
-                                  style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
+                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30).r,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(right: 10.0).r,
+                                              child: SvgPicture.asset(
+                                                'assets/icon/icon_profile.svg',
+                                                width: 25.r,
+                                                color: Color(0xffc1c1c1),
+                                              ),
+                                            ),
+                                            Text(
+                                              '${commentProvider.commentListData![index].member!.name}',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                            ),
+                                            Text(
+                                              '/',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                            ),
+                                            Text(
+                                              getNationCode(commentProvider.commentListData![index].member!.nationality),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                            )
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+
+                                            Text(
+                                              DataUtils.getTime(commentProvider.commentListData![index].createdAt),
+                                              style: TextStyle(
+                                                  fontSize: 12.spMin, color: Color(0xffc1c1c1)),
+                                            ),
+                                            InkWell(
+                                              onTap: (){
+
+                                                print(commentProvider.commentListData!);
+                                                showDialog(context: context, builder: (builder){
+                                                  return CommentDialog(context: context, onpressed: (){
+                                                    setState(() {
+                                                      isNestedComments = true;
+                                                      parentsCommentIndex = index;
+                                                    });
+                                                    Navigator.pop(context);
+                                                  },
+                                                    isNestedComment: false,
+                                                    comment: commentProvider.commentListData![index],
+                                                  );
+                                                });
+                                              },
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(left: 8.0).r,
+                                                child: SvgPicture.asset(
+                                                  'assets/icon/ICON_more.svg',
+                                                  width: 25.r,
+                                                  height: 25.r,
+                                                  color: Color(0xffc1c1c1),
+                                                ),
+                                              ),
+                                            )
+                                          ],
+                                        )
+                                      ],
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 13).r,
+                                      child: Text(
+                                        '${commentProvider.commentListData![index].content}',
+                                        style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
 
-                        //대댓글
-                        commentListMock[i].childs == null ? SizedBox() :
-                            Column(
-                              children: [
-                                for(int j = 0 ; j < commentListMock[i].childs!.length; j++)
-                                   Row(
+                              //대댓글
+                              commentProvider.commentListData![index].childs == null ? SizedBox() :
+                              Column(
+                                children: [
+                                  for(int j = 0 ; j < commentProvider.commentListData![index].childs!.length; j++)
+                                    Row(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Expanded(
@@ -391,7 +417,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                       alignment: Alignment.centerLeft,
                                                       padding: EdgeInsets.only(right: 10),
                                                       child: Text(
-                                                        '${commentListMock[i].childs![j].member!.name}/${getNationCode(commentListMock[i].childs![j].member!.nationality)}',
+                                                        '${commentProvider.commentListData![index].childs![j].member!.name}/${getNationCode(commentProvider.commentListData![index].childs![j].member!.nationality)}',
                                                         overflow: TextOverflow.ellipsis,
                                                         style: TextStyle(
                                                             fontWeight: FontWeight.bold, fontSize: 14.spMin),
@@ -399,7 +425,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    DataUtils.getTime(commentListMock[i].childs![j].createdAt),
+                                                    DataUtils.getTime(commentProvider.commentListData![index].childs![j].createdAt),
                                                     style: TextStyle(
                                                         fontSize: 12.spMin, color: Color(0xffc1c1c1)),
                                                   ),
@@ -412,7 +438,8 @@ class _ArticlePageState extends State<ArticlePage> {
                                                           });
                                                           Navigator.pop(context);
                                                         },
-                                                          isNestedComment: true,);
+                                                          isNestedComment: true,
+                                                          comment: commentProvider.commentListData![index],);
                                                       });
                                                     },
                                                     child: Padding(
@@ -431,7 +458,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                 padding: const EdgeInsets.only(
                                                     top: 5).h,
                                                 child: Text(
-                                                  '${commentListMock[i].childs![j].content}',
+                                                  '${commentProvider.commentListData![index].childs![j].content}',
                                                   style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
                                                 ),
                                               ),
@@ -440,11 +467,19 @@ class _ArticlePageState extends State<ArticlePage> {
                                         ),
                                       ],
                                     ),
-                              ],
-                            ),
-                        Divider(thickness: 1.5, color: Color(0xfff8f8f8),)
-                      ],
-                    ),
+                                ],
+                              ),
+                              Divider(thickness: 1.5, color: Color(0xfff8f8f8),)
+
+
+                            ],
+                          ),
+                        )
+                    ],
+                  )
+
+
+
                 ],
               ),
             ),
@@ -455,79 +490,58 @@ class _ArticlePageState extends State<ArticlePage> {
               horizontal: 20,
             ).r,
             child: Container(
-                  decoration: BoxDecoration(
-                    color: Color(0xffefefef),
-                    borderRadius: BorderRadius.circular(10).r,
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 10).w,
-                  child: Row(
-                    children: [
-                      Expanded(
-                          child: TextField(
-                            maxLines: null,
-                            inputFormatters: [
-                              LengthLimitingTextInputFormatter(255),
-                            ],
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
-                          hintText: isNestedComments? "comment2".tr() : "comment1".tr(),
-                          hintStyle: TextStyle(color: Color(0xffb1b1b1)),
-                          border: InputBorder.none,
-                        ),
-                        onTap: () {
-                          if (_newComment.trim().isEmpty) {}
-                        },
-                        controller: _controller,
-                        onChanged: (value) {
-                          setState(() {
-                            _newComment = value;
-                          });
-                        },
-                      )),
-                      IconButton(
-                        onPressed: () {
-                          if(isNestedComments){
-                            Comment newValue = Comment(
-                                boardArticleCommentId: 1,
-                                content: _newComment,
-                                createdAt: DateTime.now().toString(),
-                                childs: [],
-                                member: CommentMember(
-                                    name: "daisy",
-                                    nationality: "Japan",
-                                    profileImageUrl: ""
-                                )
-                            );
-                            CommentRepository.addCommentChilds(parentsCommentIndex, newValue);
-                            parentsCommentIndex = -1;
-                            isNestedComments = false;
-                          }
-                          else{
-                            Comment newValue = Comment(
-                              boardArticleCommentId: 1,
-                              content: _newComment,
-                              createdAt: DateTime.now().toString(),
-                              childs: [],
-                              member: CommentMember(
-                                name: "daisy",
-                                nationality: "Japan",
-                                profileImageUrl: ""
-                              )
-                            );
-                            CommentRepository.addComment(newValue);
-                          }
-                          updateUi();
-                        },
-                        icon: SvgPicture.asset(
-                          'assets/icon/icon_send.svg',
-                          height: 22.r,
-                          color: _newComment.trim().isEmpty
-                              ? Color(0xffc1c1c1)
-                              : Color(0xff7898ff),
-                        ),
+                decoration: BoxDecoration(
+                  color: Color(0xffefefef),
+                  borderRadius: BorderRadius.circular(10).r,
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 10).w,
+                child: Row(
+                  children: [
+                    Expanded(
+                        child: TextField(
+                          maxLines: null,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(255),
+                          ],
+                          keyboardType: TextInputType.multiline,
+                          decoration: InputDecoration(
+                            hintText: isNestedComments? "comment2".tr() : "comment1".tr(),
+                            hintStyle: TextStyle(color: Color(0xffb1b1b1)),
+                            border: InputBorder.none,
+                          ),
+                          onTap: () {
+                            if (_newComment.trim().isEmpty) {}
+                          },
+                          controller: _controller,
+                          onChanged: (value) {
+                            setState(() {
+                              _newComment = value;
+                            });
+                          },
+                        )),
+                    IconButton(
+                      onPressed: () {
+                        if(isNestedComments){
+                          commentProvider.addComment(_newComment, parentsCommentIndex);
+                          parentsCommentIndex = -1;
+                          isNestedComments = false;
+                        }
+                        else{
+                          commentProvider.addComment(_newComment, widget.board.articleId!);
+                          //CommentRepository.addComment(newValue);
+                        }
+                        updateUi();
+                      },
+                      icon: SvgPicture.asset(
+                        'assets/icon/ICON_send.svg',
+                        height: 22.r,
+                        color: _newComment.trim().isEmpty
+                            ? Color(0xffc1c1c1)
+                            : Color(0xff7898ff),
                       ),
-                    ],
-                  )),
+                    ),
+                  ],
+                )),
           ),
         ]),
       ),

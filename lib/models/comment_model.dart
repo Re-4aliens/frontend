@@ -1,24 +1,31 @@
 class Comment {
-  int? boardArticleCommentId;
+  int? articleCommentId;
   String? content;
   CommentMember? member;
   String? createdAt;
   List<Comment>? childs;
 
-  Comment({this.boardArticleCommentId, this.content, this.member, this.childs, this.createdAt});
+  Comment({this.articleCommentId, this.content, this.member, this.childs, this.createdAt});
 
   Comment.fromJson(Map<String, dynamic> json) {
-    boardArticleCommentId = json['boardArticleCommentId'];
+    List<Comment> childComments = [];
+    if (json['childs'] != null) {
+      var childJsonList = json['childs'] as List<dynamic>;
+      childComments = childJsonList
+          .map((childJson) => Comment.fromJson(childJson))
+          .toList();
+    }
+
+    articleCommentId = json['articleCommentId'];
     content = json['content'];
     createdAt = json['createdAt'];
-    member =
-    json['member'] != null ? new CommentMember.fromJson(json['member']) : null;
-    childs = json['child'].cast<Comment>();
+    member = json['member'] != null ? new CommentMember.fromJson(json['member']) : null;
+    childs = childComments;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['boardArticleCommentId'] = this.boardArticleCommentId;
+    data['articleCommentId'] = this.articleCommentId;
     data['content'] = this.content;
     data['childs'] = this.childs;
     data['createdAt'] = this.createdAt;

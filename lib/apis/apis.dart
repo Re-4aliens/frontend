@@ -19,6 +19,7 @@ import 'package:http_parser/http_parser.dart';
 import 'dart:convert';
 
 import '../models/board_model.dart';
+import '../models/comment_model.dart';
 import '../models/memberDetails_model.dart';
 import '../models/message_model.dart';
 import '../models/partner_model.dart';
@@ -227,6 +228,11 @@ class APIs {
 
       //fail
     } else {
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        await APIs.getAccessToken();
+        await APIs.logOut(context);
+      }
       print(json.decode(utf8.decode(response.bodyBytes)));
     }
   }
@@ -408,9 +414,8 @@ class APIs {
     );
     //success
     if (response.statusCode == 200) {
+      print('${json.decode(utf8.decode(response.bodyBytes))}');
       return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
-      print('매칭 상태 요청 ${json.decode(utf8.decode(response.bodyBytes))}');
-
 
 
       //fail
@@ -631,10 +636,10 @@ class APIs {
                 .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
             );
           }
-            else{
+          else{
             _status = await APIs.getApplicantStatus();
           }
-          }
+        }
       }
       else if(e == "AT-C-007"){
         //토큰 및 정보 삭제
@@ -1109,40 +1114,40 @@ class APIs {
   매칭 완료 일시
 
   */
-static Future<String> matchingProfessData() async{
-  var _url = Uri.parse('http://3.34.2.246:8080/api/v1/applicant/completion-date');
+  static Future<String> matchingProfessData() async{
+    var _url = Uri.parse('http://3.34.2.246:8080/api/v1/applicant/completion-date');
 
-  //토큰 읽어오기
-  var jwtToken = await storage.read(key: 'token');
-  //accessToken만 보내기
-  jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
-  var response = await http.get(
-    _url,
-    headers: {
-      'Authorization': 'Bearer $jwtToken',
-      'Content-Type': 'application/json',
-    },
-  );
+    var response = await http.get(
+      _url,
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
 
-  if (response.statusCode == 200) {
-    print(json.decode(utf8.decode(response.bodyBytes)));
-    return json.decode(utf8.decode(response.bodyBytes))['data']['matchingCompleteDate'];
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return json.decode(utf8.decode(response.bodyBytes))['data']['matchingCompleteDate'];
 
-  } else {
-    print(json.decode(utf8.decode(response.bodyBytes)));
-    if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-      print('액세스 토큰 만료');
-      throw 'AT-C-002';
-    } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
-      print('로그아웃된 토큰');
-      throw 'AT-C-007';
-    }else{
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
 
+      }
+      throw Exception('요청 오류');
     }
-    throw Exception('요청 오류');
   }
-}
 
   /*
 
@@ -1436,7 +1441,8 @@ static Future<String> matchingProfessData() async{
     return files;
   }*/
 
-/*전체게시판 글 전부 조회*/
+
+  /*전체게시판 글 전부 조회*/
   static Future<List<dynamic>> TotalArticles() async {
     final _url = 'http://3.34.2.246:8080/api/v2/articles';
 
@@ -1541,6 +1547,369 @@ static Future<String> matchingProfessData() async{
 
 
 
+
+
+  /*
+
+  특정 게시판 게시물 조회
+
+  */
+  static Future<List<Board>> getArticles(String boardCategory) async {
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles?category=${boardCategory}'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      List<dynamic> body = json.decode(
+          utf8.decode(response.bodyBytes))['data'];
+      return body.map((dynamic item) => Board.fromJson(item)).toList();
+
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      throw Exception('요청 오류');
+    }
+  }
+
+  /*
+
+  게시물 생성
+
+  */
+  static Future<bool> postArticles(Board board) async {
+    const url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles';
+
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    // FormData 텍스트 필드 추가
+    request.fields['title'] = board.title!;
+    request.fields['content'] = board.content!;
+    request.fields['category'] = board.category!;
+
+
+    // FormData 파일 필드 추가
+    if (board.images != null && board.images!.isNotEmpty) {
+      for (String imagePath in board.images!) {
+        if (imagePath.isNotEmpty) {
+          var file = await http.MultipartFile.fromPath('imageUrls', imagePath);
+          request.files.add(file);
+        }
+      }
+    }
+
+    // request 전송
+    var response = await request.send();
+
+    // success
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      return true;
+      // fail
+    } else {
+      print(await response.stream.bytesToString());
+      return false;
+    }
+  }
+
+  /*
+
+  게시물 삭제
+
+   */
+  static Future<bool> deleteArticles(int articleId) async {
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+
+    var response = await http.delete(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
+
+  /*
+
+  특정 게시물 댓글 조회
+
+  */
+  static Future<List<Comment>> getCommentsList(int articleId) async {
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/3/comments'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data'];
+      return body.map((dynamic item) => Comment.fromJson(item)).toList();
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      throw Exception('요청 오류');
+    }
+  }
+
+  /*
+
+  댓글 생성
+
+  */
+  static Future<bool> postComment(String content, int articleId) async {
+    var url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}/comments';
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.post(Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "content": content,
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      return false;
+    }
+  }
+
+  /*
+
+  대댓글 생성
+
+  */
+  static Future<bool> postNestedComment(String content, int commentId) async {
+    var url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-article-comments/${commentId}/comments';
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.post(Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "content": content,
+        }));
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      return false;
+    }
+  }
+
+
+  /*
+
+  댓글 삭제
+
+   */
+  static Future<bool> deleteComment(int articleId) async {
+
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-article-comments/${articleId}'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+
+    var response = await http.delete(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
+
+
+/*
+
+  좋아요 생성
+
+  */
+  static Future<bool> addLike(int articleId) async {
+    var url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}/likes';
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.post(Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'},
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      return false;
+    }
+  }
+
+  /*
+
+  좋아요 삭제
+
+   */
+  static Future<bool> cancleLike(int articleId) async {
+
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}/likes'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+
+    var response = await http.delete(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
+
 }
+
 
 
