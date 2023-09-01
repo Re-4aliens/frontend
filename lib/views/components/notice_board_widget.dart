@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:aliens/models/message_model.dart';
+import 'package:aliens/models/noticeArticle.dart';
 import 'package:aliens/views/pages/board/article_writing_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,9 +19,9 @@ import 'board_dialog_widget.dart';
 
 class NoticeWidget extends StatefulWidget {
 
-  NoticeWidget({super.key, required this.board, required this.screenArguments});
+  NoticeWidget({super.key, required this.noticeArticle, required this.screenArguments});
   final ScreenArguments screenArguments;
-  final Board board;
+  final NoticeArticle noticeArticle;
   @override
   State<StatefulWidget> createState() => _NoticeWidgetState();
 }
@@ -39,7 +40,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => NoticeDetailPage(board: widget.board, screenArguments: widget.screenArguments)),
+                builder: (context) => NoticeDetailPage(noticeArticle: widget.noticeArticle, screenArguments: widget.screenArguments)),
           );
     },
     child: ListTile(
@@ -49,7 +50,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
           Padding(
             padding:EdgeInsets.only(),
             child: Text(
-              '${widget.board.title}',
+              '${widget.noticeArticle.title}',
               style: TextStyle(
                 fontSize: 18.spMin,
                 color: Colors.black,
@@ -58,7 +59,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
           ),
           Flexible(
             child: Text(
-              DataUtils.getTime(widget.board.createdAt),
+              DataUtils.getTime(widget.noticeArticle.createdAt),
               style: TextStyle(
                 fontSize: 14.spMin,
                 color: Color(0xff888888),

@@ -139,7 +139,7 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
                         thickness: 1.h,
                         color: Color(0xffCECECE),
                       ),
-                        NoticeWidget(board: NotiList[index], screenArguments: widget.screenArguments),
+                        NoticeWidget(noticeArticle: NotiList[index], screenArguments: widget.screenArguments),
 
                       ],
                     );
