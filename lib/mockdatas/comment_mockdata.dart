@@ -10,7 +10,7 @@ List<Comment> commentListMock = [
 ];
 
 Comment comment1 = Comment(
-    boardArticleCommentId: 1,
+    articleCommentId: 1,
     content: "그러니까요 ㅠㅠㅠ 진짜 너무 더워요...",
     member: CommentMember(
         memberId: 1,
@@ -21,7 +21,7 @@ Comment comment1 = Comment(
     ),
   childs: [
     Comment(
-      boardArticleCommentId: 1,
+      articleCommentId: 1,
       content: "hot summer hot hot summer hot summer hot hot summer hot summer hot hot summer hot summer hot hot summer",
       member: CommentMember(
         memberId: 1,
@@ -33,7 +33,7 @@ Comment comment1 = Comment(
       createdAt: "2023-08-06 14:30:33",
     ),
     Comment(
-        boardArticleCommentId: 1,
+        articleCommentId: 1,
         content: "겨울 언제와...",
         member: CommentMember(
             memberId: 1,
@@ -49,7 +49,7 @@ Comment comment1 = Comment(
 );
 
 Comment comment2 = Comment(
-    boardArticleCommentId: 1,
+    articleCommentId: 1,
     content: "そうなんですよTT 本当に暑いです···",
     member: CommentMember(
         memberId: 1,
@@ -63,7 +63,7 @@ Comment comment2 = Comment(
 );
 
 Comment comment3 = Comment(
-    boardArticleCommentId: 1,
+    articleCommentId: 1,
     content: "That's what I'm saying It's really hot...",
     member: CommentMember(
         memberId: 1,
@@ -77,7 +77,7 @@ Comment comment3 = Comment(
 );
 
 Comment comment4 = Comment(
-    boardArticleCommentId: 1,
+    articleCommentId: 1,
     content: "就是啊 呜呜呜 真的太热了...",
     member: CommentMember(
         memberId: 1,

@@ -287,22 +287,11 @@ class _HomePageState extends State<HomePage> {
           BottomNavigationBarItem(
             icon: Padding(
               padding: EdgeInsets.all(8),
-              child: GestureDetector(
-                onTap: () async {
-                  try {
-                    final totalarticles = await APIs.TotalArticles();
-                    setState(() {
-                    });
-                  } catch (e) {
-                    print('API 호출 오류: $e');
-                  }
-                },
-                child: SvgPicture.asset(
-                  'assets/icon/ICON_board.svg',
-                  width: 25.r,
-                  height: 25.r,
-                  color: selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
-                ),
+              child: SvgPicture.asset(
+                'assets/icon/ICON_board.svg',
+                width: 25.r,
+                height: 25.r,
+                color: selectedIndex == 2 ? Color(0xFF7898FF) : Color(0xFFD9D9D9),
               ),
             ),
             label: "board".tr(),
