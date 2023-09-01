@@ -76,7 +76,7 @@ Board freePostingBoard1 = Board(
     likeCount: 109,
     commentsCount: 4,
     createdAt: "2023-08-17 23:53:00",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "아이폰",
@@ -93,7 +93,7 @@ Board freePostingBoard2 = Board(
     likeCount: 0,
     commentsCount: 4,
     createdAt: "2023-08-17 23:00:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "ゆうき",
@@ -131,7 +131,7 @@ Board freePostingBoard4 = Board(
     likeCount: 109,
     commentsCount: 4,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "햄버거",
@@ -168,7 +168,7 @@ Board fashionBoard2 = Board(
     likeCount: 9,
     commentsCount: 4,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -185,7 +185,7 @@ Board gameBoard1 = Board(
     likeCount: 9,
     commentsCount: 4,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -202,7 +202,7 @@ Board gameBoard2 = Board(
     likeCount: 9,
     commentsCount: 4,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "치킨보이",
@@ -219,7 +219,7 @@ Board foodBoard1 = Board(
     likeCount: 2,
     commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "찜닭",
@@ -257,7 +257,7 @@ Board musicBoard2 = Board(
     likeCount: 2,
     commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "Daisy",
@@ -275,7 +275,7 @@ Board musicBoard3 = Board(
     likeCount: 2,
     commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -292,7 +292,7 @@ Board infoBoard1 = Board(
     likeCount: 2,
     commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -326,7 +326,7 @@ Board infoBoard3 = Board(
     likeCount: 2,
     commentsCount: 10,
     createdAt: "2023-08-06 14:30:33",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "윤정하",
@@ -340,7 +340,7 @@ Board MyPostingBoard1 = Board(
     title: "낼 점심은 닭가슴살. 신난다.",
     createdAt: "2023-08-17 23:53:00",
     category: "음악게시판",
-    images: null,
+    images: [],
     member: Member(
       memberId: 1,
       name: "MM",
@@ -351,11 +351,13 @@ Board MyPostingBoard1 = Board(
 
 Board Notification1= Board(
     articleId: 1,
+    title: "낼 점심은 닭가슴살. 신난다.",
+    likeCount: 2,
+    commentsCount: 10,
     content: "낼 점심은 닭가슴살. 신난다.",
     createdAt: "2023-08-17 23:53:00",
     category: "음악게시판",
-    images: null,
-
+    images: [],
     member: Member(
       memberId: 1,
       name: "Jenny",
@@ -363,13 +365,16 @@ Board Notification1= Board(
       profileImageUrl: "",
     )
 );
+
 Board Notification2= Board(
     articleId: 1,
+    title: "요기가 알림기능인가....",
+    likeCount: 2,
+    commentsCount: 10,
     content: "요기가 알림기능인가....",
     createdAt: "2023-08-31 23:53:00",
     category: "정보게시판",
-    images: null,
-
+    images: [],
     member: Member(
       memberId: 1,
       name: "MM",
