@@ -9,18 +9,24 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/comment_model.dart';
+import '../../providers/comment_provider.dart';
 
 
 class CommentDialog extends StatelessWidget{
   final BuildContext context;
   final VoidCallback onpressed;
   final bool isNestedComment;
+  final Comment comment;
 
   const CommentDialog({
     Key? key,
     required this.context,
     required this.onpressed,
-    required this.isNestedComment
+    required this.isNestedComment,
+    required this.comment
   }) : super(key:key);
 
   @override
@@ -32,6 +38,7 @@ class CommentDialog extends StatelessWidget{
   }
 
   Widget androidDialog(){
+    final commentProvider = Provider.of<CommentProvider>(context);
     return Dialog(
       elevation: 0,
       backgroundColor: Color(0xffffffff),
@@ -71,7 +78,8 @@ class CommentDialog extends StatelessWidget{
             ),
             InkWell(
               onTap: (){
-                Navigator.pop(context);
+                //TODO 로딩 만들기
+                commentProvider.deleteComment(comment.articleCommentId!);
               },
               child: Container(
                 padding: EdgeInsets.all(13).r,
@@ -113,6 +121,7 @@ class CommentDialog extends StatelessWidget{
   }
 
   Widget iOSDialog(){
+    final commentProvider = Provider.of<CommentProvider>(context);
     return Dialog(
       elevation: 0,
       backgroundColor: Color(0xffffffff),
@@ -143,6 +152,8 @@ class CommentDialog extends StatelessWidget{
           ),
           InkWell(
             onTap: () {
+              //TODO 로딩 만들기
+              commentProvider.deleteComment(comment.articleCommentId!);
             },
             child: Container(
               height: 80,
