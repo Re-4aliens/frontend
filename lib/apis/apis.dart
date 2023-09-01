@@ -1506,6 +1506,40 @@ static Future<String> matchingProfessData() async{
 
 /*전체 게시판 게시글 상세 조회*/
 
+/*공지사항 전체조회*/
+  static Future<List<dynamic>> BoardNotice() async {
+    final _url = 'http://3.34.2.246:8080/api/v2/notices';
+
+    try {
+      // 토큰 읽어오기
+      var jwtToken = await storage.read(key: 'token');
+      jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+      final response = await http.get(
+        Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(utf8.decode(response.bodyBytes));
+        final data = responseData['data'];
+        if (data != null && data is List) {
+          return data;
+        }
+      }
+
+      print('API request failed: ${response.statusCode}');
+      return [];
+    } catch (error) {
+      print('Error fetching notices: $error');
+      return [];
+    }
+  }
+
+  /*공지사항 상세조회*/
 
 
 }
