@@ -52,13 +52,15 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
       child: ListView(
         children: [
           InkWell(
-            onTap: (){
+        onTap: () async {
               if(widget.isTotalBoard){
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => NoticeBoardPage(screenArguments: widget.screenArguments)),
+
                 );
+
               }
               else{
                 Navigator.pop(context);
