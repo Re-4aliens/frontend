@@ -119,7 +119,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
           title: Text('market'.tr(),
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 20.spMin,
+                fontSize: 18.spMin,
               )
           ),
           centerTitle: true,
@@ -127,14 +127,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
 
         ),
         body:isDrawerStart
-            ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false, onpressd: () {  },
+            ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: true, onpressd: () {  },
         )
             :Column(
             children: [
               Expanded(
                 child: SingleChildScrollView(
                   child: Container(
-                    padding: const EdgeInsets.only(right:24, left: 24, top: 12),
+                    padding: EdgeInsets.only(right: 24.w, left: 24.w, top: 12.h),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -145,14 +145,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 '가죽쪼리팔아요',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                    fontSize: 20.h,
+                                    fontSize: 20.spMin,
                                     color: Colors.black
                                 ),
                               ),
                             ),
                             Container(
-                              width: 75.h,
-                              height: 35.h,
+                              width: 75.spMin,
+                              height: 35.spMin,
                               decoration: BoxDecoration(
                                 color: Colors.transparent,
                                 border: Border.all(color: Color(0xFFEBEBEB)),
@@ -165,7 +165,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Color(0xff888888),
-                                            fontSize: 14.h
+                                            fontSize: 14.spMin
                                         ),
                                       ),
                                 ],
@@ -176,27 +176,27 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           ],
                         ),//제목 넣는 곳
                         SizedBox(height: MediaQuery.of(context).size.height*0.01,),
-                        Divider(thickness: 1,color: Color(0xffebebeb),),
+                        Divider(thickness: 1.h,color: Color(0xffebebeb),),
                         SizedBox(height: MediaQuery.of(context).size.height*0.01,),
                         Row(
                           children: [
                             Text('₩ ',
-                              style: TextStyle(fontSize: 16.h,fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 16.spMin,fontWeight: FontWeight.bold),
                             ),
                             Text('25000',
-                              style: TextStyle(fontSize: 16.h,fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 16.spMin,fontWeight: FontWeight.bold),
                             )//가격넣는곳
                           ],
                         ),//가격
                         SizedBox(height: MediaQuery.of(context).size.height*0.01,),
-                        Divider(thickness: 1,color: Color(0xffebebeb),),
+                        Divider(thickness: 1.h,color: Color(0xffebebeb),),
                         SizedBox(height: MediaQuery.of(context).size.height*0.005),
                         Row(
                           children: [
                             Text(
                             '상품상태',
                             style: TextStyle(
-                              fontSize: 16.h,
+                              fontSize: 16.spMin,
                               color: Color(0xff888888),
                             ),
                           ),
@@ -215,7 +215,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                         label: Text(
                                           condition,
                                           style: TextStyle(
-                                            fontSize: 14.h,
+                                            fontSize: 14.spMin,
                                             color: isSelected
                                                 ? Colors.white
                                                 : Color(0xffC1C1C1),
@@ -257,33 +257,33 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             children: [
                               Container(
                                 margin: EdgeInsets.only(right: 20).r,
-                                width: 197.h,
-                                height: 207.h,
+                                width: 197.spMin,
+                                height: 207.spMin,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10).r,
                                   color: Color(0xffF8F8F8),
                                 ),
                                 child: Icon(Icons.add_photo_alternate_outlined,//사진 넣는 곳
-                                  size: 66.h,
+                                  size: 66.spMin,
                                   color: Color(0xffebebeb),
                                   ),
                               ),
                               Container(
                                 margin: EdgeInsets.only(right: 20).r,
-                                width: 197.h,
-                                height: 207.h,
+                                width: 197.spMin,
+                                height: 207.spMin,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10).r,
                                   color: Color(0xffF8F8F8),
                                 ),
                                 child: Icon(Icons.add_photo_alternate_outlined,//사진 넣는 곳
-                                  size: 66.h,
+                                  size: 66.spMin,
                                   color: Color(0xffebebeb),
                                 ),
                               ),
                               Container(
-                                width: 197.h,
-                                height: 207.h,
+                                width: 197.spMin,
+                                height: 207.spMin,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10).r,
                                   color: Color(0xffF8F8F8),
@@ -301,7 +301,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           '제품명 : 가죽쪼리\n가격 : 25,000원\n상세정보 : 거의 새 상품이나 마찬가지입니다.\n딱 한 번만 신었어요\n휴대폰 번호 : 010-1234-5678', //내용
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                          fontSize: 16.h
+                          fontSize: 16.spMin
                         ),
                         ),//내용 넣는 곳
                         SizedBox(height: MediaQuery.of(context).size.height*0.02),
@@ -312,7 +312,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             Text('23.08.06 22:10',//createdAt
                               style: TextStyle(
                                 color: Color(0xffa8a8a8),
-                                fontSize: 16.h,
+                                fontSize: 16.spMin,
                               ),
                             ),
                             Row(
@@ -322,14 +322,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   child: Icon(
                                     Icons.thumb_up_alt_sharp,
                                     color: Color(0xffc1c1c1),
-                                    size: 18.w,
+                                    size: 18.spMin,
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 4, right: 15).r,
                                   child: Text('10',
                                     style: TextStyle(
-                                      fontSize: 16.h,
+                                      fontSize: 16.spMin,
                                       color: Color(0xffc1c1c1)
                                     ),
                                   )
@@ -339,14 +339,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   child: Icon(
                                     Icons.chat_bubble,
                                     color: Color(0xffc1c1c1),
-                                    size: 18.w,
+                                    size: 18.spMin,
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0).r,
                                   child: Text('1',
                                     style: TextStyle(
-                                        fontSize: 16.h,
+                                        fontSize: 16.spMin,
                                         color: Color(0xffc1c1c1)
                                     ),
                                   ),
@@ -355,14 +355,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             ),
                           ],
                         ),
-                        Divider(thickness: 1.2,color: Color(0xffE5EBFF),),
+                        Divider(thickness: 1.2.h,color: Color(0xffE5EBFF),),
 
                         //댓글
                         for (int i = 0; i < MarketcommentListMock.length; i++)
                           Column(
                             children: [
                               Padding(
-                                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30).r,
+                                padding: EdgeInsets.symmetric(vertical: 15, /*horizontal: 30*/).r,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -451,7 +451,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                       children: [
                                         Expanded(
                                           child: Container(
-                                            padding: EdgeInsets.all(10).r,
+                                           // padding: EdgeInsets.all(10).r,
                                             alignment: Alignment.centerRight,
                                             child: Icon(
                                               Icons.subdirectory_arrow_right,

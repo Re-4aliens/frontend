@@ -57,6 +57,16 @@ List<Board> MyPostingBoardList = [
 
 ];
 
+List<Board> NotificationList=[
+  Notification1,
+  Notification2
+];
+
+List<Board> NotiList = [
+  Notice1,
+  Notice2,
+  Notice3,
+];
 
 Board freePostingBoard1 = Board(
     articleId: 1,
@@ -339,5 +349,55 @@ Board MyPostingBoard1 = Board(
     )
 );
 
+Board Notification1= Board(
+    articleId: 1,
+    content: "낼 점심은 닭가슴살. 신난다.",
+    createdAt: "2023-08-17 23:53:00",
+    category: "음악게시판",
+    images: null,
 
+    member: Member(
+      memberId: 1,
+      name: "Jenny",
+      nationality: 'South Korea',
+      profileImageUrl: "",
+    )
+);
+Board Notification2= Board(
+    articleId: 1,
+    content: "요기가 알림기능인가....",
+    createdAt: "2023-08-31 23:53:00",
+    category: "정보게시판",
+    images: null,
 
+    member: Member(
+      memberId: 1,
+      name: "MM",
+      nationality: 'South Korea',
+      profileImageUrl: "",
+    )
+);
+
+Board Notice1= Board(
+    articleId: 1,
+    title: '[Friend Ship 이용시 규칙사항]',
+    content: "안녕하세요!! \n Friendship 관리자 ㅇㅇㅇ입니다. ~~~~",
+    createdAt: "2023-01-31 23:53:00",
+
+);
+
+Board Notice2= Board(
+  articleId: 1,
+  title: '베타버전 안내&베타테스터 모집 ',
+  content: "베타테스터 하실분~~~ 추첨을 통해 맥북드림",
+  createdAt: "2023-01-31 23:53:00",
+
+);
+
+Board Notice3= Board(
+  articleId: 1,
+  title: '3.1ver 업데이트 안내',
+  content: "업데이트 되었으니 업데이트 하시오",
+  createdAt: "2023-01-31 23:53:00",
+
+);
