@@ -1,5 +1,6 @@
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/board_model.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -40,40 +41,23 @@ class BoardProvider with ChangeNotifier {
     }
 
     return true;
-    /*
-
-    switch (_board.category){
-      case '자유게시판':
-        freePostingArticleList!.insert(0, _board);
-        totalBoardList.insert(0, _board);
-        break;
-      case '음식게시판':
-        foodBoardList.insert(0, _board);
-        totalBoardList.insert(0, _board);
-        break;
-      case '음악게시판':
-        musicBoardList.insert(0, _board);
-        totalBoardList.insert(0, _board);
-        break;
-      case '패션게시판':
-        fashionBoardList.insert(0, _board);
-        totalBoardList.insert(0, _board);
-        break;
-      case '게임게시판':
-        gameBoardList.insert(0, _board);
-        totalBoardList.insert(0, _board);
-        break;
-
-      case '정보게시판':
-        infoBoardList.insert(0, _board);
-        totalBoardList.insert(0, _board);
-        break;
-      default:
-        totalBoardList.add(_board);
-    }
   }
 
-     */
+  deletePost(int articleId) async {
+    bool value = false;
+    loading = true;
+    try {
+      value =  await APIs.deleteArticles(articleId);
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        value = await APIs.deleteArticles(articleId);
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+    return value;
   }
 
 }

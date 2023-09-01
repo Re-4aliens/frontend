@@ -1531,6 +1531,40 @@ static Future<String> matchingProfessData() async{
 
   /*
 
+  게시물 삭제
+
+   */
+  static Future<bool> deleteArticles(int articleId) async {
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    //accessToken
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+
+    var response = await http.delete(
+        Uri.parse(_url),
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json',
+        },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
+
+  /*
+
   특정 게시물 댓글 조회
 
   */

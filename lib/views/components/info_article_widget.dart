@@ -64,7 +64,7 @@ class _InfoArticleWidgetState extends State<InfoArticleWidget>{
                 InkWell(
                   onTap: (){
                     showDialog(context: context, builder: (builder){
-                      return BoardDialog(context: context,);
+                      return BoardDialog(context: context, board: widget.board);
                     });
                   },
                   child: Padding(
