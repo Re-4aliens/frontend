@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../apis/apis.dart';
 import '../../models/board_model.dart';
 import '../../models/screenArgument.dart';
 import '../pages/board/article_page.dart';
@@ -22,15 +23,35 @@ class NoticeWidget extends StatefulWidget {
   NoticeWidget({super.key, required this.noticeArticle, required this.screenArguments});
   final ScreenArguments screenArguments;
   final NoticeArticle noticeArticle;
+
   @override
   State<StatefulWidget> createState() => _NoticeWidgetState();
 }
 class _NoticeWidgetState extends State<NoticeWidget> {
   String createdAt = '';
+  List<NoticeArticle> noticearticles = [];
 
   @override
   void initState() {
     super.initState();
+    fetchNoticeData();
+  }
+
+
+  Future<void> fetchNoticeData() async {
+    try {
+      final response = await APIs.BoardNotice();
+      final dataList = response as List<dynamic>; // 변환된 리스트 데이터
+
+      setState(() {
+        print('1');
+        noticearticles = dataList.map((article) =>
+            NoticeArticle.fromJson(article)).toList();
+        print('2');
+      });
+    } catch (error) {
+      print('Error fetching article data: $error');
+    }
   }
 
   @override
