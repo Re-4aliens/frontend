@@ -126,7 +126,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                               context: context,
                               builder: (builder) {
                                 return BoardDialog(
-                                  context: context,
+                                  context: context, board: widget.board
                                 );
                               });
                         },
