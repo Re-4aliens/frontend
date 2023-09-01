@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/board_model.dart';
 import 'package:aliens/models/chatRoom_model.dart';
+import 'package:aliens/models/noticeArticle.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
@@ -27,9 +28,9 @@ import 'notification_page.dart';
 
 
 class NoticeDetailPage extends StatefulWidget {
-  NoticeDetailPage({Key? key, required this.screenArguments, required this.board}) : super(key: key);
+  NoticeDetailPage({Key? key, required this.screenArguments, required this.noticeArticle}) : super(key: key);
   final ScreenArguments screenArguments;
-  final Board board;
+  final NoticeArticle noticeArticle;
 
 
   @override
@@ -127,7 +128,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                 Padding(
                   padding:EdgeInsets.only(),
                   child: Text(
-                    '${widget.board.title}',
+                    '${widget.noticeArticle.title}',
                     style: TextStyle(
                       fontSize: 18.spMin,
                       fontWeight: FontWeight.bold,
@@ -138,7 +139,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
 
                 Flexible(
                   child: Text(
-                    DataUtils.getTime(widget.board.createdAt),
+                    DataUtils.getTime(widget.noticeArticle.createdAt),
                     style: TextStyle(
                       fontSize: 14.spMin,
                       color: Color(0xff888888),
@@ -155,7 +156,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 21.w, vertical: 10.spMin),
             child: Text(
-              '${widget.board.content}', // 'content' from the Board object
+              '${widget.noticeArticle.content}', // 'content' from the Board object
               style: TextStyle(
                 fontSize: 18.spMin,
                 color: Colors.black,

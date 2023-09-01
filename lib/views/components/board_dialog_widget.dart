@@ -19,11 +19,7 @@ class BoardDialog extends StatelessWidget{
   final BuildContext context;
   final Board board;
 
-  const BoardDialog({
-    Key? key,
-    required this.context,
-    required this.board
-  }) : super(key:key);
+  const BoardDialog({Key? key, required this.context, required this.board}) : super(key:key);
 
   @override
   Widget build(BuildContext context) {
