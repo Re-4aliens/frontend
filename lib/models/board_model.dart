@@ -4,7 +4,7 @@ class Board {
   String? title;
   String? content;
   int? likeCount;
-  int? commentCount;
+  int? commentsCount;
   List<String>? images;
   Member? member;
   String? createdAt;
@@ -15,7 +15,7 @@ class Board {
         this.title,
         this.content,
         this.likeCount,
-        this.commentCount,
+        this.commentsCount,
         this.images,
         this.member,
         this.createdAt});
@@ -29,6 +29,7 @@ class Board {
     images = json['images'].cast<String>();
     member =
     json['member'] != null ? new Member.fromJson(json['member']) : null;
+    commentsCount = json['commentsCount'];
     createdAt = json['createdAt'];
   }
 
@@ -39,6 +40,7 @@ class Board {
     data['title'] = this.title;
     data['content'] = this.content;
     data['likeCount'] = this.likeCount;
+    data['commentsCount'] = this.commentsCount;
     data['images'] = this.images;
     if (this.member != null) {
       data['member'] = this.member!.toJson();
