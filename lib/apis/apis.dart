@@ -2172,17 +2172,169 @@ class APIs {
   }
 
 
+  /*상품 판매글 댓글 전체 조회*/
+  static Future<List<Comment>> getMarketArticleComments(int marketArticleId) async {
+    try {
+      var jwtToken = await storage.read(key: 'token');
+      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
+
+      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$marketArticleId/market-article-comments');
+
+      final response = await http.get(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final commentsData = responseBody['data'];
+
+        // 댓글 데이터를 파싱하여 Comment 객체로 변환
+        final comments = commentsData.map((commentJson) {
+          return Comment.fromJson(commentJson);
+        }).toList();
+
+        return comments;
+      } else {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final errorCode = responseBody['code'];
+
+        if (errorCode == 'AT-C-002') {
+          throw '액세스 토큰 만료';
+        } else if (errorCode == 'AT-C-007') {
+          throw '로그아웃된 토큰';
+        } else {
+          throw Exception('댓글 조회 오류');
+        }
+      }
+    } catch (error) {
+      print('Error fetching market article comments: $error');
+      throw Exception('댓글 조회 오류');
+    }
+  }
+
+
   /*상품 판매글 부모 댓글 등록*/
-  
+  static Future<String> createMarketArticleComment(int marketArticleId, String content) async {
+    try {
+      var jwtToken = await storage.read(key: 'token');
+      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
+
+      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$marketArticleId/market-article-comments');
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'content': content}),
+      );
+
+      if (response.statusCode == 201) {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final message = responseBody['message'];
+        return message;
+      } else {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final errorCode = responseBody['code'];
+
+        if (errorCode == 'AT-C-002') {
+          throw '액세스 토큰 만료';
+        } else if (errorCode == 'AT-C-007') {
+          throw '로그아웃된 토큰';
+        } else {
+          throw Exception('댓글 생성 오류');
+        }
+      }
+    } catch (error) {
+      print('Error creating market article comment: $error');
+      throw Exception('댓글 생성 오류');
+    }
+  }
 
 
- /*특정 판매글 댓글 삭제*/
+  /*특정 판매글 댓글 삭제*/
+  static Future<String> deleteMarketArticleComment(int marketArticleCommentId) async {
+    try {
+      var jwtToken = await storage.read(key: 'token');
+      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
+
+      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-article-comments/$marketArticleCommentId');
+
+      final response = await http.delete(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final message = responseBody['message'];
+        return message;
+      } else {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final errorCode = responseBody['code'];
+
+        if (errorCode == 'AT-C-002') {
+          throw '액세스 토큰 만료';
+        } else if (errorCode == 'AT-C-007') {
+          throw '로그아웃된 토큰';
+        } else {
+          throw Exception('댓글 삭제 오류');
+        }
+      }
+    } catch (error) {
+      print('Error deleting market article comment: $error');
+      throw Exception('댓글 삭제 오류');
+    }
+  }
 
 
- /*상품 판매글 댓글 전체 조회*/
+  /*특정 상품 판매글 댓글에 대댓글 등록*/
+  static Future<String> addMarketArticleCommentReply(int marketArticleId, int marketArticleCommentId, String content) async {
+    try {
+      var jwtToken = await storage.read(key: 'token');
+      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
+      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$marketArticleId/market-article-comments/$marketArticleCommentId');
 
- /*특정 상품 판매글 댓글에 대댓글 등록*/
+      final response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({'content': content}),
+      );
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final message = responseBody['message'];
+        return message;
+      } else {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final errorCode = responseBody['code'];
+
+        if (errorCode == 'AT-C-002') {
+          throw '액세스 토큰 만료';
+        } else if (errorCode == 'AT-C-007') {
+          throw '로그아웃된 토큰';
+        } else {
+          throw Exception('대댓글 생성 오류');
+        }
+      }
+    } catch (error) {
+      print('Error adding market article comment reply: $error');
+      throw Exception('대댓글 생성 오류');
+    }
+  }
+
 
 }
 
