@@ -104,7 +104,7 @@ class _MyArticleWidgetState extends State<MyArticleWidget>{
               padding: const EdgeInsets.only(top: 8).h,
               child: Text('${widget.board.title}', style: TextStyle(fontSize: 14.spMin, color: Color(0xff444444), fontWeight: FontWeight.bold)),
             ),
-            widget.board.images == null ?
+            widget.board.images!.isEmpty ?
             SizedBox():
             Container(
               height: 90.h,
