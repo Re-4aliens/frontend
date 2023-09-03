@@ -13,6 +13,21 @@ class BoardProvider with ChangeNotifier {
   List<Board>? articleList;
   bool loading = false;
 
+  getAllArticles() async {
+    loading = true;
+    try{
+      articleList = await APIs.TotalArticles();
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        articleList = await APIs.TotalArticles();
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
   getArticles(String boardCategory) async {
     loading = true;
     try{
