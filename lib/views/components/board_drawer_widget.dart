@@ -180,101 +180,152 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
               ),
             ],
           ),
-          /*InkWell(
-            onTap: (){},
-=======
-          InkWell(
-            onTap: (){
-
-              if(widget.isTotalBoard){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PostBoardPage()),
-                );
-              }
-              else{
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PostBoardPage()),
-                );
-              }
-          },
->>>>>>> c09efe068d128ee0553b7508207babe030759d40
-            child: Container(
-              color: Colors.white,
-              width: double.infinity,
-              height: 60,
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    '글쓰기',
-                    style: TextStyle(color: Color(0xff888888), fontSize: 16),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Icon(
-                    Icons.edit,
-                    color: Color(0xff888888),
-                  ),
-                ],
-              ),
-            ),
-          ),*/
           Divider(height: 0, thickness: 1,),
-          InkWell(
-            onTap: (){
-              if(widget.isTotalBoard){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyArticlePage(screenArguments: widget.screenArguments)),
-                );
-              }
-              else{
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyArticlePage(screenArguments: widget.screenArguments)),
-                );
-              }
-            },
-            child: Container(
-              color: Colors.white,
-              width: double.infinity,
-              height: 60,
-              alignment: Alignment.centerLeft,
-              padding: EdgeInsets.all(10),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    'my_posts'.tr(),
-                    style: TextStyle(color: Color(0xff888888), fontSize: 16),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  SvgPicture.asset(
-                    'assets/icon/ICON_board.svg',
-                    height: 16.spMin,
-                    color: Color(0xff888888),
-                  )
-                ],
-              ),
+          ExpansionTile(
+            backgroundColor: Colors.white,
+            tilePadding: EdgeInsets.only(right: 10,left: 10),
+            initiallyExpanded:false,
+            collapsedBackgroundColor: Colors.white,
+            title:Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 20,
+                ),
+                Text(
+                  'my_posts'.tr(),
+                  style: TextStyle(color: Color(0xff888888), fontSize: 16),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                SvgPicture.asset(
+                  'assets/icon/ICON_board.svg',
+                  height: 16.spMin,
+                  color: Color(0xff888888),
+                )
+              ],
             ),
+            children: [
+
+              //좋아요
+              InkWell(
+                onTap: (){
+                  if(widget.isTotalBoard){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyArticlePage(screenArguments: widget.screenArguments, category: 'liked'.tr())),
+                    );
+                  }
+                  else{
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyArticlePage(screenArguments: widget.screenArguments, category: 'liked'.tr())),
+                    );
+                  }
+                },
+                child: Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  height: 60,
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        'liked'.tr(),
+                        style: TextStyle(color: Color(0xff888888), fontSize: 16),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              //게시글
+              InkWell(
+                onTap: (){
+                  if(widget.isTotalBoard){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyArticlePage(screenArguments: widget.screenArguments, category: 'my_posts-child'.tr())),
+                    );
+                  }
+                  else{
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyArticlePage(screenArguments: widget.screenArguments, category: 'my_posts-child'.tr())),
+                    );
+                  }
+                },
+                child: Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  height: 60,
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        'my_posts-child'.tr(),
+                        style: TextStyle(color: Color(0xff888888), fontSize: 16),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              //댓글
+              InkWell(
+                onTap: (){
+                  if(widget.isTotalBoard){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyArticlePage(screenArguments: widget.screenArguments, category: 'my-comments'.tr())),
+                    );
+                  }
+                  else{
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyArticlePage(screenArguments: widget.screenArguments, category: 'my-comments'.tr())),
+                    );
+                  }
+                },
+                child: Container(
+                  color: Colors.white,
+                  width: double.infinity,
+                  height: 60,
+                  alignment: Alignment.centerLeft,
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        'my-comments'.tr(),
+                        style: TextStyle(color: Color(0xff888888), fontSize: 16),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
           Divider(height: 0, thickness: 1,),
           InkWell(

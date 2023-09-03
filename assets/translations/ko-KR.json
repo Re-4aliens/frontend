@@ -298,6 +298,9 @@
   "post2": "제목을 입력하세요.",
   "post3": "작성 완료",
   "post4": "카테고리를 선택해주세요.",
+  "liked": "좋아요한 게시글",
+  "my_posts-child": "내가 작성한 게시글",
+  "my-comments": "내가 작성한 댓글",
 
   "general-board-post" : "일반게시판 글쓰기",
   "market-board-post": "장터게시판 글쓰기"
