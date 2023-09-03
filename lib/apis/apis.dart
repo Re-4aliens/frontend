@@ -21,6 +21,7 @@ import 'dart:convert';
 import '../models/board_model.dart';
 import '../models/comment_model.dart';
 import '../models/market_articles.dart';
+import '../models/market_comment.dart';
 import '../models/memberDetails_model.dart';
 import '../models/message_model.dart';
 import '../models/partner_model.dart';
@@ -2135,7 +2136,7 @@ class APIs {
 
 
   /*상품 판매글 댓글 전체 조회*/
-  static Future<List<Comment>> getMarketArticleComments(int marketArticleId) async {
+  static Future<List<MarketComment>> getMarketArticleComments(int marketArticleId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
@@ -2151,15 +2152,9 @@ class APIs {
       );
 
       if (response.statusCode == 200) {
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        final commentsData = responseBody['data'];
-
-        // 댓글 데이터를 파싱하여 Comment 객체로 변환
-        final comments = commentsData.map((commentJson) {
-          return Comment.fromJson(commentJson);
-        }).toList();
-
-        return comments;
+        print(json.decode(utf8.decode(response.bodyBytes)));
+        List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data'];
+        return body.map((dynamic item) => MarketComment.fromJson(item)).toList();
       } else {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final errorCode = responseBody['code'];
@@ -2180,12 +2175,12 @@ class APIs {
 
 
   /*상품 판매글 부모 댓글 등록*/
-  static Future<String> createMarketArticleComment(int marketArticleId, String content) async {
+  static Future<bool> createMarketArticleComment(int articleCommentId, String content) async {
     try {
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
-      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$marketArticleId/market-article-comments');
+      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$articleCommentId/market-article-comments');
 
       final response = await http.post(
         url,
@@ -2197,9 +2192,8 @@ class APIs {
       );
 
       if (response.statusCode == 201) {
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        final message = responseBody['message'];
-        return message;
+        print(json.decode(utf8.decode(response.bodyBytes)));
+        return true;
       } else {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final errorCode = responseBody['code'];
@@ -2220,12 +2214,12 @@ class APIs {
 
 
   /*특정 판매글 댓글 삭제*/
-  static Future<String> deleteMarketArticleComment(int marketArticleCommentId) async {
+  static Future<String> deleteMarketArticleComment(int articleCommentId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
-      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-article-comments/$marketArticleCommentId');
+      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-article-comments/$articleCommentId');
 
       final response = await http.delete(
         url,
@@ -2259,12 +2253,12 @@ class APIs {
 
 
   /*특정 상품 판매글 댓글에 대댓글 등록*/
-  static Future<String> addMarketArticleCommentReply(int marketArticleId, int marketArticleCommentId, String content) async {
+  static Future<bool> addMarketArticleCommentReply(int articleCommentId, int ArticleCommentId, String content) async {
     try {
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
-      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$marketArticleId/market-article-comments/$marketArticleCommentId');
+      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$articleCommentId/market-article-comments/$ArticleCommentId');
 
       final response = await http.post(
         url,
