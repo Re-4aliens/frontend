@@ -1,5 +1,6 @@
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/board_model.dart';
+import 'package:aliens/models/market_articles.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,22 @@ class BoardProvider with ChangeNotifier {
 
   List<Board>? articleList;
   bool loading = false;
+  List<Board>? likedList;
+
+  getAllArticles() async {
+    loading = true;
+    try{
+      articleList = await APIs.TotalArticles();
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        articleList = await APIs.TotalArticles();
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
 
   getArticles(String boardCategory) async {
     loading = true;
@@ -81,6 +98,55 @@ class BoardProvider with ChangeNotifier {
         //이미 좋아요를 눌렀으면
         //해제 요청
         //await APIs.cancleLike(articleId);
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  getLikedList() async {
+
+    loading = true;
+
+    try {
+      //게시판 좋아요 리스트 요청
+      likedList = await APIs.getLikedPost();
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        //게시판 좋아요 리스트 요청
+        likedList = await APIs.getLikedPost();
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  getMyArticles() async {
+    loading = true;
+    try{
+      articleList = await APIs.getMyArticles();
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        articleList = await APIs.getMyArticles();
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  getMyCommentArticles() async {
+    loading = true;
+    try{
+      articleList = await APIs.getCommentArticles();
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        articleList = await APIs.getCommentArticles();
       } else {
       }
     }

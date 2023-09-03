@@ -17,16 +17,16 @@ import '../../repository/board_provider.dart';
 import '../pages/board/article_page.dart';
 import 'board_dialog_widget.dart';
 
-class TotalArticleWidget extends StatefulWidget {
+class LikedArticleWidget extends StatefulWidget {
 
-  TotalArticleWidget({super.key, required this.board, required this.nationCode});
+  LikedArticleWidget({super.key, required this.board, required this.nationCode});
 
   final Board board;
   final String nationCode;
   @override
-  State<StatefulWidget> createState() => _TotalArticleWidgetState();
+  State<StatefulWidget> createState() => _LikedArticleWidgetWidgetState();
 }
-class _TotalArticleWidgetState extends State<TotalArticleWidget>{
+class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
 
   String createdAt = '';
   String boardCategory = '';
@@ -163,80 +163,25 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
             children: [
               Padding(
                 padding: const EdgeInsets.only(top: 10).h,
-                child: Text(
-                  '${widget.board.title}',
-                  style: TextStyle(
-                      fontSize: 14.spMin,
-                      color: Color(0xff444444),
-                      fontWeight: FontWeight.bold),
-                ),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                          text: '${widget.board.member!.name}',
+                          style: TextStyle(
+                            fontSize: 14.spMin,
+                            color: Color(0xff444444),
+                            fontWeight: FontWeight.bold
+                          )),
+                      TextSpan(
+                          text: '님의 게시글에 좋아요를 눌렀습니다.',
+                          style: TextStyle(
+                              fontSize: 14.spMin,
+                              color: Color(0xff444444))),
+                    ]
+                  ),
+                )
               ),
-              widget.board.images!.isEmpty
-                  ? SizedBox()
-                  : Container(
-                height: 90.h,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: widget.board.images!.length,
-                    itemBuilder: (context, index) {
-                      return Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(right: 10).w,
-                            height: 80.h,
-                            width: 80.h,
-                            decoration: BoxDecoration(
-                                color: Color(0xfff8f8f8),
-                                borderRadius:
-                                BorderRadius.circular(10)),
-                            padding: const EdgeInsets.all(25.0).r,
-                            child: Image.asset(
-                                'assets/icon/ICON_photo_1.png'),
-                          ),
-                        ],
-                      );
-                    }),
-              ),
-              widget.board.category == "정보게시판" ? SizedBox(height: 10.h,):
-              Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 15.0).h,
-                child: Text(
-                  '${widget.board.content}',
-                  style: TextStyle(
-                      fontSize: 14.spMin, color: Color(0xff616161)),
-                ),
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4.0).r,
-                    child: SvgPicture.asset(
-                      'assets/icon/ICON_good.svg',
-                      width: 25.r,
-                      height: 25.r,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(left: 4, right: 15).w,
-                    child: widget.board.likeCount == 0
-                        ? Text('')
-                        : Text('${widget.board.likeCount}'),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0).r,
-                    child: SvgPicture.asset(
-                      'assets/icon/icon_comment.svg',
-                      width: 25.r,
-                      height: 25.r,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0).r,
-                    child: Text('${widget.board.commentsCount}'),
-                  ),
-                ],
-              )
             ],
           ),
         ),
