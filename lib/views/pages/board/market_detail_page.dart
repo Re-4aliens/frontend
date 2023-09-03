@@ -84,6 +84,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     String productStatus = '${widget.marketBoard.productStatus}';
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
     marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
+
+
     return GestureDetector(
       onTap: (){
         FocusScope.of(context).unfocus();
@@ -413,7 +415,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                           });
                                                           Navigator.pop(context);
                                                         },
-                                                            isNestedComment: false, marketcomment: marketcomment);
+                                                            isNestedComment: false, marketcomment: marketcommentProvider.commentListData![index]);
                                                       });
                                                     },
                                                     child: Padding(
@@ -511,7 +513,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                 });
                                                                 Navigator.pop(context);
                                                               },
-                                                                isNestedComment: true, marketcomment:marketComment);
+                                                                isNestedComment: true,marketcomment: marketcommentProvider.commentListData![index]);
                                                             });
                                                           },
                                                           child: Padding(
