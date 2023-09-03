@@ -1,6 +1,7 @@
 
 import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:aliens/models/chatRoom_model.dart';
+import 'package:aliens/models/market_articles.dart';
 import 'package:aliens/models/signup_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -1393,11 +1394,10 @@ class APIs {
 
 
   /*전체게시판 글 전부 조회*/
-  static Future<List<dynamic>> TotalArticles() async {
-    final _url = 'http://3.34.2.246:8080/api/v2/articles';
+  static Future<List<Board>> TotalArticles() async {
+    final _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/articles';
 
-    try {
-      // 토큰 읽어오기
+      //토큰 읽어오기
       var jwtToken = await storage.read(key: 'token');
       jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
@@ -1410,19 +1410,26 @@ class APIs {
       );
 
       if (response.statusCode == 200) {
-        final responseData = json.decode(utf8.decode(response.bodyBytes));
-        final data = responseData['data'];
-        if (data != null && data is List) {
-          return data; // 응답 데이터 리스트를 반환
-        }
-      }
+        print(json.decode(utf8.decode(response.bodyBytes)));
+        List<dynamic> body = json.decode(
+            utf8.decode(response.bodyBytes))['data'];
+        return body.map((dynamic item) => Board.fromJson(item)).toList();
 
-      print('API request failed: ${response.statusCode}');
-      return []; // 빈 리스트 반환하여 오류 시도 처리
-    } catch (error) {
-      print('Error fetching article data: $error');
-      return []; // 빈 리스트 반환하여 오류 시도 처리
-    }
+
+        //fail
+      } else {
+        print(json.decode(utf8.decode(response.bodyBytes)));
+        if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+          print('액세스 토큰 만료');
+          throw 'AT-C-002';
+        } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+          print('로그아웃된 토큰');
+          throw 'AT-C-007';
+        }else{
+
+        }
+        throw Exception('요청 오류');
+      }
   }
 
 
@@ -1495,8 +1502,101 @@ class APIs {
     }
   }
 
+  /*
+
+  나의 게시글 조회
+
+   */
+
+  static Future<List<Board>> getMyArticles() async {
+    //TODO url 수정
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/articles'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      List<dynamic> body = json.decode(
+          utf8.decode(response.bodyBytes))['data'];
+      return body.map((dynamic item) => Board.fromJson(item)).toList();
 
 
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      throw Exception('요청 오류');
+    }
+  }
+
+  /*
+
+  내가 댓글 단 게시글 조회
+
+   */
+
+  static Future<List<Board>> getCommentArticles() async {
+    //TODO url 수정
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/articles'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      List<dynamic> body = json.decode(
+          utf8.decode(response.bodyBytes))['data'];
+      return body.map((dynamic item) => Board.fromJson(item)).toList();
+
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      throw Exception('요청 오류');
+    }
+  }
 
   /*
 
@@ -1881,6 +1981,7 @@ class APIs {
   }
 
 
+
   /*상품판매글 모두 조회*/
   static Future<List<MarketBoard>> getMarketArticles() async {
     var _url = 'http://3.34.2.246:8080/api/v2/market-articles';
@@ -1957,7 +2058,6 @@ class APIs {
       return []; // Empty list on error
     }
   }
-
 
   /*상품 판매글 생성*/
   static Future<bool> createMarketArticle(MarketBoard marketArticle) async {
@@ -2291,6 +2391,51 @@ class APIs {
     }
   }
 
+
+
+  /*
+
+  좋아요 리스트
+
+  */
+  static Future<List<Board>> getLikedPost() async {
+    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/likes'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data'];
+      return body.map((dynamic item) => Board.fromJson(item)).toList();
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      throw Exception('요청 오류');
+    }
+  }
 
 }
 
