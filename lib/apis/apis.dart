@@ -1882,7 +1882,7 @@ class APIs {
 
   /*상품판매글 모두 조회*/
   static Future<List<MarketBoard>> getMarketArticles() async {
-    var _url = 'https://3.34.2.246:8080/api/v2/market-articles';
+    var _url = 'http://3.34.2.246:8080/api/v2/market-articles';
 
     // 토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1976,8 +1976,8 @@ class APIs {
       request.fields['productStatus'] = marketArticle.productStatus!;
 
       // 이미지 파일 필드 추가
-      if (marketArticle.images != null && marketArticle.images!.isNotEmpty) {
-        for (String imagePath in marketArticle.images!) {
+      if (marketArticle.imageUrls != null && marketArticle.imageUrls!.isNotEmpty) {
+        for (String imagePath in marketArticle.imageUrls!) {
           if (imagePath.isNotEmpty) {
             var file = await http.MultipartFile.fromPath('imageUrls', imagePath);
             request.files.add(file);
@@ -2132,44 +2132,6 @@ class APIs {
     }
   }
 
-
-  /*특정 판매글 찜 제거*/
-  static Future<String> removeMarketArticleBookmark(int articleId) async {
-    try {
-      var jwtToken = await storage.read(key: 'token');
-      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
-
-      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$articleId/bookmarks');
-
-      final response = await http.delete(
-        url,
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        final message = responseBody['message'];
-        return message;
-      } else {
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        final errorCode = responseBody['code'];
-
-        if (errorCode == 'AT-C-002') {
-          throw '액세스 토큰 만료';
-        } else if (errorCode == 'AT-C-007') {
-          throw '로그아웃된 토큰';
-        } else {
-          throw Exception('북마크 해제 오류');
-        }
-      }
-    } catch (error) {
-      print('Error removing market article bookmark: $error');
-      throw Exception('북마크 해제 오류');
-    }
-  }
 
 
   /*상품 판매글 댓글 전체 조회*/

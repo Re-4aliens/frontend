@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:aliens/models/market_articles.dart';
 import 'package:aliens/permissions.dart';
 import 'package:chips_choice/chips_choice.dart';
 import 'package:aliens/models/chatRoom_model.dart';
@@ -22,8 +23,9 @@ import '../../components/button.dart';
 
 class MarketBoardPostPage extends StatefulWidget {
 
-  const MarketBoardPostPage({super.key,required this.screenArguments});
+  const MarketBoardPostPage({super.key,required this.screenArguments, this.marketBoard, });
 final ScreenArguments screenArguments;
+final MarketBoard? marketBoard;
 
 
   @override

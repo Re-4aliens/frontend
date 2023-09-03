@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
+import 'package:aliens/models/market_articles.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
@@ -26,8 +27,10 @@ import '../home_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
-  {super.key, required this.screenArguments});
+  {super.key, required this.screenArguments, required this.marketBoard});
   final ScreenArguments screenArguments;
+  final MarketBoard marketBoard;
+
 
 
   @override
@@ -73,7 +76,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     List<String> whatStatus = [
       '미개봉', '거의 새 것', '약간의 하자', '사용감 있음'
     ];
-    String productStatus = '거의 새 것';
+    String productStatus = '${widget.marketBoard.productStatus}';
     return GestureDetector(
       onTap: (){
         FocusScope.of(context).unfocus();
@@ -141,7 +144,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                '가죽쪼리팔아요',
+                                '${widget.marketBoard.title}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                     fontSize: 20.spMin,
@@ -160,7 +163,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('판매중',
+                                  Text('${widget.marketBoard.status}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Color(0xff888888),
@@ -169,9 +172,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                       ),
                                 ],
                               ),
-
                               ),
-
                           ],
                         ),//제목 넣는 곳
                         SizedBox(height: MediaQuery.of(context).size.height*0.01,),
@@ -182,7 +183,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             Text('₩ ',
                               style: TextStyle(fontSize: 16.spMin,fontWeight: FontWeight.bold),
                             ),
-                            Text('25000',
+                            Text('${widget.marketBoard.price}',
                               style: TextStyle(fontSize: 16.spMin,fontWeight: FontWeight.bold),
                             )//가격넣는곳
                           ],
@@ -193,7 +194,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         Row(
                           children: [
                             Text(
-                            '상품상태',
+                              'market-productStatus'.tr(),
                             style: TextStyle(
                               fontSize: 16.spMin,
                               color: Color(0xff888888),
@@ -253,21 +254,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(right: 20).r,
-                                width: 197.spMin,
-                                height: 207.spMin,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10).r,
-                                  color: Color(0xffF8F8F8),
-                                ),
-                                child: Icon(Icons.add_photo_alternate_outlined,//사진 넣는 곳
-                                  size: 66.spMin,
-                                  color: Color(0xffebebeb),
-                                  ),
-                              ),
-                              Container(
+                            children: widget.marketBoard.imageUrls!.map((imageUrl) {
+                              return Container(
                                 margin: EdgeInsets.only(right: 20).r,
                                 width: 197.spMin,
                                 height: 207.spMin,
@@ -275,29 +263,18 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   borderRadius: BorderRadius.circular(10).r,
                                   color: Color(0xffF8F8F8),
                                 ),
-                                child: Icon(Icons.add_photo_alternate_outlined,//사진 넣는 곳
-                                  size: 66.spMin,
-                                  color: Color(0xffebebeb),
+                                child: Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                              Container(
-                                width: 197.spMin,
-                                height: 207.spMin,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10).r,
-                                  color: Color(0xffF8F8F8),
-                                ),
-                                child: Icon(Icons.add_photo_alternate_outlined,//사진 넣는 곳
-                                  size: 66.h,
-                                  color: Color(0xffebebeb),
-                                ),
-                              )
-                            ],
+                              );
+                            }).toList(),
                           ),
-                        ),//사진
+                        ),
+//사진
                         SizedBox(height: MediaQuery.of(context).size.height*0.02),
                         Text(
-                          '제품명 : 가죽쪼리\n가격 : 25,000원\n상세정보 : 거의 새 상품이나 마찬가지입니다.\n딱 한 번만 신었어요\n휴대폰 번호 : 010-1234-5678', //내용
+                          '${widget.marketBoard.content}', //내용
                           textAlign: TextAlign.start,
                           style: TextStyle(
                           fontSize: 16.spMin
@@ -308,7 +285,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('23.08.06 22:10',//createdAt
+                            Text('${widget.marketBoard.createdAt}',//createdAt
                               style: TextStyle(
                                 color: Color(0xffa8a8a8),
                                 fontSize: 16.spMin,
@@ -318,15 +295,16 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(4.0).r,
-                                  child: Icon(
-                                    Icons.thumb_up_alt_sharp,
+                                  child: SvgPicture.asset(
+                                    'assets/icon/ICON_good.svg',
+                                    width: 18.r,
+                                    height: 18.r,
                                     color: Color(0xffc1c1c1),
-                                    size: 18.spMin,
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 4, right: 15).r,
-                                  child: Text('10',
+                                  child: Text('${widget.marketBoard.marketArticleBookmarkCount}',
                                     style: TextStyle(
                                       fontSize: 16.spMin,
                                       color: Color(0xffc1c1c1)
@@ -335,15 +313,16 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0).r,
-                                  child: Icon(
-                                    Icons.chat_bubble,
+                                  child: SvgPicture.asset(
+                                    'assets/icon/icon_comment.svg',
+                                    width: 18.r,
+                                    height: 18.r,
                                     color: Color(0xffc1c1c1),
-                                    size: 18.spMin,
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0).r,
-                                  child: Text('1',
+                                  child: Text('${widget.marketBoard.commentsCount}',
                                     style: TextStyle(
                                         fontSize: 16.spMin,
                                         color: Color(0xffc1c1c1)
