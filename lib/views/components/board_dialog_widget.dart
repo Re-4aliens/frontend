@@ -1,3 +1,4 @@
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/board_provider.dart';
@@ -18,8 +19,9 @@ import '../../models/board_model.dart';
 class BoardDialog extends StatelessWidget{
   final BuildContext context;
   final Board board;
+  final MemberDetails memberDetails;
 
-  const BoardDialog({Key? key, required this.context, required this.board}) : super(key:key);
+  const BoardDialog({Key? key, required this.context, required this.board, required this.memberDetails}) : super(key:key);
 
   @override
   Widget build(BuildContext context) {

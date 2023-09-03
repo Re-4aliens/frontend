@@ -98,7 +98,7 @@ class _NotificationBoardWidgetState extends State<NotificationBoardWidget> {
                 }
                 return Column(
                   children: [
-                    NotificationWidget(board: NotificationList[index], nationCode: nationCode),
+                    NotificationWidget(board: NotificationList[index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!,),
                     Divider(
                       thickness: 1.h,
                       color: Color(0xffCECECE),
