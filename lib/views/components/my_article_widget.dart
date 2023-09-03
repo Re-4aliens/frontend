@@ -1,6 +1,7 @@
 
 import 'dart:async';
 
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/views/pages/board/article_writing_page.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -15,10 +16,11 @@ import 'board_dialog_widget.dart';
 
 class MyArticleWidget extends StatefulWidget {
 
-  MyArticleWidget({super.key, required this.board, required this.nationCode});
+  MyArticleWidget({super.key, required this.board, required this.nationCode, required this.memberDetails});
 
   final Board board;
   final String nationCode;
+  final MemberDetails memberDetails;
   @override
   State<StatefulWidget> createState() => _MyArticleWidgetState();
 }
@@ -81,7 +83,7 @@ class _MyArticleWidgetState extends State<MyArticleWidget>{
           InkWell(
             onTap: (){
               showDialog(context: context, builder: (builder){
-                return BoardDialog(context: context, board: widget.board);
+                return BoardDialog(context: context, board: widget.board, memberDetails: widget.memberDetails,);
               });
             },
             child: Padding(
@@ -136,7 +138,7 @@ class _MyArticleWidgetState extends State<MyArticleWidget>{
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board)),
+          MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails,)),
         );
       },
     );
