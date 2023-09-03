@@ -299,6 +299,11 @@
 
 
   "general-board-post" : "General Board New Post",
-  "market-board-post": "Market Board New Post"
+  "market-board-post": "Market Board New Post",
+  "Brand_New": "Brand New",
+  "Almost_New": "Almost New",
+  "Slight_Defect": "Slight Defect",
+  "Used": "Used",
+  "sale": "For sale"
 
 }

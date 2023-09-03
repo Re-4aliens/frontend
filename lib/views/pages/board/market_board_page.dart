@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../models/market_articles.dart';
+import '../../../models/message_model.dart';
 import '../../components/board_drawer_widget.dart';
 
 
@@ -259,7 +260,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                marketBoard.createdAt ?? "", // 생성 날짜 정보 사용
+                                DataUtils.getTime(widget.marketBoard?.createdAt), // 생성 날짜 정보 사용
                                 style: TextStyle(
                                   color: Color(0xffC1C1C1),
                                   fontSize: 12.spMin,
@@ -307,7 +308,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                       ),
                       SizedBox(height: 5.h),
                       Text(
-                        '${marketBoard.price ?? 0}원', // 가격 정보 사용
+                        '${marketBoard.price.toString() ?? 0}원', // 가격 정보 사용
                         style: TextStyle(
                             fontSize: 16.spMin, fontWeight: FontWeight.w700),
                       ),
