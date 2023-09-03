@@ -14,10 +14,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../apis/apis.dart';
 import '../../mockdatas/board_mockdata.dart';
 import '../../models/countries.dart';
+import '../../repository/board_provider.dart';
 import '../../repository/sql_message_repository.dart';
 import '../pages/board/article_page.dart';
 
