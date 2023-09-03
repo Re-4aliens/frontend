@@ -7,7 +7,7 @@ class MarketBoard {
   String? content;
   int? marketArticleBookmarkCount;
   int? commentsCount;
-  List<String>? images;
+  List<String>? imageUrls;
   Member? member;
   String? createdAt;
 
@@ -20,7 +20,7 @@ class MarketBoard {
     this.content,
     this.marketArticleBookmarkCount,
     this.commentsCount,
-    this.images,
+    this.imageUrls,
     this.member,
     this.createdAt,
   });
@@ -34,7 +34,7 @@ class MarketBoard {
     content = json['content'];
     marketArticleBookmarkCount = json['marketArticleBookmarkCount'];
     commentsCount = json['commentsCount'];
-    images = json['images'].cast<String>();
+    imageUrls = json['imageUrls'].cast<String>();
     member = json['member'] != null ? Member.fromJson(json['member']) : null;
     createdAt = json['createdAt'];
   }
@@ -49,7 +49,7 @@ class MarketBoard {
     data['content'] = content;
     data['marketArticleBookmarkCount'] = marketArticleBookmarkCount;
     data['commentsCount'] = commentsCount;
-    data['images'] = images;
+    data['imageUrls'] = imageUrls;
     if (member != null) {
       data['member'] = member!.toJson();
     }
