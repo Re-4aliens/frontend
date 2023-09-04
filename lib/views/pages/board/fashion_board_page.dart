@@ -143,7 +143,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                       }
                       return Column(
                         children: [
-                          ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode),
+                          ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!,),
                           Divider(
                             thickness: 2,
                             color: Color(0xffE5EBFF),
