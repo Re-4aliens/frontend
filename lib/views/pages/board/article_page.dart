@@ -183,13 +183,13 @@ class _ArticlePageState extends State<ArticlePage> {
                               style: TextStyle(fontSize: 14.spMin, fontWeight: FontWeight.bold, color: Color(0xff444444)),
                             ),
                           ),
-                          widget.board.images!.isEmpty
+                          widget.board.imageUrls!.isEmpty
                               ? SizedBox()
                               : Container(
                             height: 100.h,
                             child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
-                                itemCount: widget.board.images!.length,
+                                itemCount: widget.board.imageUrls!.length,
                                 itemBuilder: (context, index) {
                                   return Row(
                                     children: [

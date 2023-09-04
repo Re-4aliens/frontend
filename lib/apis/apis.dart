@@ -1445,7 +1445,7 @@ class APIs {
 
   /*전체게시판 글 전부 조회*/
   static Future<List<Board>> TotalArticles() async {
-    final _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/articles';
+    final _url = 'http://3.34.2.246:8080/api/v2/articles';
 
       //토큰 읽어오기
       var jwtToken = await storage.read(key: 'token');
@@ -1517,7 +1517,44 @@ class APIs {
     }
   }
 
-/*전체 게시판 게시글 상세 조회*/
+/*장터 게시판 게시글 상세 조회*/
+  static Future<MarketArticle> getMarketArticle(int articleId) async {
+    final _url = 'http://3.34.2.246:8080/api/v2/market-articles/${articleId}';
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      dynamic body = json.decode(
+          utf8.decode(response.bodyBytes))['data'];
+      return MarketArticle.fromJson(body);
+
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      throw Exception('요청 오류');
+    }
+  }
 
 /*공지사항 전체조회*/
   static Future<List<dynamic>> BoardNotice() async {
@@ -1711,8 +1748,8 @@ class APIs {
 
 
     // FormData 파일 필드 추가
-    if (board.images != null && board.images!.isNotEmpty) {
-      for (String imagePath in board.images!) {
+    if (board.imageUrls != null && board.imageUrls!.isNotEmpty) {
+      for (String imagePath in board.imageUrls!) {
         if (imagePath.isNotEmpty) {
           var file = await http.MultipartFile.fromPath('imageUrls', imagePath);
           request.files.add(file);

@@ -155,7 +155,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
                               TotalArticleWidget(
                                   board: boardProvider.articleList![index],
                                   nationCode: nationCode,
-                                memberDetails: widget.screenArguments.memberDetails!,
+                                screenArguments: widget.screenArguments!,
                               ),
                               Divider(
                                 thickness: 2,
