@@ -63,7 +63,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
             }
             return Column(
               children: [
-                TotalArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode),
+                TotalArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!,),
                 Divider(
                   thickness: 2,
                   color: Color(0xffE5EBFF),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/providers/comment_provider.dart';
 import 'package:aliens/repository/sql_message_database.dart';
@@ -27,9 +28,10 @@ import '../../components/comment_dialog_widget.dart';
 
 class ArticlePage extends StatefulWidget {
   const ArticlePage(
-      {super.key, required this.board});
+      {super.key, required this.board, required this.memberDetails});
 
   final Board board;
+  final MemberDetails memberDetails;
 
   @override
   State<StatefulWidget> createState() => _ArticlePageState();
@@ -150,7 +152,7 @@ class _ArticlePageState extends State<ArticlePage> {
                         InkWell(
                           onTap: (){
                             showDialog(context: context, builder: (builder){
-                              return BoardDialog(context: context, board: widget.board);
+                              return BoardDialog(context: context, board: widget.board, memberDetails: widget.memberDetails);
                             });
                           },
                           child: Padding(

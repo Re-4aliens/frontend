@@ -1,3 +1,4 @@
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/board_provider.dart';
@@ -12,14 +13,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import '../../apis/apis.dart';
 import '../../models/board_model.dart';
 
 
 class BoardDialog extends StatelessWidget{
   final BuildContext context;
   final Board board;
+  final MemberDetails memberDetails;
 
-  const BoardDialog({Key? key, required this.context, required this.board}) : super(key:key);
+  const BoardDialog({Key? key, required this.context, required this.board, required this.memberDetails}) : super(key:key);
 
   @override
   Widget build(BuildContext context) {
@@ -68,10 +71,33 @@ class BoardDialog extends StatelessWidget{
                 ),
               ),
             ),
-            InkWell(
+            memberDetails.email == board.member!.email ? InkWell(
               onTap: (){
-                //TODO 로딩 추가
-                boardProvider.deletePost(board.articleId!);
+                showDialog(
+                    context: context,
+                    builder: (_) => FutureBuilder(
+                        future: APIs.deleteArticles(board.articleId!),
+                        builder: (BuildContext context,
+                            AsyncSnapshot snapshot) {
+                          if (snapshot.hasData == false) {
+                            //받아오는 동안
+                            return Container(
+                                child: Image(
+                                    image: AssetImage(
+                                        "assets/illustration/loading_01.gif")));
+                          } else{
+                            //받아온 후
+                            WidgetsBinding.instance!.addPostFrameCallback((_) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
+                            return Container(
+                                child: Image(
+                                    image: AssetImage(
+                                        "assets/illustration/loading_01.gif")));
+                          }
+
+                        }));
                 },
               child: Container(
                 padding: EdgeInsets.all(13).r,
@@ -84,7 +110,7 @@ class BoardDialog extends StatelessWidget{
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-            ),
+            ): SizedBox(),
           ],
         ),
       ),
@@ -126,15 +152,38 @@ class BoardDialog extends StatelessWidget{
               ),
             ),
           ),
-          Divider(thickness: 1,),
-          InkWell(
+          memberDetails.email == board.member!.email ? Divider(thickness: 1,):SizedBox(),
+          memberDetails.email == board.member!.email ? InkWell(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20.0),
               bottomRight: Radius.circular(20.0),
             ).r,
             onTap: () {
-              //TODO 로딩 추가
-              boardProvider.deletePost(board.articleId!);
+              showDialog(
+                  context: context,
+                  builder: (_) => FutureBuilder(
+                      future: APIs.deleteArticles(board.articleId!),
+                      builder: (BuildContext context,
+                          AsyncSnapshot snapshot) {
+                        if (snapshot.hasData == false) {
+                          //받아오는 동안
+                          return Container(
+                              child: Image(
+                                  image: AssetImage(
+                                      "assets/illustration/loading_01.gif")));
+                        } else{
+                          //받아온 후
+                          WidgetsBinding.instance!.addPostFrameCallback((_) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
+                          return Container(
+                              child: Image(
+                                  image: AssetImage(
+                                      "assets/illustration/loading_01.gif")));
+                        }
+
+                      }));
             },
             child: Container(
               height: 80.h,
@@ -147,7 +196,7 @@ class BoardDialog extends StatelessWidget{
                 ),
               ),
             ),
-          ),
+          ): SizedBox(),
         ],
       )
     );
