@@ -89,7 +89,7 @@ ScreenArguments mockScreenArgument_1 = ScreenArguments(
       profileImage: '',
       age: 22,
     ),
-    "MATCHED",
+    "AppliedAndMatched",
     Applicant(
         member: Member(
             name: 'Daisy',
