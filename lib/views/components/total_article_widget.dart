@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:aliens/apis/apis.dart';
 import 'package:aliens/apis/apis.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/views/pages/board/article_writing_page.dart';
 import 'package:aliens/views/pages/board/info_article_page.dart';
@@ -19,10 +20,11 @@ import 'board_dialog_widget.dart';
 
 class TotalArticleWidget extends StatefulWidget {
 
-  TotalArticleWidget({super.key, required this.board, required this.nationCode});
+  TotalArticleWidget({super.key, required this.board, required this.nationCode, required this.memberDetails});
 
   final Board board;
   final String nationCode;
+  final MemberDetails memberDetails;
   @override
   State<StatefulWidget> createState() => _TotalArticleWidgetState();
 }
@@ -135,7 +137,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                         context: context,
                         builder: (builder) {
                           return BoardDialog(
-                            context: context, board: widget.board,
+                            context: context, board: widget.board, memberDetails: widget.memberDetails,
                           );
                         });
                   },
@@ -252,7 +254,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ArticlePage(board: widget.board)),
+                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails)),
             );
           }
         },

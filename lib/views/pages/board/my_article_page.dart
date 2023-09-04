@@ -154,7 +154,9 @@ class _MyArticlePageState extends State<MyArticlePage> {
                             children: [
                               TotalArticleWidget(
                                   board: boardProvider.articleList![index],
-                                  nationCode: nationCode),
+                                  nationCode: nationCode,
+                                memberDetails: widget.screenArguments.memberDetails!,
+                              ),
                               Divider(
                                 thickness: 2,
                                 color: Color(0xffE5EBFF),
@@ -179,7 +181,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
                               children: [
                                 LikedArticleWidget(
                                     board: boardProvider.articleList![index],
-                                    nationCode: nationCode),
+                                    nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!),
                                 Divider(
                                   thickness: 2,
                                   color: Color(0xffE5EBFF),
