@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import '../../apis/apis.dart';
 import '../../models/board_model.dart';
 
 
@@ -70,10 +71,33 @@ class BoardDialog extends StatelessWidget{
                 ),
               ),
             ),
-            InkWell(
+            memberDetails.email == board.member!.email ? InkWell(
               onTap: (){
-                //TODO 로딩 추가
-                boardProvider.deletePost(board.articleId!);
+                showDialog(
+                    context: context,
+                    builder: (_) => FutureBuilder(
+                        future: APIs.deleteArticles(board.articleId!),
+                        builder: (BuildContext context,
+                            AsyncSnapshot snapshot) {
+                          if (snapshot.hasData == false) {
+                            //받아오는 동안
+                            return Container(
+                                child: Image(
+                                    image: AssetImage(
+                                        "assets/illustration/loading_01.gif")));
+                          } else{
+                            //받아온 후
+                            WidgetsBinding.instance!.addPostFrameCallback((_) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                            });
+                            return Container(
+                                child: Image(
+                                    image: AssetImage(
+                                        "assets/illustration/loading_01.gif")));
+                          }
+
+                        }));
                 },
               child: Container(
                 padding: EdgeInsets.all(13).r,
@@ -86,7 +110,7 @@ class BoardDialog extends StatelessWidget{
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-            ),
+            ): SizedBox(),
           ],
         ),
       ),
@@ -128,15 +152,38 @@ class BoardDialog extends StatelessWidget{
               ),
             ),
           ),
-          Divider(thickness: 1,),
-          InkWell(
+          memberDetails.email == board.member!.email ? Divider(thickness: 1,):SizedBox(),
+          memberDetails.email == board.member!.email ? InkWell(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20.0),
               bottomRight: Radius.circular(20.0),
             ).r,
             onTap: () {
-              //TODO 로딩 추가
-              boardProvider.deletePost(board.articleId!);
+              showDialog(
+                  context: context,
+                  builder: (_) => FutureBuilder(
+                      future: APIs.deleteArticles(board.articleId!),
+                      builder: (BuildContext context,
+                          AsyncSnapshot snapshot) {
+                        if (snapshot.hasData == false) {
+                          //받아오는 동안
+                          return Container(
+                              child: Image(
+                                  image: AssetImage(
+                                      "assets/illustration/loading_01.gif")));
+                        } else{
+                          //받아온 후
+                          WidgetsBinding.instance!.addPostFrameCallback((_) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                          });
+                          return Container(
+                              child: Image(
+                                  image: AssetImage(
+                                      "assets/illustration/loading_01.gif")));
+                        }
+
+                      }));
             },
             child: Container(
               height: 80.h,
@@ -149,7 +196,7 @@ class BoardDialog extends StatelessWidget{
                 ),
               ),
             ),
-          ),
+          ): SizedBox(),
         ],
       )
     );
