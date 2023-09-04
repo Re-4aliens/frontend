@@ -14,14 +14,7 @@ class LoadingPage extends StatefulWidget {
 
 class _LoadingPageState extends State<LoadingPage> {
 
-  @override
-  void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          '/main', (Route<dynamic> route) => false,
-          arguments: mockScreenArgument_1);
-    });
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -24,14 +24,14 @@ class ChattingButton extends StatelessWidget{
             boxShadow: [
               //내부그림자
               BoxShadow(
-                color: screenArguments.status == 'NOT_APPLIED'
+                color: screenArguments.status == 'NotAppliedAndNotMatched'
                     ? Color(0xffCBCBCB)
                     : Color(0xffFF9393),
               ),
               //버튼색
               BoxShadow(
                 blurRadius: 7,
-                color: screenArguments.status == 'NOT_APPLIED'
+                color: screenArguments.status == 'NotAppliedAndNotMatched'
                     ? Color(0xffE0E0E0)
                     : Color(0xffFFB5B5),
                 spreadRadius: 14,
@@ -56,13 +56,13 @@ class ChattingButton extends StatelessWidget{
                         borderRadius: BorderRadius.circular(25),
                         boxShadow: [
                           BoxShadow(
-                            color: screenArguments.status == 'NOT_APPLIED'
+                            color: screenArguments.status == 'NotAppliedAndNotMatched'
                                 ? Color(0xffCBCBCB)
                                 : Color(0xffFF9393),
                           ),
                           BoxShadow(
                             blurRadius: 7,
-                            color: screenArguments.status == 'NOT_APPLIED'
+                            color: screenArguments.status == 'NotAppliedAndNotMatched'
                                 ? Color(0xffEBEBEB)
                                 : Color(0xFFFFCECE),
                             spreadRadius: -2,
@@ -78,7 +78,7 @@ class ChattingButton extends StatelessWidget{
               bottom: -25,
               child: Container(
                 decoration: BoxDecoration(
-                  color: screenArguments.status == 'NOT_APPLIED'
+                  color: screenArguments.status == 'NotAppliedAndNotMatched'
                       ? Color(0xffD7D7D7)
                       : Color(0xFFFFA6A6),
                   borderRadius: BorderRadius.circular(50),
@@ -97,11 +97,11 @@ class ChattingButton extends StatelessWidget{
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    screenArguments.status == 'PENDING' ? '${'homepage-progress'.tr()}' : '${'homepage-chatting'.tr()}',
+                    screenArguments.status == 'AppliedAndNotMatched' ? '${'homepage-progress'.tr()}' : '${'homepage-chatting'.tr()}',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.spMin,
-                      color: screenArguments.status == 'NOT_APPLIED'
+                      color: screenArguments.status == 'NotAppliedAndNotMatched'
                           ? Color(0xffACACAC)
                           : Colors.white,
                     ),
@@ -110,7 +110,7 @@ class ChattingButton extends StatelessWidget{
                     'How to Use?',
                     style: TextStyle(
                         fontSize: 12.spMin,
-                        color: screenArguments.status == 'NOT_APPLIED'
+                        color: screenArguments.status == 'NotAppliedAndNotMatched'
                             ? Color(0xff888888)
                             : Color(0xffFF8F8F)),
                   ),
@@ -118,7 +118,7 @@ class ChattingButton extends StatelessWidget{
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      screenArguments.status == 'NOT_APPLIED'?
+                      screenArguments.status == 'NotAppliedAndNotMatched'?
                       SvgPicture.asset('assets/character/none_speech_bubble.svg', width: 100.r,)
                           :SvgPicture.asset('assets/character/speech_bubble.svg', width: 100.r,
                       )
