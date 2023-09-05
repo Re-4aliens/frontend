@@ -28,10 +28,11 @@ import '../../components/comment_dialog_widget.dart';
 
 class ArticlePage extends StatefulWidget {
   const ArticlePage(
-      {super.key, required this.board, required this.memberDetails});
+      {super.key, required this.board, required this.memberDetails, required this.index});
 
   final Board board;
   final MemberDetails memberDetails;
+  final int index;
 
   @override
   State<StatefulWidget> createState() => _ArticlePageState();
@@ -218,25 +219,24 @@ class _ArticlePageState extends State<ArticlePage> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Padding(
-                                  padding: const EdgeInsets.all(4.0).r,
-                                  child: InkWell(
+                              InkWell(
+                                onTap: (){
+                                  boardProvider.addLike(widget.board.articleId!, widget.index);
+                                },
+                                child: Padding(
+                                    padding: const EdgeInsets.all(4.0).r,
                                     child: SvgPicture.asset(
                                       'assets/icon/ICON_good.svg',
                                       width: 25.r,
                                       height: 25.r,
                                       color: Color(0xffc1c1c1),
-                                    ),
-                                    onTap: (){
-                                      boardProvider.addLike(widget.board.articleId!);
-                                    },
-                                  )
+                                    )
+                                ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 4, right: 15).r,
-                                child: widget.board.likeCount == 0
-                                    ? Text('')
-                                    : Text('${widget.board.likeCount}'),
+                                child:
+                                boardProvider.likeCounts![widget.index] == 0 ? Text('') : Text('${boardProvider.likeCounts![widget.index]}'),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
@@ -259,6 +259,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
                   ),
                   Divider(color: Color(0xffF5F7FF), thickness: 2.h),
+                  /*
                   Container(
                     height: 50.h,
                     margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10).r,
@@ -268,6 +269,8 @@ class _ArticlePageState extends State<ArticlePage> {
                     alignment: Alignment.center,
                     child: Text('광고'),
                   ),
+
+                   */
 
 
                   //댓글 위젯

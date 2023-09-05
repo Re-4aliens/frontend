@@ -14,6 +14,7 @@ class BoardProvider with ChangeNotifier {
   List<Board>? articleList;
   bool loading = false;
   List<Board>? likedList;
+  List<int>? likeCounts;
 
   getAllArticles() async {
     loading = true;
@@ -77,32 +78,27 @@ class BoardProvider with ChangeNotifier {
     return value;
   }
 
-  addLike(int articleId) async {
-
+  addLike(int articleId, int index) async {
     loading = true;
     try {
-
       //좋아요 요청
-      await APIs.addLike(articleId);
-
-      //이미 좋아요를 눌렀으면
-      //해제 요청
-      //await APIs.cancleLike(articleId);
+      likeCounts![index] = await APIs.addLike(articleId);
 
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
         //좋아요 요청
-        await APIs.addLike(articleId);
+        likeCounts![index] = await APIs.addLike(articleId);
 
-        //이미 좋아요를 눌렀으면
-        //해제 요청
-        //await APIs.cancleLike(articleId);
       } else {
       }
     }
     loading = false;
     notifyListeners();
+  }
+
+  getLikeCounts() async {
+    likeCounts = articleList!.map((board) => board.likeCount ?? 0).toList();
   }
 
   getLikedList() async {

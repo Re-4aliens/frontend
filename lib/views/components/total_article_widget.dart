@@ -23,11 +23,12 @@ import 'board_dialog_widget.dart';
 
 class TotalArticleWidget extends StatefulWidget {
 
-  TotalArticleWidget({super.key, required this.board, required this.nationCode, required this.screenArguments});
+  TotalArticleWidget({super.key, required this.board, required this.nationCode, required this.screenArguments, required this.index});
 
   final Board board;
   final String nationCode;
   final ScreenArguments screenArguments;
+  final int index;
   @override
   State<StatefulWidget> createState() => _TotalArticleWidgetState();
 }
@@ -40,6 +41,9 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
   @override
   void initState() {
     super.initState();
+    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+    boardProvider.getLikeCounts();
+
     switch (widget.board.category){
       case '자유게시판':
         boardCategory = 'free-posting'.tr();
@@ -70,6 +74,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
 
   @override
   Widget build(BuildContext context) {
+    final boardProvider = Provider.of<BoardProvider>(context);
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: ListTile(
@@ -214,19 +219,23 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(4.0).r,
-                    child: SvgPicture.asset(
-                      'assets/icon/ICON_good.svg',
-                      width: 25.r,
-                      height: 25.r,
+                  InkWell(
+                    onTap: (){
+                      boardProvider.addLike(widget.board.articleId!, widget.index);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0).r,
+                      child: SvgPicture.asset(
+                        'assets/icon/ICON_good.svg',
+                        width: 25.r,
+                        height: 25.r,
+                      ),
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 4, right: 15).w,
-                    child: widget.board.likeCount == 0
-                        ? Text('')
-                        : Text('${widget.board.likeCount}'),
+                    child:
+                      boardProvider.likeCounts![widget.index] == 0 ? Text('') : Text('${boardProvider.likeCounts![widget.index]}'),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,
@@ -285,7 +294,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.screenArguments.memberDetails!)),
+                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.screenArguments.memberDetails!, index: widget.index,)),
             );
           }
         },
