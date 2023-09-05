@@ -199,7 +199,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails,)),
+                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails, index: 0 )), //수정필요
             );
           }
         },

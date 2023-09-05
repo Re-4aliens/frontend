@@ -136,7 +136,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                 }
                 return Column(
                   children: [
-                    ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!),
+                    ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!, index: index),
                     Divider(
                       thickness: 2,
                       color: Color(0xffE5EBFF),
