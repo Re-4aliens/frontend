@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
+import 'package:aliens/models/market_articles.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import '../../../mockdatas/comment_mockdata.dart';
 import '../../../mockdatas/market_comment_mockdata.dart';
 import '../../../models/comment_model.dart';
@@ -18,16 +20,22 @@ import '../../../models/board_model.dart';
 import '../../../models/countries.dart';
 import 'package:flutter/services.dart';
 
+import '../../../models/market_comment.dart';
 import '../../../models/message_model.dart';
+import '../../../providers/market_comment_provider.dart';
 import '../../components/board_dialog_widget.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/comment_dialog_widget.dart';
+import '../../components/marketcomment_dialog.dart';
 import '../home_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
-  {super.key, required this.screenArguments});
+  {super.key, required this.screenArguments, required this.marketBoard});
   final ScreenArguments screenArguments;
+  final MarketBoard marketBoard;
+
+
 
 
   @override
@@ -52,7 +60,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     });
     FocusScope.of(context).unfocus();
   }
-
+  
   String getNationCode(_nationality){
     var nationCode = '';
     for (Map<String, String> country in countries) {
@@ -67,13 +75,27 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    //print('Data from marketBoard: ${widget.marketBoard.createdAt}');
+
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
 
     List<String> whatStatus = [
-      '미개봉', '거의 새 것', '약간의 하자', '사용감 있음'
+      'Brand_New'.tr(), 'Almost_New'.tr(), 'Slight_Defect'.tr(), 'Used'.tr()
     ];
-    String productStatus = '거의 새 것';
+    String productStatus = '${widget.marketBoard.productStatus}';
+    final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
+    marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
+
+    bool showLoading = marketcommentProvider.loading;
+    if (showLoading) {
+      Future.delayed(Duration(seconds: 3), () {
+        setState(() {
+          showLoading = false;
+        });
+      });
+    }
+
     return GestureDetector(
       onTap: (){
         FocusScope.of(context).unfocus();
@@ -141,7 +163,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                '가죽쪼리팔아요',
+                                '${widget.marketBoard.title}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                     fontSize: 20.spMin,
@@ -160,7 +182,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('판매중',
+                                  Text('${widget.marketBoard.status}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Color(0xff888888),
@@ -169,9 +191,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                       ),
                                 ],
                               ),
-
                               ),
-
                           ],
                         ),//제목 넣는 곳
                         SizedBox(height: MediaQuery.of(context).size.height*0.01,),
@@ -182,7 +202,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             Text('₩ ',
                               style: TextStyle(fontSize: 16.spMin,fontWeight: FontWeight.bold),
                             ),
-                            Text('25000',
+                            Text('${widget.marketBoard.price.toString()}',
                               style: TextStyle(fontSize: 16.spMin,fontWeight: FontWeight.bold),
                             )//가격넣는곳
                           ],
@@ -193,7 +213,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         Row(
                           children: [
                             Text(
-                            '상품상태',
+                              'market-productStatus'.tr(),
                             style: TextStyle(
                               fontSize: 16.spMin,
                               color: Color(0xff888888),
@@ -253,21 +273,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(right: 20).r,
-                                width: 197.spMin,
-                                height: 207.spMin,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10).r,
-                                  color: Color(0xffF8F8F8),
-                                ),
-                                child: Icon(Icons.add_photo_alternate_outlined,//사진 넣는 곳
-                                  size: 66.spMin,
-                                  color: Color(0xffebebeb),
-                                  ),
-                              ),
-                              Container(
+                            children: widget.marketBoard.imageUrls!.map((imageUrl) {
+                              return Container(
                                 margin: EdgeInsets.only(right: 20).r,
                                 width: 197.spMin,
                                 height: 207.spMin,
@@ -275,29 +282,18 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   borderRadius: BorderRadius.circular(10).r,
                                   color: Color(0xffF8F8F8),
                                 ),
-                                child: Icon(Icons.add_photo_alternate_outlined,//사진 넣는 곳
-                                  size: 66.spMin,
-                                  color: Color(0xffebebeb),
+                                child: Image.network(
+                                  imageUrl,
+                                  fit: BoxFit.cover,
                                 ),
-                              ),
-                              Container(
-                                width: 197.spMin,
-                                height: 207.spMin,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10).r,
-                                  color: Color(0xffF8F8F8),
-                                ),
-                                child: Icon(Icons.add_photo_alternate_outlined,//사진 넣는 곳
-                                  size: 66.h,
-                                  color: Color(0xffebebeb),
-                                ),
-                              )
-                            ],
+                              );
+                            }).toList(),
                           ),
-                        ),//사진
+                        ),
+//사진
                         SizedBox(height: MediaQuery.of(context).size.height*0.02),
                         Text(
-                          '제품명 : 가죽쪼리\n가격 : 25,000원\n상세정보 : 거의 새 상품이나 마찬가지입니다.\n딱 한 번만 신었어요\n휴대폰 번호 : 010-1234-5678', //내용
+                          '${widget.marketBoard.content}', //내용
                           textAlign: TextAlign.start,
                           style: TextStyle(
                           fontSize: 16.spMin
@@ -308,7 +304,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('23.08.06 22:10',//createdAt
+                            Text(
+                              DataUtils.getTime(widget.marketBoard.createdAt),//createdAt
                               style: TextStyle(
                                 color: Color(0xffa8a8a8),
                                 fontSize: 16.spMin,
@@ -318,15 +315,16 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(4.0).r,
-                                  child: Icon(
-                                    Icons.thumb_up_alt_sharp,
+                                  child: SvgPicture.asset(
+                                    'assets/icon/ICON_good.svg',
+                                    width: 18.r,
+                                    height: 18.r,
                                     color: Color(0xffc1c1c1),
-                                    size: 18.spMin,
                                   ),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 4, right: 15).r,
-                                  child: Text('10',
+                                  child: Text('${widget.marketBoard.marketArticleBookmarkCount}',
                                     style: TextStyle(
                                       fontSize: 16.spMin,
                                       color: Color(0xffc1c1c1)
@@ -335,15 +333,16 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0).r,
-                                  child: Icon(
-                                    Icons.chat_bubble,
+                                  child: SvgPicture.asset(
+                                    'assets/icon/icon_comment.svg',
+                                    width: 18.r,
+                                    height: 18.r,
                                     color: Color(0xffc1c1c1),
-                                    size: 18.spMin,
                                   ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0).r,
-                                  child: Text('1',
+                                  child: Text('${widget.marketBoard.commentsCount}',
                                     style: TextStyle(
                                         fontSize: 16.spMin,
                                         color: Color(0xffc1c1c1)
@@ -356,189 +355,215 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         ),
                         Divider(thickness: 1.2.h,color: Color(0xffE5EBFF),),
 
+
                         //댓글
-                        for (int i = 0; i < MarketcommentListMock.length; i++)
-                          Column(
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(vertical: 15, /*horizontal: 30*/).r,
+                        showLoading
+                            ? Container(
+                          alignment: Alignment.center,
+                          child: Image(
+                            image: AssetImage("assets/illustration/loading_01.gif"),
+                          ),
+                        )
+                            :
+                        Column(
+                          children: [
+                            for(int index = 0; index < 5; index++)
+                              Container(
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment: CrossAxisAlignment.center,
-                                          children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(right: 10.0).r,
-                                              child: SvgPicture.asset(
-                                                'assets/icon/icon_profile.svg',
-                                                width: 25.r,
-                                                color: Color(0xffc1c1c1),
-                                              ),
-                                            ),
-                                            Text(
-                                              '${MarketcommentListMock[i].member!.name}',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                            ),
-                                            Text(
-                                              '/',
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                            ),
-                                            Text(
-                                              getNationCode(MarketcommentListMock[i].member!.nationality),
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                            )
-                                          ],
-                                        ),
-                                        Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-
-                                            Text(
-                                              DataUtils.getTime(MarketcommentListMock[i].createdAt),
-                                              style: TextStyle(
-                                                  fontSize: 12.spMin, color: Color(0xffc1c1c1)),
-                                            ),
-                                            InkWell(
-                                              onTap: (){
-                                                showDialog(context: context, builder: (builder){
-                                                  return CommentDialog(context: context, onpressed: (){
-                                                    setState(() {
-                                                      isNestedComments = true;
-                                                      parentsCommentIndex = i;
-                                                    });
-                                                    Navigator.pop(context);
-                                                  },
-                                                      isNestedComment: false,
-                                                    comment: MarketcommentListMock[i],
-                                                  );
-                                                });
-                                              },
-                                              child: Padding(
-                                                padding: const EdgeInsets.only(left: 8.0).r,
-                                                child: Icon(Icons.more_vert,
-                                                    color: Color(0xffc1c1c1)),
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    ),
                                     Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 13).r,
-                                      child: Text(
-                                        '${MarketcommentListMock[i].content}',
-                                        style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              //대댓글
-                              MarketcommentListMock[i].childs == null ? SizedBox() :
-                              Column(
-                                children: [
-                                  for(int j = 0 ; j < MarketcommentListMock[i].childs!.length; j++)
-                                    Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                           // padding: EdgeInsets.all(10).r,
-                                            alignment: Alignment.centerRight,
-                                            child: Icon(
-                                              Icons.subdirectory_arrow_right,
-                                              size: 20.h,
-                                              color: Color(0xffc1c1c1),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            color: Color(0xffF4F4F4),
-                                            borderRadius: BorderRadius.circular(10).r,
-                                          ),
-                                          width: 300.w,
-                                          padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
-                                          margin: EdgeInsets.only(top: 15.h, bottom: 0.h, right: 30.w, left: 0),
-                                          child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                      padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30).r,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
                                             children: [
                                               Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.center,
                                                 children: [
                                                   Padding(
-                                                    padding: const EdgeInsets.only(right: 10.0).w,
+                                                    padding: const EdgeInsets.only(right: 10.0).r,
                                                     child: SvgPicture.asset(
                                                       'assets/icon/icon_profile.svg',
                                                       width: 25.r,
                                                       color: Color(0xffc1c1c1),
                                                     ),
                                                   ),
-                                                  Flexible(
-                                                    child: Container(
-                                                      alignment: Alignment.centerLeft,
-                                                      padding: EdgeInsets.only(right: 10),
-                                                      child: Text(
-                                                        '${MarketcommentListMock[i].childs![j].member!.name}/${getNationCode(MarketcommentListMock[i].childs![j].member!.nationality)}',
-                                                        overflow: TextOverflow.ellipsis,
-                                                        style: TextStyle(
-                                                            fontWeight: FontWeight.bold, fontSize: 14.spMin),
-                                                      ),
-                                                    ),
+                                                  Text(
+                                                    '${marketcommentProvider.commentListData![index].member!.name}',
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, fontSize: 14.spMin),
                                                   ),
                                                   Text(
-                                                    DataUtils.getTime(MarketcommentListMock[i].childs![j].createdAt),
+                                                    '/',
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                                  ),
+                                                  Text(
+                                                    getNationCode(marketcommentProvider.commentListData![index].member!.nationality),
+                                                    style: TextStyle(
+                                                        fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                                  )
+                                                ],
+                                              ),
+                                              Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+
+                                                  Text(
+                                                    DataUtils.getTime(marketcommentProvider.commentListData![index].createdAt),
                                                     style: TextStyle(
                                                         fontSize: 12.spMin, color: Color(0xffc1c1c1)),
                                                   ),
                                                   InkWell(
                                                     onTap: (){
+
+                                                      print(marketcommentProvider.commentListData!);
                                                       showDialog(context: context, builder: (builder){
-                                                        return CommentDialog(context: context, onpressed: (){
+                                                        return MarketCommentDialog(context: context, onpressed: (){
                                                           setState(() {
                                                             isNestedComments = true;
+                                                            parentsCommentIndex = index;
                                                           });
                                                           Navigator.pop(context);
                                                         },
-                                                          isNestedComment: true,
-                                                          comment: MarketcommentListMock[i],);
+                                                            isNestedComment: false, marketcomment: marketcommentProvider.commentListData![index]);
                                                       });
                                                     },
                                                     child: Padding(
-                                                      padding: const EdgeInsets.only(left: 8.0).w,
-                                                      child: Icon(Icons.more_vert,
-                                                          color: Color(0xffc1c1c1)),
+                                                      padding: const EdgeInsets.only(left: 8.0).r,
+                                                      child: SvgPicture.asset(
+                                                        'assets/icon/ICON_more.svg',
+                                                        width: 25.r,
+                                                        height: 25.r,
+                                                        color: Color(0xffc1c1c1),
+                                                      ),
                                                     ),
                                                   )
                                                 ],
+                                              )
+                                            ],
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                top: 13).r,
+                                            child: Text(
+                                              '${marketcommentProvider.commentListData![index].content}',
+                                              style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+
+                                    //대댓글
+                                    marketcommentProvider.commentListData![index].childs == null ? SizedBox() :
+                                    Column(
+                                      children: [
+                                        for(int j = 0 ; j < marketcommentProvider.commentListData![index].childs!.length; j++)
+                                          Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  padding: EdgeInsets.all(10).r,
+                                                  alignment: Alignment.centerRight,
+                                                  child: SvgPicture.asset(
+                                                    'assets/icon/ICON_reply.svg',
+                                                    width: 15.r,
+                                                    height: 15.r,
+                                                    color: Color(0xffc1c1c1),
+                                                  ),
+                                                ),
                                               ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    top: 5).h,
-                                                child: Text(
-                                                  '${MarketcommentListMock[i].childs![j].content}',
-                                                  style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                  color: Color(0xffF4F4F4),
+                                                  borderRadius: BorderRadius.circular(10).r,
+                                                ),
+                                                width: 300.w,
+                                                padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 20.w),
+                                                margin: EdgeInsets.only(top: 15.h, bottom: 0.h, right: 30.w, left: 0),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Padding(
+                                                          padding: const EdgeInsets.only(right: 10.0).w,
+                                                          child: SvgPicture.asset(
+                                                            'assets/icon/icon_profile.svg',
+                                                            width: 25.r,
+                                                            color: Color(0xffc1c1c1),
+                                                          ),
+                                                        ),
+                                                        Flexible(
+                                                          child: Container(
+                                                            alignment: Alignment.centerLeft,
+                                                            padding: EdgeInsets.only(right: 10),
+                                                            child: Text(
+                                                              '${marketcommentProvider.commentListData![index].childs![j].member!.name}/${getNationCode(marketcommentProvider.commentListData![index].childs![j].member!.nationality)}',
+                                                              overflow: TextOverflow.ellipsis,
+                                                              style: TextStyle(
+                                                                  fontWeight: FontWeight.bold, fontSize: 14.spMin),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          DataUtils.getTime(marketcommentProvider.commentListData![index].childs![j].createdAt),
+                                                          style: TextStyle(
+                                                              fontSize: 12.spMin, color: Color(0xffc1c1c1)),
+                                                        ),
+                                                        InkWell(
+                                                          onTap: (){
+                                                            showDialog(context: context, builder: (builder){
+                                                              return MarketCommentDialog(context: context, onpressed: (){
+                                                                setState(() {
+                                                                  isNestedComments = true;
+                                                                });
+                                                                Navigator.pop(context);
+                                                              },
+                                                                isNestedComment: true,marketcomment: marketcommentProvider.commentListData![index]);
+                                                            });
+                                                          },
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.only(left: 8.0).w,
+                                                            child: SvgPicture.asset(
+                                                              'assets/icon/ICON_more.svg',
+                                                              width: 22.r,
+                                                              height: 22.r,
+                                                              color: Color(0xffc1c1c1),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    Padding(
+                                                      padding: const EdgeInsets.only(
+                                                          top: 5).h,
+                                                      child: Text(
+                                                        '${marketcommentProvider.commentListData![index].childs![j].content}',
+                                                        style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ),
                                       ],
                                     ),
-                                ],
-                              ),
-                              Divider(thickness: 1.5, color: Color(0xfff8f8f8),)
-                            ],
-                          ),
+                                    Divider(thickness: 1.5, color: Color(0xfff8f8f8),)
+
+
+                                  ],
+                                ),
+                              )
+                          ],
+                        )
+
                       ],
                     ),
                   ),
@@ -582,12 +607,12 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                     IconButton(
                       onPressed: () {
                         if(isNestedComments){
-                          Comment newValue = Comment(
+                          MarketComment newValue = MarketComment(
                               articleCommentId: 1,
                               content: _newComment,
                               createdAt: DateTime.now().toString(),
                               childs: [],
-                              member: CommentMember(
+                              member: MarketCommentMember(
                                   name: "daisy",
                                   nationality: "Japan",
                                   profileImageUrl: ""
@@ -598,12 +623,12 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           isNestedComments = false;
                         }
                         else{
-                          Comment newValue = Comment(
+                          MarketComment newValue = MarketComment(
                               articleCommentId: 1,
                               content: _newComment,
                               createdAt: DateTime.now().toString(),
                               childs: [],
-                              member: CommentMember(
+                              member: MarketCommentMember(
                                   name: "daisy",
                                   nationality: "Japan",
                                   profileImageUrl: ""
