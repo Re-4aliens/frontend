@@ -355,7 +355,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         ),
                         Divider(thickness: 1.2.h,color: Color(0xffE5EBFF),),
 
-
                         //댓글
                         showLoading
                             ? Container(
@@ -417,7 +416,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                   ),
                                                   InkWell(
                                                     onTap: (){
-
                                                       print(marketcommentProvider.commentListData!);
                                                       showDialog(context: context, builder: (builder){
                                                         return MarketCommentDialog(context: context, onpressed: (){
@@ -427,7 +425,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                           });
                                                           Navigator.pop(context);
                                                         },
-                                                            isNestedComment: false, marketcomment: marketcommentProvider.commentListData![index]);
+                                                            isNestedComment: false,
+                                                            marketcomment: marketcommentProvider.commentListData![index]);
                                                       });
                                                     },
                                                     child: Padding(
@@ -607,33 +606,13 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                     IconButton(
                       onPressed: () {
                         if(isNestedComments){
-                          MarketComment newValue = MarketComment(
-                              articleCommentId: 1,
-                              content: _newComment,
-                              createdAt: DateTime.now().toString(),
-                              childs: [],
-                              member: MarketCommentMember(
-                                  name: "daisy",
-                                  nationality: "Japan",
-                                  profileImageUrl: ""
-                              )
-                          );
+                          MarketCommentProvider().addMarketComment(_newComment, parentsCommentIndex);
                           //CommentRepository.addCommentChilds(parentsCommentIndex, newValue);
                           parentsCommentIndex = -1;
                           isNestedComments = false;
                         }
                         else{
-                          MarketComment newValue = MarketComment(
-                              articleCommentId: 1,
-                              content: _newComment,
-                              createdAt: DateTime.now().toString(),
-                              childs: [],
-                              member: MarketCommentMember(
-                                  name: "daisy",
-                                  nationality: "Japan",
-                                  profileImageUrl: ""
-                              )
-                          );
+                          MarketCommentProvider().addMarketComment(_newComment, widget.marketBoard.articleId!);
                           //CommentRepository.addComment(newValue);
                         }
                         updateUi();

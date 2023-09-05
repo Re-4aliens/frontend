@@ -1523,7 +1523,6 @@ class APIs {
     }
   }
 
-
   /*장터 게시판 게시글 상세 조회*/
   static Future<MarketBoard> getMarketArticle(int articleId) async {
     final _url = 'http://3.34.2.246:8080/api/v2/market-articles/${articleId}';
@@ -1767,6 +1766,7 @@ class APIs {
       );
 
       if (response.statusCode == 200) {
+        print(json.decode(utf8.decode(response.bodyBytes)));
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final message = responseBody['message'];
         return message;
@@ -1790,8 +1790,7 @@ class APIs {
 
 
   /*상품 판매글 댓글 전체 조회*/
-  static Future<List<MarketComment>> getMarketArticleComments(
-      int marketArticleId) async {
+  static Future<List<MarketComment>> getMarketArticleComments(int marketArticleId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
@@ -1833,14 +1832,13 @@ class APIs {
 
 
   /*상품 판매글 부모 댓글 등록*/
-  static Future<bool> createMarketArticleComment(int articleCommentId,
-      String content) async {
+  static Future<bool> createMarketArticleComment(String content, int articleId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
       final url = Uri.parse(
-          'http://3.34.2.246:8080/api/v2/market-articles/$articleCommentId/market-article-comments');
+          'http://3.34.2.246:8080/api/v2/market-articles/$articleId/market-article-comments');
 
       final response = await http.post(
         url,
@@ -1863,12 +1861,39 @@ class APIs {
         } else if (errorCode == 'AT-C-007') {
           throw '로그아웃된 토큰';
         } else {
-          throw Exception('댓글 생성 오류');
+          throw Exception('댓글 생성 오류 : $responseBody');
         }
       }
     } catch (error) {
       print('Error creating market article comment: $error');
-      throw Exception('댓글 생성 오류');
+      if (error is String) {
+        // 클라이언트 오류인 경우
+        if (error == 'AT-C-002') {
+          print('클라이언트 오류 400: 액세스 토큰 만료');
+          throw Exception('클라이언트 오류: 액세스 토큰 만료');
+        } else if (error == 'AT-C-007') {
+          print('클라이언트 오류 400: 로그아웃된 토큰');
+          throw Exception('클라이언트 오류: 로그아웃된 토큰');
+        } else {
+          print('클라이언트 오류 400: $error');
+          throw Exception('클라이언트 오류: $error');
+        }
+      } else if (error is int) {
+        // 서버 오류인 경우
+        if (error >= 500) {
+          print('서버 오류 500 이상: $error');
+          throw Exception('서버 오류: $error');
+        } else if (error >= 400) {
+          print('클라이언트 오류 400 이상: $error');
+          throw Exception('클라이언트 오류: $error');
+        } else {
+          print('알 수 없는 오류: $error');
+          throw Exception('알 수 없는 오류: $error');
+        }
+      } else {
+        print('알 수 없는 오류: $error');
+        throw Exception('알 수 없는 오류: $error');
+      }
     }
   }
 
@@ -1914,14 +1939,13 @@ class APIs {
 
 
   /*특정 상품 판매글 댓글에 대댓글 등록*/
-  static Future<bool> addMarketArticleCommentReply(int articleCommentId,
-      int ArticleCommentId, String content) async {
+  static Future<bool> addMarketArticleCommentReply(int articleId, int ArticleCommentId, String content) async {
     try {
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
       final url = Uri.parse(
-          'http://3.34.2.246:8080/api/v2/market-articles/$articleCommentId/market-article-comments/$ArticleCommentId');
+          'http://3.34.2.246:8080/api/v2/market-articles/$articleId/market-article-comments/$ArticleCommentId');
 
       final response = await http.post(
         url,
@@ -1933,6 +1957,7 @@ class APIs {
       );
 
       if (response.statusCode == 200) {
+        print(json.decode(utf8.decode(response.bodyBytes)));
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final message = responseBody['message'];
         return message;
