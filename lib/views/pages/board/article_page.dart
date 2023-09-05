@@ -275,7 +275,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
 
                   //댓글 위젯
-                  commentProvider.loading?
+                  commentProvider.loading || commentProvider.commentListData == null?
                   Container(
                       alignment: Alignment.center,
                       child: Image(
