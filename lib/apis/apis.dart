@@ -1749,42 +1749,38 @@ class APIs {
 
 
   /* 특정 판매글 찜 등록*/
-  static Future<String> addMarketArticleBookmark(int articleId) async {
-    try {
-      var jwtToken = await storage.read(key: 'token');
-      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
+  static Future<int> marketbookmark(int articleId) async {
+    var url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}/bookmarks';
 
-      final url = Uri.parse(
-          'http://3.34.2.246:8080/api/v2/market-articles/$articleId/bookmarks');
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
 
-      final response = await http.post(
-        url,
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-          'Content-Type': 'application/json',
-        },
-      );
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
-      if (response.statusCode == 200) {
-        print(json.decode(utf8.decode(response.bodyBytes)));
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        final message = responseBody['message'];
-        return message;
-      } else {
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        final errorCode = responseBody['code'];
+    var response = await http.post(Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'},
+    );
 
-        if (errorCode == 'AT-C-002') {
-          throw '액세스 토큰 만료';
-        } else if (errorCode == 'AT-C-007') {
-          throw '로그아웃된 토큰';
-        } else {
-          throw Exception('북마크 등록 오류');
-        }
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return json.decode(utf8.decode(response.bodyBytes))['data']['likeCount'];
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
       }
-    } catch (error) {
-      print('Error adding market article bookmark: $error');
-      throw Exception('북마크 등록 오류');
+      return -1;
     }
   }
 

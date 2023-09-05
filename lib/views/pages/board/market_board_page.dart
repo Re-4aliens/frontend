@@ -49,7 +49,10 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       setState(() {
         marketBoardList = fetchedData; // 불러온 데이터를 리스트에 할당
         for (var marketBoard in marketBoardList) {
-          print('createdAt: ${marketBoard.createdAt}');
+         // print('createdAt: ${marketBoard.createdAt}');
+      //    print('status: ${marketBoard.marketArticleStatus}');
+       //   print('productstatus: ${marketBoard.productStatus}');
+
         }
 
       });
@@ -188,6 +191,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
       itemBuilder: (BuildContext context, int index) {
         MarketBoard marketBoard = marketBoardList[index];
+        String productStatusText = getProductStatusText(marketBoard.productStatus);
+
         return InkWell(
           onTap: () {
             Navigator.push(
@@ -197,6 +202,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                     MarketDetailPage(
                       screenArguments: widget.screenArguments,
                       marketBoard: marketBoard,
+                        productStatus: getProductStatusText(marketBoard.productStatus)
                     ),
               ),
             );
@@ -226,7 +232,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             left: 10.w, right: 10.w, top: 2.h, bottom: 2.h),
                         height: 21.spMin,
                         child: Text(
-                          marketBoard.productStatus ?? "", // 상품 상태 정보
+                          '[$productStatusText]', // 상품 상태 정보
                           style: TextStyle(
                               fontSize: 10.spMin, color: Colors.white),
                           textAlign: TextAlign.center,
@@ -251,7 +257,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '[${marketBoard.status ?? ""}]', // 상태 정보 사용
+                            '[${marketBoard.marketArticleStatus ?? ""}]', // 상태 정보 사용
                             style: TextStyle(
                               color: Color(0xff616161),
                               fontSize: 16.spMin,
@@ -361,6 +367,28 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       },
       itemCount: marketBoardList.length,
     );
-  }
 
+  }
+}
+
+String getProductStatusText(String? productStatus) {
+  List<String> whatStatus = [
+    'Brand_New'.tr(),
+    'Almost_New'.tr(),
+    'Slight_Defect'.tr(),
+    'Used'.tr(),
+  ];
+
+  switch (productStatus) {
+    case '새 것':
+      return whatStatus[0];
+    case '거의 새 것':
+      return whatStatus[1];
+    case '약간의 하자':
+      return whatStatus[2];
+    case '사용감 있음':
+      return whatStatus[3];
+    default:
+      return '';
+  }
 }

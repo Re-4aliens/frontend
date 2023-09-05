@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:aliens/apis/apis.dart';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/market_articles.dart';
@@ -31,9 +32,10 @@ import '../home_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
-  {super.key, required this.screenArguments, required this.marketBoard});
+  {super.key, required this.screenArguments, required this.marketBoard, required this.productStatus});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
+  final String productStatus;
 
 
 
@@ -47,6 +49,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   var _newComment = '';
   bool isNestedComments = false;
   int parentsCommentIndex = -1;
+  bool showLoading = false;
 
   void sendComment() async {
     updateUi();
@@ -72,6 +75,11 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     return nationCode;
   }
 
+  void initState() {
+    super.initState();
+    final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
+    marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,14 +95,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
     marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
 
-    bool showLoading = marketcommentProvider.loading;
+   /* bool showLoading = marketcommentProvider.loading;
     if (showLoading) {
       Future.delayed(Duration(seconds: 3), () {
         setState(() {
           showLoading = false;
         });
       });
-    }
+    }*/
 
     return GestureDetector(
       onTap: (){
@@ -182,7 +190,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('${widget.marketBoard.status}',
+                                  Text('${widget.marketBoard.marketArticleStatus}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Color(0xff888888),
@@ -225,7 +233,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 child: Row(
                                   children:
                                   whatStatus.map((condition) {
-                                    final bool isSelected = productStatus ==
+                                    final bool isSelected = getProductStatusText(productStatus) ==
                                         condition;
                                     return Padding(
                                       padding: EdgeInsets.symmetric(
@@ -313,13 +321,16 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             ),
                             Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0).r,
-                                  child: SvgPicture.asset(
-                                    'assets/icon/ICON_good.svg',
-                                    width: 18.r,
-                                    height: 18.r,
-                                    color: Color(0xffc1c1c1),
+                                InkWell(
+                                  onTap: (){},
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0).r,
+                                    child: SvgPicture.asset(
+                                      'assets/icon/ICON_good.svg',
+                                      width: 18.r,
+                                      height: 18.r,
+                                      color: Color(0xffc1c1c1),
+                                    ),
                                   ),
                                 ),
                                 Padding(
@@ -356,7 +367,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         Divider(thickness: 1.2.h,color: Color(0xffE5EBFF),),
 
                         //댓글
-                        showLoading
+                        marketcommentProvider.loading
                             ? Container(
                           alignment: Alignment.center,
                           child: Image(
@@ -631,5 +642,26 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
         ]),
       ),
     );
+  }
+}
+String getProductStatusText(String? productStatus) {
+  List<String> whatStatus = [
+    'Brand_New'.tr(),
+    'Almost_New'.tr(),
+    'Slight_Defect'.tr(),
+    'Used'.tr(),
+  ];
+
+  switch (productStatus) {
+    case '새 것':
+      return whatStatus[0];
+    case '거의 새 것':
+      return whatStatus[1];
+    case '약간의 하자':
+      return whatStatus[2];
+    case '사용감 있음':
+      return whatStatus[3];
+    default:
+      return '';
   }
 }
