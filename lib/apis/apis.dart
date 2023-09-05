@@ -1463,7 +1463,8 @@ class APIs {
         print(json.decode(utf8.decode(response.bodyBytes)));
         List<dynamic> body = json.decode(
             utf8.decode(response.bodyBytes))['data'];
-        return body.map((dynamic item) => Board.fromJson(item)).toList();
+        List<dynamic> value = body.map((dynamic item) => Board.fromJson(item)).toList();
+        return List.from(value.reversed);
 
 
         //fail
@@ -1596,8 +1597,7 @@ class APIs {
    */
 
   static Future<List<Board>> getMyArticles() async {
-    //TODO url 수정
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/articles'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v2/articles'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1618,7 +1618,8 @@ class APIs {
       print(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> body = json.decode(
           utf8.decode(response.bodyBytes))['data'];
-      return body.map((dynamic item) => Board.fromJson(item)).toList();
+      List<dynamic> value = body.map((dynamic item) => Board.fromJson(item)).toList();
+      return List.from(value.reversed);
 
 
       //fail
@@ -1645,7 +1646,7 @@ class APIs {
 
   static Future<List<Board>> getCommentArticles() async {
     //TODO url 수정
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/articles'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v2/articles'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1666,7 +1667,8 @@ class APIs {
       print(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> body = json.decode(
           utf8.decode(response.bodyBytes))['data'];
-      return body.map((dynamic item) => Board.fromJson(item)).toList();
+      List<dynamic> value = body.map((dynamic item) => Board.fromJson(item)).toList();
+      return List.from(value.reversed);
 
 
       //fail
@@ -1691,7 +1693,7 @@ class APIs {
 
   */
   static Future<List<Board>> getArticles(String boardCategory) async {
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles?category=${boardCategory}'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v2/community-articles?category=${boardCategory}'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1712,7 +1714,8 @@ class APIs {
       print(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> body = json.decode(
           utf8.decode(response.bodyBytes))['data'];
-      return body.map((dynamic item) => Board.fromJson(item)).toList();
+      List<dynamic> value = body.map((dynamic item) => Board.fromJson(item)).toList();
+      return List.from(value.reversed);
 
 
       //fail
@@ -1737,7 +1740,7 @@ class APIs {
 
   */
   static Future<bool> postArticles(Board board) async {
-    const url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles';
+    const url = 'http://3.34.2.246:8080/api/v2/community-articles';
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
 
@@ -1811,7 +1814,7 @@ class APIs {
 
   */
   static Future<List<Comment>> getCommentsList(int articleId) async {
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/3/comments'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}/comments'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1855,7 +1858,7 @@ class APIs {
 
   */
   static Future<bool> postComment(String content, int articleId) async {
-    var url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}/comments';
+    var url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}/comments';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1897,7 +1900,7 @@ class APIs {
 
   */
   static Future<bool> postNestedComment(String content, int commentId) async {
-    var url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-article-comments/${commentId}/comments';
+    var url = 'http://3.34.2.246:8080/api/v2/community-article-comments/${commentId}/comments';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1941,7 +1944,7 @@ class APIs {
    */
   static Future<bool> deleteComment(int articleId) async {
 
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-article-comments/${articleId}'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v2/community-article-comments/${articleId}'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1975,8 +1978,8 @@ class APIs {
   좋아요 생성
 
   */
-  static Future<bool> addLike(int articleId) async {
-    var url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}/likes';
+  static Future<int> addLike(int articleId) async {
+    var url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}/likes';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -1993,7 +1996,7 @@ class APIs {
     //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
+      return json.decode(utf8.decode(response.bodyBytes))['data']['likeCount'];
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
@@ -2006,44 +2009,11 @@ class APIs {
       }else{
 
       }
-      return false;
+      return -1;
     }
   }
 
-  /*
 
-  좋아요 삭제
-
-   */
-  static Future<bool> cancleLike(int articleId) async {
-
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}/likes'; //mocksever
-
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    //accessToken
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-
-    var response = await http.delete(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
-
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
-    }
-  }
 
   /*
 
@@ -2051,7 +2021,7 @@ class APIs {
 
   */
   static Future<List<Board>> getLikedPost() async {
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/likes'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v2/community-articles/likes'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
