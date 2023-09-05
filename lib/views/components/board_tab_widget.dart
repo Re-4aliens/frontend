@@ -45,7 +45,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
     final boardProvider = Provider.of<BoardProvider>(context);
     return Container(
       decoration: BoxDecoration(color: Colors.white),
-      child: boardProvider.loading
+      child: boardProvider.loading || boardProvider.articleList == null
           ? Container(
           alignment: Alignment.center,
           child: Image(

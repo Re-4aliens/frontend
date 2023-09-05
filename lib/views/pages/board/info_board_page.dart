@@ -123,7 +123,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
         body: isDrawerStart ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,
           onpressd: (){},) :Container(
           decoration: BoxDecoration(color: Colors.white),
-          child: boardProvider.loading? Container(
+          child: boardProvider.loading || boardProvider.articleList == null? Container(
               alignment: Alignment.center,
               child: Image(
                   image: AssetImage(
