@@ -1418,12 +1418,11 @@ class APIs {
 
   /*전체게시판 글 전부 조회*/
   static Future<List<Board>> TotalArticles() async {
-    final _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/articles';
+    final _url = 'http://3.34.2.246:8080/api/v2/articles';
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
     final response = await http.get(
       Uri.parse(_url),
       headers: {
@@ -1431,26 +1430,21 @@ class APIs {
         'Content-Type': 'application/json',
       },
     );
-
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> body = json.decode(
           utf8.decode(response.bodyBytes))['data'];
       return body.map((dynamic item) => Board.fromJson(item)).toList();
-
-
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
         print('액세스 토큰 만료');
         throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
         print('로그아웃된 토큰');
         throw 'AT-C-007';
-      } else {
-
+      }else{
       }
       throw Exception('요청 오류');
     }
