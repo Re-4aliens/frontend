@@ -14,14 +14,14 @@ class MarketCommentProvider with ChangeNotifier {
   bool loading = false;
   MarketComment? marketcomment;
 
-  getMarketComments(int articleCommentId) async {
+  getMarketComments(int articleId) async {
     loading = true;
     try {
-      commentListData = await APIs.getMarketArticleComments(articleCommentId);
+      commentListData = await APIs.getMarketArticleComments(articleId);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        commentListData = await APIs.getMarketArticleComments(articleCommentId);
+        commentListData = await APIs.getMarketArticleComments(articleId);
       } else {
         // 오류 처리 로직
       }
@@ -31,13 +31,13 @@ class MarketCommentProvider with ChangeNotifier {
   }
 
 
-  addMarketComment(int articleId, String content) async {
+  addMarketComment(String content, int articleId) async {
     try {
-      await APIs.createMarketArticleComment(articleId, content);
+      await APIs.createMarketArticleComment(content,articleId);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        await APIs.createMarketArticleComment(articleId, content);
+        await APIs.createMarketArticleComment(content,articleId);
       } else {
         return false;
       }
