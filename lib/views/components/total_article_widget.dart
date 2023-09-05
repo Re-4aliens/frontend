@@ -2,8 +2,10 @@
 import 'dart:async';
 import 'package:aliens/apis/apis.dart';
 import 'package:aliens/apis/apis.dart';
+import 'package:aliens/models/market_articles.dart';
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/message_model.dart';
+import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/views/pages/board/article_writing_page.dart';
 import 'package:aliens/views/pages/board/info_article_page.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -16,15 +18,16 @@ import 'dart:convert';
 import '../../models/board_model.dart';
 import '../../repository/board_provider.dart';
 import '../pages/board/article_page.dart';
+import '../pages/board/market_detail_page.dart';
 import 'board_dialog_widget.dart';
 
 class TotalArticleWidget extends StatefulWidget {
 
-  TotalArticleWidget({super.key, required this.board, required this.nationCode, required this.memberDetails});
+  TotalArticleWidget({super.key, required this.board, required this.nationCode, required this.screenArguments});
 
   final Board board;
   final String nationCode;
-  final MemberDetails memberDetails;
+  final ScreenArguments screenArguments;
   @override
   State<StatefulWidget> createState() => _TotalArticleWidgetState();
 }
@@ -137,7 +140,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                         context: context,
                         builder: (builder) {
                           return BoardDialog(
-                            context: context, board: widget.board, memberDetails: widget.memberDetails,
+                            context: context, board: widget.board, memberDetails: widget.screenArguments.memberDetails!,
                           );
                         });
                   },
@@ -173,13 +176,13 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              widget.board.images!.isEmpty
+              widget.board.imageUrls!.isEmpty
                   ? SizedBox()
                   : Container(
                 height: 90.h,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: widget.board.images!.length,
+                    itemCount: widget.board.imageUrls!.length,
                     itemBuilder: (context, index) {
                       return Row(
                         children: [
@@ -250,11 +253,39 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                   builder: (context) =>
                       InfoArticlePage(board: widget.board)),
             );
-          } else {
+          } else if(widget.board.category == "장터게시판"){
+            showDialog(
+                context: context,
+                builder: (_) => FutureBuilder(
+                    future: APIs.getMarketArticle(widget.board.articleId!),
+                    builder: (BuildContext context,
+                        AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        //받아오는 동안
+                        return Container(
+                            child: Image(
+                                image: AssetImage(
+                                    "assets/illustration/loading_01.gif")));
+                      } else{
+                        MarketArticle data = snapshot.data;
+                        //받아온 후
+                        WidgetsBinding.instance!.addPostFrameCallback((_) {Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments)),
+                        );
+                        });
+                        return Container(
+                            child: Image(
+                                image: AssetImage(
+                                    "assets/illustration/loading_01.gif")));
+                      }
+
+                    }));
+          }else {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails)),
+                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.screenArguments.memberDetails!)),
             );
           }
         },
