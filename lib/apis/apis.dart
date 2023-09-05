@@ -1529,6 +1529,46 @@ class APIs {
     }
   }
 
+
+  /*장터 게시판 게시글 상세 조회*/
+  static Future<MarketBoard> getMarketArticle(int articleId) async {
+    final _url = 'http://3.34.2.246:8080/api/v2/market-articles/${articleId}';
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      dynamic body = json.decode(
+          utf8.decode(response.bodyBytes))['data'];
+      return MarketBoard.fromJson(body);
+
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }else{
+
+      }
+      throw Exception('요청 오류');
+    }
+  }
+
   /*상품 판매글 검색*/
   static Future<List<MarketBoard>> marketSearch(String keyword) async {
     try {
