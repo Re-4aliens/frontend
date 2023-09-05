@@ -106,13 +106,13 @@ class _MyArticleWidgetState extends State<MyArticleWidget>{
               padding: const EdgeInsets.only(top: 8).h,
               child: Text('${widget.board.title}', style: TextStyle(fontSize: 14.spMin, color: Color(0xff444444), fontWeight: FontWeight.bold)),
             ),
-            widget.board.images!.isEmpty ?
+            widget.board.imageUrls!.isEmpty ?
             SizedBox():
             Container(
               height: 90.h,
               child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: widget.board.images!.length,
+                  itemCount: widget.board.imageUrls!.length,
                   itemBuilder: (context, index){
                     return Row(
                       children: [
