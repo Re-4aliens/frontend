@@ -75,6 +75,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    //print('Data from marketBoard: ${widget.marketBoard.createdAt}');
+
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
 
@@ -85,6 +87,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
     marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
 
+    bool showLoading = marketcommentProvider.loading;
+    if (showLoading) {
+      Future.delayed(Duration(seconds: 3), () {
+        setState(() {
+          showLoading = false;
+        });
+      });
+    }
 
     return GestureDetector(
       onTap: (){
@@ -345,13 +355,15 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         ),
                         Divider(thickness: 1.2.h,color: Color(0xffE5EBFF),),
 
+
                         //댓글
-                        marketcommentProvider.loading?
-                        Container(
-                            alignment: Alignment.center,
-                            child: Image(
-                                image: AssetImage(
-                                    "assets/illustration/loading_01.gif")))
+                        showLoading
+                            ? Container(
+                          alignment: Alignment.center,
+                          child: Image(
+                            image: AssetImage("assets/illustration/loading_01.gif"),
+                          ),
+                        )
                             :
                         Column(
                           children: [
