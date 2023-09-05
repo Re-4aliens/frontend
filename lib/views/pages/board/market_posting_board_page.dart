@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:aliens/apis/apis.dart';
+import 'package:aliens/models/market_articles.dart';
 import 'package:aliens/permissions.dart';
 import 'package:chips_choice/chips_choice.dart';
 import 'package:aliens/models/chatRoom_model.dart';
@@ -22,8 +24,9 @@ import '../../components/button.dart';
 
 class MarketBoardPostPage extends StatefulWidget {
 
-  const MarketBoardPostPage({super.key,required this.screenArguments});
+  const MarketBoardPostPage({super.key,required this.screenArguments, this.marketBoard, });
 final ScreenArguments screenArguments;
+final MarketBoard? marketBoard;
 
 
   @override
@@ -34,11 +37,12 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
 
-  String _title = '';
-  String _price = '';
-  String _content = '';
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
+
   List<String> whatStatus = [
-    '미개봉', '거의 새 것', '약간의 하자', '사용감 있음'
+    'Brand_New'.tr(), 'Almost_New'.tr(), 'Slight_Defect'.tr(), 'Used'.tr()
   ];
   String productStatus = '';
 
@@ -155,7 +159,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
             Container(
                 width: double.infinity,
                 color: Colors.white,
-              padding: EdgeInsets.only(right: 10.w, left: 10.w, top: 12.h, bottom: 50),
+              padding: EdgeInsets.only(right: 10.w, left: 10.w, top: 12.h, bottom: 50.h),
                   child: Form(
                     key: _formKey,
                     child: Column(
@@ -165,7 +169,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                             Expanded(
                               child: TextFormField(
                                     style: TextStyle(
-                                        fontSize: 20.h,
+                                        fontSize: 20.spMin,
                                         color: Color(0xff616161)
                                     ),
                                     decoration: InputDecoration(
@@ -185,18 +189,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                             right: 14.w, left: 14.w)
                                     ),
                                     maxLength: 30,
-                                    /*validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return '${'market-posting-title'.tr()}';
-                                      }else if (value.length > 30) {
-                                        return '${'market-posting-title-error'.tr()}';
-                                      }
-                                      return null;
-                                    },*/
-                                    onSaved: (value) {
-                                      _title = value ?? '';
-                                    },
-                                  ),
+                                controller: _titleController,
+                                onChanged: (value){
+                                      setState(() {
+                                        _isButtonEnabled = _isFormValid();
+                                      });
+                                },
+                              ),
                             ),
                             Container(
                               width: 95.w,
@@ -216,7 +215,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                     height: 4.r,
                                     color: Color(0xff888888),
                                   ),
-                                  Text('판매중',
+                                  Text('sale'.tr(),
                                     style: TextStyle(
                                       color: Color(0xff888888),
                                       fontSize:14.spMin
@@ -260,9 +259,11 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                   ),
                                   contentPadding: EdgeInsets.only(right: 14.w, left: 14.w),
                                 ),
-
-                                onSaved: (value) {
-                                  _price = value ?? '';
+                                controller: _priceController,
+                                onChanged: (value){
+                                  setState(() {
+                                    _isButtonEnabled = _isFormValid();
+                                  });
                                 },
                               ),
                             ),
@@ -274,7 +275,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 14),
                               child: Text(
-                                '상품상태',
+                                'market-productStatus'.tr(),
                                 style: TextStyle(
                                   fontSize:  16.spMin,
                                   color: Color(0xff888888),
@@ -296,9 +297,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                         label: Text(
                                           condition,
                                           style: TextStyle(
-                                            fontSize: isSmallScreen
-                                                ? 10
-                                                : 12,
+                                            fontSize: 12.spMin,
                                             color: isSelected
                                                 ? Colors.white
                                                 : Color(0xffC1C1C1),
@@ -315,7 +314,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                           });
                                         },
                                         labelPadding: EdgeInsets.only(
-                                            left: 12, right: 12),
+                                            left: 12.w, right: 12.w),
                                         // 선택 영역 패딩 조절
                                         shape: RoundedRectangleBorder(
                                           side: BorderSide(
@@ -385,7 +384,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           decoration: InputDecoration(
                               hintText: '${'market-posting-content'.tr()}',
                               hintStyle: TextStyle(
-                                  fontSize: 14.h,
+                                  fontSize: 14.spMin,
                                   color: Color(0xffC0C0C0)
                               ),
                               enabledBorder: UnderlineInputBorder(
@@ -404,26 +403,58 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               contentPadding: EdgeInsets.only(
                                   right: 14.w, left: 14.w)
                           ),
-
-                          onSaved: (value) {
-                            _content = value ?? '';
+                          controller: _contentController,
+                          onChanged: (value){
+                            setState(() {
+                              _isButtonEnabled = _isFormValid();
+                            });
                           },
                           maxLines: null,
                         ), //상품 내용
                         SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                         Button(
-                            child: Text(
-                              'post3'.tr(), style: TextStyle(color: _isButtonEnabled ? Colors.white : Color(0xff888888))),
-                            onPressed: () {
-                            if (_formKey.currentState!.validate()) {
+                          child: Text(
+                            'post3'.tr(),
+                            style: TextStyle(
+                              color: _isButtonEnabled ? Colors.white : Color(0xff888888),
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate() && productStatus.isNotEmpty && _images.isNotEmpty ) {
                               FocusScope.of(context).unfocus();
                               _formKey.currentState!.save();
+
+                              MarketBoard marketArticle = MarketBoard(
+                                title: _titleController.text,
+                                content: _contentController.text,
+                                price: int.parse(_priceController.text),
+                                productStatus: productStatus,
+                                imageUrls: _images.map((image) => image.path).toList(),
+                              );
+
+                              try {
+                                bool success = await APIs.createMarketArticle(marketArticle);
+
+                                if (success) {
+                                  print('게시물 생성 성공!!!');
+                                  Navigator.of(context).pop(); // 이전 페이지로 이동
+                                } else {
+                                  print('게시물 생성 실패...');
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Fail'),
+                                      duration: Duration(seconds: 3),
+                                    ),
+                                  );
+                                }
+                              } catch (error) {
+                                print('Error creating market article: $error');
+                              }
                             }
-                            },
-                          isEnabled: _formKey.currentState?.validate() == true &&
-                              productStatus.isNotEmpty &&
-                              _images.isNotEmpty,
-                            )
+                          },
+                          isEnabled: _isButtonEnabled
+                        )
+
 
                       ],
                     ),
@@ -432,5 +463,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
             ),
           )
     );
+  }
+
+  bool _isFormValid() {
+    return _titleController.text.isNotEmpty &&
+        _priceController.text.isNotEmpty &&
+        _contentController.text.isNotEmpty &&
+        productStatus.isNotEmpty &&
+        _images.isNotEmpty;
   }
 }
