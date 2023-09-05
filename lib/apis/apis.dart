@@ -432,7 +432,7 @@ class APIs {
         throw 'AT-C-007';
       }else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'MT-C-005'){
         print('정보 없음');
-        return "NOT_APPLIED";
+        return "NotAppliedAndNotMatched";
       }else{
 
       }
@@ -652,10 +652,10 @@ class APIs {
 
     _memberDetails = MemberDetails.fromJson(await APIs.getMemberDetails());
 
-    _applicant = _status != 'NOT_APPLIED'
+    _applicant = _status == 'AppliedAndNotMatched' || _status == 'AppliedAndMatched'
         ? Applicant.fromJson(await APIs.getApplicantInfo())
         : null;
-    _partners = _status == 'MATCHED' ? await APIs.getApplicantPartners() : null;
+    _partners = _status == 'AppliedAndNotMatched' || _status == 'AppliedAndMatched'? await APIs.getApplicantPartners() : null;
 
     _screenArguments =
     new ScreenArguments(_memberDetails, _status, _applicant, _partners);
