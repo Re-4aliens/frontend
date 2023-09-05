@@ -24,13 +24,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../apis/apis.dart';
+import '../../models/market_articles.dart';
 import '../../repository/sql_message_repository.dart';
 import '../pages/board/market_posting_board_page.dart';
 
 class BoardDrawerWidget extends StatefulWidget {
-  const BoardDrawerWidget({super.key, required this.screenArguments, required this.isTotalBoard, required this.onpressd});
+  const BoardDrawerWidget({super.key, required this.screenArguments, required this.isTotalBoard, required this.onpressd, this.marketBoard});
 
   final ScreenArguments screenArguments;
+  final MarketBoard? marketBoard;
+
   final bool isTotalBoard;
   final VoidCallback onpressd;
 
@@ -39,6 +42,7 @@ class BoardDrawerWidget extends StatefulWidget {
 }
 
 class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
+
 
 
 
@@ -118,7 +122,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => MarketBoardPostPage(screenArguments: widget.screenArguments)),
+                    MaterialPageRoute(builder: (context) => MarketBoardPostPage(screenArguments: widget.screenArguments,marketBoard:widget.marketBoard )),
                   );
                 },
                 child: Container(
@@ -445,7 +449,8 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments)),
+                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard,)),
+
                 );
               }
               else{
@@ -453,7 +458,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments)),
+                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard,)),
                 );
               }
             },
