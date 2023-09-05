@@ -111,7 +111,7 @@ class _HomePageState extends State<HomePage> {
 
     List _pageWidget = [
       HomeWidget(screenArguments: args,),
-      args.status == 'MATCHED'
+      args.status == 'AppliedAndMatched' || args.status == 'NotAppliedAndMatched'
           ? matchingChattingWidget(
               screenArguments: args,
             )

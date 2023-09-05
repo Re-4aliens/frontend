@@ -21,13 +21,13 @@ Widget build(BuildContext context) {
         //내부 그림자
         BoxShadow(
           color:
-          screenArguments.status != 'NOT_APPLIED' ? Color(0xffCBCBCB) : Color(0xff678CFF),
+          screenArguments.status == 'AppliedAndNotMatched' || screenArguments.status == 'AppliedAndMatched'? Color(0xffCBCBCB) : Color(0xff678CFF),
         ),
         //버튼색
         BoxShadow(
           blurRadius: 7,
           color:
-          screenArguments.status != 'NOT_APPLIED' ? Color(0xffE0E0E0) : Color(0xffAEC1FF),
+          screenArguments.status == 'AppliedAndNotMatched' || screenArguments.status == 'AppliedAndMatched' ? Color(0xffE0E0E0) : Color(0xffAEC1FF),
           spreadRadius: 14,
           offset: const Offset(-20, -20),
         ),
@@ -52,14 +52,14 @@ Widget build(BuildContext context) {
                       boxShadow: [
                         //큰원 내부그림자
                         BoxShadow(
-                          color: screenArguments.status != 'NOT_APPLIED'
+                          color: screenArguments.status == 'AppliedAndNotMatched' || screenArguments.status == 'AppliedAndMatched'
                               ? Color(0xffCBCBCB)
                               : Color(0xff678CFF),
                         ),
                         //큰원색
                         BoxShadow(
                           blurRadius: 7,
-                          color: screenArguments.status != 'NOT_APPLIED'
+                          color: screenArguments.status == 'AppliedAndNotMatched' || screenArguments.status == 'AppliedAndMatched'
                               ? Color(0xffEBEBEB)
                               : Color(0xFFCAD6FE),
                           spreadRadius: -2,
@@ -76,7 +76,7 @@ Widget build(BuildContext context) {
             top: -25,
             child: Container(
               decoration: BoxDecoration(
-                color: screenArguments.status != 'NOT_APPLIED'
+                color: screenArguments.status == 'AppliedAndNotMatched' || screenArguments.status == 'AppliedAndMatched'
                     ? Color(0xffD7D7D7) // 회색
                     : Color(0xFF99B1FF), //하늘
                 borderRadius: BorderRadius.circular(50),
@@ -95,11 +95,11 @@ Widget build(BuildContext context) {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  screenArguments.status != 'NOT_APPLIED' ? '${'homepage-applydone'.tr()}' : '${'homepage-apply'.tr()}',
+                  screenArguments.status == 'AppliedAndNotMatched' || screenArguments.status == 'AppliedAndMatched' ? '${'homepage-applydone'.tr()}' : '${'homepage-apply'.tr()}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 18.spMin,
-                    color: screenArguments.status != 'NOT_APPLIED'
+                    color: screenArguments.status == 'AppliedAndNotMatched' || screenArguments.status == 'AppliedAndMatched'
                         ? Color(0xffACACAC)
                         : Colors.white,
                   ),
@@ -108,7 +108,7 @@ Widget build(BuildContext context) {
                   'How to Use?',
                   style: TextStyle(
                       fontSize: 12.spMin,
-                      color: screenArguments.status != 'NOT_APPLIED'
+                      color: screenArguments.status == 'AppliedAndNotMatched' || screenArguments.status == 'AppliedAndMatched'
                           ? Color(0xff888888)
                           : Color(0xff7898FF)),
                 ),
@@ -116,7 +116,7 @@ Widget build(BuildContext context) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    screenArguments.status != 'NOT_APPLIED'
+                    screenArguments.status == 'AppliedAndNotMatched' || screenArguments.status == 'AppliedAndMatched'
                         ? SvgPicture.asset('assets/character/none_puzzle.svg', width: 100.r,)
                         :SvgPicture.asset('assets/character/matching_puzzle.svg', width: 100.r,
                     )

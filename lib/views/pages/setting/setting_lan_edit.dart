@@ -51,7 +51,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
 
     _selectedLanguage = widget.isKorean ? '한국어' : 'English';
 
-    if(widget.screenArguments!.status != 'NOT_APPLIED'){
+    if(widget.screenArguments!.status == 'NotAppliedAndMatched' || widget.screenArguments!.status == 'AppliedAndMatched'){
 
       _firstPreferLanguage = _nationlist.firstWhere((element) =>
       element['value'] == widget.screenArguments!.applicant!.preferLanguages!
@@ -66,32 +66,6 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
   }
 
 
-/*  void initState() {
-    super.initState();
-    _selectedLanguage = _nationlist[0];
-    print(ModalRoute.of(context)?.settings.arguments);
-    _loadInitialLanguages();
-  }
-
-  // 서버에서 언어 정보를 가져오는 함수
-  Future<void> _loadInitialLanguages() async {
-    try {
-      final applicant = await APIs.getMemberDetails();
-      final applicantData = Applicant.fromJson(applicant);
-
-      args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-
-      if (args != null && args!.status != 'NOT_APPLIED') {
-        setState(() {
-          _firstPreferLanguage = applicantData.preferLanguages?.firstPreferLanguage ?? _nationlist[0];
-          _secondPreferLanguage = applicantData.preferLanguages?.secondPreferLanguage ?? _nationlist[1];
-        });
-      }
-    } catch (error) {
-      print('Error loading initial languages: $error');
-      // 에러 처리
-    }
-  }*/
 
 
   Widget build(BuildContext context) {
@@ -176,7 +150,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
             ),
 
             //신청이 안된 상태일때는 빈공간
-            widget.screenArguments!.status != 'PENDING'
+            widget.screenArguments!.status == 'NotAppliedAndNotMatched' || widget.screenArguments!.status != 'AppliedAndNotMatched'
                 ? SizedBox(child: Container(),)
                 : Container(
               child: Column(
@@ -280,7 +254,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                       String _firstPreferLanguageArgs = _nationlist.firstWhere((element) => element['language'] == _firstPreferLanguage)['value'];
                       String _secondPreferLanguageArgs = _nationlist.firstWhere((element) => element['language'] == _secondPreferLanguage)['value'];
                       //펜딩일때만 수정
-                      if(widget.screenArguments!.status == 'PENDING'){
+                      if(widget.screenArguments!.status != 'AppliedAndNotMatched'){
                         bool isSuccess = false;
                         try {
                          isSuccess = await APIs.updatePreferLanguage(_firstPreferLanguageArgs, _secondPreferLanguageArgs);
