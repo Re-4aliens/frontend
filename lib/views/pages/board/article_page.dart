@@ -15,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../apis/apis.dart';
 import '../../../mockdatas/comment_mockdata.dart';
 import '../../../models/comment_model.dart';
 import '../../../models/board_model.dart';
@@ -43,7 +44,7 @@ class _ArticlePageState extends State<ArticlePage> {
   var _newComment = '';
   bool isNestedComments = false;
   String boardCategory = '';
-  int parentsCommentIndex = -1;
+  int parentsCommentId = -1;
 
   void sendComment() async {
 
@@ -105,7 +106,7 @@ class _ArticlePageState extends State<ArticlePage> {
         FocusScope.of(context).unfocus();
         setState(() {
           isNestedComments = false;
-          parentsCommentIndex = -1;
+          parentsCommentId = -1;
         });
       },
       child: Scaffold(
@@ -283,7 +284,7 @@ class _ArticlePageState extends State<ArticlePage> {
                       :
                   Column(
                     children: [
-                      for(int index = 0; index < 5; index++)
+                      for(int index = 0; index < commentProvider.commentListData!.length; index++)
                         Container(
                           child: Column(
                             children: [
@@ -339,7 +340,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                   return CommentDialog(context: context, onpressed: (){
                                                     setState(() {
                                                       isNestedComments = true;
-                                                      parentsCommentIndex = index;
+                                                      parentsCommentId = commentProvider.commentListData![index].articleCommentId!;
                                                     });
                                                     Navigator.pop(context);
                                                   },
@@ -526,14 +527,17 @@ class _ArticlePageState extends State<ArticlePage> {
                         )),
                     IconButton(
                       onPressed: () {
-                        if(isNestedComments){
-                          commentProvider.addComment(_newComment, parentsCommentIndex);
-                          parentsCommentIndex = -1;
-                          isNestedComments = false;
-                        }
-                        else{
-                          commentProvider.addComment(_newComment, widget.board.articleId!);
-                          //CommentRepository.addComment(newValue);
+                        print('${parentsCommentId}');
+                        if(_newComment != ''){
+                          if(isNestedComments){
+                            commentProvider.addNestedComment(_newComment, parentsCommentId, widget.board.articleId!);
+                            parentsCommentId = -1;
+                            isNestedComments = false;
+                          }
+                          else{
+                            commentProvider.addComment(_newComment, widget.board.articleId!);
+                            //CommentRepository.addComment(newValue);
+                          }
                         }
                         updateUi();
                       },
