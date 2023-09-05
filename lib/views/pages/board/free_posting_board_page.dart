@@ -121,7 +121,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
           onpressd: (){},) :
         Container(
           decoration: BoxDecoration(color: Colors.white),
-          child: boardProvider.loading? Container(
+          child: boardProvider.loading || boardProvider.articleList == null? Container(
               alignment: Alignment.center,
               child: Image(
                   image: AssetImage(

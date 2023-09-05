@@ -128,7 +128,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
               )
             : Container(
                 decoration: BoxDecoration(color: Colors.white),
-                child: boardProvider.loading
+                child: boardProvider.loading || boardProvider.articleList == null
                     ? Container(
                         alignment: Alignment.center,
                         child: Image(
