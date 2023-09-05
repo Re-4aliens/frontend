@@ -262,10 +262,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                //DataUtils.getTime(widget.marketBoard?.createdAt),//formatexception : invalid date format null 에러남
-                               '${widget.marketBoard?.createdAt.toString()}', //그냥 null 반환
-                               // DataUtils.getTime(widget.marketBoard!.createdAt), //null check operator used on a null vlaue 에러
-                               //DataUtils.getTime(widget.marketBoard?.createdAt.toString()), //걍 빨간줄
+                          DataUtils.getTime(marketBoard.createdAt),
                                 style: TextStyle(
                                   color: Color(0xffC1C1C1),
                                   fontSize: 12.spMin,
