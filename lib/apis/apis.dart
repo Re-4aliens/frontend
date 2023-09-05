@@ -1487,6 +1487,7 @@ class APIs {
       );
 
       if (response.statusCode == 200) {
+        print(json.decode(utf8.decode(response.bodyBytes)));
         final responseData = json.decode(utf8.decode(response.bodyBytes));
         final data = responseData['data'];
         if (data != null && data is List) {
@@ -2001,6 +2002,7 @@ class APIs {
     );
 
     if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data'];
       return body.map((dynamic item) => MarketBoard.fromJson(item)).toList();
     } else {

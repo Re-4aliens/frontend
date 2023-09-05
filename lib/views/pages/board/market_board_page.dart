@@ -25,6 +25,7 @@ class MarketBoardPage extends StatefulWidget {
 
 
 
+
   @override
   State<StatefulWidget> createState() => _MarketBoardPageState();
 }
@@ -32,6 +33,8 @@ class MarketBoardPage extends StatefulWidget {
 class _MarketBoardPageState extends State<MarketBoardPage> {
   bool isDrawerStart = false;
   List<MarketBoard> marketBoardList = [];
+  //String createdAt = '';
+
 
 
   void initState() {
@@ -42,8 +45,13 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   Future<void> _fetchMarketArticles() async {
     try {
       var fetchedData = await APIs.getMarketArticles(); // API 호출 함수 호출
+      print(fetchedData);
       setState(() {
         marketBoardList = fetchedData; // 불러온 데이터를 리스트에 할당
+        for (var marketBoard in marketBoardList) {
+          print('createdAt: ${marketBoard.createdAt}');
+        }
+
       });
     } catch (error) {
       // 에러 처리
@@ -54,6 +62,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
   @override
   Widget build(BuildContext context) {
+
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
@@ -253,8 +262,10 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                          '${widget.marketBoard?.createdAt}',
-                               // DataUtils.getTime(widget.marketBoard?.createdAt), // 생성 날짜 정보 사용
+                                //DataUtils.getTime(widget.marketBoard?.createdAt),//formatexception : invalid date format null 에러남
+                               '${widget.marketBoard?.createdAt.toString()}', //그냥 null 반환
+                               // DataUtils.getTime(widget.marketBoard!.createdAt), //null check operator used on a null vlaue 에러
+                               //DataUtils.getTime(widget.marketBoard?.createdAt.toString()), //걍 빨간줄
                                 style: TextStyle(
                                   color: Color(0xffC1C1C1),
                                   fontSize: 12.spMin,
