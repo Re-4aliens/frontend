@@ -2314,7 +2314,7 @@ class APIs {
 
 
   /*특정 판매글 댓글 삭제*/
-  static Future<String> deleteMarketArticleComment(int articleCommentId) async {
+  static Future<bool> deleteMarketArticleComment(int articleCommentId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];

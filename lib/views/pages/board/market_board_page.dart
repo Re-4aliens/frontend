@@ -54,10 +54,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
         appBar: AppBar(
@@ -126,12 +123,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                 Navigator.pushNamed(context, '/market/notice');
               },
               child: Container(
-                margin: EdgeInsets
-                    .only(right: 10, left: 10, top: 10, bottom: 10)
-                    .r,
-                padding: EdgeInsets
-                    .only(right: 10, left: 10)
-                    .r,
+                margin: EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 10).r,
+                padding: EdgeInsets.only(right: 10, left: 10).r,
                 width: double.infinity,
                 height: 42.spMin,
                 decoration: BoxDecoration(
@@ -181,9 +174,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
 
   Widget _contentWidget() {
-    List<MarketBoard> marketBoardList = [];
 
     return ListView.separated(
+
       itemBuilder: (BuildContext context, int index) {
         MarketBoard marketBoard = marketBoardList[index];
         return InkWell(
@@ -260,7 +253,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                                DataUtils.getTime(widget.marketBoard?.createdAt), // 생성 날짜 정보 사용
+                          '${widget.marketBoard?.createdAt}',
+                               // DataUtils.getTime(widget.marketBoard?.createdAt), // 생성 날짜 정보 사용
                                 style: TextStyle(
                                   color: Color(0xffC1C1C1),
                                   fontSize: 12.spMin,

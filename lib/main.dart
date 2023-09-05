@@ -1,4 +1,5 @@
 import 'package:aliens/providers/comment_provider.dart';
+import 'package:aliens/providers/market_comment_provider.dart';
 import 'package:aliens/repository/board_provider.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/board/market_notice_page.dart';
@@ -94,6 +95,7 @@ void main() async {
     providers: [
       ChangeNotifierProvider(create: (_) => BoardProvider()),
       ChangeNotifierProvider(create: (_) => CommentProvider()),
+      ChangeNotifierProvider(create: (_) => MarketCommentProvider())
     ],
     child: EasyLocalization(
       path: 'assets/translations',

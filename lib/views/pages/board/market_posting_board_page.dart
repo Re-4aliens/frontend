@@ -37,9 +37,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
 
-  String _title = '';
-  String _price = '';
-  String _content = '';
+  TextEditingController _titleController = TextEditingController();
+  TextEditingController _priceController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
+
   List<String> whatStatus = [
     'Brand_New'.tr(), 'Almost_New'.tr(), 'Slight_Defect'.tr(), 'Used'.tr()
   ];
@@ -188,18 +189,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                             right: 14.w, left: 14.w)
                                     ),
                                     maxLength: 30,
-                                    /*validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return '${'market-posting-title'.tr()}';
-                                      }else if (value.length > 30) {
-                                        return '${'market-posting-title-error'.tr()}';
-                                      }
-                                      return null;
-                                    },*/
-                                    onSaved: (value) {
-                                      _title = value ?? '';
-                                    },
-                                  ),
+                                controller: _titleController,
+                                onChanged: (value){
+                                      setState(() {
+                                        _isButtonEnabled = _isFormValid();
+                                      });
+                                },
+                              ),
                             ),
                             Container(
                               width: 95.w,
@@ -263,9 +259,11 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                   ),
                                   contentPadding: EdgeInsets.only(right: 14.w, left: 14.w),
                                 ),
-
-                                onSaved: (value) {
-                                  _price = value ?? '';
+                                controller: _priceController,
+                                onChanged: (value){
+                                  setState(() {
+                                    _isButtonEnabled = _isFormValid();
+                                  });
                                 },
                               ),
                             ),
@@ -405,25 +403,31 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               contentPadding: EdgeInsets.only(
                                   right: 14.w, left: 14.w)
                           ),
-
-                          onSaved: (value) {
-                            _content = value ?? '';
+                          controller: _contentController,
+                          onChanged: (value){
+                            setState(() {
+                              _isButtonEnabled = _isFormValid();
+                            });
                           },
                           maxLines: null,
                         ), //상품 내용
                         SizedBox(height: MediaQuery.of(context).size.height * 0.08),
                         Button(
-                            child: Text(
-                              'post3'.tr(), style: TextStyle(color: _isButtonEnabled ? Colors.white : Color(0xff888888))),
-                            onPressed: () async {
-                            if (_formKey.currentState!.validate() && productStatus.isNotEmpty && _images.isNotEmpty) {
+                          child: Text(
+                            'post3'.tr(),
+                            style: TextStyle(
+                              color: _isButtonEnabled ? Colors.white : Color(0xff888888),
+                            ),
+                          ),
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate() && productStatus.isNotEmpty && _images.isNotEmpty ) {
                               FocusScope.of(context).unfocus();
                               _formKey.currentState!.save();
 
                               MarketBoard marketArticle = MarketBoard(
-                                title: _title,
-                                content: _content,
-                                price: int.parse(_price),
+                                title: _titleController.text,
+                                content: _contentController.text,
+                                price: int.parse(_priceController.text),
                                 productStatus: productStatus,
                                 imageUrls: _images.map((image) => image.path).toList(),
                               );
@@ -446,13 +450,11 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               } catch (error) {
                                 print('Error creating market article: $error');
                               }
-
                             }
-                            },
-                          isEnabled: _formKey.currentState?.validate() == true &&
-                              productStatus.isNotEmpty &&
-                              _images.isNotEmpty,
-                            )
+                          },
+                          isEnabled: _isButtonEnabled
+                        )
+
 
                       ],
                     ),
@@ -461,5 +463,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
             ),
           )
     );
+  }
+
+  bool _isFormValid() {
+    return _titleController.text.isNotEmpty &&
+        _priceController.text.isNotEmpty &&
+        _contentController.text.isNotEmpty &&
+        productStatus.isNotEmpty &&
+        _images.isNotEmpty;
   }
 }
