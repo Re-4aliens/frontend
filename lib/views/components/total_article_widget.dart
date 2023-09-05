@@ -276,11 +276,11 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                                 image: AssetImage(
                                     "assets/illustration/loading_01.gif")));
                       } else{
-                        MarketArticle data = snapshot.data;
+                        MarketBoard data = snapshot.data;
                         //받아온 후
                         WidgetsBinding.instance!.addPostFrameCallback((_) {Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments)),
+                          MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data,)),
                         );
                         });
                         return Container(
@@ -302,4 +302,3 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
     );
   }
 }
-
