@@ -442,7 +442,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             category: boardCategory,
                             title: title,
                             content: content,
-                            images: requestImages,
+                            imageUrls: requestImages,
                           );
 
                           showDialog(
