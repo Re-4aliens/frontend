@@ -1468,8 +1468,8 @@ class APIs {
 
 
   /*전체게시판 글 전부 조회*/
-  static Future<List<Board>> TotalArticles() async {
-    final _url = 'http://3.34.2.246:8080/api/v2/articles';
+  static Future<List<Board>> TotalArticles(int page) async {
+    final _url = 'http://3.34.2.246:8080/api/v2/articles?page=${page}&size=10&sort=createdAt,desc';
 
       //토큰 읽어오기
       var jwtToken = await storage.read(key: 'token');
@@ -2195,8 +2195,8 @@ class APIs {
   특정 게시판 게시물 조회
 
   */
-  static Future<List<Board>> getArticles(String boardCategory) async {
-    var _url = 'http://3.34.2.246:8080/api/v2/community-articles?category=${boardCategory}'; //mocksever
+  static Future<List<Board>> getArticles(String boardCategory, int page) async {
+    var _url = 'http://3.34.2.246:8080/api/v2/community-articles?category=${boardCategory}&page=${page}&size=10&sort=createdAt,desc'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');

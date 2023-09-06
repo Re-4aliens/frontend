@@ -19,11 +19,11 @@ class BoardProvider with ChangeNotifier {
   getAllArticles() async {
     loading = true;
     try{
-      articleList = await APIs.TotalArticles();
+      articleList = await APIs.TotalArticles(0);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        articleList = await APIs.TotalArticles();
+        articleList = await APIs.TotalArticles(0);
       } else {
       }
     }
@@ -34,11 +34,41 @@ class BoardProvider with ChangeNotifier {
   getArticles(String boardCategory) async {
     loading = true;
     try{
-      articleList = await APIs.getArticles(boardCategory);
+      articleList = await APIs.getArticles(boardCategory, 0);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        articleList = await APIs.getArticles(boardCategory);
+        articleList = await APIs.getArticles(boardCategory, 0);
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  getMoreArticles(String boardCategory, int page) async {
+    loading = true;
+    try{
+      articleList!.addAll(await APIs.getArticles(boardCategory, page));
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        articleList!.addAll(await APIs.getArticles(boardCategory, page));
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  getMoreAllArticles(int page) async {
+    loading = true;
+    try{
+      articleList!.addAll(await APIs.TotalArticles(page));
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        articleList!.addAll(await APIs.TotalArticles(page));
       } else {
       }
     }

@@ -32,12 +32,26 @@ class GameBoardPage extends StatefulWidget {
 
 class _GameBoardPageState extends State<GameBoardPage> {
   bool isDrawerStart = false;
+  final ScrollController _scrollController = ScrollController();
+  int page = 0;
 
   @override
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
     boardProvider.getArticles('게임게시판');
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset == _scrollController.position.maxScrollExtent
+          && !_scrollController.position.outOfRange) {
+        page++;
+        boardProvider.getMoreArticles('게임게시판', page);
+      }
+    });
+  }
+  @override
+  void dispose() {
+    _scrollController.dispose();
   }
 
   @override
@@ -126,7 +140,12 @@ class _GameBoardPageState extends State<GameBoardPage> {
               alignment: Alignment.center,
               child: Image(
                   image: AssetImage(
-                      "assets/illustration/loading_01.gif"))): ListView.builder(
+                      "assets/illustration/loading_01.gif"))): 
+          Column(
+                        children: [
+                          Expanded(
+                            child: ListView.builder(
+                              controller: _scrollController,
               itemCount: boardProvider.articleList!.length,
               itemBuilder: (context, index) {
 
@@ -141,12 +160,16 @@ class _GameBoardPageState extends State<GameBoardPage> {
                   children: [
                     ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!, index: index),
                     Divider(
-                      thickness: 2,
-                      color: Color(0xffE5EBFF),
+                            thickness: 2,
+                            color: Color(0xffE5EBFF),
                     )
                   ],
                 );
               }),
+                          ),
+                          //불러오기 위젯
+                        ],
+                      ),
         ),
       floatingActionButton: isDrawerStart ? null : FloatingActionButton(
         onPressed: (){

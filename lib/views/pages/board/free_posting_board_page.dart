@@ -31,13 +31,30 @@ class FreePostingBoardPage extends StatefulWidget {
 class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
 
   bool isDrawerStart = false;
+  final ScrollController _scrollController = ScrollController();
+  int page = 0;
 
   @override
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
     boardProvider.getArticles('자유게시판');
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset == _scrollController.position.maxScrollExtent
+          && !_scrollController.position.outOfRange) {
+        print('추가');
+        page++;
+        boardProvider.getMoreArticles('자유게시판', page);
+      }
+    });
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
@@ -120,12 +137,13 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
         body: isDrawerStart ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,
           onpressd: (){},) :
         Container(
-          decoration: BoxDecoration(color: Colors.white),
+          color: Colors.white,
           child: boardProvider.loading || boardProvider.articleList == null? Container(
               alignment: Alignment.center,
               child: Image(
                   image: AssetImage(
                       "assets/illustration/loading_01.gif"))):ListView.builder(
+            controller: _scrollController,
               itemCount: boardProvider.articleList!.length,
               itemBuilder: (context, index) {
                 var nationCode = '';
@@ -139,8 +157,8 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                   children: [
                     ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!, index: index),
                     Divider(
-                      thickness: 2,
-                      color: Color(0xffE5EBFF),
+                        thickness: 2,
+                        color: Color(0xffE5EBFF),
                     )
                   ],
                 );
