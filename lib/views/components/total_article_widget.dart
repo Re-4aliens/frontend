@@ -18,16 +18,19 @@ import 'dart:convert';
 import '../../models/board_model.dart';
 import '../../repository/board_provider.dart';
 import '../pages/board/article_page.dart';
+import '../pages/board/market_board_page.dart';
 import '../pages/board/market_detail_page.dart';
 import 'board_dialog_widget.dart';
 
 class TotalArticleWidget extends StatefulWidget {
 
-  TotalArticleWidget({super.key, required this.board, required this.nationCode, required this.screenArguments, required this.index});
+
+  TotalArticleWidget({super.key, required this.board, required this.nationCode, required this.screenArguments, required this.index, this.marketBoard});
 
   final Board board;
   final String nationCode;
   final ScreenArguments screenArguments;
+  final MarketBoard? marketBoard;
   final int index;
   @override
   State<StatefulWidget> createState() => _TotalArticleWidgetState();
@@ -283,7 +286,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                         //받아온 후
                         WidgetsBinding.instance!.addPostFrameCallback((_) {Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data,)),
+                          MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data, productStatus: '',)),
                         );
                         });
                         return Container(

@@ -14,30 +14,31 @@ class MarketCommentProvider with ChangeNotifier {
   bool loading = false;
   MarketComment? marketcomment;
 
-  getMarketComments(int articleCommentId) async {
+  getMarketComments(int articleId) async {
     loading = true;
     try {
-      commentListData = await APIs.getMarketArticleComments(articleCommentId);
+      commentListData = await APIs.getMarketArticleComments(articleId);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        commentListData = await APIs.getMarketArticleComments(articleCommentId);
+        commentListData = await APIs.getMarketArticleComments(articleId);
       } else {
         // 오류 처리 로직
       }
     }
     loading = false;
     notifyListeners();
+
   }
 
 
-  addMarketComment(int articleId, String content) async {
+  addMarketComment(String content, int articleId) async {
     try {
-      await APIs.createMarketArticleComment(articleId, content);
+      await APIs.createMarketArticleComment(content,articleId);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        await APIs.createMarketArticleComment(articleId, content);
+        await APIs.createMarketArticleComment(content,articleId);
       } else {
         return false;
       }
@@ -46,24 +47,26 @@ class MarketCommentProvider with ChangeNotifier {
 
 
     notifyListeners();
+    getMarketComments(articleId);
     return true;
   }
 
-  addNestedMarketComment(int commentId, int ArticleCommentId, String content) async {
+  addNestedMarketComment(String content, int commentId, int articleId) async {
     try {
-      await APIs.addMarketArticleCommentReply(commentId, ArticleCommentId, content);
+      await APIs.addMarketArticleCommentReply(content, commentId,articleId );
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        await APIs.addMarketArticleCommentReply(commentId, ArticleCommentId, content);
+        await APIs.addMarketArticleCommentReply(content, commentId,articleId);
       } else {
         return false;
       }
     }
     //TODO fcm 전송
 
-
     notifyListeners();
+    getMarketComments(articleId);
+
     return true;
   }
   deleteMarketComment(int articleId) async {
@@ -80,6 +83,8 @@ class MarketCommentProvider with ChangeNotifier {
     }
     loading = false;
     notifyListeners();
+    getMarketComments(articleId);
+
     return value;
   }
 

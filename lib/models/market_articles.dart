@@ -1,7 +1,7 @@
 class MarketBoard {
   int? articleId;
   String? title;
-  String? status;
+  String? marketArticleStatus;
   int? price;
   String? productStatus;
   String? content;
@@ -14,7 +14,7 @@ class MarketBoard {
   MarketBoard({
     this.articleId,
     this.title,
-    this.status,
+    this.marketArticleStatus,
     this.price,
     this.productStatus,
     this.content,
@@ -28,7 +28,7 @@ class MarketBoard {
   MarketBoard.fromJson(Map<String, dynamic> json) {
     articleId = json['articleId'];
     title = json['title'];
-    status = json['status'];
+    marketArticleStatus = json['marketArticleStatus'];
     price = json['price'];
     productStatus = json['productStatus'];
     content = json['content'];
@@ -43,7 +43,7 @@ class MarketBoard {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['articleId'] = articleId;
     data['title'] = title;
-    data['status'] = status;
+    data['marketArticleStatus'] = marketArticleStatus;
     data['price'] = price;
     data['productStatus'] = productStatus;
     data['content'] = content;
