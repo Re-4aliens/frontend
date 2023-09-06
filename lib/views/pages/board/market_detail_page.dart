@@ -24,6 +24,7 @@ import 'package:flutter/services.dart';
 
 import '../../../models/market_comment.dart';
 import '../../../models/message_model.dart';
+import '../../../providers/bookmarks_provider.dart';
 import '../../../providers/market_comment_provider.dart';
 import '../../components/board_dialog_widget.dart';
 import '../../components/board_drawer_widget.dart';
@@ -33,12 +34,14 @@ import '../home_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
-  {super.key, required this.screenArguments, required this.marketBoard, required this.productStatus, required this.StatusText});
+  {super.key, required this.screenArguments, required this.marketBoard, required this.productStatus, required this.StatusText, required this.index});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
   //final MemberDetails memberDetails;
   final String productStatus;
   final String StatusText;
+  final int index;
+
 
 
 
@@ -82,11 +85,19 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     super.initState();
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
     marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
+
+/*
+    final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
+    bookmarkProvider.getbookmarksCounts();*/
+
   }
 
   @override
   Widget build(BuildContext context) {
     //print('Data from marketBoard: ${widget.marketBoard.createdAt}');
+    /*print('comment:${widget.marketBoard.commentsCount}');
+    print('marketArticleBookmarkCount:${widget.marketBoard.marketArticleBookmarkCount}');*/
+
 
     List<String> whatStatus = [
       'Brand_New'.tr(), 'Almost_New'.tr(), 'Slight_Defect'.tr(), 'Used'.tr()
@@ -94,8 +105,10 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     String productStatus = '${widget.marketBoard.productStatus}';
     String StatusText = '${widget.marketBoard.marketArticleStatus}';
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context);
+    final bookmarkProvider = Provider.of<BookmarksProvider>(context);
 
-   /* bool showLoading = marketcommentProvider.loading;
+
+    /* bool showLoading = marketcommentProvider.loading;
     if (showLoading) {
       Future.delayed(Duration(seconds: 3), () {
         setState(() {
@@ -322,7 +335,10 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             Row(
                               children: [
                                 InkWell(
-                                  onTap: (){},
+                                  onTap: (){
+                                    print('부크마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
+                                    bookmarkProvider.addBookmarks(widget.marketBoard.articleId!, widget.index);
+                                  },
                                   child: Padding(
                                     padding: const EdgeInsets.all(4.0).r,
                                     child: SvgPicture.asset(
@@ -335,13 +351,12 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 4, right: 15).r,
-                                  child: Text('${widget.marketBoard.marketArticleBookmarkCount}',
-                                    style: TextStyle(
-                                      fontSize: 16.spMin,
-                                      color: Color(0xffc1c1c1)
-                                    ),
-                                  )
-                                ),
+                                  child:
+                                  bookmarkProvider.marketArticleBookmarkCount![widget.index] == 0
+                                      ? Text('0',style: TextStyle(fontSize: 16.spMin,color: Color(0xffc1c1c1)))
+                                      : Text('${bookmarkProvider.marketArticleBookmarkCount![widget.index]}',style: TextStyle(fontSize: 16.spMin,color: Color(0xffc1c1c1))),
+
+                                  ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0).r,
                                   child: SvgPicture.asset(

@@ -15,15 +15,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import '../../../models/market_articles.dart';
 import '../../../models/message_model.dart';
+import '../../../providers/bookmarks_provider.dart';
 import '../../components/board_drawer_widget.dart';
 
 
 class MarketBoardPage extends StatefulWidget {
-  const MarketBoardPage({super.key, required this.screenArguments, required this.marketBoard,});
+  const MarketBoardPage({super.key, required this.screenArguments, required this.marketBoard, required this.index,});
   final ScreenArguments screenArguments;
   final MarketBoard? marketBoard;
+  final int index;
+
   //final MemberDetails memberDetails;
 
 
@@ -43,6 +47,13 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   void initState() {
     super.initState();
     _fetchMarketArticles();
+
+    final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
+    print(10);
+    bookmarkProvider.getbookmarksCounts();
+    print(11);
+    print('북마크될라나: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
+    print('북마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index] == 0}');
   }
 
   Future<void> _fetchMarketArticles() async {
@@ -55,8 +66,16 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
          // print('createdAt: ${marketBoard.createdAt}');
       //    print('status: ${marketBoard.marketArticleStatus}');
        //   print('productstatus: ${marketBoard.productStatus}');
+        //  print('comment:${marketBoard.commentsCount}');
 
         }
+        /*final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
+        print(10);
+        bookmarkProvider.getbookmarksCounts();
+        print(11);
+        print('북마크될라나: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
+        print('북마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index] == 0}');
+        print('북마크개수:${bookmarkProvider.marketArticleBookmarkCount}');*/
 
       });
     } catch (error) {
@@ -190,6 +209,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
 
   Widget _contentWidget() {
+    final bookmarkProvider = Provider.of<BookmarksProvider>(context);
 
     return ListView.separated(
 
@@ -208,7 +228,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                       screenArguments: widget.screenArguments,
                       marketBoard: marketBoard,
                         productStatus: getProductStatusText(marketBoard.productStatus), 
-                      StatusText: getStatusText(marketBoard.marketArticleStatus),
+                      StatusText: getStatusText(marketBoard.marketArticleStatus), index: widget.index,
                      // memberDetails: widget.memberDetails,
                     ),
               ),
@@ -336,13 +356,23 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             height: 16.r,
                             color: Color(0xffc1c1c1),
                           ),
-                          Text(
+
+                          bookmarkProvider.marketArticleBookmarkCount?[widget.index] == 0
+                              ? Text('0',style: TextStyle(fontSize: 16.spMin,color: Color(0xffc1c1c1)))
+                              : Text('${bookmarkProvider.marketArticleBookmarkCount![widget.index]}',
+                              style: TextStyle(
+                                fontSize: 14.spMin,
+                                color: Color(0xffc1c1c1),
+                              )
+                          ),
+
+                          /*Text(
                             ' ${marketBoard.marketArticleBookmarkCount ?? 0}  ',
                             style: TextStyle(
                               fontSize: 14.spMin,
                               color: Color(0xffc1c1c1),
                             ),
-                          ),
+                          ),*/
                           SvgPicture.asset(
                             'assets/icon/icon_comment.svg',
                             width: 16.r,
