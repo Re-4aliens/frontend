@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'package:aliens/apis/apis.dart';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/market_articles.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
@@ -31,9 +33,11 @@ import '../home_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
-  {super.key, required this.screenArguments, required this.marketBoard});
+  {super.key, required this.screenArguments, required this.marketBoard, required this.productStatus});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
+  //final MemberDetails memberDetails;
+  final String productStatus;
 
 
 
@@ -46,7 +50,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   final _controller = TextEditingController();
   var _newComment = '';
   bool isNestedComments = false;
-  int parentsCommentIndex = -1;
+  int parentsCommentId = -1;
+  bool showLoading = false;
 
   void sendComment() async {
     updateUi();
@@ -72,36 +77,37 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     return nationCode;
   }
 
+  void initState() {
+    super.initState();
+    final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
+    marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
+  }
 
   @override
   Widget build(BuildContext context) {
     //print('Data from marketBoard: ${widget.marketBoard.createdAt}');
 
-    final double screenWidth = MediaQuery.of(context).size.height;
-    final bool isSmallScreen = screenWidth <= 700;
-
     List<String> whatStatus = [
       'Brand_New'.tr(), 'Almost_New'.tr(), 'Slight_Defect'.tr(), 'Used'.tr()
     ];
     String productStatus = '${widget.marketBoard.productStatus}';
-    final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
-    marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
+    final marketcommentProvider = Provider.of<MarketCommentProvider>(context);
 
-    bool showLoading = marketcommentProvider.loading;
+   /* bool showLoading = marketcommentProvider.loading;
     if (showLoading) {
       Future.delayed(Duration(seconds: 3), () {
         setState(() {
           showLoading = false;
         });
       });
-    }
+    }*/
 
     return GestureDetector(
       onTap: (){
         FocusScope.of(context).unfocus();
         setState(() {
           isNestedComments = false;
-          parentsCommentIndex = -1;
+          parentsCommentId = -1;
         });
       },
       child: Scaffold(
@@ -182,7 +188,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('${widget.marketBoard.status}',
+                                  Text('${widget.marketBoard.marketArticleStatus}',
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Color(0xff888888),
@@ -225,7 +231,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 child: Row(
                                   children:
                                   whatStatus.map((condition) {
-                                    final bool isSelected = productStatus ==
+                                    final bool isSelected = getProductStatusText(productStatus) ==
                                         condition;
                                     return Padding(
                                       padding: EdgeInsets.symmetric(
@@ -313,13 +319,16 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             ),
                             Row(
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(4.0).r,
-                                  child: SvgPicture.asset(
-                                    'assets/icon/ICON_good.svg',
-                                    width: 18.r,
-                                    height: 18.r,
-                                    color: Color(0xffc1c1c1),
+                                InkWell(
+                                  onTap: (){},
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0).r,
+                                    child: SvgPicture.asset(
+                                      'assets/icon/ICON_good.svg',
+                                      width: 18.r,
+                                      height: 18.r,
+                                      color: Color(0xffc1c1c1),
+                                    ),
                                   ),
                                 ),
                                 Padding(
@@ -355,19 +364,17 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         ),
                         Divider(thickness: 1.2.h,color: Color(0xffE5EBFF),),
 
-
                         //댓글
-                        showLoading
-                            ? Container(
-                          alignment: Alignment.center,
-                          child: Image(
-                            image: AssetImage("assets/illustration/loading_01.gif"),
-                          ),
-                        )
+                        marketcommentProvider.loading || marketcommentProvider.commentListData == null?
+                        Container(
+                            alignment: Alignment.center,
+                            child: Image(
+                                image: AssetImage(
+                                    "assets/illustration/loading_01.gif")))
                             :
                         Column(
                           children: [
-                            for(int index = 0; index < 5; index++)
+                            for(int index = 0; index < marketcommentProvider.commentListData!.length; index++)
                               Container(
                                 child: Column(
                                   children: [
@@ -423,11 +430,13 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                         return MarketCommentDialog(context: context, onpressed: (){
                                                           setState(() {
                                                             isNestedComments = true;
-                                                            parentsCommentIndex = index;
+                                                            parentsCommentId = marketcommentProvider.commentListData![index].articleCommentId!;
                                                           });
                                                           Navigator.pop(context);
                                                         },
-                                                            isNestedComment: false, marketcomment: marketcommentProvider.commentListData![index]);
+                                                          isNestedComment: false,
+                                                          marketcomment: marketcommentProvider.commentListData![index],
+                                                        );
                                                       });
                                                     },
                                                     child: Padding(
@@ -525,7 +534,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                 });
                                                                 Navigator.pop(context);
                                                               },
-                                                                isNestedComment: true,marketcomment: marketcommentProvider.commentListData![index]);
+                                                                isNestedComment: true,
+                                                                marketcomment: marketcommentProvider.commentListData![index]);
                                                             });
                                                           },
                                                           child: Padding(
@@ -577,80 +587,85 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                 child: Container(
                     decoration: BoxDecoration(
                       color: Color(0xffefefef),
-                  borderRadius: BorderRadius.circular(10).r,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10).w,
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextField(
-                          maxLines: null,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(255),
-                          ],
-                          keyboardType: TextInputType.multiline,
-                          decoration: InputDecoration(
-                            hintText: isNestedComments? "comment2".tr() : "comment1".tr(),
-                            hintStyle: TextStyle(color: Color(0xffb1b1b1)),
-                            border: InputBorder.none,
-                          ),
-                          onTap: () {
-                            if (_newComment.trim().isEmpty) {}
-                          },
-                          controller: _controller,
-                          onChanged: (value) {
-                            setState(() {
-                              _newComment = value;
-                            });
-                          },
-                        )),
-                    IconButton(
-                      onPressed: () {
-                        if(isNestedComments){
-                          MarketComment newValue = MarketComment(
-                              articleCommentId: 1,
-                              content: _newComment,
-                              createdAt: DateTime.now().toString(),
-                              childs: [],
-                              member: MarketCommentMember(
-                                  name: "daisy",
-                                  nationality: "Japan",
-                                  profileImageUrl: ""
-                              )
-                          );
-                          //CommentRepository.addCommentChilds(parentsCommentIndex, newValue);
-                          parentsCommentIndex = -1;
-                          isNestedComments = false;
-                        }
-                        else{
-                          MarketComment newValue = MarketComment(
-                              articleCommentId: 1,
-                              content: _newComment,
-                              createdAt: DateTime.now().toString(),
-                              childs: [],
-                              member: MarketCommentMember(
-                                  name: "daisy",
-                                  nationality: "Japan",
-                                  profileImageUrl: ""
-                              )
-                          );
-                          //CommentRepository.addComment(newValue);
-                        }
-                        updateUi();
-                      },
-                      icon: SvgPicture.asset(
-                        'assets/icon/ICON_send.svg',
-                        height: 22.r,
-                        color: _newComment.trim().isEmpty
-                            ? Color(0xffc1c1c1)
-                            : Color(0xff7898ff),
-                      ),
+                      borderRadius: BorderRadius.circular(10).r,
                     ),
-                  ],
-                )),
-          ),
+                    padding: EdgeInsets.symmetric(horizontal: 10).w,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: TextField(
+                              maxLines: null,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(255),
+                              ],
+                              keyboardType: TextInputType.multiline,
+                              decoration: InputDecoration(
+                                hintText: isNestedComments? "comment2".tr() : "comment1".tr(),
+                                hintStyle: TextStyle(color: Color(0xffb1b1b1)),
+                                border: InputBorder.none,
+                              ),
+                              onTap: () {
+                                if (_newComment.trim().isEmpty) {}
+                              },
+                              controller: _controller,
+                              onChanged: (value) {
+                                setState(() {
+                                  _newComment = value;
+                                });
+                              },
+                            )),
+                        IconButton(
+                          onPressed: () {
+                            print('${parentsCommentId}');
+                            if(_newComment != ''){
+                              if(isNestedComments){
+                                marketcommentProvider.addNestedMarketComment(_newComment, parentsCommentId, widget.marketBoard.articleId!);
+                                //여기 페이지 재로드하는거나 marketcommentprovider 재로드를 넣어야할거같아
+                                parentsCommentId = -1;
+                                isNestedComments = false;
+
+                              }
+                              else{
+                                marketcommentProvider.addMarketComment(_newComment, widget.marketBoard.articleId!);
+                              }
+                              updateUi();
+                            }
+
+                          },
+                          icon: SvgPicture.asset(
+                            'assets/icon/ICON_send.svg',
+                            height: 22.r,
+                            color: _newComment.trim().isEmpty
+                                ? Color(0xffc1c1c1)
+                                : Color(0xff7898ff),
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
         ]),
       ),
     );
+  }
+}
+String getProductStatusText(String? productStatus) {
+  List<String> whatStatus = [
+    'Brand_New'.tr(),
+    'Almost_New'.tr(),
+    'Slight_Defect'.tr(),
+    'Used'.tr(),
+  ];
+
+  switch (productStatus) {
+    case '새 것':
+      return whatStatus[0];
+    case '거의 새 것':
+      return whatStatus[1];
+    case '약간의 하자':
+      return whatStatus[2];
+    case '사용감 있음':
+      return whatStatus[3];
+    default:
+      return '';
   }
 }
