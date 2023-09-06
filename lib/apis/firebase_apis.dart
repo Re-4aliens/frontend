@@ -30,7 +30,6 @@ class FirebaseAPIs {
 
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
 
-
     var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     var androidDetails = AndroidNotificationDetails(
       'channel_id', // 채널 ID
@@ -72,6 +71,16 @@ class FirebaseAPIs {
       print('채팅 도착 ${message.data}');
       // 알림 표시
       if(json.decode(notification!)['chatNotification'] == true){
+        flutterLocalNotificationsPlugin.show(
+          0, // 알림 ID
+          '${message.data['title']}', // 제목
+          '${message.data['body']}', // 본문
+          platformDetails, // 알림 설정
+        );
+      }
+    }else if(message.data['type']=='article-like' || message.data['type']=='article-comment-reply' || message.data['type']=='article-comment'){
+      print('게시판 알림 도착 ${message.data}');
+      if(json.decode(notification!)['communityNotification'] == true){
         flutterLocalNotificationsPlugin.show(
           0, // 알림 ID
           '${message.data['title']}', // 제목

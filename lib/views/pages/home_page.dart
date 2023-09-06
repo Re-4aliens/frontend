@@ -71,6 +71,7 @@ class _HomePageState extends State<HomePage> {
             'allNotification': true,
             'matchingNotification': true,
             'chatNotification': true,
+            'communityNotification' : true,
           }),
         );
       }
@@ -86,6 +87,7 @@ class _HomePageState extends State<HomePage> {
             'allNotification': false,
             'matchingNotification': false,
             'chatNotification': false,
+            'communityNotification' : false,
           }),
         );
       }
