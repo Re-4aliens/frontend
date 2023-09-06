@@ -247,7 +247,10 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                   ),
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,
-                    child: Text('${widget.board.commentsCount}'),
+                    child: widget.board.commentsCount == 0
+                        ? Text('')
+                        : Text(
+                        '${widget.board.commentsCount}'),
                   ),
                 ],
               )
