@@ -1888,67 +1888,40 @@ class APIs {
 
   /*상품 판매글 부모 댓글 등록*/
   static Future<bool> createMarketArticleComment(String content, int articleId) async {
-    try {
-      var jwtToken = await storage.read(key: 'token');
-      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
+    var url = 'http://3.34.2.246:8080/api/v2/market-articles/$articleId/market-article-comments';
 
-      final url = Uri.parse(
-          'http://3.34.2.246:8080/api/v2/market-articles/$articleId/market-article-comments');
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
 
-      final response = await http.post(
-        url,
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.post(Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $accessToken',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({'content': content}),
-      );
+          'Authorization': 'Bearer $jwtToken',
+          'Content-Type': 'application/json'},
+        body: jsonEncode({
+          "content": content,
+        }));
 
-      if (response.statusCode == 201) {
-        print(json.decode(utf8.decode(response.bodyBytes)));
-        return true;
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else
+      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
       } else {
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        final errorCode = responseBody['code'];
 
-        if (errorCode == 'AT-C-002') {
-          throw '액세스 토큰 만료';
-        } else if (errorCode == 'AT-C-007') {
-          throw '로그아웃된 토큰';
-        } else {
-          throw Exception('댓글 생성 오류 : $responseBody');
-        }
       }
-    } catch (error) {
-      print('Error creating market article comment: $error');
-      if (error is String) {
-        // 클라이언트 오류인 경우
-        if (error == 'AT-C-002') {
-          print('클라이언트 오류 400: 액세스 토큰 만료');
-          throw Exception('클라이언트 오류: 액세스 토큰 만료');
-        } else if (error == 'AT-C-007') {
-          print('클라이언트 오류 400: 로그아웃된 토큰');
-          throw Exception('클라이언트 오류: 로그아웃된 토큰');
-        } else {
-          print('클라이언트 오류 400: $error');
-          throw Exception('클라이언트 오류: $error');
-        }
-      } else if (error is int) {
-        // 서버 오류인 경우
-        if (error >= 500) {
-          print('서버 오류 500 이상: $error');
-          throw Exception('서버 오류: $error');
-        } else if (error >= 400) {
-          print('클라이언트 오류 400 이상: $error');
-          throw Exception('클라이언트 오류: $error');
-        } else {
-          print('알 수 없는 오류: $error');
-          throw Exception('알 수 없는 오류: $error');
-        }
-      } else {
-        print('알 수 없는 오류: $error');
-        throw Exception('알 수 없는 오류: $error');
-      }
+      return false;
     }
   }
 
@@ -1973,7 +1946,7 @@ class APIs {
       if (response.statusCode == 200) {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final message = responseBody['message'];
-        return message;
+        return true;
       } else {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final errorCode = responseBody['code'];
@@ -1994,13 +1967,13 @@ class APIs {
 
 
   /*특정 상품 판매글 댓글에 대댓글 등록*/
-  static Future<bool> addMarketArticleCommentReply(int articleId, int ArticleCommentId, String content) async {
+  static Future<bool> addMarketArticleCommentReply(String content, int commentId, int articleId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
       final url = Uri.parse(
-          'http://3.34.2.246:8080/api/v2/market-articles/$articleId/market-article-comments/$ArticleCommentId');
+          'http://3.34.2.246:8080/api/v2/market-articles/$articleId/market-article-comments/$commentId');
 
       final response = await http.post(
         url,
@@ -2015,7 +1988,7 @@ class APIs {
         print(json.decode(utf8.decode(response.bodyBytes)));
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final message = responseBody['message'];
-        return message;
+        return true;
       } else {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final errorCode = responseBody['code'];

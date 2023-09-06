@@ -28,6 +28,7 @@ class MarketCommentProvider with ChangeNotifier {
     }
     loading = false;
     notifyListeners();
+
   }
 
 
@@ -50,13 +51,13 @@ class MarketCommentProvider with ChangeNotifier {
     return true;
   }
 
-  addNestedMarketComment(int commentId, int ArticleCommentId, String content) async {
+  addNestedMarketComment(String content, int commentId, int articleId) async {
     try {
-      await APIs.addMarketArticleCommentReply(commentId, ArticleCommentId, content);
+      await APIs.addMarketArticleCommentReply(content, commentId,articleId );
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        await APIs.addMarketArticleCommentReply(commentId, ArticleCommentId, content);
+        await APIs.addMarketArticleCommentReply(content, commentId,articleId);
       } else {
         return false;
       }
@@ -64,6 +65,8 @@ class MarketCommentProvider with ChangeNotifier {
     //TODO fcm 전송
 
     notifyListeners();
+    getMarketComments(articleId);
+
     return true;
   }
   deleteMarketComment(int articleId) async {
@@ -80,6 +83,8 @@ class MarketCommentProvider with ChangeNotifier {
     }
     loading = false;
     notifyListeners();
+    getMarketComments(articleId);
+
     return value;
   }
 

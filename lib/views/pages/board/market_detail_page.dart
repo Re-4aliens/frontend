@@ -619,16 +619,18 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             print('${parentsCommentId}');
                             if(_newComment != ''){
                               if(isNestedComments){
-                                marketcommentProvider.addNestedMarketComment(widget.marketBoard.articleId!, parentsCommentId,_newComment);
+                                marketcommentProvider.addNestedMarketComment(_newComment, parentsCommentId, widget.marketBoard.articleId!);
+                                //여기 페이지 재로드하는거나 marketcommentprovider 재로드를 넣어야할거같아
                                 parentsCommentId = -1;
                                 isNestedComments = false;
+
                               }
                               else{
                                 marketcommentProvider.addMarketComment(_newComment, widget.marketBoard.articleId!);
-                                //CommentRepository.addComment(newValue);
                               }
+                              updateUi();
                             }
-                            updateUi();
+
                           },
                           icon: SvgPicture.asset(
                             'assets/icon/ICON_send.svg',
