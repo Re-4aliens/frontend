@@ -90,6 +90,7 @@ class BoardDialog extends StatelessWidget{
                             WidgetsBinding.instance!.addPostFrameCallback((_) {
                               Navigator.pop(context);
                               Navigator.pop(context);
+                              boardProvider.getArticles(board.category!);
                             });
                             return Container(
                                 child: Image(
@@ -176,6 +177,7 @@ class BoardDialog extends StatelessWidget{
                           WidgetsBinding.instance!.addPostFrameCallback((_) {
                             Navigator.pop(context);
                             Navigator.pop(context);
+                            boardProvider.getArticles(board.category!);
                           });
                           return Container(
                               child: Image(

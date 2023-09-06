@@ -34,7 +34,8 @@ class _MyArticlePageState extends State<MyArticlePage> {
     //boardProvider.getArticles('자유게시판');
 
     if(widget.category == 'liked'.tr()){
-      //boardProvider.getLikedList();
+      boardProvider.getLikedList();
+      boardProvider.getLikeCounts();
     }else if(widget.category == 'my_posts-child'.tr()){
       boardProvider.getMyArticles();
     }else if(widget.category == 'my-comments'.tr()){
