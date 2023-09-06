@@ -34,7 +34,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
     //boardProvider.getArticles('자유게시판');
 
     if(widget.category == 'liked'.tr()){
-      boardProvider.getLikedList();
+      //boardProvider.getLikedList();
     }else if(widget.category == 'my_posts-child'.tr()){
       boardProvider.getMyArticles();
     }else if(widget.category == 'my-comments'.tr()){
@@ -128,7 +128,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
               )
             : Container(
                 decoration: BoxDecoration(color: Colors.white),
-                child: boardProvider.loading
+                child: boardProvider.loading || boardProvider.articleList == null
                     ? Container(
                         alignment: Alignment.center,
                         child: Image(
@@ -156,6 +156,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
                                   board: boardProvider.articleList![index],
                                   nationCode: nationCode,
                                 screenArguments: widget.screenArguments!,
+                                index: index,
                               ),
                               Divider(
                                 thickness: 2,

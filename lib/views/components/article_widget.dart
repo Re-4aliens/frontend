@@ -12,6 +12,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../apis/apis.dart';
 import '../../models/board_model.dart';
 import '../../repository/board_provider.dart';
 import '../pages/board/article_page.dart';
@@ -20,11 +21,13 @@ import 'board_dialog_widget.dart';
 
 class ArticleWidget extends StatefulWidget {
 
-  ArticleWidget({super.key, required this.board, required this.nationCode, required this.memberDetails});
+  ArticleWidget({super.key, required this.board, required this.nationCode, required this.memberDetails, required this.index});
 
   final Board board;
   final String nationCode;
   final MemberDetails memberDetails;
+  final int index;
+
   @override
   State<StatefulWidget> createState() => _ArticleWidgetState();
 }
@@ -35,6 +38,8 @@ class _ArticleWidgetState extends State<ArticleWidget>{
   @override
   void initState() {
     super.initState();
+    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+    boardProvider.getLikeCounts();
   }
 
   @override
@@ -135,26 +140,23 @@ class _ArticleWidgetState extends State<ArticleWidget>{
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
+                InkWell(
+                  onTap: (){
+                    boardProvider.addLike(widget.board.articleId!, widget.index);
+                  },
+                  child: Padding(
                     padding: const EdgeInsets.all(4.0).r,
-                    child: InkWell(
-                      child: SvgPicture.asset(
-                        'assets/icon/ICON_good.svg',
-                        width: 25.r,
-                        height: 25.r,
-                        color: Color(0xffc1c1c1),
-                      ),
-                      onTap: (){
-                        boardProvider.addLike(widget.board.articleId!);
-                      },
-                    )
+                    child: SvgPicture.asset(
+                      'assets/icon/ICON_good.svg',
+                      width: 25.r,
+                      height: 25.r,
+                    ),
+                  ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 4, right: 15).w,
-                  child: widget.board.likeCount == 0
-                      ? Text('')
-                      : Text(
-                      '${widget.board.likeCount}'),
+                  child:
+                  boardProvider.likeCounts![widget.index] == 0 ? Text('') : Text('${ boardProvider.likeCounts![widget.index]}'),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0).r,
@@ -184,7 +186,7 @@ class _ArticleWidgetState extends State<ArticleWidget>{
           MaterialPageRoute(builder: (context) => InfoArticlePage(board: widget.board)),
         ):Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails,)),
+          MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails, index: widget.index,)),
         );
       },
     );

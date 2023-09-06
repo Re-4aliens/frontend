@@ -403,7 +403,6 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                     alignment: Alignment.topCenter,
                     padding: EdgeInsets.all(20).r,
                     child: Button(
-
                       child: Text('post3'.tr()),
                       onPressed: () {
                         print(boardCategory);
