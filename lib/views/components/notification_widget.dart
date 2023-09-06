@@ -17,7 +17,7 @@ import 'board_dialog_widget.dart';
 
 class NotificationWidget extends StatefulWidget {
 
-  NotificationWidget({super.key, required this.board, required this.nationCode, required this.memberDetails});
+  NotificationWidget({super.key, required this.board, required this.nationCode, required this.memberDetails, });
 
   final Board board;
   final String nationCode;
@@ -40,7 +40,6 @@ class _NotificationWidgetState extends State<NotificationWidget>{
 
 
     return ListTile(
-
     //제목
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -122,7 +121,7 @@ class _NotificationWidgetState extends State<NotificationWidget>{
           MaterialPageRoute(builder: (context) => InfoArticlePage(board: widget.board)),
         ):Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails,)),
+          MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails, index: 0,)), //수정 필요
         );
 
       },

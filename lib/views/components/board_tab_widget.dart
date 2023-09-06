@@ -45,7 +45,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
     final boardProvider = Provider.of<BoardProvider>(context);
     return Container(
       decoration: BoxDecoration(color: Colors.white),
-      child: boardProvider.loading
+      child: boardProvider.loading || boardProvider.articleList == null
           ? Container(
           alignment: Alignment.center,
           child: Image(
@@ -63,7 +63,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
             }
             return Column(
               children: [
-                TotalArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, screenArguments: widget.screenArguments!,),
+                TotalArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, screenArguments: widget.screenArguments!, index: index),
                 Divider(
                   thickness: 2,
                   color: Color(0xffE5EBFF),

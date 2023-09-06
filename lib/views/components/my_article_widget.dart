@@ -138,7 +138,7 @@ class _MyArticleWidgetState extends State<MyArticleWidget>{
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails,)),
+          MaterialPageRoute(builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails, index: 0 )), //수정필요
         );
       },
     );
