@@ -91,22 +91,7 @@ class BoardProvider with ChangeNotifier {
     return true;
   }
 
-  deletePost(int articleId) async {
-    bool value = false;
-    loading = true;
-    try {
-      value =  await APIs.deleteArticles(articleId);
-    } catch (e) {
-      if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        value = await APIs.deleteArticles(articleId);
-      } else {
-      }
-    }
-    loading = false;
-    notifyListeners();
-    return value;
-  }
+
 
   addLike(int articleId, int index) async {
     loading = true;
@@ -132,17 +117,31 @@ class BoardProvider with ChangeNotifier {
   }
 
   getLikedList() async {
-
     loading = true;
-
     try {
       //게시판 좋아요 리스트 요청
-      likedList = await APIs.getLikedPost();
+      likedList = await APIs.getLikedPost(0);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
         //게시판 좋아요 리스트 요청
-        likedList = await APIs.getLikedPost();
+        likedList = await APIs.getLikedPost(0);
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  getMoreLikedList(int page) async {
+    loading = true;
+    try {
+      //게시판 좋아요 리스트 요청
+      likedList!.addAll(await APIs.getLikedPost(page));
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        likedList!.addAll(await APIs.getLikedPost(page));
       } else {
       }
     }
