@@ -126,7 +126,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
               )
             : Container(
                 decoration: BoxDecoration(color: Colors.white),
-                child: boardProvider.loading? Container(
+                child: boardProvider.loading || boardProvider.articleList == null? Container(
                     alignment: Alignment.center,
                     child: Image(
                         image: AssetImage(
@@ -143,7 +143,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                       }
                       return Column(
                         children: [
-                          ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!,),
+                          ArticleWidget(board: boardProvider.articleList![index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!, index: index,),
                           Divider(
                             thickness: 2,
                             color: Color(0xffE5EBFF),

@@ -43,10 +43,11 @@ class CommentProvider with ChangeNotifier {
 
 
     notifyListeners();
+    getComments(articleId);
     return true;
   }
 
-  addNestedComment(String content, int commentId) async {
+  addNestedComment(String content, int commentId, int articleId) async {
     try {
       await APIs.postNestedComment(content, commentId);
     } catch (e) {
@@ -61,6 +62,7 @@ class CommentProvider with ChangeNotifier {
 
 
     notifyListeners();
+    getComments(articleId);
     return true;
   }
 
