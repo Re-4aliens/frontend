@@ -46,6 +46,7 @@ class MarketCommentProvider with ChangeNotifier {
 
 
     notifyListeners();
+    getMarketComments(articleId);
     return true;
   }
 
@@ -61,7 +62,6 @@ class MarketCommentProvider with ChangeNotifier {
       }
     }
     //TODO fcm 전송
-
 
     notifyListeners();
     return true;
