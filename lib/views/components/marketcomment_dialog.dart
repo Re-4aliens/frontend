@@ -81,7 +81,7 @@ class MarketCommentDialog extends StatelessWidget{
             InkWell(
               onTap: (){
                 //TODO 로딩 만들기
-               // marketcommentProvider.deleteComment(marketcomment.articleCommentId!);
+                marketcommentProvider.deleteMarketComment(marketcomment.articleCommentId!);
               },
               child: Container(
                 padding: EdgeInsets.all(13).r,
@@ -155,7 +155,7 @@ class MarketCommentDialog extends StatelessWidget{
           InkWell(
             onTap: () {
               //TODO 로딩 만들기
-             // marketcommentProvider.deleteComment(marketcomment.articleCommentId!);
+              marketcommentProvider.deleteMarketComment(marketcomment.articleCommentId!);
             },
             child: Container(
               height: 80,

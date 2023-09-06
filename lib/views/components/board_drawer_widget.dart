@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:aliens/models/chatRoom_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/board/article_writing_page.dart';
@@ -33,6 +34,7 @@ class BoardDrawerWidget extends StatefulWidget {
 
   final ScreenArguments screenArguments;
   final MarketBoard? marketBoard;
+  //final MemberDetails memberDetails;
 
   final bool isTotalBoard;
   final VoidCallback onpressd;
@@ -449,7 +451,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard,)),
+                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard)),
 
                 );
               }
