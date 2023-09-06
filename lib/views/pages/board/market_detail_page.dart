@@ -33,11 +33,12 @@ import '../home_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
-  {super.key, required this.screenArguments, required this.marketBoard, required this.productStatus});
+  {super.key, required this.screenArguments, required this.marketBoard, required this.productStatus, required this.StatusText});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
   //final MemberDetails memberDetails;
   final String productStatus;
+  final String StatusText;
 
 
 
@@ -91,6 +92,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
       'Brand_New'.tr(), 'Almost_New'.tr(), 'Slight_Defect'.tr(), 'Used'.tr()
     ];
     String productStatus = '${widget.marketBoard.productStatus}';
+    String StatusText = '${widget.marketBoard.marketArticleStatus}';
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context);
 
    /* bool showLoading = marketcommentProvider.loading;
@@ -178,7 +180,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               ),
                             ),
                             Container(
-                              width: 75.spMin,
+                              width: 80.spMin,
                               height: 35.spMin,
                               decoration: BoxDecoration(
                                 color: Colors.transparent,
@@ -188,7 +190,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Text('${widget.marketBoard.marketArticleStatus}',
+                                  Text(getStatusText(StatusText),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: Color(0xff888888),
@@ -665,6 +667,22 @@ String getProductStatusText(String? productStatus) {
       return whatStatus[2];
     case '사용감 있음':
       return whatStatus[3];
+    default:
+      return '';
+  }
+}
+
+String getStatusText(String? marketArticleStatus){
+  List<String> Status = [
+    'sale'.tr(),
+    'sold-out'.tr(),
+  ];
+
+  switch (marketArticleStatus) {
+    case '판매 중':
+      return Status[0];
+    case '판매 완료':
+      return Status[1];
     default:
       return '';
   }

@@ -283,7 +283,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                         //받아온 후
                         WidgetsBinding.instance!.addPostFrameCallback((_) {Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data, productStatus: '',)),
+                          MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data, productStatus: '', StatusText: '',)),
                         );
                         });
                         return Container(

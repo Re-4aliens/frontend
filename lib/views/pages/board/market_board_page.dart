@@ -207,7 +207,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                     MarketDetailPage(
                       screenArguments: widget.screenArguments,
                       marketBoard: marketBoard,
-                        productStatus: getProductStatusText(marketBoard.productStatus),
+                        productStatus: getProductStatusText(marketBoard.productStatus), 
+                      StatusText: getStatusText(marketBoard.marketArticleStatus),
                      // memberDetails: widget.memberDetails,
                     ),
               ),
