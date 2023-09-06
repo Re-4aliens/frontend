@@ -196,6 +196,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       itemBuilder: (BuildContext context, int index) {
         MarketBoard marketBoard = marketBoardList[index];
         String productStatusText = getProductStatusText(marketBoard.productStatus);
+        String StatusText = getStatusText(marketBoard.marketArticleStatus);
 
         return InkWell(
           onTap: () {
@@ -262,9 +263,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            '[${marketBoard.marketArticleStatus ?? ""}]', // 상태 정보 사용
+                           '[$StatusText]', // 상태 정보 사용
                             style: TextStyle(
-                              color: Color(0xff616161),
+                              color: marketBoard.marketArticleStatus == '판매 중'?Color(0xff616161): Color(0xffFF375B),
                               fontSize: 16.spMin,
                               fontWeight: FontWeight.w600,
                             ),
@@ -393,6 +394,22 @@ String getProductStatusText(String? productStatus) {
       return whatStatus[2];
     case '사용감 있음':
       return whatStatus[3];
+    default:
+      return '';
+  }
+}
+
+String getStatusText(String? marketArticleStatus){
+  List<String> Status = [
+    'sale'.tr(),
+    'sold-out'.tr(),
+  ];
+
+  switch (marketArticleStatus) {
+    case '판매 중':
+      return Status[0];
+    case '판매 완료':
+      return Status[1];
     default:
       return '';
   }

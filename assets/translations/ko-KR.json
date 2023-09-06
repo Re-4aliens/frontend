@@ -309,5 +309,6 @@
   "Almost_New": "거의 새 것",
   "Slight_Defect": "약간의 하자",
   "Used": "사용감 있음",
-  "sale": "판매중"
+  "sale": "판매중",
+  "sold-out":"판매완료"
 }
