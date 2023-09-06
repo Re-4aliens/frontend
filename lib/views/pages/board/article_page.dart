@@ -15,6 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../apis/apis.dart';
 import '../../../mockdatas/comment_mockdata.dart';
 import '../../../models/comment_model.dart';
 import '../../../models/board_model.dart';
@@ -28,10 +29,11 @@ import '../../components/comment_dialog_widget.dart';
 
 class ArticlePage extends StatefulWidget {
   const ArticlePage(
-      {super.key, required this.board, required this.memberDetails});
+      {super.key, required this.board, required this.memberDetails, required this.index});
 
   final Board board;
   final MemberDetails memberDetails;
+  final int index;
 
   @override
   State<StatefulWidget> createState() => _ArticlePageState();
@@ -42,7 +44,7 @@ class _ArticlePageState extends State<ArticlePage> {
   var _newComment = '';
   bool isNestedComments = false;
   String boardCategory = '';
-  int parentsCommentIndex = -1;
+  int parentsCommentId = -1;
 
   void sendComment() async {
 
@@ -104,7 +106,7 @@ class _ArticlePageState extends State<ArticlePage> {
         FocusScope.of(context).unfocus();
         setState(() {
           isNestedComments = false;
-          parentsCommentIndex = -1;
+          parentsCommentId = -1;
         });
       },
       child: Scaffold(
@@ -218,25 +220,24 @@ class _ArticlePageState extends State<ArticlePage> {
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Padding(
-                                  padding: const EdgeInsets.all(4.0).r,
-                                  child: InkWell(
+                              InkWell(
+                                onTap: (){
+                                  boardProvider.addLike(widget.board.articleId!, widget.index);
+                                },
+                                child: Padding(
+                                    padding: const EdgeInsets.all(4.0).r,
                                     child: SvgPicture.asset(
                                       'assets/icon/ICON_good.svg',
                                       width: 25.r,
                                       height: 25.r,
                                       color: Color(0xffc1c1c1),
-                                    ),
-                                    onTap: (){
-                                      boardProvider.addLike(widget.board.articleId!);
-                                    },
-                                  )
+                                    )
+                                ),
                               ),
                               Padding(
                                 padding: EdgeInsets.only(left: 4, right: 15).r,
-                                child: widget.board.likeCount == 0
-                                    ? Text('')
-                                    : Text('${widget.board.likeCount}'),
+                                child:
+                                boardProvider.likeCounts![widget.index] == 0 ? Text('') : Text('${boardProvider.likeCounts![widget.index]}'),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
@@ -259,6 +260,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
                   ),
                   Divider(color: Color(0xffF5F7FF), thickness: 2.h),
+                  /*
                   Container(
                     height: 50.h,
                     margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10).r,
@@ -269,9 +271,11 @@ class _ArticlePageState extends State<ArticlePage> {
                     child: Text('광고'),
                   ),
 
+                   */
+
 
                   //댓글 위젯
-                  commentProvider.loading?
+                  commentProvider.loading || commentProvider.commentListData == null?
                   Container(
                       alignment: Alignment.center,
                       child: Image(
@@ -280,7 +284,7 @@ class _ArticlePageState extends State<ArticlePage> {
                       :
                   Column(
                     children: [
-                      for(int index = 0; index < 5; index++)
+                      for(int index = 0; index < commentProvider.commentListData!.length; index++)
                         Container(
                           child: Column(
                             children: [
@@ -336,7 +340,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                   return CommentDialog(context: context, onpressed: (){
                                                     setState(() {
                                                       isNestedComments = true;
-                                                      parentsCommentIndex = index;
+                                                      parentsCommentId = commentProvider.commentListData![index].articleCommentId!;
                                                     });
                                                     Navigator.pop(context);
                                                   },
@@ -523,14 +527,17 @@ class _ArticlePageState extends State<ArticlePage> {
                         )),
                     IconButton(
                       onPressed: () {
-                        if(isNestedComments){
-                          commentProvider.addComment(_newComment, parentsCommentIndex);
-                          parentsCommentIndex = -1;
-                          isNestedComments = false;
-                        }
-                        else{
-                          commentProvider.addComment(_newComment, widget.board.articleId!);
-                          //CommentRepository.addComment(newValue);
+                        print('${parentsCommentId}');
+                        if(_newComment != ''){
+                          if(isNestedComments){
+                            commentProvider.addNestedComment(_newComment, parentsCommentId, widget.board.articleId!);
+                            parentsCommentId = -1;
+                            isNestedComments = false;
+                          }
+                          else{
+                            commentProvider.addComment(_newComment, widget.board.articleId!);
+                            //CommentRepository.addComment(newValue);
+                          }
                         }
                         updateUi();
                       },
