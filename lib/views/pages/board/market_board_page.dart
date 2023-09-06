@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:aliens/apis/apis.dart';
+import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:aliens/models/chatRoom_model.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/board/market_detail_page.dart';
@@ -19,9 +21,10 @@ import '../../components/board_drawer_widget.dart';
 
 
 class MarketBoardPage extends StatefulWidget {
-  const MarketBoardPage({super.key, required this.screenArguments, required this.marketBoard});
+  const MarketBoardPage({super.key, required this.screenArguments, required this.marketBoard,});
   final ScreenArguments screenArguments;
   final MarketBoard? marketBoard;
+  //final MemberDetails memberDetails;
 
 
 
@@ -124,7 +127,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
         ),
         body: isDrawerStart
-            ? BoardDrawerWidget(screenArguments: widget.screenArguments,
+            ? BoardDrawerWidget(
+          screenArguments: widget.screenArguments,
           isTotalBoard: false,
           onpressd: () {},
         )
@@ -202,7 +206,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                     MarketDetailPage(
                       screenArguments: widget.screenArguments,
                       marketBoard: marketBoard,
-                        productStatus: getProductStatusText(marketBoard.productStatus)
+                        productStatus: getProductStatusText(marketBoard.productStatus),
+                     // memberDetails: widget.memberDetails,
                     ),
               ),
             );
