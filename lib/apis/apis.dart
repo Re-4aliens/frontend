@@ -1415,56 +1415,6 @@ class APIs {
 
 
 
-  /*장터*/
-/*  static Future<void> postDataWithImages({
-    required String title,
-    required String status,
-    required int price,
-    required String productStatus,
-    required List<Asset> images,
-    required String content,
-  }) async {
-    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
-    request.fields['title'] = title;
-    request.fields['status'] = status;
-    request.fields['price'] = price.toString();
-    request.fields['productStatus'] = productStatus;
-    request.fields['content'] = content;
-
-    List<File> files = await convertAssetsToFiles(images);
-
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i];
-      var stream = http.ByteStream(Stream.castFrom(file.openRead()));
-      var length = await file.length();
-
-      var multipartFile = http.MultipartFile('image$i', stream, length,
-          filename: 'image$i.jpg');
-
-      request.files.add(multipartFile);
-    }
-
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      print('API Response: ${await response.stream.bytesToString()}');
-    } else {
-      print('API Request failed with status ${response.statusCode}');
-    }
-  }
-
-  static Future<List<File>> convertAssetsToFiles(List<Asset> assets) async {
-    List<File> files = [];
-
-    for (var asset in assets) {
-      final byteData = await asset.getByteData();
-      final buffer = byteData.buffer.asUint8List();
-      final tempFile = File('${(await getTemporaryDirectory()).path}/${asset.name}');
-      await tempFile.writeAsBytes(buffer);
-      files.add(tempFile);
-    }
-
-    return files;
-  }*/
 
 
   /*전체게시판 글 전부 조회*/
