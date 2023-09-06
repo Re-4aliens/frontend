@@ -3,6 +3,7 @@ import 'package:aliens/apis/apis.dart';
 import 'package:aliens/mockdatas/board_mockdata.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/market_articles.dart';
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
@@ -35,6 +36,7 @@ class MarketDetailPage extends StatefulWidget {
   {super.key, required this.screenArguments, required this.marketBoard, required this.productStatus});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
+  //final MemberDetails memberDetails;
   final String productStatus;
 
 
@@ -48,7 +50,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   final _controller = TextEditingController();
   var _newComment = '';
   bool isNestedComments = false;
-  int parentsCommentIndex = -1;
+  int parentsCommentId = -1;
   bool showLoading = false;
 
   void sendComment() async {
@@ -85,15 +87,11 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   Widget build(BuildContext context) {
     //print('Data from marketBoard: ${widget.marketBoard.createdAt}');
 
-    final double screenWidth = MediaQuery.of(context).size.height;
-    final bool isSmallScreen = screenWidth <= 700;
-
     List<String> whatStatus = [
       'Brand_New'.tr(), 'Almost_New'.tr(), 'Slight_Defect'.tr(), 'Used'.tr()
     ];
     String productStatus = '${widget.marketBoard.productStatus}';
-    final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
-    marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
+    final marketcommentProvider = Provider.of<MarketCommentProvider>(context);
 
    /* bool showLoading = marketcommentProvider.loading;
     if (showLoading) {
@@ -109,7 +107,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
         FocusScope.of(context).unfocus();
         setState(() {
           isNestedComments = false;
-          parentsCommentIndex = -1;
+          parentsCommentId = -1;
         });
       },
       child: Scaffold(
@@ -367,17 +365,16 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                         Divider(thickness: 1.2.h,color: Color(0xffE5EBFF),),
 
                         //댓글
-                        marketcommentProvider.loading
-                            ? Container(
-                          alignment: Alignment.center,
-                          child: Image(
-                            image: AssetImage("assets/illustration/loading_01.gif"),
-                          ),
-                        )
+                        marketcommentProvider.loading || marketcommentProvider.commentListData == null?
+                        Container(
+                            alignment: Alignment.center,
+                            child: Image(
+                                image: AssetImage(
+                                    "assets/illustration/loading_01.gif")))
                             :
                         Column(
                           children: [
-                            for(int index = 0; index < 5; index++)
+                            for(int index = 0; index < marketcommentProvider.commentListData!.length; index++)
                               Container(
                                 child: Column(
                                   children: [
@@ -427,17 +424,19 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                   ),
                                                   InkWell(
                                                     onTap: (){
+
                                                       print(marketcommentProvider.commentListData!);
                                                       showDialog(context: context, builder: (builder){
                                                         return MarketCommentDialog(context: context, onpressed: (){
                                                           setState(() {
                                                             isNestedComments = true;
-                                                            parentsCommentIndex = index;
+                                                            parentsCommentId = marketcommentProvider.commentListData![index].articleCommentId!;
                                                           });
                                                           Navigator.pop(context);
                                                         },
-                                                            isNestedComment: false,
-                                                            marketcomment: marketcommentProvider.commentListData![index]);
+                                                          isNestedComment: false,
+                                                          marketcomment: marketcommentProvider.commentListData![index],
+                                                        );
                                                       });
                                                     },
                                                     child: Padding(
@@ -535,7 +534,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                 });
                                                                 Navigator.pop(context);
                                                               },
-                                                                isNestedComment: true,marketcomment: marketcommentProvider.commentListData![index]);
+                                                                isNestedComment: true,
+                                                                marketcomment: marketcommentProvider.commentListData![index]);
                                                             });
                                                           },
                                                           child: Padding(
@@ -587,58 +587,60 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                 child: Container(
                     decoration: BoxDecoration(
                       color: Color(0xffefefef),
-                  borderRadius: BorderRadius.circular(10).r,
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 10).w,
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: TextField(
-                          maxLines: null,
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(255),
-                          ],
-                          keyboardType: TextInputType.multiline,
-                          decoration: InputDecoration(
-                            hintText: isNestedComments? "comment2".tr() : "comment1".tr(),
-                            hintStyle: TextStyle(color: Color(0xffb1b1b1)),
-                            border: InputBorder.none,
-                          ),
-                          onTap: () {
-                            if (_newComment.trim().isEmpty) {}
-                          },
-                          controller: _controller,
-                          onChanged: (value) {
-                            setState(() {
-                              _newComment = value;
-                            });
-                          },
-                        )),
-                    IconButton(
-                      onPressed: () {
-                        if(isNestedComments){
-                          MarketCommentProvider().addMarketComment(_newComment, parentsCommentIndex);
-                          //CommentRepository.addCommentChilds(parentsCommentIndex, newValue);
-                          parentsCommentIndex = -1;
-                          isNestedComments = false;
-                        }
-                        else{
-                          MarketCommentProvider().addMarketComment(_newComment, widget.marketBoard.articleId!);
-                          //CommentRepository.addComment(newValue);
-                        }
-                        updateUi();
-                      },
-                      icon: SvgPicture.asset(
-                        'assets/icon/ICON_send.svg',
-                        height: 22.r,
-                        color: _newComment.trim().isEmpty
-                            ? Color(0xffc1c1c1)
-                            : Color(0xff7898ff),
-                      ),
+                      borderRadius: BorderRadius.circular(10).r,
                     ),
-                  ],
-                )),
-          ),
+                    padding: EdgeInsets.symmetric(horizontal: 10).w,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: TextField(
+                              maxLines: null,
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(255),
+                              ],
+                              keyboardType: TextInputType.multiline,
+                              decoration: InputDecoration(
+                                hintText: isNestedComments? "comment2".tr() : "comment1".tr(),
+                                hintStyle: TextStyle(color: Color(0xffb1b1b1)),
+                                border: InputBorder.none,
+                              ),
+                              onTap: () {
+                                if (_newComment.trim().isEmpty) {}
+                              },
+                              controller: _controller,
+                              onChanged: (value) {
+                                setState(() {
+                                  _newComment = value;
+                                });
+                              },
+                            )),
+                        IconButton(
+                          onPressed: () {
+                            print('${parentsCommentId}');
+                            if(_newComment != ''){
+                              if(isNestedComments){
+                                marketcommentProvider.addNestedMarketComment(widget.marketBoard.articleId!, parentsCommentId,_newComment);
+                                parentsCommentId = -1;
+                                isNestedComments = false;
+                              }
+                              else{
+                                marketcommentProvider.addMarketComment(_newComment, widget.marketBoard.articleId!);
+                                //CommentRepository.addComment(newValue);
+                              }
+                            }
+                            updateUi();
+                          },
+                          icon: SvgPicture.asset(
+                            'assets/icon/ICON_send.svg',
+                            height: 22.r,
+                            color: _newComment.trim().isEmpty
+                                ? Color(0xffc1c1c1)
+                                : Color(0xff7898ff),
+                          ),
+                        ),
+                      ],
+                    )),
+              ),
         ]),
       ),
     );

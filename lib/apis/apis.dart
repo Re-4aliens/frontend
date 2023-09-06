@@ -1866,6 +1866,8 @@ class APIs {
         return body.map((dynamic item) => MarketComment.fromJson(item))
             .toList();
       } else {
+        print(json.decode(utf8.decode(response.bodyBytes)));
+
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final errorCode = responseBody['code'];
 
