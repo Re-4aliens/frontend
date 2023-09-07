@@ -121,18 +121,18 @@ class _ArticleWidgetState extends State<ArticleWidget>{
                           width: 80.h,
                           decoration: BoxDecoration(
                               color: Color(0xfff8f8f8),
-                              borderRadius: BorderRadius.circular(10).r
-                          ),
-                          child:
-                          Padding(
-                            padding: const EdgeInsets.all(25.0).r,
-                            child: Image.asset('assets/icon/ICON_photo_1.png'),
+                              borderRadius: BorderRadius.circular(10).r,
+                            image: DecorationImage(
+                              image: NetworkImage(widget.board.imageUrls![index]),
+                              fit: BoxFit.cover
+                            )
                           ),
                         ),
                       ],
                     );
                   }),
             ),
+            widget.board.category == "정보게시판" ? SizedBox():
             Padding(
               padding: EdgeInsets.only(top: 10.h, bottom: 15.0.h),
               child: Text('${widget.board.content}', style: TextStyle(fontSize: 14.spMin, color: Color(0xff616161)),),
