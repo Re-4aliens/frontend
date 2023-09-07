@@ -250,7 +250,10 @@ class _ArticlePageState extends State<ArticlePage> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
-                                child: Text('${widget.board.commentsCount}'),
+                                child: widget.board.commentsCount == 0
+                                    ? Text('')
+                                    : Text(
+                                    '${widget.board.commentsCount}')
                               ),
                             ],
                           )
@@ -346,6 +349,8 @@ class _ArticlePageState extends State<ArticlePage> {
                                                   },
                                                     isNestedComment: false,
                                                     comment: commentProvider.commentListData![index],
+                                                    memberDetials: widget.memberDetails,
+                                                    articleId: widget.board.articleId!,
                                                   );
                                                 });
                                               },
@@ -445,7 +450,9 @@ class _ArticlePageState extends State<ArticlePage> {
                                                           Navigator.pop(context);
                                                         },
                                                           isNestedComment: true,
-                                                          comment: commentProvider.commentListData![index],);
+                                                          comment: commentProvider.commentListData![index].childs![j],
+                                                          memberDetials: widget.memberDetails,
+                                                        articleId: widget.board.articleId!,);
                                                       });
                                                     },
                                                     child: Padding(
@@ -536,7 +543,6 @@ class _ArticlePageState extends State<ArticlePage> {
                           }
                           else{
                             commentProvider.addComment(_newComment, widget.board.articleId!);
-                            //CommentRepository.addComment(newValue);
                           }
                         }
                         updateUi();

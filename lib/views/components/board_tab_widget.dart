@@ -34,11 +34,29 @@ class TotalBoardWidget extends StatefulWidget {
 
 class _TotalBoardWidgetState extends State<TotalBoardWidget> {
 
+  final ScrollController _scrollController = ScrollController();
+  int page = 0;
+
   @override
   void initState() {
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
     boardProvider.getAllArticles();
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset == _scrollController.position.maxScrollExtent
+          && !_scrollController.position.outOfRange) {
+        print('추가');
+        page++;
+        boardProvider.getMoreAllArticles(page);
+      }
+    });
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +70,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
               image: AssetImage(
                   "assets/illustration/loading_01.gif")))
           : ListView.builder(
+        controller: _scrollController,
           itemCount: boardProvider.articleList!.length,
           itemBuilder: (context, index) {
             var nationCode = '';

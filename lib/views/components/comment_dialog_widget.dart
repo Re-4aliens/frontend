@@ -1,3 +1,4 @@
+import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/views/components/block_dialog_widget.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
+import '../../apis/apis.dart';
 import '../../models/comment_model.dart';
 import '../../providers/comment_provider.dart';
 
@@ -20,13 +22,17 @@ class CommentDialog extends StatelessWidget{
   final VoidCallback onpressed;
   final bool isNestedComment;
   final Comment comment;
+  final MemberDetails memberDetials;
+  final int articleId;
 
   const CommentDialog({
     Key? key,
     required this.context,
     required this.onpressed,
     required this.isNestedComment,
-    required this.comment
+    required this.comment,
+    required this.memberDetials,
+    required this.articleId,
   }) : super(key:key);
 
   @override
@@ -73,13 +79,39 @@ class CommentDialog extends StatelessWidget{
                 ),
               ),
             ),
+
+            memberDetials.email == comment.member!.email ?
             SizedBox(
               height: 10.h,
-            ),
+            ):SizedBox(),
+            memberDetials.email == comment.member!.email ?
             InkWell(
               onTap: (){
-                //TODO 로딩 만들기
-                commentProvider.deleteComment(comment.articleCommentId!);
+                showDialog(
+                    context: context,
+                    builder: (_) => FutureBuilder(
+                        future: APIs.deleteComment(comment.articleCommentId!),
+                        builder: (BuildContext context,
+                            AsyncSnapshot snapshot) {
+                          if (snapshot.hasData == false) {
+                            //받아오는 동안
+                            return Container(
+                                child: Image(
+                                    image: AssetImage(
+                                        "assets/illustration/loading_01.gif")));
+                          } else{
+                            //받아온 후
+                            WidgetsBinding.instance!.addPostFrameCallback((_) {
+                              Navigator.pop(context);
+                              Navigator.pop(context);
+                              commentProvider.getComments(articleId);
+                            });
+                            return Container(
+                                child: Image(
+                                    image: AssetImage(
+                                        "assets/illustration/loading_01.gif")));
+                          }
+                        }));
               },
               child: Container(
                 padding: EdgeInsets.all(13).r,
@@ -91,7 +123,7 @@ class CommentDialog extends StatelessWidget{
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-            ),
+            ):SizedBox(),
             SizedBox(
               height: 10.h,
             ),
@@ -150,10 +182,34 @@ class CommentDialog extends StatelessWidget{
               ),
             ),
           ),
+          memberDetials.email == comment.member!.email ?
           InkWell(
             onTap: () {
-              //TODO 로딩 만들기
-              commentProvider.deleteComment(comment.articleCommentId!);
+              showDialog(
+                  context: context,
+                  builder: (_) => FutureBuilder(
+                      future: APIs.deleteComment(comment.articleCommentId!),
+                      builder: (BuildContext context,
+                          AsyncSnapshot snapshot) {
+                        if (snapshot.hasData == false) {
+                          //받아오는 동안
+                          return Container(
+                              child: Image(
+                                  image: AssetImage(
+                                      "assets/illustration/loading_01.gif")));
+                        } else{
+                          //받아온 후
+                          WidgetsBinding.instance!.addPostFrameCallback((_) {
+                            Navigator.pop(context);
+                            Navigator.pop(context);
+                            commentProvider.getComments(articleId);
+                          });
+                          return Container(
+                              child: Image(
+                                  image: AssetImage(
+                                      "assets/illustration/loading_01.gif")));
+                        }
+                      }));
             },
             child: Container(
               height: 80,
@@ -166,7 +222,7 @@ class CommentDialog extends StatelessWidget{
                 ),
               ),
             ),
-          ),
+          ):SizedBox(),
           InkWell(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20.0),

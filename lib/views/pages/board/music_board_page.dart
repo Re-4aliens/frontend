@@ -32,12 +32,30 @@ class MusicBoardPage extends StatefulWidget {
 
 class _MusicBoardPageState extends State<MusicBoardPage> {
   bool isDrawerStart = false;
+  final ScrollController _scrollController = ScrollController();
+  int page = 0;
+
   @override
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
     boardProvider.getArticles('음악게시판');
+
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset == _scrollController.position.maxScrollExtent
+          && !_scrollController.position.outOfRange) {
+        page++;
+        boardProvider.getMoreArticles('음악게시판', page);
+      }
+    });
   }
+  @override
+  void dispose() {
+    _scrollController.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
@@ -125,6 +143,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
               child: Image(
                   image: AssetImage(
                       "assets/illustration/loading_01.gif"))):ListView.builder(
+              controller: _scrollController,
               itemCount: boardProvider.articleList!.length,
               itemBuilder: (context, index) {
                 var nationCode = '';
