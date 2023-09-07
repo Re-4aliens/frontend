@@ -451,7 +451,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard)),
+                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard, index:0,)),
 
                 );
               }
@@ -460,7 +460,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard,)),
+                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard, index:0,)),
                 );
               }
             },
