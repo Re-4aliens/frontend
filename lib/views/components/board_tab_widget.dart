@@ -54,6 +54,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
 
   @override
   void dispose() {
+    super.dispose();
     _scrollController.dispose();
   }
 
