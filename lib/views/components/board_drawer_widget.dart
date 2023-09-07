@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/screenArgument.dart';
@@ -23,18 +24,22 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:web_socket_channel/status.dart';
 
 import '../../apis/apis.dart';
+import '../../mockdatas/mockdata_model.dart';
+import '../../mockdatas/mockdata_model.dart';
 import '../../models/market_articles.dart';
+import '../../models/members.dart';
 import '../../repository/sql_message_repository.dart';
 import '../pages/board/market_posting_board_page.dart';
 
 class BoardDrawerWidget extends StatefulWidget {
-  const BoardDrawerWidget({super.key, required this.screenArguments, required this.isTotalBoard, required this.onpressd, this.marketBoard});
+  const BoardDrawerWidget({super.key, required this.screenArguments, required this.isTotalBoard, required this.onpressd, this.marketBoard, this.memberDetails});
 
   final ScreenArguments screenArguments;
   final MarketBoard? marketBoard;
-  //final MemberDetails memberDetails;
+  final MemberDetails? memberDetails;
 
   final bool isTotalBoard;
   final VoidCallback onpressd;
@@ -51,12 +56,14 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
   @override
   Widget build(BuildContext context) {
 
+
     return Container(
       decoration: BoxDecoration(
         color: Color(0xffEBEBEB),
       ),
       child: ListView(
         children: [
+
           InkWell(
         onTap: () async {
               if(widget.isTotalBoard){
@@ -451,7 +458,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard, )),
+                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard, memberDetails: widget.screenArguments.memberDetails!)),
 
                 );
               }
@@ -460,7 +467,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard, )),
+                      builder: (context) => MarketBoardPage(screenArguments: widget.screenArguments, marketBoard: widget.marketBoard, memberDetails:widget.screenArguments.memberDetails!)),
                 );
               }
             },
