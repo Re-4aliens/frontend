@@ -23,10 +23,10 @@ import '../../components/board_drawer_widget.dart';
 
 
 class MarketBoardPage extends StatefulWidget {
-  const MarketBoardPage({super.key, required this.screenArguments, required this.marketBoard, required this.index,});
+  const MarketBoardPage({super.key, required this.screenArguments, required this.marketBoard});
   final ScreenArguments screenArguments;
   final MarketBoard? marketBoard;
-  final int index;
+ // final int index;
 
   //final MemberDetails memberDetails;
 
@@ -52,8 +52,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     print(10);
     bookmarkProvider.getbookmarksCounts();
     print(11);
-    print('북마크될라나: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
-    print('북마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index] == 0}');
+    //print('북마크될라나: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
+    //print('북마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index] == 0}');
   }
 
   Future<void> _fetchMarketArticles() async {
