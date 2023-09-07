@@ -222,7 +222,7 @@ class APIs {
       //토큰 및 정보 삭제
       await storage.delete(key: 'auth');
       await storage.delete(key: 'token');
-      await storage.delete(key: 'notification');
+      await storage.delete(key: 'notifications');
       print('로그아웃, 정보 지움');
 
       //스택 비우고 화면 이동
@@ -1242,7 +1242,7 @@ class APIs {
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
       //알림값 읽어오기
-      var notification = await storage.read(key: 'notification');
+      var notification = await storage.read(key: 'notifications');
 
       var allNotification = json.decode(notification!)['allNotification'];
       var matchingNotification = json.decode(
@@ -1251,7 +1251,7 @@ class APIs {
 
 
       await getChatNotificationStatus();
-      await storage.delete(key: 'notification');
+      await storage.delete(key: 'notifications');
       if (all) {
 
       }

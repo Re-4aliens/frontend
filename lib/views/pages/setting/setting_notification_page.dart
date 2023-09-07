@@ -40,7 +40,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
 
   Future<void> getNotification() async {
     //토큰 읽어오기
-    var notification = await storage.read(key: 'notification');
+    var notification = await storage.read(key: 'notifications');
 
     allNotification = json.decode(notification!)['allNotification'] == true;
     matchingNotification = json.decode(notification!)['matchingNotification'] == true;
@@ -120,10 +120,10 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
                               if(await Permissions.getNotificationPermission()){
-                                await storage.delete(key: 'notification');
+                                await storage.delete(key: 'notifications');
 
                                 await storage.write(
-                                  key: 'notification',
+                                  key: 'notifications',
                                   value: jsonEncode({
                                     'allNotification' : value,
                                     'matchingNotification' : value,
@@ -162,7 +162,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
                               if(await Permissions.getNotificationPermission()){
-                                await storage.delete(key: 'notification');
+                                await storage.delete(key: 'notifications');
                                 if (value == true && chatNotification == true && communityNotification == true) {
                                   allNotification = true;
                                 } else {
@@ -170,7 +170,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                 }
 
                                 await storage.write(
-                                  key: 'notification',
+                                  key: 'notifications',
                                   value: jsonEncode({
                                     'allNotification': allNotification,
                                     'matchingNotification': value,
@@ -202,7 +202,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
                               if(await Permissions.getNotificationPermission()){
-                                await storage.delete(key: 'notification');
+                                await storage.delete(key: 'notifications');
                                 if (matchingNotification == true &&
                                     value == true && communityNotification == true) {
                                   allNotification = true;
@@ -210,7 +210,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                   allNotification = false;
                                 }
                                 await storage.write(
-                                  key: 'notification',
+                                  key: 'notifications',
                                   value: jsonEncode({
                                     'allNotification': allNotification,
                                     'matchingNotification': matchingNotification,
@@ -222,7 +222,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                               }
                             },
                           ),
-                        ], //communityNotification
+                        ],
                       ),
                     ),
                     Container(
@@ -242,7 +242,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             trackColor: Color(0xffC1C1C1),
                             onChanged: (value) async {
                               if(await Permissions.getNotificationPermission()){
-                                await storage.delete(key: 'notification');
+                                await storage.delete(key: 'notifications');
                                 if (matchingNotification == true &&
                                     value == true && chatNotification == true) {
                                   allNotification = true;
@@ -250,7 +250,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                   allNotification = false;
                                 }
                                 await storage.write(
-                                  key: 'notification',
+                                  key: 'notifications',
                                   value: jsonEncode({
                                     'allNotification': allNotification,
                                     'matchingNotification': matchingNotification,
