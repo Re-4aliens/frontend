@@ -307,6 +307,7 @@
   "Almost_New": "ALMOST_NEW",
   "Slight_Defect": "SLIGHT_DEFECT",
   "Used": "USED",
-  "sale": "SELL"
+  "sale": "SELL",
+  "sold-out":"SOLD_OUT"
 
 }

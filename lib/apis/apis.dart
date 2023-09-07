@@ -1756,39 +1756,43 @@ class APIs {
 
   /* 특정 판매글 찜 등록*/
   static Future<int> marketbookmark(int articleId) async {
-    var url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}/bookmarks';
+    var url = 'http://3.34.2.246:8080/api/v2/market-articles/${articleId}/bookmarks';
 
-    //토큰 읽어오기
+    // 토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
 
-    //accessToken만 보내기
+    // accessToken만 보내기
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
-    var response = await http.post(Uri.parse(url),
+    var response = await http.post(
+      Uri.parse(url),
       headers: {
         'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'},
+        'Content-Type': 'application/json',
+      },
     );
 
-    //success
+    // success
+    var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
+    print(jsonResponse);
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return json.decode(utf8.decode(response.bodyBytes))['data']['likeCount'];
-      //fail
+      return jsonResponse['data']['marketArticleBookmarkCount'];
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+      var errorCode = jsonResponse['code'];
+
+      if (errorCode == 'AT-C-002') {
         print('액세스 토큰 만료');
         throw 'AT-C-002';
-      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+      } else if (errorCode == 'AT-C-007') {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
-      }else{
-
+      } else {
+        print('기타 에러: $errorCode');
+        throw '기타 에러: $errorCode'; // 기타 에러 처리
       }
-      return -1;
     }
   }
+
 
 
   /*상품 판매글 댓글 전체 조회*/
