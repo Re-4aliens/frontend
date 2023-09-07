@@ -49,6 +49,8 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
   }
   @override
   void dispose() {
+
+    super.dispose();
     _scrollController.dispose();
   }
 

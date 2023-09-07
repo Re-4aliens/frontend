@@ -52,6 +52,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
   }
   @override
   void dispose() {
+    super.dispose();
     _scrollController.dispose();
   }
 
