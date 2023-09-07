@@ -228,7 +228,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                       screenArguments: widget.screenArguments,
                       marketBoard: marketBoard,
                         productStatus: getProductStatusText(marketBoard.productStatus), 
-                      StatusText: getStatusText(marketBoard.marketArticleStatus), index: widget.index,
+                      StatusText: getStatusText(marketBoard.marketArticleStatus), index: index,
                      // memberDetails: widget.memberDetails,
                     ),
               ),
@@ -343,7 +343,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                       ),
                       SizedBox(height: 5.h),
                       Text(
-                        '${marketBoard.price.toString() ?? 0}원', // 가격 정보 사용
+                        '${marketBoard.price.toString() ?? ""}원', // 가격 정보 사용
                         style: TextStyle(
                             fontSize: 16.spMin, fontWeight: FontWeight.w700),
                       ),
@@ -357,9 +357,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             color: Color(0xffc1c1c1),
                           ),
 
-                          bookmarkProvider.marketArticleBookmarkCount?[widget.index] == 0
+                          bookmarkProvider.marketArticleBookmarkCount?[index] == 0
                               ? Text('0',style: TextStyle(fontSize: 16.spMin,color: Color(0xffc1c1c1)))
-                              : Text('${bookmarkProvider.marketArticleBookmarkCount![widget.index]}',
+                              : Text('${bookmarkProvider.marketArticleBookmarkCount![index]}',
                               style: TextStyle(
                                 fontSize: 14.spMin,
                                 color: Color(0xffc1c1c1),

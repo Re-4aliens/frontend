@@ -1415,61 +1415,11 @@ class APIs {
 
 
 
-  /*장터*/
-/*  static Future<void> postDataWithImages({
-    required String title,
-    required String status,
-    required int price,
-    required String productStatus,
-    required List<Asset> images,
-    required String content,
-  }) async {
-    var request = http.MultipartRequest('POST', Uri.parse(apiUrl));
-    request.fields['title'] = title;
-    request.fields['status'] = status;
-    request.fields['price'] = price.toString();
-    request.fields['productStatus'] = productStatus;
-    request.fields['content'] = content;
-
-    List<File> files = await convertAssetsToFiles(images);
-
-    for (var i = 0; i < files.length; i++) {
-      var file = files[i];
-      var stream = http.ByteStream(Stream.castFrom(file.openRead()));
-      var length = await file.length();
-
-      var multipartFile = http.MultipartFile('image$i', stream, length,
-          filename: 'image$i.jpg');
-
-      request.files.add(multipartFile);
-    }
-
-    var response = await request.send();
-    if (response.statusCode == 200) {
-      print('API Response: ${await response.stream.bytesToString()}');
-    } else {
-      print('API Request failed with status ${response.statusCode}');
-    }
-  }
-
-  static Future<List<File>> convertAssetsToFiles(List<Asset> assets) async {
-    List<File> files = [];
-
-    for (var asset in assets) {
-      final byteData = await asset.getByteData();
-      final buffer = byteData.buffer.asUint8List();
-      final tempFile = File('${(await getTemporaryDirectory()).path}/${asset.name}');
-      await tempFile.writeAsBytes(buffer);
-      files.add(tempFile);
-    }
-
-    return files;
-  }*/
 
 
   /*전체게시판 글 전부 조회*/
-  static Future<List<Board>> TotalArticles() async {
-    final _url = 'http://3.34.2.246:8080/api/v2/articles';
+  static Future<List<Board>> TotalArticles(int page) async {
+    final _url = 'http://3.34.2.246:8080/api/v2/articles?page=${page}&size=10&sort=createdAt,asc';
 
       //토큰 읽어오기
       var jwtToken = await storage.read(key: 'token');
@@ -1487,8 +1437,7 @@ class APIs {
         print(json.decode(utf8.decode(response.bodyBytes)));
         List<dynamic> body = json.decode(
             utf8.decode(response.bodyBytes))['data'];
-        List<dynamic> value = body.map((dynamic item) => Board.fromJson(item)).toList();
-        return List.from(value.reversed);
+        return body.map((dynamic item) => Board.fromJson(item)).toList();
 
 
         //fail
@@ -2050,8 +1999,8 @@ class APIs {
   좋아요 리스트
 
   */
-  static Future<List<Board>> getLikedPost() async {
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/likes'; //mocksever
+  static Future<List<Board>> getLikedPost(page) async {
+    var _url = 'http://3.34.2.246:8080/api/v2/articles/member/like?page=${page}&size=10&sort=createdAt,desc'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -2195,8 +2144,8 @@ class APIs {
   특정 게시판 게시물 조회
 
   */
-  static Future<List<Board>> getArticles(String boardCategory) async {
-    var _url = 'http://3.34.2.246:8080/api/v2/community-articles?category=${boardCategory}'; //mocksever
+  static Future<List<Board>> getArticles(String boardCategory, int page) async {
+    var _url = 'http://3.34.2.246:8080/api/v2/community-articles?category=${boardCategory}&page=${page}&size=10&sort=createdAt,desc'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -2288,7 +2237,7 @@ class APIs {
 
    */
   static Future<bool> deleteArticles(int articleId) async {
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}'; //mocksever
+    var _url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -2522,41 +2471,6 @@ class APIs {
 
       }
       return -1;
-    }
-  }
-
-
-  /*
-
-  좋아요 삭제
-
-   */
-  static Future<bool> cancleLike(int articleId) async {
-    var _url = 'https://aaa1f771-6012-440a-9939-4328d9519a52.mock.pstmn.io/api/v2/community-articles/${articleId}/likes'; //mocksever
-
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    //accessToken
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-
-    var response = await http.delete(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
-
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
     }
   }
 
