@@ -1728,6 +1728,7 @@ class APIs {
         url,
         headers: {
           'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
         },
       );
 
