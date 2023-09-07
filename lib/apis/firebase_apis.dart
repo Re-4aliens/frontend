@@ -39,7 +39,7 @@ class FirebaseAPIs {
     );
     var platformDetails = NotificationDetails(android: androidDetails);
 
-    var notification = await storage.read(key: 'notification');
+    var notification = await storage.read(key: 'notifications');
     print('알림 도착 ${message.data}');
 
     //상대방의 일괄 읽음 알림 (상대방이 채팅창 들어왔을 때의 알림)
@@ -70,6 +70,7 @@ class FirebaseAPIs {
 
       print('채팅 도착 ${message.data}');
       // 알림 표시
+      //다 대문자인가?
       if(json.decode(notification!)['chatNotification'] == true){
         flutterLocalNotificationsPlugin.show(
           0, // 알림 ID
@@ -78,8 +79,9 @@ class FirebaseAPIs {
           platformDetails, // 알림 설정
         );
       }
-    }else if(message.data['type']=='article-like' || message.data['type']=='article-comment-reply' || message.data['type']=='article-comment'){
+    }else if(message.data['type']=='ARTICLE_LIKE' || message.data['type']=='ARTICLE_COMMENT_REPLY' || message.data['type']=='ARTICLE_COMMENT'){
       print('게시판 알림 도착 ${message.data}');
+      print('${json.decode(notification!)['chatNotification']}');
       if(json.decode(notification!)['communityNotification'] == true){
         flutterLocalNotificationsPlugin.show(
           0, // 알림 ID
