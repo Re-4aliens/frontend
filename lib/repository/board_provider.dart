@@ -152,14 +152,31 @@ class BoardProvider with ChangeNotifier {
   getMyArticles() async {
     loading = true;
     try{
-      articleList = await APIs.getMyArticles();
+      articleList = await APIs.getMyArticles(0);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        articleList = await APIs.getMyArticles();
+        articleList = await APIs.getMyArticles(0);
       } else {
       }
     }
+    getLikeCounts();
+    loading = false;
+    notifyListeners();
+  }
+
+  getMoreMyArticles(int page) async {
+    loading = true;
+    try{
+      articleList!.addAll(await APIs.getMyArticles(page));
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        articleList!.addAll(await APIs.getMyArticles(page));
+      } else {
+      }
+    }
+    getLikeCounts();
     loading = false;
     notifyListeners();
   }
