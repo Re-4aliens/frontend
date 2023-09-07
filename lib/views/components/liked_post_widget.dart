@@ -20,11 +20,12 @@ import 'board_dialog_widget.dart';
 
 class LikedArticleWidget extends StatefulWidget {
 
-  LikedArticleWidget({super.key, required this.board, required this.nationCode, required this.memberDetails});
+  LikedArticleWidget({super.key, required this.board, required this.nationCode, required this.memberDetails, required this.index});
 
   final Board board;
   final String nationCode;
   final MemberDetails memberDetails;
+  final int index;
   @override
   State<StatefulWidget> createState() => _LikedArticleWidgetWidgetState();
 }
@@ -199,7 +200,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails, index: 0 )), //수정필요
+                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails, index: widget.index )),
             );
           }
         },
