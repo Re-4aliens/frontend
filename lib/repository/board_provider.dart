@@ -11,10 +11,9 @@ import '../models/comment_model.dart';
 class BoardProvider with ChangeNotifier {
   //notifyListeners();
 
-  List<Board>? articleList;
+  List<Board> articleList= [];
   bool loading = false;
-  List<Board>? likedList;
-  List<int>? likeCounts;
+  List<int> likeCounts = [];
 
   getAllArticles() async {
     loading = true;
@@ -27,6 +26,7 @@ class BoardProvider with ChangeNotifier {
       } else {
       }
     }
+    getLikeCounts();
     loading = false;
     notifyListeners();
   }
@@ -42,6 +42,7 @@ class BoardProvider with ChangeNotifier {
       } else {
       }
     }
+    getLikeCounts();
     loading = false;
     notifyListeners();
   }
@@ -57,6 +58,7 @@ class BoardProvider with ChangeNotifier {
       } else {
       }
     }
+    getLikeCounts();
     loading = false;
     notifyListeners();
   }
@@ -72,6 +74,7 @@ class BoardProvider with ChangeNotifier {
       } else {
       }
     }
+    getLikeCounts();
     loading = false;
     notifyListeners();
   }
@@ -120,15 +123,16 @@ class BoardProvider with ChangeNotifier {
     loading = true;
     try {
       //게시판 좋아요 리스트 요청
-      likedList = await APIs.getLikedPost(0);
+      articleList = await APIs.getLikedPost(0);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
         //게시판 좋아요 리스트 요청
-        likedList = await APIs.getLikedPost(0);
+        articleList = await APIs.getLikedPost(0);
       } else {
       }
     }
+    getLikeCounts();
     loading = false;
     notifyListeners();
   }
@@ -137,14 +141,15 @@ class BoardProvider with ChangeNotifier {
     loading = true;
     try {
       //게시판 좋아요 리스트 요청
-      likedList!.addAll(await APIs.getLikedPost(page));
+      articleList!.addAll(await APIs.getLikedPost(page));
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        likedList!.addAll(await APIs.getLikedPost(page));
+        articleList!.addAll(await APIs.getLikedPost(page));
       } else {
       }
     }
+    getLikeCounts();
     loading = false;
     notifyListeners();
   }
