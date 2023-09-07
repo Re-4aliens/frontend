@@ -27,6 +27,8 @@ class MyArticlePage extends StatefulWidget {
 
 class _MyArticlePageState extends State<MyArticlePage> {
   bool isDrawerStart = false;
+  final ScrollController _scrollController = ScrollController();
+  int page = 0;
 
   @override
   void initState() {
@@ -35,7 +37,6 @@ class _MyArticlePageState extends State<MyArticlePage> {
 
     if(widget.category == 'liked'.tr()){
       boardProvider.getLikedList();
-      boardProvider.getLikeCounts();
     }else if(widget.category == 'my_posts-child'.tr()){
       boardProvider.getMyArticles();
     }else if(widget.category == 'my-comments'.tr()){
@@ -43,6 +44,25 @@ class _MyArticlePageState extends State<MyArticlePage> {
     }else{
     }
 
+    _scrollController.addListener(() {
+      if (_scrollController.offset == _scrollController.position.maxScrollExtent
+          && !_scrollController.position.outOfRange) {
+        page++;
+        if(widget.category == 'liked'.tr()){
+          boardProvider.getLikedList();
+        }else if(widget.category == 'my_posts-child'.tr()){
+          boardProvider.getMyArticles();
+        }else if(widget.category == 'my-comments'.tr()){
+          boardProvider.getMoreMyCommentArticles(page);
+        }else{
+        }
+      }
+    });
+
+  }
+  @override
+  void dispose() {
+    _scrollController.dispose();
   }
 
   @override
@@ -139,7 +159,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
                       widget.category == 'my_posts-child'.tr() || widget.category ==
                           'my-comments'.tr()?
                         ListView.builder(
-                        itemCount: boardProvider.articleList!.length,
+                        itemCount: boardProvider.articleList!.length, controller: _scrollController,
                         itemBuilder: (context, index) {
                           var nationCode = '';
                           for (Map<String, String> country in countries) {
@@ -166,8 +186,10 @@ class _MyArticlePageState extends State<MyArticlePage> {
                             ],
                           );
                         })
+                      //좋아요 리스트
                           : ListView.builder(
                           itemCount: boardProvider.articleList!.length,
+                          controller: _scrollController,
                           itemBuilder: (context, index) {
                             var nationCode = '';
                             for (Map<String, String> country in countries) {
@@ -183,7 +205,9 @@ class _MyArticlePageState extends State<MyArticlePage> {
                               children: [
                                 LikedArticleWidget(
                                     board: boardProvider.articleList![index],
-                                    nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!),
+                                    nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!,
+                                  index: index
+                                ),
                                 Divider(
                                   thickness: 2,
                                   color: Color(0xffE5EBFF),
