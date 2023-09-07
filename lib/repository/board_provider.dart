@@ -19,11 +19,11 @@ class BoardProvider with ChangeNotifier {
   getAllArticles() async {
     loading = true;
     try{
-      articleList = await APIs.TotalArticles();
+      articleList = await APIs.TotalArticles(0);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        articleList = await APIs.TotalArticles();
+        articleList = await APIs.TotalArticles(0);
       } else {
       }
     }
@@ -34,11 +34,41 @@ class BoardProvider with ChangeNotifier {
   getArticles(String boardCategory) async {
     loading = true;
     try{
-      articleList = await APIs.getArticles(boardCategory);
+      articleList = await APIs.getArticles(boardCategory, 0);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        articleList = await APIs.getArticles(boardCategory);
+        articleList = await APIs.getArticles(boardCategory, 0);
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  getMoreArticles(String boardCategory, int page) async {
+    loading = true;
+    try{
+      articleList!.addAll(await APIs.getArticles(boardCategory, page));
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        articleList!.addAll(await APIs.getArticles(boardCategory, page));
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  getMoreAllArticles(int page) async {
+    loading = true;
+    try{
+      articleList!.addAll(await APIs.TotalArticles(page));
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        articleList!.addAll(await APIs.TotalArticles(page));
       } else {
       }
     }
@@ -61,22 +91,7 @@ class BoardProvider with ChangeNotifier {
     return true;
   }
 
-  deletePost(int articleId) async {
-    bool value = false;
-    loading = true;
-    try {
-      value =  await APIs.deleteArticles(articleId);
-    } catch (e) {
-      if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        value = await APIs.deleteArticles(articleId);
-      } else {
-      }
-    }
-    loading = false;
-    notifyListeners();
-    return value;
-  }
+
 
   addLike(int articleId, int index) async {
     loading = true;
@@ -102,17 +117,31 @@ class BoardProvider with ChangeNotifier {
   }
 
   getLikedList() async {
-
     loading = true;
-
     try {
       //게시판 좋아요 리스트 요청
-      likedList = await APIs.getLikedPost();
+      likedList = await APIs.getLikedPost(0);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
         //게시판 좋아요 리스트 요청
-        likedList = await APIs.getLikedPost();
+        likedList = await APIs.getLikedPost(0);
+      } else {
+      }
+    }
+    loading = false;
+    notifyListeners();
+  }
+
+  getMoreLikedList(int page) async {
+    loading = true;
+    try {
+      //게시판 좋아요 리스트 요청
+      likedList!.addAll(await APIs.getLikedPost(page));
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        likedList!.addAll(await APIs.getLikedPost(page));
       } else {
       }
     }

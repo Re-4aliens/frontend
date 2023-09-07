@@ -33,13 +33,28 @@ class InfoBoardPage extends StatefulWidget {
 
 class _InfoBoardPageState extends State<InfoBoardPage> {
   bool isDrawerStart = false;
+  final ScrollController _scrollController = ScrollController();
+  int page = 0;
 
   @override
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
     boardProvider.getArticles('정보게시판');
+
+    _scrollController.addListener(() {
+      if (_scrollController.offset == _scrollController.position.maxScrollExtent
+          && !_scrollController.position.outOfRange) {
+        page++;
+        boardProvider.getMoreArticles('정보게시판', page);
+      }
+    });
   }
+  @override
+  void dispose() {
+    _scrollController.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -128,6 +143,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
               child: Image(
                   image: AssetImage(
                       "assets/illustration/loading_01.gif"))):ListView.builder(
+              controller: _scrollController,
               itemCount: boardProvider.articleList!.length,
               itemBuilder: (context, index) {
                 var nationCode = '';
