@@ -52,6 +52,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
 
   @override
   void dispose() {
+    super.dispose();
     _scrollController.dispose();
   }
 
