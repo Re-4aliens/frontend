@@ -42,6 +42,7 @@ class _SearchPageState extends State<SearchPage> {
   final _controller = TextEditingController();
   var _keyword = '';
   String boardCategory = '';
+  bool searched =false;
 
 
   void updateUi() async {
@@ -111,14 +112,18 @@ class _SearchPageState extends State<SearchPage> {
                   hintText: 'search1'.tr()
               ),
               onFieldSubmitted: (value) {
-                print(value);
+                //검색 api 수행
+                //성공하면
+                setState(() {
+                  searched = true;
+                });
               },
             ),
           ),
           backgroundColor: Colors.white,
           elevation: 0,
         ),
-        body: Center(
+        body: searched == false? Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -137,7 +142,9 @@ class _SearchPageState extends State<SearchPage> {
                 ),
                 ),
               ]),
-        ),
+        )
+            //결과 위젯
+            :Center(child: Text('결과'),),
       );
   }
 }
