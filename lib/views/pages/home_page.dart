@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:aliens/models/memberDetails_model.dart';
@@ -7,6 +8,7 @@ import 'package:aliens/views/components/setting_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -45,17 +47,17 @@ class _HomePageState extends State<HomePage> {
   MemberDetails memberDetails = MemberDetails();
   static final storage = FlutterSecureStorage();
   dynamic notification = null;
+  dynamic inAppNotification = null;
 
   @override
   void initState() {
-    // TODO: implement initState
-
     //알림 설정
     _setNotification();
   }
 
   _setNotification() async {
     notification = await storage.read(key: 'notifications');
+    inAppNotification = await storage.read(key: 'inAppNotification');
 
     //알림 허용 팝업을 띄움
 
@@ -76,6 +78,15 @@ class _HomePageState extends State<HomePage> {
           }),
         );
       }
+      if(inAppNotification != null){
+      }else{
+        await storage.write(
+          key: 'inAppNotification',
+          value: jsonEncode({
+            'inAppNotification': true,
+          }),
+        );
+      }
     }else{
       print('알림 불허 상태');
       //저장된 설정 정보가 없다면
@@ -89,6 +100,15 @@ class _HomePageState extends State<HomePage> {
             'matchingNotification': false,
             'chatNotification': false,
             'communityNotification' : false,
+          }),
+        );
+      }
+      if(inAppNotification != null){
+      }else{
+        await storage.write(
+          key: 'inAppNotification',
+          value: jsonEncode({
+            'inAppNotification': false,
           }),
         );
       }

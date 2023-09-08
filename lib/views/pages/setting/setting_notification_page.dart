@@ -31,6 +31,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
   late bool matchingNotification;
   late bool chatNotification;
   late bool communityNotification;
+  late bool inAppNotification;
 
   static final storage = FlutterSecureStorage();
 
@@ -41,11 +42,13 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
   Future<void> getNotification() async {
     //토큰 읽어오기
     var notification = await storage.read(key: 'notifications');
+    var inApp = await storage.read(key:'inAppNotification');
 
     allNotification = json.decode(notification!)['allNotification'] == true;
     matchingNotification = json.decode(notification!)['matchingNotification'] == true;
     chatNotification = json.decode(notification!)['chatNotification'] == true;
     communityNotification = json.decode(notification!)['communityNotification'] == true;
+    inAppNotification = json.decode(inApp!)['inAppNotification'] == true;
 
     print(allNotification);
     print(matchingNotification);
@@ -278,12 +281,22 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             ),
                           ),
                           CupertinoSwitch(
-                            value: switchValue4,
+                            value: inAppNotification,
                             activeColor: Color(0xff7898FF),
                             trackColor: Color(0xffC1C1C1),
-                            onChanged: (value) => setState(() {
-                              this.switchValue4 = value;
-                            }),
+                            onChanged: (value) async {
+                              if(await Permissions.getNotificationPermission()){
+                                await storage.delete(key: 'inAppNotification');
+
+                                await storage.write(
+                                  key: 'inAppNotification',
+                                  value: jsonEncode({
+                                    'inAppNotification': value,
+                                  }),
+                                );
+                                setState(() {});
+                              }
+                            }
                           ),
                         ],
                       ),
