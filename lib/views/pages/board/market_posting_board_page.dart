@@ -227,9 +227,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               child:_isEditMode
                                   ?
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  SizedBox(width: 15.w,),
+
                                   SvgPicture.asset(
                                     'assets/icon/icon_dropdown.svg',
                                     width: 4.r,
