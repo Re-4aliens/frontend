@@ -27,10 +27,38 @@ class FirebaseAPIs {
     importance: Importance.min,
   );
 
-
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
 
     var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    var initialzationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    var initialzationSettingsIOS = DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+    );
+
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    var initializationSettings = InitializationSettings(
+        android: initialzationSettingsAndroid, iOS: initialzationSettingsIOS);
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+
     var androidDetails = AndroidNotificationDetails(
       'channel_id', // 채널 ID
       'Channel name', // 채널 이름
