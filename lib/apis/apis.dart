@@ -25,6 +25,7 @@ import '../models/market_articles.dart';
 import '../models/market_comment.dart';
 import '../models/memberDetails_model.dart';
 import '../models/message_model.dart';
+import '../models/notification_article_model.dart';
 import '../models/partner_model.dart';
 import '../models/screenArgument.dart';
 
@@ -222,7 +223,7 @@ class APIs {
       //토큰 및 정보 삭제
       await storage.delete(key: 'auth');
       await storage.delete(key: 'token');
-      await storage.delete(key: 'notification');
+      await storage.delete(key: 'notifications');
       print('로그아웃, 정보 지움');
 
       //스택 비우고 화면 이동
@@ -1242,7 +1243,7 @@ class APIs {
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
       //알림값 읽어오기
-      var notification = await storage.read(key: 'notification');
+      var notification = await storage.read(key: 'notifications');
 
       var allNotification = json.decode(notification!)['allNotification'];
       var matchingNotification = json.decode(
@@ -1251,7 +1252,7 @@ class APIs {
 
 
       await getChatNotificationStatus();
-      await storage.delete(key: 'notification');
+      await storage.delete(key: 'notifications');
       if (all) {
 
       }
@@ -2482,8 +2483,86 @@ class APIs {
     }
   }
 
+/*
+
+  알림 리스트
+
+  */
+  static Future<List<NotificationArticle>> getNotiList() async {
+    var _url = 'http://3.34.2.246:8080/api/v2/board/personal-notices'; //mocksever
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    //accessToken만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+
+    var response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data']['personalNoticeInfos'];
+      dynamic value = body.map((dynamic item) => NotificationArticle.fromJson(item)).toList();
+      return List.from(value.reversed);
+
+      //fail
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else
+      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      } else {
+
+      }
+      throw Exception('요청 오류');
+    }
+  }
+
+  /*
+
+  알림 읽음 조회
+
+   */
+  static Future<bool> readNotification(int personalNoticeId) async {
+    var url = 'http://3.34.2.246:8080/api/v2/board/personal-notice/read/${personalNoticeId}';
+
+    //토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token');
+
+    // 액세스 토큰만 보내기
+    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
 
+    var response = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    //성공
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+    }
+    //실패
+    else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return false;
+    }
+  }
 }
 
 

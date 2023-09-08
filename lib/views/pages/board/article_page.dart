@@ -202,9 +202,12 @@ class _ArticlePageState extends State<ArticlePage> {
                                         decoration: BoxDecoration(
                                             color: Color(0xfff8f8f8),
                                             borderRadius:
-                                            BorderRadius.circular(10).r),
-                                        child: Icon(Icons
-                                            .add_photo_alternate_outlined),
+                                            BorderRadius.circular(10).r,
+                                          image: DecorationImage(
+                                            image: NetworkImage(widget.board.imageUrls![index]),
+                                            fit: BoxFit.cover,
+                                          )
+                                        ),
                                       ),
                                     ],
                                   );
@@ -222,7 +225,8 @@ class _ArticlePageState extends State<ArticlePage> {
                             children: [
                               InkWell(
                                 onTap: (){
-                                  boardProvider.addLike(widget.board.articleId!, widget.index);
+                                  if(widget.index != -1)
+                                    boardProvider.addLike(widget.board.articleId!, widget.index);
                                 },
                                 child: Padding(
                                     padding: const EdgeInsets.all(4.0).r,
@@ -234,6 +238,11 @@ class _ArticlePageState extends State<ArticlePage> {
                                     )
                                 ),
                               ),
+                              widget.index == -1 ? Padding(
+                                padding: EdgeInsets.only(left: 4, right: 15).r,
+                                child:
+                                widget.board.likeCount == 0 || widget.board.likeCount == null? Text('') : Text('${widget.board.likeCount}'),
+                              ):
                               Padding(
                                 padding: EdgeInsets.only(left: 4, right: 15).r,
                                 child:
