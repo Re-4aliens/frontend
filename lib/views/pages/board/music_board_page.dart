@@ -133,7 +133,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                 onTap: () {
                   Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "음악게시판",)),
+                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "음악게시판", nationCode: '',)),
                   );
                 },
                 child: SvgPicture.asset(

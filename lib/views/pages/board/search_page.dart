@@ -26,13 +26,15 @@ import '../../../models/message_model.dart';
 import '../../../repository/board_provider.dart';
 import '../../components/board_dialog_widget.dart';
 import '../../components/comment_dialog_widget.dart';
+import '../../components/total_article_widget.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage(
-      {super.key, required this.screenArguments, required this.category});
+      {super.key, required this.screenArguments, required this.category, required this.nationCode});
 
   final ScreenArguments screenArguments;
   final String category;
+  final String nationCode;
 
   @override
   State<StatefulWidget> createState() => _SearchPageState();
@@ -43,6 +45,7 @@ class _SearchPageState extends State<SearchPage> {
   var _keyword = '';
   String boardCategory = '';
   bool searched =false;
+  List<Board> searchResults = []; //검색결과
 
 
   void updateUi() async {
@@ -54,9 +57,41 @@ class _SearchPageState extends State<SearchPage> {
     FocusScope.of(context).unfocus();
   }
 
+  String getNationCode(_nationality){
+    var nationCode = '';
+    for (Map<String, String> country in countries) {
+      if (country['name'] == _nationality) {
+        nationCode = country['code']!;
+        break;
+      }
+    }
+    return nationCode;
+  }
+
+  Widget _ResultsWidget() {
+    if (searchResults.isEmpty) {
+      return Center(
+        child: Container()
+      );
+    } else {
+      return ListView.builder(
+          itemCount: searchResults.length,
+          itemBuilder: (context, index) {
+            final board = searchResults[index];
+            return TotalArticleWidget(
+              board: board,
+              nationCode: board.member!.nationality.toString(),
+              screenArguments: widget.screenArguments,
+              index: index,
+            );
+          });
+    }
+  }
+
+
 
   @override
-  void initState() {
+  /*void initState() {
     switch (widget.category){
       case '자유게시판':
         boardCategory = 'free-posting'.tr();
@@ -76,7 +111,7 @@ class _SearchPageState extends State<SearchPage> {
       default:
     }
 
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -111,10 +146,13 @@ class _SearchPageState extends State<SearchPage> {
                   border: InputBorder.none,
                   hintText: 'search1'.tr()
               ),
-              onFieldSubmitted: (value) {
-                //검색 api 수행
-                //성공하면
+              onFieldSubmitted: (value) async {
                 setState(() {
+                  _keyword = value;
+                });
+                searchResults = await APIs.TotalSearch(value);
+                setState(() {
+                  print("검색성공");
                   searched = true;
                 });
               },
@@ -123,7 +161,8 @@ class _SearchPageState extends State<SearchPage> {
           backgroundColor: Colors.white,
           elevation: 0,
         ),
-        body: searched == false? Center(
+        body: searched == false
+            ? Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -144,7 +183,10 @@ class _SearchPageState extends State<SearchPage> {
               ]),
         )
             //결과 위젯
-            :Center(child: Text('결과'),),
+            :_ResultsWidget(),
       );
   }
 }
+
+
+
