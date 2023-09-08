@@ -202,9 +202,12 @@ class _ArticlePageState extends State<ArticlePage> {
                                         decoration: BoxDecoration(
                                             color: Color(0xfff8f8f8),
                                             borderRadius:
-                                            BorderRadius.circular(10).r),
-                                        child: Icon(Icons
-                                            .add_photo_alternate_outlined),
+                                            BorderRadius.circular(10).r,
+                                          image: DecorationImage(
+                                            image: NetworkImage(widget.board.imageUrls![index]),
+                                            fit: BoxFit.cover,
+                                          )
+                                        ),
                                       ),
                                     ],
                                   );
