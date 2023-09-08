@@ -48,7 +48,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   String productStatus = '';
 
   final _marketArticleStatusList = ['sale'.tr(), 'sold-out'.tr()];
-  String? _marketArticleStatus = 'sale'.tr();
+  String? marketArticleStatus = 'sale'.tr();
 
 
   //List<Asset> images = [];
@@ -136,7 +136,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
       _titleController.text = widget.marketBoard!.title!;
       _priceController.text = widget.marketBoard!.price.toString();
       _contentController.text = widget.marketBoard!.content!;
-      productStatus = widget.marketBoard!.productStatus!;
+      productStatus = getProductStatusText(widget.marketBoard!.productStatus!);
+      marketArticleStatus = getStatusText(widget.marketBoard!.marketArticleStatus!);
+
       _images = widget.marketBoard!.imageUrls!.map((imageUrl) => XFile(imageUrl)).toList();
     }
   }
@@ -227,9 +229,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               child:_isEditMode
                                   ?
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: [
-
+                                  SizedBox(width: 5.w,),
                                   SvgPicture.asset(
                                     'assets/icon/icon_dropdown.svg',
                                     width: 4.r,
@@ -242,7 +244,6 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                       style: TextStyle(
                                         color: Color(0xff888888),
                                         fontSize: 14.spMin,
-
                                       ),
                                       items: _marketArticleStatusList.map((value) {
                                         return DropdownMenuItem(
@@ -256,10 +257,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                           value: value,
                                         );
                                       }).toList(),
-                                      value: _marketArticleStatus,
+                                      value: marketArticleStatus,
                                       onChanged: (value) {
                                         setState(() {
-                                          _marketArticleStatus = value!;
+                                          marketArticleStatus = value;
                                         });
                                       },
                                     ),
@@ -487,7 +488,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                 content: _contentController.text,
                                 price: int.parse(_priceController.text),
                                 productStatus: productStatus,
-                                marketArticleStatus: _marketArticleStatus,
+                                marketArticleStatus: marketArticleStatus,
                                 imageUrls: _images.map((image) => image.path).toList(),
                               );
 
@@ -499,23 +500,20 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                     'content': _contentController.text,
                                     'price': int.parse(_priceController.text),
                                     'productStatus': productStatus,
-                                    'marketArticleStatus':_marketArticleStatus,
+                                    'marketArticleStatus':marketArticleStatus,
                                     'imageUrls': _images.map((image) => image.path).toList(),
                                   };
+                                  print(marketArticleStatus);
 
                                   bool success = await APIs.updateMarketArticle(widget.marketBoard!.articleId ?? 0, updateData);
+                                  print('1');
+                                  print(updateData);
                                   Navigator.of(context).pop(); // 이전 페이지로 이동
 
 
                                   if (success) {
                                     print('게시물 수정 성공!!!');
-                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                                      builder: (BuildContext context) => MarketBoardPage(
-                                        screenArguments: widget.screenArguments,
-                                        memberDetails:widget.screenArguments.memberDetails!,
-                                        marketBoard:widget.marketBoard,
-                                      ),
-                                    ));
+                                    Navigator.of(context).pop();
                                   } else {
                                     print('게시물 수정 실패...');
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -568,5 +566,42 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
         _contentController.text.isNotEmpty &&
         productStatus.isNotEmpty &&
         _images.isNotEmpty;
+  }
+}
+String getProductStatusText(String? productStatus) {
+  List<String> whatStatus = [
+    'Brand_New'.tr(),
+    'Almost_New'.tr(),
+    'Slight_Defect'.tr(),
+    'Used'.tr(),
+  ];
+
+  switch (productStatus) {
+    case '새 것':
+      return whatStatus[0];
+    case '거의 새 것':
+      return whatStatus[1];
+    case '약간의 하자':
+      return whatStatus[2];
+    case '사용감 있음':
+      return whatStatus[3];
+    default:
+      return '';
+  }
+}
+
+String getStatusText(String? marketArticleStatus){
+  List<String> Status = [
+    'sale'.tr(),
+    'sold-out'.tr(),
+  ];
+
+  switch (marketArticleStatus) {
+    case '판매 중':
+      return Status[0];
+    case '판매 완료':
+      return Status[1];
+    default:
+      return '';
   }
 }
