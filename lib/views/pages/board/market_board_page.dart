@@ -21,15 +21,15 @@ import '../../../models/market_articles.dart';
 import '../../../models/message_model.dart';
 import '../../../providers/bookmarks_provider.dart';
 import '../../components/board_drawer_widget.dart';
+import '../../components/market_dialog_widget.dart';
 
 
 class MarketBoardPage extends StatefulWidget {
-  const MarketBoardPage({super.key, required this.screenArguments, required this.marketBoard, required this.index,});
+  const MarketBoardPage({super.key, required this.screenArguments, required this.marketBoard, required this.memberDetails});
   final ScreenArguments screenArguments;
   final MarketBoard? marketBoard;
-  final int index;
-
-  //final MemberDetails memberDetails;
+  final MemberDetails memberDetails;
+ // final int index;
 
 
 
@@ -47,17 +47,16 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
   void initState() {
     super.initState();
-    _fetchMarketArticles();
+    fetchMarketArticles();
 
     final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
     print(10);
     bookmarkProvider.getbookmarksCounts();
     print(11);
-    print('북마크될라나: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
-    print('북마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index] == 0}');
+
   }
 
-  Future<void> _fetchMarketArticles() async {
+  Future<void> fetchMarketArticles() async {
     try {
       var fetchedData = await APIs.getMarketArticles(); // API 호출 함수 호출
       print(fetchedData);
@@ -70,13 +69,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
         //  print('comment:${marketBoard.commentsCount}');
 
         }
-        /*final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
-        print(10);
-        bookmarkProvider.getbookmarksCounts();
-        print(11);
-        print('북마크될라나: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
-        print('북마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index] == 0}');
-        print('북마크개수:${bookmarkProvider.marketArticleBookmarkCount}');*/
 
       });
     } catch (error) {
@@ -313,29 +305,10 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                 ),
                               ),
                               InkWell(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return SimpleDialog(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              20.0),
-                                        ),
-                                        children: [
-                                          SimpleDialogOption(
-                                            child: Text('${'modify'.tr()}'),
-                                            onPressed: () {},
-                                          ),
-                                          SimpleDialogOption(
-                                            child: Text(
-                                                '${'chatting-report1'.tr()}'),
-                                            onPressed: () {},
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
+                                onTap: (){
+                                  showDialog(context: context, builder: (builder){
+                                    return MarketBoardDialog(context: context, marketBoard: marketBoard, memberDetails: widget.memberDetails, screenArguments: widget.screenArguments,);
+                                  });
                                 },
                                 child: SvgPicture.asset(
                                   'assets/icon/ICON_more.svg',
