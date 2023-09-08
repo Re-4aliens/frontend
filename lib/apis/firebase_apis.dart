@@ -27,11 +27,38 @@ class FirebaseAPIs {
     importance: Importance.min,
   );
 
-
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
 
-
     var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    var initialzationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    var initialzationSettingsIOS = DarwinInitializationSettings(
+      requestSoundPermission: true,
+      requestBadgePermission: true,
+      requestAlertPermission: true,
+    );
+
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    var initializationSettings = InitializationSettings(
+        android: initialzationSettingsAndroid, iOS: initialzationSettingsIOS);
+
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+
     var androidDetails = AndroidNotificationDetails(
       'channel_id', // 채널 ID
       'Channel name', // 채널 이름
@@ -40,7 +67,7 @@ class FirebaseAPIs {
     );
     var platformDetails = NotificationDetails(android: androidDetails);
 
-    var notification = await storage.read(key: 'notification');
+    var notification = await storage.read(key: 'notifications');
     print('알림 도착 ${message.data}');
 
     //상대방의 일괄 읽음 알림 (상대방이 채팅창 들어왔을 때의 알림)
@@ -71,7 +98,19 @@ class FirebaseAPIs {
 
       print('채팅 도착 ${message.data}');
       // 알림 표시
+      //다 대문자인가?
       if(json.decode(notification!)['chatNotification'] == true){
+        flutterLocalNotificationsPlugin.show(
+          0, // 알림 ID
+          '${message.data['title']}', // 제목
+          '${message.data['body']}', // 본문
+          platformDetails, // 알림 설정
+        );
+      }
+    }else if(message.data['type']=='ARTICLE_LIKE' || message.data['type']=='ARTICLE_COMMENT_REPLY' || message.data['type']=='ARTICLE_COMMENT'){
+      print('게시판 알림 도착 ${message.data}');
+      print('${json.decode(notification!)['chatNotification']}');
+      if(json.decode(notification!)['communityNotification'] == true){
         flutterLocalNotificationsPlugin.show(
           0, // 알림 ID
           '${message.data['title']}', // 제목

@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/animation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SplashPage extends StatefulWidget {
@@ -27,7 +28,6 @@ class _SplashPageState extends State<SplashPage> {
       });
     });
 
-
     //5초 후에 넘어가기
     Timer(Duration(milliseconds: 5000), () {
       Navigator.of(context)
@@ -35,7 +35,6 @@ class _SplashPageState extends State<SplashPage> {
       );
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

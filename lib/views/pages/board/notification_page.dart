@@ -1,18 +1,16 @@
 import 'dart:async';
+import 'dart:convert';
 
-import 'package:aliens/mockdatas/board_mockdata.dart';
-import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
-import 'package:aliens/repository/sql_message_database.dart';
-import 'package:aliens/views/pages/chatting/chatting_page.dart';
+import 'package:aliens/providers/noti_board_provider.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../mockdatas/market_comment_mockdata.dart';
+import 'package:provider/provider.dart';
+import '../../../models/board_model.dart';
 import '../../../models/countries.dart';
+import '../../../models/market_articles.dart';
 import '../../components/article_widget.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/info_article_widget.dart';
@@ -32,10 +30,18 @@ class NotificationBoardWidget extends StatefulWidget {
 }
 
 class _NotificationBoardWidgetState extends State<NotificationBoardWidget> {
-  bool isDrawerStart = false;
+  int page = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    final boardProvider = Provider.of<NotiBoardProvider>(context, listen: false);
+    boardProvider.getNotiArticles();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final boardProvider = Provider.of<NotiBoardProvider>(context);
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -65,40 +71,30 @@ class _NotificationBoardWidgetState extends State<NotificationBoardWidget> {
                       height: 18.h,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        isDrawerStart = !isDrawerStart;
-                      });
-                    },
-                    icon: Icon(Icons.format_list_bulleted_outlined),
-                    color: Colors.white,
-                  ),
                 ],
               )
             ],
           ),
         ),
-        body: isDrawerStart
-            ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,
-          onpressd: (){},
-        )
-            : Container(
+        body: Container(
           decoration: BoxDecoration(color: Colors.white),
-          child: ListView.builder(
-              itemCount: NotificationList.length,
+          child: boardProvider.loading || boardProvider.notiArticleList == null? Container(
+              alignment: Alignment.center,
+              child: Image(
+                  image: AssetImage(
+                      "assets/illustration/loading_01.gif"))):ListView.builder(
+              itemCount: boardProvider.notiArticleList!.length,
               itemBuilder: (context, index) {
-
                 var nationCode = '';
                 for (Map<String, String> country in countries) {
-                  if (country['name'] == NotificationList[index].member!.nationality.toString()) {
+                  if (country['name'] == boardProvider.notiArticleList![index].nationality.toString()) {
                     nationCode = country['code']!;
                     break;
                   }
                 }
                 return Column(
                   children: [
-                    NotificationWidget(board: NotificationList[index], nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!,),
+                    NotificationWidget(article: boardProvider.notiArticleList![index], nationCode: nationCode, screenArguments: widget.screenArguments, index: index),
                     Divider(
                       thickness: 1.h,
                       color: Color(0xffCECECE),
@@ -109,4 +105,5 @@ class _NotificationBoardWidgetState extends State<NotificationBoardWidget> {
         ),
     );
   }
+
 }
