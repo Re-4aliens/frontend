@@ -17,6 +17,7 @@ import '../../apis/apis.dart';
 import '../../models/board_model.dart';
 import '../../models/market_articles.dart';
 import '../pages/board/market_board_page.dart';
+import '../pages/board/market_posting_board_page.dart';
 
 
 class MarketBoardDialog extends StatelessWidget{
@@ -135,31 +136,15 @@ class MarketBoardDialog extends StatelessWidget{
                 //modify
                 InkWell(
                   onTap: (){
-                    showDialog(
-                        context: context,
-                        builder: (_) => FutureBuilder(
-                            future: APIs.deleteMarketArticle(marketBoard.articleId ?? 0),
-                            builder: (BuildContext context,
-                                AsyncSnapshot snapshot) {
-                              if (snapshot.hasData == false) {
-                                //받아오는 동안
-                                return Container(
-                                    child: Image(
-                                        image: AssetImage(
-                                            "assets/illustration/loading_01.gif")));
-                              } else{
-                                //받아온 후
-                                WidgetsBinding.instance.addPostFrameCallback((_) {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                });
-                                return Container(
-                                    child: Image(
-                                        image: AssetImage(
-                                            "assets/illustration/loading_01.gif")));
-                              }
-
-                            }));
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                        builder: (context) => MarketBoardPostPage(
+                      screenArguments: screenArguments,
+                      marketBoard: marketBoard,// 수정 모드에서 데이터 전달
+                    ),
+                    )
+                    );
                   },
                   child: Container(
                     padding: EdgeInsets.all(13).r,
