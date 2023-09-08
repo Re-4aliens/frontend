@@ -133,7 +133,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                 onTap: () {
                   Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "마켓게시판",)),
+                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "장터게시판", nationCode: '',)),
                   );
                 },
                 child: SvgPicture.asset(

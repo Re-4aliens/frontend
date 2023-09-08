@@ -133,7 +133,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
                 onTap: () {
                   Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "정보게시판",)),
+                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "정보게시판", nationCode: '',)),
                   );
                 },
                 child: SvgPicture.asset(
