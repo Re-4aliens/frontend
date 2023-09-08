@@ -7,6 +7,7 @@ import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:aliens/views/pages/board/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -120,12 +121,21 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
-              'assets/icon/icon_search.svg',
-              width: 25.r,
-              height: 25.r,
-              color: Colors.white,
-            ),
+            Padding(padding: EdgeInsets.all(8),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "패션게시판",)),
+                  );
+                },
+                child: SvgPicture.asset(
+                  'assets/icon/icon_search.svg',
+                  width: 25.r,
+                  height: 25.r,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ]
       ),
