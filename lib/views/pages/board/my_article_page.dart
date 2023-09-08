@@ -131,15 +131,6 @@ class _MyArticlePageState extends State<MyArticlePage> {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.all(8),
-              child: SvgPicture.asset(
-                'assets/icon/icon_search.svg',
-                width: 25.r,
-                height: 25.r,
-                color: Colors.white,
-              ),
-            ),
           ],
         ),
         body: isDrawerStart

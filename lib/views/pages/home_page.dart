@@ -28,6 +28,7 @@ import '../components/chatting_widget.dart';
 import '../components/matching_chatting_widget.dart';
 import '../components/setting_profile_widget.dart';
 import 'board/notification_page.dart';
+import 'board/search_page.dart';
 
 int selectedIndex = 0;
 bool isDrawerStart = false;
@@ -241,12 +242,22 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
-            'assets/icon/icon_search.svg',
-            width: 25.r,
-            height: 25.r,
-            color: Colors.white,
-          ),),
+          Padding(padding: EdgeInsets.all(8),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.push(context,
+                  MaterialPageRoute(
+                      builder: (context) => SearchPage(screenArguments: args, category: "패션게시판",)),
+                );
+              },
+              child: SvgPicture.asset(
+                'assets/icon/icon_search.svg',
+                width: 25.r,
+                height: 25.r,
+                color: Colors.white,
+              ),
+            ),
+          ),
         ] : null,
       ),
       bottomNavigationBar: BottomNavigationBar(
