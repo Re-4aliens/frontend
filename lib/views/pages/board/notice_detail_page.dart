@@ -103,22 +103,6 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.all(8),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(
-                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "패션게시판",)),
-                  );
-                },
-                child: SvgPicture.asset(
-                  'assets/icon/icon_search.svg',
-                  width: 25.r,
-                  height: 25.r,
-                  color: Colors.white,
-                ),
-              ),
-            ),
           ]
       ),
       body: isDrawerStart

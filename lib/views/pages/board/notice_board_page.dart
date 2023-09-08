@@ -121,22 +121,6 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.all(8),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(context,
-                    MaterialPageRoute(
-                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "공지게시판",)),
-                  );
-                },
-                child: SvgPicture.asset(
-                  'assets/icon/icon_search.svg',
-                  width: 25.r,
-                  height: 25.r,
-                  color: Colors.white,
-                ),
-              ),
-            ),
           ]
       ),
       body: isDrawerStart
