@@ -201,10 +201,13 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                             decoration: BoxDecoration(
                                 color: Color(0xfff8f8f8),
                                 borderRadius:
-                                BorderRadius.circular(10)),
+                                BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: NetworkImage(widget.board.imageUrls![index]!),
+                                fit: BoxFit.cover,
+                              )
+                            ),
                             padding: const EdgeInsets.all(25.0).r,
-                            child: Image.asset(
-                                'assets/icon/ICON_photo_1.png'),
                           ),
                         ],
                       );
@@ -238,7 +241,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                   Padding(
                     padding: EdgeInsets.only(left: 4, right: 15).w,
                     child:
-                      boardProvider.likeCounts![widget.index] == 0 ? Text('') : Text('${boardProvider.likeCounts![widget.index]}'),
+                      boardProvider.likeCounts![widget.index] == 0 || boardProvider.likeCounts == null? Text('') : Text('${boardProvider.likeCounts![widget.index]}'),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,
@@ -284,7 +287,9 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                       } else{
                         MarketBoard data = snapshot.data;
                         //받아온 후
-                        WidgetsBinding.instance!.addPostFrameCallback((_) {Navigator.push(
+                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                          Navigator.pop(context);
+                          Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data, productStatus: '', StatusText: '', index: widget.index,)),
                         );
