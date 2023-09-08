@@ -132,7 +132,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                 onTap: () {
                   Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "자유게시판",)),
+                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "자유게시판", nationCode: '',)),
                   );
                 },
                 child: SvgPicture.asset(
