@@ -131,7 +131,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                 onTap: () {
                   Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "패션게시판",)),
+                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "패션게시판", nationCode: '',)),
                   );
                 },
               child: SvgPicture.asset(

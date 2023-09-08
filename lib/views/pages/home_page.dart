@@ -267,7 +267,7 @@ class _HomePageState extends State<HomePage> {
               onTap: () {
                 Navigator.push(context,
                   MaterialPageRoute(
-                      builder: (context) => SearchPage(screenArguments: args, category: "전체게시판",)),
+                      builder: (context) => SearchPage(screenArguments: args, category: "전체게시판", nationCode: '',)),
                 );
               },
               child: SvgPicture.asset(
