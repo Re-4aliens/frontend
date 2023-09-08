@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _setNotification() async {
-    notification = await storage.read(key: 'notification');
+    notification = await storage.read(key: 'notifications');
 
     //알림 허용 팝업을 띄움
 
@@ -66,11 +66,12 @@ class _HomePageState extends State<HomePage> {
       }else{
         //true로 설정
         await storage.write(
-          key: 'notification',
+          key: 'notifications',
           value: jsonEncode({
             'allNotification': true,
             'matchingNotification': true,
             'chatNotification': true,
+            'communityNotification' : true,
           }),
         );
       }
@@ -81,11 +82,12 @@ class _HomePageState extends State<HomePage> {
       }else{
         //false로 설정
         await storage.write(
-          key: 'notification',
+          key: 'notifications',
           value: jsonEncode({
             'allNotification': false,
             'matchingNotification': false,
             'chatNotification': false,
+            'communityNotification' : false,
           }),
         );
       }
