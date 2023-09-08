@@ -126,7 +126,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
               padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
               width: 19.0,
               height: 19.0,
-              decoration: boardProvider.isReadList[widget.index] == 'true'
+              decoration: boardProvider.isReadList[widget.index] == true
                   ? BoxDecoration()
                   : BoxDecoration(
                       color: Color(0xFFFFE68D),
