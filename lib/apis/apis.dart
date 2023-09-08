@@ -1630,6 +1630,9 @@ class APIs {
       request.fields['content'] = marketArticle.content!;
       request.fields['price'] = marketArticle.price.toString();
       request.fields['productStatus'] = marketArticle.productStatus!;
+      request.fields['marketArticleStatus'] = marketArticle.marketArticleStatus!;
+
+
 
       // 이미지 파일 필드 추가
       if (marketArticle.imageUrls != null &&
@@ -1650,11 +1653,14 @@ class APIs {
       var response = await request.send();
 
       // 성공
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         print('상품 판매글 생성');
+        print(await response.stream.bytesToString());
         return true;
       } else {
         final responseBody = await response.stream.bytesToString();
+        print(await response.stream.bytesToString());
+
         final errorCode = json.decode(responseBody)['code'];
 
         if (errorCode == 'AT-C-002') {
@@ -1676,14 +1682,16 @@ class APIs {
   }
 
   /*특정 판매글 수정*/
-  static Future<String> updateMarketArticle(int articleId,
-      Map<String, dynamic> updateData) async {
+
+  static Future<bool> updateMarketArticle(int articleId, Map<String, dynamic> updateData) async {
     try {
+      print('Starting updateMarketArticle with articleId: $articleId');
+
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
-      final url = Uri.parse(
-          'http://3.34.2.246:8080/api/v2/market-articles/$articleId');
+      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$articleId');
+      print('Update Data: $updateData');
 
       final response = await http.patch(
         url,
@@ -1696,8 +1704,12 @@ class APIs {
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        final message = responseBody['message'];
-        return message;
+        print('Successful Response Body: $responseBody');
+        return true;
+      } else if (response.statusCode == 500) {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        print('500 Error Response Body: $responseBody');
+        return false;
       } else {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final errorCode = responseBody['code'];
@@ -1729,6 +1741,7 @@ class APIs {
         url,
         headers: {
           'Authorization': 'Bearer $accessToken',
+          'Content-Type': 'application/json',
         },
       );
 
