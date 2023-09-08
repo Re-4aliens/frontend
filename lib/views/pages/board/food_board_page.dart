@@ -130,7 +130,7 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
                 onTap: () {
                   Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "패션게시판",)),
+                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "음식게시판",)),
                   );
                 },
                 child: SvgPicture.asset(

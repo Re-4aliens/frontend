@@ -84,14 +84,60 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text(boardCategory, style: TextStyle(fontSize: 18.spMin),),
-          backgroundColor: Color(0xff7898ff),
+          leading: IconButton(
+            onPressed: () {
+              setState(() {
+                Navigator.of(context).pop();
+              });
+            },
+            icon: SvgPicture.asset(
+              'assets/icon/icon_back.svg',
+              color: Color(0xff616161),
+              width: 24.w,
+              height: MediaQuery.of(context).size.height * 0.02,
+            ),
+          ),
+          //toolbarHeight: 90,
+          title: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Color(0xffEFEFEF),
+            ),
+            padding: EdgeInsets.only(left: 10.w),
+            child: TextFormField(
+              textInputAction: TextInputAction.go,
+              decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'search1'.tr()
+              ),
+              onFieldSubmitted: (value) {
+                print(value);
+              },
+            ),
+          ),
+          backgroundColor: Colors.white,
           elevation: 0,
         ),
-        body: Column(
-            children: [
-
-        ]),
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  'assets/icon/icon_search.svg',
+                  width: 60.r,
+                  height: 60.r,
+                  color: Color(0xffc1c1c1),
+                ),
+                Text('search2'.tr(),
+                style: TextStyle(
+                  fontSize: 15.spMin,
+                  color: Color(0xff888888),
+                  fontWeight: FontWeight.bold
+                ),
+                ),
+              ]),
+        ),
       );
   }
 }

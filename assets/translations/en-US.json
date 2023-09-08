@@ -309,6 +309,9 @@
   "Slight_Defect": "SLIGHT_DEFECT",
   "Used": "USED",
   "sale": "SELL",
-  "sold-out":"SOLD_OUT"
+  "sold-out":"SOLD_OUT",
+
+  "search1": "Type Keyword",
+  "search2": "Search for posts!"
 
 }
