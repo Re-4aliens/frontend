@@ -5,6 +5,7 @@ import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/repository/board_provider.dart';
 import 'package:aliens/repository/sql_message_database.dart';
+import 'package:aliens/views/pages/board/search_page.dart';
 import 'package:aliens/views/components/article_widget.dart';
 import 'package:aliens/views/pages/board/article_page.dart';
 import 'package:aliens/views/pages/board/article_writing_page.dart';
@@ -126,12 +127,21 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                 ),
               ),
             ),
-            Padding(padding: EdgeInsets.all(8), child: SvgPicture.asset(
-              'assets/icon/icon_search.svg',
-              width: 25.r,
-              height: 25.r,
-              color: Colors.white,
-            ),
+            Padding(padding: EdgeInsets.all(8),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "자유게시판",)),
+                  );
+                },
+                child: SvgPicture.asset(
+                  'assets/icon/icon_search.svg',
+                  width: 25.r,
+                  height: 25.r,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ],
         ),
