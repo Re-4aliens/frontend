@@ -1,6 +1,7 @@
 import 'package:aliens/providers/bookmarks_provider.dart';
 import 'package:aliens/providers/comment_provider.dart';
 import 'package:aliens/providers/market_comment_provider.dart';
+import 'package:aliens/providers/noti_board_provider.dart';
 import 'package:aliens/repository/board_provider.dart';
 import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/board/market_notice_page.dart';
@@ -97,7 +98,8 @@ void main() async {
       ChangeNotifierProvider(create: (_) => BoardProvider()),
       ChangeNotifierProvider(create: (_) => CommentProvider()),
       ChangeNotifierProvider(create: (_) => MarketCommentProvider()),
-      ChangeNotifierProvider(create: (_) => BookmarksProvider())
+      ChangeNotifierProvider(create: (_) => BookmarksProvider()),
+      ChangeNotifierProvider(create: (_) => NotiBoardProvider())
     ],
     child: EasyLocalization(
       path: 'assets/translations',
