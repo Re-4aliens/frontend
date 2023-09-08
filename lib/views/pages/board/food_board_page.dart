@@ -50,6 +50,7 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
   }
   @override
   void dispose() {
+    super.dispose();
     _scrollController.dispose();
   }
 

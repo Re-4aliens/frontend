@@ -51,6 +51,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
   }
   @override
   void dispose() {
+    super.dispose();
     _scrollController.dispose();
   }
 
