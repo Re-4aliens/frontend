@@ -20,13 +20,13 @@ import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../components/button.dart';
+import 'market_board_page.dart';
 
 
 class MarketBoardPostPage extends StatefulWidget {
-
-  const MarketBoardPostPage({super.key,required this.screenArguments, this.marketBoard, });
-final ScreenArguments screenArguments;
-final MarketBoard? marketBoard;
+  const MarketBoardPostPage({super.key,required this.screenArguments, this.marketBoard});
+  final ScreenArguments screenArguments;
+  final MarketBoard? marketBoard;
 
 
   @override
@@ -36,6 +36,7 @@ final MarketBoard? marketBoard;
 class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
+  bool _isEditMode = false; //수정여부
 
   TextEditingController _titleController = TextEditingController();
   TextEditingController _priceController = TextEditingController();
@@ -45,6 +46,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     'Brand_New'.tr(), 'Almost_New'.tr(), 'Slight_Defect'.tr(), 'Used'.tr()
   ];
   String productStatus = '';
+
+  final _marketArticleStatusList = ['sale'.tr(), 'sold-out'.tr()];
+  String? _marketArticleStatus = 'sale'.tr();
+
 
   //List<Asset> images = [];
 
@@ -119,6 +124,20 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
         }
 
       });
+    }
+  }
+
+  void initState() {
+    super.initState();
+
+    // 수정 모드인 경우, 전달된 게시물 데이터 초기화
+    if (widget.marketBoard != null) {
+      _isEditMode = true;
+      _titleController.text = widget.marketBoard!.title!;
+      _priceController.text = widget.marketBoard!.price.toString();
+      _contentController.text = widget.marketBoard!.content!;
+      productStatus = widget.marketBoard!.productStatus!;
+      _images = widget.marketBoard!.imageUrls!.map((imageUrl) => XFile(imageUrl)).toList();
     }
   }
 
@@ -205,27 +224,66 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                 border: Border.all(color: Color(0xFFEBEBEB)),
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: Row(
+                              child:_isEditMode
+                                  ?
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                   SizedBox(width: 15.w),
+                                  SizedBox(width: 15.w,),
                                   SvgPicture.asset(
                                     'assets/icon/icon_dropdown.svg',
                                     width: 4.r,
                                     height: 4.r,
                                     color: Color(0xff888888),
                                   ),
-                                  Text('sale'.tr(),
-                                    style: TextStyle(
-                                      color: Color(0xff888888),
-                                      fontSize:14.spMin
+                                  DropdownButtonHideUnderline(
+                                    child: DropdownButton(
+                                      icon: const SizedBox.shrink(),
+                                      style: TextStyle(
+                                        color: Color(0xff888888),
+                                        fontSize: 14.spMin,
+
+                                      ),
+                                      items: _marketArticleStatusList.map((value) {
+                                        return DropdownMenuItem(
+                                          child: Text(
+                                            value,
+                                            style: TextStyle(
+                                              fontSize: 14.spMin,
+                                              color: Color(0xff888888),
+                                            ),
+                                          ),
+                                          value: value,
+                                        );
+                                      }).toList(),
+                                      value: _marketArticleStatus,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          _marketArticleStatus = value!;
+                                        });
+                                      },
                                     ),
                                   ),
-                                  SizedBox(width: 15.w),
                                 ],
+                              )
+                              :  Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SvgPicture.asset(
+                                      'assets/icon/icon_dropdown.svg',
+                                      width: 4.r,
+                                      height: 4.r,
+                                      color: Color(0xff888888),
+                                    ),
+                                    Text('sale'.tr(),
+                                      style: TextStyle(
+                                          color: Color(0xff888888),
+                                          fontSize:14.spMin
+                                      ),
                               ),
-                            )
-                          ],
+
+                            ])
+                            )],
                         ), //제목
                         Divider(thickness: 1.h,color:Color(0xffEBEBEB)),
                         Row(
@@ -429,26 +487,65 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                 content: _contentController.text,
                                 price: int.parse(_priceController.text),
                                 productStatus: productStatus,
+                                marketArticleStatus: _marketArticleStatus,
                                 imageUrls: _images.map((image) => image.path).toList(),
                               );
 
                               try {
-                                bool success = await APIs.createMarketArticle(marketArticle);
+                                if (_isEditMode) {
+                                  // 수정 모드인 경우 게시물 업데이트
+                                  Map<String, dynamic> updateData = {
+                                    'title': _titleController.text,
+                                    'content': _contentController.text,
+                                    'price': int.parse(_priceController.text),
+                                    'productStatus': productStatus,
+                                    'marketArticleStatus':_marketArticleStatus,
+                                    'imageUrls': _images.map((image) => image.path).toList(),
+                                  };
 
-                                if (success) {
-                                  print('게시물 생성 성공!!!');
+                                  bool success = await APIs.updateMarketArticle(widget.marketBoard!.articleId ?? 0, updateData);
                                   Navigator.of(context).pop(); // 이전 페이지로 이동
-                                } else {
-                                  print('게시물 생성 실패...');
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Fail'),
-                                      duration: Duration(seconds: 3),
-                                    ),
-                                  );
+
+
+                                  if (success) {
+                                    print('게시물 수정 성공!!!');
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                      builder: (BuildContext context) => MarketBoardPage(
+                                        screenArguments: widget.screenArguments,
+                                        memberDetails:widget.screenArguments.memberDetails!,
+                                        marketBoard:widget.marketBoard,
+                                      ),
+                                    ));
+                                  } else {
+                                    print('게시물 수정 실패...');
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Fail'),
+                                        duration: Duration(seconds: 3),
+                                      ),
+                                    );
+                                  }
+                                } else
+                                {
+                                  // 생성 모드인 경우 게시물 생성
+                                  bool success = await APIs.createMarketArticle(marketArticle);
+                                  Navigator.of(context).pop(); // 이전 페이지로 이동
+
+                                  if (success) {
+                                    print('게시물 생성 성공!!!');
+                                    Navigator.of(context).pop(); // 이전 페이지로 이동
+                                  } else {
+                                    print('게시물 생성 실패...');
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('Fail'),
+                                        duration: Duration(seconds: 3),
+                                      ),
+                                    );
+                                  }
                                 }
                               } catch (error) {
-                                print('Error creating market article: $error');
+                                print('Error: $error');
                               }
                             }
                           },
