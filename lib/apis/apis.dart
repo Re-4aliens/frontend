@@ -2047,8 +2047,8 @@ class APIs {
 
    */
 
-  static Future<List<Board>> getMyArticles() async {
-    var _url = 'http://3.34.2.246:8080/api/v2/articles'; //mocksever
+  static Future<List<Board>> getMyArticles(int page) async {
+    var _url = 'http://3.34.2.246:8080/api/v2/articles/member?page=${page}&size=10&sort=createdAt,desc'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -2069,8 +2069,7 @@ class APIs {
       print(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> body = json.decode(
           utf8.decode(response.bodyBytes))['data'];
-      List<dynamic> value = body.map((dynamic item) => Board.fromJson(item)).toList();
-      return List.from(value.reversed);
+      return body.map((dynamic item) => Board.fromJson(item)).toList();
 
 
       //fail
@@ -2096,9 +2095,8 @@ class APIs {
 
    */
 
-  static Future<List<Board>> getCommentArticles() async {
-    //TODO url 수정
-    var _url = 'http://3.34.2.246:8080/api/v2/articles'; //mocksever
+  static Future<List<Board>> getCommentArticles(int page) async {
+    var _url = 'http://3.34.2.246:8080/api/v2/articles/member/comment?page=${page}&size=10&sort=createdAt,desc'; //mocksever
 
     //토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
@@ -2119,8 +2117,7 @@ class APIs {
       print(json.decode(utf8.decode(response.bodyBytes)));
       List<dynamic> body = json.decode(
           utf8.decode(response.bodyBytes))['data'];
-      List<dynamic> value = body.map((dynamic item) => Board.fromJson(item)).toList();
-      return List.from(value.reversed);
+      return body.map((dynamic item) => Board.fromJson(item)).toList();
 
 
       //fail
