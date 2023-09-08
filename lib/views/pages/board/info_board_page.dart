@@ -52,6 +52,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
   }
   @override
   void dispose() {
+    super.dispose();
     _scrollController.dispose();
   }
 

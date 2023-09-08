@@ -156,7 +156,7 @@ class _ArticleWidgetState extends State<ArticleWidget>{
                 Padding(
                   padding: EdgeInsets.only(left: 4, right: 15).w,
                   child:
-                  boardProvider.likeCounts![widget.index] == 0 ? Text('') : Text('${ boardProvider.likeCounts![widget.index]}'),
+                  boardProvider.likeCounts![widget.index] == 0 || boardProvider.likeCounts == null? Text('') : Text('${ boardProvider.likeCounts![widget.index]}'),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0).r,
