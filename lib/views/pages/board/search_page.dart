@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
             final board = searchResults[index];
             return TotalArticleWidget(
               board: board,
-              nationCode: widget.nationCode,
+              nationCode: board.member!.nationality.toString(),
               screenArguments: widget.screenArguments,
               index: index,
             );
