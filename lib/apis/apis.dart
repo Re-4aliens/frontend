@@ -1653,7 +1653,7 @@ class APIs {
       var response = await request.send();
 
       // 성공
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         print('상품 판매글 생성');
         print(await response.stream.bytesToString());
         return true;
@@ -1682,13 +1682,16 @@ class APIs {
   }
 
   /*특정 판매글 수정*/
+
   static Future<bool> updateMarketArticle(int articleId, Map<String, dynamic> updateData) async {
     try {
+      print('Starting updateMarketArticle with articleId: $articleId');
+
       var jwtToken = await storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
-      final url = Uri.parse(
-          'http://3.34.2.246:8080/api/v2/market-articles/$articleId');
+      final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$articleId');
+      print('Update Data: $updateData');
 
       final response = await http.patch(
         url,
@@ -1701,14 +1704,13 @@ class APIs {
 
       if (response.statusCode == 200) {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        print('404 Error Response Body: $responseBody');
-        return false;
+        print('Successful Response Body: $responseBody');
+        return true;
       } else if (response.statusCode == 500) {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         print('500 Error Response Body: $responseBody');
         return false;
-      }
-        else {
+      } else {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final errorCode = responseBody['code'];
 
