@@ -10,6 +10,7 @@ import 'package:aliens/repository/sql_message_database.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -467,7 +468,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                               image: AssetImage(
                                                   "assets/illustration/loading_01.gif")));
                                     }else {
-                                      return AlertDialog(
+                                      return CupertinoAlertDialog(
                                         title: Text('업로드 실패'),
                                       );
                                     }
