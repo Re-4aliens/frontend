@@ -28,6 +28,7 @@ import '../models/message_model.dart';
 import '../models/notification_article_model.dart';
 import '../models/partner_model.dart';
 import '../models/screenArgument.dart';
+import '../util/image_util.dart';
 
 class APIs {
   static final storage = FlutterSecureStorage();
@@ -732,8 +733,7 @@ class APIs {
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     // MultipartFile로 변환
-
-    var profileImage = await http.MultipartFile.fromPath(
+    var profileImage = await ImageUtil.compressImageToMultipartFile(
       'profileImage',
       profileImageFile.path,
     );
