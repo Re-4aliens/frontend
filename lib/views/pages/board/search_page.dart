@@ -78,11 +78,19 @@ class _SearchPageState extends State<SearchPage> {
           itemCount: searchResults.length,
           itemBuilder: (context, index) {
             final board = searchResults[index];
-            return TotalArticleWidget(
-              board: board,
-              nationCode: board.member!.nationality.toString(),
-              screenArguments: widget.screenArguments,
-              index: index,
+            return Column(
+              children: [
+                TotalArticleWidget(
+                  board: board,
+                  nationCode: board.member!.nationality.toString(),
+                  screenArguments: widget.screenArguments,
+                  index: index,
+                ),
+                Divider(
+                  thickness: 2,
+                  color: Color(0xffE5EBFF),
+                )
+              ],
             );
           });
     }
@@ -90,28 +98,6 @@ class _SearchPageState extends State<SearchPage> {
 
 
 
-  @override
-  /*void initState() {
-    switch (widget.category){
-      case '자유게시판':
-        boardCategory = 'free-posting'.tr();
-        break;
-      case '음식게시판':
-        boardCategory = 'food'.tr();
-        break;
-      case '음악게시판':
-        boardCategory = 'music'.tr();
-        break;
-      case '패션게시판':
-        boardCategory = 'fashion'.tr();
-        break;
-      case '게임게시판':
-        boardCategory = 'game'.tr();
-        break;
-      default:
-    }
-
-  }*/
 
   @override
   Widget build(BuildContext context) {
