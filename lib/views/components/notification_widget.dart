@@ -77,7 +77,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(right: 10),
                     child: Text(
-                      '${widget.screenArguments.memberDetails!.name}/${widget.nationCode}',
+                      '${widget.article.name}/${widget.nationCode}',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16.spMin),
@@ -172,14 +172,10 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                           boardProvider.putReadValue(widget.index, widget.article.personalNoticeId!);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => MarketDetailPage(
-                                  screenArguments: widget.screenArguments,
-                                  marketBoard: data,
-                                  productStatus: '',
-                                  StatusText: '',
-                                  index: widget.index, //수정 필요
-                                )),
+                            MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data,
+                              productStatus: getProductStatusText(data.productStatus),
+                              StatusText: getStatusText(data.marketArticleStatus),
+                              index: -1,)),
                           );
                         }
                         //정보 게시판 연결
