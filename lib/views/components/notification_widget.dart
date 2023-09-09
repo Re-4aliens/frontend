@@ -77,7 +77,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                     alignment: Alignment.centerLeft,
                     padding: EdgeInsets.only(right: 10),
                     child: Text(
-                      '${widget.screenArguments.memberDetails!.name}/${widget.nationCode}',
+                      '${widget.article.name}/${widget.nationCode}',
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16.spMin),
