@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -119,7 +120,7 @@ class FirebaseAPIs {
         await flutterLocalNotificationsPlugin.show(
           0, // 알림 ID
           'Friendship', // 제목
-          '${message.data['name']}님이 회원님의 게시글에 좋아요를 눌렀습니다.', // 본문
+          '${message.data['name']}님이 회원님의 게시글을 좋아합니다.', // 본문
           platformDetails, // 알림 설정
         );
       }
