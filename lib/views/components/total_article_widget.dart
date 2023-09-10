@@ -150,7 +150,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                         context: context,
                         builder: (builder) {
                           return BoardDialog(
-                            context: context, board: widget.board, memberDetails: widget.screenArguments.memberDetails!,
+                            context: context, board: widget.board, memberDetails: widget.screenArguments.memberDetails!,boardCategory: "전체게시판",
                           );
                         });
                   },

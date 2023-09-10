@@ -154,7 +154,7 @@ class _ArticlePageState extends State<ArticlePage> {
                         InkWell(
                           onTap: (){
                             showDialog(context: context, builder: (builder){
-                              return BoardDialog(context: context, board: widget.board, memberDetails: widget.memberDetails);
+                              return BoardDialog(context: context, board: widget.board, memberDetails: widget.memberDetails, boardCategory: "",);
                             });
                           },
                           child: Padding(

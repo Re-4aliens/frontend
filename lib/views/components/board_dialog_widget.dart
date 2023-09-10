@@ -21,8 +21,9 @@ class BoardDialog extends StatelessWidget{
   final BuildContext context;
   final Board board;
   final MemberDetails memberDetails;
+  final String boardCategory;
 
-  const BoardDialog({Key? key, required this.context, required this.board, required this.memberDetails}) : super(key:key);
+  const BoardDialog({Key? key, required this.context, required this.board, required this.memberDetails, required this.boardCategory}) : super(key:key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +72,8 @@ class BoardDialog extends StatelessWidget{
                 ),
               ),
             ),
+
+            SizedBox(height: 25.h,),
             memberDetails.email == board.member!.email ? InkWell(
               onTap: (){
                 showDialog(
@@ -90,7 +93,22 @@ class BoardDialog extends StatelessWidget{
                             WidgetsBinding.instance!.addPostFrameCallback((_) {
                               Navigator.pop(context);
                               Navigator.pop(context);
-                              boardProvider.getArticles(board.category!);
+                              switch (boardCategory) {
+                                case '전체게시판':
+                                  boardProvider.getAllArticles();
+                                  break;
+                                case '일반게시판':
+                                  boardProvider.getArticles(board.category!);
+                                  break;
+                                case '나의 게시글':
+                                  boardProvider.getArticles(board.category!);
+                                  break;
+                                case '좋아하는 게시글':
+                                  boardProvider.getLikedList();
+                                  break;
+                                default:
+                              }
+                              //boardProvider.getArticles(board.category!);
                             });
                             return Container(
                                 child: Image(
@@ -177,7 +195,22 @@ class BoardDialog extends StatelessWidget{
                           WidgetsBinding.instance!.addPostFrameCallback((_) {
                             Navigator.pop(context);
                             Navigator.pop(context);
-                            boardProvider.getArticles(board.category!);
+                            switch (boardCategory) {
+                              case '전체게시판':
+                                boardProvider.getAllArticles();
+                                break;
+                              case '일반게시판':
+                                boardProvider.getArticles(board.category!);
+                                break;
+                              case '나의 게시글':
+                                boardProvider.getArticles(board.category!);
+                                break;
+                              case '좋아하는 게시글':
+                                boardProvider.getLikedList();
+                                break;
+                              default:
+                            }
+                            //boardProvider.getArticles(board.category!);
                           });
                           return Container(
                               child: Image(
