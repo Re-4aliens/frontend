@@ -138,7 +138,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
                         context: context,
                         builder: (builder) {
                           return BoardDialog(
-                            context: context, board: widget.board, memberDetails: widget.memberDetails,
+                            context: context, board: widget.board, memberDetails: widget.memberDetails, boardCategory: "좋아하는 게시글",
                           );
                         });
                   },

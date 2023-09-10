@@ -102,11 +102,14 @@ class HomeWidget extends StatelessWidget{
 
                           recognizer: new TapGestureRecognizer()..onTap = () {
                             showDialog(context: context, builder: (context){
-                              return InteractiveViewer(
-                                child: Image.asset(
-                                    EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
-                                    'assets/character/${screenArguments.memberDetails!.mbti}_ko.PNG' :
-                                    'assets/character/${screenArguments.memberDetails!.mbti}_en.PNG'
+                              return GestureDetector(
+                                onTap: (){Navigator.pop(context);},
+                                child: InteractiveViewer(
+                                  child: Image.asset(
+                                      EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR") ?
+                                      'assets/character/${screenArguments.memberDetails!.mbti}_ko.PNG' :
+                                      'assets/character/${screenArguments.memberDetails!.mbti}_en.PNG'
+                                  ),
                                 ),
                               );
                             });
