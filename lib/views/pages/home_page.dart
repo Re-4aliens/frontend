@@ -13,6 +13,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 import '../../../apis/apis.dart';
 import '../../main.dart';
@@ -48,11 +49,97 @@ class _HomePageState extends State<HomePage> {
   static final storage = FlutterSecureStorage();
   dynamic notification = null;
   dynamic inAppNotification = null;
+  StreamSubscription<RemoteMessage>? _messageStreamSubscription;
 
   @override
   void initState() {
     //알림 설정
     _setNotification();
+
+    _messageStreamSubscription =
+        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+
+          print('앱 내부 알림 도착${message.data}');
+
+          var inAppNotification = await storage.read(key: 'inAppNotification');
+
+          if(message.data['type']=='ARTICLE_LIKE'){
+
+            print(json.decode(inAppNotification!)['inAppNotification']);
+            if(json.decode(inAppNotification!)['inAppNotification'] == true){
+              showOverlayNotification((context) {
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  child: SafeArea(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
+                      child: ListTile(
+                        title: Text('Friendship'),
+                        subtitle: Text('${message.data['name']}${'liked noti'.tr()}'),
+                        trailing: IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () {
+                              OverlaySupportEntry.of(context)?.dismiss();
+                            }),
+                      ),
+                    ),
+                  ),
+                );
+              }, duration: Duration(milliseconds: 4000));
+
+            }
+          }else if(message.data['type']=='ARTICLE_COMMENT_REPLY'){
+
+            if(json.decode(inAppNotification!)['inAppNotification'] == true){
+              showOverlayNotification((context) {
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  child: SafeArea(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
+                      child: ListTile(
+                        title: Text('Friendship'),
+                        subtitle: Text('${message.data['name']}${'reply'.tr()}'),
+                        trailing: IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () {
+                              OverlaySupportEntry.of(context)?.dismiss();
+                            }),
+                      ),
+                    ),
+                  ),
+                );
+              }, duration: Duration(milliseconds: 4000));
+
+            }
+          }else if(message.data['type']=='ARTICLE_COMMENT'){
+            if(json.decode(inAppNotification!)['inAppNotification'] == true){
+
+              showOverlayNotification((context) {
+                return Card(
+                  margin: const EdgeInsets.symmetric(horizontal: 4),
+                  child: SafeArea(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
+                      child: ListTile(
+                        title: Text('Friendship'),
+                        subtitle: Text('${message.data['name']}${'comment'.tr()}'),
+                        trailing: IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () {
+                              OverlaySupportEntry.of(context)?.dismiss();
+                            }),
+                      ),
+                    ),
+                  ),
+                );
+              }, duration: Duration(milliseconds: 4000));
+
+            }
+          }
+
+        }
+        );
   }
 
   _setNotification() async {
