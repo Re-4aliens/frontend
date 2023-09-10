@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -29,6 +30,8 @@ class FirebaseAPIs {
 
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
 
+
+    await Firebase.initializeApp();
     var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
     var initialzationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -65,7 +68,11 @@ class FirebaseAPIs {
       priority: Priority.high,
       importance: Importance.max,
     );
-    var platformDetails = NotificationDetails(android: androidDetails);
+    var platformDetails = NotificationDetails(android: androidDetails,iOS: DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: true,
+      presentSound: true,
+    ),);
 
     var notification = await storage.read(key: 'notifications');
     print('알림 도착 ${message.data}');
@@ -107,14 +114,32 @@ class FirebaseAPIs {
           platformDetails, // 알림 설정
         );
       }
-    }else if(message.data['type']=='ARTICLE_LIKE' || message.data['type']=='ARTICLE_COMMENT_REPLY' || message.data['type']=='ARTICLE_COMMENT'){
-      print('게시판 알림 도착 ${message.data}');
-      print('${json.decode(notification!)['chatNotification']}');
+    }else if(message.data['type']=='ARTICLE_LIKE'){
+
+      if(json.decode(notification!)['communityNotification'] == true){
+        await flutterLocalNotificationsPlugin.show(
+          0, // 알림 ID
+          'Friendship', // 제목
+          '${message.data['name']}님이 회원님의 게시글을 좋아합니다.', // 본문
+          platformDetails, // 알림 설정
+        );
+      }
+    }else if(message.data['type']=='ARTICLE_COMMENT_REPLY'){
+
       if(json.decode(notification!)['communityNotification'] == true){
         flutterLocalNotificationsPlugin.show(
           0, // 알림 ID
-          '${message.data['title']}', // 제목
-          '${message.data['body']}', // 본문
+          'Friendship', // 제목
+          '${message.data['name']}님이 회원님의 댓글에 답글을 달았습니다.', // 본문
+          platformDetails, // 알림 설정
+        );
+      }
+    }else if(message.data['type']=='ARTICLE_COMMENT'){
+      if(json.decode(notification!)['communityNotification'] == true){
+        flutterLocalNotificationsPlugin.show(
+          0, // 알림 ID
+          'Friendship', // 제목
+          '${message.data['name']}님이 회원님의 게시글에 댓글을 달았습니다.', // 본문
           platformDetails, // 알림 설정
         );
       }

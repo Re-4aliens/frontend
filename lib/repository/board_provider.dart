@@ -80,18 +80,19 @@ class BoardProvider with ChangeNotifier {
   }
 
   addPost(Board _board) async {
+    bool value = false;
     try {
-      await APIs.postArticles(_board);
+      value = await APIs.postArticles(_board);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        await APIs.postArticles(_board);
+        value = await APIs.postArticles(_board);
       } else {
         return false;
       }
     }
 
-    return true;
+    return value;
   }
 
 

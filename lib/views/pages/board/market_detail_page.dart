@@ -56,6 +56,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   bool isNestedComments = false;
   int parentsCommentId = -1;
   bool showLoading = false;
+  int bookmark = -1;
 
   void sendComment() async {
     updateUi();
@@ -85,7 +86,9 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     super.initState();
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context, listen: false);
     marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
-
+    if(widget.index == -1) {
+      bookmark = widget.marketBoard.marketArticleBookmarkCount!;
+    };
 /*
     final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
     bookmarkProvider.getbookmarksCounts();*/
@@ -335,9 +338,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             Row(
                               children: [
                                 InkWell(
-                                  onTap: (){
-                                    print('부크마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
-                                    bookmarkProvider.addBookmarks(widget.marketBoard.articleId!, widget.index);
+                                  onTap: () async {
+                                    //print('부크마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
+                                    if(widget.index == -1){
+                                      bookmark = await APIs.marketbookmark(widget.marketBoard.articleId!);
+                                    }else{
+                                      bookmarkProvider.addBookmarks(widget.marketBoard.articleId!, widget.index);
+                                    }
+                                    setState(() {});
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(4.0).r,
@@ -349,13 +357,18 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                     ),
                                   ),
                                 ),
+                                widget.index == -1 ?
+                                Padding(
+                                  padding: EdgeInsets.only(left: 4, right: 15).r,
+                                  child:
+                                  Text('${bookmark}',style: TextStyle(fontSize: 16.spMin,color: Color(0xffc1c1c1))),
+                                ):
                                 Padding(
                                   padding: EdgeInsets.only(left: 4, right: 15).r,
                                   child:
                                   bookmarkProvider.marketArticleBookmarkCount![widget.index] == 0
                                       ? Text('0',style: TextStyle(fontSize: 16.spMin,color: Color(0xffc1c1c1)))
                                       : Text('${bookmarkProvider.marketArticleBookmarkCount![widget.index]}',style: TextStyle(fontSize: 16.spMin,color: Color(0xffc1c1c1))),
-
                                   ),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0).r,
