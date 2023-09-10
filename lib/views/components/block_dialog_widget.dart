@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:web_socket_channel/status.dart';
 
 import '../../apis/apis.dart';
@@ -29,12 +30,12 @@ class _BlockDialogState extends State<BlockDialog>{
   @override
   Widget build(BuildContext context) {
     if(Platform.isAndroid)
-      return androidReport();
+      return androidBlock();
     else
-      return androidReport();
+      return iosBlock();
   }
 
-  Widget androidReport(){
+  Widget androidBlock(){
     return AlertDialog(
       title: Text('chatting-block2'.tr(), style: TextStyle(
         fontWeight: FontWeight.bold
@@ -54,6 +55,63 @@ class _BlockDialogState extends State<BlockDialog>{
           }
         }, child: Text('chatting-block1'.tr(), style: TextStyle(color: Color(0xffFF4646)),)),
       ],
+    );
+  }
+
+  Widget iosBlock(){
+    return Dialog(
+      elevation: 0,
+      backgroundColor: Color(0xffffffff),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0).w,
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20).r,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(height: 10,),
+            Text('chatting-block2'.tr(), style: TextStyle(
+                fontWeight: FontWeight.bold
+            ),),
+            SizedBox(height: 10,),
+            Text('chatting-block3'.tr(),
+              style: TextStyle(
+                  color: Color(0xff888888)
+              ),),
+            SizedBox(height: 20,),
+            Divider(
+              height: 2.w,),
+            Container(
+              height: 60.h,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(child: InkWell(
+                    child: Center(child: Text('cancle'.tr())),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),),
+                  VerticalDivider(
+                    width: 2.w,
+                  ),
+                  Expanded(
+                    child: InkWell(
+                      child: Center(child: Text("chatting-block1".tr())),
+                      onTap: () async {
+                        if(await APIs.blockPartner(widget.partner)){
+                          Navigator.of(context).pushNamedAndRemoveUntil('/loading', (Route<dynamic> route) => false);
+                        }
+                      },
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
