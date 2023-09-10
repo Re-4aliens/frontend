@@ -109,7 +109,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       }
     }
     for(int i =0; i < marketBoardList.length; i++){
-      print(marketBoardList[i].title);
+      //print(marketBoardList[i].title);
     }
   }
 

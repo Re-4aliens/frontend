@@ -1683,7 +1683,7 @@ class APIs {
 
   /*특정 판매글 수정*/
 
-  static Future<bool> updateMarketArticle(int articleId, Map<String, dynamic> updateData) async {
+  static Future<bool> updateMarketArticle(int articleId, MarketBoard marketArticle) async {
     try {
       print('Starting updateMarketArticle with articleId: $articleId');
 
@@ -1691,28 +1691,45 @@ class APIs {
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
       final url = Uri.parse('http://3.34.2.246:8080/api/v2/market-articles/$articleId');
-      print('Update Data: $updateData');
+      print('Update Data: $marketArticle');
 
-      final response = await http.patch(
-        url,
-        headers: {
-          'Authorization': 'Bearer $accessToken',
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(updateData),
-      );
+      final request = http.MultipartRequest('PATCH', url);
+      print("wj");
+
+      // Set headers
+      request.headers['Authorization'] = 'Bearer $accessToken';
+
+      // Add text fields
+      request.fields['title'] = marketArticle.title!;
+      request.fields['content'] = marketArticle.content!;
+      request.fields['price'] = marketArticle.price.toString();
+      request.fields['productStatus'] = marketArticle.productStatus!;
+      request.fields['marketArticleStatus'] = marketArticle.marketArticleStatus!;
+
+      // Add image files
+      if (marketArticle.imageUrls != null && marketArticle.imageUrls!.isNotEmpty) {
+        for (String imagePath in marketArticle.imageUrls!) {
+          if (imagePath.isNotEmpty) {
+            var file = await http.MultipartFile.fromPath('imageUrls', imagePath);
+            request.files.add(file);
+          }
+        }
+      }
+      print(50);
+
+      final response = await request.send();
 
       if (response.statusCode == 200) {
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final responseBody = await response.stream.bytesToString();
         print('Successful Response Body: $responseBody');
         return true;
       } else if (response.statusCode == 500) {
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final responseBody = await response.stream.bytesToString();
         print('500 Error Response Body: $responseBody');
         return false;
       } else {
-        final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        final errorCode = responseBody['code'];
+        final responseBody = await response.stream.bytesToString();
+        final errorCode = json.decode(responseBody)['code'];
 
         if (errorCode == 'AT-C-002') {
           throw '액세스 토큰 만료';
