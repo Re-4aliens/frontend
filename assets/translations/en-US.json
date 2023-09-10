@@ -313,6 +313,9 @@
 
 
   "search1": "Type Keyword",
-  "search2": "Search for posts!"
+  "search2": "Search for posts!",
+  "liked noti":" liked your post",
+  "reply":" replied to your comment",
+  "comment":" commented on your post"
 
 }
