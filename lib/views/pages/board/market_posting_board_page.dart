@@ -495,14 +495,23 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               try {
                                 if (_isEditMode) {
                                   // 수정 모드인 경우 게시물 업데이트
-                                  Map<String, dynamic> updateData = {
+                                  /*Map<String, dynamic> updateData = {
                                     'title': _titleController.text,
                                     'content': _contentController.text,
                                     'price': int.parse(_priceController.text),
                                     'productStatus': productStatus,
                                     'marketArticleStatus':marketArticleStatus,
                                     'imageUrls': _images.map((image) => image.path).toList(),
-                                  };
+                                  };*/
+
+                                  MarketBoard updateData = MarketBoard(
+                                    title: _titleController.text,
+                                    content: _contentController.text,
+                                    price: int.parse(_priceController.text),
+                                    productStatus: productStatus,
+                                    marketArticleStatus: marketArticleStatus,
+                                    imageUrls: _images.map((image) => image.path).toList(),
+                                  );
                                   print(marketArticleStatus);
 
                                   bool success = await APIs.updateMarketArticle(widget.marketBoard!.articleId ?? 0, updateData);
