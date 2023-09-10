@@ -186,7 +186,7 @@ class MarketBoardDialog extends StatelessWidget{
                 Navigator.pop(context);
                 showDialog(
                     context: context,
-                    builder: (builder) => iOSReportDialog());
+                    builder: (builder) => iOSReportDialog(memberId: marketBoard.member!.memberId!,));
               },
               child: Container(
                 height: 80.h,

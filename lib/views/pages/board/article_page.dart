@@ -154,7 +154,7 @@ class _ArticlePageState extends State<ArticlePage> {
                         InkWell(
                           onTap: (){
                             showDialog(context: context, builder: (builder){
-                              return BoardDialog(context: context, board: widget.board, memberDetails: widget.memberDetails);
+                              return BoardDialog(context: context, board: widget.board, memberDetails: widget.memberDetails, boardCategory: "",);
                             });
                           },
                           child: Padding(
@@ -195,18 +195,30 @@ class _ArticlePageState extends State<ArticlePage> {
                                 itemBuilder: (context, index) {
                                   return Row(
                                     children: [
-                                      Container(
-                                        margin: EdgeInsets.only(right: 10.w),
-                                        height: 80.h,
-                                        width: 80.h,
-                                        decoration: BoxDecoration(
-                                            color: Color(0xfff8f8f8),
-                                            borderRadius:
-                                            BorderRadius.circular(10).r,
-                                          image: DecorationImage(
-                                            image: NetworkImage(widget.board.imageUrls![index]),
-                                            fit: BoxFit.cover,
-                                          )
+                                      InkWell(
+                                        onTap: (){
+                                          showDialog(context: context, builder: (context){
+                                            return GestureDetector(
+                                              onTap: (){Navigator.pop(context);},
+                                              child: InteractiveViewer(
+                                                child: Image.network(widget.board.imageUrls![index]),
+                                              ),
+                                            );
+                                          });
+                                        },
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 10.w),
+                                          height: 80.h,
+                                          width: 80.h,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xfff8f8f8),
+                                              borderRadius:
+                                              BorderRadius.circular(10).r,
+                                            image: DecorationImage(
+                                              image: NetworkImage(widget.board.imageUrls![index]),
+                                              fit: BoxFit.cover,
+                                            )
+                                          ),
                                         ),
                                       ),
                                     ],
