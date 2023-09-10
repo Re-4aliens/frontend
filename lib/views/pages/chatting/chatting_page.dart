@@ -507,7 +507,7 @@ class _ChattingPageState extends State<ChattingPage> {
                 },
                 //아이콘 수정 필요
                 icon: SvgPicture.asset(
-                  'assets/icon/icon_more.svg',
+                  'assets/icon/ICON_more.svg',
                   height: 20,
                 ),
               )
