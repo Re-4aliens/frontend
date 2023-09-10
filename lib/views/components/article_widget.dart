@@ -79,7 +79,7 @@ class _ArticleWidgetState extends State<ArticleWidget>{
           InkWell(
             onTap: (){
               showDialog(context: context, builder: (builder){
-                return BoardDialog(context: context, board: widget.board, memberDetails: widget.memberDetails,);
+                return BoardDialog(context: context, board: widget.board, memberDetails: widget.memberDetails, boardCategory: "일반게시판",);
               });
             },
             child: Padding(
