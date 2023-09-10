@@ -29,9 +29,8 @@ class MarketBoardPage extends StatefulWidget {
   final ScreenArguments screenArguments;
   final MarketBoard? marketBoard;
   final MemberDetails memberDetails;
+
  // final int index;
-
-
 
 
   @override
@@ -41,35 +40,94 @@ class MarketBoardPage extends StatefulWidget {
 class _MarketBoardPageState extends State<MarketBoardPage> {
   bool isDrawerStart = false;
   List<MarketBoard> marketBoardList = [];
-  //String createdAt = '';
+  ScrollController _scrollController = ScrollController();
+  bool loading= false;
 
+  //String createdAt = '';
+  int page = 0;
 
 
   void initState() {
     super.initState();
     fetchMarketArticles();
+    _scrollController = ScrollController();
+    _scrollController.addListener((){
+      _loadData();
+    });
+
+
 
     final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
     print(10);
     bookmarkProvider.getbookmarksCounts();
     print(11);
-
   }
+
+  /*void _scrollListener() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      if (!loading) {
+        _loadData();
+      }
+    }
+  }*/
+
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadData() async {
+    if (!loading) {
+      setState(() {
+        loading = true; // 로딩 중임을 표시
+      });
+
+      try {
+        setState(() {
+          page++;
+        });
+        var fetchedData = await APIs.getMarketArticles(page);
+        setState(() {
+          //page++;
+          marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
+           // 다음 페이지로 이동
+          loading = false; // 로딩 완료
+        });
+      } catch (e) {
+        if (e == "AT-C-002") {
+          await APIs.getAccessToken();
+          var fetchedData = await APIs.getMarketArticles(page);
+          setState(() {
+            marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
+            page++; // 다음 페이지로 이동
+            loading = false; // 로딩 완료
+          });
+        } else {
+          // 에러 처리
+        }
+      }
+    }
+    for(int i =0; i < marketBoardList.length; i++){
+      print(marketBoardList[i].title);
+    }
+  }
+
+  @override
 
   Future<void> fetchMarketArticles() async {
     try {
-      var fetchedData = await APIs.getMarketArticles(); // API 호출 함수 호출
+      var fetchedData = await APIs.getMarketArticles(0); // API 호출 함수 호출
       print(fetchedData);
       setState(() {
         marketBoardList = fetchedData; // 불러온 데이터를 리스트에 할당
         for (var marketBoard in marketBoardList) {
-         // print('createdAt: ${marketBoard.createdAt}');
-      //    print('status: ${marketBoard.marketArticleStatus}');
-       //   print('productstatus: ${marketBoard.productStatus}');
-        //  print('comment:${marketBoard.commentsCount}');
+          // print('createdAt: ${marketBoard.createdAt}');
+          //    print('status: ${marketBoard.marketArticleStatus}');
+          //   print('productstatus: ${marketBoard.productStatus}');
+          //  print('comment:${marketBoard.commentsCount}');
 
         }
-
       });
     } catch (error) {
       // 에러 처리
@@ -80,8 +138,10 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    final double screenWidth = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
         appBar: AppBar(
@@ -133,7 +193,10 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                 onTap: () {
                   Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => SearchPage(screenArguments: widget.screenArguments, category: "장터게시판", nationCode: '',)),
+                        builder: (context) =>
+                            SearchPage(screenArguments: widget.screenArguments,
+                              category: "장터게시판",
+                              nationCode: '',)),
                   );
                 },
                 child: SvgPicture.asset(
@@ -161,8 +224,12 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                 Navigator.pushNamed(context, '/market/notice');
               },
               child: Container(
-                margin: EdgeInsets.only(right: 10, left: 10, top: 10, bottom: 10).r,
-                padding: EdgeInsets.only(right: 10, left: 10).r,
+                margin: EdgeInsets
+                    .only(right: 10, left: 10, top: 10, bottom: 10)
+                    .r,
+                padding: EdgeInsets
+                    .only(right: 10, left: 10)
+                    .r,
                 width: double.infinity,
                 height: 42.spMin,
                 decoration: BoxDecoration(
@@ -214,11 +281,18 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   Widget _contentWidget() {
     final bookmarkProvider = Provider.of<BookmarksProvider>(context);
 
-    return ListView.separated(
-
+    return
+      marketBoardList.isEmpty
+          ? Center(
+        child: CircularProgressIndicator(), // Loading indicator
+      )
+          :
+      ListView.separated(
+      controller: _scrollController,
       itemBuilder: (BuildContext context, int index) {
         MarketBoard marketBoard = marketBoardList[index];
-        String productStatusText = getProductStatusText(marketBoard.productStatus);
+        String productStatusText = getProductStatusText(
+            marketBoard.productStatus);
         String StatusText = getStatusText(marketBoard.marketArticleStatus);
 
         return InkWell(
@@ -230,9 +304,12 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                     MarketDetailPage(
                       screenArguments: widget.screenArguments,
                       marketBoard: marketBoard,
-                        productStatus: getProductStatusText(marketBoard.productStatus), 
-                      StatusText: getStatusText(marketBoard.marketArticleStatus), index: index,
-                     // memberDetails: widget.memberDetails,
+                      productStatus: getProductStatusText(
+                          marketBoard.productStatus),
+                      StatusText: getStatusText(
+                          marketBoard.marketArticleStatus),
+                      index: index,
+                      // memberDetails: widget.memberDetails,
                     ),
               ),
             );
@@ -250,7 +327,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: NetworkImage(marketBoard.imageUrls?.first ?? ""), // 첫 번째 이미지를 가져오기
+                      image: NetworkImage(
+                          marketBoard.imageUrls?.first ?? ""), // 첫 번째 이미지를 가져오기
                     ),
                   ),
                   child: Column(
@@ -277,7 +355,10 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                 ),
                 SizedBox(width: 5.w),
                 Container(
-                  width: MediaQuery.of(context).size.width - 170.w,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width - 170.w,
                   height: 124.spMin,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,9 +368,11 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                           '[$StatusText]', // 상태 정보 사용
+                            '[$StatusText]', // 상태 정보 사용
                             style: TextStyle(
-                              color: marketBoard.marketArticleStatus == '판매 중'?Color(0xff616161): Color(0xffFF375B),
+                              color: marketBoard.marketArticleStatus == '판매 중'
+                                  ? Color(0xff616161)
+                                  : Color(0xffFF375B),
                               fontSize: 16.spMin,
                               fontWeight: FontWeight.w600,
                             ),
@@ -298,16 +381,20 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
                               Text(
-                          DataUtils.getTime(marketBoard.createdAt),
+                                DataUtils.getTime(marketBoard.createdAt),
                                 style: TextStyle(
-                                  color: Color(0xffC1C1C1),
+                                 color: Color(0xffC1C1C1),
                                   fontSize: 12.spMin,
                                 ),
                               ),
                               InkWell(
-                                onTap: (){
-                                  showDialog(context: context, builder: (builder){
-                                    return MarketBoardDialog(context: context, marketBoard: marketBoard, memberDetails: widget.memberDetails, screenArguments: widget.screenArguments,);
+                                onTap: () {
+                                  showDialog(
+                                      context: context, builder: (builder) {
+                                    return MarketBoardDialog(context: context,
+                                      marketBoard: marketBoard,
+                                      memberDetails: widget.memberDetails,
+                                      screenArguments: widget.screenArguments,);
                                   });
                                 },
                                 child: SvgPicture.asset(
@@ -341,22 +428,18 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                             color: Color(0xffc1c1c1),
                           ),
 
-                          bookmarkProvider.marketArticleBookmarkCount?[index] == 0
-                              ? Text('0',style: TextStyle(fontSize: 16.spMin,color: Color(0xffc1c1c1)))
-                              : Text('${bookmarkProvider.marketArticleBookmarkCount![index]}',
+                          bookmarkProvider.marketArticleBookmarkCount?[index] ==
+                              0
+                              ? Text('0', style: TextStyle(
+                              fontSize: 16.spMin, color: Color(0xffc1c1c1)))
+                              : Text('${bookmarkProvider
+                              .marketArticleBookmarkCount![index]}',
                               style: TextStyle(
                                 fontSize: 14.spMin,
                                 color: Color(0xffc1c1c1),
                               )
                           ),
 
-                          /*Text(
-                            ' ${marketBoard.marketArticleBookmarkCount ?? 0}  ',
-                            style: TextStyle(
-                              fontSize: 14.spMin,
-                              color: Color(0xffc1c1c1),
-                            ),
-                          ),*/
                           SvgPicture.asset(
                             'assets/icon/icon_comment.svg',
                             width: 16.r,
@@ -388,44 +471,70 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       },
       itemCount: marketBoardList.length,
     );
-
   }
+
+  getMoreMarketArticles(int page) async {
+    setState(() {
+      loading = true; // 2. 로딩 중임을 표시
+    });
+
+    try {
+      var fetchedData = await APIs.getMarketArticles(page);
+      setState(() {
+        marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
+        loading = false; // 로딩 완료
+      });
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await APIs.getAccessToken();
+        marketBoardList.addAll(await APIs.getMarketArticles(page));
+        setState(() {
+          loading = false; // 로딩 완료
+        });
+      } else {
+        // 에러 처리
+      }
+    }
+  }
+
+  String getProductStatusText(String? productStatus) {
+    List<String> whatStatus = [
+      'Brand_New'.tr(),
+      'Almost_New'.tr(),
+      'Slight_Defect'.tr(),
+      'Used'.tr(),
+    ];
+
+    switch (productStatus) {
+      case '새 것':
+        return whatStatus[0];
+      case '거의 새 것':
+        return whatStatus[1];
+      case '약간의 하자':
+        return whatStatus[2];
+      case '사용감 있음':
+        return whatStatus[3];
+      default:
+        return '';
+    }
+  }
+
+  String getStatusText(String? marketArticleStatus) {
+    List<String> Status = [
+      'sale'.tr(),
+      'sold-out'.tr(),
+    ];
+
+    switch (marketArticleStatus) {
+      case '판매 중':
+        return Status[0];
+      case '판매 완료':
+        return Status[1];
+      default:
+        return '';
+    }
+  }
+
+
 }
 
-String getProductStatusText(String? productStatus) {
-  List<String> whatStatus = [
-    'Brand_New'.tr(),
-    'Almost_New'.tr(),
-    'Slight_Defect'.tr(),
-    'Used'.tr(),
-  ];
-
-  switch (productStatus) {
-    case '새 것':
-      return whatStatus[0];
-    case '거의 새 것':
-      return whatStatus[1];
-    case '약간의 하자':
-      return whatStatus[2];
-    case '사용감 있음':
-      return whatStatus[3];
-    default:
-      return '';
-  }
-}
-
-String getStatusText(String? marketArticleStatus){
-  List<String> Status = [
-    'sale'.tr(),
-    'sold-out'.tr(),
-  ];
-
-  switch (marketArticleStatus) {
-    case '판매 중':
-      return Status[0];
-    case '판매 완료':
-      return Status[1];
-    default:
-      return '';
-  }
-}
