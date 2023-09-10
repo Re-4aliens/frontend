@@ -68,6 +68,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'apis/firebase_apis.dart';
+import 'package:overlay_support/overlay_support.dart';
 //import 'firebase_options.dart';
 
 final supportedLocales = [
@@ -129,81 +130,83 @@ class MyApp extends StatelessWidget {
     return ScreenUtilInit(
       designSize: const Size(390, 844),
       builder: (context, child){
-        return MaterialApp(
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            theme: ThemeData(fontFamily: 'NotoSans'),
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/splash',
-        routes: {
+        return OverlaySupport.global(
+          child: MaterialApp(
+              localizationsDelegates: context.localizationDelegates,
+              supportedLocales: context.supportedLocales,
+              locale: context.locale,
+              theme: ThemeData(fontFamily: 'NotoSans'),
+          title: 'Flutter Demo',
+          debugShowCheckedModeBanner: false,
+          initialRoute: '/splash',
+          routes: {
 
 
-        '/' : (context)=> StartPage(),
-        //'/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: StartPage()),
+          '/' : (context)=> StartPage(),
+          //'/' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: StartPage()),
 
-        //'/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
-        '/main': (context)=> HomePage(),
+          //'/main' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: HomePage()),
+          '/main': (context)=> HomePage(),
 
-        '/splash': (context)=> SplashPage(),
+          '/splash': (context)=> SplashPage(),
 
-        // matching
-        '/apply' : (context) => MatchingApplyPage(),
-        '/done' : (context) => MatchingDonePage(),
-        '/state' : (context) => MatchingStatePage(),
-        '/choose' : (context) => MatchingChoosePage(),
-        '/apply/done' : (context) => MatchingApplyDonePage(),
-        '/info/my' : (conext) => MatchingInfoPage(),
-        '/info/your' : (context) => MatchingPartnerInfoPage(),
-        //'/edit' : (context) => MatchingEditPage(),
+          // matching
+          '/apply' : (context) => MatchingApplyPage(),
+          '/done' : (context) => MatchingDonePage(),
+          '/state' : (context) => MatchingStatePage(),
+          '/choose' : (context) => MatchingChoosePage(),
+          '/apply/done' : (context) => MatchingApplyDonePage(),
+          '/info/my' : (conext) => MatchingInfoPage(),
+          '/info/your' : (context) => MatchingPartnerInfoPage(),
+          //'/edit' : (context) => MatchingEditPage(),
 
-        //setting
-        //'/setting/lan/edit':(context) => SettingLanEditPage(),
-        //'/setting/MBTI/edit' : (context) => SettingMBTIEditPage(),
-        '/setting/notification' : (context) => SettingNotificationPage(),
-        '/setting/terms': (context) => SettingTermsPage(),
-        '/setting/terms/use' : (context) => SettingTermsUsePage(),
-        '/setting/terms/private': (context) => SettingTermsPrivatePage(),
-        '/setting/security': (context) => SettingSecurityPage(),
-        '/setting/delete/what': (context) => SettingDeleteWhatPage(),
-        '/setting/delete' : (context) => SettingDeletePage(),
-        '/setting/delete/done': (context) => SettingDeleteDonePage(),
-        '/setting/edit/PW' : (context) => SettingEditPWPage(),
-        '/setting/edit/PW/done' : (context) => SettingEditPWDonePage(),
-        '/setting/edit/find' : (context) => SettingFindPWPage(),
+          //setting
+          //'/setting/lan/edit':(context) => SettingLanEditPage(),
+          //'/setting/MBTI/edit' : (context) => SettingMBTIEditPage(),
+          '/setting/notification' : (context) => SettingNotificationPage(),
+          '/setting/terms': (context) => SettingTermsPage(),
+          '/setting/terms/use' : (context) => SettingTermsUsePage(),
+          '/setting/terms/private': (context) => SettingTermsPrivatePage(),
+          '/setting/security': (context) => SettingSecurityPage(),
+          '/setting/delete/what': (context) => SettingDeleteWhatPage(),
+          '/setting/delete' : (context) => SettingDeletePage(),
+          '/setting/delete/done': (context) => SettingDeleteDonePage(),
+          '/setting/edit/PW' : (context) => SettingEditPWPage(),
+          '/setting/edit/PW/done' : (context) => SettingEditPWDonePage(),
+          '/setting/edit/find' : (context) => SettingFindPWPage(),
 
-        //SignUp
-        '/name' : (context) => SignUpName(),
-        '/birthday': (context) => SignUpBirthday(),
-        '/bio': (context) => SignUpBio(),
-        '/gender' : (context) => SignUpGender(),
-        '/nationality' :(context) => SignUpNationality(),
-        '/mbti': (context) => SignUpMbti(),
-        '/profile': (context) => SignUpProfile(),
-        '/school' : (context) => SignUpSchool(),
-        '/email': (context) => SignUpEmail(),
-        '/verify' : (context) => SignUpVerify(),
-        '/finish': (context) => SignUpVerifyFinish(),
-        '/password': (context) => SignUpPassword(),
-        '/welcome' : (context) => SignUpWelcome(),
+          //SignUp
+          '/name' : (context) => SignUpName(),
+          '/birthday': (context) => SignUpBirthday(),
+          '/bio': (context) => SignUpBio(),
+          '/gender' : (context) => SignUpGender(),
+          '/nationality' :(context) => SignUpNationality(),
+          '/mbti': (context) => SignUpMbti(),
+          '/profile': (context) => SignUpProfile(),
+          '/school' : (context) => SignUpSchool(),
+          '/email': (context) => SignUpEmail(),
+          '/verify' : (context) => SignUpVerify(),
+          '/finish': (context) => SignUpVerifyFinish(),
+          '/password': (context) => SignUpPassword(),
+          '/welcome' : (context) => SignUpWelcome(),
 
-        //login
-        '/login': (context) => Login(),
-        '/login/findpassword' : (context) => LoginFindPassword(),
-        '/login/checkemail' : (context)=> LoginCheckMail(),
+          //login
+          '/login': (context) => Login(),
+          '/login/findpassword' : (context) => LoginFindPassword(),
+          '/login/checkemail' : (context)=> LoginCheckMail(),
 
-        //chatting
-        //'/chatting': (context) => ChattingPage(),
+          //chatting
+          //'/chatting': (context) => ChattingPage(),
 
-        //loading
-        //'/loading' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: LoadingPage()),
-        '/loading' : (context) => LoadingPage(),
+          //loading
+          //'/loading' : (context)=> ChangeNotifierProvider(create: (context) => MemberProvider(), child: LoadingPage()),
+          '/loading' : (context) => LoadingPage(),
 
-        //market board
-        '/market/notice' : (context) => MarketNoticePage()
+          //market board
+          '/market/notice' : (context) => MarketNoticePage()
 
-        },
+          },
+          ),
         );
 
       },

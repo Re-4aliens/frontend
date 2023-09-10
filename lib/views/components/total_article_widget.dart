@@ -16,6 +16,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../../models/board_model.dart';
+import '../../providers/bookmarks_provider.dart';
 import '../../repository/board_provider.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/market_board_page.dart';
@@ -78,6 +79,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
   @override
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
+    final bookmarkProvider = Provider.of<BookmarksProvider>(context);
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: ListTile(
@@ -226,8 +228,13 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: (){
-                      boardProvider.addLike(widget.board.articleId!, widget.index);
+                    onTap: () async {
+                      if(widget.board.category != "장터게시판"){
+                        boardProvider.addLike(widget.board.articleId!, widget.index);
+                      }else{
+                        boardProvider.likeCounts[widget.index] = await APIs.marketbookmark(widget.board.articleId!);
+                      }
+                      setState(() {});
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(4.0).r,
@@ -291,7 +298,10 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                           Navigator.pop(context);
                           Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data, productStatus: '', StatusText: '', index: widget.index,)),
+                          MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data,
+                            productStatus: getProductStatusText(data.productStatus),
+                            StatusText: getStatusText(data.marketArticleStatus),
+                            index: -1,)),
                         );
                         });
                         return Container(
@@ -312,4 +322,42 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
       ),
     );
   }
+  String getProductStatusText(String? productStatus) {
+    List<String> whatStatus = [
+      'Brand_New'.tr(),
+      'Almost_New'.tr(),
+      'Slight_Defect'.tr(),
+      'Used'.tr(),
+    ];
+
+    switch (productStatus) {
+      case '새 것':
+        return whatStatus[0];
+      case '거의 새 것':
+        return whatStatus[1];
+      case '약간의 하자':
+        return whatStatus[2];
+      case '사용감 있음':
+        return whatStatus[3];
+      default:
+        return '';
+    }
+  }
+
+  String getStatusText(String? marketArticleStatus){
+    List<String> Status = [
+      'sale'.tr(),
+      'sold-out'.tr(),
+    ];
+
+    switch (marketArticleStatus) {
+      case '판매 중':
+        return Status[0];
+      case '판매 완료':
+        return Status[1];
+      default:
+        return '';
+    }
+  }
+
 }
