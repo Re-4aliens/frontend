@@ -128,9 +128,9 @@ class APIs {
     }
     // FormData 파일 필드 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
-      var file = await http.MultipartFile.fromPath(
-          'profileImage',
-          member.profileImage!
+      var file = await ImageUtil.compressImageToMultipartFile(
+        'profileImage',
+          member.profileImage!,
       );
       request.files.add(file);
     }
@@ -1639,8 +1639,10 @@ class APIs {
           marketArticle.imageUrls!.isNotEmpty) {
         for (String imagePath in marketArticle.imageUrls!) {
           if (imagePath.isNotEmpty) {
-            var file = await http.MultipartFile.fromPath(
-                'imageUrls', imagePath);
+            var file = await ImageUtil.compressImageToMultipartFile(
+              'imageUrls',
+                imagePath,
+            );
             request.files.add(file);
           }
         }
@@ -2216,7 +2218,10 @@ class APIs {
     if (board.imageUrls != null && board.imageUrls!.isNotEmpty) {
       for (String imagePath in board.imageUrls!) {
         if (imagePath.isNotEmpty) {
-          var file = await http.MultipartFile.fromPath('imageUrls', imagePath);
+          var file = await ImageUtil.compressImageToMultipartFile(
+            'imageUrls',
+            imagePath,
+          );
           request.files.add(file);
         }
       }
