@@ -157,7 +157,7 @@ class BoardDialog extends StatelessWidget{
               Navigator.pop(context);
               showDialog(
                   context: context,
-                  builder: (builder) => iOSReportDialog());
+                  builder: (builder) => iOSReportDialog(memberId: board.member!.memberId!,));
             },
             child: Container(
               height: 80.h,

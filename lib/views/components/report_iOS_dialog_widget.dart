@@ -7,10 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
+import '../../apis/apis.dart';
 import '../../models/message_model.dart';
+import '../../models/partner_model.dart';
 
 class iOSReportDialog extends StatefulWidget {
-  const iOSReportDialog({super.key});
+  const iOSReportDialog({super.key,
+    required this.memberId,});
+  final int memberId;
 
   @override
   State<iOSReportDialog> createState() => _iOSReportDialogState();
@@ -149,7 +153,25 @@ class _iOSReportDialogState extends State<iOSReportDialog> {
                   Expanded(
                     child: InkWell(
                       child: Center(child: Text("chatting-report1".tr())),
-                      onTap: () {
+                      onTap: ()async {
+                        var reportCategory;
+                        for(int i = 0; i < reportList.length; i ++){
+                          if(reportList[i][1] == _reportReason){
+                            reportCategory = reportList[i][0];
+                            break;
+                          }
+                        }
+                        if(await APIs.reportPartner(reportCategory, _textEditingController.text, widget.memberId)){
+                          Navigator.pop(context);
+                          showDialog(context: context, builder: (context){
+                            return AlertDialog(
+                              title: Text('chatting-report8'.tr(), style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold
+                              ),),
+                            );
+                          });
+                        }
                       },
                     ),
                   )
