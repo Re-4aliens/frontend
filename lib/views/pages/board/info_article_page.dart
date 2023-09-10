@@ -141,8 +141,11 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                         InkWell(
                           onTap: (){
                             showDialog(context: context, builder: (context){
-                              return InteractiveViewer(
-                                child: Image.network(widget.board.imageUrls![index]),
+                              return GestureDetector(
+                                onTap: (){Navigator.pop(context);},
+                                child: InteractiveViewer(
+                                  child: Image.network(widget.board.imageUrls![index]),
+                                ),
                               );
                             });
                           },
@@ -159,8 +162,6 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                                 fit: BoxFit.cover
                               )
                             ),
-                            child: Icon(Icons
-                                .add_photo_alternate_outlined),
                           ),
                         ),
                       ],

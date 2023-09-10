@@ -198,8 +198,11 @@ class _ArticlePageState extends State<ArticlePage> {
                                       InkWell(
                                         onTap: (){
                                           showDialog(context: context, builder: (context){
-                                            return InteractiveViewer(
-                                              child: Image.network(widget.board.imageUrls![index]),
+                                            return GestureDetector(
+                                              onTap: (){Navigator.pop(context);},
+                                              child: InteractiveViewer(
+                                                child: Image.network(widget.board.imageUrls![index]),
+                                              ),
                                             );
                                           });
                                         },
