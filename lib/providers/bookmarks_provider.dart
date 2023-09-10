@@ -39,7 +39,7 @@ class BookmarksProvider with ChangeNotifier {
   }
 
   getbookmarksCounts() async {
-    articleList = await APIs.getMarketArticles();
+    articleList = await APIs.getMarketArticles(0);
     marketArticleBookmarkCount = articleList!.map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0).toList();
     //print(marketboard.marketArticleBookmarkCount ?? 0);
    // print('북마크개수:${marketArticleBookmarkCount}');

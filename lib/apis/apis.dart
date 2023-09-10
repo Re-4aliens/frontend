@@ -1494,8 +1494,8 @@ class APIs {
   }
 
 /*상품판매글 모두 조회*/
-  static Future<List<MarketBoard>> getMarketArticles() async {
-    var _url = 'http://3.34.2.246:8080/api/v2/market-articles';
+  static Future<List<MarketBoard>> getMarketArticles(int page) async {
+    var _url = 'http://3.34.2.246:8080/api/v2/market-articles?page=${page}&size=10&sort=createdAt,desc';
 
     // 토큰 읽어오기
     var jwtToken = await storage.read(key: 'token');
