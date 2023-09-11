@@ -35,12 +35,18 @@ class BookmarksProvider with ChangeNotifier {
     loading = false;
     notifyListeners();
     getbookmarksCounts(0);
-    print('이것도 될라나;;');
   }
 
   getbookmarksCounts(int page) async {
     //final index = 0; // 원하는 페이지 번호 또는 index를 설정
     articleList = await APIs.getMarketArticles(page);
+    marketArticleBookmarkCount = articleList!.map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0).toList();
+    print('북마크 개수: ${marketArticleBookmarkCount?.length}');
+  }
+
+  getMoreBookmarksCounts(int page) async {
+    //받아와서 교체하는 것이 아닌 추가를 해야하므로 addAll 사용
+    articleList!.addAll(await APIs.getMarketArticles(page));
     marketArticleBookmarkCount = articleList!.map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0).toList();
     print('북마크 개수: ${marketArticleBookmarkCount?.length}');
   }
