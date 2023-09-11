@@ -39,10 +39,11 @@ class BookmarksProvider with ChangeNotifier {
   }
 
   getbookmarksCounts() async {
-    articleList = await APIs.getMarketArticles(0);
+    final index = 0; // 원하는 페이지 번호 또는 index를 설정
+    articleList = await APIs.getMarketArticles(index);
     marketArticleBookmarkCount = articleList!.map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0).toList();
-    //print(marketboard.marketArticleBookmarkCount ?? 0);
-   // print('북마크개수:${marketArticleBookmarkCount}');
+    print('북마크 개수: $marketArticleBookmarkCount');
   }
+
 
 }
