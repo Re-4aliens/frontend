@@ -49,11 +49,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
   void initState() {
     super.initState();
-    fetchMarketArticles();
     _scrollController = ScrollController();
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-          _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         if (!loading) {
           _loadData();
         }
@@ -61,8 +59,11 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     });
 
     final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
+    //초기 page값은 0
+    //0번째 페이지 북마크 리스트를 받아옵니다.
     bookmarkProvider.getbookmarksCounts(page);
-
+    //0번째 페이지 게시글 리스트도 받아옵니다.
+    fetchMarketArticles();
   }
 
 
@@ -72,8 +73,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   }
 
   Future<void> _loadData() async {
-    //page++;
-    print("page ${page}");
+
+    //다음 받아올 페이지를 위해 +1 해준다.
+    page++;
 
     if (!loading) {
       setState(() {
@@ -81,29 +83,21 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       });
 
       try {
-        page++;
         print("page is ${page}");
+
+        // +1 된 페이지 게시글 리스트를 받아온다.
         var fetchedData = await APIs.getMarketArticles(page);
 
-        // 데이터가 없을 때 무한 스크롤 중지
-        if (fetchedData.isEmpty) {
-          setState(() {
-            loading = false;
-          });
-          return;
-        }
-
         setState(() {
-          marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
+          marketBoardList.addAll(fetchedData); // 기존 리스트에 추가한다.
           loading = false; // 로딩 완료
         });
 
-        /* 북마크 리스트 업데이트 코드 추가 */
-        final bookmarkProvider = Provider.of<BookmarksProvider>(
-            context, listen: false);
-        bookmarkProvider.getbookmarksCounts(page);
-        print('북마크 길이: ${bookmarkProvider.marketArticleBookmarkCount?.length}');
-        print('market 길이: ${marketBoardList.length}');
+        final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
+        // +1된 페이지 북마크 리스트를 받아온다.
+        // 받아온 게시글 리스트는 addAll로 추가된 것이므로 북마크 리스트도 addAll로 추가해서 업데이트하는 로직필요
+        bookmarkProvider.getMoreBookmarksCounts(page);
+
       } catch (e) {
         if (e == "AT-C-002") {
           await APIs.getAccessToken();
@@ -284,7 +278,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       controller: _scrollController,
       itemBuilder: (BuildContext context, int index) {
         if (index < marketBoardList.length) {
-          print('인덱스뭔데${index}');
           MarketBoard marketBoard = marketBoardList[index];
           String productStatusText =
           getProductStatusText(marketBoard.productStatus);
@@ -484,31 +477,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
 
 
-  getMoreMarketArticles(int page) async {
-    setState(() {
-      loading = true; // 2. 로딩 중임을 표시
-    });
-
-    try {
-      var fetchedData = await APIs.getMarketArticles(page);
-      setState(() {
-        print('추가전${marketBoardList.length}');
-        marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
-        print('추가후${marketBoardList.length}');
-        loading = false; // 로딩 완료
-      });
-    } catch (e) {
-      if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        marketBoardList.addAll(await APIs.getMarketArticles(page));
-        setState(() {
-          loading = false; // 로딩 완료
-        });
-      } else {
-        // 에러 처리
-      }
-    }
-  }
 
   String getProductStatusText(String? productStatus) {
     List<String> whatStatus = [
