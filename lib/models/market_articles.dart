@@ -11,6 +11,22 @@ class MarketBoard {
   Member? member;
   String? createdAt;
 
+  @override
+  String toString() {
+    return 'MarketBoard{'
+        'articleId: $articleId, '
+        'title: $title, '
+        'marketArticleStatus: $marketArticleStatus, '
+        'price: $price, '
+        'productStatus: $productStatus, '
+        'content: $content, '
+        'marketArticleBookmarkCount: $marketArticleBookmarkCount, '
+        'commentsCount: $commentsCount, '
+        'imageUrls: $imageUrls, '
+        'member: $member, '
+        'createdAt: $createdAt'
+        '}';
+  }
   MarketBoard({
     this.articleId,
     this.title,
