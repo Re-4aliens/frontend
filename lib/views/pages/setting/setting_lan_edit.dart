@@ -51,7 +51,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
 
     _selectedLanguage = widget.isKorean ? '한국어' : 'English';
 
-    if(widget.screenArguments!.status == 'NotAppliedAndMatched' || widget.screenArguments!.status == 'AppliedAndMatched'){
+    if(widget.screenArguments!.status == 'AppliedAndNotMatched' || widget.screenArguments!.status == 'AppliedAndMatched'){
 
       _firstPreferLanguage = _nationlist.firstWhere((element) =>
       element['value'] == widget.screenArguments!.applicant!.preferLanguages!
@@ -254,7 +254,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                       String _firstPreferLanguageArgs = _nationlist.firstWhere((element) => element['language'] == _firstPreferLanguage)['value'];
                       String _secondPreferLanguageArgs = _nationlist.firstWhere((element) => element['language'] == _secondPreferLanguage)['value'];
                       //펜딩일때만 수정
-                      if(widget.screenArguments!.status != 'AppliedAndNotMatched'){
+                      if(widget.screenArguments!.status == 'AppliedAndNotMatched' || widget.screenArguments!.status == 'AppliedAndMatched'){
                         bool isSuccess = false;
                         try {
                          isSuccess = await APIs.updatePreferLanguage(_firstPreferLanguageArgs, _secondPreferLanguageArgs);

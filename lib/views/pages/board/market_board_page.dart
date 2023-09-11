@@ -315,7 +315,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                     height: 124.spMin,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10)),
-                      image: DecorationImage(
+                      image: marketBoard.imageUrls!.isEmpty ? null : DecorationImage(
                         fit: BoxFit.cover,
                         image: NetworkImage(
                             marketBoard.imageUrls?.first ?? ""),
