@@ -1707,12 +1707,23 @@ class APIs {
       request.fields['price'] = marketArticle.price.toString();
       request.fields['productStatus'] = marketArticle.productStatus!;
       request.fields['marketArticleStatus'] = marketArticle.marketArticleStatus!;
+      print(12);
 
       // Add image files
       if (marketArticle.imageUrls != null && marketArticle.imageUrls!.isNotEmpty) {
-        for (String imagePath in marketArticle.imageUrls!) {
-          if (imagePath.isNotEmpty) {
-            var file = await http.MultipartFile.fromPath('imageUrls', imagePath);
+        for (String imageUrl in marketArticle.imageUrls!) {
+          if (imageUrl.isNotEmpty) {
+            // 이미지 URL을 다운로드하여 로컬에 저장
+            final response = await http.get(Uri.parse(imageUrl));
+            final bytes = response.bodyBytes;
+            final fileName = 'image.jpg'; // 저장할 파일 이름, 원하는 이름으로 설정
+
+            final Directory tempDir = Directory.systemTemp; // 임시 디렉토리 사용
+            final File imageFile = File('${tempDir.path}/$fileName');
+            await imageFile.writeAsBytes(bytes);
+
+            // 이미지 파일을 로컬 파일로 저장한 후 해당 파일 경로를 사용
+            var file = await http.MultipartFile.fromPath('imageUrls', imageFile.path);
             request.files.add(file);
           }
         }
