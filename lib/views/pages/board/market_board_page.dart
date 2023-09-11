@@ -52,6 +52,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     fetchMarketArticles();
     _scrollController = ScrollController();
     _scrollController.addListener((){
+
+      page++;
       _loadData();
     });
 
@@ -63,14 +65,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     print(11);
   }
 
-  /*void _scrollListener() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      if (!loading) {
-        _loadData();
-      }
-    }
-  }*/
 
   void dispose() {
     _scrollController.dispose();
@@ -80,7 +74,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   Future<void> _loadData() async {
     if (!loading) {
       setState(() {
-        loading = true; // 로딩 중임을 표시
+        loading = true;
       });
 
       try {
@@ -88,28 +82,33 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
           page++;
         });
         var fetchedData = await APIs.getMarketArticles(page);
+
+        // 데이터가 없을 때 무한 스크롤 중지
+        if (fetchedData.isEmpty) {
+          setState(() {
+            loading = false;
+          });
+          return;
+        }
+
         setState(() {
-          //page++;
-          marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
-           // 다음 페이지로 이동
-          loading = false; // 로딩 완료
+          page++;
+          marketBoardList.addAll(fetchedData);
+          loading = false;
         });
       } catch (e) {
         if (e == "AT-C-002") {
           await APIs.getAccessToken();
           var fetchedData = await APIs.getMarketArticles(page);
           setState(() {
-            marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
-            page++; // 다음 페이지로 이동
-            loading = false; // 로딩 완료
+            marketBoardList.addAll(fetchedData);
+            page++;
+            loading = false;
           });
         } else {
           // 에러 처리
         }
       }
-    }
-    for(int i =0; i < marketBoardList.length; i++){
-      //print(marketBoardList[i].title);
     }
   }
 
@@ -121,13 +120,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       print(fetchedData);
       setState(() {
         marketBoardList = fetchedData; // 불러온 데이터를 리스트에 할당
-        for (var marketBoard in marketBoardList) {
-          // print('createdAt: ${marketBoard.createdAt}');
-          //    print('status: ${marketBoard.marketArticleStatus}');
-          //   print('productstatus: ${marketBoard.productStatus}');
-          //  print('comment:${marketBoard.commentsCount}');
-
-        }
       });
     } catch (error) {
       // 에러 처리
@@ -138,11 +130,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final bool isSmallScreen = screenWidth <= 700;
+    final double screenWidth = MediaQuery.of(context).size.height;
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xff7898ff),
@@ -283,9 +271,11 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
     return
       marketBoardList.isEmpty
-          ? Center(
-        child: CircularProgressIndicator(), // Loading indicator
-      )
+          ? Container(
+          alignment: Alignment.center,
+          child: Image(
+              image: AssetImage(
+                  "assets/illustration/loading_01.gif")))
           :
       ListView.separated(
       controller: _scrollController,
