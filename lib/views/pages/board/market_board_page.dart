@@ -63,9 +63,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
 
     final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
-    //print(10);
     bookmarkProvider.getbookmarksCounts();
-    //print(11);
   }
 
   /*void _scrollListener() {
