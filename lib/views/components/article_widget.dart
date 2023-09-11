@@ -148,8 +148,8 @@ class _ArticleWidgetState extends State<ArticleWidget>{
                     padding: const EdgeInsets.all(4.0).r,
                     child: SvgPicture.asset(
                       'assets/icon/ICON_good.svg',
-                      width: 25.r,
-                      height: 25.r,
+                      width: 30.r,
+                      height: 30.r,
                     ),
                   ),
                 ),
@@ -162,8 +162,8 @@ class _ArticleWidgetState extends State<ArticleWidget>{
                   padding: const EdgeInsets.all(4.0).r,
                   child: SvgPicture.asset(
                     'assets/icon/icon_comment.svg',
-                    width: 25.r,
-                    height: 25.r,
+                    width: 30.r,
+                    height: 30.r,
                   ),
                 ),
                 Padding(
