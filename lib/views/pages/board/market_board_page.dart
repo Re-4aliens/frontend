@@ -94,18 +94,15 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
         }
 
         setState(() {
-
           marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
-           // 다음 페이지로 이동
           loading = false; // 로딩 완료
-
         });
 
-        /*
+        /* 북마크 리스트 업데이트 코드 추가 */
+        final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
+        bookmarkProvider.getbookmarksCounts();
+        print('북마크 길이: ${bookmarkProvider.marketArticleBookmarkCount}');
 
-        여기서 북마크 리스트도 업데이트 되어야함
-
-         */
 
       } catch (e) {
         if (e == "AT-C-002") {
@@ -113,23 +110,21 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
           page++; // 다음 페이지로 이동
           var fetchedData = await APIs.getMarketArticles(page);
           setState(() {
-
             marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
             loading = false; // 로딩 완료
+
           });
 
-          /*
-
-        여기서 북마크 리스트도 업데이트 되어야함
-
-         */
+          /* 북마크 리스트 업데이트 코드 추가 */
+          final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
+          bookmarkProvider.getbookmarksCounts();
+          //print('북마크 길이11: ${bookmarkProvider.marketArticleBookmarkCount?.length}');
 
         } else {
           // 에러 처리
         }
       }
     }
-
   }
 
   @override
