@@ -232,7 +232,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                       if(widget.board.category != "장터게시판"){
                         boardProvider.addLike(widget.board.articleId!, widget.index);
                       }else{
-                        boardProvider.likeCounts[widget.index] = await APIs.marketbookmark(widget.board.articleId!);
+                        boardProvider.likeCounts[widget.index] = await APIs.marketbookmark(widget.board.articleId!, widget.index);
                       }
                       setState(() {});
                     },
