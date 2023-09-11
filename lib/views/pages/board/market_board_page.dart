@@ -53,22 +53,26 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     _scrollController = ScrollController();
     _scrollController.addListener((){
 
-      page++;
-      _loadData();
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        if (!loading) {
+          _loadData();
+        }
+      }
     });
 
 
 
     final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
-    print(10);
+    //print(10);
     bookmarkProvider.getbookmarksCounts();
-    print(11);
+    //print(11);
   }
 
 
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
+    _scrollController.dispose();
   }
 
   Future<void> _loadData() async {
@@ -78,9 +82,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       });
 
       try {
-        setState(() {
-          page++;
-        });
+        page++;
         var fetchedData = await APIs.getMarketArticles(page);
 
         // 데이터가 없을 때 무한 스크롤 중지
@@ -92,24 +94,42 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
         }
 
         setState(() {
-          page++;
-          marketBoardList.addAll(fetchedData);
-          loading = false;
+
+          marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
+           // 다음 페이지로 이동
+          loading = false; // 로딩 완료
+
         });
+
+        /*
+
+        여기서 북마크 리스트도 업데이트 되어야함
+
+         */
+
       } catch (e) {
         if (e == "AT-C-002") {
           await APIs.getAccessToken();
+          page++; // 다음 페이지로 이동
           var fetchedData = await APIs.getMarketArticles(page);
           setState(() {
-            marketBoardList.addAll(fetchedData);
-            page++;
-            loading = false;
+
+            marketBoardList.addAll(fetchedData); // 기존 리스트에 추가
+            loading = false; // 로딩 완료
           });
+
+          /*
+
+        여기서 북마크 리스트도 업데이트 되어야함
+
+         */
+
         } else {
           // 에러 처리
         }
       }
     }
+
   }
 
   @override
