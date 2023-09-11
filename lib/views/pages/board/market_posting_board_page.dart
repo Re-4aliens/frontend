@@ -15,6 +15,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../mockdatas/mockdata_model.dart';
+import '../../../mockdatas/mockdata_model.dart';
 import '../../components/board_drawer_widget.dart';
 import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -495,14 +497,23 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               try {
                                 if (_isEditMode) {
                                   // 수정 모드인 경우 게시물 업데이트
-                                  Map<String, dynamic> updateData = {
+                                  /*Map<String, dynamic> updateData = {
                                     'title': _titleController.text,
                                     'content': _contentController.text,
                                     'price': int.parse(_priceController.text),
                                     'productStatus': productStatus,
                                     'marketArticleStatus':marketArticleStatus,
                                     'imageUrls': _images.map((image) => image.path).toList(),
-                                  };
+                                  };*/
+
+                                  MarketBoard updateData = MarketBoard(
+                                    title: _titleController.text,
+                                    content: _contentController.text,
+                                    price: int.parse(_priceController.text),
+                                    productStatus: productStatus,
+                                    marketArticleStatus: marketArticleStatus,
+                                    imageUrls: _images.map((image) => image.path).toList(),
+                                  );
                                   print(marketArticleStatus);
 
                                   bool success = await APIs.updateMarketArticle(widget.marketBoard!.articleId ?? 0, updateData);
@@ -513,7 +524,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
 
                                   if (success) {
                                     print('게시물 수정 성공!!!');
-                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                                      builder: (BuildContext context) => MarketBoardPage(
+                                          screenArguments: widget.screenArguments,
+                                          marketBoard: widget.marketBoard,
+                                          memberDetails: widget.screenArguments.memberDetails!
+                                      ),
+                                    )
+                                    );
                                   } else {
                                     print('게시물 수정 실패...');
                                     ScaffoldMessenger.of(context).showSnackBar(
