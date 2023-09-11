@@ -62,6 +62,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
     final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
     bookmarkProvider.getbookmarksCounts(page);
+
   }
 
 
