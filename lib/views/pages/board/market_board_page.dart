@@ -72,7 +72,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   }
 
   Future<void> _loadData() async {
-    page++;
+    //page++;
     print("page ${page}");
 
     if (!loading) {
@@ -83,7 +83,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       try {
         page++;
         print("page is ${page}");
-        var fetchedData = await getMoreMarketArticles(page);
+        var fetchedData = await APIs.getMarketArticles(page);
 
         // 데이터가 없을 때 무한 스크롤 중지
         if (fetchedData.isEmpty) {
