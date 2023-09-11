@@ -31,6 +31,7 @@ import '../../components/board_drawer_widget.dart';
 import '../../components/comment_dialog_widget.dart';
 import '../../components/marketcomment_dialog.dart';
 import '../home_page.dart';
+import 'market_board_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
@@ -97,6 +98,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('${widget.marketBoard}');
     //print('Data from marketBoard: ${widget.marketBoard.createdAt}');
     /*print('comment:${widget.marketBoard.commentsCount}');
     print('marketArticleBookmarkCount:${widget.marketBoard.marketArticleBookmarkCount}');*/
@@ -139,7 +141,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
               IconButton(
                 onPressed: () {
                   setState(() {
-                    Navigator.of(context).pop();
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (BuildContext context) => MarketBoardPage(
+                          screenArguments: widget.screenArguments,
+                          marketBoard: widget.marketBoard,
+                          memberDetails: widget.screenArguments.memberDetails!
+                      ),
+                    )
+                  );
                   });
                 },
                 icon: SvgPicture.asset(
@@ -341,7 +350,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   onTap: () async {
                                     //print('부크마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
                                     if(widget.index == -1){
-                                      bookmark = await APIs.marketbookmark(widget.marketBoard.articleId!);
+                                      bookmark = await APIs.marketbookmark(widget.marketBoard.articleId!, widget.index);
                                     }else{
                                       bookmarkProvider.addBookmarks(widget.marketBoard.articleId!, widget.index);
                                     }

@@ -20,29 +20,29 @@ class BookmarksProvider with ChangeNotifier {
     try {
       //좋아요 요청
       print('이건되나');
-      marketArticleBookmarkCount![index] = await APIs.marketbookmark(articleId);
+      marketArticleBookmarkCount![index] = await APIs.marketbookmark(articleId, index);
       print('이건???');
 
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
         //좋아요 요청
-        marketArticleBookmarkCount![index] = await APIs.marketbookmark(articleId);
+        marketArticleBookmarkCount![index] = await APIs.marketbookmark(articleId, index);
 
       } else {
       }
     }
     loading = false;
     notifyListeners();
-    getbookmarksCounts();
+    getbookmarksCounts(0);
     print('이것도 될라나;;');
   }
 
-  getbookmarksCounts() async {
-    final index = 0; // 원하는 페이지 번호 또는 index를 설정
-    articleList = await APIs.getMarketArticles(index);
+  getbookmarksCounts(int page) async {
+    //final index = 0; // 원하는 페이지 번호 또는 index를 설정
+    articleList = await APIs.getMarketArticles(page);
     marketArticleBookmarkCount = articleList!.map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0).toList();
-    print('북마크 개수: $marketArticleBookmarkCount');
+    print('북마크 개수: ${marketArticleBookmarkCount?.length}');
   }
 
 
