@@ -46,7 +46,10 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+    final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
+
     boardProvider.getLikeCounts();
+    bookmarkProvider.getbookmarksCounts(0);
 
     switch (widget.board.category){
       case '자유게시판':
@@ -301,7 +304,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                           MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data,
                             productStatus: getProductStatusText(data.productStatus),
                             StatusText: getStatusText(data.marketArticleStatus),
-                            index: -1, backPage: '',)),
+                            index: -1, backPage: 'total',)),
                         );
                         });
                         return Container(
