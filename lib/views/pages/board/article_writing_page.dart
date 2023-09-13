@@ -142,6 +142,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
     return Scaffold(
+        resizeToAvoidBottomInset : false,
         appBar: AppBar(
           centerTitle: true,
           title: Text(
@@ -385,6 +386,11 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                 },
                                 controller: _contentController,
                                 decoration: InputDecoration(
+                                  hintText: '${'posting-noti'.tr()}',
+                                    hintStyle: TextStyle(
+                                      fontSize: 14.spMin,
+                                      color: Color(0xffc0c0c0)
+                                    ),
                                     border: InputBorder.none,
                                     helperStyle: TextStyle(
                                         color: Color(0xffc1c1c1), fontSize: 16.spMin)),
