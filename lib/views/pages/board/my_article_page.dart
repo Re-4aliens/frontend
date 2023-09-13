@@ -197,7 +197,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
                               children: [
                                 LikedArticleWidget(
                                     board: boardProvider.articleList![index],
-                                    nationCode: nationCode, memberDetails: widget.screenArguments.memberDetails!,
+                                    nationCode: nationCode, screenArguments: widget.screenArguments!,
                                   index: index
                                 ),
                                 Divider(

@@ -312,7 +312,8 @@ class _ArticlePageState extends State<ArticlePage> {
                         Container(
                           child: Column(
                             children: [
-                              Padding(
+
+                              Container(
                                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30).r,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -400,6 +401,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                     ),
                                   ],
                                 ),
+                                color: parentsCommentId == commentProvider.commentListData![index].articleCommentId ? Color(0xffF5F7FF) : Colors.white,
                               ),
 
                               //대댓글
