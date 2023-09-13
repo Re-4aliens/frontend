@@ -539,11 +539,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                 {
                                   // 생성 모드인 경우 게시물 생성
                                   bool success = await APIs.createMarketArticle(marketArticle);
-                                  Navigator.of(context).pop(); // 이전 페이지로 이동
+                                  //Navigator.of(context).pop(); // 이전 페이지로 이동
 
                                   if (success) {
                                     print('게시물 생성 성공!!!');
-                                    Navigator.of(context).pop(); // 이전 페이지로 이동
+                                    Future.delayed(const Duration(milliseconds: 100),() {
+                                      Navigator.of(context).pop(); // 이전 페이지로 이동
+                                    });
                                   } else {
                                     print('게시물 생성 실패...');
                                     ScaffoldMessenger.of(context).showSnackBar(
