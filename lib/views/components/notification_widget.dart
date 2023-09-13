@@ -175,7 +175,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                             MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data,
                               productStatus: getProductStatusText(data.productStatus),
                               StatusText: getStatusText(data.marketArticleStatus),
-                              index: -1,)),
+                              index: -1, backPage: '',)),
                           );
                         }
                         //정보 게시판 연결

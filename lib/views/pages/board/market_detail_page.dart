@@ -35,14 +35,14 @@ import 'market_board_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
-  {super.key, required this.screenArguments, required this.marketBoard, required this.productStatus, required this.StatusText, required this.index});
+  {super.key, required this.screenArguments, required this.marketBoard, required this.productStatus, required this.StatusText, required this.index, required this.backPage});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
   //final MemberDetails memberDetails;
   final String productStatus;
   final String StatusText;
   final int index;
-
+  final String backPage;
 
 
 
@@ -58,6 +58,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   int parentsCommentId = -1;
   bool showLoading = false;
   int bookmark = -1;
+  bool isDrawerStart = false;
+
 
   void sendComment() async {
     updateUi();
@@ -90,9 +92,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     if(widget.index == -1) {
       bookmark = widget.marketBoard.marketArticleBookmarkCount!;
     };
-/*
-    final bookmarkProvider = Provider.of<BookmarksProvider>(context, listen: false);
-    bookmarkProvider.getbookmarksCounts();*/
 
   }
 
@@ -113,14 +112,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     final bookmarkProvider = Provider.of<BookmarksProvider>(context);
 
 
-    /* bool showLoading = marketcommentProvider.loading;
-    if (showLoading) {
-      Future.delayed(Duration(seconds: 3), () {
-        setState(() {
-          showLoading = false;
-        });
-      });
-    }*/
 
     return GestureDetector(
       onTap: (){
@@ -181,7 +172,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
 
         ),
         body:isDrawerStart
-            ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: true, onpressd: () {  },
+            ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false, onpressd: () {  },
         )
             :Column(
             children: [
