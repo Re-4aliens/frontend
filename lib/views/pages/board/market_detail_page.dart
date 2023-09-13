@@ -145,14 +145,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                   }
                   else{
                     setState(() {
-                      Navigator.of(context).pop(MaterialPageRoute(
-                        builder: (BuildContext context) => MarketBoardPage(
-                            screenArguments: widget.screenArguments,
-                            marketBoard: widget.marketBoard,
-                            memberDetails: widget.screenArguments.memberDetails!
-                        ),
-                      )
-                      );
+                      Navigator.of(context).pop();
                     });
                   }
                 },

@@ -142,7 +142,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
     return Scaffold(
-        resizeToAvoidBottomInset : false,
+       resizeToAvoidBottomInset : true,
         appBar: AppBar(
           centerTitle: true,
           title: Text(
