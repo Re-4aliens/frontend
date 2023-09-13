@@ -302,7 +302,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                             productStatus: getProductStatusText(data.productStatus),
                             StatusText: getStatusText(data.marketArticleStatus),
                             index: -1,)),
-                        );
+                        ).then((value) =>
+                              boardProvider.getAllArticles());
                         });
                         return Container(
                             child: Image(
