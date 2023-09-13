@@ -47,7 +47,7 @@ class HomeWidget extends StatelessWidget{
                                   fontSize: 24.spMin,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
-                                  height: 1.5)),
+                                  height: 1.5.h)),
                           TextSpan(
                               text: '${'homepage-welcome1.2'.tr()}\n',
                               style: TextStyle(
@@ -64,20 +64,20 @@ class HomeWidget extends StatelessWidget{
                                   fontSize: 24.spMin,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
-                                  height: 1.5)),
+                                  height: 1.5.h)),
                         ]),
                         TextSpan(
                             text: '${'homepage-happy'.tr()}\n',
                             style: TextStyle(
                                 fontSize: 12.spMin,
                                 color: Color(0xff888888),
-                                height: 2)),
+                                height: 2.h)),
                         TextSpan(
                             text: '${'homepage-positive1'.tr()} ',
                             style: TextStyle(
                                 fontSize: 12.spMin,
                                 color: Color(0xff888888),
-                                height: 1.5)),
+                                height: 1.5.h)),
                         TextSpan(
                             text: '${'homepage-positive2'.tr()}'
                             /*'${args.memberDetails?.mbti}'*/,

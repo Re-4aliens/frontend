@@ -12,12 +12,12 @@ import '../../apis/apis.dart';
 
 
 class ReportDialog extends StatefulWidget {
-  final Partner partner;
+  final int memberId;
   final BuildContext context;
 
   const ReportDialog({
     Key? key,
-    required this.partner,
+    required this.memberId,
     required this.context
   }) : super(key: key);
   @override
@@ -41,7 +41,7 @@ class _ReportDialogState extends State<ReportDialog>{
   ["SCAM", 'chatting-report5'.tr()],
   ["ETC", 'chatting-report6'.tr()]
   ];
-  final TextEditingController _textEditingController = TextEditingController(text: ' ');
+  final TextEditingController _textEditingController = TextEditingController();
 
   String? _reportReason = 'chatting-report2'.tr();
   Widget androidReport(){
@@ -142,7 +142,7 @@ class _ReportDialogState extends State<ReportDialog>{
               break;
             }
           }
-          if(await APIs.reportPartner(reportCategory, _textEditingController.text, widget.partner.memberId!)){
+          if(await APIs.reportPartner(reportCategory, _textEditingController.text, widget.memberId)){
             Navigator.pop(context);
             showDialog(context: context, builder: (context){
               return AlertDialog(

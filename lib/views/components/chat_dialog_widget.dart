@@ -61,7 +61,7 @@ class ChatDialog extends StatelessWidget{
               onTap: (){
                 Navigator.pop(context);
                 showDialog(context: context, builder: (context){
-                  return ReportDialog(partner: partner, context: context);
+                  return ReportDialog(memberId: partner.memberId!, context: context);
                 });
               },
               child: Container(

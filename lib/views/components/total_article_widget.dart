@@ -304,8 +304,10 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget>{
                           MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data,
                             productStatus: getProductStatusText(data.productStatus),
                             StatusText: getStatusText(data.marketArticleStatus),
-                            index: -1, backPage: 'total',)),
-                        );
+
+                            index: -1, backPage: '',)),
+                        ).then((value) =>
+                              boardProvider.getAllArticles());
                         });
                         return Container(
                             child: Image(
