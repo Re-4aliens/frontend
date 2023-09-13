@@ -297,7 +297,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         marketBoard.productStatus),
                     StatusText: getStatusText(
                         marketBoard.marketArticleStatus),
-                    index: index, backPage: '',
+                    index: index, backPage: 'marketboard',
                   ),
                 ),
               );
