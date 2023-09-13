@@ -433,8 +433,8 @@ class LanguageButton extends StatelessWidget {
                   children: [
                     Container(
                         child : SvgPicture.asset(puzzle,
-                          width: 45.r,
-                          height: 45.r,
+                          width: 40.r,
+                          height: 40.r,
                         )
                     ),
                     Container(
@@ -479,7 +479,7 @@ class LanguageButton extends StatelessWidget {
                       language,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize:20.spMin,
+                        fontSize:18.spMin,
                         color: selectedFirst || selectedSecond
                             ? Colors.white
                             : Colors.black,

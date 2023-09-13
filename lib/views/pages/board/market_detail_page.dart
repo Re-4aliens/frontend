@@ -415,7 +415,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               Container(
                                 child: Column(
                                   children: [
-                                    Padding(
+                                    Container(
                                       padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30).r,
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -501,6 +501,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                           ),
                                         ],
                                       ),
+                                      color: parentsCommentId == marketcommentProvider.commentListData![index].articleCommentId ? Color(0xffF5F7FF) : Colors.white,
                                     ),
 
                                     //대댓글

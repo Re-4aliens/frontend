@@ -64,7 +64,7 @@ class MarketBoardDialog extends StatelessWidget{
                 Navigator.pop(context);
                 showDialog(
                     context: context,
-                    builder: (builder) => ReportDialog(partner: Partner(), context: context));
+                    builder: (builder) => ReportDialog(memberId: marketBoard.member!.memberId!, context: context));
               },
               child: Container(
                 padding: EdgeInsets.all(13).r,

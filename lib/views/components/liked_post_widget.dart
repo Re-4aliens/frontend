@@ -4,6 +4,7 @@ import 'package:aliens/apis/apis.dart';
 import 'package:aliens/apis/apis.dart';
 import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/models/message_model.dart';
+import 'package:aliens/models/screenArgument.dart';
 import 'package:aliens/views/pages/board/article_writing_page.dart';
 import 'package:aliens/views/pages/board/info_article_page.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -14,17 +15,19 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
 import '../../models/board_model.dart';
+import '../../models/market_articles.dart';
 import '../../repository/board_provider.dart';
 import '../pages/board/article_page.dart';
+import '../pages/board/market_detail_page.dart';
 import 'board_dialog_widget.dart';
 
 class LikedArticleWidget extends StatefulWidget {
 
-  LikedArticleWidget({super.key, required this.board, required this.nationCode, required this.memberDetails, required this.index});
+  LikedArticleWidget({super.key, required this.board, required this.nationCode, required this.screenArguments, required this.index});
 
   final Board board;
   final String nationCode;
-  final MemberDetails memberDetails;
+  final ScreenArguments screenArguments;
   final int index;
   @override
   State<StatefulWidget> createState() => _LikedArticleWidgetWidgetState();
@@ -138,7 +141,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
                         context: context,
                         builder: (builder) {
                           return BoardDialog(
-                            context: context, board: widget.board, memberDetails: widget.memberDetails, boardCategory: "좋아하는 게시글",
+                            context: context, board: widget.board, memberDetails: widget.screenArguments.memberDetails!, boardCategory: "좋아하는 게시글",
                           );
                         });
                   },
@@ -189,6 +192,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
           ),
         ),
         onTap: () {
+          print(widget.board.category);
           if (widget.board.category == "정보게시판") {
             Navigator.push(
               context,
@@ -196,11 +200,46 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
                   builder: (context) =>
                       InfoArticlePage(board: widget.board)),
             );
-          } else {
+          }
+          else if(widget.board.category == "장터게시판"){
+            showDialog(
+                context: context,
+                builder: (_) => FutureBuilder(
+                    future: APIs.getMarketArticle(widget.board.articleId!),
+                    builder: (BuildContext context,
+                        AsyncSnapshot snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        //받아오는 동안
+                        return Container(
+                            child: Image(
+                                image: AssetImage(
+                                    "assets/illustration/loading_01.gif")));
+                      } else{
+                        MarketBoard data = snapshot.data;
+                        //받아온 후
+                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data,
+                              productStatus: getProductStatusText(data.productStatus),
+                              StatusText: getStatusText(data.marketArticleStatus),
+                              index: -1, backPage: '',)),
+                          );
+                        });
+                        return Container(
+                            child: Image(
+                                image: AssetImage(
+                                    "assets/illustration/loading_01.gif")));
+                      }
+
+                    }));
+          }
+          else {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.memberDetails, index: widget.index )),
+                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.screenArguments.memberDetails!, index: widget.index,)),
             );
           }
         },

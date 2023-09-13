@@ -132,7 +132,7 @@ class CommentDialog extends StatelessWidget{
                 Navigator.pop(context);
                 showDialog(
                     context: context,
-                    builder: (builder) => ReportDialog(partner: Partner(), context: context));
+                    builder: (builder) => ReportDialog(memberId: comment.member!.memberId!, context: context));
 
               },
               child: Container(

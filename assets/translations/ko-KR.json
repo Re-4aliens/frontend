@@ -247,7 +247,7 @@
   "chatting-report5": "사기",
   "chatting-report6": "기타",
   "chatting-report7": "신고 사유를 적어주세요.",
-  "chatting-report8": "신고가 접수되었습니다.",
+  "chatting-report8": "신고가 접수되었습니다. \n검토까지는 최대 24시간 소요됩니다.",
   "chatting-block1": "차단하기",
   "chatting-block2": "사용자를 차단하시겠습니까?",
   "chatting-block3": "메세지 수신 및 발신이 모두 차단되며, 차단된 상대방과는 재매칭이 불가합니다.",
@@ -270,7 +270,6 @@
   "market-posting-title-error": "최대 30자까지 입력가능합니다.",
   "market_noti": "장터게시판 이용 시 주의사항",
   "market-productStatus" : "상품 상태",
-  "modify": "수정하기",
 
 
   "board": "게시판",
