@@ -73,6 +73,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   }
 
   Future<void> _loadData() async {
+
     //다음 받아올 페이지를 위해 +1 해준다.
     page++;
 
@@ -83,6 +84,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
       try {
         print("page is ${page}");
+
         // +1 된 페이지 게시글 리스트를 받아온다.
         var fetchedData = await APIs.getMarketArticles(page);
 
@@ -295,7 +297,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         marketBoard.productStatus),
                     StatusText: getStatusText(
                         marketBoard.marketArticleStatus),
-                    index: index,
+                    index: index, backPage: 'marketboard',
                   ),
                 ),
               );
