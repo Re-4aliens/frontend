@@ -45,11 +45,21 @@ class BookmarksProvider with ChangeNotifier {
   }
 
   getMoreBookmarksCounts(int page) async {
-    //받아와서 교체하는 것이 아닌 추가를 해야하므로 addAll 사용
-    articleList!.addAll(await APIs.getMarketArticles(page));
-    marketArticleBookmarkCount = articleList!.map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0).toList();
-    print('북마크 개수: ${marketArticleBookmarkCount?.length}');
+    // 새로운 게시글 리스트를 받아옵니다.
+    List<MarketBoard>? newArticles = await APIs.getMarketArticles(page);
+
+    // 받아온 게시글 리스트가 null이거나 비어있지 않은 경우에만 처리합니다.
+    if (newArticles != null && newArticles.isNotEmpty) {
+      // 기존 게시글 리스트에 새로운 게시글을 추가합니다.
+      articleList!.addAll(newArticles);
+
+      // 북마크 카운트를 업데이트합니다.
+      marketArticleBookmarkCount!.addAll(newArticles.map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0).toList());
+
+      print('북마크 개수: ${marketArticleBookmarkCount?.length}');
+    }
   }
+
 
 
 }

@@ -150,6 +150,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
+        resizeToAvoidBottomInset : true,
         appBar: AppBar(
           backgroundColor: Colors.white,
           toolbarHeight: 56,
@@ -437,42 +438,44 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           ),
                         ),
                         SizedBox(height: 45.h),
-                        TextFormField(
-                          style: TextStyle(
-                              fontSize: 14.h,
-                              color: Color(0xff888888)
-                          ),
-                          decoration: InputDecoration(
-                              hintText: '${'market-posting-content'.tr()}',
-                              hintStyle: TextStyle(
-                                  fontSize: 14.spMin,
-                                  color: Color(0xffC0C0C0)
-                              ),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Colors.transparent),
-                                // 원하는 색상으로 설정
-                              ),
-                              focusedErrorBorder: UnderlineInputBorder(
+                        Container(
+                          child: TextFormField(
+                            style: TextStyle(
+                                fontSize: 14.h,
+                                color: Color(0xff888888)
+                            ),
+                            decoration: InputDecoration(
+                                hintText: '${'market-posting-content'.tr()}\n${'posting-noti'.tr()}',
+                                hintStyle: TextStyle(
+                                    fontSize: 14.spMin,
+                                    color: Color(0xffC0C0C0)
+                                ),
+                                enabledBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Colors.transparent)
-                              ),
-                              errorBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.transparent)
-                              ),
-                              contentPadding: EdgeInsets.only(
-                                  right: 14.w, left: 14.w)
+                                      color: Colors.transparent),
+                                  // 원하는 색상으로 설정
+                                ),
+                                focusedErrorBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.transparent)
+                                ),
+                                errorBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.transparent)
+                                ),
+                                contentPadding: EdgeInsets.only(
+                                    right: 14.w, left: 14.w)
+                            ),
+                            controller: _contentController,
+                            onChanged: (value){
+                              setState(() {
+                                _isButtonEnabled = _isFormValid();
+                              });
+                            },
+                            maxLines: 10,
                           ),
-                          controller: _contentController,
-                          onChanged: (value){
-                            setState(() {
-                              _isButtonEnabled = _isFormValid();
-                            });
-                          },
-                          maxLines: null,
                         ), //상품 내용
-                        SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+                        SizedBox(height:100.h),
                         Button(
                           child: Text(
                             'post3'.tr(),
@@ -496,15 +499,6 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
 
                               try {
                                 if (_isEditMode) {
-                                  // 수정 모드인 경우 게시물 업데이트
-                                  /*Map<String, dynamic> updateData = {
-                                    'title': _titleController.text,
-                                    'content': _contentController.text,
-                                    'price': int.parse(_priceController.text),
-                                    'productStatus': productStatus,
-                                    'marketArticleStatus':marketArticleStatus,
-                                    'imageUrls': _images.map((image) => image.path).toList(),
-                                  };*/
 
                                   MarketBoard updateData = MarketBoard(
                                     title: _titleController.text,
@@ -545,11 +539,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                 {
                                   // 생성 모드인 경우 게시물 생성
                                   bool success = await APIs.createMarketArticle(marketArticle);
-                                  Navigator.of(context).pop(); // 이전 페이지로 이동
+                                  //Navigator.of(context).pop(); // 이전 페이지로 이동
 
                                   if (success) {
                                     print('게시물 생성 성공!!!');
-                                    Navigator.of(context).pop(); // 이전 페이지로 이동
+                                    Future.delayed(const Duration(milliseconds: 100),() {
+                                      Navigator.of(context).pop(); // 이전 페이지로 이동
+                                    });
                                   } else {
                                     print('게시물 생성 실패...');
                                     ScaffoldMessenger.of(context).showSnackBar(
