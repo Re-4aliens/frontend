@@ -666,7 +666,7 @@ class APIs {
         ? Applicant.fromJson(await APIs.getApplicantInfo())
         : null;
     _partners =
-    _status == 'AppliedAndNotMatched' || _status == 'AppliedAndMatched'
+    _status == 'NotAppliedAndMatched' || _status == 'AppliedAndMatched'
         ? await APIs.getApplicantPartners()
         : null;
 
