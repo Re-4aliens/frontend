@@ -150,7 +150,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
-        resizeToAvoidBottomInset : false,
+        resizeToAvoidBottomInset : true,
         appBar: AppBar(
           backgroundColor: Colors.white,
           toolbarHeight: 56,
@@ -472,10 +472,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                 _isButtonEnabled = _isFormValid();
                               });
                             },
-                            maxLines: null,
+                            maxLines: 10,
                           ),
                         ), //상품 내용
-                        SizedBox(height:150.h),
+                        SizedBox(height:100.h),
                         Button(
                           child: Text(
                             'post3'.tr(),
