@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
+import '../firebase_options.dart';
 import '../repository/sql_message_database.dart';
 
 
@@ -14,25 +18,65 @@ import '../repository/sql_message_database.dart';
 //FlutterLocalNotificationsPlugin 패키지 초기화
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
-
+late AndroidNotificationChannel channel;
+bool isFlutterLocalNotificationsInitialized = false;
 
 class FirebaseAPIs {
+
+  static Future<void> setupFlutterNotifications() async {
+    if (isFlutterLocalNotificationsInitialized) {
+      return;
+    }
+    channel = const AndroidNotificationChannel(
+      'high_importance_channel', // id
+      'High Importance Notifications', // title
+      description: 'This channel is used for important notifications.', // description
+      importance: Importance.high,
+    );
+    flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(channel);
+    await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    // 토큰 요청
+    getToken();
+
+    isFlutterLocalNotificationsInitialized = true;
+  }
+  static Future<void> getToken() async {
+    if (Platform.isIOS) {
+      print('ios');
+      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(alert: true,badge: true,sound: true,);
+      String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+      print("apnsToken: " + apnsToken.toString());
+    }
+
+    await FirebaseMessaging.instance.getToken().then((value) {
+      print("deviceToken: " + value.toString());
+    })!;
+  }
 
   static final storage = FlutterSecureStorage();
   final _firebaseMessaging = FirebaseMessaging.instance;
 
-  /// 상단 알림을 위해 AndroidNotificationChannel 생성
-  static AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-    importance: Importance.min,
-  );
-
+  @pragma('vm:entry-point')
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
 
 
-    await Firebase.initializeApp();
-    var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+    await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform,);
+    await setupFlutterNotifications();
 
     var initialzationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -41,7 +85,6 @@ class FirebaseAPIs {
       requestBadgePermission: true,
       requestAlertPermission: true,
     );
-
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
