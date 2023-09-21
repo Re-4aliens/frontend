@@ -10,7 +10,10 @@ import FirebaseCore
   ) -> Bool {
   FirebaseApp.configure()
 
-    UNUserNotificationCenter.current().delegate = self
+      if #available(iOS 10.0, *) {
+            UNUserNotificationCenter.current().delegate = self as? UNUserNotificationCenterDelegate
+          }
+         
 
     let authOptions: UNAuthorizationOptions = [.alert, .badge, .sound]
     UNUserNotificationCenter.current().requestAuthorization(

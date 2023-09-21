@@ -29,6 +29,13 @@
             {
               "client_id": "101096502511-egccalvrmfdis0ajrakdk13j45bsv0ko.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "101096502511-9u0htr73hlptae6797tq6ricj32oub9a.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aliens.friendship"
+              }
             }
           ]
         }

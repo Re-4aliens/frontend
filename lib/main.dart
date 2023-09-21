@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:aliens/providers/bookmarks_provider.dart';
 import 'package:aliens/providers/comment_provider.dart';
 import 'package:aliens/providers/market_comment_provider.dart';
@@ -67,14 +69,63 @@ import './views/pages/splash_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'apis/firebase_apis.dart';
+import './apis/firebase_apis.dart';
 import 'package:overlay_support/overlay_support.dart';
+
+import 'firebase_options.dart';
 //import 'firebase_options.dart';
 
 final supportedLocales = [
   Locale('en', 'US'),
   Locale('ko', 'KR')
 ];
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('백그라운드 도착1');
+}
+
+@pragma('vm:entry-point')
+void backgroundHandler(NotificationResponse details) {
+  print('백그라운드 도착2');
+}
+
+void initializeNotification() async {
+  final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(const AndroidNotificationChannel(
+      'high_importance_channel', 'high_importance_notification',
+      importance: Importance.max));
+
+  await flutterLocalNotificationsPlugin.initialize(
+    const InitializationSettings(
+      android: AndroidInitializationSettings("@mipmap/ic_launcher"),
+      iOS: DarwinInitializationSettings(
+        requestSoundPermission: true,
+        requestBadgePermission: true,
+        requestAlertPermission: true,
+      ),
+    ),
+    onDidReceiveNotificationResponse: (details) {
+      print(details);
+    },
+    onDidReceiveBackgroundNotificationResponse: backgroundHandler,
+  );
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  RemoteMessage? message = await FirebaseMessaging.instance.getInitialMessage();
+  if (message != null) {
+    print(message);
+  }
+}
 
 void main() async {
 
@@ -86,13 +137,14 @@ void main() async {
 
 
   // fcm 초기화 부분
-  await initializeDefault();
-  final fcmToken = await FirebaseMessaging.instance.getToken();
-  // fcm 토큰 출력
-  print(fcmToken);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,);
 
-  FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler); // 백그라운드에서 동작하게 해줌
+  await FirebaseAPIs.setupFlutterNotifications();
+  FirebaseMessaging.onBackgroundMessage(FirebaseAPIs.FCMBackgroundHandler);
 
+  flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  initializeNotification();
 
   runApp(MultiProvider(
     providers: [
