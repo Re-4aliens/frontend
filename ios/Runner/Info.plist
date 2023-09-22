@@ -7,9 +7,9 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>NSBonjourServices</key>
-    	<array>
-    		<string>_dartobservatory._tcp</string>
-    	</array>
+	<array>
+		<string>_dartobservatory._tcp</string>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -44,11 +44,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Used to demonstrate image picker plugin</string>
+	<string>NSCameraUsageDescription</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Used to capture audio for image picker plugin</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Used to demonstrate image picker plugin</string>
+	<string>NSPhotoLibraryUsageDescription</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>
