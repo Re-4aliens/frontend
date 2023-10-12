@@ -52,6 +52,7 @@ class _ChattingPageState extends State<ChattingPage> {
   final _controller = TextEditingController();
 
   final ScrollController _scrollController = ScrollController();
+  final chattingServerDomain = "www.4aliens.r-e.kr";
   var _newMessage = '';
   bool isLoading = true;
   bool isKeypadUp = false;
@@ -254,9 +255,9 @@ class _ChattingPageState extends State<ChattingPage> {
       }
     }
 
-    final wsUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/message/send');
-    final wsReadUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/message/read');
-    final wsAllReadUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/room/read');
+    final wsUrl = Uri.parse('ws://$chattingServerDomain:8081/ws/chat/message/send');
+    final wsReadUrl = Uri.parse('ws://$chattingServerDomain:8081/ws/chat/message/read');
+    final wsAllReadUrl = Uri.parse('ws://$chattingServerDomain:8081/ws/chat/room/read');
     var header = {
       'Authorization': chatToken
     };
