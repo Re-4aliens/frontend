@@ -1,0 +1,10 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by 윤정하 on 2023/09/22.
+  
+*/
+NSPhotoLibraryUsageDescription = "\"FriendShip\"이 프로필 사진 첨부 및 수정, 게시글 사진 첨부 및 수정을 위해 사진 라이브러리에 접근하도록 허용합니다. ";
+
+NSCameraUsageDescription = "\"FriendShip\"이 프로필 사진 첨부 및 수정을 위해 카메라에 접근하도록 허용합니다. ";

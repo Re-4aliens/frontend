@@ -1,0 +1,11 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by 윤정하 on 2023/09/22.
+  
+*/
+
+NSPhotoLibraryUsageDescription = "Allow \"FriendShip\" to access your photos to set as my profile image and to share photos.";
+
+NSCameraUsageDescription = "Allow \"FriendShip\" to access your camera to take a photo to set as my profile image.";
