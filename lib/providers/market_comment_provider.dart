@@ -10,18 +10,18 @@ import '../models/market_comment.dart';
 class MarketCommentProvider with ChangeNotifier {
 
 
-  List<MarketComment>? commentListData;
+  List<Comment>? commentListData;
   bool loading = false;
   MarketComment? marketcomment;
 
   getMarketComments(int articleId) async {
     loading = true;
     try {
-      commentListData = await APIs.getMarketArticleComments(articleId);
+      commentListData = await APIs.getCommentsList(articleId);  //getMarketArticleComments 을 getCommentsList로 수정
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        commentListData = await APIs.getMarketArticleComments(articleId);
+        commentListData = await APIs.getCommentsList(articleId); //getMarketArticleComments 을 getCommentsList로 수정
       } else {
         // 오류 처리 로직
       }
@@ -34,11 +34,11 @@ class MarketCommentProvider with ChangeNotifier {
 
   addMarketComment(String content, int articleId) async {
     try {
-      await APIs.createMarketArticleComment(content,articleId);
+      await APIs.postComment(content,articleId); //createMarketArticleComment 을 postComment로 수정
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        await APIs.createMarketArticleComment(content,articleId);
+        await APIs.postComment(content,articleId); //createMarketArticleComment 을 postComment로 수정
       } else {
         return false;
       }
@@ -73,11 +73,11 @@ class MarketCommentProvider with ChangeNotifier {
     bool value = false;
     loading = true;
     try {
-      value =  await APIs.deleteMarketArticleComment(articleId);
+      value =  await APIs.deleteComment(articleId); //deleteMarketArticleComment 을 deleteComment 로 수정
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
-        value = await APIs.deleteMarketArticleComment(articleId);
+        value = await APIs.deleteComment(articleId); //deleteMarketArticleComment 을 deleteComment 로 수정
       } else {
       }
     }
