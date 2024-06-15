@@ -75,7 +75,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                 child: Text('confirm'.tr()),
                 onPressed: () async {
 
-                 if(_formKey.currentState!.validate()){
+                if(_formKey.currentState!.validate()){
                     var _email = _EmailController.text;
                     var _name = _NameController.text;
                     //임시 비밀번호 발급 요청
@@ -91,7 +91,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                                         image: AssetImage(
                                             "assets/illustration/loading_01.gif")));
                               } else{
-                                if(snapshot.data == true){
+                                if(snapshot.data == "M003"){
                                   //받아온 후
                                   WidgetsBinding.instance!.addPostFrameCallback((_) {
                                     Navigator.popAndPushNamed(context,'/login/checkemail');

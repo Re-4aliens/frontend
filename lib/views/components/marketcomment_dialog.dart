@@ -21,7 +21,7 @@ class MarketCommentDialog extends StatelessWidget{
   final BuildContext context;
   final VoidCallback onpressed;
   final bool isNestedComment;
-  final MarketComment marketcomment;
+  final Comment marketcomment;
 
   const MarketCommentDialog({
     Key? key,

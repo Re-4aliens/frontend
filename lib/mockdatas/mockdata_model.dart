@@ -231,8 +231,7 @@ SignUpModel signUpModel = SignUpModel(
   password: '1234567',
   birthday: '1993-09-13',
   profileImage: '',
-  selfIntroduction: '',
-
+  aboutMe: '',
 );
 
 void saveMockData() async {
