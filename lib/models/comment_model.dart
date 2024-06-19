@@ -5,7 +5,12 @@ class Comment {
   String? createdAt;
   List<Comment>? childs;
 
-  Comment({this.articleCommentId, this.content, this.member, this.childs, this.createdAt});
+  Comment(
+      {this.articleCommentId,
+      this.content,
+      this.member,
+      this.childs,
+      this.createdAt});
 
   Comment.fromJson(Map<String, dynamic> json) {
     List<Comment> childComments = [];
@@ -19,18 +24,19 @@ class Comment {
     articleCommentId = json['articleCommentId'];
     content = json['content'];
     createdAt = json['createdAt'];
-    member = json['member'] != null ? new CommentMember.fromJson(json['member']) : null;
+    member =
+        json['member'] != null ? CommentMember.fromJson(json['member']) : null;
     childs = childComments;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['articleCommentId'] = this.articleCommentId;
-    data['content'] = this.content;
-    data['childs'] = this.childs;
-    data['createdAt'] = this.createdAt;
-    if (this.member != null) {
-      data['member'] = this.member!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['articleCommentId'] = articleCommentId;
+    data['content'] = content;
+    data['childs'] = childs;
+    data['createdAt'] = createdAt;
+    if (member != null) {
+      data['member'] = member!.toJson();
     }
     return data;
   }
@@ -45,10 +51,10 @@ class CommentMember {
 
   CommentMember(
       {this.memberId,
-        this.email,
-        this.name,
-        this.profileImageUrl,
-        this.nationality});
+      this.email,
+      this.name,
+      this.profileImageUrl,
+      this.nationality});
 
   CommentMember.fromJson(Map<String, dynamic> json) {
     memberId = json['memberId'];
@@ -59,12 +65,12 @@ class CommentMember {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['memberId'] = this.memberId;
-    data['email'] = this.email;
-    data['name'] = this.name;
-    data['profileImageUrl'] = this.profileImageUrl;
-    data['nationality'] = this.nationality;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['memberId'] = memberId;
+    data['email'] = email;
+    data['name'] = name;
+    data['profileImageUrl'] = profileImageUrl;
+    data['nationality'] = nationality;
     return data;
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 class Partner {
   String? roomState;
   int? roomId;
@@ -15,20 +13,17 @@ class Partner {
   String? secondPreferLanguage;
 
   Partner(
-      {
-        this.roomState,
-        this.roomId,
-        this.memberId,
-        this.name,
-        this.mbti,
-        this.gender,
-        this.nationality,
-        this.profileImage,
-        this.selfIntroduction,
-
-        this.firstPreferLanguage,
-        this.secondPreferLanguage
-      });
+      {this.roomState,
+      this.roomId,
+      this.memberId,
+      this.name,
+      this.mbti,
+      this.gender,
+      this.nationality,
+      this.profileImage,
+      this.selfIntroduction,
+      this.firstPreferLanguage,
+      this.secondPreferLanguage});
 
   Partner.fromJson(Map<String, dynamic> json) {
     roomState = json['roomState'];
@@ -45,17 +40,17 @@ class Partner {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['roomState'] = this.roomState;
-    data['roomId'] = this.roomId;
-    data['name'] = this.name;
-    data['mbti'] = this.mbti;
-    data['gender'] = this.gender;
-    data['nationality'] = this.nationality;
-    data['profileImage'] = this.profileImage;
-    data['selfIntroduction'] = this.selfIntroduction;
-    data['firstPreferLanguage'] = this.firstPreferLanguage;
-    data['secondPreferLanguage'] = this.secondPreferLanguage;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['roomState'] = roomState;
+    data['roomId'] = roomId;
+    data['name'] = name;
+    data['mbti'] = mbti;
+    data['gender'] = gender;
+    data['nationality'] = nationality;
+    data['profileImage'] = profileImage;
+    data['selfIntroduction'] = selfIntroduction;
+    data['firstPreferLanguage'] = firstPreferLanguage;
+    data['secondPreferLanguage'] = secondPreferLanguage;
     return data;
   }
 }
