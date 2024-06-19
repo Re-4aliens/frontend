@@ -1,11 +1,11 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:aliens/services/apis.dart';
-import 'package:aliens/views/components/button_big.dart';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import 'package:aliens/services/apis.dart';
+import 'package:aliens/views/components/button_big.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -19,7 +19,8 @@ class _StartPageState extends State<StartPage> {
 
   //storage로부터 읽을 모델
   dynamic userInfo;
-  dynamic token;
+  dynamic accessToken;
+  dynamic refreshToken;
 
   String selectedValue = 'English';
 
@@ -39,34 +40,46 @@ class _StartPageState extends State<StartPage> {
     //저장된 정보가 있다면
     if (userInfo != null) {
       //토큰 저장 시간
-      token = await storage.read(key: 'token');
+      accessToken = await storage.read(key: 'token');
+      refreshToken = await storage.read(key: 'refreshToken');
 
-      final jwt = JWT.decode(token);
+      final jwtAccessToken = JWT.decode(accessToken);
+      final jwtRefreshToken = JWT.decode(refreshToken);
 
-      DateTime timestamp =
-          DateTime.fromMillisecondsSinceEpoch(jwt.payload['iat'] * 1000);
+      DateTime accessTokenTimestamp = DateTime.fromMillisecondsSinceEpoch(
+          jwtAccessToken.payload['iat'] * 1000);
+      DateTime refreshTokenTimestamp = DateTime.fromMicrosecondsSinceEpoch(
+          jwtRefreshToken.payload['iat'] * 1000);
 
-      Duration diff = DateTime.now().difference(timestamp);
+      Duration accessTokenDiff =
+          DateTime.now().difference(accessTokenTimestamp);
+      Duration refreshTokenDiff =
+          DateTime.now().difference(refreshTokenTimestamp);
 
-      print('지금 시간: ${DateTime.now()}\n토큰 저장 시간: $timestamp\n 차이: $diff');
-      //리프레시 토큰 기간이 지났다면
-      if (diff >= const Duration(days: 7)) {
-        //토큰 및 정보 지움
-        //자동로그인 해제
+      print(
+          '지금 시간: ${DateTime.now()}\n엑세스 토큰 저장 시간: $accessTokenTimestamp\n 차이: $accessTokenDiff');
+      print(
+          '지금 시간: ${DateTime.now()}리프레시 토큰 저장 시간: $refreshTokenTimestamp\n 차이: $refreshTokenDiff');
+
+      //refresh token 유효 기간(30일) 만료
+      if (refreshTokenDiff >= const Duration(days: 30)) {
+        print("refresh token 만료");
+        // 자동 로그인 해제
         await storage.delete(key: 'auth');
         await storage.delete(key: 'token');
-      } else if (diff < Duration.zero) {
+      }
+      // 시간 음수 오류 처리
+      else if (accessTokenDiff < Duration.zero ||
+          refreshTokenDiff < Duration.zero) {
         print('시간 음수 오류');
 
         //자동로그인 해제
         await storage.delete(key: 'auth');
         await storage.delete(key: 'token');
-      } else if (diff <= const Duration(days: 6) &&
-          diff >= const Duration(minutes: 30)) {
-        //액세스 토큰 기간이 지났다면
-        //액세스 토큰 재발급
-        print('액세스 토큰 재발급');
-
+      }
+      // access token 유효 기간(1일) 만료
+      else if (accessTokenDiff >= const Duration(days: 1)) {
+        print('access token 만료');
         if (await APIs.getAccessToken()) {
           Navigator.pushNamedAndRemoveUntil(
               context, '/loading', (route) => false);
