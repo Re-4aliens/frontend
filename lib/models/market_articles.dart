@@ -27,6 +27,7 @@ class MarketBoard {
         'createdAt: $createdAt'
         '}';
   }
+
   MarketBoard({
     this.articleId,
     this.title,

@@ -1,23 +1,18 @@
-import 'package:aliens/models/memberDetails_model.dart';
-import 'package:aliens/models/partner_model.dart';
-import 'package:aliens/models/screenArgument.dart';
-import 'package:aliens/views/components/block_dialog_widget.dart';
+import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/views/components/report_dialog_widget.dart';
-import 'package:aliens/views/components/report_iOS_dialog_widget.dart';
+import 'package:aliens/views/components/report_ios_dialog_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import '../../apis/apis.dart';
+import 'package:aliens/services/comment_service.dart';
 import '../../models/comment_model.dart';
-import '../../providers/comment_provider.dart';
+import 'package:aliens/providers/comment_provider.dart';
 
-
-class CommentDialog extends StatelessWidget{
+class CommentDialog extends StatelessWidget {
   final BuildContext context;
   final VoidCallback onpressed;
   final bool isNestedComment;
@@ -33,116 +28,122 @@ class CommentDialog extends StatelessWidget{
     required this.comment,
     required this.memberDetials,
     required this.articleId,
-  }) : super(key:key);
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if(Platform.isAndroid)
+    if (Platform.isAndroid) {
       return androidDialog();
-    else
+    } else {
       return iOSDialog();
+    }
   }
 
-  Widget androidDialog(){
+  Widget androidDialog() {
     final commentProvider = Provider.of<CommentProvider>(context);
     return Dialog(
       elevation: 0,
-      backgroundColor: Color(0xffffffff),
+      backgroundColor: const Color(0xffffffff),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(5.0).r,
       ),
       child: Container(
-        padding: EdgeInsets.all(30).r,
+        padding: const EdgeInsets.all(30).r,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               'chatting-dialog1'.tr(),
-              style: TextStyle(
-                  fontSize: 16.spMin,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 16.spMin, fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: 20.h,
             ),
-            isNestedComment ? SizedBox():
-            InkWell(
-              onTap: onpressed,
-              child: Container(
-                padding: EdgeInsets.all(13).r,
-                decoration: BoxDecoration(
-                    color: Color(0xff7898FF),
-                    borderRadius: BorderRadius.circular(5).r),
-                alignment: Alignment.center,
-                child: Text('comment3'.tr(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-
-            memberDetials.email == comment.member!.email ?
+            isNestedComment
+                ? const SizedBox()
+                : InkWell(
+                    onTap: onpressed,
+                    child: Container(
+                      padding: const EdgeInsets.all(13).r,
+                      decoration: BoxDecoration(
+                          color: const Color(0xff7898FF),
+                          borderRadius: BorderRadius.circular(5).r),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'comment3'.tr(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+            memberDetials.email == comment.member!.email
+                ? SizedBox(
+                    height: 10.h,
+                  )
+                : const SizedBox(),
+            memberDetials.email == comment.member!.email
+                ? InkWell(
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => FutureBuilder(
+                              future: CommentService.deleteComment(
+                                  comment.articleCommentId!),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                if (snapshot.hasData == false) {
+                                  //받아오는 동안
+                                  return Container(
+                                      child: const Image(
+                                          image: AssetImage(
+                                              "assets/illustration/loading_01.gif")));
+                                } else {
+                                  //받아온 후
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    commentProvider.getComments(articleId);
+                                  });
+                                  return Container(
+                                      child: const Image(
+                                          image: AssetImage(
+                                              "assets/illustration/loading_01.gif")));
+                                }
+                              }));
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(13).r,
+                      decoration: BoxDecoration(
+                          color: const Color(0xff7898FF),
+                          borderRadius: BorderRadius.circular(5).r),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'delete'.tr(),
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  )
+                : const SizedBox(),
             SizedBox(
               height: 10.h,
-            ):SizedBox(),
-            memberDetials.email == comment.member!.email ?
-            InkWell(
-              onTap: (){
-                showDialog(
-                    context: context,
-                    builder: (_) => FutureBuilder(
-                        future: APIs.deleteComment(comment.articleCommentId!),
-                        builder: (BuildContext context,
-                            AsyncSnapshot snapshot) {
-                          if (snapshot.hasData == false) {
-                            //받아오는 동안
-                            return Container(
-                                child: Image(
-                                    image: AssetImage(
-                                        "assets/illustration/loading_01.gif")));
-                          } else{
-                            //받아온 후
-                            WidgetsBinding.instance!.addPostFrameCallback((_) {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              commentProvider.getComments(articleId);
-                            });
-                            return Container(
-                                child: Image(
-                                    image: AssetImage(
-                                        "assets/illustration/loading_01.gif")));
-                          }
-                        }));
-              },
-              child: Container(
-                padding: EdgeInsets.all(13).r,
-                decoration: BoxDecoration(
-                    color: Color(0xff7898FF),
-                    borderRadius: BorderRadius.circular(5).r),
-                alignment: Alignment.center,
-                child: Text('delete'.tr(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ):SizedBox(),
-            SizedBox(
-              height: 10.h,
             ),
             InkWell(
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
                 showDialog(
                     context: context,
-                    builder: (builder) => ReportDialog(memberId: comment.member!.memberId!, context: context));
-
+                    builder: (builder) => ReportDialog(
+                        memberId: comment.member!.memberId!, context: context));
               },
               child: Container(
-                padding: EdgeInsets.all(13).r,
+                padding: const EdgeInsets.all(13).r,
                 decoration: BoxDecoration(
-                    color: Color(0xff7898FF),
+                    color: const Color(0xff7898FF),
                     borderRadius: BorderRadius.circular(5).r),
                 alignment: Alignment.center,
-                child: Text('chatting-report1'.tr(),
-                  style: TextStyle(color: Colors.white),
+                child: Text(
+                  'chatting-report1'.tr(),
+                  style: const TextStyle(color: Colors.white),
                 ),
               ),
             )
@@ -152,79 +153,83 @@ class CommentDialog extends StatelessWidget{
     );
   }
 
-  Widget iOSDialog(){
+  Widget iOSDialog() {
     final commentProvider = Provider.of<CommentProvider>(context);
     return Dialog(
       elevation: 0,
-      backgroundColor: Color(0xffffffff),
+      backgroundColor: const Color(0xffffffff),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20.0),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          isNestedComment ? SizedBox():
-          InkWell(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20.0),
-              topRight: Radius.circular(20.0),
-            ),
-            onTap: onpressed,
-            child: Container(
-              height: 80,
-              alignment: Alignment.center,
-              child: Text(
-                "comment3".tr(),
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
+          isNestedComment
+              ? const SizedBox()
+              : InkWell(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20.0),
+                    topRight: Radius.circular(20.0),
+                  ),
+                  onTap: onpressed,
+                  child: Container(
+                    height: 80,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "comment3".tr(),
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
-          memberDetials.email == comment.member!.email ?
+          memberDetials.email == comment.member!.email
+              ? InkWell(
+                  onTap: () {
+                    showDialog(
+                        context: context,
+                        builder: (_) => FutureBuilder(
+                            future: CommentService.deleteComment(
+                                comment.articleCommentId!),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.hasData == false) {
+                                //받아오는 동안
+                                return Container(
+                                    child: const Image(
+                                        image: AssetImage(
+                                            "assets/illustration/loading_01.gif")));
+                              } else {
+                                //받아온 후
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((_) {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  commentProvider.getComments(articleId);
+                                });
+                                return Container(
+                                    child: const Image(
+                                        image: AssetImage(
+                                            "assets/illustration/loading_01.gif")));
+                              }
+                            }));
+                  },
+                  child: Container(
+                    height: 80,
+                    alignment: Alignment.center,
+                    child: Text(
+                      "delete".tr(),
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox(),
           InkWell(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (_) => FutureBuilder(
-                      future: APIs.deleteComment(comment.articleCommentId!),
-                      builder: (BuildContext context,
-                          AsyncSnapshot snapshot) {
-                        if (snapshot.hasData == false) {
-                          //받아오는 동안
-                          return Container(
-                              child: Image(
-                                  image: AssetImage(
-                                      "assets/illustration/loading_01.gif")));
-                        } else{
-                          //받아온 후
-                          WidgetsBinding.instance!.addPostFrameCallback((_) {
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                            commentProvider.getComments(articleId);
-                          });
-                          return Container(
-                              child: Image(
-                                  image: AssetImage(
-                                      "assets/illustration/loading_01.gif")));
-                        }
-                      }));
-            },
-            child: Container(
-              height: 80,
-              alignment: Alignment.center,
-              child: Text(
-                "delete".tr(),
-                style: TextStyle(
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ):SizedBox(),
-          InkWell(
-            borderRadius: BorderRadius.only(
+            borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(20.0),
               bottomRight: Radius.circular(20.0),
             ),
@@ -232,14 +237,16 @@ class CommentDialog extends StatelessWidget{
               Navigator.pop(context);
               showDialog(
                   context: context,
-                  builder: (builder) => iOSReportDialog(memberId: comment.member!.memberId!,));
+                  builder: (builder) => iOSReportDialog(
+                        memberId: comment.member!.memberId!,
+                      ));
             },
             child: Container(
               height: 80,
               alignment: Alignment.center,
               child: Text(
                 "chatting-report1".tr(),
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.bold,
                 ),
@@ -250,6 +257,4 @@ class CommentDialog extends StatelessWidget{
       ),
     );
   }
-
 }
-

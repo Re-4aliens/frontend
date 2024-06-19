@@ -1,16 +1,9 @@
-import 'dart:convert';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../apis/apis.dart';
-import '../../components/appbar.dart';
+import 'package:aliens/services/auth_service.dart';
 import '../../components/button.dart';
 
 class SettingDeleteDonePage extends StatefulWidget {
@@ -30,7 +23,8 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
         body: Padding(
-          padding: EdgeInsets.only(left: 20,right: 20, bottom: 60, top:100),
+          padding:
+              const EdgeInsets.only(left: 20, right: 20, bottom: 60, top: 100),
           child: Column(
             children: [
               Expanded(
@@ -41,33 +35,34 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${'setting-withdrawaldone'.tr()}',
+                          'setting-withdrawaldone'.tr(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                              fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
+                              fontSize: isSmallScreen ? 22 : 24,
+                              fontWeight: FontWeight.bold),
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.05,
                         ),
                         Container(
-                          child: SvgPicture.asset(
-                            'assets/icon/icon_check.svg',
-                            color: Color(0xff7898ff),
-                          ),
                           height: MediaQuery.of(context).size.height * 0.126,
-                          width: MediaQuery.of(context).size.width*0.272,
+                          width: MediaQuery.of(context).size.width * 0.272,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: SvgPicture.asset(
+                            'assets/icon/icon_check.svg',
+                            color: const Color(0xff7898ff),
                           ),
                         ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.05,
                         ),
-                        Text('${'setting-thank'.tr()}',
+                        Text(
+                          'setting-thank'.tr(),
                           style: TextStyle(
-                            color: Color(0xff414141),
-                            fontSize: isSmallScreen?14:16
-                          ),
+                              color: const Color(0xff414141),
+                              fontSize: isSmallScreen ? 14 : 16),
                           textAlign: TextAlign.center,
                         )
                       ],
@@ -75,21 +70,19 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                   )),
               Expanded(
                   child: Container(
-                    alignment: Alignment.bottomCenter,
-                    child: Button(
-                      //수정
-                        isEnabled: true,
-                        child: Text('${'setting-gohome'.tr()}'),
-                        onPressed: () async {
-
-                          final fcmToken = await FirebaseMessaging.instance.getToken();
-                          await APIs.logOut(context);
-                          Navigator.of(context)
-                              .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
-                          );
-                        }),
-                  )),
-
+                alignment: Alignment.bottomCenter,
+                child: Button(
+                    //수정
+                    isEnabled: true,
+                    child: Text('setting-gohome'.tr()),
+                    onPressed: () async {
+                      final fcmToken =
+                          await FirebaseMessaging.instance.getToken();
+                      await AuthService.logOut(context);
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/', (Route<dynamic> route) => false);
+                    }),
+              )),
             ],
           ),
         ));

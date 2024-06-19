@@ -1,3 +1,5 @@
+//
+
 class Applicant {
   Member? member;
   PreferLanguages? preferLanguages;
@@ -5,20 +7,19 @@ class Applicant {
   Applicant({this.member, this.preferLanguages});
 
   Applicant.fromJson(Map<String, dynamic> json) {
-    member =
-    json['member'] != null ? new Member.fromJson(json['member']) : null;
+    member = json['member'] != null ? Member.fromJson(json['member']) : null;
     preferLanguages = json['preferLanguages'] != null
-        ? new PreferLanguages.fromJson(json['preferLanguages'])
+        ? PreferLanguages.fromJson(json['preferLanguages'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.member != null) {
-      data['member'] = this.member!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (member != null) {
+      data['member'] = member!.toJson();
     }
-    if (this.preferLanguages != null) {
-      data['preferLanguages'] = this.preferLanguages!.toJson();
+    if (preferLanguages != null) {
+      data['preferLanguages'] = preferLanguages!.toJson();
     }
     return data;
   }
@@ -36,14 +37,13 @@ class Member {
 
   Member(
       {this.name,
-        this.gender,
-        this.mbti,
-        this.nationality,
-        this.age,
-        this.profileImage,
-        this.countryImage,
-        this.selfIntroduction
-      });
+      this.gender,
+      this.mbti,
+      this.nationality,
+      this.age,
+      this.profileImage,
+      this.countryImage,
+      this.selfIntroduction});
 
   Member.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -57,15 +57,15 @@ class Member {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['gender'] = this.gender;
-    data['mbti'] = this.mbti;
-    data['nationality'] = this.nationality;
-    data['age'] = this.age;
-    data['profileImage'] = this.profileImage;
-    data['countryImage'] = this.countryImage;
-    data['selfIntroduction'] = this.selfIntroduction;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['name'] = name;
+    data['gender'] = gender;
+    data['mbti'] = mbti;
+    data['nationality'] = nationality;
+    data['age'] = age;
+    data['profileImage'] = profileImage;
+    data['countryImage'] = countryImage;
+    data['selfIntroduction'] = selfIntroduction;
     return data;
   }
 }
@@ -82,10 +82,9 @@ class PreferLanguages {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['firstPreferLanguage'] = this.firstPreferLanguage;
-    data['secondPreferLanguage'] = this.secondPreferLanguage;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['firstPreferLanguage'] = firstPreferLanguage;
+    data['secondPreferLanguage'] = secondPreferLanguage;
     return data;
   }
 }
-

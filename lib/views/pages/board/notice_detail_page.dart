@@ -1,38 +1,20 @@
-import 'dart:async';
-
-import 'package:aliens/mockdatas/board_mockdata.dart';
-import 'package:aliens/models/board_model.dart';
-import 'package:aliens/models/chatRoom_model.dart';
-import 'package:aliens/models/noticeArticle.dart';
-import 'package:aliens/models/screenArgument.dart';
-import 'package:aliens/repository/sql_message_database.dart';
-import 'package:aliens/views/pages/chatting/chatting_page.dart';
+import 'package:aliens/models/notice_article.dart';
+import 'package:aliens/models/screen_argument.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aliens/views/pages/board/search_page.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../../mockdatas/market_comment_mockdata.dart';
-import '../../../models/countries.dart';
 import '../../../models/message_model.dart';
-import '../../components/article_widget.dart';
 import '../../components/board_drawer_widget.dart';
-import '../../components/info_article_widget.dart';
-import '../../components/my_article_widget.dart';
-import '../../components/notice_board_widget.dart';
-import '../../components/notification_widget.dart';
-import 'article_page.dart';
-import 'article_writing_page.dart';
 import 'notification_page.dart';
 
-
 class NoticeDetailPage extends StatefulWidget {
-  NoticeDetailPage({Key? key, required this.screenArguments, required this.noticeArticle}) : super(key: key);
+  const NoticeDetailPage(
+      {Key? key, required this.screenArguments, required this.noticeArticle})
+      : super(key: key);
   final ScreenArguments screenArguments;
   final NoticeArticle noticeArticle;
-
 
   @override
   State<StatefulWidget> createState() => _NoticeDetailPageState();
@@ -56,7 +38,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
           toolbarHeight: 56.spMin,
           elevation: 0,
           shadowColor: Colors.black26,
-          backgroundColor: Color(0xff7898ff),
+          backgroundColor: const Color(0xff7898ff),
           leadingWidth: 100,
           leading: Column(
             children: [
@@ -78,7 +60,7 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                         isDrawerStart = !isDrawerStart;
                       });
                     },
-                    icon: Icon(Icons.format_list_bulleted_outlined),
+                    icon: const Icon(Icons.format_list_bulleted_outlined),
                     color: Colors.white,
                   ),
                 ],
@@ -87,12 +69,14 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
           ),
           actions: [
             Padding(
-              padding: EdgeInsets.all(8),
+              padding: const EdgeInsets.all(8),
               child: GestureDetector(
                 onTap: () {
-                  Navigator.push(context,
+                  Navigator.push(
+                    context,
                     MaterialPageRoute(
-                        builder: (context) => NotificationBoardWidget(screenArguments: widget.screenArguments)),
+                        builder: (context) => NotificationBoardWidget(
+                            screenArguments: widget.screenArguments)),
                   );
                 },
                 child: SvgPicture.asset(
@@ -103,63 +87,65 @@ class _NoticeDetailPageState extends State<NoticeDetailPage> {
                 ),
               ),
             ),
-          ]
-      ),
+          ]),
       body: isDrawerStart
-          ? BoardDrawerWidget(screenArguments: widget.screenArguments, isTotalBoard: false,
-        onpressd: (){},
-      )
-          :
-
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(left: 21.w, right: 21.w, top: 15.spMin, bottom: 15.spMin), // Adjust padding as needed
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ? BoardDrawerWidget(
+              screenArguments: widget.screenArguments,
+              isTotalBoard: false,
+              onpressd: () {},
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding:EdgeInsets.only(),
-                  child: Text(
-                    '${widget.noticeArticle.title}',
-                    style: TextStyle(
-                      fontSize: 18.spMin,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
+                  padding: EdgeInsets.only(
+                      left: 21.w,
+                      right: 21.w,
+                      top: 15.spMin,
+                      bottom: 15.spMin), // Adjust padding as needed
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(),
+                        child: Text(
+                          '${widget.noticeArticle.title}',
+                          style: TextStyle(
+                            fontSize: 18.spMin,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: Text(
+                          DataUtils.getTime(widget.noticeArticle.createdAt),
+                          style: TextStyle(
+                            fontSize: 14.spMin,
+                            color: const Color(0xff888888),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-
-                Flexible(
+                Divider(
+                  thickness: 1.h,
+                  color: const Color(0xffCECECE),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: 21.w, vertical: 10.spMin),
                   child: Text(
-                    DataUtils.getTime(widget.noticeArticle.createdAt),
+                    '${widget.noticeArticle.content}', // 'content' from the Board object
                     style: TextStyle(
-                      fontSize: 14.spMin,
-                      color: Color(0xff888888),
+                      fontSize: 18.spMin,
+                      color: Colors.black,
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-          Divider(
-            thickness: 1.h,
-            color: Color(0xffCECECE),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 21.w, vertical: 10.spMin),
-            child: Text(
-              '${widget.noticeArticle.content}', // 'content' from the Board object
-              style: TextStyle(
-                fontSize: 18.spMin,
-                color: Colors.black,
-              ),
-            ),
-          ),
-
-        ],
-      ),
     );
   }
 }

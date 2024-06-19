@@ -2,7 +2,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class ImageUtil {
-  static Future<http.MultipartFile> compressImageToMultipartFile(String fieldName, String imagePath) async {
+  static Future<http.MultipartFile> compressImageToMultipartFile(
+      String fieldName, String imagePath) async {
     const int maxSizeInBytes = 1 * 1000000; // 1MB
     double compressionQuality = 1.0;
 

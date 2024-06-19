@@ -3,13 +3,10 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../components/appbar.dart';
 import '../../components/button.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SettingFindPWPage extends StatefulWidget {
   const SettingFindPWPage({super.key});
@@ -19,9 +16,8 @@ class SettingFindPWPage extends StatefulWidget {
 }
 
 class _SettingFindPWPageState extends State<SettingFindPWPage> {
-  static final storage = FlutterSecureStorage();
+  static const storage = FlutterSecureStorage();
   final TextEditingController _passwordController = TextEditingController();
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +27,28 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
 
     return Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(appBar: AppBar(), title: '',backgroundColor: Colors.transparent, infookay: false, infocontent: '',),
-
+        appBar: CustomAppBar(
+          appBar: AppBar(),
+          title: '',
+          backgroundColor: Colors.transparent,
+          infookay: false,
+          infocontent: '',
+        ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
-              Text('${'setting-findpas'.tr()}',
+              Text(
+                'setting-findpas'.tr(),
                 style: TextStyle(
-                    fontSize: isSmallScreen?22:24,
-                    fontWeight: FontWeight.bold
-                ),),
-              SizedBox(
+                    fontSize: isSmallScreen ? 22 : 24,
+                    fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
                 height: 20,
               ),
               TextFormField(
@@ -54,62 +56,60 @@ class _SettingFindPWPageState extends State<SettingFindPWPage> {
                 obscuringCharacter: '*',
                 controller: _passwordController,
                 decoration: InputDecoration(
-                  hintText: '${'setting-enterpass'.tr()}',
+                  hintText: 'setting-enterpass'.tr(),
                   hintStyle: TextStyle(
-                    fontSize: isSmallScreen?18:20,
-                    color: Color(0xffD9D9D9),
+                    fontSize: isSmallScreen ? 18 : 20,
+                    color: const Color(0xffD9D9D9),
                   ),
-
                 ),
               ),
-             
               Expanded(
                 child: Container(
                   alignment: Alignment.bottomCenter,
-                  padding: EdgeInsets.only(bottom: 50),
+                  padding: const EdgeInsets.only(bottom: 50),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 0.0),
                     child: Button(
-                      //수정
+                        //수정
                         isEnabled: true,
-                        child: Text('${'setting-authen'.tr()}'),
+                        child: Text('setting-authen'.tr()),
                         onPressed: () async {
                           //if 지금 비밀번호랑 입력한 거랑 같으면
                           var userInfo = await storage.read(key: 'auth');
                           if (_passwordController.text ==
-                              json.decode(userInfo!)['password'])
+                              json.decode(userInfo!)['password']) {
                             Navigator.pushNamed(context, '/setting/edit/PW',
                                 arguments: _passwordController.text);
-                          else
-                            showDialog(context: context,
+                          } else {
+                            showDialog(
+                                context: context,
                                 builder: (BuildContext context) =>
                                     CupertinoAlertDialog(
-
-                                      title: Text('${'setting-wrongpass'.tr()}',
-                                        style: TextStyle(
+                                      title: Text(
+                                        'setting-wrongpass'.tr(),
+                                        style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      content: Text('${'setting-confirmpass'.tr()}'),
+                                      content: Text('setting-confirmpass'.tr()),
                                       actions: <Widget>[
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.of(context).pop(),
-                                          child: Text('${'confirm'.tr()}',
-                                              style: TextStyle(
+                                          child: Text('confirm'.tr(),
+                                              style: const TextStyle(
                                                 color: Colors.black,
                                               )),
                                         ),
                                       ],
                                     ));
-                        }
-                        ),
+                          }
+                        }),
                   ),
                 ),
               )
             ],
           ),
-        )
-    );
+        ));
   }
 }

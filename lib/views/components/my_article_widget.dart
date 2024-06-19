@@ -1,18 +1,6 @@
 
-import 'dart:async';
 
-import 'package:aliens/models/memberDetails_model.dart';
-import 'package:aliens/models/message_model.dart';
-import 'package:aliens/views/pages/board/article_writing_page.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
-import '../../models/board_model.dart';
-import '../pages/board/article_page.dart';
-import 'board_dialog_widget.dart';
 /*
 class MyArticleWidget extends StatefulWidget {
 

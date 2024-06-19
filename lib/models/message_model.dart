@@ -2,15 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:uuid/uuid.dart';
 
 class MessageFields {
-  static final String chatId = 'chatId';
-  static final String chatType = 'chatType';
-  static final String chatContent = 'chatContent';
-  static final String roomId = 'roomId';
-  static final String senderId = 'senderId';
-  static final String senderName = 'senderName';
-  static final String receiverId = 'receiverId';
-  static final String sendTime = 'sendTime';
-  static final String unreadCount = 'unreadCount';
+  static const String chatId = 'chatId';
+  static const String chatType = 'chatType';
+  static const String chatContent = 'chatContent';
+  static const String roomId = 'roomId';
+  static const String senderId = 'senderId';
+  static const String senderName = 'senderName';
+  static const String receiverId = 'receiverId';
+  static const String sendTime = 'sendTime';
+  static const String unreadCount = 'unreadCount';
 }
 
 class MessageModel {
@@ -25,8 +25,7 @@ class MessageModel {
   int? unreadCount;
 
   MessageModel(
-      {
-        this.chatId,
+      {this.chatId,
       this.chatType,
       this.chatContent,
       this.roomId,
@@ -49,39 +48,38 @@ class MessageModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['chatId'] = this.chatId;
-    data['chatType'] = this.chatType;
-    data['chatContent'] = this.chatContent;
-    data['roomId'] = this.roomId;
-    data['senderId'] = this.senderId;
-    data['senderName'] = this.senderName;
-    data['receiverId'] = this.receiverId;
-    data['sendTime'] = this.sendTime;
-    data['unreadCount'] = this.unreadCount;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['chatId'] = chatId;
+    data['chatType'] = chatType;
+    data['chatContent'] = chatContent;
+    data['roomId'] = roomId;
+    data['senderId'] = senderId;
+    data['senderName'] = senderName;
+    data['receiverId'] = receiverId;
+    data['sendTime'] = sendTime;
+    data['unreadCount'] = unreadCount;
     return data;
   }
 }
 
 class DataUtils {
-  static String makeUUID(){
+  static String makeUUID() {
     return const Uuid().v1();
   }
+
   static String getTime(createdAt) {
-    Duration diff = DateTime.now().difference(DateTime.parse('${createdAt}'));
+    Duration diff = DateTime.now().difference(DateTime.parse('$createdAt'));
     //1분 이하
-    if(diff.inSeconds < 60){
+    if (diff.inSeconds < 60) {
       return "time1".tr();
     }
     //1분 이상 1시간 이하
-    else if(diff.inSeconds >= 60 && diff.inMinutes < 60){
+    else if (diff.inSeconds >= 60 && diff.inMinutes < 60) {
       return "${diff.inMinutes}${"time2".tr()}";
-    }
-    else if(diff.inMinutes >= 60 && diff.inHours < 24){
+    } else if (diff.inMinutes >= 60 && diff.inHours < 24) {
       return "${diff.inHours}${"time3".tr()}";
-    }
-    else{
-      return DateFormat('yy.MM.dd').format(DateTime.parse('${createdAt}'));
+    } else {
+      return DateFormat('yy.MM.dd').format(DateTime.parse('$createdAt'));
     }
   }
 }

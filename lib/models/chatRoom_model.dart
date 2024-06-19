@@ -6,7 +6,11 @@ class ChatRoom {
   String? lastChatTime;
   int? numberOfUnreadChat;
 
-  ChatRoom({this.partner, this.lastChatContent, this.lastChatTime, this.numberOfUnreadChat});
+  ChatRoom(
+      {this.partner,
+      this.lastChatContent,
+      this.lastChatTime,
+      this.numberOfUnreadChat});
 
   ChatRoom.fromJson(Map<String, dynamic> json) {
     partner = json['partner'];
@@ -16,11 +20,11 @@ class ChatRoom {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['partner'] = this.partner;
-    data['lastChatContent'] = this.lastChatContent;
-    data['lastChatTime'] = this.lastChatTime;
-    data['numberOfUnreadChat'] = this.numberOfUnreadChat;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['partner'] = partner;
+    data['lastChatContent'] = lastChatContent;
+    data['lastChatTime'] = lastChatTime;
+    data['numberOfUnreadChat'] = numberOfUnreadChat;
     return data;
   }
 }
