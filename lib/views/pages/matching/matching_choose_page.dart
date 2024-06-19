@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aliens/apis/apis.dart';
+import 'package:aliens/services/apis.dart';
 
-import '../../../apis/apis.dart';
-import '../../../models/screenArgument.dart';
+import '../../../models/screen_argument.dart';
 import '../../components/button.dart';
 
 class MatchingChoosePage extends StatefulWidget {
@@ -20,7 +18,7 @@ class MatchingChoosePage extends StatefulWidget {
 class _MatchingChoosePageState extends State<MatchingChoosePage> {
   var selectedStack = -1;
   var selectedIndex = [-1, -1];
-  static final storage = FlutterSecureStorage();
+  static const storage = FlutterSecureStorage();
 
   final List<Map<String, dynamic>> nationlist = [
     {
@@ -40,15 +38,14 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
       'lan': 'CN',
       'value': 'JAPANESE',
       'puzzle': 'assets/character/pink_puzzle.svg',
-    },//중국어
+    }, //중국어
     {
       'language': '日本語',
       'lan': 'JP',
       'value': 'CHINESE',
       'puzzle': 'assets/character/green_puzzle.svg',
-    }//일본어
+    } //일본어
   ];
-
 
   @override
   Widget build(BuildContext context) {
@@ -59,18 +56,19 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
     final double fontSize = isSmallScreen ? 14.0 : 16.0;
 
     return Scaffold(
-        backgroundColor: Color(0xFFF5F7FF),
+        backgroundColor: const Color(0xFFF5F7FF),
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Color(0xffF5F7FF),
+          backgroundColor: const Color(0xffF5F7FF),
           leading: IconButton(
             icon: SvgPicture.asset(
               'assets/icon/icon_back.svg',
-              color: Color(0xff4D4D4D),
+              color: const Color(0xff4D4D4D),
               width: 24,
-              height: MediaQuery.of(context).size.height * 0.029,),
-            onPressed: (){
+              height: MediaQuery.of(context).size.height * 0.029,
+            ),
+            onPressed: () {
               Navigator.of(context).pop();
             },
           ),
@@ -79,39 +77,40 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
               onPressed: () {
                 showDialog(
                   context: context,
-                  builder: (BuildContext context) =>
-                      AlertDialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30) //모서리
+                  builder: (BuildContext context) => AlertDialog(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30) //모서리
                           ),
-                          alignment: Alignment.center,
-                          title: Padding(
-                            padding: EdgeInsets.all(30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 20),
-                                  child: SvgPicture.asset(
-                                    'assets/icon/icon_info.svg',
-                                    color: Color(0xff7898ff),
-                                    width: MediaQuery.of(context).size.width * 0.062,
-                                    height: MediaQuery.of(context).size.height * 0.029,
-                                  ),
-                                ),
-                                Text('${'matching-chooseinfo'.tr()}',
-                                  style: TextStyle(
-                                    fontSize: 14.spMin,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.5,
-                                  ),
-                                  textAlign: TextAlign.center,)
-                              ],
+                      alignment: Alignment.center,
+                      title: Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: SvgPicture.asset(
+                                'assets/icon/icon_info.svg',
+                                color: const Color(0xff7898ff),
+                                width:
+                                    MediaQuery.of(context).size.width * 0.062,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.029,
+                              ),
                             ),
-                          )
-
-                      ),
+                            Text(
+                              'matching-chooseinfo'.tr(),
+                              style: TextStyle(
+                                fontSize: 14.spMin,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                height: 1.5,
+                              ),
+                              textAlign: TextAlign.center,
+                            )
+                          ],
+                        ),
+                      )),
                 );
               },
               icon: SvgPicture.asset(
@@ -127,23 +126,26 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.only(right: 25,left: 25).w,
+              padding: const EdgeInsets.only(right: 25, left: 25).w,
               child: Column(
                 children: [
-                  SizedBox(height: 70.h,),
+                  SizedBox(
+                    height: 70.h,
+                  ),
                   Text(
-                    '${'matching-chooselan'.tr()}',
+                    'matching-chooselan'.tr(),
                     style: TextStyle(
                       fontSize: 24.spMin,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   SizedBox(
-                    height: 20.h ,
+                    height: 20.h,
                   ),
                   Text(
-                    '${'matching-choosedetail'.tr()}',
-                    style: TextStyle(fontSize: 16.spMin, color: Color(0xff616161)),
+                    'matching-choosedetail'.tr(),
+                    style: TextStyle(
+                        fontSize: 16.spMin, color: const Color(0xff616161)),
                     textAlign: TextAlign.center,
                   ),
                 ],
@@ -160,12 +162,10 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                     children: [
                       LanguageButton(
                         language: nationlist[2 * i]['language'],
-                        lan : nationlist[2 * i]['lan'],
+                        lan: nationlist[2 * i]['lan'],
                         puzzle: nationlist[2 * i]['puzzle'],
-                        selectedFirst:
-                        selectedIndex[0] == (2 * i),
-                        selectedSecond:
-                        selectedIndex[1] == (2 * i),
+                        selectedFirst: selectedIndex[0] == (2 * i),
+                        selectedSecond: selectedIndex[1] == (2 * i),
                         onPressed: () {
                           setState(() {
                             //첫 번째가 선택이 안됐으면
@@ -196,8 +196,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                 //값을 없앤다.
                                 selectedIndex[1] = -1;
                               } //본인이 아닌데 1번 값이라면
-                              else if (selectedIndex[0] ==
-                                  (2 * i)) {
+                              else if (selectedIndex[0] == (2 * i)) {
                                 //변화 x
                                 print('첫번째꺼 이미선택됨');
                               } //본인이 아니면
@@ -208,18 +207,17 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                               }
                             }
                           });
-                        },
-                        /*puzzle : nationlist[2 * i],*/),
+                        }, /*puzzle : nationlist[2 * i],*/
+                      ),
                       SizedBox(
                         width: 20.w,
                       ),
                       LanguageButton(
-                        language: nationlist[2 * i+1]['language'],
-                        lan : nationlist[2 * i+1]['lan'],
-                        puzzle: nationlist[2 * i+1]['puzzle'],                                  selectedFirst:
-                      selectedIndex[0] == (2 * i + 1),
-                        selectedSecond:
-                        selectedIndex[1] == (2 * i + 1),
+                        language: nationlist[2 * i + 1]['language'],
+                        lan: nationlist[2 * i + 1]['lan'],
+                        puzzle: nationlist[2 * i + 1]['puzzle'],
+                        selectedFirst: selectedIndex[0] == (2 * i + 1),
+                        selectedSecond: selectedIndex[1] == (2 * i + 1),
                         onPressed: () {
                           setState(() {
                             //첫 번째가 선택이 안됐으면
@@ -250,8 +248,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                 //값을 없앤다.
                                 selectedIndex[1] = -1;
                               } //본인이 아닌데 1번 값이라면
-                              else if (selectedIndex[0] ==
-                                  (2 * i + 1)) {
+                              else if (selectedIndex[0] == (2 * i + 1)) {
                                 //변화 x
                                 print('첫번째꺼 이미선택됨');
                               } //본인이 아니면
@@ -266,81 +263,82 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                       )
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 ],
               ),
-            SizedBox(height: 70.h,),
+            SizedBox(
+              height: 70.h,
+            ),
             Padding(
-              padding: EdgeInsets.only(right: 25,left: 25),
+              padding: const EdgeInsets.only(right: 25, left: 25),
               child: Button(
                 onPressed: () async {
                   //success
-                  if (selectedIndex[0] != -1 &&
-                      selectedIndex[1] != -1) {
+                  if (selectedIndex[0] != -1 && selectedIndex[1] != -1) {
                     //신청 요청
-                    var success;
+                    late bool success;
                     try {
-                      success = await APIs.applicantMatching(nationlist[selectedIndex[0]]['value'], nationlist[selectedIndex[1]]['value']);
+                      success = await APIs.applicantMatching(
+                          nationlist[selectedIndex[0]]['value'],
+                          nationlist[selectedIndex[1]]['value']);
                     } catch (e) {
-                      if(e == "AT-C-002"){
-                        try{
+                      if (e == "AT-C-002") {
+                        try {
                           await APIs.getAccessToken();
-                        }catch (e){
-                          if(e == "AT-C-005") {
+                        } catch (e) {
+                          if (e == "AT-C-005") {
                             //토큰 및 정보 삭제
                             await storage.delete(key: 'auth');
                             await storage.delete(key: 'token');
                             print('로그아웃, 정보 지움');
 
                             //스택 비우고 화면 이동
-                            Navigator.of(context)
-                                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
-                            );
-                          }else if(e == "AT-C-007"){
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                                '/', (Route<dynamic> route) => false);
+                          } else if (e == "AT-C-007") {
                             //토큰 및 정보 삭제
                             await APIs.logOut(context);
-                          }
-                          else{
-                            success = await APIs.applicantMatching(nationlist[selectedIndex[0]]['value'], nationlist[selectedIndex[1]]['value']);
+                          } else {
+                            success = await APIs.applicantMatching(
+                                nationlist[selectedIndex[0]]['value'],
+                                nationlist[selectedIndex[1]]['value']);
                           }
                         }
-                      }
-                      else if(e == "AT-C-007"){
+                      } else if (e == "AT-C-007") {
                         //토큰 및 정보 삭제
                         await APIs.logOut(context);
-                      }
-
-                      else{
-                        success = await APIs.applicantMatching(nationlist[selectedIndex[0]]['value'], nationlist[selectedIndex[1]]['value']);
+                      } else {
+                        success = await APIs.applicantMatching(
+                            nationlist[selectedIndex[0]]['value'],
+                            nationlist[selectedIndex[1]]['value']);
                       }
                     }
-                    if(success){
+                    if (success) {
                       //페이지 이동
-                      Navigator.pushNamed(context, '/apply/done', arguments: args);
-                    }else{
+                      Navigator.pushNamed(context, '/apply/done',
+                          arguments: args);
+                    } else {
                       print('요청 실패');
-                    };
+                    }
                   } else {
                     //fail
-                  };
+                  }
                 },
+                isEnabled: selectedIndex[0] != -1 && selectedIndex[1] != -1,
                 child: Text(
                   selectedIndex[0] == -1
-                      ? '${'matching-chooselan'.tr()}'
+                      ? 'matching-chooselan'.tr()
                       : selectedIndex[1] == -1
-                      ? '${'matching-choosetwo'.tr()}'
-                      : '${'done'.tr()}',
+                          ? 'matching-choosetwo'.tr()
+                          : 'done'.tr(),
                   style: TextStyle(
-                    color: selectedIndex[0] != -1 &&
-                        selectedIndex[1] != -1
+                    color: selectedIndex[0] != -1 && selectedIndex[1] != -1
                         ? Colors.white
-                        : Color(0xffA7A7A7),
+                        : const Color(0xffA7A7A7),
                   ),
                 ),
-                isEnabled: selectedIndex[0] != -1 &&
-                    selectedIndex[1] != -1,
               ),
             ),
           ],
@@ -349,7 +347,6 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
 }
 
 class LanguageButton extends StatelessWidget {
-
   final language;
   final lan;
   final selectedFirst;
@@ -359,30 +356,32 @@ class LanguageButton extends StatelessWidget {
 
   const LanguageButton(
       {Key? key,
-        required this.language,
-        required this.lan,
-        required this.selectedFirst,
-        required this.selectedSecond,
-        required this.puzzle,
-        required this.onPressed})
+      required this.language,
+      required this.lan,
+      required this.selectedFirst,
+      required this.selectedSecond,
+      required this.puzzle,
+      required this.onPressed})
       : super(key: key);
 
   Color changeColor(bool selectedFirst, bool selectedSecond) {
-    if (selectedFirst == true)
-      return Color(0xff7898FF);
-    else if (selectedSecond == true)
-      return Color(0xffFFB5B5);
-    else
+    if (selectedFirst == true) {
+      return const Color(0xff7898FF);
+    } else if (selectedSecond == true) {
+      return const Color(0xffFFB5B5);
+    } else {
       return Colors.white;
+    }
   }
 
   Color changeShadowColor(bool selectedFirst, bool selectedSecond) {
-    if (selectedFirst == true)
-      return Color(0xff4976FF);
-    else if (selectedSecond == true)
-      return Color(0xffFF9393);
-    else
-      return Color(0xff7898FF).withOpacity(0.3);
+    if (selectedFirst == true) {
+      return const Color(0xff4976FF);
+    } else if (selectedSecond == true) {
+      return const Color(0xffFF9393);
+    } else {
+      return const Color(0xff7898FF).withOpacity(0.3);
+    }
   }
 
   @override
@@ -409,7 +408,7 @@ class LanguageButton extends StatelessWidget {
           child: Container(
             height: 120.r,
             width: 160.r,
-            padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20).r,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20).r,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20).r,
                 boxShadow: [
@@ -432,43 +431,44 @@ class LanguageButton extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                        child : SvgPicture.asset(puzzle,
-                          width: 40.r,
-                          height: 40.r,
-                        )
-                    ),
+                        child: SvgPicture.asset(
+                      puzzle,
+                      width: 40.r,
+                      height: 40.r,
+                    )),
                     Container(
                       height: 30.r,
                       width: 30.r,
                       decoration: BoxDecoration(
                         color: selectedFirst || selectedSecond
                             ? Colors.white
-                            : Color(0xFFD9D9D9),
-                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                            : const Color(0xFFD9D9D9),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
                       ),
                       alignment: Alignment.center,
                       child: selectedFirst
                           ? Text(
-                        '1',
-                        style: TextStyle(
-                          color: Color(0xff7898FF),
-                          fontSize: 20.spMin,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
+                              '1',
+                              style: TextStyle(
+                                color: const Color(0xff7898FF),
+                                fontSize: 20.spMin,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
                           : selectedSecond
-                          ? Text(
-                        '2',
-                        style: TextStyle(
-                          color: Color(0xffffb5b5),
-                          fontSize: 20.spMin,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      )
-                          : Icon(
-                        Icons.check,
-                        color: Colors.white,
-                      ),
+                              ? Text(
+                                  '2',
+                                  style: TextStyle(
+                                    color: const Color(0xffffb5b5),
+                                    fontSize: 20.spMin,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : const Icon(
+                                  Icons.check,
+                                  color: Colors.white,
+                                ),
                     ),
                   ],
                 ),
@@ -479,7 +479,7 @@ class LanguageButton extends StatelessWidget {
                       language,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize:18.spMin,
+                        fontSize: 18.spMin,
                         color: selectedFirst || selectedSecond
                             ? Colors.white
                             : Colors.black,
@@ -494,7 +494,7 @@ class LanguageButton extends StatelessWidget {
                         fontSize: 12.spMin,
                         color: selectedFirst || selectedSecond
                             ? Colors.white
-                            : Color(0xff888888),
+                            : const Color(0xff888888),
                       ),
                     ),
                   ],

@@ -1,12 +1,8 @@
 import 'dart:convert';
 
-import '../../../apis/apis.dart';
-import 'package:aliens/models/applicant_model.dart';
-import 'package:aliens/models/memberDetails_model.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:aliens/services/apis.dart';
+import 'package:aliens/models/member_details_model.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aliens/providers/auth_provider.dart';
-import 'package:aliens/models/auth_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -23,8 +19,8 @@ class SettingDeletePage extends StatefulWidget {
 }
 
 class _SettingDeletePageState extends State<SettingDeletePage> {
-  final TextEditingController passwordController = new TextEditingController();
-  static final storage = FlutterSecureStorage();
+  final TextEditingController passwordController = TextEditingController();
+  static const storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +35,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
           backgroundColor: Colors.transparent,
           infookay: false,
           infocontent: '',
-          title: '${'setting-memwithdrawal'.tr()}',
+          title: 'setting-memwithdrawal'.tr(),
         ),
         body: Container(
           padding: EdgeInsets.only(
@@ -51,29 +47,29 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                '${'setting-withdrawal'.tr()}',
+                'setting-withdrawal'.tr(),
                 style: TextStyle(
                     fontSize: isSmallScreen ? 22 : 24,
                     fontWeight: FontWeight.bold),
               ),
               Container(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(
-                    '${'setting-putpas'.tr()}',
+                    'setting-putpas'.tr(),
                     style: TextStyle(
                       fontSize: isSmallScreen ? 12 : 14,
-                      color: Color(0xffb8b8b8),
+                      color: const Color(0xffb8b8b8),
                     ),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               _passwordCheck(memberDetails),
-              Expanded(child: SizedBox()),
+              const Expanded(child: SizedBox()),
               Button(
                   //수정
                   isEnabled: true,
-                  child: Text('${'setting-withdrawal'.tr()}'),
+                  child: Text('setting-withdrawal'.tr()),
                   onPressed: () async {
                     var userInfo = await storage.read(key: 'auth');
 
@@ -119,68 +115,75 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                           builder: (context) {
                             return Dialog(
                               elevation: 0,
-                              backgroundColor: Color(0xffffffff),
+                              backgroundColor: const Color(0xffffffff),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(5.0),
                               ),
                               child: Container(
-                                padding: EdgeInsets.all(30),
+                                padding: const EdgeInsets.all(30),
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(10),
                                       child: SvgPicture.asset(
                                         'assets/character/withdraw.svg',
-                                        height: MediaQuery.of(context).size.height * 0.1,
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.1,
                                       ),
                                     ),
                                     Text(
-                                      '${'setting-real'.tr()}',
-                                      style: TextStyle(
+                                      'setting-real'.tr(),
+                                      style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(25.0),
                                       child: Text(
-                                        '${'setting-delete5'.tr()}',
+                                        'setting-delete5'.tr(),
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          color: Color(0xff888888)
-                                        ),
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xff888888)),
                                       ),
                                     ),
                                     InkWell(
                                       onTap: () async {
                                         if (await APIs.withdraw(
-                                        passwordController.text)){
-                                        Navigator.pushNamed(context, '/setting/delete/done');
+                                            passwordController.text)) {
+                                          Navigator.pushNamed(
+                                              context, '/setting/delete/done');
                                         }
                                       },
                                       child: Container(
-                                        padding: EdgeInsets.all(13),
+                                        padding: const EdgeInsets.all(13),
                                         decoration: BoxDecoration(
-                                            color: Color(0xff7898FF),
+                                            color: const Color(0xff7898FF),
                                             borderRadius:
                                                 BorderRadius.circular(5)),
                                         alignment: Alignment.center,
                                         child: Text(
-                                          '${'setting-okay'.tr()}',
-                                          style: TextStyle(color: Colors.white),
+                                          'setting-okay'.tr(),
+                                          style: const TextStyle(
+                                              color: Colors.white),
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 10,
                                     ),
-                                    TextButton(onPressed: (){
-                                      Navigator.pop(context);
-                                    }, child: Text(
-                                      '${'setting-cancel'.tr()}',
-                                      style: TextStyle(color: Color(0xffc1c1c1)),
-                                    ),),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        'setting-cancel'.tr(),
+                                        style: const TextStyle(
+                                            color: Color(0xffc1c1c1)),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -192,20 +195,23 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                           builder: (context) {
                             return AlertDialog(
                                 title: Text(
-                                  '${'setting-fail'.tr()}',
-                                  style: TextStyle(
+                                  'setting-fail'.tr(),
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                content: Text('${'setting-failwhy'.tr()}', style: TextStyle(
-                                  color: Color(0xff888888),
-                                ),),
+                                content: Text(
+                                  'setting-failwhy'.tr(),
+                                  style: const TextStyle(
+                                    color: Color(0xff888888),
+                                  ),
+                                ),
                                 actions: <Widget>[
                                   TextButton(
                                     onPressed: () =>
                                         Navigator.of(context).pop(),
-                                    child: Text('${'cancel'.tr()}',
-                                        style: TextStyle(
+                                    child: Text('cancel'.tr(),
+                                        style: const TextStyle(
                                           color: Color(0xff7898FF),
                                         )),
                                   ),
@@ -214,8 +220,8 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                                       Navigator.of(context).pop();
                                     },
                                     child: Text(
-                                      '${'again'.tr()}',
-                                      style: TextStyle(
+                                      'again'.tr(),
+                                      style: const TextStyle(
                                         color: Color(0xff7898FF),
                                       ),
                                     ),
@@ -230,7 +236,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
   }
 
   Widget _passwordCheck(memberDetails) {
-    return Container(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: TextFormField(
         controller: passwordController,

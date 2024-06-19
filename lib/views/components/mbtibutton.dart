@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
-class mbtiButton extends StatelessWidget{
+class MbtiButton extends StatelessWidget {
   final text;
   final explain;
   final mbti;
@@ -12,8 +10,7 @@ class mbtiButton extends StatelessWidget{
   final VoidCallback onPressed;
   final String image;
 
-
-  const mbtiButton({
+  const MbtiButton({
     Key? key,
     required this.text,
     required this.explain,
@@ -22,16 +19,16 @@ class mbtiButton extends StatelessWidget{
     required this.step,
     required this.onPressed,
     required this.image,
-  }) : super(key:key);
+  }) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 800;
 
     return Container(
-      margin: EdgeInsets.only(left: 15,right: 15, top: 5, bottom: 5),
-     // width: MediaQuery.of(context).size.width * 0.4,
+      margin: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
+      // width: MediaQuery.of(context).size.width * 0.4,
       width: isSmallScreen ? 130 : 150,
       height: isSmallScreen ? 200 : 230,
       //width: isSmallScreen?MediaQuery.of(context).size.width * 0.37: MediaQuery.of(context).size.width * 0.42,
@@ -43,37 +40,36 @@ class mbtiButton extends StatelessWidget{
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
             blurRadius: 10,
-            offset: Offset(0, 4),
+            offset: const Offset(0, 4),
           ),
         ],
       ),
-      child:NeumorphicButton(
+      child: NeumorphicButton(
         style: NeumorphicStyle(
-          color: selected? Color(0xff7898FF):Colors.white,
+          color: selected ? const Color(0xff7898FF) : Colors.white,
           boxShape: NeumorphicBoxShape.roundRect(BorderRadius.circular(25)),
-          shadowDarkColorEmboss: Color(0xff7898FF).withOpacity(0.5),
+          shadowDarkColorEmboss: const Color(0xff7898FF).withOpacity(0.5),
           intensity: 10,
           //surfaceIntensity: 30,
           depth: -5, // depth 값이 음수이면 Inner Shadow 효과가 적용
           lightSource: LightSource.bottomRight,
-        ), onPressed: onPressed,
+        ),
+        onPressed: onPressed,
         child: Container(
           child: Column(
-            //crossAxisAlignment: CrossAxisAlignment.start,
+              //crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Row(
                   children: [
-                    selected? SvgPicture.asset(
-                        'assets/icon/icon_check.svg',
-                        width: isSmallScreen?25:30,
-                        color: Colors.white)
+                    selected
+                        ? SvgPicture.asset('assets/icon/icon_check.svg',
+                            width: isSmallScreen ? 25 : 30, color: Colors.white)
                         : SvgPicture.asset(
-                      'assets/icon/icon_emptycheck.svg',
-                      width: isSmallScreen?25:30,
-                      // color : Color(0xffFFF2a2)
-                    ),
-
+                            'assets/icon/icon_emptycheck.svg',
+                            width: isSmallScreen ? 25 : 30,
+                            // color : Color(0xffFFF2a2)
+                          ),
                     SizedBox(width: MediaQuery.of(context).size.width * 0.1),
                   ],
                 ),
@@ -81,36 +77,50 @@ class mbtiButton extends StatelessWidget{
                 Center(
                   child: Column(
                     children: [
-                      Text(text, textAlign: TextAlign.center,style: TextStyle(
-                          color: selected ? Colors.white: Color(0xff616161),
-                          fontSize: isSmallScreen?15:17, fontWeight: FontWeight.bold),),
-                      Text(explain,textAlign: TextAlign.center,style: TextStyle(
-                          color: selected ? Colors.white: Color(0xff616161),
-                          fontSize: isSmallScreen?13:15),),
+                      Text(
+                        text,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: selected
+                                ? Colors.white
+                                : const Color(0xff616161),
+                            fontSize: isSmallScreen ? 15 : 17,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        explain,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: selected
+                                ? Colors.white
+                                : const Color(0xff616161),
+                            fontSize: isSmallScreen ? 13 : 15),
+                      ),
                       Container(
-                        width: isSmallScreen?65:80,
-                        height: isSmallScreen?65:80,
-                        padding: EdgeInsets.all(7),
-                        decoration: BoxDecoration(shape: BoxShape.circle,
+                        width: isSmallScreen ? 65 : 80,
+                        height: isSmallScreen ? 65 : 80,
+                        padding: const EdgeInsets.all(7),
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
                         ),
                         child: SvgPicture.asset(image),
                       ),
-                      Text(mbti, textAlign: TextAlign.center, style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold,
-                          color:selected? Colors.white : Color(0xff616161)),),
+                      Text(
+                        mbti,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: isSmallScreen ? 22 : 24,
+                            fontWeight: FontWeight.bold,
+                            color: selected
+                                ? Colors.white
+                                : const Color(0xff616161)),
+                      ),
                     ],
                   ),
                 ),
-
-              ]
-          ),
-
+              ]),
         ),
-      ) ,
+      ),
     );
-
   }
-
 }
-
-
-

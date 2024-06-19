@@ -1,14 +1,9 @@
-import 'package:aliens/mockdatas/board_mockdata.dart';
-import 'package:aliens/models/board_model.dart';
 import 'package:flutter/widgets.dart';
-import 'package:provider/provider.dart';
 
-import '../apis/apis.dart';
+import 'package:aliens/services/apis.dart';
 import '../models/comment_model.dart';
 
 class CommentProvider with ChangeNotifier {
-
-
   List<Comment>? commentListData;
   bool loading = false;
 
@@ -20,13 +15,11 @@ class CommentProvider with ChangeNotifier {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
         commentListData = await APIs.getCommentsList(articleId);
-      } else {
-      }
+      } else {}
     }
     loading = false;
     notifyListeners();
   }
-
 
   addComment(String content, int articleId) async {
     try {
@@ -40,7 +33,6 @@ class CommentProvider with ChangeNotifier {
       }
     }
     //TODO fcm 전송
-
 
     notifyListeners();
     getComments(articleId);
@@ -60,7 +52,6 @@ class CommentProvider with ChangeNotifier {
     }
     //TODO fcm 전송
 
-
     notifyListeners();
     getComments(articleId);
     return true;
@@ -70,19 +61,16 @@ class CommentProvider with ChangeNotifier {
     bool value = false;
     loading = true;
     try {
-      value =  await APIs.deleteComment(articleCommentId);
+      value = await APIs.deleteComment(articleCommentId);
     } catch (e) {
       if (e == "AT-C-002") {
         await APIs.getAccessToken();
         value = await APIs.deleteComment(articleCommentId);
-      } else {
-      }
+      } else {}
     }
     loading = false;
     notifyListeners();
     getComments(articleId);
     return value;
   }
-
-
 }
