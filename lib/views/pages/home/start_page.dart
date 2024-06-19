@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,6 +5,7 @@ import 'package:aliens/services/apis.dart';
 import 'package:aliens/views/components/button_big.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -41,19 +41,10 @@ class _StartPageState extends State<StartPage> {
       //토큰 저장 시간
       token = await storage.read(key: 'token');
 
-      final parts = token.split('.');
-      if (parts.length != 3) {
-        throw Exception('Invalid token format');
-      }
-
-      final payload = json
-          .decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
-
-      // 페이로드 출력
-      print('페이로드: $payload');
+      final jwt = JWT.decode(token);
 
       DateTime timestamp =
-          DateTime.fromMillisecondsSinceEpoch(payload['iat'] * 1000);
+          DateTime.fromMillisecondsSinceEpoch(jwt.payload['iat'] * 1000);
 
       Duration diff = DateTime.now().difference(timestamp);
 

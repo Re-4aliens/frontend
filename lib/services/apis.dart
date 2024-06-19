@@ -512,8 +512,9 @@ class APIs {
     var accessToken = await storage.read(key: 'token');
     var refreshToken = await storage.read(key: 'refreshToken');
 
-    accessToken = json.decode(accessToken!)['accessToken'];
-    refreshToken = json.decode(refreshToken!)['refreshToken'];
+    print("accessToken : $accessToken");
+    print("refreshToken : $refreshToken");
+    print("타입 : ${accessToken.runtimeType},  ${refreshToken.runtimeType}");
 
     var response = await http.post(
       Uri.parse(url),
