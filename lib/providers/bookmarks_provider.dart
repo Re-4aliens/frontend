@@ -1,7 +1,7 @@
 import 'package:aliens/models/market_articles.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/auth_service.dart';
+import 'package:aliens/services/market_service.dart';
 
 class BookmarksProvider with ChangeNotifier {
   List<MarketBoard>? articleList;
@@ -13,16 +13,14 @@ class BookmarksProvider with ChangeNotifier {
     loading = true;
     try {
       //좋아요 요청
-      print('이건되나');
       marketArticleBookmarkCount![index] =
-          await APIs.marketbookmark(articleId, index);
-      print('이건???');
+          await MarketService.marketBookmark(articleId, index);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
+        await AuthService.getAccessToken();
         //좋아요 요청
         marketArticleBookmarkCount![index] =
-            await APIs.marketbookmark(articleId, index);
+            await MarketService.marketBookmark(articleId, index);
       } else {}
     }
     loading = false;
@@ -32,16 +30,16 @@ class BookmarksProvider with ChangeNotifier {
 
   getbookmarksCounts(int page) async {
     //final index = 0; // 원하는 페이지 번호 또는 index를 설정
-    articleList = await APIs.getMarketArticles(page);
+    articleList = await MarketService.getMarketArticles(page);
     marketArticleBookmarkCount = articleList!
         .map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0)
         .toList();
-    print('북마크 개수: ${marketArticleBookmarkCount?.length}');
   }
 
   getMoreBookmarksCounts(int page) async {
     // 새로운 게시글 리스트를 받아옵니다.
-    List<MarketBoard>? newArticles = await APIs.getMarketArticles(page);
+    List<MarketBoard>? newArticles =
+        await MarketService.getMarketArticles(page);
 
     // 받아온 게시글 리스트가 null이거나 비어있지 않은 경우에만 처리합니다.
     if (newArticles.isNotEmpty) {

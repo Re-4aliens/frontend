@@ -2,7 +2,8 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/user_service.dart';
+import 'package:aliens/services/auth_service.dart';
 import '../../../models/screen_argument.dart';
 import '../../components/button.dart';
 
@@ -281,26 +282,27 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                               'AppliedAndMatched') {
                         bool isSuccess = false;
                         try {
-                          isSuccess = await APIs.updatePreferLanguage(
+                          isSuccess = await UserService.updatePreferLanguage(
                               firstPreferLanguageArgs,
                               secondPreferLanguageArgs);
                         } catch (e) {
                           if (e == "AT-C-002") {
                             try {
-                              await APIs.getAccessToken();
+                              await AuthService.getAccessToken();
                             } catch (e) {
                               if (e == "AT-C-005") {
                                 //토큰 및 정보 삭제
-                                await APIs.logOut(context);
+                                await AuthService.logOut(context);
                               } else {
-                                isSuccess = await APIs.updatePreferLanguage(
-                                    firstPreferLanguageArgs,
-                                    secondPreferLanguageArgs);
+                                isSuccess =
+                                    await UserService.updatePreferLanguage(
+                                        firstPreferLanguageArgs,
+                                        secondPreferLanguageArgs);
                               }
                             }
                           } else if (e == "AT-C-007") {
                             //토큰 및 정보 삭제
-                            await APIs.logOut(context);
+                            await AuthService.logOut(context);
                           }
                         }
 

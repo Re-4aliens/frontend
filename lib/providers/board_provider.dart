@@ -1,6 +1,8 @@
 import 'package:aliens/models/board_model.dart';
 import 'package:flutter/widgets.dart';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/board_service.dart';
+import 'package:aliens/services/auth_service.dart';
+import 'package:aliens/services/comment_service.dart';
 
 // 게시물 관련 데이터를 관리하는 FLUTTER의 ChangeNotifier를 사용하는 상태 관리 클래스
 // 게시물 데이터 가져오기, 좋아요 추가하기, 게시물 목록 관리하는 메서드 포함
@@ -13,11 +15,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getAllArticles() async {
     _setLoading(true);
     try {
-      articleList = await APIs.TotalArticles(0);
+      articleList = await BoardService.getTotalArticles(0);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList = await APIs.TotalArticles(0);
+        await AuthService.getAccessToken();
+        articleList = await BoardService.getTotalArticles(0);
       }
     }
     await getLikeCounts();
@@ -27,11 +29,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getArticles(String boardCategory) async {
     _setLoading(true);
     try {
-      articleList = await APIs.getArticles(boardCategory, 0);
+      articleList = await BoardService.getArticles(boardCategory, 0);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList = await APIs.getArticles(boardCategory, 0);
+        await AuthService.getAccessToken();
+        articleList = await BoardService.getArticles(boardCategory, 0);
       }
     }
     await getLikeCounts();
@@ -41,11 +43,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getMoreArticles(String boardCategory, int page) async {
     _setLoading(true);
     try {
-      articleList.addAll(await APIs.getArticles(boardCategory, page));
+      articleList.addAll(await BoardService.getArticles(boardCategory, page));
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList.addAll(await APIs.getArticles(boardCategory, page));
+        await AuthService.getAccessToken();
+        articleList.addAll(await BoardService.getArticles(boardCategory, page));
       }
     }
     await getLikeCounts();
@@ -55,11 +57,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getMoreAllArticles(int page) async {
     _setLoading(true);
     try {
-      articleList.addAll(await APIs.TotalArticles(page));
+      articleList.addAll(await BoardService.getTotalArticles(page));
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList.addAll(await APIs.TotalArticles(page));
+        await AuthService.getAccessToken();
+        articleList.addAll(await BoardService.getTotalArticles(page));
       }
     }
     await getLikeCounts();
@@ -69,11 +71,11 @@ class BoardProvider with ChangeNotifier {
   Future<bool> addPost(Board board) async {
     bool value = false;
     try {
-      value = await APIs.postArticles(board);
+      value = await BoardService.postArticle(board);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        value = await APIs.postArticles(board);
+        await AuthService.getAccessToken();
+        value = await BoardService.postArticle(board);
       }
     }
     return value;
@@ -82,11 +84,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> addLike(int articleId, int index) async {
     _setLoading(true);
     try {
-      likeCounts[index] = await APIs.addLike(articleId);
+      likeCounts[index] = await BoardService.addLike(articleId);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        likeCounts[index] = await APIs.addLike(articleId);
+        await AuthService.getAccessToken();
+        likeCounts[index] = await BoardService.addLike(articleId);
       }
     }
     _setLoading(false);
@@ -95,11 +97,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getLikedList() async {
     _setLoading(true);
     try {
-      articleList = await APIs.getLikedPost(0);
+      articleList = await BoardService.getLikedPost(0);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList = await APIs.getLikedPost(0);
+        await AuthService.getAccessToken();
+        articleList = await BoardService.getLikedPost(0);
       }
     }
     await getLikeCounts();
@@ -109,11 +111,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getMoreLikedList(int page) async {
     _setLoading(true);
     try {
-      articleList.addAll(await APIs.getLikedPost(page));
+      articleList.addAll(await BoardService.getLikedPost(page));
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList.addAll(await APIs.getLikedPost(page));
+        await AuthService.getAccessToken();
+        articleList.addAll(await BoardService.getLikedPost(page));
       }
     }
     await getLikeCounts();
@@ -123,11 +125,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getMyArticles() async {
     _setLoading(true);
     try {
-      articleList = await APIs.getMyArticles(0);
+      articleList = await BoardService.getMyArticles(0);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList = await APIs.getMyArticles(0);
+        await AuthService.getAccessToken();
+        articleList = await BoardService.getMyArticles(0);
       }
     }
     await getLikeCounts();
@@ -137,11 +139,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getMoreMyArticles(int page) async {
     _setLoading(true);
     try {
-      articleList.addAll(await APIs.getMyArticles(page));
+      articleList.addAll(await BoardService.getMyArticles(page));
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList.addAll(await APIs.getMyArticles(page));
+        await AuthService.getAccessToken();
+        articleList.addAll(await BoardService.getMyArticles(page));
       }
     }
     await getLikeCounts();
@@ -151,11 +153,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getMyCommentArticles() async {
     _setLoading(true);
     try {
-      articleList = await APIs.getCommentArticles(0);
+      articleList = await CommentService.getCommentArticles(0);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList = await APIs.getCommentArticles(0);
+        await AuthService.getAccessToken();
+        articleList = await CommentService.getCommentArticles(0);
       }
     }
     await getLikeCounts();
@@ -165,11 +167,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getMoreMyCommentArticles(int page) async {
     _setLoading(true);
     try {
-      articleList.addAll(await APIs.getCommentArticles(page));
+      articleList.addAll(await CommentService.getCommentArticles(page));
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        articleList.addAll(await APIs.getCommentArticles(page));
+        await AuthService.getAccessToken();
+        articleList.addAll(await CommentService.getCommentArticles(page));
       }
     }
     await getLikeCounts();

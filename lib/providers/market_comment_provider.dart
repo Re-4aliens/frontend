@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
-
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/auth_service.dart';
+import 'package:aliens/services/comment_service.dart';
 import '../models/comment_model.dart';
 import '../models/market_comment.dart';
 
@@ -12,12 +12,12 @@ class MarketCommentProvider with ChangeNotifier {
   getMarketComments(int articleId) async {
     loading = true;
     try {
-      commentListData = await APIs.getCommentsList(
+      commentListData = await CommentService.getCommentsList(
           articleId); //getMarketArticleComments 을 getCommentsList로 수정
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        commentListData = await APIs.getCommentsList(
+        await AuthService.getAccessToken();
+        commentListData = await CommentService.getCommentsList(
             articleId); //getMarketArticleComments 을 getCommentsList로 수정
       } else {
         // 오류 처리 로직
@@ -29,12 +29,12 @@ class MarketCommentProvider with ChangeNotifier {
 
   addMarketComment(String content, int articleId) async {
     try {
-      await APIs.postComment(
+      await CommentService.postComment(
           content, articleId); //createMarketArticleComment 을 postComment로 수정
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        await APIs.postComment(
+        await AuthService.getAccessToken();
+        await CommentService.postComment(
             content, articleId); //createMarketArticleComment 을 postComment로 수정
       } else {
         return false;
@@ -49,11 +49,13 @@ class MarketCommentProvider with ChangeNotifier {
 
   addNestedMarketComment(String content, int commentId, int articleId) async {
     try {
-      await APIs.addMarketArticleCommentReply(content, commentId, articleId);
+      await CommentService.addMarketArticleCommentReply(
+          content, commentId, articleId);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        await APIs.addMarketArticleCommentReply(content, commentId, articleId);
+        await AuthService.getAccessToken();
+        await CommentService.addMarketArticleCommentReply(
+            content, commentId, articleId);
       } else {
         return false;
       }
@@ -70,12 +72,12 @@ class MarketCommentProvider with ChangeNotifier {
     bool value = false;
     loading = true;
     try {
-      value = await APIs.deleteComment(
+      value = await CommentService.deleteComment(
           articleId); //deleteMarketArticleComment 을 deleteComment 로 수정
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        value = await APIs.deleteComment(
+        await AuthService.getAccessToken();
+        value = await CommentService.deleteComment(
             articleId); //deleteMarketArticleComment 을 deleteComment 로 수정
       } else {}
     }

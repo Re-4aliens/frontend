@@ -1,7 +1,7 @@
 import 'package:aliens/models/notification_article_model.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/auth_service.dart';
+import 'package:aliens/services/notification_service.dart';
 
 class NotiBoardProvider with ChangeNotifier {
   //notifyListeners();
@@ -13,11 +13,11 @@ class NotiBoardProvider with ChangeNotifier {
   getNotiArticles() async {
     loading = true;
     try {
-      notiArticleList = await APIs.getNotiList();
+      notiArticleList = await NotificationService.getNotiList();
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        notiArticleList = await APIs.getNotiList();
+        await AuthService.getAccessToken();
+        notiArticleList = await NotificationService.getNotiList();
       } else {}
     }
     getReadValue();
@@ -31,13 +31,13 @@ class NotiBoardProvider with ChangeNotifier {
 
   putReadValue(int index, int personalNoticeId) async {
     try {
-      if (await APIs.readNotification(personalNoticeId)) {
+      if (await NotificationService.readNotification(personalNoticeId)) {
         isReadList[index] = false;
       }
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        if (await APIs.readNotification(personalNoticeId)) {
+        await AuthService.getAccessToken();
+        if (await NotificationService.readNotification(personalNoticeId)) {
           isReadList[index] = false;
         }
       } else {}

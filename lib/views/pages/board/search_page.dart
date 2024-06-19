@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+import 'package:aliens/services/board_service.dart';
 
-import 'package:aliens/services/apis.dart';
 import '../../../models/board_model.dart';
 import '../../../models/countries.dart';
 
@@ -116,7 +116,7 @@ class _SearchPageState extends State<SearchPage> {
               setState(() {
                 _keyword = value;
               });
-              searchResults = await APIs.TotalSearch(value);
+              searchResults = await BoardService.searchTotal(value);
               setState(() {
                 print("검색성공");
                 searched = true;

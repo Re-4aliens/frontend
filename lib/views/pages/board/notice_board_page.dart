@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/board_service.dart';
 import 'package:aliens/models/notice_article.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/notice_board_widget.dart';
@@ -31,7 +31,7 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
 
   Future<void> fetchNoticeData() async {
     try {
-      final response = await APIs.BoardNotice();
+      final response = await BoardService.boardNotice();
       final dataList = response;
 
       setState(() {

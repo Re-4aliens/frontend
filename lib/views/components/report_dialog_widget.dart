@@ -2,8 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
-
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/report_servcie.dart';
 
 class ReportDialog extends StatefulWidget {
   final int memberId;
@@ -136,7 +135,7 @@ class _ReportDialogState extends State<ReportDialog> {
                   break;
                 }
               }
-              if (await APIs.reportPartner(reportCategory,
+              if (await ReportService.reportPartner(reportCategory,
                   _textEditingController.text, widget.memberId)) {
                 Navigator.pop(context);
                 showDialog(

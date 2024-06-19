@@ -1,4 +1,4 @@
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/matching_service.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -52,7 +52,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
         ),
         extendBodyBehindAppBar: true,
         body: FutureBuilder(
-          future: APIs.matchingProfessData(),
+          future: MatchingService.matchingProfessData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               //받아오는 동안

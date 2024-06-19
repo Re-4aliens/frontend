@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/user_service.dart';
 
 Widget buildSettingList(context, index, screenArguments) {
   final TextEditingController textEditingController = TextEditingController();
@@ -121,7 +121,7 @@ Widget buildSettingList(context, index, screenArguments) {
                                       fontWeight: FontWeight.bold),
                                 )),
                                 onTap: () async {
-                                  if (await APIs.inquiry(
+                                  if (await UserService.inquiry(
                                       textEditingController.text)) {
                                     Navigator.pop(context);
                                     showDialog(

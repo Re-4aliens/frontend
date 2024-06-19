@@ -1,6 +1,6 @@
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../services/apis.dart';
+import 'package:aliens/services/user_service.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -190,7 +190,7 @@ class _SignUpPasswordState extends State<SignUpPassword> {
 
                     //------ 회원가입 api 요청
                     //authProvider.signUp(member, context);
-                    if (await APIs.signUp(member)) {
+                    if (await UserService.signUp(member)) {
                       Navigator.pushNamed(context, '/welcome',
                           arguments: member);
                     } else {

@@ -2,7 +2,7 @@ import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/user_service.dart';
 import '../../components/button.dart';
 
 class MatchingEditPage extends StatefulWidget {
@@ -232,7 +232,7 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                               element['language'] ==
                               _secondPreferLanguage)['value'];
 
-                      if (await APIs.updatePreferLanguage(
+                      if (await UserService.updatePreferLanguage(
                           _firstPreferLanguage, _secondPreferLanguage)) {
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             '/loading', (Route<dynamic> route) => false);

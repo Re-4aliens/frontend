@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/auth_service.dart';
 import '../../components/button.dart';
 
 class LoginFindPassword extends StatefulWidget {
@@ -98,7 +98,7 @@ class _LoginFindPasswordState extends State<LoginFindPassword> {
                     showDialog(
                         context: context,
                         builder: (_) => FutureBuilder(
-                            future: APIs.temporaryPassword(email, name),
+                            future: AuthService.temporaryPassword(email, name),
                             builder:
                                 (BuildContext context, AsyncSnapshot snapshot) {
                               if (snapshot.connectionState ==

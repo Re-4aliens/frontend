@@ -2,7 +2,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../services/apis.dart';
+import 'package:aliens/services/matching_service.dart';
 import '../../../models/screen_argument.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -33,7 +33,7 @@ class _MatchingApplyDonePageState extends State<MatchingApplyDonePage> {
         extendBodyBehindAppBar: true,
         body: Container(
           child: FutureBuilder<ScreenArguments>(
-            future: APIs.getMatchingData(context),
+            future: MatchingService.getMatchingData(context),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting ||
                   snapshot.data == null) {

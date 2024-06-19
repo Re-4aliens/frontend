@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/comment_service.dart';
 import '../../models/comment_model.dart';
 import 'package:aliens/providers/comment_provider.dart';
 
@@ -86,8 +86,8 @@ class CommentDialog extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (_) => FutureBuilder(
-                              future:
-                                  APIs.deleteComment(comment.articleCommentId!),
+                              future: CommentService.deleteComment(
+                                  comment.articleCommentId!),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.hasData == false) {
@@ -190,8 +190,8 @@ class CommentDialog extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (_) => FutureBuilder(
-                            future:
-                                APIs.deleteComment(comment.articleCommentId!),
+                            future: CommentService.deleteComment(
+                                comment.articleCommentId!),
                             builder:
                                 (BuildContext context, AsyncSnapshot snapshot) {
                               if (snapshot.hasData == false) {

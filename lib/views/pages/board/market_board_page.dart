@@ -1,6 +1,6 @@
 import 'dart:async';
-
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/auth_service.dart';
+import 'package:aliens/services/market_service.dart';
 import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/views/pages/board/market_detail_page.dart';
@@ -82,7 +82,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
         print("page is $page");
 
         // +1 된 페이지 게시글 리스트를 받아온다.
-        var fetchedData = await APIs.getMarketArticles(page);
+        var fetchedData = await MarketService.getMarketArticles(page);
 
         setState(() {
           marketBoardList.addAll(fetchedData); // 기존 리스트에 추가한다.
@@ -96,7 +96,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
         bookmarkProvider.getMoreBookmarksCounts(page);
       } catch (e) {
         if (e == "AT-C-002") {
-          await APIs.getAccessToken();
+          await AuthService.getAccessToken();
         } else {
           // 에러 처리
         }
@@ -111,7 +111,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   @override
   Future<void> fetchMarketArticles() async {
     try {
-      var fetchedData = await APIs.getMarketArticles(0); // API 호출 함수 호출
+      var fetchedData =
+          await MarketService.getMarketArticles(0); // API 호출 함수 호출
       print(fetchedData);
       setState(() {
         marketBoardList = fetchedData; // 불러온 데이터를 리스트에 할당

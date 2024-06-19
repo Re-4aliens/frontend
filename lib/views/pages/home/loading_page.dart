@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/matching_service.dart';
 
 class LoadingPage extends StatefulWidget {
   const LoadingPage({Key? key}) : super(key: key);
@@ -15,7 +15,7 @@ class _LoadingPageState extends State<LoadingPage> {
       backgroundColor: Colors.white,
       body: Center(
         child: FutureBuilder(
-          future: APIs.getMatchingData(context),
+          future: MatchingService.getMatchingData(context),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             print('Snapshot state: ${snapshot.connectionState}');
 

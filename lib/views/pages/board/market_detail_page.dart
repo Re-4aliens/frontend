@@ -1,4 +1,4 @@
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/market_service.dart';
 import 'package:aliens/models/market_articles.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -361,9 +361,10 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                     onTap: () async {
                                       //print('부크마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
                                       if (widget.index == -1) {
-                                        bookmark = await APIs.marketbookmark(
-                                            widget.marketBoard.articleId!,
-                                            widget.index);
+                                        bookmark =
+                                            await MarketService.marketBookmark(
+                                                widget.marketBoard.articleId!,
+                                                widget.index);
                                       } else {
                                         bookmarkProvider.addBookmarks(
                                             widget.marketBoard.articleId!,

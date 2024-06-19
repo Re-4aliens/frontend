@@ -8,7 +8,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/chat_service.dart';
+import 'package:aliens/services/auth_service.dart';
 
 class MatchingChattingWidget extends StatefulWidget {
   const MatchingChattingWidget({super.key, required this.screenArguments});
@@ -48,10 +49,10 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
     Map<String, dynamic> chatSummary;
 
     try {
-      chatSummary = await APIs.getChatSummary(context);
+      chatSummary = await ChatService.getChatSummary(context);
     } catch (e) {
-      await APIs.getAccessToken();
-      chatSummary = await APIs.getChatSummary(context);
+      await AuthService.getAccessToken();
+      chatSummary = await ChatService.getChatSummary(context);
     }
 
     for (int i = 0; i < chatRoomList.length; i++) {
@@ -91,11 +92,11 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
   _updateList() async {
     late Map<String, dynamic> chatSummary;
     try {
-      chatSummary = await APIs.getChatSummary(context);
+      chatSummary = await ChatService.getChatSummary(context);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        chatSummary = await APIs.getChatSummary(context);
+        await AuthService.getAccessToken();
+        chatSummary = await ChatService.getChatSummary(context);
       }
     }
 

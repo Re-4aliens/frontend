@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:flutter_svg/svg.dart';
-import '../../../services/apis.dart';
+import 'package:aliens/services/auth_service.dart';
 import '../../components/button.dart';
 
 class SettingDeleteDonePage extends StatefulWidget {
@@ -78,7 +78,7 @@ class _SettingDeleteDonePageState extends State<SettingDeleteDonePage> {
                     onPressed: () async {
                       final fcmToken =
                           await FirebaseMessaging.instance.getToken();
-                      await APIs.logOut(context);
+                      await AuthService.logOut(context);
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           '/', (Route<dynamic> route) => false);
                     }),

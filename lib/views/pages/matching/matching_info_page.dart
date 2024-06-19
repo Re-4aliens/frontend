@@ -2,7 +2,7 @@ import 'package:aliens/views/pages/matching/matching_edit_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/user_service.dart';
 import '../../../models/screen_argument.dart';
 
 class MatchingInfoPage extends StatefulWidget {
@@ -191,7 +191,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                                   TextButton(
                                                                     onPressed:
                                                                         () async {
-                                                                      if (await APIs.updateSelfIntroduction(
+                                                                      if (await UserService.updateSelfIntroduction(
                                                                           bioEditingController
                                                                               .text)) {
                                                                         Navigator.of(context).pushNamedAndRemoveUntil(

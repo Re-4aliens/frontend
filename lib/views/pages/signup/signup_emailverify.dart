@@ -3,7 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../services/apis.dart';
+import 'package:aliens/services/email_service.dart';
 import '../../components/button.dart';
 
 class SignUpVerify extends StatefulWidget {
@@ -75,8 +75,8 @@ class _SignUpVerifyState extends State<SignUpVerify> {
                   isEnabled: true,
                   child: Text('done'.tr()),
                   onPressed: () async {
-                    String status =
-                        await APIs.getAuthenticationStatus(member.email);
+                    String status = await EmailService.getAuthenticationStatus(
+                        member.email);
                     if (status == 'signup-email17'.tr()) {
                       Navigator.pushNamed(context, '/password',
                           arguments: member);
