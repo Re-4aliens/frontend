@@ -126,7 +126,29 @@ static Future<String> getAuthenticationStatus(String email) async {
 static Future<bool> signUp(SignUpModel member) async {
   const url = '$domainUrl/members';
 
-  Map<String, dynamic> data = {
+  var request = http.MultipartRequest('POST', Uri.parse(url));
+
+  // 프로필 이미지 추가
+  if (member.profileImage != null && member.profileImage!.isNotEmpty) {
+    var file = await http.MultipartFile.fromPath(
+      'profileImage',
+      member.profileImage!,
+      contentType: MediaType('image', 'png'), // 프로필 이미지의 Content-Type 설정
+    );
+    request.files.add(file);
+  } else {
+    // 프로필 이미지가 없을 경우 빈 파일로 대체
+    var file = http.MultipartFile.fromString(
+      'profileImage',
+      '',
+      filename: 'empty.txt',
+      contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
+    );
+    request.files.add(file);
+  }
+
+  // JSON 데이터를 문자열로 변환
+  var jsonPayload = jsonEncode({
     'email': member.email,
     'password': member.password,
     'name': member.name,
@@ -135,38 +157,35 @@ static Future<bool> signUp(SignUpModel member) async {
     'nationality': member.nationality,
     'birthday': member.birthday,
     'aboutMe': member.aboutMe ?? '',
-  };
+  });
 
-  String jsonBody = jsonEncode(data);
-
-  var response = await http.post(
-    Uri.parse(url),
-    headers: {
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonBody,
+  // JSON 데이터를 MultipartFile로 추가
+  var jsonPart = http.MultipartFile.fromString(
+    'request',
+    jsonPayload,
+    contentType: MediaType('application', 'json'),
   );
+  request.files.add(jsonPart);
 
-  var responseBody = utf8.decode(response.bodyBytes);
-  print("Request Body: $jsonBody");
-  print("응답 본문: $responseBody");
+  // 요청 보내기
+  var response = await request.send();
 
-  var jsonResponse = json.decode(responseBody);
-  var code = jsonResponse['code'];
-
-  print('Code: $code');
+  // 출력: 모든 파일의 Content-Type 출력
+  request.files.forEach((file) {
+    print('File: ${file.filename}, Content-Type: ${file.contentType}');
+  });
 
   if (response.statusCode == 200) {
-    print('성공응답이 도착했습니다.');
+    print('Registration Success');
     return true;
   } else {
-    print('실패 응답이 도착했습니다.');
+    var responseBody = await response.stream.bytesToString();
+    print('Registration Failed');
+    print("응답 본문: $responseBody");
     return false;
   }
 }
-
   /*
-  
   로그인
 
    */
