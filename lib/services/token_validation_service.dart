@@ -4,7 +4,7 @@ import 'package:aliens/services/apis.dart';
 
 // 토큰 유효성 검사
 
-class AuthenticationService {
+class TokenValidationService {
   static const storage = FlutterSecureStorage();
 
   Future<bool> checkTokenValidity() async {
