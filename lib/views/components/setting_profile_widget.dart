@@ -1,13 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../pages/setting/setting_lan_edit.dart';
 import '../pages/setting/setting_mbti_edit.dart';
 
-
-Widget buildProfileList(context, index, screenArgument){
+Widget buildProfileList(context, index, screenArgument) {
 /*  var updatedMBTI = await Navigator.pushNamed(
     context, '/setting/MBTI/edit'
   );*/
@@ -15,10 +12,10 @@ Widget buildProfileList(context, index, screenArgument){
   final double screenWidth = MediaQuery.of(context).size.width;
   final bool isSmallScreen = screenWidth <= 600;
   List settingList = [
-    '${'setting-gender'.tr()}',
-    '${'setting-nationality'.tr()}',
+    ('setting-gender'.tr()),
+    ('setting-nationality'.tr()),
     'MBTI',
-    '${'setting-lan'.tr()}',
+    ('setting-lan'.tr()),
   ];
 
   List settingIcon = [
@@ -50,33 +47,33 @@ Widget buildProfileList(context, index, screenArgument){
     screenArgument.memberDetails.mbti.toString(),
   ];
 
-
-  bool _isKorean = EasyLocalization.of(context)!.locale == Locale.fromSubtags(languageCode: "ko", countryCode: "KR");
+  bool isKorean = EasyLocalization.of(context)!.locale ==
+      const Locale.fromSubtags(languageCode: "ko", countryCode: "KR");
   return ListTile(
     onTap: () {
-      if (index == 3)
+      if (index == 3) {
         Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => SettingLanEditPage(
-                  screenArguments: screenArgument,
-                isKorean: _isKorean
-              )),
+                  screenArguments: screenArgument, isKorean: isKorean)),
         );
-      else if(index ==2)
+      } else if (index == 2) {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => SettingMBTIEditPage(
-                  screenArguments: screenArgument
-              )),
+              builder: (context) =>
+                  SettingMBTIEditPage(screenArguments: screenArgument)),
         );
+      }
     },
     title: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Container(
-          padding: EdgeInsets.only(left : MediaQuery.of(context).size.width * 0.012, right: MediaQuery.of(context).size.width * 0.04),
+          padding: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width * 0.012,
+              right: MediaQuery.of(context).size.width * 0.04),
           child: settingIcon.elementAt(index),
         ),
         if (index > 3)
@@ -85,46 +82,45 @@ Widget buildProfileList(context, index, screenArgument){
             child: settingIcon.elementAt(index),
           ),
         Text(
-            '${settingList.elementAt(index)}',
-            style: TextStyle(
-              fontSize: 18.h,
-            ),
-            overflow: TextOverflow.fade,
+          '${settingList.elementAt(index)}',
+          style: TextStyle(
+            fontSize: 18.h,
+          ),
+          overflow: TextOverflow.fade,
         ),
-        Expanded(child: SizedBox()),
+        const Expanded(child: SizedBox()),
         Container(
           alignment: Alignment.centerRight,
-          child:
-            index < 2 ?
-              Text(
-                '${memberInfo.elementAt(index)}',
-                style: TextStyle(
-                    fontSize:18.h, color: Color(0xff7898FF), overflow: TextOverflow.ellipsis),
-              )
-            :index == 2 ?
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                Text(
+          child: index < 2
+              ? Text(
                   '${memberInfo.elementAt(index)}',
                   style: TextStyle(
-                      fontSize: 18.h, color: Color(0xff7898FF)),
-                ),
-                SizedBox(width: 1.h),
-                Icon(
-                  Icons.arrow_forward_ios,
-                  size: 18.h,
-                  color: Color(0xff4D4D4D),
+                      fontSize: 18.h,
+                      color: const Color(0xff7898FF),
+                      overflow: TextOverflow.ellipsis),
                 )
-              ],
-              )
-            :
-              Icon(
-                Icons.arrow_forward_ios,
-                size: 18.h,
-                color: Color(0xff4d4d4d),
-              ),
-
+              : index == 2
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          '${memberInfo.elementAt(index)}',
+                          style: TextStyle(
+                              fontSize: 18.h, color: const Color(0xff7898FF)),
+                        ),
+                        SizedBox(width: 1.h),
+                        Icon(
+                          Icons.arrow_forward_ios,
+                          size: 18.h,
+                          color: const Color(0xff4D4D4D),
+                        )
+                      ],
+                    )
+                  : Icon(
+                      Icons.arrow_forward_ios,
+                      size: 18.h,
+                      color: const Color(0xff4d4d4d),
+                    ),
         )
       ],
     ),

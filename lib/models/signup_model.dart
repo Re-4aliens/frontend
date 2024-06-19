@@ -34,16 +34,16 @@ class SignUpModel {
       );
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['email'] = this.email;
-    data['password'] = this.password;
-    data['mbti'] = this.mbti;
-    data['gender'] = this.gender;
-    data['nationality'] = this.nationality;
-    data['birthday'] = this.birthday;
-    data['name'] = this.name;
-    data['profileImage'] = this.profileImage;
-    data['aboutMe'] = this.aboutMe;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['email'] = email;
+    data['password'] = password;
+    data['mbti'] = mbti;
+    data['gender'] = gender;
+    data['nationality'] = nationality;
+    data['birthday'] = birthday;
+    data['name'] = name;
+    data['profileImage'] = profileImage;
+    data['aboutMe'] = aboutMe;
     return data;
   }
 }

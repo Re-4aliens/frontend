@@ -1,24 +1,11 @@
 import 'dart:convert';
-import 'package:aliens/models/applicant_model.dart';
-import 'package:aliens/models/memberDetails_model.dart';
-import 'package:aliens/models/partner_model.dart';
-import 'package:aliens/mockdatas/mockdata_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../../../apis/apis.dart';
-import '../../models/chatRoom_model.dart';
-import '../../permissions.dart';
-import '../components/button.dart';
-import '../components/button_big.dart';
+import 'package:aliens/services/apis.dart';
+import 'package:aliens/views/components/button_big.dart';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-
-import 'package:aliens/providers/member_provider.dart';
-import 'package:provider/provider.dart';
-
-import 'chatting/chatting_page.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -28,18 +15,16 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  static final storage = FlutterSecureStorage();
+  static const storage = FlutterSecureStorage();
 
   //storage로부터 읽을 모델
-  dynamic userInfo = null;
-  dynamic token = null;
-
+  dynamic userInfo;
+  dynamic token;
 
   String selectedValue = 'English';
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     //비동기로 flutter secure storage 정보를 불러오는 작업
@@ -47,61 +32,75 @@ class _StartPageState extends State<StartPage> {
       //토큰 유효성 검사
       _isValid();
     });
-
   }
-
 
   _isValid() async {
     userInfo = await storage.read(key: 'token');
     //저장된 정보가 있다면
-    if (userInfo != null){
+    if (userInfo != null) {
       //토큰 저장 시간
       token = await storage.read(key: 'token');
-      DateTime timestamp = DateTime.parse(json.decode(token!)['timestamp']);
+
+      final parts = token.split('.');
+      if (parts.length != 3) {
+        throw Exception('Invalid token format');
+      }
+
+      final payload = json
+          .decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
+
+      // 페이로드 출력
+      print('페이로드: $payload');
+
+      DateTime timestamp =
+          DateTime.fromMillisecondsSinceEpoch(payload['iat'] * 1000);
+
       Duration diff = DateTime.now().difference(timestamp);
 
-      print('지금 시간: ${DateTime.now()}\n토큰 저장 시간: ${timestamp}\n 차이: ${diff}');
+      print('지금 시간: ${DateTime.now()}\n토큰 저장 시간: $timestamp\n 차이: $diff');
       //리프레시 토큰 기간이 지났다면
-      if(diff >= Duration(days: 7)){
+      if (diff >= const Duration(days: 7)) {
         //토큰 및 정보 지움
         //자동로그인 해제
         await storage.delete(key: 'auth');
         await storage.delete(key: 'token');
-
-      } else if(diff < Duration.zero){
+      } else if (diff < Duration.zero) {
         print('시간 음수 오류');
 
         //자동로그인 해제
         await storage.delete(key: 'auth');
         await storage.delete(key: 'token');
-      }else if (diff <= Duration(days: 6) && diff >= Duration(minutes: 30)){
+      } else if (diff <= const Duration(days: 6) &&
+          diff >= const Duration(minutes: 30)) {
         //액세스 토큰 기간이 지났다면
         //액세스 토큰 재발급
         print('액세스 토큰 재발급');
 
-        if(await APIs.getAccessToken())
-          Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
-      } else{
+        if (await APIs.getAccessToken()) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/loading', (route) => false);
+        }
+      } else {
         //else
-        Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/loading', (route) => false);
       }
-    }else{
+    } else {
       //저장된 정보가 없다면
       print('로그인 필요');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
-      backgroundColor: Color(0xfff8f8f8),
+      backgroundColor: const Color(0xfff8f8f8),
       body: Center(
         child: Column(
           children: <Widget>[
-            Expanded(
+            const Expanded(
               flex: 6,
               child: SizedBox(),
             ),
@@ -111,13 +110,13 @@ class _StartPageState extends State<StartPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Container(
+                    SizedBox(
                         width: MediaQuery.of(context).size.width * 0.4,
                         child: SvgPicture.asset(
                           'assets/character/logoimage.svg',
                         )),
-                    SizedBox(height: 10),
-                    Container(
+                    const SizedBox(height: 10),
+                    SizedBox(
                       width: MediaQuery.of(context).size.width * 0.4,
                       child: SvgPicture.asset(
                         'assets/character/logotext.svg',
@@ -128,45 +127,48 @@ class _StartPageState extends State<StartPage> {
                       padding: const EdgeInsets.only(top: 14.0),
                       child: Text(
                         '${'title1'.tr()}${'title2'.tr()}',
-                        style: TextStyle(fontSize: isSmallScreen ? 16 : 18, color: Color(0xff414141)),
+                        style: TextStyle(
+                            fontSize: isSmallScreen ? 16 : 18,
+                            color: const Color(0xff414141)),
                       ),
                     ),
                     DropdownButton<String>(
-                      underline: SizedBox(),
-                      value: selectedValue,
-                      items: <String>['English', '한국어']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: TextStyle(
-                                fontSize: isSmallScreen ? 12 : 14,
-                            color: Color(0xff616161)),
+                        underline: const SizedBox(),
+                        value: selectedValue,
+                        items: <String>['English', '한국어']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                  fontSize: isSmallScreen ? 12 : 14,
+                                  color: const Color(0xff616161)),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            selectedValue = newValue!;
+                            switch (selectedValue) {
+                              case '한국어':
+                                EasyLocalization.of(context)!
+                                    .setLocale(const Locale('ko', 'KR'));
+                                break;
+                              case 'English':
+                                EasyLocalization.of(context)!
+                                    .setLocale(const Locale('en', 'US'));
+                                break;
+                            }
+                          });
+                        },
+                        icon: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: SvgPicture.asset(
+                            'assets/icon/icon_dropdown.svg',
+                            height: 8,
                           ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedValue = newValue!;
-                          switch (selectedValue){
-                            case '한국어':
-                              EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
-                              break;
-                            case 'English':
-                              EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
-                              break;
-                          }
-                        });
-                      },
-                      icon: Padding(
-                        padding: const EdgeInsets.only(left: 8.0),
-                        child: SvgPicture.asset(
-                          'assets/icon/icon_dropdown.svg',
-                          height: 8,
-                        ),
-                      )
-                    ),
+                        )),
                   ],
                 ),
               ),
@@ -177,7 +179,7 @@ class _StartPageState extends State<StartPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                      padding: EdgeInsets.only(right: 20, left: 20),
+                      padding: const EdgeInsets.only(right: 20, left: 20),
                       child: Column(
                         children: [
                           BigButton(
@@ -204,7 +206,7 @@ class _StartPageState extends State<StartPage> {
                                   },
                                   child: Text('login1'.tr(),
                                       style: TextStyle(
-                                        color: Color(0xff000000),
+                                        color: const Color(0xff000000),
                                         fontSize: isSmallScreen ? 12 : 14,
                                         fontWeight: FontWeight.bold,
                                       )))

@@ -1,28 +1,25 @@
 import 'package:flutter/cupertino.dart';
 import 'dart:io' show Platform;
 
-class withdrawDialog extends StatelessWidget{
-
+class WithdrawDialog extends StatelessWidget {
   final bool correct;
 
-  const withdrawDialog({
-    Key? key,
-    required this.correct
-  }) : super(key:key);
+  const WithdrawDialog({Key? key, required this.correct}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if(Platform.isAndroid)
+    if (Platform.isAndroid) {
       return androidDialog();
-    else
+    } else {
       return iOSDialog();
+    }
   }
 
-  Widget androidDialog(){
+  Widget androidDialog() {
     return Container();
   }
 
-  Widget iOSDialog(){
+  Widget iOSDialog() {
     return Container();
   }
 }

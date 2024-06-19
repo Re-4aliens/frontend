@@ -63,7 +63,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '101096502511',
     projectId: 'friendship-aefec',
     storageBucket: 'friendship-aefec.appspot.com',
-    iosClientId: '101096502511-9u0htr73hlptae6797tq6ricj32oub9a.apps.googleusercontent.com',
+    iosClientId:
+        '101096502511-9u0htr73hlptae6797tq6ricj32oub9a.apps.googleusercontent.com',
     iosBundleId: 'com.aliens.friendship',
   );
 }

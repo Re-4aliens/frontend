@@ -1,19 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:aliens/models/chatRoom_model.dart';
 import 'package:aliens/models/countries.dart';
 import 'package:aliens/models/partner_model.dart';
 import 'package:dash_flags/dash_flags.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'dart:math' as math;
 
-import '../../../models/screenArgument.dart';
+import '../../../models/screen_argument.dart';
 import '../chatting/chatting_page.dart';
-
-import 'package:image_picker/image_picker.dart';
 
 class CustomClipPath extends CustomClipper<Path> {
   @override
@@ -53,10 +47,10 @@ class _MatchingListPageState extends State<MatchingListPage> {
     final bool isSmallScreen = screenWidth <= 700;
 
     return Scaffold(
-      backgroundColor: Color(0xFFF5F7FF),
+      backgroundColor: const Color(0xFFF5F7FF),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Color(0xff7898ff),
+        backgroundColor: const Color(0xff7898ff),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -74,7 +68,7 @@ class _MatchingListPageState extends State<MatchingListPage> {
             clipper: CustomClipPath(),
             child: Container(
               height: MediaQuery.of(context).size.height * 3 / 5,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Color(0xff7898ff),
               ),
             ),
@@ -83,8 +77,9 @@ class _MatchingListPageState extends State<MatchingListPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Spacer(),
+              const Spacer(),
               Container(
+                alignment: Alignment.center,
                 child: Text(
                   'matched4'.tr(),
                   style: TextStyle(
@@ -92,12 +87,12 @@ class _MatchingListPageState extends State<MatchingListPage> {
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
                 ),
-                alignment: Alignment.center,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Container(
+                alignment: Alignment.center,
                 child: Text(
                   'matched5'.tr(namedArgs: {
                     'num': '${widget.screenArguments.partners!.length}'
@@ -105,9 +100,8 @@ class _MatchingListPageState extends State<MatchingListPage> {
                   style: TextStyle(
                       fontSize: isSmallScreen ? 16 : 18, color: Colors.white),
                 ),
-                alignment: Alignment.center,
               ),
-              Spacer(),
+              const Spacer(),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -123,11 +117,13 @@ class _MatchingListPageState extends State<MatchingListPage> {
                       },
                       isClicked: selectedIndex == i,
                     ),
-                  SizedBox(height: 20,),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Container(
                     width: double.maxFinite,
                     height: 50,
-                    padding: EdgeInsets.symmetric(horizontal: 25),
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: ElevatedButton(
                       onPressed: () {
                         if (selectedIndex != -1) {
@@ -135,31 +131,32 @@ class _MatchingListPageState extends State<MatchingListPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ChattingPage(
-                                  applicant:
-                                  widget.screenArguments.applicant,
-                                  partner: widget.screenArguments
-                                      .partners![selectedIndex],
-                                  memberDetails: widget.screenArguments.memberDetails!,
-                                )),
+                                      applicant:
+                                          widget.screenArguments.applicant,
+                                      partner: widget.screenArguments
+                                          .partners![selectedIndex],
+                                      memberDetails:
+                                          widget.screenArguments.memberDetails!,
+                                    )),
                           );
                         }
                       },
+                      style: ElevatedButton.styleFrom(
+                          elevation: 0.0,
+                          backgroundColor: selectedIndex == -1
+                              ? const Color(0xffEBEBEB)
+                              : const Color(0xff7898FF),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40))),
                       child: Text(
                         'matched6'.tr(),
                         style: TextStyle(
                           color: selectedIndex == -1
-                              ? Color(0xff888888)
+                              ? const Color(0xff888888)
                               : Colors.white,
                           fontSize: isSmallScreen ? 14 : 16,
                         ),
                       ),
-                      style: ElevatedButton.styleFrom(
-                          elevation: 0.0,
-                          backgroundColor: selectedIndex == -1
-                              ? Color(0xffEBEBEB)
-                              : Color(0xff7898FF),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40))),
                     ),
                   ),
                 ],
@@ -219,7 +216,7 @@ class _MatchingListState extends State<MatchingList> {
                     offset: const Offset(0, 4)),
               ],
               gradient: widget.isClicked
-                  ? LinearGradient(
+                  ? const LinearGradient(
                       begin: Alignment.bottomLeft,
                       end: Alignment.topRight,
                       stops: [0.45, 0.55],
@@ -228,7 +225,7 @@ class _MatchingListState extends State<MatchingList> {
                         Color(0xff95AEFF),
                         Color(0xff4976ff),
                       ])
-                  : LinearGradient(colors: [Colors.white, Colors.white]),
+                  : const LinearGradient(colors: [Colors.white, Colors.white]),
             ),
             child: InkWell(
               onTap: widget.onPressed,
@@ -245,24 +242,24 @@ class _MatchingListState extends State<MatchingList> {
                         BoxShadow(
                           color: widget.isClicked
                               ? Colors.transparent
-                              : Color(0xff7898FF).withOpacity(0.3),
+                              : const Color(0xff7898FF).withOpacity(0.3),
                         ),
 
                         //버튼색
 
                         widget.isClicked
-                            ? BoxShadow(
+                            ? const BoxShadow(
                                 color: Color(0xff7898ff),
                                 spreadRadius: -5.0,
                                 blurRadius: 10,
                               )
-                            : BoxShadow(
+                            : const BoxShadow(
                                 blurRadius: 10,
                                 color: Colors.white,
-                                offset: const Offset(-5, -5),
+                                offset: Offset(-5, -5),
                               )
                       ]),
-                  padding: EdgeInsets.only(left: 20, right: 30),
+                  padding: const EdgeInsets.only(left: 20, right: 30),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -277,7 +274,7 @@ class _MatchingListState extends State<MatchingList> {
                           showDialog(
                               context: context,
                               builder: (_) => Center(
-                                    child: Container(
+                                    child: SizedBox(
                                       width: 340,
                                       height: 275,
                                       child: Stack(
@@ -297,7 +294,7 @@ class _MatchingListState extends State<MatchingList> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     height: 50,
                                                   ),
                                                   Text(
@@ -305,7 +302,9 @@ class _MatchingListState extends State<MatchingList> {
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      fontSize: isSmallScreen ? 30 : 36,
+                                                      fontSize: isSmallScreen
+                                                          ? 30
+                                                          : 36,
                                                     ),
                                                   ),
                                                   Padding(
@@ -314,7 +313,7 @@ class _MatchingListState extends State<MatchingList> {
                                                             15),
                                                     child: Text(
                                                       '${widget.partner.selfIntroduction}',
-                                                      style: TextStyle(
+                                                      style: const TextStyle(
                                                         color:
                                                             Color(0xff888888),
                                                         fontSize: 16,
@@ -323,16 +322,18 @@ class _MatchingListState extends State<MatchingList> {
                                                   ),
                                                   Container(
                                                     decoration: BoxDecoration(
-                                                      color: Color(0xffF1F1F1),
+                                                      color: const Color(
+                                                          0xffF1F1F1),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               20),
                                                     ),
-                                                    padding: EdgeInsets.only(
-                                                        top: 5,
-                                                        bottom: 5,
-                                                        left: 15,
-                                                        right: 20),
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 5,
+                                                            bottom: 5,
+                                                            left: 15,
+                                                            right: 20),
                                                     child: Stack(
                                                       children: [
                                                         Text(
@@ -342,20 +343,22 @@ class _MatchingListState extends State<MatchingList> {
                                                                   isSmallScreen
                                                                       ? 14
                                                                       : 16,
-                                                              color: Color(
+                                                              color: const Color(
                                                                   0xff616161)),
                                                         ),
                                                         Positioned(
                                                           left: 0,
                                                           top: 0,
                                                           bottom: 0,
-                                                          child:
-                                                          Center(
-                                                            child: Container(
+                                                          child: Center(
+                                                            child: SizedBox(
                                                               width: 21,
-                                                              height:14,
-                                                              child: CountryFlag(
-                                                                country: Country.fromCode(flagSrc),
+                                                              height: 14,
+                                                              child:
+                                                                  CountryFlag(
+                                                                country: Country
+                                                                    .fromCode(
+                                                                        flagSrc),
                                                               ),
                                                             ),
                                                           ),
@@ -363,14 +366,14 @@ class _MatchingListState extends State<MatchingList> {
                                                       ],
                                                     ),
                                                   ),
-                                                  SizedBox(
+                                                  const SizedBox(
                                                     height: 30,
                                                   )
                                                 ],
                                               ),
                                             ),
                                           ),
-                                          Container(
+                                          SizedBox(
                                             width: 340,
                                             height: 105,
                                             child: Stack(
@@ -385,36 +388,36 @@ class _MatchingListState extends State<MatchingList> {
                                                           width: 100,
                                                           height: 100,
                                                           decoration:
-                                                              BoxDecoration(
+                                                              const BoxDecoration(
                                                             shape:
                                                                 BoxShape.circle,
                                                             color: Colors.white,
                                                           ),
                                                           padding:
-                                                              EdgeInsets.all(5),
+                                                              const EdgeInsets
+                                                                  .all(5),
                                                           child:
                                                               SvgPicture.asset(
                                                             'assets/icon/icon_profile.svg',
-                                                            color: Color(
+                                                            color: const Color(
                                                                 0xffEBEBEB),
                                                           ),
                                                         )
                                                       : Container(
                                                           width: 100,
                                                           height: 100,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            color: Colors.white,
-                                                                image: DecorationImage(
-                                                                  image: NetworkImage(
-                                                                      widget.partner.profileImage!
-                                                                  )
-                                                                )
-                                                          ),
+                                                          decoration: BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              color:
+                                                                  Colors.white,
+                                                              image: DecorationImage(
+                                                                  image: NetworkImage(widget
+                                                                      .partner
+                                                                      .profileImage!))),
                                                           padding:
-                                                              EdgeInsets.all(5),
+                                                              const EdgeInsets
+                                                                  .all(5),
                                                         ),
                                                 ),
                                                 Align(
@@ -423,6 +426,13 @@ class _MatchingListState extends State<MatchingList> {
                                                   child: Container(
                                                     height: 20,
                                                     width: 20,
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xffebebeb),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
                                                     child: Icon(
                                                       widget.partner.gender ==
                                                               'MALE'
@@ -430,13 +440,8 @@ class _MatchingListState extends State<MatchingList> {
                                                           : Icons
                                                               .female_rounded,
                                                       size: 15,
-                                                      color: Color(0xff7898ff),
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      color: Color(0xffebebeb),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
+                                                      color: const Color(
+                                                          0xff7898ff),
                                                     ),
                                                   ),
                                                 ),
@@ -448,31 +453,27 @@ class _MatchingListState extends State<MatchingList> {
                                     ),
                                   ));
                         },
-                        child: widget.partner.profileImage == null ? SvgPicture.asset(
-                          'assets/icon/icon_profile.svg',
-                          width: 50,
-                          color: Color(0xffEBEBEB),
-                        ) : Container(
-                          width: 50,
-                          height: 50,
-                          decoration:
-                          BoxDecoration(
-                            shape:
-                            BoxShape.circle,
-                            color: Colors.white,
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                  widget.partner.profileImage!
+                        child: widget.partner.profileImage == null
+                            ? SvgPicture.asset(
+                                'assets/icon/icon_profile.svg',
+                                width: 50,
+                                color: const Color(0xffEBEBEB),
                               )
-                            )
-                          ),
-                          padding:
-                          EdgeInsets.all(5),
-                        ),
+                            : Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            widget.partner.profileImage!))),
+                                padding: const EdgeInsets.all(5),
+                              ),
                       ),
                       Expanded(
                           child: Container(
-                        margin: EdgeInsets.symmetric(
+                        margin: const EdgeInsets.symmetric(
                           vertical: 5,
                           horizontal: 10,
                         ),
@@ -492,29 +493,29 @@ class _MatchingListState extends State<MatchingList> {
                                         : Colors.black,
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 Container(
                                   height: 18,
                                   width: 18,
+                                  decoration: BoxDecoration(
+                                    color: widget.partner.gender == 'MALE'
+                                        ? const Color(0xffFFB5B5)
+                                        : const Color(0xffFFF3C7),
+                                    borderRadius: BorderRadius.circular(9),
+                                  ),
                                   child: widget.partner.gender == 'MALE'
-                                      ? Icon(
+                                      ? const Icon(
                                           Icons.male_rounded,
                                           size: 15,
                                           color: Colors.white,
                                         )
-                                      : Icon(
+                                      : const Icon(
                                           Icons.female_rounded,
                                           size: 15,
                                           color: Colors.white,
                                         ),
-                                  decoration: BoxDecoration(
-                                    color: widget.partner.gender == 'MALE'
-                                        ? Color(0xffFFB5B5)
-                                        : Color(0xffFFF3C7),
-                                    borderRadius: BorderRadius.circular(9),
-                                  ),
                                 )
                               ],
                             ),
@@ -524,24 +525,24 @@ class _MatchingListState extends State<MatchingList> {
                                 fontSize: isSmallScreen ? 14 : 16,
                                 color: widget.isClicked
                                     ? Colors.white
-                                    : Color(0xffA4A4A4),
+                                    : const Color(0xffA4A4A4),
                               ),
                             ),
                           ],
                         ),
                       )),
                       Container(
-                        child: CountryFlag(
-                          country: Country.fromCode(flagSrc),
-                          height: 30,
-                        ),
                         decoration: BoxDecoration(boxShadow: [
                           BoxShadow(
-                            offset: Offset(2, 3),
+                            offset: const Offset(2, 3),
                             blurRadius: 5,
                             color: Colors.black.withOpacity(0.2),
                           )
                         ]),
+                        child: CountryFlag(
+                          country: Country.fromCode(flagSrc),
+                          height: 30,
+                        ),
                       )
                     ],
                   ),
@@ -560,53 +561,52 @@ class _MatchingListState extends State<MatchingList> {
                     spreadRadius: 0.5,
                     offset: const Offset(0, 4)),
               ],
-              gradient: LinearGradient(colors: [Colors.white, Colors.white]),
+              gradient:
+                  const LinearGradient(colors: [Colors.white, Colors.white]),
             ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                  height: isSmallScreen ? 70 : 80,
-                  width: isSmallScreen ? 300 : 350,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        //내부 그림자
-                        BoxShadow(
-                          color: Color(0xffCBCBCB)
-                        ),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Container(
+                height: isSmallScreen ? 70 : 80,
+                width: isSmallScreen ? 300 : 350,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
+                      //내부 그림자
+                      BoxShadow(color: Color(0xffCBCBCB)),
 
-                        //버튼색
-                        BoxShadow(
-                                blurRadius: 10,
-                                color: Color(0xffF8F8F8),
-                                offset: const Offset(-5, -5),
-                              )
-                      ]),
-                  padding: EdgeInsets.only(left: 20, right: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SvgPicture.asset(
-                        'assets/icon/icon_profile.svg',
-                        width: 50,
-                        color: Color(0xffEBEBEB),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(
-                          '탈퇴한 사용자입니다.',
-                          style: TextStyle(
-                            fontSize: isSmallScreen ? 14 : 16,
-                            color: widget.isClicked
-                                ? Colors.white
-                                : Color(0xffc1c1c1),
-                          ),
+                      //버튼색
+                      BoxShadow(
+                        blurRadius: 10,
+                        color: Color(0xffF8F8F8),
+                        offset: Offset(-5, -5),
+                      )
+                    ]),
+                padding: const EdgeInsets.only(left: 20, right: 30),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icon/icon_profile.svg',
+                      width: 50,
+                      color: const Color(0xffEBEBEB),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Text(
+                        '탈퇴한 사용자입니다.',
+                        style: TextStyle(
+                          fontSize: isSmallScreen ? 14 : 16,
+                          color: widget.isClicked
+                              ? Colors.white
+                              : const Color(0xffc1c1c1),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
+            ),
           );
   }
 }

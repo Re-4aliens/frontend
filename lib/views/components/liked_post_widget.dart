@@ -1,29 +1,24 @@
-
-import 'dart:async';
-import 'package:aliens/apis/apis.dart';
-import 'package:aliens/apis/apis.dart';
-import 'package:aliens/models/memberDetails_model.dart';
+import 'package:aliens/services/apis.dart';
 import 'package:aliens/models/message_model.dart';
-import 'package:aliens/models/screenArgument.dart';
-import 'package:aliens/views/pages/board/article_writing_page.dart';
+import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/views/pages/board/info_article_page.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
-import 'dart:convert';
 import '../../models/board_model.dart';
 import '../../models/market_articles.dart';
-import '../../repository/board_provider.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/market_detail_page.dart';
 import 'board_dialog_widget.dart';
 
 class LikedArticleWidget extends StatefulWidget {
-
-  LikedArticleWidget({super.key, required this.board, required this.nationCode, required this.screenArguments, required this.index});
+  const LikedArticleWidget(
+      {super.key,
+      required this.board,
+      required this.nationCode,
+      required this.screenArguments,
+      required this.index});
 
   final Board board;
   final String nationCode;
@@ -32,8 +27,8 @@ class LikedArticleWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _LikedArticleWidgetWidgetState();
 }
-class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
 
+class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
   String createdAt = '';
   String boardCategory = '';
   List<Board> articles = [];
@@ -41,7 +36,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
   @override
   void initState() {
     super.initState();
-    switch (widget.board.category){
+    switch (widget.board.category) {
       case '자유게시판':
         boardCategory = 'free-posting'.tr();
         break;
@@ -65,9 +60,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
         break;
       default:
     }
-
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,12 +76,12 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                      top: 10.0, bottom: 10, left: 10, right: 15)
+                          top: 10.0, bottom: 10, left: 10, right: 15)
                       .r,
                   child: SvgPicture.asset(
                     'assets/icon/icon_profile.svg',
                     width: 35.r,
-                    color: Color(0xff7898ff),
+                    color: const Color(0xff7898ff),
                   ),
                 ),
                 Column(
@@ -101,27 +94,24 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
                           '${widget.board.member!.name}',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.spMin),
+                              fontWeight: FontWeight.bold, fontSize: 16.spMin),
                         ),
                         Text(
                           '/',
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.spMin),
+                              fontWeight: FontWeight.bold, fontSize: 16.spMin),
                         ),
                         Text(
-                          '${widget.nationCode}',
+                          widget.nationCode,
                           style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.spMin),
+                              fontWeight: FontWeight.bold, fontSize: 16.spMin),
                         )
                       ],
                     ),
                     Text(
-                      '[${boardCategory}]',
+                      '[$boardCategory]',
                       style: TextStyle(
-                          color: Color(0xff888888), fontSize: 12.spMin),
+                          color: const Color(0xff888888), fontSize: 12.spMin),
                     )
                   ],
                 )
@@ -133,7 +123,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
                 Text(
                   DataUtils.getTime(widget.board.createdAt),
                   style: TextStyle(
-                      fontSize: 16.spMin, color: Color(0xffc1c1c1)),
+                      fontSize: 16.spMin, color: const Color(0xffc1c1c1)),
                 ),
                 InkWell(
                   onTap: () {
@@ -141,7 +131,11 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
                         context: context,
                         builder: (builder) {
                           return BoardDialog(
-                            context: context, board: widget.board, memberDetails: widget.screenArguments.memberDetails!, boardCategory: "좋아하는 게시글",
+                            context: context,
+                            board: widget.board,
+                            memberDetails:
+                                widget.screenArguments.memberDetails!,
+                            boardCategory: "좋아하는 게시글",
                           );
                         });
                   },
@@ -151,7 +145,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
                       'assets/icon/ICON_more.svg',
                       width: 25.r,
                       height: 25.r,
-                      color: Color(0xffc1c1c1),
+                      color: const Color(0xffc1c1c1),
                     ),
                   ),
                 )
@@ -162,32 +156,31 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
 
         //내용
         subtitle: Container(
-          padding: EdgeInsets.only(left: 10.w, bottom: 10.h,),
+          padding: EdgeInsets.only(
+            left: 10.w,
+            bottom: 10.h,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(top: 10).h,
-                child: RichText(
-                  text: TextSpan(
-                    children: [
+                  padding: const EdgeInsets.only(top: 10).h,
+                  child: RichText(
+                    text: TextSpan(children: [
                       TextSpan(
                           text: '${widget.board.member!.name}',
                           style: TextStyle(
-                            fontSize: 14.spMin,
-                            color: Color(0xff444444),
-                            fontWeight: FontWeight.bold
-                          )),
+                              fontSize: 14.spMin,
+                              color: const Color(0xff444444),
+                              fontWeight: FontWeight.bold)),
                       TextSpan(
                           text: '님의 게시글에 좋아요를 눌렀습니다.',
                           style: TextStyle(
                               fontSize: 14.spMin,
-                              color: Color(0xff444444))),
-                    ]
-                  ),
-                )
-              ),
+                              color: const Color(0xff444444))),
+                    ]),
+                  )),
             ],
           ),
         ),
@@ -197,49 +190,55 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      InfoArticlePage(board: widget.board)),
+                  builder: (context) => InfoArticlePage(board: widget.board)),
             );
-          }
-          else if(widget.board.category == "장터게시판"){
+          } else if (widget.board.category == "장터게시판") {
             showDialog(
                 context: context,
                 builder: (_) => FutureBuilder(
                     future: APIs.getMarketArticle(widget.board.articleId!),
-                    builder: (BuildContext context,
-                        AsyncSnapshot snapshot) {
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         //받아오는 동안
                         return Container(
-                            child: Image(
+                            child: const Image(
                                 image: AssetImage(
                                     "assets/illustration/loading_01.gif")));
-                      } else{
+                      } else {
                         MarketBoard data = snapshot.data;
                         //받아온 후
-                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
                           Navigator.pop(context);
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => MarketDetailPage(screenArguments: widget.screenArguments, marketBoard: data,
-                              productStatus: getProductStatusText(data.productStatus),
-                              StatusText: getStatusText(data.marketArticleStatus),
-                              index: -1, backPage: '',)),
+                            MaterialPageRoute(
+                                builder: (context) => MarketDetailPage(
+                                      screenArguments: widget.screenArguments,
+                                      marketBoard: data,
+                                      productStatus: getProductStatusText(
+                                          data.productStatus),
+                                      StatusText: getStatusText(
+                                          data.marketArticleStatus),
+                                      index: -1,
+                                      backPage: '',
+                                    )),
                           );
                         });
                         return Container(
-                            child: Image(
+                            child: const Image(
                                 image: AssetImage(
                                     "assets/illustration/loading_01.gif")));
                       }
-
                     }));
-          }
-          else {
+          } else {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ArticlePage(board: widget.board, memberDetails: widget.screenArguments.memberDetails!, index: widget.index,)),
+                  builder: (context) => ArticlePage(
+                        board: widget.board,
+                        memberDetails: widget.screenArguments.memberDetails!,
+                        index: widget.index,
+                      )),
             );
           }
         },
@@ -247,4 +246,3 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget>{
     );
   }
 }
-

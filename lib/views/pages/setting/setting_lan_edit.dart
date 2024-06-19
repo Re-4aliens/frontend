@@ -1,21 +1,14 @@
-import 'dart:convert';
-
-import 'package:aliens/mockdatas/mockdata_model.dart';
-import 'package:aliens/models/memberDetails_model.dart';
 import 'package:aliens/views/components/appbar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:easy_localization/easy_localization.dart';
-import '../../../apis/apis.dart';
-import '../../../models/applicant_model.dart';
-import '../../../models/screenArgument.dart';
+import 'package:aliens/services/apis.dart';
+import '../../../models/screen_argument.dart';
 import '../../components/button.dart';
 
 class SettingLanEditPage extends StatefulWidget {
-
-  const SettingLanEditPage({super.key, required this.screenArguments, required this.isKorean});
+  const SettingLanEditPage(
+      {super.key, required this.screenArguments, required this.isKorean});
   final ScreenArguments? screenArguments;
   final bool isKorean;
 
@@ -37,49 +30,56 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
     {
       'language': '中國語',
       'value': 'CHINESE',
-    },//중국어
+    }, //중국어
     {
       'language': '日本語',
       'value': 'JAPANESE',
-    }//일본어
+    } //일본어
   ];
   late String _firstPreferLanguage;
   late String _secondPreferLanguage;
 
   @override
   void initState() {
-
     _selectedLanguage = widget.isKorean ? '한국어' : 'English';
 
-    if(widget.screenArguments!.status == 'AppliedAndNotMatched' || widget.screenArguments!.status == 'AppliedAndMatched'){
-
+    if (widget.screenArguments!.status == 'AppliedAndNotMatched' ||
+        widget.screenArguments!.status == 'AppliedAndMatched') {
       _firstPreferLanguage = _nationlist.firstWhere((element) =>
-      element['value'] == widget.screenArguments!.applicant!.preferLanguages!
-          .firstPreferLanguage!)['language'];
+          element['value'] ==
+          widget.screenArguments!.applicant!.preferLanguages!
+              .firstPreferLanguage!)['language'];
 
-      _secondPreferLanguage = _nationlist.firstWhere((element) => element['value'] == widget.screenArguments!.applicant!.preferLanguages!.secondPreferLanguage!)['language'];
-    }else{
+      _secondPreferLanguage = _nationlist.firstWhere((element) =>
+          element['value'] ==
+          widget.screenArguments!.applicant!.preferLanguages!
+              .secondPreferLanguage!)['language'];
+    } else {
       _firstPreferLanguage = '한국어';
       _secondPreferLanguage = 'English';
     }
-
   }
 
-
-
-
+  @override
   Widget build(BuildContext context) {
-
     final double screenWidth = MediaQuery.of(context).size.width;
     final bool isSmallScreen = screenWidth <= 600;
 
-
-
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(appBar: AppBar(), backgroundColor: Colors.transparent, infookay: false, infocontent: '',title: '${'setting-lan'.tr()}',),
+      appBar: CustomAppBar(
+        appBar: AppBar(),
+        backgroundColor: Colors.transparent,
+        infookay: false,
+        infocontent: '',
+        title: 'setting-lan'.tr(),
+      ),
       body: Container(
-        padding: EdgeInsets.only(right: 24,left: 24,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
+        padding: EdgeInsets.only(
+            right: 24,
+            left: 24,
+            top: MediaQuery.of(context).size.height * 0.06,
+            bottom: MediaQuery.of(context).size.height * 0.06),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -96,26 +96,26 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
             ),*/
             //SizedBox(height: MediaQuery.of(context).size.height * 0.02),
             Container(
-              height: MediaQuery.of(context).size.height*0.1,
+              height: MediaQuery.of(context).size.height * 0.1,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                //color: Colors.green.shade300,
-              ),
+              decoration: const BoxDecoration(
+                  //color: Colors.green.shade300,
+                  ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('${'setting-displaylan'.tr()}',
+                  Text(
+                    'setting-displaylan'.tr(),
                     style: TextStyle(
-                      fontSize: 18.spMin,
-                      fontWeight: FontWeight.bold
-                    ),),
-                  Container(
+                        fontSize: 18.spMin, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(
                     width: 110.w,
                     child: DropdownButton<String>(
                       isExpanded: true,
                       value: _selectedLanguage,
                       hint: Text(
-                        _selectedLanguage!,
+                        _selectedLanguage,
                         style: TextStyle(
                           fontSize: 22.spMin,
                           fontWeight: FontWeight.bold,
@@ -144,162 +144,189 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                 ],
               ),
             ),
-            Divider(
+            const Divider(
               thickness: 1,
               color: Color(0xffECECEC),
             ),
 
             //신청이 안된 상태일때는 빈공간
-            widget.screenArguments!.status == 'NotAppliedAndNotMatched' || widget.screenArguments!.status != 'AppliedAndNotMatched'
-                ? SizedBox(child: Container(),)
+            widget.screenArguments!.status == 'NotAppliedAndNotMatched' ||
+                    widget.screenArguments!.status != 'AppliedAndNotMatched'
+                ? SizedBox(
+                    child: Container(),
+                  )
                 : Container(
-              child: Column(
-                children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Column(
                       children: [
-                        Flexible(
-                          child: Text('${'matchingpreferlan'.tr()}',
-                            style: TextStyle(
-                              fontSize: 18.spMin,
-                              fontWeight: FontWeight.bold
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text('${'first'.tr()}',
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  'matchingpreferlan'.tr(),
                                   style: TextStyle(
-                                    color: Color(0xff7898ff),
-                                    fontSize: 14.spMin,
-                                  ),),
-                                SizedBox(
-                                  width: 5,
+                                      fontSize: 18.spMin,
+                                      fontWeight: FontWeight.bold),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                Container(
-                                  width: 110.w,
-
-                                  child: DropdownButton(
-                                      isExpanded: true,
-                                      items: _nationlist.map((value){
-                                        return DropdownMenuItem(
-                                            child: Text(value['language'],
-                                              style: TextStyle(fontSize: 22.spMin, fontWeight: FontWeight.bold),),
-                                            value: value['language']);
-                                      }).toList(),
-                                      value: _firstPreferLanguage,
-                                      onChanged: (value){
-                                        setState(() {
-                                          _firstPreferLanguage = value.toString();
-                                        });}
+                              ),
+                              Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'first'.tr(),
+                                        style: TextStyle(
+                                          color: const Color(0xff7898ff),
+                                          fontSize: 14.spMin,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      SizedBox(
+                                        width: 110.w,
+                                        child: DropdownButton(
+                                            isExpanded: true,
+                                            items: _nationlist.map((value) {
+                                              return DropdownMenuItem(
+                                                  value: value['language'],
+                                                  child: Text(
+                                                    value['language'],
+                                                    style: TextStyle(
+                                                        fontSize: 22.spMin,
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ));
+                                            }).toList(),
+                                            value: _firstPreferLanguage,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _firstPreferLanguage =
+                                                    value.toString();
+                                              });
+                                            }),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
+                            ],
+                          ), //1순위
+                        ), //매칭선호언어 글자+1순위
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(
+                              'second'.tr(),
+                              style: TextStyle(
+                                color: const Color(0xff7898ff),
+                                fontSize: 14.spMin,
+                              ),
+                            ),
+                            SizedBox(
+                              width: 5.w,
+                            ),
+                            SizedBox(
+                              width: 110.w,
+                              child: DropdownButton(
+                                  isExpanded: true,
+                                  items: _nationlist.map((value) {
+                                    return DropdownMenuItem(
+                                        value: value['language'],
+                                        child: Text(
+                                          value['language'],
+                                          style: TextStyle(
+                                              fontSize: 22.spMin,
+                                              fontWeight: FontWeight.bold),
+                                        ));
+                                  }).toList(),
+                                  value: _secondPreferLanguage,
+                                  onChanged: (value) {
+                                    print(value);
+                                    setState(() {
+                                      _secondPreferLanguage = value.toString();
+                                    });
+                                  }),
                             ),
                           ],
-                        ),
+                        ), //2순위
                       ],
-                    ), //1순위
-                  ), //매칭선호언어 글자+1순위
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('${'second'.tr()}',
-                        style: TextStyle(
-                          color: Color(0xff7898ff),
-                          fontSize: 14.spMin ,
-                        ),),
-                      SizedBox(
-                        width: 5.w,
-                      ),
-                      Container(
-                        width: 110.w,
-                        child: DropdownButton(
-                            isExpanded: true,
-                            items: _nationlist.map((value){
-                              return DropdownMenuItem(
-                                  child: Text(value['language'],
-                                    style: TextStyle(fontSize: 22.spMin, fontWeight: FontWeight.bold),),
-                                  value: value['language']);
-                            }).toList(),
-                            value: _secondPreferLanguage,
-                            onChanged: (value){
-                              print(value);
-                              setState(() {
-                                _secondPreferLanguage = value.toString();
-                              });}
-                        ),
-                      ),
-                    ],
-                  ),//2순위
-                ],
-              ),
-            ),
+                    ),
+                  ),
 
-            Expanded(child: SizedBox()),
+            const Expanded(child: SizedBox()),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0.0),
               child: Button(
-                //수정
+                  //수정
                   isEnabled: true,
-                  child: Text('${'confirm'.tr()}'),
-                  onPressed: ()async{
-                    if(_firstPreferLanguage != _secondPreferLanguage){
-
-                      String _firstPreferLanguageArgs = _nationlist.firstWhere((element) => element['language'] == _firstPreferLanguage)['value'];
-                      String _secondPreferLanguageArgs = _nationlist.firstWhere((element) => element['language'] == _secondPreferLanguage)['value'];
+                  child: Text('confirm'.tr()),
+                  onPressed: () async {
+                    if (_firstPreferLanguage != _secondPreferLanguage) {
+                      String firstPreferLanguageArgs = _nationlist.firstWhere(
+                          (element) =>
+                              element['language'] ==
+                              _firstPreferLanguage)['value'];
+                      String secondPreferLanguageArgs = _nationlist.firstWhere(
+                          (element) =>
+                              element['language'] ==
+                              _secondPreferLanguage)['value'];
                       //펜딩일때만 수정
-                      if(widget.screenArguments!.status == 'AppliedAndNotMatched' || widget.screenArguments!.status == 'AppliedAndMatched'){
+                      if (widget.screenArguments!.status ==
+                              'AppliedAndNotMatched' ||
+                          widget.screenArguments!.status ==
+                              'AppliedAndMatched') {
                         bool isSuccess = false;
                         try {
-                         isSuccess = await APIs.updatePreferLanguage(_firstPreferLanguageArgs, _secondPreferLanguageArgs);
+                          isSuccess = await APIs.updatePreferLanguage(
+                              firstPreferLanguageArgs,
+                              secondPreferLanguageArgs);
                         } catch (e) {
-                          if(e == "AT-C-002"){
-                            try{
+                          if (e == "AT-C-002") {
+                            try {
                               await APIs.getAccessToken();
-                            }catch (e){
-                              if(e == "AT-C-005") {
-
+                            } catch (e) {
+                              if (e == "AT-C-005") {
                                 //토큰 및 정보 삭제
                                 await APIs.logOut(context);
-                              }
-                              else{
-                                isSuccess = await APIs.updatePreferLanguage(_firstPreferLanguageArgs, _secondPreferLanguageArgs);
+                              } else {
+                                isSuccess = await APIs.updatePreferLanguage(
+                                    firstPreferLanguageArgs,
+                                    secondPreferLanguageArgs);
                               }
                             }
-                          }
-                          else if(e == "AT-C-007"){
+                          } else if (e == "AT-C-007") {
                             //토큰 및 정보 삭제
                             await APIs.logOut(context);
                           }
                         }
 
-                        if(isSuccess){
+                        if (isSuccess) {
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/loading', (Route<dynamic> route) => false);
                           if (_selectedLanguage == '한국어') {
-                            EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
+                            EasyLocalization.of(context)!
+                                .setLocale(const Locale('ko', 'KR'));
                           } else if (_selectedLanguage == 'English') {
-                            EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
+                            EasyLocalization.of(context)!
+                                .setLocale(const Locale('en', 'US'));
                           }
                         }
-                      }
-                      else {
+                      } else {
                         Navigator.of(context).pushNamedAndRemoveUntil(
                             '/loading', (Route<dynamic> route) => false);
                         if (_selectedLanguage == '한국어') {
-                          EasyLocalization.of(context)!.setLocale(Locale('ko', 'KR'));
+                          EasyLocalization.of(context)!
+                              .setLocale(const Locale('ko', 'KR'));
                         } else if (_selectedLanguage == 'English') {
-                          EasyLocalization.of(context)!.setLocale(Locale('en', 'US'));
+                          EasyLocalization.of(context)!
+                              .setLocale(const Locale('en', 'US'));
                         }
                       }
                     }
-
                   }),
             )
           ],

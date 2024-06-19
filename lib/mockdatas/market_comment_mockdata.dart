@@ -1,8 +1,6 @@
-
 import '../models/comment_model.dart';
 
-
-List<Comment> MarketcommentListMock = [
+List<Comment> marketCommentListMock = [
   comment1,
 ];
 
@@ -14,8 +12,7 @@ Comment comment1 = Comment(
       name: "누군가",
       nationality: "South Korea",
       email: "ex@email.com",
-      profileImageUrl: ""
-  ),
+      profileImageUrl: ""),
   childs: [
     Comment(
       articleCommentId: 1,
@@ -25,8 +22,7 @@ Comment comment1 = Comment(
           name: "좀믿어",
           nationality: "South Korea",
           email: "ex@email.com",
-          profileImageUrl: ""
-      ),
+          profileImageUrl: ""),
       createdAt: "2023-08-06 14:30:33",
     ),
     Comment(
@@ -37,11 +33,9 @@ Comment comment1 = Comment(
           name: "Jenny",
           nationality: "South Korea",
           email: "ex@email.com",
-          profileImageUrl: ""
-      ),
+          profileImageUrl: ""),
       createdAt: "2023-08-06 14:30:33",
     )
   ],
   createdAt: "2023-08-06 14:30:33",
 );
-
