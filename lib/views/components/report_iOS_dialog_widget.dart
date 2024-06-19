@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/report_servcie.dart';
 
 class iOSReportDialog extends StatefulWidget {
   const iOSReportDialog({
@@ -168,7 +168,7 @@ class _iOSReportDialogState extends State<iOSReportDialog> {
                             break;
                           }
                         }
-                        if (await APIs.reportPartner(reportCategory,
+                        if (await ReportService.reportPartner(reportCategory,
                             _textEditingController.text, widget.memberId)) {
                           Navigator.pop(context);
                           showDialog(

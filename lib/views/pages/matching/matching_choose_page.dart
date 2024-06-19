@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aliens/services/apis.dart';
-
+import 'package:aliens/services/matching_service.dart';
+import 'package:aliens/services/auth_service.dart';
 import '../../../models/screen_argument.dart';
 import '../../components/button.dart';
 
@@ -280,13 +280,13 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                     //신청 요청
                     late bool success;
                     try {
-                      success = await APIs.applicantMatching(
+                      success = await MatchingService.applicantMatching(
                           nationlist[selectedIndex[0]]['value'],
                           nationlist[selectedIndex[1]]['value']);
                     } catch (e) {
                       if (e == "AT-C-002") {
                         try {
-                          await APIs.getAccessToken();
+                          await AuthService.getAccessToken();
                         } catch (e) {
                           if (e == "AT-C-005") {
                             //토큰 및 정보 삭제
@@ -299,18 +299,18 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                 '/', (Route<dynamic> route) => false);
                           } else if (e == "AT-C-007") {
                             //토큰 및 정보 삭제
-                            await APIs.logOut(context);
+                            await AuthService.logOut(context);
                           } else {
-                            success = await APIs.applicantMatching(
+                            success = await MatchingService.applicantMatching(
                                 nationlist[selectedIndex[0]]['value'],
                                 nationlist[selectedIndex[1]]['value']);
                           }
                         }
                       } else if (e == "AT-C-007") {
                         //토큰 및 정보 삭제
-                        await APIs.logOut(context);
+                        await AuthService.logOut(context);
                       } else {
-                        success = await APIs.applicantMatching(
+                        success = await MatchingService.applicantMatching(
                             nationlist[selectedIndex[0]]['value'],
                             nationlist[selectedIndex[1]]['value']);
                       }

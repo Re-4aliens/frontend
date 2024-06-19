@@ -81,42 +81,43 @@ class _StartPageState extends State<StartPage> {
                       ),
                     ),
                     DropdownButton<String>(
-                        underline: const SizedBox(),
-                        value: selectedValue,
-                        items: <String>['English', '한국어']
-                            .map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                  fontSize: isSmallScreen ? 12 : 14,
-                                  color: const Color(0xff616161)),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedValue = newValue!;
-                            switch (selectedValue) {
-                              case '한국어':
-                                EasyLocalization.of(context)!
-                                    .setLocale(const Locale('ko', 'KR'));
-                                break;
-                              case 'English':
-                                EasyLocalization.of(context)!
-                                    .setLocale(const Locale('en', 'US'));
-                                break;
-                            }
-                          });
-                        },
-                        icon: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: SvgPicture.asset(
-                            'assets/icon/icon_dropdown.svg',
-                            height: 8,
+                      underline: const SizedBox(),
+                      value: selectedValue,
+                      items: <String>['English', '한국어']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(
+                            value,
+                            style: TextStyle(
+                                fontSize: isSmallScreen ? 12 : 14,
+                                color: const Color(0xff616161)),
                           ),
-                        )),
+                        );
+                      }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedValue = newValue!;
+                          switch (selectedValue) {
+                            case '한국어':
+                              EasyLocalization.of(context)!
+                                  .setLocale(const Locale('ko', 'KR'));
+                              break;
+                            case 'English':
+                              EasyLocalization.of(context)!
+                                  .setLocale(const Locale('en', 'US'));
+                              break;
+                          }
+                        });
+                      },
+                      icon: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: SvgPicture.asset(
+                          'assets/icon/icon_dropdown.svg',
+                          height: 8,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -149,15 +150,18 @@ class _StartPageState extends State<StartPage> {
                                   TextStyle(fontSize: isSmallScreen ? 12 : 14),
                             ),
                             TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(context, '/login');
-                                },
-                                child: Text('login1'.tr(),
-                                    style: TextStyle(
-                                      color: const Color(0xff000000),
-                                      fontSize: isSmallScreen ? 12 : 14,
-                                      fontWeight: FontWeight.bold,
-                                    )))
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/login');
+                              },
+                              child: Text(
+                                'login1'.tr(),
+                                style: TextStyle(
+                                  color: const Color(0xff000000),
+                                  fontSize: isSmallScreen ? 12 : 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
                           ],
                         )
                       ],

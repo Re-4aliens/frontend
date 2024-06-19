@@ -1,4 +1,4 @@
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/market_service.dart';
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/views/pages/board/info_article_page.dart';
@@ -196,7 +196,8 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
             showDialog(
                 context: context,
                 builder: (_) => FutureBuilder(
-                    future: APIs.getMarketArticle(widget.board.articleId!),
+                    future:
+                        MarketService.getMarketArticle(widget.board.articleId!),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         //받아오는 동안

@@ -1,3 +1,4 @@
+import 'package:aliens/services/auth_service.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:aliens/views/components/button_big.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -5,7 +6,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:aliens/services/apis.dart';
 import 'package:aliens/models/auth_model.dart';
 
 class Login extends StatefulWidget {
@@ -169,7 +169,7 @@ class _LoginState extends State<Login> {
                               auth.password = _passwordController.text;
                               final fcmToken =
                                   await FirebaseMessaging.instance.getToken();
-                              var loginSuccess = await APIs.logIn(auth);
+                              var loginSuccess = await AuthService.logIn(auth);
 
                               if (loginSuccess) {
                                 Navigator.of(context).pushNamedAndRemoveUntil(
@@ -365,7 +365,8 @@ class _LoginState extends State<Login> {
                                   final fcmToken = await FirebaseMessaging
                                       .instance
                                       .getToken();
-                                  var loginSuccess = await APIs.logIn(auth);
+                                  var loginSuccess =
+                                      await AuthService.logIn(auth);
 
                                   if (loginSuccess) {
                                     Navigator.of(context)

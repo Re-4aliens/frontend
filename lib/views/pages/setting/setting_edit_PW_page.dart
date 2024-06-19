@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../../../services/apis.dart';
+import 'package:aliens/services/auth_service.dart';
 import '../../components/appbar.dart';
 import '../../components/button.dart';
 
@@ -135,12 +135,12 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                                 _passwordControllerSecond.text) {
                               late bool success;
                               try {
-                                success = await APIs.changePassword(
+                                success = await AuthService.changePassword(
                                     _passwordController.text);
                               } catch (e) {
                                 if (e == "AT-C-002") {
                                   try {
-                                    await APIs.getAccessToken();
+                                    await AuthService.getAccessToken();
                                   } catch (e) {
                                     if (e == "AT-C-005") {
                                       //토큰 및 정보 삭제
@@ -154,17 +154,18 @@ class _SettingEditPWPageState extends State<SettingEditPWPage> {
                                               (Route<dynamic> route) => false);
                                     } else if (e == "AT-C-007") {
                                       //토큰 및 정보 삭제
-                                      await APIs.logOut(context);
+                                      await AuthService.logOut(context);
                                     } else {
-                                      success = await APIs.changePassword(
-                                          _passwordController.text);
+                                      success =
+                                          await AuthService.changePassword(
+                                              _passwordController.text);
                                     }
                                   }
                                 } else if (e == "AT-C-007") {
                                   //토큰 및 정보 삭제
-                                  await APIs.logOut(context);
+                                  await AuthService.logOut(context);
                                 } else {
-                                  success = await APIs.changePassword(
+                                  success = await AuthService.changePassword(
                                       _passwordController.text);
                                 }
                               }

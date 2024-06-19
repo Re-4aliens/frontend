@@ -1,4 +1,4 @@
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/market_service.dart';
 import 'package:aliens/models/market_articles.dart';
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/models/screen_argument.dart';
@@ -238,7 +238,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                             widget.board.articleId!, widget.index);
                       } else {
                         boardProvider.likeCounts[widget.index] =
-                            await APIs.marketbookmark(
+                            await MarketService.marketBookmark(
                                 widget.board.articleId!, widget.index);
                       }
                       setState(() {});
@@ -288,7 +288,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
             showDialog(
                 context: context,
                 builder: (_) => FutureBuilder(
-                    future: APIs.getMarketArticle(widget.board.articleId!),
+                    future:
+                        MarketService.getMarketArticle(widget.board.articleId!),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         //받아오는 동안

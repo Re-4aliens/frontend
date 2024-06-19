@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:aliens/repository/sql_message_repository.dart';
 import 'package:aliens/views/components/chat_dialog_widget.dart';
 import 'package:async/async.dart';
-
+import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:web_socket_channel/io.dart';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/chat_service.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
 import '../../../models/vs_game.dart';
@@ -131,7 +131,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
   _unreadListFuc() async {
     List<MessageModel> unreadlist =
-        await APIs.getMessages(widget.partner.roomId, context);
+        await ChatService.getMessages(widget.partner.roomId, context);
 
     //1. 리스트 업데이트
     for (final message in unreadlist) {
@@ -233,12 +233,12 @@ class _ChattingPageState extends State<ChattingPage> {
   void connectWebSocket() async {
     String chatToken = '';
     try {
-      chatToken = await APIs.getChatToken();
+      chatToken = await ChatService.getChatToken();
     } catch (e) {
       print(e);
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        chatToken = await APIs.getChatToken();
+        await AuthService.getAccessToken();
+        chatToken = await ChatService.getChatToken();
       }
     }
 

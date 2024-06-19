@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/models/member_details_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -151,7 +151,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
                                     ),
                                     InkWell(
                                       onTap: () async {
-                                        if (await APIs.withdraw(
+                                        if (await AuthService.withdraw(
                                             passwordController.text)) {
                                           Navigator.pushNamed(
                                               context, '/setting/delete/done');

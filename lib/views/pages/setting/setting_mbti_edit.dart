@@ -1,7 +1,7 @@
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/user_service.dart';
 import '../../../models/screen_argument.dart';
 import '../../components/button.dart';
 
@@ -114,7 +114,7 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
                   isEnabled: true,
                   child: Text('confirm'.tr()),
                   onPressed: () async {
-                    if (await APIs.updateMBTI(_selectedMBTI)) {
+                    if (await UserService.updateMBTI(_selectedMBTI)) {
                       Navigator.of(context).pushNamedAndRemoveUntil(
                           '/loading', (Route<dynamic> route) => false);
                     }

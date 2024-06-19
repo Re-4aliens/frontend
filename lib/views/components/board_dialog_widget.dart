@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/board_service.dart';
 import '../../models/board_model.dart';
 
 class BoardDialog extends StatelessWidget {
@@ -84,7 +84,8 @@ class BoardDialog extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (_) => FutureBuilder(
-                              future: APIs.deleteArticles(board.articleId!),
+                              future:
+                                  BoardService.deleteArticle(board.articleId!),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.hasData == false) {
@@ -195,7 +196,8 @@ class BoardDialog extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (_) => FutureBuilder(
-                              future: APIs.deleteArticles(board.articleId!),
+                              future:
+                                  BoardService.deleteArticle(board.articleId!),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.hasData == false) {

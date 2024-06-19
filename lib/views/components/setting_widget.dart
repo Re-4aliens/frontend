@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/views/components/setting_list_widget.dart';
 import 'package:aliens/views/components/setting_profile_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/user_service.dart';
 import '../../models/screen_argument.dart';
 import '../../util/permissions.dart';
 
@@ -172,7 +173,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                             null) {
                                                       String? imagePath =
                                                           _profileImage?.path;
-                                                      if (await APIs
+                                                      if (await UserService
                                                           .updateProfile(File(
                                                               imagePath!))) {
                                                         Navigator.of(context)
@@ -199,7 +200,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                       print('요청시도');
                                                       String? imagePath =
                                                           _profileImage?.path;
-                                                      if (await APIs
+                                                      if (await UserService
                                                           .updateProfile(File(
                                                               imagePath!))) {
                                                         print('성공');
@@ -318,7 +319,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                 //authProvider.logout(context);
 
                 final fcmToken = await FirebaseMessaging.instance.getToken();
-                await APIs.logOut(context);
+                await AuthService.logOut(context);
               },
               child: Container(
                 decoration: const BoxDecoration(

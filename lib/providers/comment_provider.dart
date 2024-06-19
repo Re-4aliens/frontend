@@ -1,7 +1,7 @@
+import 'package:aliens/services/auth_service.dart';
 import 'package:flutter/widgets.dart';
-
-import 'package:aliens/services/apis.dart';
-import '../models/comment_model.dart';
+import 'package:aliens/models/comment_model.dart';
+import 'package:aliens/services/comment_service.dart';
 
 class CommentProvider with ChangeNotifier {
   List<Comment>? commentListData;
@@ -10,11 +10,11 @@ class CommentProvider with ChangeNotifier {
   getComments(int articleId) async {
     loading = true;
     try {
-      commentListData = await APIs.getCommentsList(articleId);
+      commentListData = await CommentService.getCommentsList(articleId);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        commentListData = await APIs.getCommentsList(articleId);
+        await AuthService.getAccessToken();
+        commentListData = await CommentService.getCommentsList(articleId);
       } else {}
     }
     loading = false;
@@ -23,11 +23,11 @@ class CommentProvider with ChangeNotifier {
 
   addComment(String content, int articleId) async {
     try {
-      await APIs.postComment(content, articleId);
+      await CommentService.postComment(content, articleId);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        await APIs.postComment(content, articleId);
+        await AuthService.getAccessToken();
+        await CommentService.postComment(content, articleId);
       } else {
         return false;
       }
@@ -41,11 +41,11 @@ class CommentProvider with ChangeNotifier {
 
   addNestedComment(String content, int commentId, int articleId) async {
     try {
-      await APIs.postNestedComment(content, commentId);
+      await CommentService.postNestedComment(content, commentId);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        await APIs.postNestedComment(content, commentId);
+        await AuthService.getAccessToken();
+        await CommentService.postNestedComment(content, commentId);
       } else {
         return false;
       }
@@ -61,11 +61,11 @@ class CommentProvider with ChangeNotifier {
     bool value = false;
     loading = true;
     try {
-      value = await APIs.deleteComment(articleCommentId);
+      value = await CommentService.deleteComment(articleCommentId);
     } catch (e) {
       if (e == "AT-C-002") {
-        await APIs.getAccessToken();
-        value = await APIs.deleteComment(articleCommentId);
+        await AuthService.getAccessToken();
+        value = await CommentService.deleteComment(articleCommentId);
       } else {}
     }
     loading = false;

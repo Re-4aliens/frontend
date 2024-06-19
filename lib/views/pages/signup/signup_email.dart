@@ -2,7 +2,7 @@ import 'package:aliens/views/components/appbar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import '../../../services/apis.dart';
+import 'package:aliens/services/email_service.dart';
 
 class SignUpEmail extends StatefulWidget {
   const SignUpEmail({super.key});
@@ -104,8 +104,8 @@ class _SignUpEmailState extends State<SignUpEmail> {
                             String enteredEmail = _EmailController.text;
                             print(
                                 'Entered Email: $enteredEmail'); // Print the entered email
-                            //await APIs.checkEmail(_EmailController.text)
-                            if (await APIs.checkExistence(
+                            //await EmailService.checkEmail(_EmailController.text)
+                            if (await EmailService.checkExistence(
                                 _EmailController.text)) {
                               showDialog(
                                   context: context,
@@ -253,7 +253,8 @@ class _SignUpEmailState extends State<SignUpEmail> {
                           showDialog(
                               context: context,
                               builder: (_) => FutureBuilder(
-                                  future: APIs.verifyEmail(member.email),
+                                  future:
+                                      EmailService.verifyEmail(member.email),
                                   builder: (BuildContext context,
                                       AsyncSnapshot snapshot) {
                                     if (snapshot.hasData == false) {

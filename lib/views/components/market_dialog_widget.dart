@@ -8,7 +8,7 @@ import 'package:aliens/models/market_articles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/board_service.dart';
 import '../pages/board/market_board_page.dart';
 import '../pages/board/market_posting_board_page.dart';
 
@@ -88,7 +88,7 @@ class MarketBoardDialog extends StatelessWidget {
                           showDialog(
                               context: context,
                               builder: (_) => FutureBuilder(
-                                  future: APIs.deleteArticles(
+                                  future: BoardService.deleteArticle(
                                       marketBoard.articleId ?? 0),
                                   builder: (BuildContext context,
                                       AsyncSnapshot snapshot) {
@@ -219,7 +219,7 @@ class MarketBoardDialog extends StatelessWidget {
                       showDialog(
                           context: context,
                           builder: (_) => FutureBuilder(
-                              future: APIs.deleteArticles(
+                              future: BoardService.deleteArticle(
                                   marketBoard.articleId ?? 0),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/market_service.dart';
 import 'package:aliens/models/market_articles.dart';
 import 'package:aliens/util/permissions.dart';
 import 'package:aliens/models/screen_argument.dart';
@@ -506,9 +506,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               );
                               print(marketArticleStatus);
 
-                              bool success = await APIs.updateMarketArticle(
-                                  widget.marketBoard!.articleId ?? 0,
-                                  updateData);
+                              bool success =
+                                  await MarketService.updateMarketArticle(
+                                      widget.marketBoard!.articleId ?? 0,
+                                      updateData);
                               print('1');
                               print(updateData);
                               Navigator.of(context).pop(); // 이전 페이지로 이동
@@ -537,7 +538,8 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                             } else {
                               // 생성 모드인 경우 게시물 생성
                               bool success =
-                                  await APIs.createMarketArticle(marketArticle);
+                                  await MarketService.createMarketArticle(
+                                      marketArticle);
                               //Navigator.of(context).pop(); // 이전 페이지로 이동
 
                               if (success) {

@@ -4,8 +4,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/block_service.dart';
 
 class BlockDialog extends StatefulWidget {
   final Partner partner;
@@ -48,7 +47,7 @@ class _BlockDialogState extends State<BlockDialog> {
             )),
         TextButton(
             onPressed: () async {
-              if (await APIs.blockPartner(widget.partner)) {
+              if (await BlockService.blockPartner(widget.partner)) {
                 Navigator.of(context).pushNamedAndRemoveUntil(
                     '/loading', (Route<dynamic> route) => false);
               }
@@ -113,7 +112,7 @@ class _BlockDialogState extends State<BlockDialog> {
                     child: InkWell(
                       child: Center(child: Text("chatting-block1".tr())),
                       onTap: () async {
-                        if (await APIs.blockPartner(widget.partner)) {
+                        if (await BlockService.blockPartner(widget.partner)) {
                           Navigator.of(context).pushNamedAndRemoveUntil(
                               '/loading', (Route<dynamic> route) => false);
                         }

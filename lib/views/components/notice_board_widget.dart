@@ -5,7 +5,7 @@ import 'package:aliens/models/notice_article.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:aliens/services/apis.dart';
+import 'package:aliens/services/board_service.dart';
 import '../../models/screen_argument.dart';
 import '../pages/board/notice_detail_page.dart';
 
@@ -31,7 +31,7 @@ class _NoticeWidgetState extends State<NoticeWidget> {
 
   Future<void> fetchNoticeData() async {
     try {
-      final response = await APIs.BoardNotice();
+      final response = await BoardService.boardNotice();
       final dataList = response; // 변환된 리스트 데이터
 
       setState(() {
