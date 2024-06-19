@@ -505,16 +505,16 @@ class APIs {
 
 //토큰 재발급
   static Future<bool> getAccessToken() async {
-    print('Access token 재발급 시도');
+    print("Access 토큰 재발급 요청");
     const url = '$domainUrl/authentication/reissue';
 
     // 토큰 읽어오기
     var accessToken = await storage.read(key: 'token');
     var refreshToken = await storage.read(key: 'refreshToken');
 
-    // print("accessToken : $accessToken");
-    // print("refreshToken : $refreshToken");
-    // print("타입 : ${accessToken.runtimeType},  ${refreshToken.runtimeType}");
+    print("accessToken : $accessToken");
+    print("refreshToken : $refreshToken");
+    print("타입 : ${accessToken.runtimeType},  ${refreshToken.runtimeType}");
 
     var response = await http.post(
       Uri.parse(url),
@@ -531,19 +531,24 @@ class APIs {
       print('토큰 재발급 성공');
       // 발급받은 새로운 access token 저장
       var responseData = json.decode(utf8.decode(response.bodyBytes));
-      var newAccessToken = responseData['accessToken'];
-      var newRefreshToken = responseData['refreshToken'];
-      var code = responseData['code'];
+
+      String newAccessToken = responseData["result"]["accessToken"];
+      String newRefreshToken = responseData["result"]["refreshToken"];
+      String code = responseData['code'];
+
       await storage.write(key: 'token', value: newAccessToken);
       await storage.write(key: 'refreshToken', value: newRefreshToken);
+
       print('새로운 Access Token: $newAccessToken');
       print('새로운 Refresh Token: $newRefreshToken');
       print('Response Code: $code');
+
       return true;
     } else {
       print('토큰 재발급 실패');
       print('Response Status Code: ${response.statusCode}');
       print('Response Body: ${response.body}');
+
       return false;
     }
   }
