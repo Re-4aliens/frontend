@@ -188,13 +188,13 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              widget.board.imageUrls!.isEmpty
+              widget.board.imageUrls?.isEmpty ?? true
                   ? const SizedBox()
                   : SizedBox(
                       height: 90.h,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: widget.board.imageUrls!.length,
+                          itemCount: widget.board.imageUrls?.length ?? 0,
                           itemBuilder: (context, index) {
                             return Row(
                               children: [
@@ -237,9 +237,11 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                         boardProvider.addLike(
                             widget.board.articleId!, widget.index);
                       } else {
-                        boardProvider.likeCounts[widget.index] =
-                            await MarketService.marketBookmark(
-                                widget.board.articleId!, widget.index);
+                        if (widget.board.articleId != null) {
+                          boardProvider.likeCounts[widget.index] =
+                              await MarketService.marketBookmark(
+                                  widget.board.articleId!, widget.index);
+                        }
                       }
                       setState(() {});
                     },

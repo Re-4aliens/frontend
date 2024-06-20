@@ -52,6 +52,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
   @override
   void initState() {
+    super.initState();
     switch (widget.board.category) {
       case '자유게시판':
         boardCategory = 'free-posting'.tr();

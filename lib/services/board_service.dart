@@ -4,6 +4,7 @@ import 'package:aliens/models/board_model.dart';
 import 'package:aliens/services/api_service.dart';
 import 'package:aliens/util/image_util.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:dio/dio.dart';
 
 class BoardService extends APIService {
   /* 
@@ -24,6 +25,7 @@ class BoardService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
+
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
@@ -126,10 +128,12 @@ class BoardService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.headers['Authorization'] = jwtToken;
+    Dio dio = Dio();
+    dio.options.headers['Content-Type'] = 'multipart/form-data';
+    dio.options.headers['Authorization'] = jwtToken;
 
     // 이미지 파일 추가
+    List<MultipartFile> imageFiles = [];
     if (newBoard.imageUrls != null && newBoard.imageUrls!.isNotEmpty) {
       for (String imagePath in newBoard.imageUrls!) {
         if (imagePath.isNotEmpty) {
@@ -137,29 +141,54 @@ class BoardService extends APIService {
             'boardImages',
             imagePath,
           );
-          request.files.add(file);
+          imageFiles.add(file);
         }
       }
     }
 
-    // 게시글 정보 추가
-    var jsonContent = jsonEncode({
-      'title': newBoard.title!,
-      'content': newBoard.content!,
-      'boardCategory': newBoard.category!,
-    });
+    // JSON 데이터 검토
+    final requestData = {
+      "title": newBoard.title ?? '',
+      "content": newBoard.content ?? '',
+      "boardCategory": newBoard.category ?? '',
+    };
 
-    request.files.add(http.MultipartFile.fromString(
+    var formData = FormData();
+    for (var file in imageFiles) {
+      formData.files.add(MapEntry('boardImages', file));
+    }
+    formData.files.add(MapEntry(
       'request',
-      jsonContent,
-      contentType: MediaType('application', 'json'),
+      MultipartFile.fromString(
+        jsonEncode(requestData),
+        contentType: MediaType('application', 'json'),
+      ),
     ));
 
-    var response = await request.send();
+    try {
+      var response = await dio.post(url, data: formData);
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.data}');
 
-    if (response.statusCode == 200) {
-      return true;
-    } else {
+      if (response.statusCode == 200) {
+        print("게시글 등록 성공");
+        return true;
+      } else {
+        print("게시글 등록 실패");
+        return false;
+      }
+    } catch (e) {
+      print("통신 실패요");
+      if (e is DioError) {
+        // DioError의 경우, 추가 정보를 제공할 수 있습니다.
+        print("DioError 타입: ${e.type}");
+        if (e.response != null) {
+          print("서버 응답: ${e.response}");
+        } else {
+          print("응답 없음. 요청 데이터: ${e.requestOptions}");
+        }
+      }
+      print(e);
       return false;
     }
   }
