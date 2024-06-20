@@ -463,6 +463,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                     alignment: Alignment.topCenter,
                     padding: const EdgeInsets.all(20).r,
                     child: Button(
+                      // 작성 완료
                       onPressed: () {
                         print(boardCategory);
                         if (title != '' &&

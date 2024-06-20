@@ -4,6 +4,7 @@ import 'api_service.dart';
 import 'package:aliens/models/signup_model.dart';
 import '../util/image_util.dart';
 import 'dart:io';
+import 'package:dio/dio.dart';
 
 class UserService extends APIService {
   /*
@@ -116,6 +117,9 @@ class UserService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
+    Dio dio = Dio();
+    dio.options.headers['Authorization'] = 'Bearer $jwtToken';
+
     // MultipartFile로 변환
     var profileImage = await ImageUtil.compressImageToMultipartFile(
       'profileImage',
@@ -123,15 +127,23 @@ class UserService extends APIService {
     );
 
     // FormData 생성
-    var formData = http.MultipartRequest('PUT', Uri.parse(url));
-    formData.headers['Authorization'] = 'Bearer $jwtToken';
-    formData.files.add(profileImage);
+    var formData = FormData.fromMap({
+      'profileImage': profileImage,
+    });
 
-    var response = await formData.send();
+    try {
+      var response = await dio.put(url, data: formData);
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.data}');
 
-    if (response.statusCode == 200) {
-      return true;
-    } else {
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print("프로필 이미지 업데이트 실패");
+      print(e);
       return false;
     }
   }

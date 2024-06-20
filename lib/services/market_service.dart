@@ -4,6 +4,7 @@ import 'dart:io';
 import 'api_service.dart';
 import '../util/image_util.dart';
 import 'package:aliens/models/market_articles.dart';
+import 'package:dio/dio.dart';
 
 class MarketService extends APIService {
   /*
@@ -82,18 +83,10 @@ class MarketService extends APIService {
       var jwtToken = await APIService.storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('$domainUrl/api/v2/market-articles'),
-      );
+      Dio dio = Dio();
+      dio.options.headers['Authorization'] = 'Bearer $accessToken';
 
-      request.fields['title'] = marketArticle.title!;
-      request.fields['content'] = marketArticle.content!;
-      request.fields['price'] = marketArticle.price.toString();
-      request.fields['productStatus'] = marketArticle.productStatus!;
-      request.fields['marketArticleStatus'] =
-          marketArticle.marketArticleStatus!;
-
+      List<MultipartFile> imageFiles = [];
       if (marketArticle.imageUrls != null &&
           marketArticle.imageUrls!.isNotEmpty) {
         for (String imagePath in marketArticle.imageUrls!) {
@@ -102,19 +95,27 @@ class MarketService extends APIService {
               'imageUrls',
               imagePath,
             );
-            request.files.add(file);
+            imageFiles.add(file);
           }
         }
       }
 
-      request.headers['Authorization'] = 'Bearer $accessToken';
+      var formData = FormData.fromMap({
+        'title': marketArticle.title ?? '',
+        'content': marketArticle.content ?? '',
+        'price': marketArticle.price.toString(),
+        'productStatus': marketArticle.productStatus ?? '',
+        'marketArticleStatus': marketArticle.marketArticleStatus ?? '',
+        'imageUrls': imageFiles,
+      });
 
-      var response = await request.send();
+      var response =
+          await dio.post('$domainUrl/api/v2/market-articles', data: formData);
 
       if (response.statusCode == 200) {
         return true;
       } else {
-        final responseBody = await response.stream.bytesToString();
+        final responseBody = await response.data;
         final errorCode = json.decode(responseBody)['code'];
 
         if (errorCode == 'AT-C-002') {
