@@ -21,8 +21,11 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
 
   @override
   void initState() {
-    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getAllArticles();
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+      boardProvider.getAllArticles();
+    });
 
     _scrollController.addListener(() {
       if (_scrollController.offset ==
@@ -30,6 +33,8 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
           !_scrollController.position.outOfRange) {
         print('추가');
         page++;
+        final boardProvider =
+            Provider.of<BoardProvider>(context, listen: false);
         boardProvider.getMoreAllArticles(page);
       }
     });
@@ -56,12 +61,14 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
               itemCount: boardProvider.articleList.length,
               itemBuilder: (context, index) {
                 var nationCode = '';
-                for (Map<String, String> country in countries) {
-                  if (country['name'] ==
-                      boardProvider.articleList[index].member!.nationality
-                          .toString()) {
-                    nationCode = country['code']!;
-                    break;
+                var member = boardProvider.articleList[index].member;
+                if (member != null) {
+                  var nationality = member.nationality?.toString() ?? '';
+                  for (Map<String, String> country in countries) {
+                    if (country['name'] == nationality) {
+                      nationCode = country['code']!;
+                      break;
+                    }
                   }
                 }
                 return Column(
