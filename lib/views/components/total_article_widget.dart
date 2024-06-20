@@ -105,7 +105,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                     Row(
                       children: [
                         Text(
-                          '${widget.board.member!.name}',
+                          widget.board.member?.name ?? 'Unknown',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16.spMin),
