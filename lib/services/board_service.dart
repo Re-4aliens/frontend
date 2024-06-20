@@ -69,9 +69,13 @@ class BoardService extends APIService {
   
   */
   static Future<List<Board>> getMyArticles(int page) async {
-    const url = '$domainUrl/boards/writes?page=0&size=10';
+    const url = '$domainUrl/boards/writes?=0&size=10';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+
+    if (jwtToken.isEmpty) {
+      throw Exception('JWT 토큰이 없습니다.');
+    }
 
     final response = await http.get(
       Uri.parse(url),
@@ -128,8 +132,12 @@ class BoardService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
+    if (jwtToken.isEmpty) {
+      throw Exception('JWT 토큰이 없습니다.');
+    }
+
     Dio dio = Dio();
-    dio.options.headers['Content-Type'] = 'multipart/form-data';
+    // dio.options.headers['Content-Type'] = 'multipart/form-data';
     dio.options.headers['Authorization'] = jwtToken;
 
     // 이미지 파일 추가
@@ -141,34 +149,29 @@ class BoardService extends APIService {
             'boardImages',
             imagePath,
           );
+          print(file);
+          print("여기 들어오고 있나?");
           imageFiles.add(file);
         }
       }
     }
 
-    // JSON 데이터 검토
-    final requestData = {
-      "title": newBoard.title ?? '',
-      "content": newBoard.content ?? '',
-      "boardCategory": newBoard.category ?? '',
-    };
+    print(imageFiles.runtimeType);
 
-    var formData = FormData();
-    for (var file in imageFiles) {
-      formData.files.add(MapEntry('boardImages', file));
-    }
-    formData.files.add(MapEntry(
-      'request',
-      MultipartFile.fromString(
-        jsonEncode(requestData),
+    var formData = FormData.fromMap({
+      'boardImages': imageFiles,
+      'request': MultipartFile.fromString(
+        jsonEncode({
+          "title": newBoard.title ?? '',
+          "content": newBoard.content ?? '',
+          "boardCategory": newBoard.category ?? '',
+        }),
         contentType: MediaType('application', 'json'),
       ),
-    ));
+    });
 
     try {
       var response = await dio.post(url, data: formData);
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.data}');
 
       if (response.statusCode == 200) {
         print("게시글 등록 성공");
@@ -203,6 +206,10 @@ class BoardService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
+    if (jwtToken.isEmpty) {
+      throw Exception('JWT 토큰이 없습니다.');
+    }
+
     var response = await http.delete(
       Uri.parse(url),
       headers: {
@@ -227,6 +234,10 @@ class BoardService extends APIService {
     final url = '$domainUrl/great?board-id=$articleId';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+
+    if (jwtToken.isEmpty) {
+      throw Exception('JWT 토큰이 없습니다.');
+    }
 
     final response = await http.post(
       Uri.parse(url),
@@ -254,6 +265,10 @@ class BoardService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
+    if (jwtToken.isEmpty) {
+      throw Exception('JWT 토큰이 없습니다.');
+    }
+
     final response = await http.get(
       Uri.parse(url),
       headers: {'Authorization': jwtToken, 'Content-Type': 'application/json'},
@@ -277,12 +292,11 @@ class BoardService extends APIService {
   
   */
   static Future<List<dynamic>> boardNotice() async {
-    const url = 'http://3.34.2.246:8080/api/v2/notices';
+    const url = '$domainUrl/boards/announcements?page=0&size=10';
 
     try {
       // 토큰 읽어오기
       var jwtToken = await APIService.storage.read(key: 'token');
-      jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
       final response = await http.get(
         Uri.parse(url),
@@ -293,6 +307,7 @@ class BoardService extends APIService {
       );
 
       if (response.statusCode == 200) {
+        print("불러오기 성공");
         final responseData = json.decode(utf8.decode(response.bodyBytes));
         final data = responseData['data'];
         if (data != null && data is List) {
