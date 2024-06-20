@@ -183,7 +183,11 @@ class BoardProvider with ChangeNotifier {
   }
 
   void _setLoading(bool value) {
-    loading = value;
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (loading != value) {
+        loading = value;
+        notifyListeners();
+      }
+    });
   }
 }
