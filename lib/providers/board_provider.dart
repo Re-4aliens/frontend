@@ -29,6 +29,7 @@ class BoardProvider with ChangeNotifier {
   Future<void> getArticles(String boardCategory) async {
     _setLoading(true);
     try {
+      print("특정 카테고리 게시판 조회 시도");
       articleList = await BoardService.getArticles(boardCategory, 0);
     } catch (e) {
       if (e == "AT-C-002") {

@@ -100,8 +100,8 @@ class BoardService extends APIService {
     
   */
   static Future<List<Board>> getArticles(String boardCategory, int page) async {
-    final url =
-        '$domainUrl/boards/category?category=$boardCategory&page=$page&size=10';
+    print("$boardCategory 게시판 조회");
+    const url = '$domainUrl/boards/category?category=FREE&page=0&size=10';
 
     final response = await http.get(
       Uri.parse(url),
@@ -110,9 +110,14 @@ class BoardService extends APIService {
       },
     );
 
+    print("요청 시도");
+    print(response.statusCode);
+
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
+
+      print("카테고리 : ${result[0]["category"]}");
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();

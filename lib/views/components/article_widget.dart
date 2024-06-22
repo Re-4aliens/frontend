@@ -62,7 +62,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(right: 10),
               child: Text(
-                '${widget.board.member!.name}/${widget.nationCode}',
+                '${widget.board.member?.name ?? 'Unknown'}/${widget.nationCode}',
                 overflow: TextOverflow.ellipsis,
                 style:
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16.spMin),
@@ -115,14 +115,14 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                       color: const Color(0xff444444),
                       fontWeight: FontWeight.bold)),
             ),
-            if (widget.board.imageUrls!.isEmpty)
+            if (widget.board.imageUrls?.isEmpty ?? true)
               const SizedBox()
             else
               SizedBox(
                 height: 90.h,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: widget.board.imageUrls!.length,
+                    itemCount: widget.board.imageUrls?.length ?? 0,
                     itemBuilder: (context, index) {
                       return Row(
                         children: [
@@ -135,7 +135,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                                 borderRadius: BorderRadius.circular(10).r,
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                        widget.board.imageUrls![index]),
+                                        widget.board.imageUrls?[index] ?? ''),
                                     fit: BoxFit.cover)),
                           ),
                         ],
