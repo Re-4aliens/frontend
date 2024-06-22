@@ -9,8 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:transition/transition.dart';
 
 import 'matching_list_page.dart';
-import 'package:aliens/mockdatas/mockdata_model.dart'; // 모의 데이터 모델을 import
-
 
 class MatchingDonePage extends StatefulWidget {
   const MatchingDonePage({super.key});
@@ -94,11 +92,9 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
 
                      */
                     Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MatchingListPage(screenArguments: mockScreenArgument_2), // mockScreenArgument_2를 전달합니다.
-      ),
-    );
+                      context,
+                      Transition(
+                          child: MatchingListPage(screenArguments: screenArguments,), transitionEffect: TransitionEffect.BOTTOM_TO_TOP),);
                   },
                   onVerticalDragStart: (DragStartDetail){
                     Navigator.push(

@@ -163,8 +163,8 @@ class _LoginState extends State<Login> {
                               auth.email = _emailController.text;
                               auth.password = _passwordController.text;
                               final fcmToken = await FirebaseMessaging.instance.getToken();
-                              var loginSuccess = await APIs.logIn(auth);
-                              
+                              var loginSuccess = await APIs.logIn(auth, fcmToken!);
+
                               if (loginSuccess) {
 
                                 Navigator.of(context).pushNamedAndRemoveUntil(
@@ -336,8 +336,8 @@ class _LoginState extends State<Login> {
                               auth.email = _emailController.text;
                               auth.password = _passwordController.text;
                               final fcmToken = await FirebaseMessaging.instance.getToken();
-                              var loginSuccess = await APIs.logIn(auth);
-              
+                              var loginSuccess = await APIs.logIn(auth, fcmToken!);
+
                               if (loginSuccess) {
 
                                 Navigator.of(context).pushNamedAndRemoveUntil(

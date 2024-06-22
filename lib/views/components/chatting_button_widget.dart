@@ -107,7 +107,7 @@ class ChattingButton extends StatelessWidget{
                     ),
                   ),
                   Text(
-                    'How to Use?', 
+                    'How to Use?',
                     style: TextStyle(
                         fontSize: 12.spMin,
                         color: screenArguments.status == 'NotAppliedAndNotMatched'

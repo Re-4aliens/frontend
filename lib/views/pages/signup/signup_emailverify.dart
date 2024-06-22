@@ -65,7 +65,7 @@ class _SignUpVerifyState extends State<SignUpVerify>{
                 child: Text('${'done'.tr()}'),
                 onPressed: () async {
                   String status = await APIs.getAuthenticationStatus(member.email);
-                  if(status == '${'signup-email17'.tr()}')
+                  if(status == 'AUTHENTICATED')
                     Navigator.pushNamed(context, '/password', arguments: member);
                   else if(status == 'EMAIL_SENT_NOT_AUTHENTICATED') {
                       showDialog(context: context, builder: (BuildContext context){

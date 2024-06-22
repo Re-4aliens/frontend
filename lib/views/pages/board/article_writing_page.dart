@@ -209,7 +209,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                               child: Column(
                                                 children: [
                                                   ListTile(
-                                                    title: Text("자유게시판", style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin),),
+                                                    title: Text("free-posting".tr(), style: TextStyle(color: Color(0xff888888), fontSize: 16.spMin),),
                                                     onTap: (){
                                                       setState(() {
                                                         boardCategory = "free-posting".tr();
@@ -417,22 +417,22 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                           FocusScope.of(context).unfocus();
                           switch (boardCategory){
                             case 'Free Posting Board':
-                              boardCategory = 'FREE';
+                              boardCategory = '자유게시판';
                               break;
                             case 'Food Board':
-                              boardCategory = 'FOOD';
+                              boardCategory = '음식게시판';
                               break;
                             case 'Music Board':
-                              boardCategory = 'MUSIC';
+                              boardCategory = '음악게시판';
                               break;
                             case 'Fashion Board':
-                              boardCategory = 'FASHION';
+                              boardCategory = '패션게시판';
                               break;
                             case 'Game Board':
-                              boardCategory = 'GAME';
+                              boardCategory = '게임게시판';
                               break;
                             case 'Information Board':
-                              boardCategory = 'INFO';
+                              boardCategory = '정보게시판';
                               break;
                             default:
                           }
@@ -444,21 +444,13 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             requestImages.add(_images[i].path.toString());
                           }
 
-                                // 변수 출력
-      print('Board Category1: $boardCategory');
-      print('Title1: $title');
-      print('Content1: $content');
-      print('Request Image1s: $requestImages');
-
-                          
                           Board _newBoard = Board(
                             category: boardCategory,
                             title: title,
                             content: content,
                             imageUrls: requestImages,
                           );
-                          // Board 객체 출력
-      print('New Board: ${_newBoard.category}, ${_newBoard.title}, ${_newBoard.content}, ${_newBoard.imageUrls}');
+
                           showDialog(
                               context: context,
                               builder: (_) => FutureBuilder(
@@ -487,12 +479,11 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                       );
                                     }
 
-                                  })
-                                  );
+                                  }));
                         }
                       },
                       isEnabled: title != '' && content != '' && boardCategory != 'post4'.tr(),
-                    ),///
+                    ),
                   )),
             ],
           ),
