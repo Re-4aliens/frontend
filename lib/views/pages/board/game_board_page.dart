@@ -165,12 +165,14 @@ class _GameBoardPageState extends State<GameBoardPage> {
                               itemCount: boardProvider.articleList.length,
                               itemBuilder: (context, index) {
                                 var nationCode = '';
+                                var member =
+                                    boardProvider.articleList[index].member;
+
+                                var nationality =
+                                    member?.nationality?.toString();
                                 for (Map<String, String> country in countries) {
-                                  if (country['name'] ==
-                                      boardProvider.articleList[index].member!
-                                          .nationality
-                                          .toString()) {
-                                    nationCode = country['code']!;
+                                  if (country['name'] == nationality) {
+                                    nationCode = country['code'] ?? '';
                                     break;
                                   }
                                 }
