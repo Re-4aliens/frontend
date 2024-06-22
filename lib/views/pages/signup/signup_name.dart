@@ -34,7 +34,7 @@ class _SignUpNameState extends State<SignUpName>{
       birthday: '',
       name: '',
       profileImage: '',
-        selfIntroduction: ''
+      aboutMe: ''
     );
 
     return Scaffold(

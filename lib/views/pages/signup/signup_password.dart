@@ -152,7 +152,8 @@ class _SignUpPasswordState extends State<SignUpPassword>{
                 onPressed: () async {
                   if(_formKey.currentState!.validate()){
                     member.password = _PasswordController.text;
-                    print(member.toJson());
+                    print(member.toJson()); // member 객체 전체 출력
+                    
                     //------ 회원가입 api 요청
                     //authProvider.signUp(member, context);
                     if(await APIs.signUp(member))

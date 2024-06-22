@@ -30,31 +30,43 @@ import '../models/partner_model.dart';
 import '../models/screenArgument.dart';
 import '../util/image_util.dart';
 
+const String domainUrl = 'https://friendship-aliens.com';
 class APIs {
-  static final storage = FlutterSecureStorage();
+  static String? token; // 엑세스 토큰을 저장할 정적 변수
+  static String? refreshToken; // 리프레시 토큰을 저장할 정적 변수
+
+  static final storage = FlutterSecureStorage(); // flutter_secure_storage 인스턴스 생성
 
   /*
 
   이메일 중복 확인
 
    */
-  static Future<bool> checkExistence(String email) async {
-    var _url =
-        'http://3.34.2.246:8080/api/v1/member/email/${email}/existence'; //mocksever
+static Future<bool> checkExistence(String email) async {
+  var _url = '$domainUrl/members/exist?email=$email';
+  var response = await http.get(Uri.parse(_url));
 
-    var response = await http.get(Uri.parse(_url));
+  if (response.statusCode == 200) {
+    var responseData = json.decode(utf8.decode(response.bodyBytes));
+    print("응답: $responseData");
 
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-
-      return json.decode(utf8.decode(response.bodyBytes))['data']['existence'];
-      //fail
+    if (responseData != null && responseData['result'] != null) {
+      var result = responseData['result'];
+      if (result.contains("사용 가능한 이메일입니다")) {
+        return false; // 사용 가능한 이메일인 경우 false 반환
+      } else {
+        return true; // 사용 불가능한 이메일인 경우 true 반환
+      }
     } else {
-      print(response.body);
-      return json.decode(utf8.decode(response.bodyBytes))['data']['existence'];
+      print("응답에 'result' 필드가 없음");
+      return false;
     }
+  } else {
+    print("실패: ${response.body}");
+    return false;
   }
+}
+
 
   /*
 
@@ -62,18 +74,17 @@ class APIs {
 
    */
   static Future<bool> verifyEmail(String email) async {
-    var _url =
-        'http://3.34.2.246:8080/api/v1/email/${email}/verification'; //mocksever
+    var _url = '$domainUrl/emails/verification/send'; 
 
-    var response = await http.post(Uri.parse(_url));
-
+    var response = await http.post(Uri.parse('$_url?email=$email'));
     //success
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+      var responseData = json.decode(utf8.decode(response.bodyBytes));
+      print("응답: $responseData");
       return true;
       //fail
     } else {
-      print(response.body);
+      print("실패: ${response.body}");
       return false;
     }
   }
@@ -83,22 +94,28 @@ class APIs {
   이메일 인증 상태 요청
 
    */
-  static Future<String> getAuthenticationStatus(String email) async {
-    var _url =
-        'http://3.34.2.246:8080/api/v1/email/${email}/authentication-status'; //mocksever
+static Future<String> getAuthenticationStatus(String email) async {
+  var _url = '$domainUrl/emails?email=$email'; 
 
-    var response = await http.get(Uri.parse(_url));
+  var response = await http.get(Uri.parse(_url));
 
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
+  if (response.statusCode == 200) {
+    var responseData = json.decode(utf8.decode(response.bodyBytes));
+    print("응답: $responseData");
+
+    var code = responseData['code']; 
+    var result = responseData['result']; 
+
+      if (code == 'E003') {
+    return result; 
+  }  else {
+      throw Exception('Invalid response format');
     }
+  } else {
+    print("실패: ${response.body}");
+    throw Exception('Failed to get authentication status');
   }
+}
 
 
   /*
@@ -106,138 +123,156 @@ class APIs {
   회원가입
 
    */
-  static Future<bool> signUp(SignUpModel member) async {
-    const url = 'http://3.34.2.246:8080/api/v1/member';
+static Future<bool> signUp(SignUpModel member) async {
+  const url = '$domainUrl/members';
 
-    var request = http.MultipartRequest('POST', Uri.parse(url));
+  var request = http.MultipartRequest('POST', Uri.parse(url));
 
-    // FormData 텍스트 필드 추가
-    request.fields['email'] = member.email!;
-    request.fields['password'] = member.password!;
-    request.fields['mbti'] = member.mbti!;
-    request.fields['gender'] = member.gender!;
-    request.fields['nationality'] = member.nationality!;
-    request.fields['birthday'] = member.birthday!;
-    request.fields['name'] = member.name!;
-
-    if (member.selfIntroduction != null &&
-        member.selfIntroduction!.isNotEmpty) {
-      request.fields['selfIntroduction'] = member.selfIntroduction!;
-    } else {
-      request.fields['selfIntroduction'] = ' ';
-    }
-    // FormData 파일 필드 추가
-    if (member.profileImage != null && member.profileImage!.isNotEmpty) {
-      var file = await ImageUtil.compressImageToMultipartFile(
-        'profileImage',
-          member.profileImage!,
-      );
-      request.files.add(file);
-    }
-
-    // request 전송
-    var response = await request.send();
-
-    // success
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-      return true;
-      // fail
-    } else {
-      print(await response.stream.bytesToString());
-      return false;
-    }
+  // 프로필 이미지 추가
+  if (member.profileImage != null && member.profileImage!.isNotEmpty) {
+    var file = await http.MultipartFile.fromPath(
+      'profileImage',
+      member.profileImage!,
+      contentType: MediaType('image', 'png'), // 프로필 이미지의 Content-Type 설정
+    );
+    request.files.add(file);
+  } else {
+    // 프로필 이미지가 없을 경우 빈 파일로 대체
+    var file = http.MultipartFile.fromString(
+      'profileImage',
+      '',
+      filename: 'empty.txt',
+      contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
+    );
+    request.files.add(file);
   }
 
-  /*
+  // JSON 데이터를 문자열로 변환
+  var jsonPayload = jsonEncode({
+    'email': member.email,
+    'password': member.password,
+    'name': member.name,
+    'mbti': member.mbti,
+    'gender': member.gender,
+    'nationality': member.nationality,
+    'birthday': member.birthday,
+    'aboutMe': member.aboutMe ?? '',
+  });
 
+  // JSON 데이터를 MultipartFile로 추가
+  var jsonPart = http.MultipartFile.fromString(
+    'request',
+    jsonPayload,
+    contentType: MediaType('application', 'json'),
+  );
+  request.files.add(jsonPart);
+
+  // 요청 보내기
+  var response = await request.send();
+
+  // 출력: 모든 파일의 Content-Type 출력
+  request.files.forEach((file) {
+    print('File: ${file.filename}, Content-Type: ${file.contentType}');
+  });
+
+  if (response.statusCode == 200) {
+    print('Registration Success');
+    return true;
+  } else {
+    var responseBody = await response.stream.bytesToString();
+    print('Registration Failed');
+    print("응답 본문: $responseBody");
+    return false;
+  }
+}
+  /*
   로그인
 
    */
-  static Future<bool> logIn(Auth auth, String fcmToken) async {
-    const url =
-        'http://3.34.2.246:8080/api/v1/auth/authentication'; //mocksever
-
+  static Future<bool> logIn(Auth auth) async {
+  const url = '$domainUrl/authentication';
+  
+  try {
     var response = await http.post(Uri.parse(url),
         headers: {
-          'Content-Type': 'application/json',
-          "FcmToken": fcmToken
+          'Content-Type': 'application/json;charset=UTF-8', 
         },
         body: jsonEncode({
-          "email": auth.email,
-          "password": auth.password,
+          "email": auth.email,    
+          "password": auth.password, 
         }));
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+    
+    print('요청이 전송되었습니다.'); 
 
-      //로그인 정보 저장
-      await storage.write(
-        key: 'auth',
-        value: jsonEncode(auth),
-      );
-      //토큰 저장
-      await storage.write(
-        key: 'token',
-        value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))),
-      );
+    if (response.statusCode == 200) {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      token = responseBody['result']['accessToken'];
+      refreshToken = responseBody['result']['refreshToken'];
+
+      // 로그인 성공 시 토큰 저장
+      await storage.write(key: 'token', value: token!);
+      await storage.write(key: 'refreshToken', value: refreshToken!);
+      
       return true;
-      //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+      print('로그인 실패: ${response.statusCode}');
       return false;
     }
+  } catch (e) {
+    print('오류 발생: $e');
+    return false;
   }
+}
+
 
   /*
 
   로그아웃
 
    */
+
   static Future<void> logOut(BuildContext context) async {
-    print('로그아웃 시도');
-    const url =
-        'http://3.34.2.246:8080/api/v1/auth/logout'; //mocksever
+    const url = '$domainUrl/authentication/logout'; 
 
-    //토큰 읽어오기
-    var accessToken = await storage.read(key: 'token');
-    var refreshToken = await storage.read(key: 'token');
+    // 토큰 읽어오기
+    var jwtToken = await storage.read(key: 'token') ?? ''; //엑세스토큰은 정적변수 사용안함
+    refreshToken = await storage.read(key: 'refreshToken') ?? '';
 
-    accessToken = json.decode(accessToken!)['data']['accessToken'];
-    refreshToken = json.decode(refreshToken!)['data']['refreshToken'];
+    // Firebase Cloud Messaging 토큰 읽어오기 
+    final fcmToken = await FirebaseMessaging.instance.getToken(); //api에는 없으나 기존 코드라 일단 둠
 
+    var body = jsonEncode({
+      'accessToken': jwtToken,
+      'refreshToken': refreshToken,
+    });
 
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    var response = await http.delete(Uri.parse(url),
+    var response = await http.post(
+      Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': jwtToken,
         'Content-Type': 'application/json',
-        'RefreshToken': '$refreshToken',
-        "FcmToken": '${fcmToken}'
       },
+      body: body,
     );
 
-    //success
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
 
-      //토큰 및 정보 삭제
+      // 토큰 및 정보 삭제
       await storage.delete(key: 'auth');
-      await storage.delete(key: 'token');
+      await storage.delete(key: 'jwtToken');
+      await storage.delete(key: 'refreshToken');
       await storage.delete(key: 'notifications');
       print('로그아웃, 정보 지움');
 
-      //스택 비우고 화면 이동
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
-      );
+      // 스택 비우고 화면 이동
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
 
-      //fail
     } else {
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         print('액세스 토큰 만료');
-        await APIs.getAccessToken();
-        await APIs.logOut(context);
+        await getAccessToken();
+        await logOut(context);
       }
       print(json.decode(utf8.decode(response.bodyBytes)));
     }
@@ -248,145 +283,122 @@ class APIs {
   임시 비밀번호 발급
 
    */
-  static Future<bool> temporaryPassword(email, name) async {
-    var _url =
-        'http://3.34.2.246:8080/api/v1/member/${email}/password/temp'; //mocksever
 
-    var response = await http.post(Uri.parse(_url),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "name": name,
-        }));
-    print('발급 요청');
+static Future<String> temporaryPassword(email, name) async {
+  var _url = '$domainUrl/members/temporary-password'; 
 
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
-    }
+  var response = await http.post(Uri.parse(_url),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        "email": email, 
+        "name": name,  
+      }));
+
+  if (response.statusCode == 200) {
+    print(json.decode(utf8.decode(response.bodyBytes))); 
+    return "M003"; // 성공 코드 
+  } else { 
+    print(json.decode(utf8.decode(response.bodyBytes))); 
+    return "Error: ${response.statusCode}";
   }
-
+}
 
   /*
 
   비밀번호 변경
 
    */
-  static Future<bool> changePassword(newPassword) async {
-    var _url = 'http://3.34.2.246:8080/api/v1/member/password'; //mocksever
+static Future<bool> changePassword(String newPassword) async {
+  var _url = '$domainUrl/members/password';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    var userInfo = await storage.read(key: 'auth');
+  var jwtToken = await storage.read(key: 'token') ?? '';
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+  var response = await http.patch(
+    Uri.parse(_url),
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    body: jsonEncode({
+      "newPassword": newPassword,
+    }),
+  );
 
-    var response = await http.put(
-        Uri.parse(_url),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json'
-        },
-        body: jsonEncode({
-          "currentPassword": json.decode(userInfo!)['password'],
-          "newPassword": newPassword,
-        })
-    );
-
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
-
-      //fail
+  var responseBody = json.decode(utf8.decode(response.bodyBytes));
+  
+  if (response.statusCode == 200) {
+    print('비밀번호 변경 성공: ${responseBody['code']}');
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    return true;
+  } 
+  else {
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    if (responseBody['code'] == 'AT-C-002') {
+      print('액세스 토큰 만료');
+      throw 'AT-C-002';
+    } else if (responseBody['code'] == 'AT-C-007') {
+      print('로그아웃된 토큰');
+      throw 'AT-C-007';
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
-      } else {
-
-      }
-      return false;
+      print('예외');
     }
+    return false;
   }
+}
+
 
 
   /*
 
-  탈퇴
+  탈퇴 //테스트실패
 
    */
-  static Future<bool> withdraw(password) async {
-    var _url = 'http://3.34.2.246:8080/api/v1/member/withdraw'; //mocksever
+static Future<bool> withdraw(password) async {
+  var _url = '$domainUrl/members/withdraw';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    //accessToken
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+  // 토큰 읽어오기
+  var jwtToken = await storage.read(key: 'token') ?? '';
 
-    var refreshToken = await storage.read(key: 'token');
-    refreshToken = json.decode(refreshToken!)['data']['refreshToken'];
+  var response = await http.patch(
+    Uri.parse(_url),
+    headers: {
+      'Authorization': jwtToken,
+    },
+  );
 
-
-    var response = await http.delete(
-        Uri.parse(_url),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-          'RefreshToken': '$refreshToken',
-        },
-        body: jsonEncode({
-          "password": password,
-        })
-    );
-
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
-
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
-    }
+  // 성공
+  if (response.statusCode == 200) {
+    print('탈퇴 성공');
+    return true;
+  } 
+  // 실패
+  else {
+    print('탈퇴 실패');
+    return false;
   }
+}
 
 
-  //유저 정보 요청
+
+  //개인 정보 조회
   static Future<Map<String, dynamic>> getMemberDetails() async {
-    var _url = 'http://3.34.2.246:8080/api/v1/member'; //mocksever
+    var _url = '$domainUrl/members'; 
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await storage.read(key: 'token') ?? ''; 
 
     var response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
+        'Authorization': jwtToken,
         'Content-Type': 'application/json'
       },
     );
 
-    //success
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return json.decode(utf8.decode(response.bodyBytes))['data'];
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('정보조회 성공: ${responseBody['code']}');
+      return responseBody['result'];
 
-      //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
@@ -397,340 +409,291 @@ class APIs {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
       } else {
-
+        print('예외');
       }
       throw Exception('요청 오류');
     }
   }
 
-  //매칭 상태 요청
+  //회원 매칭상태 조회
   static Future<String> getApplicantStatus() async {
-    var _url = 'http://3.34.2.246:8080/api/v1/applicant/status'; //mocksever
+      var _url = '$domainUrl/members/status'; 
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+      var jwtToken = await storage.read(key: 'token');
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+      if (jwtToken != null) {
+        var response = await http.get(
+          Uri.parse(_url),
+          headers: {
+            'Authorization': jwtToken,
+            'Content-Type': 'application/json'
+          },
+        );
 
-    var response = await http.get(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
-      },
-    );
-    //success
-    if (response.statusCode == 200) {
-      print('${json.decode(utf8.decode(response.bodyBytes))}');
-      return json.decode(utf8.decode(response.bodyBytes))['data']['status'];
-
-
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'MT-C-005') {
-        print('정보 없음');
-        return "NotAppliedAndNotMatched";
-      } else {
-
+        if (response.statusCode == 200) {
+          var responseBody = json.decode(utf8.decode(response.bodyBytes));
+          var matchingStatus = responseBody['result'];
+  
+          return matchingStatus; // 매칭상태 반환
+        } else {
+        print(json.decode(utf8.decode(response.bodyBytes)));
+        if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+          print('액세스 토큰 만료');
+          throw 'AT-C-002';
+        } else if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+          print('로그아웃된 토큰');
+          throw 'AT-C-007';
+        } else {
+          print('정보 없음');
+          return "NotAppliedAndNotMatched";
+        }
+        throw Exception('요청 오류');
       }
-      throw Exception('요청 오류');
+    } else {
+      // jwtToken이 null인 경우
+      print('토큰이 없습니다.');
+      throw 'TokenNotFound';
     }
   }
 
-  //매칭 정보 요청
-  static Future<Map<String, dynamic>> getApplicantInfo() async {
-    const url =
-        'http://3.34.2.246:8080/api/v1/applicant'; //mocksever
-
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-    var response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
-      },
-    );
-
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return json.decode(utf8.decode(response.bodyBytes))['data'];
-      //fail
-    } else {
-      //오류 생기면 바디 확인
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
-      } else {
-
-      }
-      throw Exception('요청 오류');
-    }
-  }
-
-  //상대 정보 요청
-  static Future<List<Partner>> getApplicantPartners() async {
-    const url = 'http://3.34.2.246:8080/api/v1/applicant/partners';
-
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-    var response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
-      },
-    );
-
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      List<dynamic> body = json.decode(
-          utf8.decode(response.bodyBytes))['data']['partners'];
-      return body.map((dynamic item) => Partner.fromJson(item)).toList();
-
-      //fail
-    } else {
-      //오류 생기면 바디 확인
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
-      } else {
-
-      }
-
-      //임의로 넣어두겠습니다
-      List<Partner> _partners = [
-        Partner(memberId: 0,
-          name: "",
-          mbti: "",
-          gender: "",
-          nationality: "",
-          profileImage: "",
-          selfIntroduction: "",
-
-        ),
-        Partner(memberId: 0,
-          name: "",
-          mbti: "",
-          gender: "",
-          nationality: "",
-          profileImage: "",
-          selfIntroduction: "",
-
-        ),
-        Partner(memberId: 0,
-          name: "",
-          mbti: "",
-          gender: "",
-          nationality: "",
-          profileImage: "",
-          selfIntroduction: "",
-
-        ),
-        Partner(memberId: 0,
-          name: "",
-          mbti: "",
-          gender: "",
-          nationality: "",
-          profileImage: "",
-          selfIntroduction: "",
-
-        )
-      ];
-      return _partners;
-    }
-  }
-
-  static Future<bool> getAccessToken() async {
-    print('accesstoken 재발급');
-    const url =
-        'http://3.34.2.246:8080/api/v1/auth/reissue'; //mocksever
-
-    //토큰 읽어오기
-    var accessToken = await storage.read(key: 'token');
-    var refreshToken = await storage.read(key: 'token');
-
-    accessToken = json.decode(accessToken!)['data']['accessToken'];
-    refreshToken = json.decode(refreshToken!)['data']['refreshToken'];
-
-
-    var response = await http.post(Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $accessToken',
-        'Content-Type': 'application/json',
-        'RefreshToken': '$refreshToken',
-      },
-    );
-
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      //만료되지 않았다면
-      //발급받은 새로운 accesstoken을 저장
-      await storage.write(
-        key: 'token',
-        value: jsonEncode(json.decode(utf8.decode(response.bodyBytes))),
-      );
-      //Navigator.pushNamedAndRemoveUntil(context, '/loading', (route) => false);
-      return true;
-
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      //refresh token이 만료되었다면 재로그인
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-005') {
-        //start page로 이동
-        throw 'AT-C-005';
-      }else if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-006'){
-        //start page로 이동
-        return false;
-      } else {
-
-      }
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
-    }
-  }
-
-  static Future<ScreenArguments> getMatchingData(context) async {
-    late ScreenArguments _screenArguments;
-
-    late MemberDetails _memberDetails;
-    late String _status;
-    late Applicant? _applicant;
-    late List<Partner>? _partners;
-
+  //매칭 정보 요청 > 매칭 신청 내역 조회
+static Future<Map<String, dynamic>> getApplicantInfo() async {
     try {
-      _status = await APIs.getApplicantStatus();
-    } catch (e) {
-      if (e == "AT-C-002") {
-        try {
-          await APIs.getAccessToken();
-        } catch (e) {
-          if (e == "AT-C-005") {
-            //토큰 및 정보 삭제
-            await storage.delete(key: 'auth');
-            await storage.delete(key: 'token');
-            print('로그아웃, 정보 지움');
+      const url = '$domainUrl/matchings/applications';
 
-            //스택 비우고 화면 이동
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
-            );
-          }
-          else {
-            _status = await APIs.getApplicantStatus();
-          }
+      var jwtToken = await storage.read(key: 'token') ?? ''; 
+
+      var response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': jwtToken,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        var responseData = json.decode(utf8.decode(response.bodyBytes));
+        print('매칭 신청 내역 조회 성공: ${responseData['code']}');
+        var result = responseData['result'];
+
+        // 필드별 출력
+        print('매칭 회차: ${result['matchingRound']}');
+        print('회원 ID: ${result['memberId']}');
+        print('첫 번째 선호 언어: ${result['firstPreferLanguage']}');
+        print('두 번째 선호 언어: ${result['secondPreferLanguage']}');
+
+        return result;
+      } else {
+        // 실패 시 오류 처리
+        print(json.decode(utf8.decode(response.bodyBytes)));
+        if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+          print('액세스 토큰 만료');
+          throw 'AT-C-002';
+        } else if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+          print('로그아웃된 토큰');
+          throw 'AT-C-007';
+        } else {
+          throw Exception('요청 오류');
         }
       }
-      else if (e == "AT-C-007") {
-        //토큰 및 정보 삭제
-        await APIs.logOut(context);
-      }
+    } catch (error) {
+      print('Error fetching applicant info: $error');
+      rethrow; 
     }
+  }
+
+  // 상대 정보 요청 > 나의 매칭 파트너 조회
+  static Future<List<Partner>> getApplicantPartners() async {
+    const _url = '$domainUrl/matchings/partners'; 
+
+      var jwtToken = await storage.read(key: 'token') ?? '';
+
+      var response = await http.get(
+        Uri.parse(_url),
+        headers: {
+          'Authorization': jwtToken,
+          'Content-Type': 'application/json'
+        },
+      );
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    List<dynamic> matchingPartner = responseBody['result']; 
+    return matchingPartner.map((dynamic item) => Partner.fromJson(item)).toList();
+  } else {
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      print('액세스 토큰 만료');
+      throw 'AT-C-002';
+    } else if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+      print('로그아웃된 토큰');
+      throw 'AT-C-007';
+    } else {
+      print('예외');
+    }
+    return [];
+  }
+}
+
+
+//토큰 재발급
+static Future<bool> getAccessToken() async {
+  print('Access token 재발급 시도');
+  const url = '$domainUrl/authentication/reissue'; 
+
+  // 토큰 읽어오기
+  var accessToken = await storage.read(key: 'token');
+  var refreshToken = await storage.read(key: 'refreshToken');
+
+  accessToken = json.decode(accessToken!)['accessToken'];
+  refreshToken = json.decode(refreshToken!)['refreshToken'];
+
+  var response = await http.post(
+    Uri.parse(url),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
+    }),
+  );
+
+  if (response.statusCode == 200) {
+    print('토큰 재발급 성공');
+    // 발급받은 새로운 access token 저장
+    var responseData = json.decode(utf8.decode(response.bodyBytes));
+    var newAccessToken = responseData['accessToken'];
+    var newRefreshToken = responseData['refreshToken'];
+    var code = responseData['code'];
+    await storage.write(key: 'token', value: newAccessToken);
+    await storage.write(key: 'refreshToken', value: newRefreshToken);
+    print('새로운 Access Token: $newAccessToken');
+    print('새로운 Refresh Token: $newRefreshToken');
+    print('Response Code: $code');
+    return true;
+  } else {
+    print('토큰 재발급 실패');
+    print('Response Status Code: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+    return false;
+  }
+}
+
+
+
+
+//getMatchingData
+
+static Future<ScreenArguments> getMatchingData(context) async {
+  late ScreenArguments _screenArguments;
+
+  late MemberDetails _memberDetails;
+  late String _status;
+  late Applicant? _applicant;
+  late List<Partner>? _partners;
+
+  try {
+    _status = await APIs.getApplicantStatus();
+    print('신청자 상태: $_status');
 
     _memberDetails = MemberDetails.fromJson(await APIs.getMemberDetails());
+    print('회원 정보: $_memberDetails');
 
-    _applicant =
-    _status == 'AppliedAndNotMatched' || _status == 'AppliedAndMatched'
-        ? Applicant.fromJson(await APIs.getApplicantInfo())
-        : null;
-    _partners =
-    _status == 'NotAppliedAndMatched' || _status == 'AppliedAndMatched'
-        ? await APIs.getApplicantPartners()
-        : null;
+    if (_status == 'AppliedAndNotMatched' || _status == 'AppliedAndMatched') {
+      _applicant = Applicant.fromJson(await APIs.getApplicantInfo());
+    } else {
+      _applicant = null;
+    }
 
-    _screenArguments =
-    new ScreenArguments(_memberDetails, _status, _applicant, _partners);
+    if (_status == 'NotAppliedAndMatched' || _status == 'AppliedAndMatched') {
+      _partners = await APIs.getApplicantPartners();
+    } else {
+      _partners = null;
+    }
 
-    //return mockScreenArgument_2;
-    return _screenArguments;
+    _screenArguments = ScreenArguments(_memberDetails, _status, _applicant, _partners);
+    print('ScreenArguments: $_screenArguments');
+  } catch (e) {
+    print('데이터를 가져오는 중 오류: $e');
   }
+
+  return _screenArguments;
+}
+
+
+//매칭 취소 (신설) => 버튼을 어디에 어떻게 만들어야할지 몰라서 현재 ui구현안됨
+static Future<bool> cancelMatchingApplication() async {
+  var _url = '$domainUrl/matchings/applications'; 
+
+  var jwtToken = await storage.read(key: 'token') ?? ''; 
+
+  var response = await http.delete(
+    Uri.parse(_url),
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    print(responseBody);
+    if (responseBody['code'] == 'MA003') {
+      print('매칭 신청 취소 성공');
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    print(responseBody);
+    return false; 
+  }
+}
 
 
   /*
 
-  mbti 수정
+  mbti 변경
 
    */
-  static Future<bool> updateMBTI(String mbti) async {
-    var url = 'http://3.34.2.246:8080/api/v1/member';
+  static Future<bool> updateMBTI(String newMBTI) async {
+    var url = '$domainUrl/members/mbti'; 
 
-    // 토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+    var jwtToken = await storage.read(key: 'token') ?? '';
+    
+    var requestBody = jsonEncode({
+      'newMBTI': newMBTI,
+    });
 
-    // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-    // 업데이트할 MBTI 정보를 담은 Map 생성
-    var requestData = {
-      'mbti': mbti,
-    };
     var response = await http.patch(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: json.encode(requestData),
+      body: requestBody,
     );
-    //성공
+
     if (response.statusCode == 200) {
       print(json.decode(utf8.decode(response.bodyBytes)));
       return true;
-    }
-    //실패
-    else {
+    } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
   }
 
-
 /*
 
-프로필 수정
+프로필 수정 //테스트 실패
 
  */
 
   static Future<bool> updateProfile(File profileImageFile) async {
-    var url = 'http://3.34.2.246:8080/api/v1/member/profile-image';
+    var url = '$domainUrl/member/profile-image';
 
-    // 토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-
-    // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await storage.read(key: 'token') ?? '';
 
     // MultipartFile로 변환
     var profileImage = await ImageUtil.compressImageToMultipartFile(
@@ -743,7 +706,6 @@ class APIs {
     formData.headers['Authorization'] = 'Bearer $jwtToken';
     formData.files.add(profileImage);
 
-    // 요청 전송
     var response = await formData.send();
 
     if (response.statusCode == 200) {
@@ -756,38 +718,32 @@ class APIs {
   }
 
   /*
-  자기소개 수정
+  자기소개 변경
   */
-  static Future<bool> updateSelfIntroduction(String selfIntroduction) async {
-    var url = 'http://3.34.2.246:8080/api/v1/member/self-introduction';
+  static Future<bool> updateSelfIntroduction(String newAboutMe) async {
+    var url = '$domainUrl/members/about-me'; 
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+    var jwtToken = await storage.read(key: 'token') ?? ''; 
 
-    // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var requestBody = jsonEncode({
+      'newAboutMe': newAboutMe,
+    });
 
-    // 업데이트할 MBTI 정보를 담은 Map 생성
-    var requestData = {
-      'selfIntroduction': selfIntroduction,
-    };
-
-    var response = await http.put(
+    var response = await http.patch(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: json.encode(requestData),
+      body: requestBody,
     );
 
-    //성공
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
+      print('자기소개 변경 성공: ${responseBody['code']}');
       print(json.decode(utf8.decode(response.bodyBytes)));
       return true;
-    }
-    //실패
-    else {
+    } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
@@ -795,54 +751,47 @@ class APIs {
 
   /*
 
-  선호 언어 수정
+  선호 언어 수정 > 매칭 신청 정보 수정
 
    */
-  static Future<bool> updatePreferLanguage(String firstPreferLanguage,
-      String secondPreferLanguage) async {
-    var url = 'http://3.34.2.246:8080/api/v1/applicant/prefer-languages';
+static Future<bool> updatePreferLanguage(String firstPreferLanguage, String secondPreferLanguage) async {
+  var url = '$domainUrl/matchings/applications';
 
-    // 토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+  var jwtToken = await storage.read(key: 'token') ?? ''; 
 
-    // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+  var response = await http.put(
+    Uri.parse(url),
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    body: jsonEncode({
+      "firstPreferLanguage": firstPreferLanguage,
+      "secondPreferLanguage": secondPreferLanguage,
+    }),
+  );
 
-    var response = await http.patch(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        "firstPreferLanguage": firstPreferLanguage,
-        "secondPreferLanguage": secondPreferLanguage,
-      }),
-    );
-    //성공
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
-    }
-    //실패
-    else {
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'MT-C-005') {
-        print('정보 없음');
-        return false;
-      } else {
-
-      }
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    print('정보 수정 성공: ${responseBody['code']}');
+    return true;
+  }
+  else {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    if (responseBody['code'] == 'AT-C-002') {
+      print('액세스 토큰 만료');
+      throw 'AT-C-002';
+    } else if (responseBody['code'] == 'AT-C-007') {
+      print('로그아웃된 토큰');
+      throw 'AT-C-007';
+    } else if (responseBody['code'] == 'MT-C-005') {
+      print('정보 없음');
+      return false;
+    } else {
       throw Exception('요청 오류');
     }
   }
+}
 
 
   /*
@@ -851,31 +800,26 @@ class APIs {
   매칭 신청
 
    */
-  static Future<bool> applicantMatching(String firstPreferLanguage,
-      String secondPreferLanguage) async {
-    var _url =
-        'http://3.34.2.246:8080/api/v1/applicant'; //mocksever
+  static Future<bool> applicantMatching(String firstPreferLanguage, String secondPreferLanguage) async {
+    var _url = '$domainUrl/matchings/applications'; 
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await storage.read(key: 'token') ?? ''; 
 
     var response = await http.post(Uri.parse(_url),
         headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json'},
+          'Authorization': jwtToken,
+          'Content-Type': 'application/json'
+        },
         body: jsonEncode({
           "firstPreferLanguage": firstPreferLanguage,
           "secondPreferLanguage": secondPreferLanguage,
         }));
 
-    //success
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      var matchingResult = responseBody['result'];
+      print('매칭 신청 결과: ${matchingResult}');
       return true;
-      //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
@@ -895,8 +839,8 @@ class APIs {
 
   /*
 
-  회원 정보 삭제
-  http://13.125.205.5ㅐ9:8080/api/v1/member/906
+  회원 정보 삭제 => 회원탈퇴랑 같은거 같으나 기존 코드라 둠
+
    */
   static Future<void> deleteInfo(memberId) async {
     var url =
@@ -1129,43 +1073,39 @@ class APIs {
 
   /*
 
-  매칭 완료 일시
+  매칭 완료 일시 > 매칭 시작 시간 조회
 
   */
-  static Future<String> matchingProfessData() async {
-    var _url = Uri.parse(
-        'http://3.34.2.246:8080/api/v1/applicant/completion-date');
+static Future<String> matchingProfessData() async {
+    var url = Uri.parse('$domainUrl/matchings/applications/begin-time');
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await storage.read(key: 'token') ?? ''; 
 
     var response = await http.get(
-      _url,
+      url,
       headers: {
-        'Authorization': 'Bearer $jwtToken',
+        'Authorization': jwtToken,
         'Content-Type': 'application/json',
       },
     );
 
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return json.decode(
-          utf8.decode(response.bodyBytes))['data']['matchingCompleteDate'];
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Code: ${responseBody['code']}');
+      print('Result: ${responseBody['result']}');
+      return responseBody['result']['matchingBeginTime'];
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
+      if (responseBody['code'] == 'AT-C-002') {
         print('액세스 토큰 만료');
         throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+      } else if (responseBody['code'] == 'AT-C-007') {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
       } else {
-
+        throw Exception('요청 오류');
       }
-      throw Exception('요청 오류');
     }
   }
 
@@ -1280,11 +1220,11 @@ class APIs {
 
   /*
 
-  신고하기
+  채팅 상대 신고 //테스트 실패
 
    */
 
-  static Future<bool> reportPartner(String reportCategory, String reportContent, int memberId) async {
+static Future<bool> reportPartner(String reportCategory, String reportContent, int memberId) async {
     var _url =
         'http://3.34.2.246:8080/api/v1/report/${memberId}'; //mocksever
 
@@ -1317,62 +1257,59 @@ class APIs {
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
-      } else {
+      }else {
 
       }
       return false;
     }
   }
-
   /*
 
-  신고하기
+  채팅 상대 차단
 
    */
 
-  static Future<bool> blockPartner(Partner partner) async {
-    var _url =
-        'http://3.34.2.246:8080/api/v1/block/${partner.memberId}'; //mocksever
+static Future<bool> blockPartner(Partner partner) async {
+    const url = '$domainUrl/chat/block'; 
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+    var jwtToken = await storage.read(key: 'token') ?? '';
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: jsonEncode({
+        "partnerId": partner.memberId,
+        "chatRoomId": partner.roomId,
+      }),
+    );
 
-    var response = await http.post(Uri.parse(_url),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "roomId": '${partner.roomId}',
-        }));
-
-    //success
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('채팅 상대 차단 성공: ${responseBody['code']}');
       return true;
-      //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
+
+      if (responseBody['code'] == 'AT-C-002') {
         print('액세스 토큰 만료');
         throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+      } else if (responseBody['code'] == 'AT-C-007') {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
-      } else {
-
       }
       return false;
     }
   }
 
+
   /*
 
-
-  매칭 신청
+  매칭 신청 // 매칭 신청 api작성했으나 기존 코드라서 둠
 
    */
   static Future<bool> inquiry(String question) async {
@@ -1418,110 +1355,95 @@ class APIs {
 
 
 
-  /*전체게시판 글 전부 조회*/
+  /*
+  전체게시판 글 전부 조회
+  */
   static Future<List<Board>> TotalArticles(int page) async {
-    final _url = 'http://3.34.2.246:8080/api/v2/articles?page=${page}&size=10&sort=createdAt,asc';
-
-      //토큰 읽어오기
-      var jwtToken = await storage.read(key: 'token');
-      jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-      final response = await http.get(
-        Uri.parse(_url),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        print(json.decode(utf8.decode(response.bodyBytes)));
-        List<dynamic> body = json.decode(
-            utf8.decode(response.bodyBytes))['data'];
-        return body.map((dynamic item) => Board.fromJson(item)).toList();
+    final _url = '$domainUrl/boards?page=$page&size=10';
 
 
-        //fail
-      } else {
-        print(json.decode(utf8.decode(response.bodyBytes)));
-        if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
-          print('액세스 토큰 만료');
-          throw 'AT-C-002';
-        } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
-          print('로그아웃된 토큰');
-          throw 'AT-C-007';
-        }else{
+    final response = await http.get(
+    Uri.parse(_url),
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+  );
 
-        }
-        throw Exception('요청 오류');
-      }
+  if (response.statusCode == 200) {
+    final responseBody = json.decode(utf8.decode(response.bodyBytes));
+    final code = responseBody['code'];
+    final result = responseBody['result'];
+
+    print('Code: $code'); 
+    print('Result: $result');
+
+    List<dynamic> body = result;
+    List<Board> boards = body.map((dynamic item) => Board.fromJson(item)).toList();
+
+    return boards;
+  } else {
+    print('Error: ${response.statusCode}');
+    throw Exception('요청 오류');
+  }
   }
 
 
 /*전체 게시판 검색*/
-  static Future<List<Board>> TotalSearch(String keyword) async {
-    try {
-      var jwtToken = await storage.read(key: 'token');
-      jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-      final response = await http.get(
-        Uri.parse(
-            'http://3.34.2.246:8080/api/v2/articles?search-keyword=$keyword'),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(utf8.decode(response.bodyBytes));
-        final List<dynamic> articlesData = data['data'];
-
-        //데이터를 list<board>객체로 반환
-        List<Board> articles = articlesData.map((articleData) {
-          return Board.fromJson(articleData);
-        }).toList();
-
-        return articles;
-      } else {
-        print('API request failed: ${response.statusCode}');
-        return []; // Empty list on failure
-      }
-    } catch (error) {
-      print('Error fetching search results: $error');
-      return []; // Empty list on error
-    }
-  }
-
-/*상품판매글 모두 조회*/
-  static Future<List<MarketBoard>> getMarketArticles(page) async {
-    var _url = 'http://3.34.2.246:8080/api/v2/market-articles?page=${page}&size=10&sort=createdAt,desc';
-
-    // 토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-
-    // accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-    var response = await http.get(
-      Uri.parse(_url),
+static Future<List<Board>> TotalSearch(String keyword) async {
+  try {
+    final response = await http.get(
+      Uri.parse('$domainUrl/boards/search?search-keyword=$keyword&page=0&size=10'),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json;charset=UTF-8',
       },
     );
 
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data'];
-      return body.map((dynamic item) => MarketBoard.fromJson(item)).toList();
+      final responseBody = json.decode(utf8.decode(response.bodyBytes));
+      final List<dynamic> articlesData = responseBody['result']; 
+      // 데이터를 List<Board> 객체로 반환
+      List<Board> articles = articlesData.map((articleData) {
+        return Board.fromJson(articleData);
+      }).toList();
+
+      return articles;
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      print('API request failed: ${response.statusCode}');
+      return [];
+    }
+  } catch (error) {
+    print('Error fetching search results: $error');
+    return []; 
+  }
+}
+
+
+/*상품판매글 모두 조회 > 장터 게시판 조회*/
+static Future<List<MarketBoard>> getMarketArticles(int page) async {
+    final _url = '$domainUrl/boards/market?page=$page&size=10';
+
+    var jwtToken = await storage.read(key: 'token') ?? '';
+
+    final response = await http.get(
+      Uri.parse(_url),
+      headers: {
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Code: ${responseBody['code']}');
+      List<dynamic> result = responseBody['result'];
+      return result.map((dynamic item) => MarketBoard.fromJson(item)).toList();
+    } else {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Error: ${responseBody}');
+      if (responseBody['code'] == 'AT-C-002') {
         print('액세스 토큰 만료');
         throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+      } else if (responseBody['code'] == 'AT-C-007') {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
       } else {
@@ -1530,91 +1452,85 @@ class APIs {
     }
   }
 
-  /*장터 게시판 게시글 상세 조회*/
-  static Future<MarketBoard> getMarketArticle(int articleId) async {
-    final _url = 'http://3.34.2.246:8080/api/v2/market-articles/${articleId}';
+  /*장터 게시글 상세 조회*/
+static Future<MarketBoard> getMarketArticle(int articleId) async {
+    final _url = '$domainUrl/boards/market/details?id=$articleId';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await storage.read(key: 'token') ?? '';
 
     final response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Code: ${responseBody['code']}');
+      dynamic result = responseBody['result'];
+      return MarketBoard.fromJson(result);
+    } else {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Error: ${responseBody}');
+      if (responseBody['code'] == 'AT-C-002') {
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if (responseBody['code'] == 'AT-C-007') {
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      } else {
+        throw Exception('요청 오류');
+      }
+    }
+  }
+
+  /*상품 판매글 검색 > 장터게시글 검색*/
+ static Future<List<MarketBoard>> marketSearch(String keyword) async {
+  try {
+    var jwtToken = await storage.read(key: 'token') ?? ''; 
+
+    final response = await http.get(
+      Uri.parse('$domainUrl/boards/market/search?search-keyword=$keyword&page=0&size=10'),
+      headers: {
+        'Authorization': jwtToken,
         'Content-Type': 'application/json',
       },
     );
 
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      dynamic body = json.decode(
-          utf8.decode(response.bodyBytes))['data'];
-      return MarketBoard.fromJson(body);
+      final data = json.decode(utf8.decode(response.bodyBytes));
+      final List<dynamic> articlesData = data['result'];
 
+      // 데이터를 List<MarketBoard> 객체로 반환
+      List<MarketBoard> articles = articlesData.map((articleData) {
+        return MarketBoard.fromJson(articleData);
+      }).toList();
 
-      //fail
+      return articles;
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
-      if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002'){
+      if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
+          'AT-C-002') {
         print('액세스 토큰 만료');
         throw 'AT-C-002';
-      } else if(json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007'){
+      } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
+          'AT-C-007') {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
-      }else{
-
-      }
-      throw Exception('요청 오류');
-    }
-  }
-
-  /*상품 판매글 검색*/
-  static Future<List<MarketBoard>> marketSearch(String keyword) async {
-    try {
-      var jwtToken = await storage.read(key: 'token');
-      jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-      final response = await http.get(
-        Uri.parse(
-            'http://3.34.2.246:8080/api/v2/market-articles?search-keyword=$keyword'),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(utf8.decode(response.bodyBytes));
-        final List<dynamic> articlesData = data['data'];
-
-        // 데이터를 List<MarketBoard> 객체로 반환
-        List<MarketBoard> articles = articlesData.map((articleData) {
-          return MarketBoard.fromJson(articleData);
-        }).toList();
-
-        return articles;
       } else {
-        print(json.decode(utf8.decode(response.bodyBytes)));
-        if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-002') {
-          print('액세스 토큰 만료');
-          throw 'AT-C-002';
-        } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-007') {
-          print('로그아웃된 토큰');
-          throw 'AT-C-007';
-        } else {
-          throw Exception('요청 오류');
-        }
+        throw Exception('요청 오류');
       }
-    } catch (error) {
-      print('Error fetching market search results: $error');
-      return []; // Empty list on error
     }
+  } catch (error) {
+    print('Error fetching market search results: $error');
+    return []; 
   }
+}
 
-  /*상품 판매글 생성*/
+
+  /*상품 판매글 생성*/  //테스트 실패
   static Future<bool> createMarketArticle(MarketBoard marketArticle) async {
     try {
       var jwtToken = await storage.read(key: 'token');
@@ -1683,7 +1599,7 @@ class APIs {
     }
   }
 
-  /*특정 판매글 수정*/
+  /*특정 판매글 수정*/ //테스트 실패
 
   static Future<bool> updateMarketArticle(int articleId, MarketBoard marketArticle) async {
     try {
@@ -1758,7 +1674,7 @@ class APIs {
     }
   }
 
-  /* 특정 판매글 삭제*/
+  /* 특정 판매글 삭제*/ //게시물 삭제로 통합된거 같지만 기존 코드라 둠
   static Future<String> deleteMarketArticle(int articleId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
@@ -1798,7 +1714,7 @@ class APIs {
   }
 
 
-  /* 특정 판매글 찜 등록*/
+  /* 특정 판매글 찜 등록*/ //api가 없어서 둠
   static Future<int> marketbookmark(int articleId, int index) async {
     var url = 'http://3.34.2.246:8080/api/v2/market-articles/${articleId}/bookmarks?page=$index&size=10&sort=createdAt,desc';
 
@@ -1839,7 +1755,7 @@ class APIs {
 
 
 
-  /*상품 판매글 댓글 전체 조회*/
+  /*상품 판매글 댓글 전체 조회*/ //특정 게시글의 모든 댓글 조회api로 통합된거 같지만 기존 코드라 둠
   static Future<List<MarketComment>> getMarketArticleComments(int marketArticleId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
@@ -1883,7 +1799,7 @@ class APIs {
   }
 
 
-  /*상품 판매글 부모 댓글 등록*/
+  /*상품 판매글 부모 댓글 등록*/ //부모 댓글 등록 api로 통합된거 같지만 기존 코드라 둠
   static Future<bool> createMarketArticleComment(String content, int articleId) async {
     var url = 'http://3.34.2.246:8080/api/v2/market-articles/$articleId/market-article-comments';
 
@@ -1923,7 +1839,7 @@ class APIs {
   }
 
 
-  /*특정 판매글 댓글 삭제*/
+  /*특정 판매글 댓글 삭제*/ //댓글 삭제 api로 통합된거 같지만 기존 코드라 둠
   static Future<bool> deleteMarketArticleComment(int articleCommentId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
@@ -1963,7 +1879,7 @@ class APIs {
   }
 
 
-  /*특정 상품 판매글 댓글에 대댓글 등록*/
+  /*특정 상품 판매글 댓글에 대댓글 등록*/ //자식 댓글 등록 api로 통합된거 같지만 기존 코드라 둠(자식댓글 테스트 실패)
   static Future<bool> addMarketArticleCommentReply(String content, int commentId, int articleId) async {
     try {
       var jwtToken = await storage.read(key: 'token');
@@ -2004,7 +1920,7 @@ class APIs {
     }
   }
 
-/*공지사항 전체조회*/
+/*공지사항 전체조회*/ //테스트 실패
   static Future<List<dynamic>> BoardNotice() async {
     final _url = 'http://3.34.2.246:8080/api/v2/notices';
 
@@ -2040,47 +1956,37 @@ class APIs {
 
   /*
 
-  좋아요 리스트
+  좋아요 리스트 > 본인이 좋아요한 게시글 조회
 
   */
-  static Future<List<Board>> getLikedPost(page) async {
-    var _url = 'http://3.34.2.246:8080/api/v2/articles/member/like?page=${page}&size=10&sort=createdAt,desc'; //mocksever
+  static Future<List<Board>> getLikedPost(int page) async {
+    final _url = '$domainUrl/great/my-board?page=0&size=10';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+    var jwtToken = await storage.read(key: 'token') ?? '';
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    final response = await http.get(
+    Uri.parse(_url),
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json'
+    },
+  );
 
-    var response = await http.get(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
-      },
-    );
+  if (response.statusCode == 200) {
+    final responseBody = json.decode(utf8.decode(response.bodyBytes));
+    final code = responseBody['code'];
+    final result = responseBody['result'];
 
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data'];
-      return body.map((dynamic item) => Board.fromJson(item)).toList();
+    print('Code: $code'); 
+    print('Result: $result');
 
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
-      } else {
-
-      }
-      throw Exception('요청 오류');
-    }
+    List<dynamic> body = result;
+    List<Board> boards = body.map((dynamic item) => Board.fromJson(item)).toList();
+    return boards;
+  } else {
+    print('Error: ${response.statusCode}');
+    throw Exception('요청 오류');
+  }
   }
 
 
@@ -2091,45 +1997,33 @@ class APIs {
    */
 
   static Future<List<Board>> getMyArticles(int page) async {
-    var _url = 'http://3.34.2.246:8080/api/v2/articles/member?page=${page}&size=10&sort=createdAt,desc'; //mocksever
+    final _url = '$domainUrl/boards/writes?page=0&size=10';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+    var jwtToken = await storage.read(key: 'token') ?? '';
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    final response = await http.get(
+    Uri.parse(_url),
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json'
+    },
+  );
 
-    var response = await http.get(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
-      },
-    );
+  if (response.statusCode == 200) {
+    final responseBody = json.decode(utf8.decode(response.bodyBytes));
+    final code = responseBody['code'];
+    final result = responseBody['result'];
 
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      List<dynamic> body = json.decode(
-          utf8.decode(response.bodyBytes))['data'];
-      return body.map((dynamic item) => Board.fromJson(item)).toList();
+    print('Code: $code'); //
+    print('Result: $result');
 
-
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
-      } else {
-
-      }
-      throw Exception('요청 오류');
-    }
+    List<dynamic> body = result;
+    List<Board> boards = body.map((dynamic item) => Board.fromJson(item)).toList();
+    return boards;
+  } else {
+    print('Error: ${response.statusCode}');
+    throw Exception('요청 오류');
+  }
   }
 
   /*
@@ -2138,268 +2032,249 @@ class APIs {
 
    */
 
-  static Future<List<Board>> getCommentArticles(int page) async {
-    var _url = 'http://3.34.2.246:8080/api/v2/articles/member/comment?page=${page}&size=10&sort=createdAt,desc'; //mocksever
+static Future<List<Board>> getCommentArticles(int page) async {
+  var _url = '$domainUrl/my-boards?page=${page}&size=10'; 
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+  var jwtToken = await storage.read(key: 'token') ?? '';
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+  var response = await http.get(
+    Uri.parse(_url),
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+  );
 
-    var response = await http.get(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
-      },
-    );
+  if (response.statusCode == 200) {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    print('Code: ${responseBody['code']}'); 
+    List<dynamic> result = responseBody['result'];
+    return result.map((dynamic item) => Board.fromJson(item)).toList();
 
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      List<dynamic> body = json.decode(
-          utf8.decode(response.bodyBytes))['data'];
-      return body.map((dynamic item) => Board.fromJson(item)).toList();
-
-
-      //fail
+  } else {
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      print('액세스 토큰 만료');
+      throw 'AT-C-002';
+    } else if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+      print('로그아웃된 토큰');
+      throw 'AT-C-007';
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
-      } else {
-
-      }
       throw Exception('요청 오류');
     }
   }
+}
+
 
   /*
 
   특정 게시판 게시물 조회
 
   */
-  static Future<List<Board>> getArticles(String boardCategory, int page) async {
-    var _url = 'http://3.34.2.246:8080/api/v2/community-articles?category=${boardCategory}&page=${page}&size=10&sort=createdAt,desc'; //mocksever
+static Future<List<Board>> getArticles(String boardCategory, int page) async {
+    var _url = '$domainUrl/boards/category?category=$boardCategory&page=$page&size=10'; 
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+    try {
+      final response = await http.get(
+        Uri.parse(_url),
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8',
+        },
+      );
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final code = responseBody['code'];
+        final result = responseBody['result'];
 
-    var response = await http.get(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
-      },
-    );
+        print('Code: $code');
+        print('Result: $result');
 
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      List<dynamic> body = json.decode(
-          utf8.decode(response.bodyBytes))['data'];
-      return body.map((dynamic item) => Board.fromJson(item)).toList();
-
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
+        List<dynamic> body = result;
+        List<Board> boards = body.map((dynamic item) => Board.fromJson(item)).toList();
+        return boards;
       } else {
-
+        print('API request failed: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        return []; 
       }
-      throw Exception('요청 오류');
+    } catch (error) {
+      print('Error fetching articles: $error');
+      return []; 
     }
   }
 
   /*
 
-  게시물 생성
+  게시물 등록 //테스트 실패
 
   */
-  static Future<bool> postArticles(Board board) async {
-    const url = 'http://3.34.2.246:8080/api/v2/community-articles';
+static Future<bool> postArticles(Board _newBoard) async {
+  const url = '$domainUrl/boards/normal';
 
-    var request = http.MultipartRequest('POST', Uri.parse(url));
+  var jwtToken = await storage.read(key: 'token') ?? '';
 
-    // FormData 텍스트 필드 추가
-    request.fields['title'] = board.title!;
-    request.fields['content'] = board.content!;
-    request.fields['category'] = board.category!;
+  var request = http.MultipartRequest('POST', Uri.parse(url));
+  request.headers['Authorization'] = jwtToken;
 
-
-    // FormData 파일 필드 추가
-    if (board.imageUrls != null && board.imageUrls!.isNotEmpty) {
-      for (String imagePath in board.imageUrls!) {
-        if (imagePath.isNotEmpty) {
-          var file = await ImageUtil.compressImageToMultipartFile(
-            'imageUrls',
-            imagePath,
-          );
-          request.files.add(file);
-        }
+  // 이미지 파일 추가
+  if (_newBoard.imageUrls != null && _newBoard.imageUrls!.isNotEmpty) {
+    for (String imagePath in _newBoard.imageUrls!) {
+      if (imagePath.isNotEmpty) {
+        var file = await ImageUtil.compressImageToMultipartFile(
+          'boardImages',
+          imagePath,
+        );
+        request.files.add(file);
       }
     }
-    // 토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-
-    // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-    request.headers['Authorization'] = 'Bearer $jwtToken';
-
-    // request 전송
-    var response = await request.send();
-
-    // success
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-      return true;
-      // fail
-    } else {
-      print(await response.stream.bytesToString());
-      return false;
-    }
   }
+
+  // 게시글 정보 추가
+  var jsonContent = jsonEncode({
+    'title': _newBoard.title!,
+    'content': _newBoard.content!,
+    'boardCategory': _newBoard.category!,
+  });
+
+  request.files.add(http.MultipartFile.fromString(
+    'request',
+    jsonContent,
+    contentType: MediaType('application', 'json'),
+  ));
+
+  // 요청 데이터 출력 테스트
+  print('Request URL: ${request.url}');
+  print('Request Headers: ${request.headers}');
+  print('Request Fields: ${request.fields}');
+  print('Request Files: ${request.files}');
+
+  var response = await request.send();
+
+  if (response.statusCode == 200) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
   /*
 
   게시물 삭제
 
    */
-  static Future<bool> deleteArticles(int articleId) async {
-    var _url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}'; //mocksever
+static Future<bool> deleteArticles(int articleId) async {
+  var _url = '$domainUrl/boards?id=${articleId}';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    //accessToken
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+  var jwtToken = await storage.read(key: 'token') ?? ''; 
 
+  var response = await http.delete(
+    Uri.parse(_url),
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json',
+    },
+  );
 
-    var response = await http.delete(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
-
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
-    }
+  var responseData = json.decode(utf8.decode(response.bodyBytes));
+  if (response.statusCode == 200) {
+    print('게시글 ID $articleId 삭제 성공: ${responseData['code']}');
+    return true;
   }
+
+  else {
+    print('게시글 ID $articleId 삭제 실패');
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    return false;
+  }
+}
+
 
   /*
 
   특정 게시물 댓글 조회
 
   */
-  static Future<List<Comment>> getCommentsList(int articleId) async {
-    var _url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}/comments'; //mocksever
+static Future<List<Comment>> getCommentsList(int articleId) async {
+    var _url = '$domainUrl/comments/boards?id=$articleId'; 
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await storage.read(key: 'token') ?? '';
 
     var response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8',
       },
     );
 
-    //success
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data'];
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('성공 code: ${responseBody['code']}'); 
+      List<dynamic> body = responseBody['result'];
       return body.map((dynamic item) => Comment.fromJson(item)).toList();
 
-      //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Error: ${responseBody}');
+      if (responseBody['code'] == 'AT-C-002') {
         print('액세스 토큰 만료');
         throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+      } else if (responseBody['code'] == 'AT-C-007') {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
       } else {
-
+        throw Exception('요청 오류');
       }
-      throw Exception('요청 오류');
     }
   }
 
   /*
 
-  댓글 생성
+  부모 댓글 등록
 
   */
+
   static Future<bool> postComment(String content, int articleId) async {
-    var url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}/comments';
+    var url = '$domainUrl/comments/parent';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+    var jwtToken = await storage.read(key: 'token') ?? '';
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8'
+      },
+      body: jsonEncode({
+        "boardId": articleId,
+        "content": content,
+      }),
+    );
 
-    var response = await http.post(Uri.parse(url),
-        headers: {
-          'Authorization': 'Bearer $jwtToken',
-          'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "content": content,
-        }));
-
-    //success
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Code: ${responseBody['code']}'); 
       return true;
-      //fail
+
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Error: ${responseBody}');
+      if (responseBody['code'] == 'AT-C-002') {
         print('액세스 토큰 만료');
         throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+      } else if (responseBody['code'] == 'AT-C-007') {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
       } else {
-
+        return false;
       }
-      return false;
     }
   }
 
   /*
 
-  대댓글 생성
+  자식 댓글 생성 //테스트 실패
 
   */
   static Future<bool> postNestedComment(String content, int commentId) async {
@@ -2441,164 +2316,185 @@ class APIs {
   }
 
 
+
   /*
 
   댓글 삭제
 
    */
-  static Future<bool> deleteComment(int articleId) async {
+static Future<bool> deleteComment(int commentId) async {
+  var _url = '$domainUrl/comments?id=${commentId}';
 
-    var _url = 'http://3.34.2.246:8080/api/v2/community-article-comments/${articleId}'; //mocksever
+  var jwtToken = await storage.read(key: 'token') ?? ''; 
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    //accessToken
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+  var response = await http.delete(
+    Uri.parse(_url),
+    headers: {
+      'Authorization': jwtToken,
+      'Content-Type': 'application/json',
+    },
+  );
 
-
-    var response = await http.delete(
-      Uri.parse(_url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-      },
-    );
-
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return true;
-
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return false;
-    }
+  if (response.statusCode == 200) {
+    var responseData = json.decode(utf8.decode(response.bodyBytes));
+    print('댓글 ID $commentId 삭제 성공: ${responseData['code']}');
+    return true;
   }
+  else {
+    print('댓글 ID $commentId 삭제 실패');
+    print(json.decode(utf8.decode(response.bodyBytes)));
+    return false;
+  }
+}
+
 
 
 /*
 
-  좋아요 생성
+  좋아요 등록
 
   */
-  static Future<int> addLike(int articleId) async {
-    var url = 'http://3.34.2.246:8080/api/v2/community-articles/${articleId}/likes';
+static Future<int> addLike(int articleId) async {
+  var url = '$domainUrl/great?board-id=$articleId';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+  var jwtToken = await storage.read(key: 'token') ?? '';
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+  var response = await http.post(
+    Uri.parse(url),
+    headers: {
+      'Authorization': jwtToken,      
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+  );
 
-    var response = await http.post(Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'},
-    );
+  if (response.statusCode == 200) {
+    var responseData = json.decode(utf8.decode(response.bodyBytes));
+    print('좋아요 등록 성공: ${responseData['code']}');
+    print(responseData);
+    return responseData['data']['likeCount'];
+  } 
 
-    //success
-    if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      return json.decode(utf8.decode(response.bodyBytes))['data']['likeCount'];
-      //fail
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        print('액세스 토큰 만료');
-        throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
-        print('로그아웃된 토큰');
-        throw 'AT-C-007';
-      } else {
-
-      }
-      return -1;
+  else {
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+    print(responseBody);
+    if (responseBody['code'] == 'AT-C-002') {
+      print('액세스 토큰 만료');
+      throw 'AT-C-002';
+    } else if (responseBody['code'] == 'AT-C-007') {
+      print('로그아웃된 토큰');
+      throw 'AT-C-007';
     }
+    return -1;
   }
+}
+
 
 /*
 
-  알림 리스트
+  알림 리스트 > 알림 조회
 
   */
-  static Future<List<NotificationArticle>> getNotiList() async {
-    var _url = 'http://3.34.2.246:8080/api/v2/board/personal-notices'; //mocksever
+static Future<List<NotificationArticle>> getNotiList() async {
+    var _url = '$domainUrl/notifications';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await storage.read(key: 'token') ?? ''; 
 
     var response = await http.get(
       Uri.parse(_url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8'
       },
     );
 
-    //success
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes))['data']['personalNoticeInfos'];
-      dynamic value = body.map((dynamic item) => NotificationArticle.fromJson(item)).toList();
-      return List.from(value.reversed);
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Code: ${responseBody['code']}');
+      List<dynamic> body = responseBody['result'];
+      List<NotificationArticle> notifications = body.map((dynamic item) => NotificationArticle.fromJson(item)).toList();
+      return notifications;
 
-      //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
+      if (responseBody['code'] == 'AT-C-002') {
         print('액세스 토큰 만료');
         throw 'AT-C-002';
-      } else
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-007') {
+      } else if (responseBody['code'] == 'AT-C-007') {
         print('로그아웃된 토큰');
         throw 'AT-C-007';
       } else {
-
+        throw Exception('요청 오류');
       }
-      throw Exception('요청 오류');
     }
   }
 
   /*
 
-  알림 읽음 조회
+  알림 읽음 조회 > 알림 읽음 요청
 
    */
-  static Future<bool> readNotification(int personalNoticeId) async {
-    var url = 'http://3.34.2.246:8080/api/v2/board/personal-notice/read/${personalNoticeId}';
+static Future<bool> readNotification(int personalNoticeId) async {
+    var url = '$domainUrl/notifications?id=$personalNoticeId';
 
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
+    var jwtToken = await storage.read(key: 'token') ?? ''; 
 
-    // 액세스 토큰만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-
-    var response = await http.put(
+    var response = await http.patch(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8',
       },
     );
 
-    //성공
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print('Code: ${responseBody['code']}');
       return true;
     }
-    //실패
     else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
+      return false;
+    }
+  }
+
+  //게시글 신고
+static Future<bool> reportBoard(int boardId, String reason) async {
+    const url = '$domainUrl/boards/report'; 
+
+    var jwtToken = await storage.read(key: 'token') ?? '';
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: jsonEncode({
+        "boardId": boardId,
+        "reason": reason,
+      }),
+    );
+
+    var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+    if (response.statusCode == 200) {
+      print('게시글 신고 성공: ${responseBody['code']}');
+      return true;
+    } else {
+      print(responseBody);
+
+      if (responseBody['code'] == 'AT-C-002') {
+        print('액세스 토큰 만료');
+        throw 'AT-C-002';
+      } else if (responseBody['code'] == 'AT-C-007') {
+        print('로그아웃된 토큰');
+        throw 'AT-C-007';
+      }
       return false;
     }
   }
 }
-
 
 

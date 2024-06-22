@@ -88,7 +88,7 @@ class MarketBoardDialog extends StatelessWidget{
                     showDialog(
                         context: context,
                         builder: (_) => FutureBuilder(
-                            future: APIs.deleteMarketArticle(marketBoard.articleId ?? 0),
+                            future: APIs.deleteArticles(marketBoard.articleId ?? 0),
                             builder: (BuildContext context,
                                 AsyncSnapshot snapshot) {
                               if (snapshot.hasData == false) {
