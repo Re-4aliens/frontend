@@ -1,10 +1,8 @@
-import 'package:uuid/uuid.dart';
-
 class RoomFields {
-  static final String roomState = 'roomState';
-  static final String roomId = 'roomId';
-  static final String partnerId = 'partnerId';
-  static final String myId = 'myId';
+  static const String roomState = 'roomState';
+  static const String roomId = 'roomId';
+  static const String partnerId = 'partnerId';
+  static const String myId = 'myId';
 }
 
 class RoomModel {
@@ -13,11 +11,7 @@ class RoomModel {
   int? partnerId;
   int? myId;
 
-  RoomModel(
-      { this.roomState,
-       this.roomId,
-       this.partnerId,
-       this.myId});
+  RoomModel({this.roomState, this.roomId, this.partnerId, this.myId});
 
   RoomModel.fromJson(Map<String, dynamic> json) {
     roomState = json['roomState'];
@@ -27,11 +21,11 @@ class RoomModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['roomState'] = this.roomState;
-    data['roomId'] = this.roomId;
-    data['partnerId'] = this.partnerId;
-    data['myId'] = this.myId;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['roomState'] = roomState;
+    data['roomId'] = roomId;
+    data['partnerId'] = partnerId;
+    data['myId'] = myId;
     return data;
   }
 }

@@ -1,8 +1,8 @@
-import 'package:aliens/models/screenArgument.dart';
+import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/models/signup_model.dart';
 
 import '../models/applicant_model.dart';
-import '../models/memberDetails_model.dart';
+import '../models/member_details_model.dart';
 import '../models/message_model.dart';
 import '../models/partner_model.dart';
 
@@ -99,12 +99,12 @@ ScreenArguments mockScreenArgument_1 = ScreenArguments(
             age: 22,
             profileImage: '',
             countryImage: ''),
-        preferLanguages:
-            PreferLanguages(firstPreferLanguage: 'KOREA', secondPreferLanguage: 'ENGLISH')),
+        preferLanguages: PreferLanguages(
+            firstPreferLanguage: 'KOREA', secondPreferLanguage: 'ENGLISH')),
     [
       Partner(
-        roomState: "OPEN",
-        roomId: 1,
+          roomState: "OPEN",
+          roomId: 1,
           name: '파트너1',
           nationality: 'South Korea',
           gender: 'FEMALE',
@@ -112,7 +112,7 @@ ScreenArguments mockScreenArgument_1 = ScreenArguments(
           memberId: 712,
           profileImage: '',
           firstPreferLanguage: "KOREAN",
-      secondPreferLanguage: "ENGLISH"),
+          secondPreferLanguage: "ENGLISH"),
       Partner(
           roomState: "OPEN",
           roomId: 2,
@@ -146,9 +146,7 @@ ScreenArguments mockScreenArgument_1 = ScreenArguments(
           profileImage: '',
           firstPreferLanguage: "KOREAN",
           secondPreferLanguage: "ENGLISH")
-    ]
-);
-
+    ]);
 
 ScreenArguments mockScreenArgument_2 = ScreenArguments(
     MemberDetails(
@@ -172,8 +170,8 @@ ScreenArguments mockScreenArgument_2 = ScreenArguments(
             age: 22,
             profileImage: '',
             countryImage: ''),
-        preferLanguages:
-        PreferLanguages(firstPreferLanguage: 'KOREA', secondPreferLanguage: 'ENGLISH')),
+        preferLanguages: PreferLanguages(
+            firstPreferLanguage: 'KOREA', secondPreferLanguage: 'ENGLISH')),
     [
       Partner(
           roomState: "OPEN",
@@ -219,8 +217,7 @@ ScreenArguments mockScreenArgument_2 = ScreenArguments(
           profileImage: '',
           firstPreferLanguage: "KOREAN",
           secondPreferLanguage: "ENGLISH")
-    ]
-);
+    ]);
 
 SignUpModel signUpModel = SignUpModel(
   email: 'gorus132@gmail.com',

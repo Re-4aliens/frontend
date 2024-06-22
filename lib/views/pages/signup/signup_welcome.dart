@@ -1,10 +1,8 @@
 import 'package:aliens/views/components/appbar.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../models/members.dart';
 import '../../components/button.dart';
 
 class SignUpWelcome extends StatefulWidget {
@@ -15,6 +13,7 @@ class SignUpWelcome extends StatefulWidget {
 }
 
 class _SignUpWelcomeState extends State<SignUpWelcome> {
+  @override
   Widget build(BuildContext context) {
     //Members members = new Members('','','','','','','','');
     final double screenWidth = MediaQuery.of(context).size.height;
@@ -26,16 +25,21 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(),
           title: '',
-           infookay: false, infocontent: '',
+          infookay: false,
+          infocontent: '',
         ),
         body: Padding(
-          padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
+          padding: EdgeInsets.only(
+              right: 20,
+              left: 20,
+              top: MediaQuery.of(context).size.height * 0.06,
+              bottom: MediaQuery.of(context).size.height * 0.06),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height:MediaQuery.of(context).size.height * 0.18),
+                SizedBox(height: MediaQuery.of(context).size.height * 0.18),
                 Container(
                   child: SvgPicture.asset(
                     'assets/character/welcome.svg',
@@ -46,24 +50,27 @@ class _SignUpWelcomeState extends State<SignUpWelcome> {
                 Text(
                   '${'signup-done1'.tr()}\n${'signup-done2'.tr()}',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: isSmallScreen ? 22 : 24,
+                      fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 Text(
                   '${'signup-done3'.tr()}\n${'signup-done4'.tr()}',
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: isSmallScreen?14:16, color: Color(0xff414141)),
+                  style: TextStyle(
+                      fontSize: isSmallScreen ? 14 : 16,
+                      color: const Color(0xff414141)),
                 ),
-                Expanded(child: SizedBox()),
+                const Expanded(child: SizedBox()),
                 Button(
                   //수정
                   isEnabled: true,
-                  child: Text('${'signup-done5'.tr()}'),
+                  child: Text('signup-done5'.tr()),
                   onPressed: () {
                     //스택 비우고
-                    Navigator.of(context)
-                        .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false
-                    );
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/', (Route<dynamic> route) => false);
                     //login페이지를 push
                     Navigator.pushNamed(context, '/login');
                     /*

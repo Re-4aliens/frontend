@@ -1,8 +1,5 @@
-import 'dart:convert';
-
-import 'package:aliens/models/screenArgument.dart';
+import 'package:aliens/models/screen_argument.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -20,8 +17,8 @@ class MatchingDonePage extends StatefulWidget {
 class _MatchingDonePageState extends State<MatchingDonePage> {
   @override
   Widget build(BuildContext context) {
-
-    final screenArguments = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    final screenArguments =
+        ModalRoute.of(context)!.settings.arguments as ScreenArguments;
 
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
@@ -35,8 +32,8 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
             onPressed: () {
               Navigator.pop(context);
             },
-            icon: Icon(Icons.arrow_back_ios_new),
-            color: Color(0xff212121),
+            icon: const Icon(Icons.arrow_back_ios_new),
+            color: const Color(0xff212121),
           ),
         ),
         body: Center(
@@ -51,7 +48,7 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                   letterSpacing: 1,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
               Text(
@@ -64,11 +61,12 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
               Expanded(
                 flex: 5,
                 child: Container(
-                  child: SvgPicture.asset('assets/character/matchingCharacters.svg',
+                  alignment: Alignment.center,
+                  child: SvgPicture.asset(
+                    'assets/character/matchingCharacters.svg',
                     height: isSmallScreen ? 190 : 260,
                     width: isSmallScreen ? 190 : 260,
                   ),
-                  alignment: Alignment.center,
                 ),
               ),
               Expanded(
@@ -94,16 +92,29 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                     Navigator.push(
                       context,
                       Transition(
-                          child: MatchingListPage(screenArguments: screenArguments,), transitionEffect: TransitionEffect.BOTTOM_TO_TOP),);
+                          child: MatchingListPage(
+                            screenArguments: screenArguments,
+                          ),
+                          transitionEffect: TransitionEffect.BOTTOM_TO_TOP),
+                    );
                   },
-                  onVerticalDragStart: (DragStartDetail){
+                  onVerticalDragStart: (DragStartDetail) {
                     Navigator.push(
                       context,
                       Transition(
-                          child: MatchingListPage(screenArguments: screenArguments,), transitionEffect: TransitionEffect.BOTTOM_TO_TOP),);
+                          child: MatchingListPage(
+                            screenArguments: screenArguments,
+                          ),
+                          transitionEffect: TransitionEffect.BOTTOM_TO_TOP),
+                    );
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width,
+                    decoration: const BoxDecoration(
+                        color: Color(0xff7898FF),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30))),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -120,7 +131,7 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                             textAlign: TextAlign.start,
                           ),
                         ),
-                        Expanded(
+                        const Expanded(
                           flex: 1,
                           child: Icon(Icons.keyboard_arrow_down_outlined,
                               color: Colors.white),
@@ -128,11 +139,6 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
                         Expanded(flex: 4, child: Container()),
                       ],
                     ),
-                    decoration: BoxDecoration(
-                        color: Color(0xff7898FF),
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(30),
-                            topRight: Radius.circular(30))),
                   ),
                 ),
               )
@@ -141,5 +147,3 @@ class _MatchingDonePageState extends State<MatchingDonePage> {
         ));
   }
 }
-
-
