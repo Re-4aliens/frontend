@@ -4,7 +4,6 @@ import 'dart:io';
 import 'api_service.dart';
 import '../util/image_util.dart';
 import 'package:aliens/models/market_articles.dart';
-import 'package:dio/dio.dart';
 
 class MarketService extends APIService {
   /*
@@ -79,14 +78,21 @@ class MarketService extends APIService {
 
   */
   static Future<bool> createMarketArticle(MarketBoard marketArticle) async {
+    const url = '$domainUrl/api/v2/market-articles';
+
     try {
-      var jwtToken = await APIService.storage.read(key: 'token');
-      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
+      var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+      jwtToken = json.decode(jwtToken)['data']['accessToken'];
 
-      Dio dio = Dio();
-      dio.options.headers['Authorization'] = 'Bearer $accessToken';
+      if (jwtToken == '') {
+        throw Exception('JWT 토큰이 없습니다.');
+      }
 
-      List<MultipartFile> imageFiles = [];
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+
+      request.headers['Content-Type'] = 'multipart/form-data';
+      request.headers['Authorization'] = jwtToken;
+
       if (marketArticle.imageUrls != null &&
           marketArticle.imageUrls!.isNotEmpty) {
         for (String imagePath in marketArticle.imageUrls!) {
@@ -95,27 +101,24 @@ class MarketService extends APIService {
               'imageUrls',
               imagePath,
             );
-            imageFiles.add(file);
+            request.files.add(file);
           }
         }
       }
 
-      var formData = FormData.fromMap({
-        'title': marketArticle.title ?? '',
-        'content': marketArticle.content ?? '',
-        'price': marketArticle.price.toString(),
-        'productStatus': marketArticle.productStatus ?? '',
-        'marketArticleStatus': marketArticle.marketArticleStatus ?? '',
-        'imageUrls': imageFiles,
-      });
+      request.fields['title'] = marketArticle.title ?? '';
+      request.fields['content'] = marketArticle.content ?? '';
+      request.fields['price'] = marketArticle.price.toString();
+      request.fields['productStatus'] = marketArticle.productStatus ?? '';
+      request.fields['marketArticleStatus'] =
+          marketArticle.marketArticleStatus ?? '';
 
-      var response =
-          await dio.post('$domainUrl/api/v2/market-articles', data: formData);
+      var response = await request.send();
 
       if (response.statusCode == 200) {
         return true;
       } else {
-        final responseBody = await response.data;
+        final responseBody = await response.stream.bytesToString();
         final errorCode = json.decode(responseBody)['code'];
 
         if (errorCode == 'AT-C-002') {
