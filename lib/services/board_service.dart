@@ -3,10 +3,27 @@ import 'package:http/http.dart' as http;
 import 'package:aliens/models/board_model.dart';
 import 'package:aliens/services/api_service.dart';
 import 'package:aliens/util/image_util.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:dio/dio.dart';
+import 'dart:async';
 
 class BoardService extends APIService {
+  static String getCategoryValue(String category) {
+    switch (category) {
+      case "자유게시판":
+        return 'FREE';
+      case "게임게시판":
+        return 'GAME';
+      case "패션게시판":
+        return 'FASHION';
+      case "음식게시판":
+        return 'FOOD';
+      case "음악게시판":
+        return 'MUSIC';
+      case "정보게시판":
+        return 'INFO';
+    }
+    return '';
+  }
+
   /* 
   
     전체 게시판 글 전부 조회 
@@ -134,19 +151,21 @@ class BoardService extends APIService {
   */
   static Future<bool> postArticle(Board newBoard) async {
     const url = '$domainUrl/boards/normal';
-
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    if (jwtToken.isEmpty) {
+    if (jwtToken == '') {
       throw Exception('JWT 토큰이 없습니다.');
     }
 
-    Dio dio = Dio();
-    // dio.options.headers['Content-Type'] = 'multipart/form-data';
-    dio.options.headers['Authorization'] = jwtToken;
+    var request = http.MultipartRequest('POST', Uri.parse(url));
 
-    // 이미지 파일 추가
-    List<MultipartFile> imageFiles = [];
+    request.headers['Content-Type'] = 'multipart/form-data;charset=UTF-8;';
+    request.headers['Authorization'] = jwtToken;
+
+    request.fields['title'] = newBoard.title!;
+    request.fields['content'] = newBoard.content!;
+    request.fields['boardCategory'] = getCategoryValue(newBoard.category!);
+
     if (newBoard.imageUrls != null && newBoard.imageUrls!.isNotEmpty) {
       for (String imagePath in newBoard.imageUrls!) {
         if (imagePath.isNotEmpty) {
@@ -154,48 +173,34 @@ class BoardService extends APIService {
             'boardImages',
             imagePath,
           );
-          print(file);
           print("여기 들어오고 있나?");
-          imageFiles.add(file);
+          request.files.add(file);
         }
       }
     }
 
-    print(imageFiles.runtimeType);
+    print(request.files);
 
-    var formData = FormData.fromMap({
-      'boardImages': imageFiles,
-      'request': MultipartFile.fromString(
-        jsonEncode({
-          "title": newBoard.title ?? '',
-          "content": newBoard.content ?? '',
-          "boardCategory": newBoard.category ?? '',
-        }),
-        contentType: MediaType('application', 'json'),
-      ),
-    });
+    print('Headers: ${request.headers}');
+    print('Fields: ${request.fields}');
+    print('Files: ${request.files}');
 
     try {
-      var response = await dio.post(url, data: formData);
+      var response = await request.send();
+
+      print(response.statusCode);
 
       if (response.statusCode == 200) {
+        print(await response.stream.bytesToString());
         print("게시글 등록 성공");
         return true;
       } else {
+        print(await response.stream.bytesToString());
         print("게시글 등록 실패");
         return false;
       }
     } catch (e) {
       print("통신 실패요");
-      if (e is DioError) {
-        // DioError의 경우, 추가 정보를 제공할 수 있습니다.
-        print("DioError 타입: ${e.type}");
-        if (e.response != null) {
-          print("서버 응답: ${e.response}");
-        } else {
-          print("응답 없음. 요청 데이터: ${e.requestOptions}");
-        }
-      }
       print(e);
       return false;
     }

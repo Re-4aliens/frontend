@@ -70,12 +70,16 @@ class BoardProvider with ChangeNotifier {
   }
 
   Future<bool> addPost(Board board) async {
+    print('addPost');
     bool value = false;
     try {
       value = await BoardService.postArticle(board);
     } catch (e) {
+      print("addPost 중 postArticle 실패");
+      print('catch $e');
       if (e == "AT-C-002") {
-        await AuthService.getAccessToken();
+        bool isSuccess = await AuthService.getAccessToken();
+        print('토큰 재발급 성공 ? $isSuccess');
         value = await BoardService.postArticle(board);
       }
     }

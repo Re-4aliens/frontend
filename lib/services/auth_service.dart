@@ -97,8 +97,12 @@ class AuthService extends APIService {
     const url = '$domainUrl/authentication/reissue';
 
     // 토큰 읽어오기
-    var accessToken = await APIService.storage.read(key: 'token');
-    var refreshToken = await APIService.storage.read(key: 'refreshToken');
+    var accessToken = await APIService.storage.read(key: 'token') ?? '';
+    var refreshToken = await APIService.storage.read(key: 'token') ?? '';
+
+    print('getAccessToken');
+    print('accessToken $accessToken');
+    print('refreshToken $refreshToken');
 
     var response = await http.post(
       Uri.parse(url),
@@ -116,11 +120,8 @@ class AuthService extends APIService {
       var responseData = json.decode(utf8.decode(response.bodyBytes));
 
       String newAccessToken = responseData["result"]["accessToken"];
-      String newRefreshToken = responseData["result"]["refreshToken"];
 
       await APIService.storage.write(key: 'token', value: newAccessToken);
-      await APIService.storage
-          .write(key: 'refreshToken', value: newRefreshToken);
 
       return true;
     } else {
