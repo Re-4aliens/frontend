@@ -118,12 +118,12 @@ class BoardService extends APIService {
   */
   static Future<List<Board>> getArticles(String boardCategory, int page) async {
     print("$boardCategory 게시판 조회");
-    const url = '$domainUrl/boards/category?category=FREE&page=0&size=10';
+    const url = '$domainUrl/boards/category?category=FASHION&page=0&size=10';
 
     final response = await http.get(
       Uri.parse(url),
       headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
+        'Content-Type': 'application/json;charset=UTF-8;',
       },
     );
 
@@ -162,10 +162,6 @@ class BoardService extends APIService {
     request.headers['Content-Type'] = 'multipart/form-data;charset=UTF-8;';
     request.headers['Authorization'] = jwtToken;
 
-    request.fields['title'] = newBoard.title!;
-    request.fields['content'] = newBoard.content!;
-    request.fields['boardCategory'] = getCategoryValue(newBoard.category!);
-
     if (newBoard.imageUrls != null && newBoard.imageUrls!.isNotEmpty) {
       for (String imagePath in newBoard.imageUrls!) {
         if (imagePath.isNotEmpty) {
@@ -178,6 +174,10 @@ class BoardService extends APIService {
         }
       }
     }
+
+    request.fields['title'] = newBoard.title!;
+    request.fields['content'] = newBoard.content!;
+    request.fields['boardCategory'] = getCategoryValue(newBoard.category!);
 
     print(request.files);
 

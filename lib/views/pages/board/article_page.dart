@@ -74,7 +74,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
     final commentProvider =
         Provider.of<CommentProvider>(context, listen: false);
-    commentProvider.getComments(widget.board.articleId!);
+    commentProvider.getComments(widget.board.articleId ?? -1);
   }
 
   String getNationCode(nationality) {
@@ -135,7 +135,7 @@ class _ArticlePageState extends State<ArticlePage> {
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.only(right: 10),
                             child: Text(
-                              '${widget.board.member!.name}/${getNationCode(widget.board.member!.nationality)}',
+                              '${widget.board.member?.name ?? ''}/${getNationCode(widget.board.member!.nationality)}',
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
