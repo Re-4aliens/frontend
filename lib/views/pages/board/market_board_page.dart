@@ -265,10 +265,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
             itemBuilder: (BuildContext context, int index) {
               if (index < marketBoardList.length) {
                 MarketBoard marketBoard = marketBoardList[index];
-                String productStatusText =
-                    getProductStatusText(marketBoard.productStatus);
-                String StatusText =
-                    getStatusText(marketBoard.marketArticleStatus);
+                String productQualityText =
+                    getProductStatusText(marketBoard.productQuality);
+                String StatusText = getStatusText(marketBoard.saleStatus);
 
                 return InkWell(
                   onTap: () {
@@ -278,10 +277,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         builder: (context) => MarketDetailPage(
                           screenArguments: widget.screenArguments,
                           marketBoard: marketBoard,
-                          productStatus:
-                              getProductStatusText(marketBoard.productStatus),
-                          StatusText:
-                              getStatusText(marketBoard.marketArticleStatus),
+                          productQuality:
+                              getProductStatusText(marketBoard.productQuality),
+                          StatusText: getStatusText(marketBoard.saleStatus),
                           index: index,
                           backPage: 'marketboard',
                         ),
@@ -326,7 +324,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                   color: Color(0xff7898FF),
                                 ),
                                 child: Text(
-                                  '[$productStatusText]',
+                                  '[$productQualityText]',
                                   style: TextStyle(
                                       fontSize: 10.spMin, color: Colors.white),
                                   textAlign: TextAlign.center,
@@ -350,8 +348,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                   Text(
                                     '[$StatusText]',
                                     style: TextStyle(
-                                      color: marketBoard.marketArticleStatus ==
-                                              '판매 중'
+                                      color: marketBoard.saleStatus == '판매 중'
                                           ? const Color(0xff616161)
                                           : const Color(0xffFF375B),
                                       fontSize: 16.spMin,
@@ -469,7 +466,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
           );
   }
 
-  String getProductStatusText(String? productStatus) {
+  String getProductStatusText(String? productQuality) {
     List<String> whatStatus = [
       'Brand_New'.tr(),
       'Almost_New'.tr(),
@@ -477,7 +474,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       'Used'.tr(),
     ];
 
-    switch (productStatus) {
+    switch (productQuality) {
       case '새 것':
         return whatStatus[0];
       case '거의 새 것':
@@ -491,13 +488,13 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     }
   }
 
-  String getStatusText(String? marketArticleStatus) {
+  String getStatusText(String? saleStatus) {
     List<String> Status = [
       'sale'.tr(),
       'sold-out'.tr(),
     ];
 
-    switch (marketArticleStatus) {
+    switch (saleStatus) {
       case '판매 중':
         return Status[0];
       case '판매 완료':

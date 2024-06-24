@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:aliens/util/image_util.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'api_service.dart';
-import '../util/image_util.dart';
 import 'package:aliens/models/market_articles.dart';
+import 'package:http_parser/http_parser.dart';
 
 class MarketService extends APIService {
   /*
@@ -74,49 +75,74 @@ class MarketService extends APIService {
 
   /*
 
-    상품 판매글 생성(테스트 실패)
+    상품 판매글 생성
 
   */
   static Future<bool> createMarketArticle(MarketBoard marketArticle) async {
-    try {
-      var jwtToken = await APIService.storage.read(key: 'token');
-      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
+    const url = '$domainUrl/boards/market';
 
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('$domainUrl/api/v2/market-articles'),
-      );
+    var jwtToken = await APIService.storage.read(key: 'token');
+    if (jwtToken == null) {
+      throw Exception('JWT token is null');
+    }
 
-      request.fields['title'] = marketArticle.title!;
-      request.fields['content'] = marketArticle.content!;
-      request.fields['price'] = marketArticle.price.toString();
-      request.fields['productStatus'] = marketArticle.productStatus!;
-      request.fields['marketArticleStatus'] =
-          marketArticle.marketArticleStatus!;
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(url),
+    );
 
-      if (marketArticle.imageUrls != null &&
-          marketArticle.imageUrls!.isNotEmpty) {
-        for (String imagePath in marketArticle.imageUrls!) {
-          if (imagePath.isNotEmpty) {
-            var file = await ImageUtil.compressImageToMultipartFile(
-              'imageUrls',
-              imagePath,
-            );
-            request.files.add(file);
-          }
+    request.headers['Authorization'] = jwtToken;
+
+    var jsonPayload = jsonEncode({
+      'title': marketArticle.title,
+      'content': marketArticle.content,
+      'saleStatus': marketArticle.saleStatus,
+      'price': marketArticle.price.toString(),
+      'productQuality': marketArticle.productQuality,
+    });
+
+    print(marketArticle.saleStatus);
+    print(marketArticle.productQuality);
+
+    // JSON 데이터를 MultipartFile로 추가
+    var jsonPart = http.MultipartFile.fromString(
+      'request',
+      jsonPayload,
+      contentType: MediaType('application', 'json'),
+    );
+    request.files.add(jsonPart);
+
+    if (marketArticle.imageUrls != null &&
+        marketArticle.imageUrls!.isNotEmpty) {
+      for (String imagePath in marketArticle.imageUrls!) {
+        if (imagePath.isNotEmpty) {
+          var file = await ImageUtil.compressImageToMultipartFile(
+            'marketBoardImages',
+            imagePath,
+          );
+          request.files.add(file);
         }
       }
+    } else {
+      var file = http.MultipartFile.fromString(
+        'marketBoardImages',
+        '',
+        filename: 'empty.txt',
+        contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
+      );
+      request.files.add(file);
+    }
 
-      request.headers['Authorization'] = 'Bearer $accessToken';
-
+    try {
       var response = await request.send();
 
       if (response.statusCode == 200) {
         return true;
       } else {
         final responseBody = await response.stream.bytesToString();
-        final errorCode = json.decode(responseBody)['code'];
+        final responseJson = json.decode(responseBody);
 
+        final errorCode = responseJson['code'];
         if (errorCode == 'AT-C-002') {
           throw 'AT-C-002';
         } else if (errorCode == 'AT-C-007') {
@@ -125,8 +151,9 @@ class MarketService extends APIService {
           throw Exception('상품 판매글 생성 오류');
         }
       }
-    } catch (error) {
-      throw Exception('상품 판매글 생성 오류: $error');
+    } catch (e) {
+      print('Error: $e');
+      rethrow;
     }
   }
 
@@ -150,9 +177,8 @@ class MarketService extends APIService {
       request.fields['title'] = marketArticle.title!;
       request.fields['content'] = marketArticle.content!;
       request.fields['price'] = marketArticle.price.toString();
-      request.fields['productStatus'] = marketArticle.productStatus!;
-      request.fields['marketArticleStatus'] =
-          marketArticle.marketArticleStatus!;
+      request.fields['productQuality'] = marketArticle.productQuality!;
+      request.fields['saleStatus'] = marketArticle.saleStatus!;
 
       if (marketArticle.imageUrls != null &&
           marketArticle.imageUrls!.isNotEmpty) {
