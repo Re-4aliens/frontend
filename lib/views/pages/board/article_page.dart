@@ -38,10 +38,12 @@ class _ArticlePageState extends State<ArticlePage> {
   int parentsCommentId = -1;
 
   void sendComment() async {
-    updateUi();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      updateUi();
+    });
   }
 
-  void updateUi() async {
+  void updateUi() {
     setState(() {
       //텍스트폼 비우기
       _controller.clear();
@@ -71,9 +73,11 @@ class _ArticlePageState extends State<ArticlePage> {
       default:
     }
 
-    final commentProvider =
-        Provider.of<CommentProvider>(context, listen: false);
-    commentProvider.getComments(widget.board.articleId!);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final commentProvider =
+          Provider.of<CommentProvider>(context, listen: false);
+      commentProvider.getComments(widget.board.articleId!);
+    });
   }
 
   String getNationCode(nationality) {

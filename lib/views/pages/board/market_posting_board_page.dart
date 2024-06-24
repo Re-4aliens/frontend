@@ -39,10 +39,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     'Slight_Defect'.tr(),
     'Used'.tr()
   ];
-  String productStatus = '';
+  String productQuality = '';
 
-  final _marketArticleStatusList = ['sale'.tr(), 'sold-out'.tr()];
-  String? marketArticleStatus = 'sale'.tr();
+  final _saleStatusList = ['sale'.tr(), 'sold-out'.tr()];
+  String? saleStatus = 'sale'.tr();
 
   //List<Asset> images = [];
 
@@ -132,9 +132,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
       _titleController.text = widget.marketBoard!.title!;
       _priceController.text = widget.marketBoard!.price.toString();
       _contentController.text = widget.marketBoard!.content!;
-      productStatus = getProductStatusText(widget.marketBoard!.productStatus!);
-      marketArticleStatus =
-          getStatusText(widget.marketBoard!.marketArticleStatus!);
+      productQuality =
+          getProductStatusText(widget.marketBoard!.productQuality!);
+      saleStatus = getStatusText(widget.marketBoard!.saleStatus!);
 
       _images = widget.marketBoard!.imageUrls!
           .map((imageUrl) => XFile(imageUrl))
@@ -239,8 +239,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                           color: const Color(0xff888888),
                                           fontSize: 14.spMin,
                                         ),
-                                        items: _marketArticleStatusList
-                                            .map((value) {
+                                        items: _saleStatusList.map((value) {
                                           return DropdownMenuItem(
                                             value: value,
                                             child: Text(
@@ -252,10 +251,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                             ),
                                           );
                                         }).toList(),
-                                        value: marketArticleStatus,
+                                        value: saleStatus,
                                         onChanged: (value) {
                                           setState(() {
-                                            marketArticleStatus = value;
+                                            saleStatus = value;
                                           });
                                         },
                                       ),
@@ -330,7 +329,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 14),
                         child: Text(
-                          'market-productStatus'.tr(),
+                          'market-productQuality'.tr(),
                           style: TextStyle(
                             fontSize: 16.spMin,
                             color: const Color(0xff888888),
@@ -343,7 +342,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           child: Row(
                             children: whatStatus.map((condition) {
                               final bool isSelected =
-                                  productStatus == condition;
+                                  productQuality == condition;
                               return Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                                 child: ChoiceChip(
@@ -363,7 +362,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                   selectedColor: const Color(0xff7898ff),
                                   onSelected: (isSelected) {
                                     setState(() {
-                                      productStatus =
+                                      productQuality =
                                           isSelected ? condition : '';
                                     });
                                   },
@@ -478,7 +477,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                   Button(
                       onPressed: () async {
                         if (_formKey.currentState!.validate() &&
-                            productStatus.isNotEmpty &&
+                            productQuality.isNotEmpty &&
                             _images.isNotEmpty) {
                           FocusScope.of(context).unfocus();
                           _formKey.currentState!.save();
@@ -486,9 +485,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           MarketBoard marketArticle = MarketBoard(
                             title: _titleController.text,
                             content: _contentController.text,
-                            price: int.parse(_priceController.text),
-                            productStatus: productStatus,
-                            marketArticleStatus: marketArticleStatus,
+                            price: _priceController.text,
+                            productQuality:
+                                getProductStatusText(productQuality),
+                            saleStatus: getStatusText(saleStatus),
                             imageUrls:
                                 _images.map((image) => image.path).toList(),
                           );
@@ -498,13 +498,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               MarketBoard updateData = MarketBoard(
                                 title: _titleController.text,
                                 content: _contentController.text,
-                                price: int.parse(_priceController.text),
-                                productStatus: productStatus,
-                                marketArticleStatus: marketArticleStatus,
+                                price: _priceController.text,
+                                productQuality:
+                                    getProductStatusText(productQuality),
+                                saleStatus: getStatusText(saleStatus),
                                 imageUrls:
                                     _images.map((image) => image.path).toList(),
                               );
-                              print(marketArticleStatus);
+                              print(saleStatus);
 
                               bool success =
                                   await MarketService.updateMarketArticle(
@@ -583,20 +584,20 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     return _titleController.text.isNotEmpty &&
         _priceController.text.isNotEmpty &&
         _contentController.text.isNotEmpty &&
-        productStatus.isNotEmpty &&
+        productQuality.isNotEmpty &&
         _images.isNotEmpty;
   }
 }
 
-String getProductStatusText(String? productStatus) {
+String getProductStatusText(String? productQuality) {
   List<String> whatStatus = [
-    'Brand_New'.tr(),
-    'Almost_New'.tr(),
-    'Slight_Defect'.tr(),
-    'Used'.tr(),
+    'BRAND_NEW',
+    'ALMOST_NEW',
+    'SLIGHT_DEFECT',
+    'USED',
   ];
 
-  switch (productStatus) {
+  switch (productQuality) {
     case '새 것':
       return whatStatus[0];
     case '거의 새 것':
@@ -610,16 +611,16 @@ String getProductStatusText(String? productStatus) {
   }
 }
 
-String getStatusText(String? marketArticleStatus) {
+String getStatusText(String? saleStatus) {
   List<String> Status = [
-    'sale'.tr(),
-    'sold-out'.tr(),
+    'SELL',
+    'END',
   ];
 
-  switch (marketArticleStatus) {
-    case '판매 중':
+  switch (saleStatus) {
+    case '판매중':
       return Status[0];
-    case '판매 완료':
+    case '판매완료':
       return Status[1];
     default:
       return '';

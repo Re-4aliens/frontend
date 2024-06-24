@@ -58,9 +58,9 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
                 var nationCode = '';
                 for (Map<String, String> country in countries) {
                   if (country['name'] ==
-                      boardProvider.articleList[index].member!.nationality
-                          .toString()) {
-                    nationCode = country['code']!;
+                      boardProvider.articleList[index].member?.nationality
+                          ?.toString()) {
+                    nationCode = country['code'] ?? ''; // Null 검사 후 기본값 설정
                     break;
                   }
                 }

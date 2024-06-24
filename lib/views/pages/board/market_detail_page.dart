@@ -22,14 +22,14 @@ class MarketDetailPage extends StatefulWidget {
       {super.key,
       required this.screenArguments,
       required this.marketBoard,
-      required this.productStatus,
+      required this.productQuality,
       required this.StatusText,
       required this.index,
       required this.backPage});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
   //final MemberDetails memberDetails;
-  final String productStatus;
+  final String productQuality;
   final String StatusText;
   final int index;
   final String backPage;
@@ -95,8 +95,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
       'Slight_Defect'.tr(),
       'Used'.tr()
     ];
-    String productStatus = '${widget.marketBoard.productStatus}';
-    String StatusText = '${widget.marketBoard.marketArticleStatus}';
+    String productQuality = '${widget.marketBoard.productQuality}';
+    String StatusText = '${widget.marketBoard.productQuality}';
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context);
     final bookmarkProvider = Provider.of<BookmarksProvider>(context);
 
@@ -248,7 +248,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           Row(
                             children: [
                               Text(
-                                'market-productStatus'.tr(),
+                                'market-productQuality'.tr(),
                                 style: TextStyle(
                                   fontSize: 16.spMin,
                                   color: const Color(0xff888888),
@@ -260,7 +260,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   child: Row(
                                     children: whatStatus.map((condition) {
                                       final bool isSelected =
-                                          getProductStatusText(productStatus) ==
+                                          getProductStatusText(
+                                                  productQuality) ==
                                               condition;
                                       return Padding(
                                         padding: EdgeInsets.symmetric(
@@ -283,7 +284,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                               const Color(0xff7898ff),
                                           onSelected: (isSelected) {
                                             setState(() {
-                                              productStatus =
+                                              productQuality =
                                                   isSelected ? condition : '';
                                             });
                                           },
@@ -878,7 +879,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   }
 }
 
-String getProductStatusText(String? productStatus) {
+String getProductStatusText(String? productQuality) {
   List<String> whatStatus = [
     'Brand_New'.tr(),
     'Almost_New'.tr(),
@@ -886,7 +887,7 @@ String getProductStatusText(String? productStatus) {
     'Used'.tr(),
   ];
 
-  switch (productStatus) {
+  switch (productQuality) {
     case '새 것':
       return whatStatus[0];
     case '거의 새 것':
@@ -900,13 +901,13 @@ String getProductStatusText(String? productStatus) {
   }
 }
 
-String getStatusText(String? marketArticleStatus) {
+String getStatusText(String? productQuality) {
   List<String> Status = [
     'sale'.tr(),
     'sold-out'.tr(),
   ];
 
-  switch (marketArticleStatus) {
+  switch (productQuality) {
     case '판매 중':
       return Status[0];
     case '판매 완료':

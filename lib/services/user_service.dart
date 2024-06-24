@@ -19,10 +19,9 @@ s
 
     // 프로필 이미지 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
-      var file = await http.MultipartFile.fromPath(
+      var file = await ImageUtil.compressImageToMultipartFile(
         'profileImage',
         member.profileImage!,
-        contentType: MediaType('image', 'png'), // 프로필 이미지의 Content-Type 설정
       );
       request.files.add(file);
     } else {

@@ -1,9 +1,9 @@
 class MarketBoard {
   int? articleId;
   String? title;
-  String? marketArticleStatus;
-  int? price;
-  String? productStatus;
+  String? saleStatus;
+  String? price;
+  String? productQuality;
   String? content;
   int? marketArticleBookmarkCount;
   int? commentsCount;
@@ -16,9 +16,9 @@ class MarketBoard {
     return 'MarketBoard{'
         'articleId: $articleId, '
         'title: $title, '
-        'marketArticleStatus: $marketArticleStatus, '
+        'saleStatus: $saleStatus, '
         'price: $price, '
-        'productStatus: $productStatus, '
+        'productQuality: $productQuality, '
         'content: $content, '
         'marketArticleBookmarkCount: $marketArticleBookmarkCount, '
         'commentsCount: $commentsCount, '
@@ -31,9 +31,9 @@ class MarketBoard {
   MarketBoard({
     this.articleId,
     this.title,
-    this.marketArticleStatus,
+    this.saleStatus,
     this.price,
-    this.productStatus,
+    this.productQuality,
     this.content,
     this.marketArticleBookmarkCount,
     this.commentsCount,
@@ -45,9 +45,9 @@ class MarketBoard {
   MarketBoard.fromJson(Map<String, dynamic> json) {
     articleId = json['articleId'];
     title = json['title'];
-    marketArticleStatus = json['marketArticleStatus'];
+    saleStatus = json['saleStatus'];
     price = json['price'];
-    productStatus = json['productStatus'];
+    productQuality = json['productQuality'];
     content = json['content'];
     marketArticleBookmarkCount = json['marketArticleBookmarkCount'];
     commentsCount = json['commentsCount'];
@@ -60,9 +60,9 @@ class MarketBoard {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['articleId'] = articleId;
     data['title'] = title;
-    data['marketArticleStatus'] = marketArticleStatus;
+    data['saleStatus'] = saleStatus;
     data['price'] = price;
-    data['productStatus'] = productStatus;
+    data['productQuality'] = productQuality;
     data['content'] = content;
     data['marketArticleBookmarkCount'] = marketArticleBookmarkCount;
     data['commentsCount'] = commentsCount;

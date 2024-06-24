@@ -34,8 +34,10 @@ class _ArticleWidgetState extends State<ArticleWidget> {
   @override
   void initState() {
     super.initState();
-    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getLikeCounts();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+      boardProvider.getLikeCounts();
+    });
   }
 
   @override
