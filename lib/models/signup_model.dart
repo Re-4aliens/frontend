@@ -6,32 +6,32 @@ class SignUpModel {
   String? nationality;
   String? birthday;
   String? name;
-  String? aboutMe;
   String? profileImage;
+  String? selfIntroduction;
 
-  SignUpModel({
-    this.email,
-    this.password,
-    this.mbti,
-    this.gender,
-    this.nationality,
-    this.birthday,
-    this.name,
-    this.aboutMe,
-    this.profileImage,
-  });
+  SignUpModel(
+      {
+        this.email,
+        this.password,
+        this.mbti,
+        this.gender,
+        this.nationality,
+        this.birthday,
+        this.name,
+        this.profileImage,
+        this.selfIntroduction});
 
   factory SignUpModel.fromJson(Map<String, dynamic> json) => SignUpModel(
-        email: json['email'],
-        password: json['password'],
-        mbti: json['mbti'],
-        gender: json['gender'],
-        nationality: json['nationality'],
-        birthday: json['birthday'],
-        name: json['name'],
-        profileImage: json['profileImage'],
-        aboutMe: json['aboutMe'],
-      );
+    email: json['email'],
+    password: json['password'],
+    mbti: json['mbti'],
+    gender: json['gender'],
+    nationality: json['nationality'],
+    birthday: json['birthday'],
+    name: json['name'],
+    profileImage: json['profileImage'],
+    selfIntroduction: json['selfIntroduction'],
+    );
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
@@ -43,7 +43,7 @@ class SignUpModel {
     data['birthday'] = this.birthday;
     data['name'] = this.name;
     data['profileImage'] = this.profileImage;
-    data['aboutMe'] = this.aboutMe;
+    data['selfIntroduction'] = this.selfIntroduction;
     return data;
   }
 }

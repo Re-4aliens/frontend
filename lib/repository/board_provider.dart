@@ -82,13 +82,6 @@ class BoardProvider with ChangeNotifier {
   addPost(Board _board) async {
     bool value = false;
     try {
-      print('추가됨');
-      // _board 객체의 속성들을 출력
-      print('Board Title: ${_board.title}');
-      print('Board Content: ${_board.content}');
-      print('Board Category: ${_board.category}');
-      print('Board Image URLs: ${_board.imageUrls}');
-
       value = await APIs.postArticles(_board);
     } catch (e) {
       if (e == "AT-C-002") {
@@ -100,8 +93,7 @@ class BoardProvider with ChangeNotifier {
     }
 
     return value;
-}
-
+  }
 
 
 
@@ -228,7 +220,3 @@ class BoardProvider with ChangeNotifier {
   }
 
 }
-
-
-
-

@@ -167,13 +167,13 @@ class _SignUpMbtiState extends State<SignUpMbti> {
       body:
         //padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
         Container(
-          padding: EdgeInsets.only(right: 12,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
+          padding: EdgeInsets.only(right: 20,left: 20,top: MediaQuery.of(context).size.height * 0.06,bottom: MediaQuery.of(context).size.height * 0.06),
           color: Color(0xffF5F7FF),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('${member.name}${'signup-mbti'.tr()}',
-                style: TextStyle(fontSize: isSmallScreen? 22: 24, fontWeight: FontWeight.bold),),
+                style: TextStyle(fontSize: isSmallScreen?22:24, fontWeight: FontWeight.bold),),
               SizedBox(height: MediaQuery.of(context).size.height * 0.05),
               Expanded(
                 child: SingleChildScrollView(child: Padding(

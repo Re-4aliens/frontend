@@ -518,3 +518,4 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
 
 }
+

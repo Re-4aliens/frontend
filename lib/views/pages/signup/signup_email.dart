@@ -105,9 +105,6 @@ class _SignUpEmailState extends State<SignUpEmail> {
                         ),
                         onPressed: () async {
                           if (_isButtonEnabled) {
-                                // Get the email entered by the user
-                              String enteredEmail = _EmailController.text;
-                              print('Entered Email: $enteredEmail'); // Print the entered email
                             //await APIs.checkEmail(_EmailController.text)
                             if (await APIs.checkExistence(
                                 _EmailController.text)) {
@@ -250,37 +247,39 @@ class _SignUpEmailState extends State<SignUpEmail> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(40))),
                     child: Text('${'signup-email7'.tr()}'),
-onPressed: _isVerified
-    ? () async {
-        member.email = _EmailController!.text;
-        print("인증 ${member.toJson()}");
+                    onPressed: _isVerified
+                        ? () async {
+                            member.email = _EmailController!.text;
+                            print(member.toJson());
 
-        showDialog(
-            context: context,
-            builder: (_) => FutureBuilder(
-                future: APIs.verifyEmail(member.email),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData == false) {
-                    // 받아오는 중일 때
-                    return Container(
-                        child: Image(
-                            image: AssetImage(
-                                "assets/illustration/loading_01.gif")));
-                  } else {
-                    // 받아온 후
-                    WidgetsBinding.instance!.addPostFrameCallback((_) {
-                      Navigator.popAndPushNamed(context, '/verify', arguments: member);
-                    });
-                    print("받음 ${member.toJson()}");
-                    return Container(
-                        child: Image(
-                            image: AssetImage(
-                                "assets/illustration/loading_01.gif")));
-                  }
-                }));
-      }
-    : null,
-))
+                            showDialog(
+                                context: context,
+                                builder: (_) => FutureBuilder(
+                                    future: APIs.verifyEmail(member.email),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot snapshot) {
+                                      if (snapshot.hasData == false) {
+                                        //받아오는 동안
+                                        return Container(
+                                            child: Image(
+                                                image: AssetImage(
+                                                    "assets/illustration/loading_01.gif")));
+                                      } else{
+                                        //받아온 후
+                                        WidgetsBinding.instance!.addPostFrameCallback((_) {
+                                          Navigator.popAndPushNamed(context, '/verify', arguments: member);
+                                        });
+                                        print(member.toJson());
+                                        return Container(
+                                            child: Image(
+                                                image: AssetImage(
+                                                    "assets/illustration/loading_01.gif")));
+                                      }
+
+                                    }));
+
+                          }
+                        : null))
           ],
         ),
       ),
