@@ -181,12 +181,12 @@ class BoardDialog extends StatelessWidget {
                 ),
               ),
             ),
-            memberDetails.email == board.member!.email
+            memberDetails.email == board.member?.email
                 ? const Divider(
                     thickness: 1,
                   )
                 : const SizedBox(),
-            memberDetails.email == board.member!.email
+            memberDetails.email == board.member?.email
                 ? InkWell(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20.0),
