@@ -4,6 +4,7 @@ import 'package:aliens/models/board_model.dart';
 import 'package:aliens/services/api_service.dart';
 import 'package:aliens/util/image_util.dart';
 import 'dart:async';
+import 'package:http_parser/http_parser.dart';
 
 class BoardService extends APIService {
   static String getCategoryValue(String category) {
@@ -151,16 +152,31 @@ class BoardService extends APIService {
   */
   static Future<bool> postArticle(Board newBoard) async {
     const url = '$domainUrl/boards/normal';
-    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    if (jwtToken == '') {
-      throw Exception('JWT 토큰이 없습니다.');
+    var jwtToken = await APIService.storage.read(key: 'token');
+    if (jwtToken == null) {
+      throw Exception('JWT token is null');
     }
 
-    var request = http.MultipartRequest('POST', Uri.parse(url));
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(url),
+    );
 
-    request.headers['Content-Type'] = 'multipart/form-data;charset=UTF-8;';
     request.headers['Authorization'] = jwtToken;
+
+    var jsonPayload = jsonEncode({
+      'title': newBoard.title,
+      'content': newBoard.content,
+      'boardCategory': getCategoryValue(newBoard.category!),
+    });
+
+    var jsonPart = http.MultipartFile.fromString(
+      'request',
+      jsonPayload,
+      contentType: MediaType('application', 'json'),
+    );
+    request.files.add(jsonPart);
 
     if (newBoard.imageUrls != null && newBoard.imageUrls!.isNotEmpty) {
       for (String imagePath in newBoard.imageUrls!) {
@@ -169,21 +185,18 @@ class BoardService extends APIService {
             'boardImages',
             imagePath,
           );
-          print("여기 들어오고 있나?");
           request.files.add(file);
         }
       }
+    } else {
+      var file = http.MultipartFile.fromString(
+        'marketBoardImages',
+        '',
+        filename: 'empty.txt',
+        contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
+      );
+      request.files.add(file);
     }
-
-    request.fields['title'] = newBoard.title!;
-    request.fields['content'] = newBoard.content!;
-    request.fields['boardCategory'] = getCategoryValue(newBoard.category!);
-
-    print(request.files);
-
-    print('Headers: ${request.headers}');
-    print('Fields: ${request.fields}');
-    print('Files: ${request.files}');
 
     try {
       var response = await request.send();
