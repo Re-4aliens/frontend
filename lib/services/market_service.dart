@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:aliens/util/image_util.dart';
 import 'package:http/http.dart' as http;
-import 'dart:io';
 import 'api_service.dart';
 import 'package:aliens/models/market_articles.dart';
 import 'package:http_parser/http_parser.dart';
@@ -164,59 +163,44 @@ class MarketService extends APIService {
   */
   static Future<bool> updateMarketArticle(
       int articleId, MarketBoard marketArticle) async {
-    try {
-      var jwtToken = await APIService.storage.read(key: 'token');
-      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
+    String url = '$domainUrl/boards/market?id=$articleId';
 
-      final url = Uri.parse('$domainUrl/api/v2/market-articles/$articleId');
+    var jwtToken = await APIService.storage.read(key: 'token');
+    if (jwtToken == null) {
+      throw Exception('JWT token is null');
+    }
 
-      final request = http.MultipartRequest('PATCH', url);
+    var requestBody = jsonEncode({
+      'title': marketArticle.title,
+      'content': marketArticle.content,
+      'saleStatus': marketArticle.saleStatus,
+      'price': marketArticle.price.toString(),
+      'productQuality': marketArticle.productQuality,
+    });
 
-      request.headers['Authorization'] = 'Bearer $accessToken';
+    final response = await http.put(
+      Uri.parse(url),
+      headers: {
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      body: requestBody,
+    );
 
-      request.fields['title'] = marketArticle.title!;
-      request.fields['content'] = marketArticle.content!;
-      request.fields['price'] = marketArticle.price.toString();
-      request.fields['productQuality'] = marketArticle.productQuality!;
-      request.fields['saleStatus'] = marketArticle.saleStatus!;
+    if (response.statusCode == 200) {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      return true;
+    } else {
+      final responseBody = json.decode(utf8.decode(response.bodyBytes));
+      final errorCode = json.decode(responseBody)['code'];
 
-      if (marketArticle.imageUrls != null &&
-          marketArticle.imageUrls!.isNotEmpty) {
-        for (String imageUrl in marketArticle.imageUrls!) {
-          if (imageUrl.isNotEmpty) {
-            final response = await http.get(Uri.parse(imageUrl));
-            final bytes = response.bodyBytes;
-            const fileName = 'image.jpg';
-
-            final Directory tempDir = Directory.systemTemp;
-            final File imageFile = File('${tempDir.path}/$fileName');
-            await imageFile.writeAsBytes(bytes);
-
-            var file =
-                await http.MultipartFile.fromPath('imageUrls', imageFile.path);
-            request.files.add(file);
-          }
-        }
-      }
-
-      final response = await request.send();
-
-      if (response.statusCode == 200) {
-        return true;
+      if (errorCode == 'AT-C-002') {
+        throw 'AT-C-002';
+      } else if (errorCode == 'AT-C-007') {
+        throw 'AT-C-007';
       } else {
-        final responseBody = await response.stream.bytesToString();
-        final errorCode = json.decode(responseBody)['code'];
-
-        if (errorCode == 'AT-C-002') {
-          throw 'AT-C-002';
-        } else if (errorCode == 'AT-C-007') {
-          throw 'AT-C-007';
-        } else {
-          throw Exception('상품 판매글 수정 오류');
-        }
+        throw Exception('상품 판매글 수정 오류');
       }
-    } catch (error) {
-      throw Exception('상품 판매글 수정 오류: $error');
     }
   }
 
