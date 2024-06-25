@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'api_service.dart';
 import 'package:aliens/models/signup_model.dart';
 import '../util/image_util.dart';
-import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 
 class UserService extends APIService {
@@ -144,27 +143,44 @@ s
 
  */
 
-  static Future<bool> updateProfile(File profileImageFile) async {
+  static Future<bool> updateProfile(String profileImage) async {
+    print("프로필 수정 시도");
     var url = '$domainUrl/members/profile-image';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    // MultipartFile로 변환
-    var profileImage = await ImageUtil.compressImageToMultipartFile(
-      'profileImage',
-      profileImageFile.path,
-    );
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers['Authorization'] = jwtToken;
 
-    // FormData 생성
-    var formData = http.MultipartRequest('PUT', Uri.parse(url));
-    formData.headers['Authorization'] = 'Bearer $jwtToken';
-    formData.files.add(profileImage);
+    if (profileImage.isNotEmpty) {
+      var file = await ImageUtil.compressImageToMultipartFile(
+        'profileImage',
+        profileImage, // 프로필 이미지의 Content-Type 설정
+      );
+      request.files.add(file);
+    } else {
+      // 프로필 이미지가 없을 경우 빈 파일로 대체
+      var file = http.MultipartFile.fromString(
+        'profileImage',
+        '',
+        filename: 'empty.txt',
+        contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
+      );
+      request.files.add(file);
+    }
 
-    var response = await formData.send();
+    var response = await request.send();
+
+    // 출력: 모든 파일의 Content-Type 출력
+    for (var file in request.files) {
+      print('File: ${file.filename}, Content-Type: ${file.contentType}');
+    }
 
     if (response.statusCode == 200) {
       return true;
     } else {
+      var responseBody = await response.stream.bytesToString();
+      print(responseBody);
       return false;
     }
   }

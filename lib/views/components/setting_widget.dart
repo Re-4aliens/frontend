@@ -98,6 +98,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                               style: TextStyle(
                                   fontSize: 14.h, color: Colors.white),
                             ),
+                            // widget.screenArguments.memberDetails!.email.toString()
                             Text(
                                 widget.screenArguments.memberDetails!.email
                                     .toString(),
@@ -182,7 +183,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                     _profileImage?.path;
                                                 if (await UserService
                                                     .updateProfile(
-                                                        File(imagePath!))) {
+                                                        imagePath!)) {
                                                   Navigator.of(context)
                                                       .pushNamedAndRemoveUntil(
                                                           '/loading',
@@ -207,7 +208,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                                     _profileImage?.path;
                                                 if (await UserService
                                                     .updateProfile(
-                                                        File(imagePath!))) {
+                                                        imagePath!)) {
                                                   print('성공');
                                                   Navigator.of(context)
                                                       .pushNamedAndRemoveUntil(
