@@ -76,7 +76,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     super.initState();
     final marketcommentProvider =
         Provider.of<MarketCommentProvider>(context, listen: false);
-    marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
+    marketcommentProvider.getMarketComments(widget.marketBoard.articleId ?? -1);
     if (widget.index == -1) {
       bookmark = widget.marketBoard.marketArticleBookmarkCount!;
     }
