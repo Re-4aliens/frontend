@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/views/components/setting_list_widget.dart';
 import 'package:aliens/views/components/setting_profile_widget.dart';
@@ -29,7 +28,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   File? _profileImage;
   final picker = ImagePicker();
 
-  //비동기 처리를 통해 이미지 가져오기
+  // 비동기 처리를 통해 이미지 가져오기
   Future getImage(ImageSource imageSource) async {
     if (imageSource == ImageSource.gallery) {
       if (await Permissions.getPhotosPermission()) {
@@ -116,23 +115,32 @@ class _SettingWidgetState extends State<SettingWidget> {
                             height: 90.r,
                             width: 90.r,
                             decoration: BoxDecoration(
-                                color: widget.screenArguments.memberDetails!
-                                            .profileImage !=
-                                        ""
-                                    ? Colors.white
-                                    : Colors.transparent,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: widget.screenArguments.memberDetails!
-                                                .profileImage !=
-                                            ""
-                                        ? NetworkImage(widget.screenArguments
-                                            .memberDetails!.profileImage!)
-                                        : const NetworkImage(''),
-                                    fit: BoxFit.cover)),
+                              color: widget.screenArguments.memberDetails!
+                                              .profileImage !=
+                                          null &&
+                                      widget.screenArguments.memberDetails!
+                                          .profileImage!.isNotEmpty
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              shape: BoxShape.circle,
+                              image: widget.screenArguments.memberDetails!
+                                              .profileImage !=
+                                          null &&
+                                      widget.screenArguments.memberDetails!
+                                          .profileImage!.isNotEmpty
+                                  ? DecorationImage(
+                                      image: NetworkImage(
+                                        widget.screenArguments.memberDetails!
+                                            .profileImage!,
+                                      ),
+                                      fit: BoxFit.cover)
+                                  : null,
+                            ),
                             child: widget.screenArguments.memberDetails!
-                                        .profileImage! ==
-                                    ""
+                                            .profileImage ==
+                                        null ||
+                                    widget.screenArguments.memberDetails!
+                                        .profileImage!.isEmpty
                                 ? SvgPicture.asset(
                                     'assets/icon/icon_profile.svg',
                                     color: Colors.white,
@@ -142,92 +150,91 @@ class _SettingWidgetState extends State<SettingWidget> {
                                 : const SizedBox(),
                           ),
                           Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.038,
-                                width: 30.w,
-                                child: FloatingActionButton(
-                                    backgroundColor: const Color(0xffE5EBFF),
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return SimpleDialog(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                              ),
-                                              children: [
-                                                SimpleDialogOption(
-                                                  child: Text(
-                                                    'setting-takepicture'.tr(),
-                                                  ),
-                                                  onPressed: () async {
-                                                    await getImage(
-                                                        ImageSource.camera);
-// 로딩 재생
-                                                    if (_profileImage != null &&
-                                                        _profileImage?.path !=
-                                                            null) {
-                                                      String? imagePath =
-                                                          _profileImage?.path;
-                                                      if (await UserService
-                                                          .updateProfile(File(
-                                                              imagePath!))) {
-                                                        Navigator.of(context)
-                                                            .pushNamedAndRemoveUntil(
-                                                                '/loading',
-                                                                (Route<dynamic>
-                                                                        route) =>
-                                                                    false);
-                                                      }
-                                                    }
-                                                  },
-                                                ),
-                                                SimpleDialogOption(
-                                                  child: Text(
-                                                      'setting-gallery'.tr()),
-                                                  onPressed: () async {
-                                                    await getImage(
-                                                        ImageSource.gallery);
-                                                    print('요청');
-                                                    // 로딩 재생
-                                                    if (_profileImage != null &&
-                                                        _profileImage?.path !=
-                                                            null) {
-                                                      print('요청시도');
-                                                      String? imagePath =
-                                                          _profileImage?.path;
-                                                      if (await UserService
-                                                          .updateProfile(File(
-                                                              imagePath!))) {
-                                                        print('성공');
-                                                        Navigator.of(context)
-                                                            .pushNamedAndRemoveUntil(
-                                                                '/loading',
-                                                                (Route<dynamic>
-                                                                        route) =>
-                                                                    false);
-                                                      }
-                                                    }
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          });
+                            bottom: 0,
+                            right: 0,
+                            child: SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.038,
+                              width: 30.w,
+                              child: FloatingActionButton(
+                                backgroundColor: const Color(0xffE5EBFF),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SimpleDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        children: [
+                                          SimpleDialogOption(
+                                            child: Text(
+                                              'setting-takepicture'.tr(),
+                                            ),
+                                            onPressed: () async {
+                                              await getImage(
+                                                  ImageSource.camera);
+                                              // 로딩 재생
+                                              if (_profileImage != null &&
+                                                  _profileImage?.path != null) {
+                                                String? imagePath =
+                                                    _profileImage?.path;
+                                                if (await UserService
+                                                    .updateProfile(
+                                                        File(imagePath!))) {
+                                                  Navigator.of(context)
+                                                      .pushNamedAndRemoveUntil(
+                                                          '/loading',
+                                                          (Route<dynamic>
+                                                                  route) =>
+                                                              false);
+                                                }
+                                              }
+                                            },
+                                          ),
+                                          SimpleDialogOption(
+                                            child: Text('setting-gallery'.tr()),
+                                            onPressed: () async {
+                                              await getImage(
+                                                  ImageSource.gallery);
+                                              print('요청');
+                                              // 로딩 재생
+                                              if (_profileImage != null &&
+                                                  _profileImage?.path != null) {
+                                                print('요청시도');
+                                                String? imagePath =
+                                                    _profileImage?.path;
+                                                if (await UserService
+                                                    .updateProfile(
+                                                        File(imagePath!))) {
+                                                  print('성공');
+                                                  Navigator.of(context)
+                                                      .pushNamedAndRemoveUntil(
+                                                          '/loading',
+                                                          (Route<dynamic>
+                                                                  route) =>
+                                                              false);
+                                                }
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      );
                                     },
-                                    child: SvgPicture.asset(
-                                      'assets/icon/icon_modify.svg',
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.019,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.0415,
-                                      color: const Color(0xff7898FF),
-                                    )),
-                              ))
+                                  );
+                                },
+                                child: SvgPicture.asset(
+                                  'assets/icon/icon_modify.svg',
+                                  height: MediaQuery.of(context).size.height *
+                                      0.019,
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0415,
+                                  color: const Color(0xff7898FF),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     )
@@ -238,104 +245,119 @@ class _SettingWidgetState extends State<SettingWidget> {
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           Expanded(
-              flex: 5,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.87,
-                padding: EdgeInsets.only(top: 17.h, bottom: 17.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return Container(
-                        padding: const EdgeInsets.only(left: 23),
-                        height: MediaQuery.of(context).size.height * 0.03,
-                        child: Text(
-                          'setting-profile'.tr(),
-                          style: TextStyle(
-                            color: const Color(0xffC1C1C1),
-                            fontSize: 16.h,
-                          ),
+            flex: 5,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.87,
+              padding: EdgeInsets.only(top: 17.h, bottom: 17.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return Container(
+                      padding: const EdgeInsets.only(left: 23),
+                      height: MediaQuery.of(context).size.height * 0.03,
+                      child: Text(
+                        'setting-profile'.tr(),
+                        style: TextStyle(
+                          color: const Color(0xffC1C1C1),
+                          fontSize: 16.h,
                         ),
-                      );
-                    } else {
-                      return SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
-                          child: buildProfileList(
-                              context, index - 1, widget.screenArguments));
-                    }
-                  },
-                ),
-              )),
+                      ),
+                    );
+                  } else {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                      child: buildProfileList(
+                        context,
+                        index - 1,
+                        widget.screenArguments,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           Expanded(
-              flex: 5,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.87,
-                //margin: EdgeInsets.only(right: 24, left: 24),
-                padding: EdgeInsets.only(top: 17.h, bottom: 17.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return Container(
-                        padding: const EdgeInsets.only(left: 23),
-                        height: MediaQuery.of(context).size.height * 0.03,
-                        child: Text(
-                          'setting-account'.tr(),
-                          style: TextStyle(
-                            color: const Color(0xffC1C1C1),
-                            fontSize: 16.h,
-                          ),
+            flex: 5,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.87,
+              //margin: EdgeInsets.only(right: 24, left: 24),
+              padding: EdgeInsets.only(top: 17.h, bottom: 17.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return Container(
+                      padding: const EdgeInsets.only(left: 23),
+                      height: MediaQuery.of(context).size.height * 0.03,
+                      child: Text(
+                        'setting-account'.tr(),
+                        style: TextStyle(
+                          color: const Color(0xffC1C1C1),
+                          fontSize: 16.h,
                         ),
-                      );
-                    } else {
-                      return SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
-                          child: buildSettingList(
-                              context, index - 1, widget.screenArguments));
-                    }
-                  },
-                ),
-              )),
+                      ),
+                    );
+                  } else {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                      child: buildSettingList(
+                        context,
+                        index - 1,
+                        widget.screenArguments,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           Expanded(
-              child: Container(
-            alignment: Alignment.center,
-            child: InkWell(
-              onTap: () async {
-                //http 로그아웃 요청
-                //authProvider.logout(context);
+            child: Container(
+              alignment: Alignment.center,
+              child: InkWell(
+                onTap: () async {
+                  // http 로그아웃 요청
+                  // authProvider.logout(context);
 
-                final fcmToken = await FirebaseMessaging.instance.getToken();
-                await AuthService.logOut(context);
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(width: 1.0, color: Color(0xFF7898FF))),
-                ),
-                child: Text(
-                  'setting-logout'.tr(),
-                  style: TextStyle(
-                    color: const Color(0xFF7898FF),
-                    fontSize: 14.h,
+                  final fcmToken = await FirebaseMessaging.instance.getToken();
+                  await AuthService.logOut(context);
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFF7898FF),
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'setting-logout'.tr(),
+                    style: TextStyle(
+                      color: const Color(0xFF7898FF),
+                      fontSize: 14.h,
+                    ),
                   ),
                 ),
               ),
             ),
-          )),
+          ),
         ],
       ),
     );
