@@ -154,14 +154,14 @@ s
 
     if (profileImage.isNotEmpty) {
       var file = await ImageUtil.compressImageToMultipartFile(
-        'profileImage',
+        'newProfileImage',
         profileImage, // 프로필 이미지의 Content-Type 설정
       );
       request.files.add(file);
     } else {
       // 프로필 이미지가 없을 경우 빈 파일로 대체
       var file = http.MultipartFile.fromString(
-        'profileImage',
+        'newProfileImage',
         '',
         filename: 'empty.txt',
         contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
