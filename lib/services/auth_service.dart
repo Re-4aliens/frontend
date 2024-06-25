@@ -32,6 +32,8 @@ class AuthService extends APIService {
         await APIService.storage.write(key: 'token', value: APIService.token!);
         await APIService.storage
             .write(key: 'refreshToken', value: APIService.refreshToken!);
+        await APIService.storage
+            .write(key: 'auth', value: jsonEncode({'password': auth.password}));
 
         return true;
       } else {
@@ -175,6 +177,8 @@ class AuthService extends APIService {
     var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
+      await APIService.storage
+          .write(key: 'password', value: jsonEncode({'password': newPassword}));
       return true;
     } else {
       if (responseBody['code'] == 'AT-C-002') {

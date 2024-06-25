@@ -11,7 +11,6 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:aliens/services/user_service.dart';
 import '../../models/screen_argument.dart';
-import '../../util/permissions.dart';
 
 class SettingWidget extends StatefulWidget {
   const SettingWidget(
@@ -30,23 +29,25 @@ class _SettingWidgetState extends State<SettingWidget> {
 
   // 비동기 처리를 통해 이미지 가져오기
   Future getImage(ImageSource imageSource) async {
-    if (imageSource == ImageSource.gallery) {
-      if (await Permissions.getPhotosPermission()) {
-        final image = await picker.pickImage(source: imageSource);
+    try {
+      final image = await picker.pickImage(source: imageSource);
+      if (image != null) {
         setState(() {
-          _profileImage = File(image!.path);
+          _profileImage = File(image.path);
         });
       }
-    } else {
-      final image = await picker.pickImage(source: imageSource);
-      setState(() {
-        _profileImage = File(image!.path);
-      });
+    } catch (e) {
+      print('Error picking image: $e');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // 프로필 이미지 URL 디버깅 로그 추가
+    final profileImageUrl =
+        widget.screenArguments.memberDetails?.profileImage ?? '';
+    print('Profile Image URL: $profileImageUrl');
+
     return Container(
       color: const Color(0xffF5F7FF),
       child: Column(
@@ -98,12 +99,12 @@ class _SettingWidgetState extends State<SettingWidget> {
                               style: TextStyle(
                                   fontSize: 14.h, color: Colors.white),
                             ),
-                            // widget.screenArguments.memberDetails!.email.toString()
                             Text(
-                                widget.screenArguments.memberDetails!.email
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: 14.h, color: Colors.white)),
+                              widget.screenArguments.memberDetails!.email
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: 14.h, color: Colors.white),
+                            ),
                           ],
                         )
                       ],
@@ -116,32 +117,18 @@ class _SettingWidgetState extends State<SettingWidget> {
                             height: 90.r,
                             width: 90.r,
                             decoration: BoxDecoration(
-                              color: widget.screenArguments.memberDetails!
-                                              .profileImage !=
-                                          null &&
-                                      widget.screenArguments.memberDetails!
-                                          .profileImage!.isNotEmpty
+                              color: profileImageUrl.isNotEmpty
                                   ? Colors.white
                                   : Colors.transparent,
                               shape: BoxShape.circle,
-                              image: widget.screenArguments.memberDetails!
-                                              .profileImage !=
-                                          null &&
-                                      widget.screenArguments.memberDetails!
-                                          .profileImage!.isNotEmpty
+                              image: profileImageUrl.isNotEmpty
                                   ? DecorationImage(
-                                      image: NetworkImage(
-                                        widget.screenArguments.memberDetails!
-                                            .profileImage!,
-                                      ),
-                                      fit: BoxFit.cover)
+                                      image: NetworkImage(profileImageUrl),
+                                      fit: BoxFit.cover,
+                                    )
                                   : null,
                             ),
-                            child: widget.screenArguments.memberDetails!
-                                            .profileImage ==
-                                        null ||
-                                    widget.screenArguments.memberDetails!
-                                        .profileImage!.isEmpty
+                            child: profileImageUrl.isEmpty
                                 ? SvgPicture.asset(
                                     'assets/icon/icon_profile.svg',
                                     color: Colors.white,
@@ -177,8 +164,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                               await getImage(
                                                   ImageSource.camera);
                                               // 로딩 재생
-                                              if (_profileImage != null &&
-                                                  _profileImage?.path != null) {
+                                              if (_profileImage != null) {
                                                 String? imagePath =
                                                     _profileImage?.path;
                                                 if (await UserService
@@ -199,17 +185,13 @@ class _SettingWidgetState extends State<SettingWidget> {
                                             onPressed: () async {
                                               await getImage(
                                                   ImageSource.gallery);
-                                              print('요청');
                                               // 로딩 재생
-                                              if (_profileImage != null &&
-                                                  _profileImage?.path != null) {
-                                                print('요청시도');
+                                              if (_profileImage != null) {
                                                 String? imagePath =
                                                     _profileImage?.path;
                                                 if (await UserService
                                                     .updateProfile(
                                                         imagePath!)) {
-                                                  print('성공');
                                                   Navigator.of(context)
                                                       .pushNamedAndRemoveUntil(
                                                           '/loading',
