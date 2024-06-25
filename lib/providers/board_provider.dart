@@ -4,9 +4,6 @@ import 'package:aliens/services/board_service.dart';
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/services/comment_service.dart';
 
-// 게시물 관련 데이터를 관리하는 FLUTTER의 ChangeNotifier를 사용하는 상태 관리 클래스
-// 게시물 데이터 가져오기, 좋아요 추가하기, 게시물 목록 관리하는 메서드 포함
-
 class BoardProvider with ChangeNotifier {
   List<Board> articleList = [];
   bool loading = false;
@@ -82,16 +79,17 @@ class BoardProvider with ChangeNotifier {
   }
 
   Future<void> addLike(int articleId, int index) async {
-    _setLoading(true);
     try {
+      _setLoading(true);
       likeCounts[index] = await BoardService.addLike(articleId);
+      _setLoading(false);
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
         likeCounts[index] = await BoardService.addLike(articleId);
       }
+      _setLoading(false);
     }
-    _setLoading(false);
   }
 
   Future<void> getLikedList() async {
@@ -180,10 +178,13 @@ class BoardProvider with ChangeNotifier {
 
   Future<void> getLikeCounts() async {
     likeCounts = articleList.map((board) => board.likeCount ?? 0).toList();
+    notifyListeners();
   }
 
   void _setLoading(bool value) {
-    loading = value;
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loading = value;
+      notifyListeners();
+    });
   }
 }

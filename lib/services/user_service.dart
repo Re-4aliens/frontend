@@ -145,7 +145,7 @@ s
  */
 
   static Future<bool> updateProfile(File profileImageFile) async {
-    var url = '$domainUrl/member/profile-image';
+    var url = '$domainUrl/members/profile-image';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
