@@ -196,7 +196,7 @@ class AuthService extends APIService {
 
   /*
 
-  탈퇴 //테스트실패
+  탈퇴
 
    */
   static Future<bool> withdraw(password) async {
