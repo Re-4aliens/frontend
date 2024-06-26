@@ -1,5 +1,6 @@
 import 'dart:io';
-
+import 'package:aliens/models/member_details_model.dart';
+import 'package:aliens/services/api_service.dart';
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/views/components/setting_list_widget.dart';
 import 'package:aliens/views/components/setting_profile_widget.dart';
@@ -9,17 +10,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'dart:convert';
 import 'package:aliens/services/user_service.dart';
 import '../../models/screen_argument.dart';
-import '../../util/permissions.dart';
 
 class SettingWidget extends StatefulWidget {
-  const SettingWidget(
-      {super.key, required this.context, required this.screenArguments});
+  const SettingWidget({
+    super.key,
+    required this.context,
+    required this.screenArguments,
+  });
 
   final ScreenArguments screenArguments;
   final BuildContext context;
+  // final MemberDetails memberDetails;
 
   @override
   State<StatefulWidget> createState() => _SettingWidgetState();
@@ -28,26 +32,70 @@ class SettingWidget extends StatefulWidget {
 class _SettingWidgetState extends State<SettingWidget> {
   File? _profileImage;
   final picker = ImagePicker();
+  MemberDetails? memberDetails;
 
-  //비동기 처리를 통해 이미지 가져오기
+  String? email;
+
+  // 비동기 처리를 통해 이미지 가져오기
   Future getImage(ImageSource imageSource) async {
-    if (imageSource == ImageSource.gallery) {
-      if (await Permissions.getPhotosPermission()) {
-        final image = await picker.pickImage(source: imageSource);
+    try {
+      final image = await picker.pickImage(source: imageSource);
+      if (image != null) {
         setState(() {
-          _profileImage = File(image!.path);
+          _profileImage = File(image.path);
         });
       }
-    } else {
-      final image = await picker.pickImage(source: imageSource);
+    } catch (e) {
+      print('Error picking image: $e');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initialize();
+
+    print(widget.screenArguments.memberDetails?.profileImageURL);
+  }
+
+  void initialize() async {
+    await fetchMemberDetails();
+    await fetchUserEmail();
+  }
+
+  Future<void> fetchMemberDetails() async {
+    try {
+      var memberDetailsJson = await UserService.getMemberDetails();
+      print(memberDetailsJson);
       setState(() {
-        _profileImage = File(image!.path);
+        memberDetails = MemberDetails.fromJson(memberDetailsJson);
+        widget.screenArguments.memberDetails = memberDetails!;
+      });
+    } catch (e) {
+      print('Error initializing member details: $e');
+    }
+  }
+
+  Future<void> fetchUserEmail() async {
+    var userInfo = await APIService.storage.read(key: 'auth');
+    if (userInfo != null && userInfo.isNotEmpty) {
+      var decodedUserInfo = json.decode(userInfo);
+      setState(() {
+        email = decodedUserInfo['email'];
+      });
+    } else {
+      setState(() {
+        email = '';
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    // 프로필 이미지 URL 디버깅 로그 추가
+
+    final profileImageUrl =
+        widget.screenArguments.memberDetails?.profileImageURL ?? '';
     return Container(
       color: const Color(0xffF5F7FF),
       child: Column(
@@ -72,8 +120,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                       children: [
                         RichText(
                           text: TextSpan(
-                            text: widget.screenArguments.memberDetails!.name
-                                .toString(),
+                            text: memberDetails?.name,
                             style: TextStyle(
                               fontSize: 32.h,
                               fontWeight: FontWeight.bold,
@@ -94,16 +141,15 @@ class _SettingWidgetState extends State<SettingWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.screenArguments.memberDetails!.birthday
-                                  .toString(),
+                              memberDetails?.birthday ?? '',
                               style: TextStyle(
                                   fontSize: 14.h, color: Colors.white),
                             ),
                             Text(
-                                widget.screenArguments.memberDetails!.email
-                                    .toString(),
-                                style: TextStyle(
-                                    fontSize: 14.h, color: Colors.white)),
+                              email.toString(),
+                              style: TextStyle(
+                                  fontSize: 14.h, color: Colors.white),
+                            ),
                           ],
                         )
                       ],
@@ -116,23 +162,18 @@ class _SettingWidgetState extends State<SettingWidget> {
                             height: 90.r,
                             width: 90.r,
                             decoration: BoxDecoration(
-                                color: widget.screenArguments.memberDetails!
-                                            .profileImage !=
-                                        ""
-                                    ? Colors.white
-                                    : Colors.transparent,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: widget.screenArguments.memberDetails!
-                                                .profileImage !=
-                                            ""
-                                        ? NetworkImage(widget.screenArguments
-                                            .memberDetails!.profileImage!)
-                                        : const NetworkImage(''),
-                                    fit: BoxFit.cover)),
-                            child: widget.screenArguments.memberDetails!
-                                        .profileImage! ==
-                                    ""
+                              color: profileImageUrl.isNotEmpty
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              shape: BoxShape.circle,
+                              image: profileImageUrl.isNotEmpty
+                                  ? DecorationImage(
+                                      image: NetworkImage(profileImageUrl),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
+                            ),
+                            child: profileImageUrl.isEmpty
                                 ? SvgPicture.asset(
                                     'assets/icon/icon_profile.svg',
                                     color: Colors.white,
@@ -142,92 +183,86 @@ class _SettingWidgetState extends State<SettingWidget> {
                                 : const SizedBox(),
                           ),
                           Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: SizedBox(
-                                height:
-                                    MediaQuery.of(context).size.height * 0.038,
-                                width: 30.w,
-                                child: FloatingActionButton(
-                                    backgroundColor: const Color(0xffE5EBFF),
-                                    onPressed: () {
-                                      showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return SimpleDialog(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
-                                              ),
-                                              children: [
-                                                SimpleDialogOption(
-                                                  child: Text(
-                                                    'setting-takepicture'.tr(),
-                                                  ),
-                                                  onPressed: () async {
-                                                    await getImage(
-                                                        ImageSource.camera);
-// 로딩 재생
-                                                    if (_profileImage != null &&
-                                                        _profileImage?.path !=
-                                                            null) {
-                                                      String? imagePath =
-                                                          _profileImage?.path;
-                                                      if (await UserService
-                                                          .updateProfile(File(
-                                                              imagePath!))) {
-                                                        Navigator.of(context)
-                                                            .pushNamedAndRemoveUntil(
-                                                                '/loading',
-                                                                (Route<dynamic>
-                                                                        route) =>
-                                                                    false);
-                                                      }
-                                                    }
-                                                  },
-                                                ),
-                                                SimpleDialogOption(
-                                                  child: Text(
-                                                      'setting-gallery'.tr()),
-                                                  onPressed: () async {
-                                                    await getImage(
-                                                        ImageSource.gallery);
-                                                    print('요청');
-                                                    // 로딩 재생
-                                                    if (_profileImage != null &&
-                                                        _profileImage?.path !=
-                                                            null) {
-                                                      print('요청시도');
-                                                      String? imagePath =
-                                                          _profileImage?.path;
-                                                      if (await UserService
-                                                          .updateProfile(File(
-                                                              imagePath!))) {
-                                                        print('성공');
-                                                        Navigator.of(context)
-                                                            .pushNamedAndRemoveUntil(
-                                                                '/loading',
-                                                                (Route<dynamic>
-                                                                        route) =>
-                                                                    false);
-                                                      }
-                                                    }
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          });
+                            bottom: 0,
+                            right: 0,
+                            child: SizedBox(
+                              height:
+                                  MediaQuery.of(context).size.height * 0.038,
+                              width: 30.w,
+                              child: FloatingActionButton(
+                                backgroundColor: const Color(0xffE5EBFF),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return SimpleDialog(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(20.0),
+                                        ),
+                                        children: [
+                                          SimpleDialogOption(
+                                            child: Text(
+                                              'setting-takepicture'.tr(),
+                                            ),
+                                            onPressed: () async {
+                                              await getImage(
+                                                  ImageSource.camera);
+                                              // 로딩 재생
+                                              if (_profileImage != null) {
+                                                String? imagePath =
+                                                    _profileImage?.path;
+                                                if (await UserService
+                                                    .updateProfile(
+                                                        imagePath!)) {
+                                                  Navigator.of(context)
+                                                      .pushNamedAndRemoveUntil(
+                                                          '/loading',
+                                                          (Route<dynamic>
+                                                                  route) =>
+                                                              false);
+                                                }
+                                              }
+                                            },
+                                          ),
+                                          SimpleDialogOption(
+                                            child: Text('setting-gallery'.tr()),
+                                            onPressed: () async {
+                                              await getImage(
+                                                  ImageSource.gallery);
+                                              // 로딩 재생
+                                              if (_profileImage != null) {
+                                                String? imagePath =
+                                                    _profileImage?.path;
+                                                if (await UserService
+                                                    .updateProfile(
+                                                        imagePath!)) {
+                                                  Navigator.of(context)
+                                                      .pushNamedAndRemoveUntil(
+                                                          '/loading',
+                                                          (Route<dynamic>
+                                                                  route) =>
+                                                              false);
+                                                }
+                                              }
+                                            },
+                                          ),
+                                        ],
+                                      );
                                     },
-                                    child: SvgPicture.asset(
-                                      'assets/icon/icon_modify.svg',
-                                      height:
-                                          MediaQuery.of(context).size.height *
-                                              0.019,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.0415,
-                                      color: const Color(0xff7898FF),
-                                    )),
-                              ))
+                                  );
+                                },
+                                child: SvgPicture.asset(
+                                  'assets/icon/icon_modify.svg',
+                                  height: MediaQuery.of(context).size.height *
+                                      0.019,
+                                  width: MediaQuery.of(context).size.width *
+                                      0.0415,
+                                  color: const Color(0xff7898FF),
+                                ),
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     )
@@ -238,104 +273,119 @@ class _SettingWidgetState extends State<SettingWidget> {
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           Expanded(
-              flex: 5,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.87,
-                padding: EdgeInsets.only(top: 17.h, bottom: 17.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return Container(
-                        padding: const EdgeInsets.only(left: 23),
-                        height: MediaQuery.of(context).size.height * 0.03,
-                        child: Text(
-                          'setting-profile'.tr(),
-                          style: TextStyle(
-                            color: const Color(0xffC1C1C1),
-                            fontSize: 16.h,
-                          ),
+            flex: 5,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.87,
+              padding: EdgeInsets.only(top: 17.h, bottom: 17.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return Container(
+                      padding: const EdgeInsets.only(left: 23),
+                      height: MediaQuery.of(context).size.height * 0.03,
+                      child: Text(
+                        'setting-profile'.tr(),
+                        style: TextStyle(
+                          color: const Color(0xffC1C1C1),
+                          fontSize: 16.h,
                         ),
-                      );
-                    } else {
-                      return SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
-                          child: buildProfileList(
-                              context, index - 1, widget.screenArguments));
-                    }
-                  },
-                ),
-              )),
+                      ),
+                    );
+                  } else {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                      child: buildProfileList(
+                        context,
+                        index - 1,
+                        widget.screenArguments,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           Expanded(
-              flex: 5,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.87,
-                //margin: EdgeInsets.only(right: 24, left: 24),
-                padding: EdgeInsets.only(top: 17.h, bottom: 17.h),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index == 0) {
-                      return Container(
-                        padding: const EdgeInsets.only(left: 23),
-                        height: MediaQuery.of(context).size.height * 0.03,
-                        child: Text(
-                          'setting-account'.tr(),
-                          style: TextStyle(
-                            color: const Color(0xffC1C1C1),
-                            fontSize: 16.h,
-                          ),
+            flex: 5,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.87,
+              //margin: EdgeInsets.only(right: 24, left: 24),
+              padding: EdgeInsets.only(top: 17.h, bottom: 17.h),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: ListView.builder(
+                itemCount: 5,
+                itemBuilder: (BuildContext context, int index) {
+                  if (index == 0) {
+                    return Container(
+                      padding: const EdgeInsets.only(left: 23),
+                      height: MediaQuery.of(context).size.height * 0.03,
+                      child: Text(
+                        'setting-account'.tr(),
+                        style: TextStyle(
+                          color: const Color(0xffC1C1C1),
+                          fontSize: 16.h,
                         ),
-                      );
-                    } else {
-                      return SizedBox(
-                          height: MediaQuery.of(context).size.height * 0.04,
-                          child: buildSettingList(
-                              context, index - 1, widget.screenArguments));
-                    }
-                  },
-                ),
-              )),
+                      ),
+                    );
+                  } else {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.04,
+                      child: buildSettingList(
+                        context,
+                        index - 1,
+                        widget.screenArguments,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ),
+          ),
           SizedBox(
             height: MediaQuery.of(context).size.height * 0.02,
           ),
           Expanded(
-              child: Container(
-            alignment: Alignment.center,
-            child: InkWell(
-              onTap: () async {
-                //http 로그아웃 요청
-                //authProvider.logout(context);
+            child: Container(
+              alignment: Alignment.center,
+              child: InkWell(
+                onTap: () async {
+                  // http 로그아웃 요청
+                  // authProvider.logout(context);
 
-                final fcmToken = await FirebaseMessaging.instance.getToken();
-                await AuthService.logOut(context);
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(width: 1.0, color: Color(0xFF7898FF))),
-                ),
-                child: Text(
-                  'setting-logout'.tr(),
-                  style: TextStyle(
-                    color: const Color(0xFF7898FF),
-                    fontSize: 14.h,
+                  final fcmToken = await FirebaseMessaging.instance.getToken();
+                  await AuthService.logOut(context);
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1.0,
+                        color: Color(0xFF7898FF),
+                      ),
+                    ),
+                  ),
+                  child: Text(
+                    'setting-logout'.tr(),
+                    style: TextStyle(
+                      color: const Color(0xFF7898FF),
+                      fontSize: 14.h,
+                    ),
                   ),
                 ),
               ),
             ),
-          )),
+          ),
         ],
       ),
     );

@@ -282,56 +282,72 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => InfoArticlePage(board: widget.board)),
+                builder: (context) => InfoArticlePage(board: widget.board),
+              ),
             );
           } else if (widget.board.category == "장터게시판") {
             showDialog(
-                context: context,
-                builder: (_) => FutureBuilder(
-                    future:
-                        MarketService.getMarketArticle(widget.board.articleId!),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        //받아오는 동안
-                        return Container(
-                            child: const Image(
-                                image: AssetImage(
-                                    "assets/illustration/loading_01.gif")));
-                      } else {
-                        MarketBoard data = snapshot.data;
-                        //받아온 후
-                        WidgetsBinding.instance.addPostFrameCallback((_) {
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MarketDetailPage(
-                                      screenArguments: widget.screenArguments,
-                                      marketBoard: data,
-                                      productStatus: getProductStatusText(
-                                          data.productStatus),
-                                      StatusText: getStatusText(
-                                          data.marketArticleStatus),
-                                      index: -1,
-                                      backPage: '',
-                                    )),
-                          ).then((value) => boardProvider.getAllArticles());
-                        });
-                        return Container(
-                            child: const Image(
-                                image: AssetImage(
-                                    "assets/illustration/loading_01.gif")));
-                      }
-                    }));
+              context: context,
+              barrierDismissible: false, // 사용자가 외부를 눌러서 닫을 수 없도록
+              builder: (BuildContext context) {
+                return FutureBuilder(
+                  future:
+                      MarketService.getMarketArticle(widget.board.articleId!),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // 데이터를 받아오는 동안 로딩 상태를 표시
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    } else if (snapshot.hasError) {
+                      // 오류가 발생한 경우 오류 메시지를 표시
+                      return AlertDialog(
+                        title: const Text('Error'),
+                        content: const Text('Failed to load market article.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    } else {
+                      // 데이터를 성공적으로 받은 경우
+                      MarketBoard data = snapshot.data;
+                      return Container(); // 빈 컨테이너 반환 (Dialog를 닫기 위해)
+                    }
+                  },
+                );
+              },
+            ).then((_) {
+              // 데이터를 성공적으로 받은 경우 네비게이션 처리
+              MarketService.getMarketArticle(widget.board.articleId!)
+                  .then((data) {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MarketDetailPage(
+                      screenArguments: widget.screenArguments,
+                      marketBoard: data,
+                      productStatus: getProductStatusText(data.productStatus),
+                      StatusText: getStatusText(data.marketArticleStatus),
+                      index: -1,
+                      backPage: '',
+                    ),
+                  ),
+                ).then((value) => boardProvider.getAllArticles());
+              });
+            });
           } else {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ArticlePage(
-                        board: widget.board,
-                        memberDetails: widget.screenArguments.memberDetails!,
-                        index: widget.index,
-                      )),
+                builder: (context) => ArticlePage(
+                  board: widget.board,
+                  memberDetails: widget.screenArguments.memberDetails!,
+                  index: widget.index,
+                ),
+              ),
             );
           }
         },

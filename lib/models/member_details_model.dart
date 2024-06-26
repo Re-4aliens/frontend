@@ -6,7 +6,7 @@ class MemberDetails {
   String? nationality;
   String? birthday;
   String? name;
-  String? profileImage;
+  String? profileImageURL;
   int? age;
   String? selfIntroduction;
 
@@ -18,7 +18,7 @@ class MemberDetails {
       this.nationality,
       this.birthday,
       this.name,
-      this.profileImage,
+      this.profileImageURL,
       this.age,
       this.selfIntroduction});
 
@@ -30,7 +30,7 @@ class MemberDetails {
       nationality: json['nationality'],
       birthday: json['birthday'],
       name: json['name'],
-      profileImage: json['profileImage'],
+      profileImageURL: json['profileImageURL'],
       age: json['age'],
       selfIntroduction: json['selfIntroduction']);
 
@@ -42,7 +42,7 @@ class MemberDetails {
     data['nationality'] = nationality;
     data['birthday'] = birthday;
     data['name'] = name;
-    data['profileImage'] = profileImage;
+    data['profileImageURL'] = profileImageURL;
     data['selfIntroduction'] = selfIntroduction;
     return data;
   }

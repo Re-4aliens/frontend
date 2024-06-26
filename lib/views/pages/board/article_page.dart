@@ -38,7 +38,9 @@ class _ArticlePageState extends State<ArticlePage> {
   int parentsCommentId = -1;
 
   void sendComment() async {
-    updateUi();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      updateUi();
+    });
   }
 
   void updateUi() async {
@@ -71,9 +73,11 @@ class _ArticlePageState extends State<ArticlePage> {
       default:
     }
 
-    final commentProvider =
-        Provider.of<CommentProvider>(context, listen: false);
-    commentProvider.getComments(widget.board.articleId!);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final commentProvider =
+          Provider.of<CommentProvider>(context, listen: false);
+      commentProvider.getComments(widget.board.articleId!);
+    });
   }
 
   String getNationCode(nationality) {
