@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:aliens/models/member_details_model.dart';
+import 'package:aliens/services/api_service.dart';
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/views/components/setting_list_widget.dart';
 import 'package:aliens/views/components/setting_profile_widget.dart';
@@ -9,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'dart:convert';
 import 'package:aliens/services/user_service.dart';
 import '../../models/screen_argument.dart';
 
@@ -33,10 +34,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   final picker = ImagePicker();
   MemberDetails? memberDetails;
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  String? email;
 
   // 비동기 처리를 통해 이미지 가져오기
   Future getImage(ImageSource imageSource) async {
@@ -53,11 +51,51 @@ class _SettingWidgetState extends State<SettingWidget> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    initialize();
+
+    print(widget.screenArguments.memberDetails?.profileImageURL);
+  }
+
+  void initialize() async {
+    await fetchMemberDetails();
+    await fetchUserEmail();
+  }
+
+  Future<void> fetchMemberDetails() async {
+    try {
+      var memberDetailsJson = await UserService.getMemberDetails();
+      print(memberDetailsJson);
+      setState(() {
+        memberDetails = MemberDetails.fromJson(memberDetailsJson);
+        widget.screenArguments.memberDetails = memberDetails!;
+      });
+    } catch (e) {
+      print('Error initializing member details: $e');
+    }
+  }
+
+  Future<void> fetchUserEmail() async {
+    var userInfo = await APIService.storage.read(key: 'auth');
+    if (userInfo != null && userInfo.isNotEmpty) {
+      var decodedUserInfo = json.decode(userInfo);
+      setState(() {
+        email = decodedUserInfo['email'];
+      });
+    } else {
+      setState(() {
+        email = '';
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     // 프로필 이미지 URL 디버깅 로그 추가
-    final profileImageUrl = memberDetails?.profileImage ?? '';
-    print('Profile Image URL: $profileImageUrl');
 
+    final profileImageUrl =
+        widget.screenArguments.memberDetails?.profileImageURL ?? '';
     return Container(
       color: const Color(0xffF5F7FF),
       child: Column(
@@ -108,7 +146,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   fontSize: 14.h, color: Colors.white),
                             ),
                             Text(
-                              memberDetails?.email ?? '',
+                              email.toString(),
                               style: TextStyle(
                                   fontSize: 14.h, color: Colors.white),
                             ),

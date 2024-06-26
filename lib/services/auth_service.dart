@@ -32,8 +32,10 @@ class AuthService extends APIService {
         await APIService.storage.write(key: 'token', value: APIService.token!);
         await APIService.storage
             .write(key: 'refreshToken', value: APIService.refreshToken!);
-        await APIService.storage
-            .write(key: 'auth', value: jsonEncode({'password': auth.password}));
+        await APIService.storage.write(
+            key: 'auth',
+            value:
+                jsonEncode({'email': auth.email, 'password': auth.password}));
 
         return true;
       } else {
@@ -162,6 +164,15 @@ class AuthService extends APIService {
     var url = '$domainUrl/members/password';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+    var userInfo = await APIService.storage.read(key: 'auth');
+
+    String? email;
+
+    if (userInfo != null && userInfo.isNotEmpty) {
+      var decodedUserInfo = json.decode(userInfo);
+
+      email = decodedUserInfo['email'];
+    }
 
     var response = await http.patch(
       Uri.parse(url),
@@ -177,8 +188,11 @@ class AuthService extends APIService {
     var responseBody = json.decode(utf8.decode(response.bodyBytes));
 
     if (response.statusCode == 200) {
-      await APIService.storage
-          .write(key: 'password', value: jsonEncode({'password': newPassword}));
+      // 새 비밀번호를 추가합니다.
+
+      await APIService.storage.write(
+          key: 'auth',
+          value: jsonEncode({'email': email, 'password': newPassword}));
       return true;
     } else {
       if (responseBody['code'] == 'AT-C-002') {

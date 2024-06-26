@@ -9,7 +9,7 @@ class UserService extends APIService {
   /*
 
   회원가입
-s
+
    */
   static Future<bool> signUp(SignUpModel member) async {
     const url = '$domainUrl/members';
