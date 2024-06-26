@@ -86,24 +86,25 @@ s
 
     var response = await http.get(
       Uri.parse(url),
-      headers: {'Authorization': jwtToken, 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
     );
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
       return responseBody['result'];
     } else {
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        // 엑세스 토큰 만료
         throw 'AT-C-002';
       } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
           'AT-C-007') {
-        // 로그아웃된 토큰
         throw 'AT-C-007';
       } else {
-        // 예외
+        throw Exception('요청 오류');
       }
-      throw Exception('요청 오류');
     }
   }
 

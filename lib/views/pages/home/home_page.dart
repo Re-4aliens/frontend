@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/views/components/board_tab_widget.dart';
 import 'package:aliens/views/components/home_widget.dart';
 import 'package:aliens/views/components/setting_widget.dart';
@@ -33,7 +32,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  MemberDetails memberDetails = MemberDetails();
   static const storage = FlutterSecureStorage();
   dynamic notification;
   dynamic inAppNotification;

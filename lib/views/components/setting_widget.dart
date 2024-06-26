@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/views/components/setting_list_widget.dart';
 import 'package:aliens/views/components/setting_profile_widget.dart';
@@ -13,11 +14,15 @@ import 'package:aliens/services/user_service.dart';
 import '../../models/screen_argument.dart';
 
 class SettingWidget extends StatefulWidget {
-  const SettingWidget(
-      {super.key, required this.context, required this.screenArguments});
+  const SettingWidget({
+    super.key,
+    required this.context,
+    required this.screenArguments,
+  });
 
   final ScreenArguments screenArguments;
   final BuildContext context;
+  // final MemberDetails memberDetails;
 
   @override
   State<StatefulWidget> createState() => _SettingWidgetState();
@@ -26,6 +31,12 @@ class SettingWidget extends StatefulWidget {
 class _SettingWidgetState extends State<SettingWidget> {
   File? _profileImage;
   final picker = ImagePicker();
+  MemberDetails? memberDetails;
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   // 비동기 처리를 통해 이미지 가져오기
   Future getImage(ImageSource imageSource) async {
@@ -44,8 +55,7 @@ class _SettingWidgetState extends State<SettingWidget> {
   @override
   Widget build(BuildContext context) {
     // 프로필 이미지 URL 디버깅 로그 추가
-    final profileImageUrl =
-        widget.screenArguments.memberDetails?.profileImage ?? '';
+    final profileImageUrl = memberDetails?.profileImage ?? '';
     print('Profile Image URL: $profileImageUrl');
 
     return Container(
@@ -72,8 +82,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                       children: [
                         RichText(
                           text: TextSpan(
-                            text: widget.screenArguments.memberDetails!.name
-                                .toString(),
+                            text: memberDetails?.name,
                             style: TextStyle(
                               fontSize: 32.h,
                               fontWeight: FontWeight.bold,
@@ -94,14 +103,12 @@ class _SettingWidgetState extends State<SettingWidget> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              widget.screenArguments.memberDetails!.birthday
-                                  .toString(),
+                              memberDetails?.birthday ?? '',
                               style: TextStyle(
                                   fontSize: 14.h, color: Colors.white),
                             ),
                             Text(
-                              widget.screenArguments.memberDetails!.email
-                                  .toString(),
+                              memberDetails?.email ?? '',
                               style: TextStyle(
                                   fontSize: 14.h, color: Colors.white),
                             ),
