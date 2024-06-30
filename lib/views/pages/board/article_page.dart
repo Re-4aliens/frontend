@@ -36,6 +36,7 @@ class _ArticlePageState extends State<ArticlePage> {
   bool isNestedComments = false;
   String boardCategory = '';
   int parentsCommentId = -1;
+  String? nationCode;
 
   void sendComment() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -55,19 +56,19 @@ class _ArticlePageState extends State<ArticlePage> {
   @override
   void initState() {
     switch (widget.board.category) {
-      case '자유게시판':
+      case 'FREE':
         boardCategory = 'free-posting'.tr();
         break;
-      case '음식게시판':
+      case 'FOOD':
         boardCategory = 'food'.tr();
         break;
-      case '음악게시판':
+      case 'MUSIC':
         boardCategory = 'music'.tr();
         break;
-      case '패션게시판':
+      case 'FASHION':
         boardCategory = 'fashion'.tr();
         break;
-      case '게임게시판':
+      case 'GAME':
         boardCategory = 'game'.tr();
         break;
       default:
@@ -78,12 +79,13 @@ class _ArticlePageState extends State<ArticlePage> {
           Provider.of<CommentProvider>(context, listen: false);
       commentProvider.getComments(widget.board.id ?? -1);
     });
+    nationCode = getNationCode(widget.board.memberProfileDto?.nationality);
   }
 
   String getNationCode(nationality) {
     var nationCode = '';
     for (Map<String, String> country in countries) {
-      if (country['name'] == nationality) {
+      if (country['name']!.toUpperCase() == nationality) {
         nationCode = country['code']!;
         break;
       }
@@ -138,7 +140,7 @@ class _ArticlePageState extends State<ArticlePage> {
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.only(right: 10),
                             child: Text(
-                              '${widget.board.memberProfileDto?.name ?? ''}/${getNationCode(widget.board.memberProfileDto?.nationality)}',
+                              '${widget.board.memberProfileDto?.name ?? ''}/$nationCode',
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -740,8 +742,9 @@ class _ArticlePageState extends State<ArticlePage> {
                             parentsCommentId = -1;
                             isNestedComments = false;
                           } else {
+                            print('Board Id : ${widget.board.id}');
                             commentProvider.addComment(
-                                _newComment, widget.board.id ?? -1);
+                                _newComment, widget.board.id!);
                           }
                         }
                         updateUi();
