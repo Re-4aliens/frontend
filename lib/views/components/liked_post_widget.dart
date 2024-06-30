@@ -11,6 +11,7 @@ import '../../models/market_articles.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/market_detail_page.dart';
 import 'board_dialog_widget.dart';
+import 'package:aliens/services/user_service.dart';
 
 class LikedArticleWidget extends StatefulWidget {
   const LikedArticleWidget(
@@ -32,6 +33,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
   String createdAt = '';
   String boardCategory = '';
   List<Board> articles = [];
+  String? email;
 
   @override
   void initState() {
@@ -60,6 +62,15 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
         break;
       default:
     }
+    initialize();
+  }
+
+  void initialize() async {
+    final userEmail = await UserService.fetchUserEmail();
+
+    setState(() {
+      email = userEmail;
+    });
   }
 
   @override
@@ -91,7 +102,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                     Row(
                       children: [
                         Text(
-                          '${widget.board.member!.name}',
+                          widget.board.memberProfileDto?.name ?? '',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16.spMin),
@@ -131,7 +142,6 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                         context: context,
                         builder: (builder) {
                           return BoardDialog(
-                            context: context,
                             board: widget.board,
                             memberDetails:
                                 widget.screenArguments.memberDetails!,
@@ -169,7 +179,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                   child: RichText(
                     text: TextSpan(children: [
                       TextSpan(
-                          text: '${widget.board.member!.name}',
+                          text: widget.board.memberProfileDto?.name,
                           style: TextStyle(
                               fontSize: 14.spMin,
                               color: const Color(0xff444444),
@@ -196,8 +206,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
             showDialog(
                 context: context,
                 builder: (_) => FutureBuilder(
-                    future:
-                        MarketService.getMarketArticle(widget.board.articleId!),
+                    future: MarketService.getMarketArticle(widget.board.id!),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         //받아오는 동안

@@ -76,7 +76,7 @@ class _ArticlePageState extends State<ArticlePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final commentProvider =
           Provider.of<CommentProvider>(context, listen: false);
-      commentProvider.getComments(widget.board.articleId!);
+      commentProvider.getComments(widget.board.id ?? -1);
     });
   }
 
@@ -138,7 +138,7 @@ class _ArticlePageState extends State<ArticlePage> {
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.only(right: 10),
                             child: Text(
-                              '${widget.board.member!.name}/${getNationCode(widget.board.member!.nationality)}',
+                              '${widget.board.memberProfileDto?.name ?? ''}/${getNationCode(widget.board.memberProfileDto?.nationality)}',
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -158,7 +158,6 @@ class _ArticlePageState extends State<ArticlePage> {
                                 context: context,
                                 builder: (builder) {
                                   return BoardDialog(
-                                    context: context,
                                     board: widget.board,
                                     memberDetails: widget.memberDetails,
                                     boardCategory: "",
@@ -188,20 +187,20 @@ class _ArticlePageState extends State<ArticlePage> {
                               top: 10,
                             ).h,
                             child: Text(
-                              '${widget.board.title}',
+                              widget.board.title,
                               style: TextStyle(
                                   fontSize: 14.spMin,
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xff444444)),
                             ),
                           ),
-                          widget.board.imageUrls!.isEmpty
+                          widget.board.imageUrls.isEmpty
                               ? const SizedBox()
                               : SizedBox(
                                   height: 100.h,
                                   child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: widget.board.imageUrls!.length,
+                                      itemCount: widget.board.imageUrls.length,
                                       itemBuilder: (context, index) {
                                         return Row(
                                           children: [
@@ -219,7 +218,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                             InteractiveViewer(
                                                           child: Image.network(
                                                               widget.board
-                                                                      .imageUrls![
+                                                                      .imageUrls[
                                                                   index]),
                                                         ),
                                                       );
@@ -240,7 +239,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                     image: DecorationImage(
                                                       image: NetworkImage(widget
                                                           .board
-                                                          .imageUrls![index]),
+                                                          .imageUrls[index]),
                                                       fit: BoxFit.cover,
                                                     )),
                                               ),
@@ -253,7 +252,7 @@ class _ArticlePageState extends State<ArticlePage> {
                             padding:
                                 const EdgeInsets.only(top: 10, bottom: 25.0).h,
                             child: Text(
-                              '${widget.board.content}',
+                              widget.board.content,
                               style: TextStyle(fontSize: 14.spMin),
                             ),
                           ),
@@ -264,7 +263,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                 onTap: () {
                                   if (widget.index != -1) {
                                     boardProvider.addLike(
-                                        widget.board.articleId!, widget.index);
+                                        widget.board.id!, widget.index);
                                   }
                                 },
                                 child: Padding(
@@ -281,21 +280,20 @@ class _ArticlePageState extends State<ArticlePage> {
                                       padding: const EdgeInsets.only(
                                               left: 4, right: 15)
                                           .r,
-                                      child: widget.board.likeCount == 0 ||
-                                              widget.board.likeCount == null
+                                      child: widget.board.greatCount == 0
                                           ? const Text('')
-                                          : Text('${widget.board.likeCount}'),
+                                          : Text('${widget.board.greatCount}'),
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.only(
                                               left: 4, right: 15)
                                           .r,
                                       child: boardProvider
-                                                  .likeCounts[widget.index] ==
+                                                  .greatCounts[widget.index] ==
                                               0
                                           ? const Text('')
                                           : Text(
-                                              '${boardProvider.likeCounts[widget.index]}'),
+                                              '${boardProvider.greatCounts[widget.index]}'),
                                     ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
@@ -308,9 +306,9 @@ class _ArticlePageState extends State<ArticlePage> {
                               ),
                               Padding(
                                   padding: const EdgeInsets.all(4.0).r,
-                                  child: widget.board.commentsCount == 0
+                                  child: widget.board.commentCount == 0
                                       ? const Text('')
-                                      : Text('${widget.board.commentsCount}')),
+                                      : Text('${widget.board.commentCount}')),
                             ],
                           )
                         ],
@@ -453,8 +451,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                               memberDetials: widget
                                                                   .memberDetails,
                                                               articleId: widget
-                                                                  .board
-                                                                  .articleId!,
+                                                                  .board.id!,
                                                             );
                                                           });
                                                     },
@@ -637,7 +634,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                               widget.memberDetails,
                                                                           articleId: widget
                                                                               .board
-                                                                              .articleId!,
+                                                                              .id!,
                                                                         );
                                                                       });
                                                                 },
@@ -739,12 +736,12 @@ class _ArticlePageState extends State<ArticlePage> {
                         if (_newComment != '') {
                           if (isNestedComments) {
                             commentProvider.addNestedComment(_newComment,
-                                parentsCommentId, widget.board.articleId!);
+                                parentsCommentId, widget.board.id!);
                             parentsCommentId = -1;
                             isNestedComments = false;
                           } else {
                             commentProvider.addComment(
-                                _newComment, widget.board.articleId!);
+                                _newComment, widget.board.id ?? -1);
                           }
                         }
                         updateUi();

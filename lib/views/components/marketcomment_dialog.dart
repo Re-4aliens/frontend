@@ -99,8 +99,7 @@ class MarketCommentDialog extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (builder) => ReportDialog(
-                        memberId: marketcomment.member!.memberId!,
-                        context: context));
+                        id: marketcomment.member!.memberId!, context: context));
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,

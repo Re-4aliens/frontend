@@ -7,7 +7,7 @@ import 'package:aliens/services/comment_service.dart';
 class BoardProvider with ChangeNotifier {
   List<Board> articleList = [];
   bool loading = false;
-  List<int> likeCounts = [];
+  List<int> greatCounts = [];
 
   Future<void> getAllArticles() async {
     _setLoading(true);
@@ -79,17 +79,16 @@ class BoardProvider with ChangeNotifier {
   }
 
   Future<void> addLike(int articleId, int index) async {
+    _setLoading(true);
     try {
-      _setLoading(true);
-      likeCounts[index] = await BoardService.addLike(articleId);
-      _setLoading(false);
+      greatCounts[index] = await BoardService.addLike(articleId);
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        likeCounts[index] = await BoardService.addLike(articleId);
+        greatCounts[index] = await BoardService.addLike(articleId);
       }
-      _setLoading(false);
     }
+    _setLoading(false);
   }
 
   Future<void> getLikedList() async {
@@ -177,8 +176,10 @@ class BoardProvider with ChangeNotifier {
   }
 
   Future<void> getLikeCounts() async {
-    likeCounts = articleList.map((board) => board.likeCount ?? 0).toList();
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      greatCounts = articleList.map((board) => board.greatCount ?? 0).toList();
+      notifyListeners();
+    });
   }
 
   void _setLoading(bool value) {
