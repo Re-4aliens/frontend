@@ -65,7 +65,10 @@ class CommentService extends APIService {
       }),
     );
 
+    print("부모 댓글 등록 시도");
+
     if (response.statusCode == 200) {
+      print("부모 댓글 등록 성공");
       return true;
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));

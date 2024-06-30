@@ -6,6 +6,20 @@ import '../util/image_util.dart';
 import 'package:http_parser/http_parser.dart';
 
 class UserService extends APIService {
+  /* 
+
+    사용자 정보 저장
+
+  */
+  static Future<String> fetchUserEmail() async {
+    var userInfo = await APIService.storage.read(key: 'auth');
+    if (userInfo != null && userInfo.isNotEmpty) {
+      var decodedUserInfo = json.decode(userInfo);
+      return decodedUserInfo['email'];
+    }
+    return '';
+  }
+
   /*
 
   회원가입

@@ -133,7 +133,7 @@ class CommentDialog extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (builder) => ReportDialog(
-                        memberId: comment.member!.memberId!, context: context));
+                        id: comment.member!.memberId!, context: context));
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,
