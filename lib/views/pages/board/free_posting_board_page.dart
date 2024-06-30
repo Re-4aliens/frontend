@@ -30,7 +30,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('자유게시판');
+    boardProvider.getArticles('FREE');
 
     _scrollController.addListener(() {
       if (_scrollController.offset ==
@@ -38,7 +38,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
           !_scrollController.position.outOfRange) {
         print('추가');
         page++;
-        boardProvider.getMoreArticles('자유게시판', page);
+        boardProvider.getMoreArticles('FREE', page);
       }
     });
   }

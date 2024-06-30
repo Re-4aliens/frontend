@@ -119,7 +119,8 @@ class BoardService extends APIService {
   */
   static Future<List<Board>> getArticles(String boardCategory, int page) async {
     print("$boardCategory 게시판 조회");
-    const url = '$domainUrl/boards/category?category=FASHION&page=0&size=10';
+    final url =
+        '$domainUrl/boards/category?category=$boardCategory&page=0&size=10';
 
     final response = await http.get(
       Uri.parse(url),
@@ -141,6 +142,7 @@ class BoardService extends APIService {
           body.map((dynamic item) => Board.fromJson(item)).toList();
       return boards;
     } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }
@@ -151,6 +153,7 @@ class BoardService extends APIService {
     
   */
   static Future<bool> postArticle(Board newBoard) async {
+    String category = getCategoryValue(newBoard.category!);
     const url = '$domainUrl/boards/normal';
 
     var jwtToken = await APIService.storage.read(key: 'token');
@@ -168,7 +171,7 @@ class BoardService extends APIService {
     var jsonPayload = jsonEncode({
       'title': newBoard.title,
       'content': newBoard.content,
-      'boardCategory': getCategoryValue(newBoard.category!),
+      'boardCategory': category,
     });
 
     var jsonPart = http.MultipartFile.fromString(
@@ -196,6 +199,10 @@ class BoardService extends APIService {
         contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
       );
       request.files.add(file);
+    }
+
+    for (var file in request.files) {
+      print('File: ${file.filename}, Content-Type: ${file.contentType}');
     }
 
     try {
