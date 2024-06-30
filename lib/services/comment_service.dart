@@ -11,8 +11,8 @@ class CommentService extends APIService {
   특정 게시물 댓글 조회
 
   */
-  static Future<List<Comment>> getCommentsList(int articleId) async {
-    var url = '$domainUrl/comments/boards?id=$articleId';
+  static Future<List<Comment>> getCommentsList(int boardId) async {
+    var url = '$domainUrl/comments/boards?id=$boardId';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -48,10 +48,14 @@ class CommentService extends APIService {
   부모 댓글 등록
 
   */
-  static Future<bool> postComment(String content, int articleId) async {
+  static Future<bool> postComment(String content, int boardId) async {
     var url = '$domainUrl/comments/parent';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+
+    print('jwtToken : $jwtToken');
+    print('boardId : $boardId');
+    print('content : $content');
 
     var response = await http.post(
       Uri.parse(url),
@@ -60,7 +64,7 @@ class CommentService extends APIService {
         'Content-Type': 'application/json;charset=UTF-8'
       },
       body: jsonEncode({
-        "boardId": articleId,
+        "boardId": boardId,
         "content": content,
       }),
     );
@@ -90,15 +94,12 @@ class CommentService extends APIService {
   자식 댓글 생성 (테스트 실패)
 
   */
-  static Future<bool> postNestedComment(String content, int commentId) async {
-    var url =
-        'http://3.34.2.246:8080/api/v2/community-article-comments/$commentId/comments';
+  static Future<bool> postNestedComment(
+      int boardId, String content, int commentId) async {
+    var url = '$domainUrl/comments/child';
 
     //토큰 읽어오기
     var jwtToken = await APIService.storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
 
     var response = await http.post(Uri.parse(url),
         headers: {
@@ -106,7 +107,9 @@ class CommentService extends APIService {
           'Content-Type': 'application/json'
         },
         body: jsonEncode({
-          "content": content,
+          'boardId': boardId,
+          'content': content,
+          'parentCommentId': commentId,
         }));
 
     //success
@@ -190,7 +193,7 @@ class CommentService extends APIService {
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
       final url = Uri.parse(
-          '$domainUrl/api/v2/market-articles/$marketArticleId/market-article-comments');
+          '$domainUrl/api/v2/market-boards/$marketArticleId/market-board-comments');
 
       final response = await http.get(
         url,
@@ -229,9 +232,8 @@ class CommentService extends APIService {
 
   */
   static Future<bool> createMarketArticleComment(
-      String content, int articleId) async {
-    var url =
-        '$domainUrl/api/v2/market-articles/$articleId/market-article-comments';
+      String content, int boardId) async {
+    var url = '$domainUrl/api/v2/market-boards/$boardId/market-board-comments';
 
     var jwtToken = await APIService.storage.read(key: 'token');
 
@@ -267,13 +269,13 @@ class CommentService extends APIService {
     특정 판매글 댓글 삭제
 
   */
-  static Future<bool> deleteMarketArticleComment(int articleCommentId) async {
+  static Future<bool> deleteMarketArticleComment(int boardCommentId) async {
     try {
       var jwtToken = await APIService.storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
-      final url = Uri.parse(
-          '$domainUrl/api/v2/market-article-comments/$articleCommentId');
+      final url =
+          Uri.parse('$domainUrl/api/v2/market-board-comments/$boardCommentId');
 
       final response = await http.delete(
         url,
@@ -309,13 +311,13 @@ class CommentService extends APIService {
 
   */
   static Future<bool> addMarketArticleCommentReply(
-      String content, int commentId, int articleId) async {
+      String content, int commentId, int boardId) async {
     try {
       var jwtToken = await APIService.storage.read(key: 'token');
       final accessToken = json.decode(jwtToken!)['data']['accessToken'];
 
       final url = Uri.parse(
-          '$domainUrl/api/v2/market-articles/$articleId/market-article-comments/$commentId');
+          '$domainUrl/api/v2/market-boards/$boardId/market-board-comments/$commentId');
 
       final response = await http.post(
         url,

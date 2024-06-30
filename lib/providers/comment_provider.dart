@@ -40,13 +40,13 @@ class CommentProvider with ChangeNotifier {
     return true;
   }
 
-  addNestedComment(String content, int commentId, int articleId) async {
+  addNestedComment(String content, int commentId, int boardId) async {
     try {
-      await CommentService.postNestedComment(content, commentId);
+      await CommentService.postNestedComment(boardId, content, commentId);
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        await CommentService.postNestedComment(content, commentId);
+        await CommentService.postNestedComment(boardId, content, commentId);
       } else {
         return false;
       }
@@ -54,7 +54,7 @@ class CommentProvider with ChangeNotifier {
     //TODO fcm 전송
 
     notifyListeners();
-    getComments(articleId);
+    getComments(boardId);
     return true;
   }
 
