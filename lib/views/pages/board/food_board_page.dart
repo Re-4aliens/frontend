@@ -30,13 +30,13 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('음식게시판');
+    boardProvider.getArticles('FOOD');
     _scrollController.addListener(() {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         page++;
-        boardProvider.getMoreArticles('음식게시판', page);
+        boardProvider.getMoreArticles('FOOD', page);
       }
     });
   }
