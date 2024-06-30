@@ -72,6 +72,7 @@ class CommentService extends APIService {
       return true;
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
       if (responseBody['code'] == 'AT-C-002') {
         // 액세스 토큰 만료
         throw 'AT-C-002';
