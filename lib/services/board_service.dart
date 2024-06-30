@@ -83,6 +83,37 @@ class BoardService extends APIService {
 
   /* 
   
+    특정 카테고리 게시판 검색
+
+  */
+  static Future<List<Board>> searchCategory(
+      String category, String keyword) async {
+    String category0 = getCategoryValue(category);
+    print(category0);
+    final response = await http.get(
+      Uri.parse(
+          '$domainUrl/boards/category/search?search-keyword=$keyword&category=$category0&page=0&size=10'),
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(utf8.decode(response.bodyBytes));
+      final List<dynamic> articlesData = responseBody['result'];
+      List<Board> articles = articlesData.map((articleData) {
+        return Board.fromJson(articleData);
+      }).toList();
+
+      return articles;
+    } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
+      throw Exception('요청 오류');
+    }
+  }
+
+  /* 
+  
     나의 게시글 조회 
   
   */

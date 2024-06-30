@@ -67,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 TotalArticleWidget(
                   board: board,
-                  nationCode: board.member!.nationality.toString(),
+                  nationCode: board.member?.nationality.toString() ?? '',
                   screenArguments: widget.screenArguments,
                   index: index,
                 ),
@@ -116,7 +116,12 @@ class _SearchPageState extends State<SearchPage> {
               setState(() {
                 _keyword = value;
               });
-              searchResults = await BoardService.searchTotal(value);
+              if (widget.category == '전체게시판') {
+                searchResults = await BoardService.searchTotal(value);
+              } else {
+                searchResults =
+                    await BoardService.searchCategory(widget.category, value);
+              }
               setState(() {
                 print("검색성공");
                 searched = true;
