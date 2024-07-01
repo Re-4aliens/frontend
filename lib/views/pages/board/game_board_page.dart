@@ -128,7 +128,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "게임게시판",
+                            category: "game",
                             nationCode: '',
                           )),
                 );

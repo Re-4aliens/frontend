@@ -122,6 +122,7 @@ class _SearchPageState extends State<SearchPage> {
                 searchResults =
                     await BoardService.searchCategory(widget.category, value);
               }
+              print(searchResults);
               setState(() {
                 print("검색성공");
                 searched = true;

@@ -129,7 +129,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "음악게시판",
+                            category: "music",
                             nationCode: '',
                           )),
                 );

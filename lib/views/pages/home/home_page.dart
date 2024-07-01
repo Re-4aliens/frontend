@@ -353,7 +353,7 @@ class _HomePageState extends State<HomePage> {
                         MaterialPageRoute(
                             builder: (context) => SearchPage(
                                   screenArguments: args,
-                                  category: "전체게시판",
+                                  category: "all",
                                   nationCode: '',
                                 )),
                       );

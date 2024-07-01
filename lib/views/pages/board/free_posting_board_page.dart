@@ -129,7 +129,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "자유게시판",
+                            category: "free",
                             nationCode: '',
                           )),
                 );

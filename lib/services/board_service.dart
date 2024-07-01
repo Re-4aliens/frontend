@@ -88,15 +88,16 @@ class BoardService extends APIService {
   */
   static Future<List<Board>> searchCategory(
       String category, String keyword) async {
-    String category0 = getCategoryValue(category);
-    print(category0);
     final response = await http.get(
       Uri.parse(
-          '$domainUrl/boards/category/search?search-keyword=$keyword&category=$category0&page=0&size=10'),
+          '$domainUrl/boards/category/search?search-keyword=$keyword&category=$category&page=0&size=10'),
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
     );
+
+    print(
+        '$domainUrl/boards/category/search?search-keyword=$keyword&category=$category&page=0&size=10');
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -104,7 +105,7 @@ class BoardService extends APIService {
       List<Board> articles = articlesData.map((articleData) {
         return Board.fromJson(articleData);
       }).toList();
-
+      print(articles);
       return articles;
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
