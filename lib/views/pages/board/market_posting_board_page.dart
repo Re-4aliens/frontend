@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:aliens/services/market_service.dart';
-import 'package:aliens/models/market_articles.dart';
+import 'package:aliens/models/market_board_model.dart';
 import 'package:aliens/util/permissions.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -129,14 +129,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     // 수정 모드인 경우, 전달된 게시물 데이터 초기화
     if (widget.marketBoard != null) {
       _isEditMode = true;
-      _titleController.text = widget.marketBoard!.title!;
+      _titleController.text = widget.marketBoard!.title;
       _priceController.text = widget.marketBoard!.price.toString();
-      _contentController.text = widget.marketBoard!.content!;
-      productQuality =
-          getProductStatusText(widget.marketBoard!.productQuality!);
-      saleStatus = getStatusText(widget.marketBoard!.saleStatus!);
+      _contentController.text = widget.marketBoard!.content;
+      productQuality = getProductStatusText(widget.marketBoard!.productQuality);
+      saleStatus = getStatusText(widget.marketBoard!.saleStatus);
 
-      _images = widget.marketBoard!.imageUrls!
+      _images = widget.marketBoard!.imageUrls
           .map((imageUrl) => XFile(imageUrl))
           .toList();
     }
@@ -509,8 +508,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
 
                               bool success =
                                   await MarketService.updateMarketArticle(
-                                      widget.marketBoard!.articleId ?? 0,
-                                      updateData);
+                                      widget.marketBoard!.id ?? 0, updateData);
                               print('1');
                               print(updateData);
                               Navigator.of(context).pop(); // 이전 페이지로 이동
