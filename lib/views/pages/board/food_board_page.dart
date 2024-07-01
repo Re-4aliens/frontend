@@ -128,7 +128,7 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "음식게시판",
+                            category: "food",
                             nationCode: '',
                           )),
                 );

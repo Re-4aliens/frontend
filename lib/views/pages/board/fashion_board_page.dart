@@ -128,7 +128,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "패션게시판",
+                            category: "fashion",
                             nationCode: '',
                           )),
                 );
