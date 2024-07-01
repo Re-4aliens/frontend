@@ -30,14 +30,14 @@ class _GameBoardPageState extends State<GameBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('GAME');
+    boardProvider.getArticles('game');
 
     _scrollController.addListener(() {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         page++;
-        boardProvider.getMoreArticles('GAME', page);
+        boardProvider.getMoreArticles('game', page);
       }
     });
   }

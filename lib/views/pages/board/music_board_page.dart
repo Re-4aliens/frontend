@@ -30,14 +30,14 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('음악게시판');
+    boardProvider.getArticles('music');
 
     _scrollController.addListener(() {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         page++;
-        boardProvider.getMoreArticles('음악게시판', page);
+        boardProvider.getMoreArticles('music', page);
       }
     });
   }

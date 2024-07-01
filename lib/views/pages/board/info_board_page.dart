@@ -30,14 +30,14 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('INFO');
+    boardProvider.getArticles('info');
 
     _scrollController.addListener(() {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         page++;
-        boardProvider.getMoreArticles('INFO', page);
+        boardProvider.getMoreArticles('info', page);
       }
     });
   }

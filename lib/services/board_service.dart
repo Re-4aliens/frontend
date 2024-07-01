@@ -10,17 +10,17 @@ class BoardService extends APIService {
   static String getCategoryValue(String category) {
     switch (category) {
       case "자유게시판":
-        return 'FREE';
+        return 'free';
       case "게임게시판":
-        return 'GAME';
+        return 'game';
       case "패션게시판":
-        return 'FASHION';
+        return 'fashion';
       case "음식게시판":
-        return 'FOOD';
+        return 'food';
       case "음악게시판":
-        return 'MUSIC';
+        return 'music';
       case "정보게시판":
-        return 'INFO';
+        return 'info';
     }
     return '';
   }
@@ -149,9 +149,10 @@ class BoardService extends APIService {
     
   */
   static Future<List<Board>> getArticles(String boardCategory, int page) async {
-    print("$boardCategory 게시판 조회");
     final url =
         '$domainUrl/boards/category?category=$boardCategory&page=0&size=10';
+
+    print(url);
 
     final response = await http.get(
       Uri.parse(url),
@@ -160,17 +161,17 @@ class BoardService extends APIService {
       },
     );
 
-    print("요청 시도");
     print(response.statusCode);
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
       final result = responseBody['result'];
 
-      print("카테고리 : ${result[0]["category"]}");
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
+      print(boards);
       return boards;
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
@@ -185,6 +186,7 @@ class BoardService extends APIService {
   */
   static Future<bool> postArticle(Board newBoard) async {
     String category = getCategoryValue(newBoard.category!);
+    print(category);
     const url = '$domainUrl/boards/normal';
 
     var jwtToken = await APIService.storage.read(key: 'token');
