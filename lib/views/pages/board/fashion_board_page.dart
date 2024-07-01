@@ -31,13 +31,13 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('FASHION');
+    boardProvider.getArticles('fashion');
     _scrollController.addListener(() {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         page++;
-        boardProvider.getMoreArticles('FASHION', page);
+        boardProvider.getMoreArticles('fashion', page);
       }
     });
   }
