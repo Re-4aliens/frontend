@@ -4,7 +4,7 @@ import 'package:aliens/views/components/report_dialog_widget.dart';
 import 'package:aliens/views/components/report_ios_dialog_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'dart:io' show Platform;
-import 'package:aliens/models/market_articles.dart';
+import 'package:aliens/models/market_board_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -61,8 +61,7 @@ class MarketBoardDialog extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (builder) => ReportDialog(
-                        memberId: marketBoard.member!.memberId!,
-                        context: context));
+                        memberId: memberDetails.memberId!, context: context));
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,
@@ -89,7 +88,7 @@ class MarketBoardDialog extends StatelessWidget {
                               context: context,
                               builder: (_) => FutureBuilder(
                                   future: BoardService.deleteArticle(
-                                      marketBoard.articleId ?? 0),
+                                      marketBoard.id ?? 0),
                                   builder: (BuildContext context,
                                       AsyncSnapshot snapshot) {
                                     if (snapshot.hasData == false) {

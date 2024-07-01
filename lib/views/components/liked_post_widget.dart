@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../models/board_model.dart';
-import '../../models/market_articles.dart';
+import '../../models/market_board_model.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/market_detail_page.dart';
 import 'board_dialog_widget.dart';

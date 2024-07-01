@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:aliens/util/image_util.dart';
 import 'package:http/http.dart' as http;
 import 'api_service.dart';
-import 'package:aliens/models/market_articles.dart';
+import 'package:aliens/models/market_board_model.dart';
 import 'package:http_parser/http_parser.dart';
 
 class MarketService extends APIService {

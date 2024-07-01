@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../../../models/market_articles.dart';
+import '../../../models/market_board_model.dart';
 import '../../../models/message_model.dart';
 import 'package:aliens/providers/bookmarks_provider.dart';
 import '../../components/board_drawer_widget.dart';
@@ -267,7 +267,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                 MarketBoard marketBoard = marketBoardList[index];
                 String productQualityText =
                     getProductStatusText(marketBoard.productQuality);
-                String StatusText = getStatusText(marketBoard.saleStatus);
+                String statusText = getStatusText(marketBoard.saleStatus);
+
+                print(statusText);
 
                 return InkWell(
                   onTap: () {
@@ -346,9 +348,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '[$StatusText]',
+                                    '[$statusText]',
                                     style: TextStyle(
-                                      color: marketBoard.saleStatus == '판매 중'
+                                      color: marketBoard.saleStatus == 'SELL'
                                           ? const Color(0xff616161)
                                           : const Color(0xffFF375B),
                                       fontSize: 16.spMin,
@@ -399,7 +401,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                               ),
                               SizedBox(height: 5.h),
                               Text(
-                                '${marketBoard.price.toString() ?? ""}원',
+                                '${marketBoard.price.toString()}원',
                                 style: TextStyle(
                                     fontSize: 16.spMin,
                                     fontWeight: FontWeight.w700),
@@ -475,13 +477,13 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     ];
 
     switch (productQuality) {
-      case '새 것':
+      case 'BRAND_NEW':
         return whatStatus[0];
-      case '거의 새 것':
+      case 'ALMOST_NEW':
         return whatStatus[1];
-      case '약간의 하자':
+      case 'SLIGHT_DEFECT':
         return whatStatus[2];
-      case '사용감 있음':
+      case 'USED':
         return whatStatus[3];
       default:
         return '';

@@ -1,5 +1,5 @@
 import 'package:aliens/services/market_service.dart';
-import 'package:aliens/models/market_articles.dart';
+import 'package:aliens/models/market_board_model.dart';
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/views/pages/board/info_article_page.dart';
