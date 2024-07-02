@@ -83,38 +83,38 @@ class BoardService extends APIService {
     }
   }
 
-  /* 
-  
-    특정 카테고리 게시판 검색
+  // /*
 
-  */
-  static Future<List<Board>> searchCategory(
-      String category, String keyword) async {
-    final response = await http.get(
-      Uri.parse(
-          '$domainUrl/boards/category/search?search-keyword=$keyword&category=$category&page=0&size=10'),
-      headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-      },
-    );
+  //   특정 카테고리 게시판 검색
 
-    print(
-        '$domainUrl/boards/category/search?search-keyword=$keyword&category=$category&page=0&size=10');
+  // */
+  // static Future<List<Board>> searchCategory(
+  //     String category, String keyword) async {
+  //   final url =
+  //       '$domainUrl/boards/category/search?search-keyword=$keyword&category=$category&page=0&size=10';
+  //   final response = await http.get(
+  //     Uri.parse(url),
+  //     headers: {
+  //       'Content-Type': 'application/json;charset=UTF-8',
+  //     },
+  //   );
 
-    if (response.statusCode == 200) {
-      final responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print(responseBody);
-      final List<dynamic> articlesData = responseBody['result'];
-      List<Board> articles = articlesData.map((articleData) {
-        return Board.fromJson(articleData);
-      }).toList();
-      print("특정 게시판 검색 결과 : $articles");
-      return articles;
-    } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
-      throw Exception('요청 오류');
-    }
-  }
+  //   print(url);
+
+  //   if (response.statusCode == 200) {
+  //     final responseBody = json.decode(utf8.decode(response.bodyBytes));
+  //     print(responseBody);
+  //     final List<dynamic> articlesData = responseBody['result'];
+  //     List<Board> articles = articlesData.map((articleData) {
+  //       return Board.fromJson(articleData);
+  //     }).toList();
+  //     print("특정 게시판 검색 결과 : $articles");
+  //     return articles;
+  //   } else {
+  //     print(json.decode(utf8.decode(response.bodyBytes)));
+  //     throw Exception('요청 오류');
+  //   }
+  // }
 
   /* 
   
