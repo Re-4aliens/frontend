@@ -82,7 +82,7 @@ class _ArticlePageState extends State<ArticlePage> {
           Provider.of<CommentProvider>(context, listen: false);
       commentProvider.getComments(widget.board.id ?? -1);
       print(
-          'on Tap : ${commentProvider.commentListData![0].id}, ${commentProvider.commentListData![0].children}, ${commentProvider.commentListData![0].content}, ${commentProvider.commentListData![0].createdAt}');
+          'on Tap : ${commentProvider.commentListData?[0].id}, ${commentProvider.commentListData?[0].children}, ${commentProvider.commentListData?[0].content}, ${commentProvider.commentListData?[0].createdAt}');
     });
     nationCode = getNationCode(widget.board.memberProfileDto?.nationality);
   }
@@ -455,9 +455,9 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                       true;
                                                                   parentsCommentId =
                                                                       commentProvider
-                                                                              .commentListData![index]
-                                                                              .id ??
-                                                                          -1;
+                                                                          .commentListData![
+                                                                              index]
+                                                                          .id;
                                                                   print(
                                                                       'parentsCommentId : ${commentProvider.commentListData![index].id}');
                                                                 });
@@ -470,7 +470,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                   commentProvider
                                                                           .commentListData![
                                                                       index],
-                                                              memberDetials: widget
+                                                              memberDetails: widget
                                                                   .memberDetails,
                                                               articleId: widget
                                                                   .board.id!,
@@ -653,7 +653,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                           comment: commentProvider
                                                                               .commentListData![index]
                                                                               .children![j],
-                                                                          memberDetials:
+                                                                          memberDetails:
                                                                               widget.memberDetails,
                                                                           articleId: widget
                                                                               .board

@@ -12,12 +12,15 @@ import 'package:aliens/services/comment_service.dart';
 import '../../models/comment_model.dart';
 import 'package:aliens/providers/comment_provider.dart';
 
+import 'dart:convert';
+import 'package:aliens/services/api_service.dart';
+
 class CommentDialog extends StatelessWidget {
   final BuildContext context;
   final VoidCallback onpressed;
   final bool isNestedComment;
   final Comment comment;
-  final MemberDetails memberDetials;
+  final MemberDetails memberDetails;
   final int articleId;
 
   const CommentDialog({
@@ -26,20 +29,55 @@ class CommentDialog extends StatelessWidget {
     required this.onpressed,
     required this.isNestedComment,
     required this.comment,
-    required this.memberDetials,
+    required this.memberDetails,
     required this.articleId,
   }) : super(key: key);
+
+  Future<String?> getUserEmail() async {
+    var userInfo = await APIService.storage.read(key: 'auth');
+    if (userInfo != null && userInfo.isNotEmpty) {
+      var decodedUserInfo = json.decode(userInfo);
+      return decodedUserInfo['email'];
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
     if (Platform.isAndroid) {
-      return androidDialog();
+      return FutureBuilder<String?>(
+        future: getUserEmail(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final userEmail = snapshot.data;
+            return androidDialog(userEmail);
+          }
+        },
+      );
     } else {
-      return iOSDialog();
+      return FutureBuilder<String?>(
+        future: getUserEmail(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final userEmail = snapshot.data;
+            print(userEmail);
+            print(userEmail == memberDetails.email);
+            return iOSDialog(userEmail);
+          }
+        },
+      );
     }
   }
 
-  Widget androidDialog() {
+  Widget androidDialog(String? userEmail) {
     final commentProvider = Provider.of<CommentProvider>(context);
     return Dialog(
       elevation: 0,
@@ -75,12 +113,12 @@ class CommentDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-            memberDetials.email == comment.memberProfileDto.email
+            memberDetails.email == userEmail
                 ? SizedBox(
                     height: 10.h,
                   )
                 : const SizedBox(),
-            memberDetials.email == comment.memberProfileDto.email
+            memberDetails.email == userEmail
                 ? InkWell(
                     onTap: () {
                       showDialog(
@@ -152,7 +190,7 @@ class CommentDialog extends StatelessWidget {
     );
   }
 
-  Widget iOSDialog() {
+  Widget iOSDialog(String? userEmail) {
     final commentProvider = Provider.of<CommentProvider>(context);
     return Dialog(
       elevation: 0,
@@ -183,7 +221,7 @@ class CommentDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-          memberDetials.email == comment.memberProfileDto.email
+          memberDetails.email == userEmail
               ? InkWell(
                   onTap: () {
                     showDialog(

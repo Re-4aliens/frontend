@@ -97,14 +97,18 @@ class CommentService extends APIService {
   */
   static Future<bool> postNestedComment(
       int boardId, String content, int commentId) async {
+    print("자식 댓글 생성 시도");
     var url = '$domainUrl/comments/child';
 
+    print('boardId : $boardId, content : $content, commentId : $commentId');
     //토큰 읽어오기
-    var jwtToken = await APIService.storage.read(key: 'token');
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+
+    print(jwtToken);
 
     var response = await http.post(Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $jwtToken',
+          'Authorization': jwtToken,
           'Content-Type': 'application/json'
         },
         body: jsonEncode({
@@ -113,11 +117,14 @@ class CommentService extends APIService {
           'parentCommentId': commentId,
         }));
 
+    print(response.statusCode);
+
     //success
     if (response.statusCode == 200) {
       return true;
       //fail
     } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 액세스 토큰 만료
         throw 'AT-C-002';
