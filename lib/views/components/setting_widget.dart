@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:aliens/models/member_details_model.dart';
-import 'package:aliens/services/api_service.dart';
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/views/components/setting_list_widget.dart';
 import 'package:aliens/views/components/setting_profile_widget.dart';
@@ -10,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
 import 'package:aliens/services/user_service.dart';
 import '../../models/screen_argument.dart';
 
@@ -54,39 +52,26 @@ class _SettingWidgetState extends State<SettingWidget> {
   void initState() {
     super.initState();
     initialize();
-
-    print(widget.screenArguments.memberDetails?.profileImageURL);
   }
 
   void initialize() async {
     await fetchMemberDetails();
-    await fetchUserEmail();
+    final userEmail = await UserService.fetchUserEmail();
+
+    setState(() {
+      email = userEmail;
+    });
   }
 
   Future<void> fetchMemberDetails() async {
     try {
       var memberDetailsJson = await UserService.getMemberDetails();
-      print(memberDetailsJson);
       setState(() {
         memberDetails = MemberDetails.fromJson(memberDetailsJson);
         widget.screenArguments.memberDetails = memberDetails!;
       });
     } catch (e) {
       print('Error initializing member details: $e');
-    }
-  }
-
-  Future<void> fetchUserEmail() async {
-    var userInfo = await APIService.storage.read(key: 'auth');
-    if (userInfo != null && userInfo.isNotEmpty) {
-      var decodedUserInfo = json.decode(userInfo);
-      setState(() {
-        email = decodedUserInfo['email'];
-      });
-    } else {
-      setState(() {
-        email = '';
-      });
     }
   }
 

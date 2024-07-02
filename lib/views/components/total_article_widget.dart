@@ -49,25 +49,25 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
     bookmarkProvider.getbookmarksCounts(0);
 
     switch (widget.board.category) {
-      case '자유게시판':
+      case 'FREE':
         boardCategory = 'free-posting'.tr();
         break;
-      case '음식게시판':
+      case 'FOOD':
         boardCategory = 'food'.tr();
         break;
-      case '음악게시판':
+      case 'MUSIC':
         boardCategory = 'music'.tr();
         break;
-      case '패션게시판':
+      case 'FASHION':
         boardCategory = 'fashion'.tr();
         break;
-      case '게임게시판':
+      case 'GAME':
         boardCategory = 'game'.tr();
         break;
-      case '정보게시판':
+      case 'INFO':
         boardCategory = 'info'.tr();
         break;
-      case '장터게시판':
+      case 'MARKET':
         boardCategory = 'market'.tr();
         break;
       default:
@@ -105,7 +105,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                     Row(
                       children: [
                         Text(
-                          '${widget.board.member!.name}',
+                          widget.board.memberProfileDto?.name ?? '',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16.spMin),
@@ -145,7 +145,6 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                         context: context,
                         builder: (builder) {
                           return BoardDialog(
-                            context: context,
                             board: widget.board,
                             memberDetails:
                                 widget.screenArguments.memberDetails!,
@@ -181,20 +180,20 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               Padding(
                 padding: const EdgeInsets.only(top: 10).h,
                 child: Text(
-                  '${widget.board.title}',
+                  widget.board.title,
                   style: TextStyle(
                       fontSize: 14.spMin,
                       color: const Color(0xff444444),
                       fontWeight: FontWeight.bold),
                 ),
               ),
-              widget.board.imageUrls!.isEmpty
+              widget.board.imageUrls.isEmpty
                   ? const SizedBox()
                   : SizedBox(
                       height: 90.h,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: widget.board.imageUrls!.length,
+                          itemCount: widget.board.imageUrls.length,
                           itemBuilder: (context, index) {
                             return Row(
                               children: [
@@ -207,7 +206,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                                       borderRadius: BorderRadius.circular(10),
                                       image: DecorationImage(
                                         image: NetworkImage(
-                                            widget.board.imageUrls![index]),
+                                            widget.board.imageUrls[index]),
                                         fit: BoxFit.cover,
                                       )),
                                   padding: const EdgeInsets.all(25.0).r,
@@ -223,7 +222,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                   : Padding(
                       padding: const EdgeInsets.only(top: 10, bottom: 15.0).h,
                       child: Text(
-                        '${widget.board.content}',
+                        widget.board.content,
                         style: TextStyle(
                             fontSize: 14.spMin, color: const Color(0xff616161)),
                       ),
@@ -234,12 +233,11 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                   InkWell(
                     onTap: () async {
                       if (widget.board.category != "장터게시판") {
-                        boardProvider.addLike(
-                            widget.board.articleId!, widget.index);
+                        boardProvider.addLike(widget.board.id!, widget.index);
                       } else {
-                        boardProvider.likeCounts[widget.index] =
+                        boardProvider.greatCounts[widget.index] =
                             await MarketService.marketBookmark(
-                                widget.board.articleId!, widget.index);
+                                widget.board.id!, widget.index);
                       }
                       setState(() {});
                     },
@@ -254,9 +252,9 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 4, right: 15).w,
-                    child: boardProvider.likeCounts[widget.index] == 0
+                    child: boardProvider.greatCounts[widget.index] == 0
                         ? const Text('')
-                        : Text('${boardProvider.likeCounts[widget.index]}'),
+                        : Text('${boardProvider.greatCounts[widget.index]}'),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,
@@ -268,9 +266,9 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(4.0).r,
-                    child: widget.board.commentsCount == 0
+                    child: widget.board.commentCount == 0
                         ? const Text('')
-                        : Text('${widget.board.commentsCount}'),
+                        : Text('${widget.board.commentCount}'),
                   ),
                 ],
               )
@@ -291,8 +289,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               barrierDismissible: false, // 사용자가 외부를 눌러서 닫을 수 없도록
               builder: (BuildContext context) {
                 return FutureBuilder(
-                  future:
-                      MarketService.getMarketArticle(widget.board.articleId!),
+                  future: MarketService.getMarketArticle(widget.board.id!),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       // 데이터를 받아오는 동안 로딩 상태를 표시
@@ -321,8 +318,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               },
             ).then((_) {
               // 데이터를 성공적으로 받은 경우 네비게이션 처리
-              MarketService.getMarketArticle(widget.board.articleId!)
-                  .then((data) {
+              MarketService.getMarketArticle(widget.board.id!).then((data) {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -339,6 +335,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               });
             });
           } else {
+            print("total_article_widget -> article_page");
+            print(widget.board.id);
             Navigator.push(
               context,
               MaterialPageRoute(
