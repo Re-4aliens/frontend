@@ -75,19 +75,18 @@ class CommentDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-            memberDetials.email == comment.member!.email
+            memberDetials.email == comment.memberProfileDto.email
                 ? SizedBox(
                     height: 10.h,
                   )
                 : const SizedBox(),
-            memberDetials.email == comment.member!.email
+            memberDetials.email == comment.memberProfileDto.email
                 ? InkWell(
                     onTap: () {
                       showDialog(
                           context: context,
                           builder: (_) => FutureBuilder(
-                              future: CommentService.deleteComment(
-                                  comment.articleCommentId!),
+                              future: CommentService.deleteComment(comment.id),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.hasData == false) {
@@ -132,8 +131,8 @@ class CommentDialog extends StatelessWidget {
                 Navigator.pop(context);
                 showDialog(
                     context: context,
-                    builder: (builder) => ReportDialog(
-                        id: comment.member!.memberId!, context: context));
+                    builder: (builder) =>
+                        ReportDialog(id: comment.id, context: context));
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,
@@ -184,14 +183,13 @@ class CommentDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-          memberDetials.email == comment.member!.email
+          memberDetials.email == comment.memberProfileDto.email
               ? InkWell(
                   onTap: () {
                     showDialog(
                         context: context,
                         builder: (_) => FutureBuilder(
-                            future: CommentService.deleteComment(
-                                comment.articleCommentId!),
+                            future: CommentService.deleteComment(comment.id),
                             builder:
                                 (BuildContext context, AsyncSnapshot snapshot) {
                               if (snapshot.hasData == false) {
@@ -238,7 +236,7 @@ class CommentDialog extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (builder) => iOSReportDialog(
-                        memberId: comment.member!.memberId!,
+                        memberId: comment.id,
                       ));
             },
             child: Container(

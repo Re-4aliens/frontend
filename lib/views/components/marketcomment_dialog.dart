@@ -75,8 +75,7 @@ class MarketCommentDialog extends StatelessWidget {
             InkWell(
               onTap: () {
                 //TODO 로딩 만들기
-                marketcommentProvider
-                    .deleteMarketComment(marketcomment.articleCommentId!);
+                marketcommentProvider.deleteMarketComment(marketcomment.id);
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,
@@ -98,8 +97,8 @@ class MarketCommentDialog extends StatelessWidget {
                 Navigator.pop(context);
                 showDialog(
                     context: context,
-                    builder: (builder) => ReportDialog(
-                        id: marketcomment.member!.memberId!, context: context));
+                    builder: (builder) =>
+                        ReportDialog(id: marketcomment.id, context: context));
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,
@@ -153,8 +152,7 @@ class MarketCommentDialog extends StatelessWidget {
           InkWell(
             onTap: () {
               //TODO 로딩 만들기
-              marketcommentProvider
-                  .deleteMarketComment(marketcomment.articleCommentId!);
+              marketcommentProvider.deleteMarketComment(marketcomment.id);
             },
             child: Container(
               height: 80,
@@ -178,7 +176,7 @@ class MarketCommentDialog extends StatelessWidget {
               showDialog(
                   context: context,
                   builder: (builder) => iOSReportDialog(
-                        memberId: marketcomment.member!.memberId!,
+                        memberId: marketcomment.id,
                       ));
             },
             child: Container(
