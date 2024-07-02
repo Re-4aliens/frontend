@@ -55,6 +55,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
   @override
   void initState() {
+    super.initState();
     switch (widget.board.category) {
       case 'FREE':
         boardCategory = 'free-posting'.tr();
@@ -72,12 +73,16 @@ class _ArticlePageState extends State<ArticlePage> {
         boardCategory = 'game'.tr();
         break;
       default:
+        boardCategory =
+            'unknown'.tr(); // default case to handle unexpected categories
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final commentProvider =
           Provider.of<CommentProvider>(context, listen: false);
       commentProvider.getComments(widget.board.id ?? -1);
+      print(
+          'on Tap : ${commentProvider.commentListData![0].id}, ${commentProvider.commentListData![0].children}, ${commentProvider.commentListData![0].content}, ${commentProvider.commentListData![0].createdAt}');
     });
     nationCode = getNationCode(widget.board.memberProfileDto?.nationality);
   }
@@ -353,8 +358,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                           .r,
                                       color: parentsCommentId ==
                                               commentProvider
-                                                  .commentListData![index]
-                                                  .articleCommentId
+                                                  .commentListData![index].id
                                           ? const Color(0xffF5F7FF)
                                           : Colors.white,
                                       child: Column(
@@ -382,7 +386,10 @@ class _ArticlePageState extends State<ArticlePage> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    '${commentProvider.commentListData![index].member!.name}',
+                                                    commentProvider
+                                                        .commentListData![index]
+                                                        .memberProfileDto
+                                                        .name,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -397,11 +404,12 @@ class _ArticlePageState extends State<ArticlePage> {
                                                   ),
                                                   Text(
                                                     getNationCode(
-                                                        commentProvider
-                                                            .commentListData![
-                                                                index]
-                                                            .member!
-                                                            .nationality),
+                                                      commentProvider
+                                                          .commentListData![
+                                                              index]
+                                                          .memberProfileDto
+                                                          .name,
+                                                    ),
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -425,8 +433,8 @@ class _ArticlePageState extends State<ArticlePage> {
                                                   ),
                                                   InkWell(
                                                     onTap: () {
-                                                      print(commentProvider
-                                                          .commentListData!);
+                                                      print(
+                                                          'on Tap : ${commentProvider.commentListData![index].id}, ${commentProvider.commentListData![index].children}, ${commentProvider.commentListData![index].content}, ${commentProvider.commentListData![index].createdAt}');
                                                       showDialog(
                                                           context: context,
                                                           builder: (builder) {
@@ -434,12 +442,24 @@ class _ArticlePageState extends State<ArticlePage> {
                                                               context: context,
                                                               onpressed: () {
                                                                 setState(() {
-                                                                  isNestedComments =
-                                                                      true;
-                                                                  parentsCommentId = commentProvider
+                                                                  print(commentProvider
+                                                                          .commentListData![
+                                                                      index]);
+                                                                  print(
+                                                                      'index : $index');
+                                                                  print(commentProvider
                                                                       .commentListData![
                                                                           index]
-                                                                      .articleCommentId!;
+                                                                      .id);
+                                                                  isNestedComments =
+                                                                      true;
+                                                                  parentsCommentId =
+                                                                      commentProvider
+                                                                              .commentListData![index]
+                                                                              .id ??
+                                                                          -1;
+                                                                  print(
+                                                                      'parentsCommentId : ${commentProvider.commentListData![index].id}');
                                                                 });
                                                                 Navigator.pop(
                                                                     context);
@@ -480,7 +500,9 @@ class _ArticlePageState extends State<ArticlePage> {
                                                 const EdgeInsets.only(top: 13)
                                                     .r,
                                             child: Text(
-                                              '${commentProvider.commentListData![index].content}',
+                                              commentProvider
+                                                  .commentListData![index]
+                                                  .content,
                                               style: TextStyle(
                                                   fontSize: 14.spMin,
                                                   color:
@@ -493,7 +515,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
                                     //대댓글
                                     commentProvider.commentListData![index]
-                                                .childs ==
+                                                .children ==
                                             null
                                         ? const SizedBox()
                                         : Column(
@@ -503,7 +525,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                       commentProvider
                                                           .commentListData![
                                                               index]
-                                                          .childs!
+                                                          .children!
                                                           .length;
                                                   j++)
                                                 Row(
@@ -583,7 +605,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                       right:
                                                                           10),
                                                                   child: Text(
-                                                                    '${commentProvider.commentListData![index].childs![j].member!.name}/${getNationCode(commentProvider.commentListData![index].childs![j].member!.nationality)}',
+                                                                    '${commentProvider.commentListData![index].children![j].memberProfileDto.name}/${getNationCode(commentProvider.commentListData![index].children![j].memberProfileDto.nationality)}',
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
@@ -597,13 +619,12 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                DataUtils.getTime(
-                                                                    commentProvider
-                                                                        .commentListData![
-                                                                            index]
-                                                                        .childs![
-                                                                            j]
-                                                                        .createdAt),
+                                                                DataUtils.getTime(commentProvider
+                                                                    .commentListData![
+                                                                        index]
+                                                                    .children![
+                                                                        j]
+                                                                    .createdAt),
                                                                 style: TextStyle(
                                                                     fontSize: 12
                                                                         .spMin,
@@ -631,7 +652,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                               true,
                                                                           comment: commentProvider
                                                                               .commentListData![index]
-                                                                              .childs![j],
+                                                                              .children![j],
                                                                           memberDetials:
                                                                               widget.memberDetails,
                                                                           articleId: widget
@@ -667,7 +688,11 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                         top: 5)
                                                                     .h,
                                                             child: Text(
-                                                              '${commentProvider.commentListData![index].childs![j].content}',
+                                                              commentProvider
+                                                                  .commentListData![
+                                                                      index]
+                                                                  .children![j]
+                                                                  .content,
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       14.spMin,

@@ -27,6 +27,7 @@ class CommentService extends APIService {
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> body = responseBody['result'];
+      print(body);
       return body.map((dynamic item) => Comment.fromJson(item)).toList();
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -91,7 +92,7 @@ class CommentService extends APIService {
 
   /*
 
-  자식 댓글 생성 (테스트 실패)
+  자식 댓글 생성
 
   */
   static Future<bool> postNestedComment(
