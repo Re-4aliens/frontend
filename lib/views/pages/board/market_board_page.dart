@@ -15,6 +15,7 @@ import '../../../models/message_model.dart';
 import 'package:aliens/providers/bookmarks_provider.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/market_dialog_widget.dart';
+import 'package:aliens/services/user_service.dart';
 
 class MarketBoardPage extends StatefulWidget {
   const MarketBoardPage(
@@ -37,6 +38,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   List<MarketBoard> marketBoardList = [];
   ScrollController _scrollController = ScrollController();
   bool loading = false;
+  MemberDetails? memberDetails;
 
   //String createdAt = '';
   int page = 0;
@@ -44,6 +46,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   @override
   void initState() {
     super.initState();
+    fetchMemberDetails();
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -61,6 +64,18 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     bookmarkProvider.getbookmarksCounts(page);
     //0번째 페이지 게시글 리스트도 받아옵니다.
     fetchMarketArticles();
+  }
+
+  Future<void> fetchMemberDetails() async {
+    try {
+      final details = await UserService.getMemberDetails();
+      setState(() {
+        memberDetails = details;
+      });
+    } catch (error) {
+      // 에러 처리
+      print('Error fetching member details: $error');
+    }
   }
 
   @override
@@ -281,7 +296,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                           marketBoard: marketBoard,
                           productQuality:
                               getProductStatusText(marketBoard.productQuality),
-                          StatusText: getStatusText(marketBoard.saleStatus),
+                          statusText: getStatusText(marketBoard.saleStatus),
                           index: index,
                           backPage: 'marketboard',
                         ),
@@ -301,12 +316,12 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                           decoration: BoxDecoration(
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10)),
-                            image: marketBoard.imageUrls!.isEmpty
+                            image: marketBoard.imageUrls.isEmpty
                                 ? null
                                 : DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                        marketBoard.imageUrls?.first ?? ""),
+                                        marketBoard.imageUrls.first ?? ""),
                                   ),
                           ),
                           child: Column(
@@ -416,7 +431,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                     color: const Color(0xffc1c1c1),
                                   ),
                                   Text(
-                                    '${marketBoard.marketArticleBookmarkCount ?? 0}',
+                                    '${marketBoard.greatCount ?? 0}',
                                     style: TextStyle(
                                       fontSize: 14.spMin,
                                       color: const Color(0xffc1c1c1),
@@ -429,7 +444,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                     color: const Color(0xffc1c1c1),
                                   ),
                                   Text(
-                                    ' ${marketBoard.commentsCount ?? 0}',
+                                    ' ${marketBoard.commentCount ?? 0}',
                                     style: TextStyle(
                                       fontSize: 14.spMin,
                                       color: const Color(0xffc1c1c1),

@@ -331,7 +331,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                       screenArguments: widget.screenArguments,
                       marketBoard: data,
                       productQuality: getProductStatusText(data.productQuality),
-                      StatusText: getStatusText(data.saleStatus),
+                      statusText: getStatusText(data.saleStatus),
                       index: -1,
                       backPage: '',
                     ),
