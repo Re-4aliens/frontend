@@ -100,7 +100,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                                   fontSize: 14.h, color: Colors.white),
                             ),
                             Text(
-                                widget.screenArguments.memberDetails!.email
+                                'widget.screenArguments.memberDetails!.email'
                                     .toString(),
                                 style: TextStyle(
                                     fontSize: 14.h, color: Colors.white)),
@@ -117,21 +117,21 @@ class _SettingWidgetState extends State<SettingWidget> {
                             width: 90.r,
                             decoration: BoxDecoration(
                                 color: widget.screenArguments.memberDetails!
-                                            .profileImage !=
+                                            .profileImageUrl !=
                                         ""
                                     ? Colors.white
                                     : Colors.transparent,
                                 shape: BoxShape.circle,
                                 image: DecorationImage(
                                     image: widget.screenArguments.memberDetails!
-                                                .profileImage !=
+                                                .profileImageUrl !=
                                             ""
                                         ? NetworkImage(widget.screenArguments
-                                            .memberDetails!.profileImage!)
+                                            .memberDetails!.profileImageUrl)
                                         : const NetworkImage(''),
                                     fit: BoxFit.cover)),
                             child: widget.screenArguments.memberDetails!
-                                        .profileImage! ==
+                                        .profileImageUrl ==
                                     ""
                                 ? SvgPicture.asset(
                                     'assets/icon/icon_profile.svg',

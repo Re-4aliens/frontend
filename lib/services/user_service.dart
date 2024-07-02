@@ -5,12 +5,14 @@ import 'package:aliens/models/signup_model.dart';
 import '../util/image_util.dart';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
+import 'package:aliens/models/market_board_model.dart';
+import 'package:aliens/models/member_details_model.dart';
 
 class UserService extends APIService {
   /*
 
   회원가입
-s
+
    */
   static Future<bool> signUp(SignUpModel member) async {
     const url = '$domainUrl/members';
@@ -79,7 +81,7 @@ s
     개인 정보 조회
 
   */
-  static Future<Map<String, dynamic>> getMemberDetails() async {
+  static Future<MemberDetails> getMemberDetails() async {
     var url = '$domainUrl/members';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
@@ -91,20 +93,33 @@ s
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      return responseBody['result'];
+      return MemberDetails.fromJson(responseBody['result']);
     } else {
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      if (responseBody['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
-      } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-          'AT-C-007') {
+      } else if (responseBody['code'] == 'AT-C-007') {
         // 로그아웃된 토큰
         throw 'AT-C-007';
       } else {
         // 예외
+        throw Exception('요청 오류: ${responseBody['message']}');
       }
-      throw Exception('요청 오류');
     }
+  }
+
+  /*
+
+    작성자와 사용자 동일 여부 (장터게시판)
+
+  */
+  static bool isMarketAuthor(
+      MemberDetails memberDetails, MarketBoard marketBoard) {
+    return memberDetails.name == marketBoard.memberProfileDto?.name &&
+        memberDetails.profileImageUrl ==
+            marketBoard.memberProfileDto?.profileImageUrl &&
+        memberDetails.nationality == marketBoard.memberProfileDto?.nationality;
   }
 
   /*

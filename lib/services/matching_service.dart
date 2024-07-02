@@ -102,8 +102,7 @@ class MatchingService extends APIService {
     try {
       status = await UserService.getApplicantStatus();
 
-      memberDetails =
-          MemberDetails.fromJson(await UserService.getMemberDetails());
+      memberDetails = await UserService.getMemberDetails();
 
       if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
         applicant = Applicant.fromJson(await getApplicantInfo());

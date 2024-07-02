@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../../models/countries.dart';
 import 'package:flutter/services.dart';
-
 import '../../../models/message_model.dart';
 import 'package:aliens/providers/bookmarks_provider.dart';
 import 'package:aliens/providers/market_comment_provider.dart';
@@ -23,14 +22,13 @@ class MarketDetailPage extends StatefulWidget {
       required this.screenArguments,
       required this.marketBoard,
       required this.productQuality,
-      required this.StatusText,
+      required this.statusText,
       required this.index,
       required this.backPage});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
-  //final MemberDetails memberDetails;
   final String productQuality;
-  final String StatusText;
+  final String statusText;
   final int index;
   final String backPage;
 
@@ -84,11 +82,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    print('${widget.marketBoard}');
-    //print('Data from marketBoard: ${widget.marketBoard.createdAt}');
-    /*print('comment:${widget.marketBoard.commentsCount}');
-    print('marketArticleBookmarkCount:${widget.marketBoard.marketArticleBookmarkCount}');*/
-
     List<String> whatStatus = [
       'Brand_New'.tr(),
       'Almost_New'.tr(),
@@ -96,7 +89,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
       'Used'.tr()
     ];
     String productQuality = widget.marketBoard.productQuality;
-    String StatusText = widget.marketBoard.productQuality;
+    String statusText = widget.marketBoard.productQuality;
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context);
     final bookmarkProvider = Provider.of<BookmarksProvider>(context);
 
@@ -198,7 +191,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      getStatusText(StatusText),
+                                      getstatusText(statusText),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: const Color(0xff888888),
@@ -260,7 +253,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   child: Row(
                                     children: whatStatus.map((condition) {
                                       final bool isSelected =
-                                          getProductStatusText(
+                                          getProductstatusText(
                                                   productQuality) ==
                                               condition;
                                       return Padding(
@@ -877,7 +870,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   }
 }
 
-String getProductStatusText(String? productQuality) {
+String getProductstatusText(String? productQuality) {
   List<String> whatStatus = [
     'Brand_New'.tr(),
     'Almost_New'.tr(),
@@ -899,7 +892,7 @@ String getProductStatusText(String? productQuality) {
   }
 }
 
-String getStatusText(String? productQuality) {
+String getstatusText(String? productQuality) {
   List<String> Status = [
     'sale'.tr(),
     'sold-out'.tr(),

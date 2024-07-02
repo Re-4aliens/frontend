@@ -75,12 +75,12 @@ class CommentDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-            memberDetials.email == comment.member!.email
+            'memberDetials.email' == comment.member!.email
                 ? SizedBox(
                     height: 10.h,
                   )
                 : const SizedBox(),
-            memberDetials.email == comment.member!.email
+            'memberDetials.email' == comment.member!.email
                 ? InkWell(
                     onTap: () {
                       showDialog(
@@ -184,7 +184,7 @@ class CommentDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-          memberDetials.email == comment.member!.email
+          'memberDetials.email' == comment.member!.email
               ? InkWell(
                   onTap: () {
                     showDialog(

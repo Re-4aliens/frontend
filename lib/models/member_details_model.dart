@@ -1,49 +1,43 @@
 class MemberDetails {
-  int? memberId;
-  String? email;
-  String? mbti;
-  String? gender;
-  String? nationality;
-  String? birthday;
-  String? name;
-  String? profileImage;
-  int? age;
-  String? selfIntroduction;
+  final String name;
+  final String mbti;
+  final String gender;
+  final String nationality;
+  final String birthday;
+  final String selfIntroduction;
+  final String profileImageUrl;
 
-  MemberDetails(
-      {this.memberId,
-      this.email,
-      this.mbti,
-      this.gender,
-      this.nationality,
-      this.birthday,
-      this.name,
-      this.profileImage,
-      this.age,
-      this.selfIntroduction});
+  MemberDetails({
+    required this.name,
+    required this.mbti,
+    required this.gender,
+    required this.nationality,
+    required this.birthday,
+    required this.selfIntroduction,
+    required this.profileImageUrl,
+  });
 
-  factory MemberDetails.fromJson(Map<String, dynamic> json) => MemberDetails(
-      memberId: json['memberId'],
-      email: json['email'],
+  factory MemberDetails.fromJson(Map<String, dynamic> json) {
+    return MemberDetails(
+      name: json['name'],
       mbti: json['mbti'],
       gender: json['gender'],
       nationality: json['nationality'],
       birthday: json['birthday'],
-      name: json['name'],
-      profileImage: json['profileImage'],
-      age: json['age'],
-      selfIntroduction: json['selfIntroduction']);
+      selfIntroduction: json['selfIntroduction'],
+      profileImageUrl: json['profileImageURL'],
+    );
+  }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['email'] = email;
-    data['mbti'] = mbti;
-    data['gender'] = gender;
-    data['nationality'] = nationality;
-    data['birthday'] = birthday;
-    data['name'] = name;
-    data['profileImage'] = profileImage;
-    data['selfIntroduction'] = selfIntroduction;
-    return data;
+    return {
+      'name': name,
+      'mbti': mbti,
+      'gender': gender,
+      'nationality': nationality,
+      'birthday': birthday,
+      'selfIntroduction': selfIntroduction,
+      'profileImageURL': profileImageUrl,
+    };
   }
 }

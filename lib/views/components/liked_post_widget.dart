@@ -216,10 +216,8 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                                 builder: (context) => MarketDetailPage(
                                       screenArguments: widget.screenArguments,
                                       marketBoard: data,
-                                      productQuality: getProductStatusText(
-                                          data.productQuality),
-                                      StatusText:
-                                          getStatusText(data.saleStatus),
+                                      productQuality: data.productQuality,
+                                      statusText: data.saleStatus,
                                       index: -1,
                                       backPage: '',
                                     )),
