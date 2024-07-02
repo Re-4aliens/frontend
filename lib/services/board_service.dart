@@ -75,6 +75,8 @@ class BoardService extends APIService {
         return Board.fromJson(articleData);
       }).toList();
 
+      print('전체 게시판 검색 결과 : $articles');
+
       return articles;
     } else {
       throw Exception('요청 오류');
@@ -101,11 +103,12 @@ class BoardService extends APIService {
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
       final List<dynamic> articlesData = responseBody['result'];
       List<Board> articles = articlesData.map((articleData) {
         return Board.fromJson(articleData);
       }).toList();
-      print(articles);
+      print("특정 게시판 검색 결과 : $articles");
       return articles;
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
@@ -153,8 +156,6 @@ class BoardService extends APIService {
     final url =
         '$domainUrl/boards/category?category=$boardCategory&page=0&size=10';
 
-    print(url);
-
     final response = await http.get(
       Uri.parse(url),
       headers: {
@@ -162,20 +163,15 @@ class BoardService extends APIService {
       },
     );
 
-    print(response.statusCode);
-
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print(responseBody);
       final result = responseBody['result'];
 
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
-      print(boards);
       return boards;
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }
