@@ -116,12 +116,7 @@ class _SearchPageState extends State<SearchPage> {
               setState(() {
                 _keyword = value;
               });
-              if (widget.category == '전체게시판') {
-                searchResults = await BoardService.searchTotal(value);
-              } else {
-                searchResults =
-                    await BoardService.searchCategory(widget.category, value);
-              }
+              searchResults = await BoardService.searchTotal(value);
               print(searchResults);
               setState(() {
                 print("검색성공");
