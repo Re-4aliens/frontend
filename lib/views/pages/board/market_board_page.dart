@@ -321,7 +321,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                 : DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                        marketBoard.imageUrls.first ?? ""),
+                                        marketBoard.imageUrls.first),
                                   ),
                           ),
                           child: Column(
@@ -411,7 +411,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                               ),
                               SizedBox(height: 20.h),
                               Text(
-                                marketBoard.title ?? "",
+                                marketBoard.title,
                                 style: TextStyle(fontSize: 16.spMin),
                               ),
                               SizedBox(height: 5.h),
