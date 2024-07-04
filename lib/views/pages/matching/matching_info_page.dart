@@ -13,6 +13,26 @@ class MatchingInfoPage extends StatefulWidget {
 }
 
 class _MatchingInfoPageState extends State<MatchingInfoPage> {
+  int age = 0;
+
+  int calculateInternationalAge(String? birthDateString) {
+    if (birthDateString != null) {
+      // 문자열을 DateTime 객체로 변환
+      DateTime birthDate = DateTime.parse(birthDateString);
+      DateTime today = DateTime.now();
+
+      int age = today.year - birthDate.year;
+
+      if (today.month < birthDate.month ||
+          (today.month == birthDate.month && today.day < birthDate.day)) {
+        age--;
+      }
+
+      return age;
+    }
+    return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as ScreenArguments?;
@@ -30,11 +50,11 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
     String initialbio = '${args.memberDetails?.selfIntroduction}';
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    @override
-    void initState() {
-      super.initState();
-      bioEditingController.text = initialbio;
-    }
+    bioEditingController.text = initialbio;
+
+    setState(() {
+      age = calculateInternationalAge(args.memberDetails?.birthday);
+    });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -129,7 +149,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                   children: [
                                     Expanded(flex: 6, child: Container()),
                                     Text(
-                                      '${args.applicant?.member?.name}',
+                                      '${args.memberDetails?.name}',
                                       //'${args.applicant['member']['name']}      '
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
@@ -314,7 +334,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                               SizedBox(
                                                 width: 120,
                                                 child: Text(
-                                                  '${args.applicant?.member?.nationality}',
+                                                  '${args.memberDetails?.nationality}',
                                                   style: TextStyle(
                                                     fontSize:
                                                         isSmallScreen ? 18 : 20,
@@ -341,7 +361,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                ' ${args.applicant?.member?.age}',
+                                                age.toString(),
                                                 style: TextStyle(
                                                   fontSize:
                                                       isSmallScreen ? 18 : 20,
@@ -365,7 +385,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                '${args.applicant?.member?.mbti}',
+                                                '${args.memberDetails?.mbti}',
                                                 style: TextStyle(
                                                   fontSize:
                                                       isSmallScreen ? 18 : 20,
@@ -465,7 +485,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                               height: 2,
                                             ),
                                             Text(
-                                              '${args.applicant?.preferLanguages?.firstPreferLanguage}',
+                                              '${args.matchingApplicant?.firstPreferLanguage}',
                                               style: TextStyle(
                                                 fontSize:
                                                     isSmallScreen ? 18 : 20,
@@ -541,7 +561,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                               height: 2,
                                             ),
                                             Text(
-                                              '${args.applicant?.preferLanguages?.secondPreferLanguage}',
+                                              '${args.matchingApplicant?.secondPreferLanguage}',
                                               style: TextStyle(
                                                 fontSize:
                                                     isSmallScreen ? 18 : 20,
@@ -651,7 +671,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Icon(
-                    args.applicant?.member?.gender == 'FEMALE'
+                    args.memberDetails?.gender == 'FEMALE'
                         ? Icons.female
                         : Icons.male,
                     color: const Color(0xff7898ff),

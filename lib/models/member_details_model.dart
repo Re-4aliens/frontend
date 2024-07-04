@@ -7,7 +7,6 @@ class MemberDetails {
   String? birthday;
   String? name;
   String? profileImageURL;
-  int? age;
   String? selfIntroduction;
 
   MemberDetails(
@@ -19,7 +18,6 @@ class MemberDetails {
       this.birthday,
       this.name,
       this.profileImageURL,
-      this.age,
       this.selfIntroduction});
 
   factory MemberDetails.fromJson(Map<String, dynamic> json) => MemberDetails(
@@ -31,7 +29,6 @@ class MemberDetails {
       birthday: json['birthday'],
       name: json['name'],
       profileImageURL: json['profileImageURL'],
-      age: json['age'],
       selfIntroduction: json['selfIntroduction']);
 
   Map<String, dynamic> toJson() {

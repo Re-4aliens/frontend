@@ -101,14 +101,14 @@ class UserService extends APIService {
     var response = await http.get(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json',
       },
     );
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
-
+      print(responseBody['result']);
       return responseBody['result'];
     } else {
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
@@ -163,7 +163,6 @@ class UserService extends APIService {
     var url = '$domainUrl/members/profile-image';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
-
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers['Authorization'] = jwtToken;
@@ -251,11 +250,13 @@ class UserService extends APIService {
       );
 
       if (response.statusCode == 200) {
+        print(json.decode(utf8.decode(response.bodyBytes)));
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         var matchingStatus = responseBody['result'];
 
         return matchingStatus; // 매칭상태 반환
       } else {
+        print(json.decode(utf8.decode(response.bodyBytes)));
         if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
             'AT-C-002') {
           // 엑세스 토큰 만료

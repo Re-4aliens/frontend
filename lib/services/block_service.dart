@@ -21,8 +21,8 @@ class BlockService extends APIService {
         'Content-Type': 'application/json;charset=UTF-8',
       },
       body: jsonEncode({
-        "partnerId": partner.memberId,
-        "chatRoomId": partner.roomId,
+        "partnerId": partner.partnerMemberId,
+        "chatRoomId": partner.chatRoomId,
       }),
     );
 

@@ -131,8 +131,8 @@ class _MatchingListPageState extends State<MatchingListPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ChattingPage(
-                                      applicant:
-                                          widget.screenArguments.applicant,
+                                      matchingApplicant: widget
+                                          .screenArguments.matchingApplicant,
                                       partner: widget.screenArguments
                                           .partners![selectedIndex],
                                       memberDetails:
@@ -265,7 +265,7 @@ class _MatchingListState extends State<MatchingList> {
                     children: [
                       InkWell(
                         onTap: () {
-                          print(widget.partner.profileImage);
+                          print(widget.partner.profileImageUrl);
                           /*
                       Navigator.pushNamed(context, '/info/your',
                           arguments: widget.partner);
@@ -298,7 +298,7 @@ class _MatchingListState extends State<MatchingList> {
                                                     height: 50,
                                                   ),
                                                   Text(
-                                                    '${widget.partner.name}',
+                                                    widget.partner.name,
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -312,7 +312,7 @@ class _MatchingListState extends State<MatchingList> {
                                                         const EdgeInsets.all(
                                                             15),
                                                     child: Text(
-                                                      '${widget.partner.selfIntroduction}',
+                                                      widget.partner.aboutMe,
                                                       style: const TextStyle(
                                                         color:
                                                             Color(0xff888888),
@@ -382,7 +382,7 @@ class _MatchingListState extends State<MatchingList> {
                                                   alignment:
                                                       Alignment.topCenter,
                                                   child: widget.partner
-                                                              .profileImage ==
+                                                              .profileImageUrl ==
                                                           ""
                                                       ? Container(
                                                           width: 100,
@@ -414,7 +414,7 @@ class _MatchingListState extends State<MatchingList> {
                                                               image: DecorationImage(
                                                                   image: NetworkImage(widget
                                                                       .partner
-                                                                      .profileImage!))),
+                                                                      .profileImageUrl))),
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(5),
@@ -453,7 +453,7 @@ class _MatchingListState extends State<MatchingList> {
                                     ),
                                   ));
                         },
-                        child: widget.partner.profileImage == null
+                        child: widget.partner.profileImageUrl == ''
                             ? SvgPicture.asset(
                                 'assets/icon/icon_profile.svg',
                                 width: 50,
@@ -467,7 +467,7 @@ class _MatchingListState extends State<MatchingList> {
                                     color: Colors.white,
                                     image: DecorationImage(
                                         image: NetworkImage(
-                                            widget.partner.profileImage!))),
+                                            widget.partner.profileImageUrl))),
                                 padding: const EdgeInsets.all(5),
                               ),
                       ),
@@ -484,7 +484,7 @@ class _MatchingListState extends State<MatchingList> {
                             Row(
                               children: [
                                 Text(
-                                  '${widget.partner.name}',
+                                  widget.partner.name,
                                   style: TextStyle(
                                     fontSize: isSmallScreen ? 16 : 20,
                                     fontWeight: FontWeight.bold,
@@ -520,7 +520,7 @@ class _MatchingListState extends State<MatchingList> {
                               ],
                             ),
                             Text(
-                              '${widget.partner.mbti}',
+                              widget.partner.mbti,
                               style: TextStyle(
                                 fontSize: isSmallScreen ? 14 : 16,
                                 color: widget.isClicked

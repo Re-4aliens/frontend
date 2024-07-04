@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:aliens/models/matching_applicant_model.dart';
 import 'package:http/http.dart' as http;
 import 'api_service.dart';
 import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/models/member_details_model.dart';
-import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/services/user_service.dart';
 
 class MatchingService extends APIService {
@@ -94,7 +94,7 @@ class MatchingService extends APIService {
   static Future<ScreenArguments> getMatchingData(context) async {
     MemberDetails? memberDetails;
     String? status;
-    Applicant? applicant;
+    MatchingApplicant? applicant;
     List<Partner>? partners;
 
     try {
@@ -102,8 +102,10 @@ class MatchingService extends APIService {
       memberDetails =
           MemberDetails.fromJson(await UserService.getMemberDetails());
 
+      print('$status, $memberDetails');
+
       if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
-        applicant = Applicant.fromJson(await getApplicantInfo());
+        applicant = MatchingApplicant.fromJson(await getApplicantInfo());
       } else {
         applicant = null;
       }
@@ -124,7 +126,6 @@ class MatchingService extends APIService {
 
     // 모든 필드가 null이 아닌지 확인하고, 그렇지 않은 경우 기본값을 설정합니다.
     memberDetails ??= MemberDetails(); // MemberDetails의 기본 생성자가 있는지 확인하세요.
-    status ??= 'unknown';
     partners ??= [];
 
     ScreenArguments screenArguments =
