@@ -30,14 +30,14 @@ class _GameBoardPageState extends State<GameBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('게임게시판');
+    boardProvider.getArticles('game');
 
     _scrollController.addListener(() {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         page++;
-        boardProvider.getMoreArticles('게임게시판', page);
+        boardProvider.getMoreArticles('game', page);
       }
     });
   }
@@ -128,7 +128,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "게임게시판",
+                            category: "game",
                             nationCode: '',
                           )),
                 );
@@ -165,12 +165,19 @@ class _GameBoardPageState extends State<GameBoardPage> {
                               itemCount: boardProvider.articleList.length,
                               itemBuilder: (context, index) {
                                 var nationCode = '';
+                                var member =
+                                    boardProvider.articleList[index].member;
+
+                                var nationality =
+                                    member?.nationality?.toString();
                                 for (Map<String, String> country in countries) {
+
                                   if (country['name'] ==
                                       (boardProvider.articleList[index]
                                               .memberProfileDto!.nationality)
                                           .toString()) {
                                     nationCode = country['code']!;
+
                                     break;
                                   }
                                 }

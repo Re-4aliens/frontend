@@ -30,13 +30,13 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('음식게시판');
+    boardProvider.getArticles('food');
     _scrollController.addListener(() {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         page++;
-        boardProvider.getMoreArticles('음식게시판', page);
+        boardProvider.getMoreArticles('food', page);
       }
     });
   }
@@ -128,7 +128,7 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "음식게시판",
+                            category: "food",
                             nationCode: '',
                           )),
                 );
@@ -162,12 +162,18 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
                         var nationCode = '';
+                        var member = boardProvider.articleList[index].member;
+
+                        var nationality = member?.nationality?.toString() ?? '';
+
                         for (Map<String, String> country in countries) {
+
                           if (country['name'] ==
                               boardProvider.articleList[index].memberProfileDto
                                   ?.nationality
                                   .toString()) {
                             nationCode = country['code']!;
+
                             break;
                           }
                         }

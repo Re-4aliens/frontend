@@ -78,21 +78,20 @@ class MarketService extends APIService {
 
   */
   static Future<bool> createMarketArticle(MarketBoard marketArticle) async {
+    const url = '$domainUrl/api/v2/market-articles';
+
     try {
-      var jwtToken = await APIService.storage.read(key: 'token');
-      final accessToken = json.decode(jwtToken!)['data']['accessToken'];
+      var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+      jwtToken = json.decode(jwtToken)['data']['accessToken'];
 
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse('$domainUrl/api/v2/market-articles'),
-      );
+      if (jwtToken == '') {
+        throw Exception('JWT 토큰이 없습니다.');
+      }
 
-      request.fields['title'] = marketArticle.title!;
-      request.fields['content'] = marketArticle.content!;
-      request.fields['price'] = marketArticle.price.toString();
-      request.fields['productStatus'] = marketArticle.productStatus!;
-      request.fields['marketArticleStatus'] =
-          marketArticle.marketArticleStatus!;
+      var request = http.MultipartRequest('POST', Uri.parse(url));
+
+      request.headers['Content-Type'] = 'multipart/form-data';
+      request.headers['Authorization'] = jwtToken;
 
       if (marketArticle.imageUrls != null &&
           marketArticle.imageUrls!.isNotEmpty) {
@@ -107,7 +106,12 @@ class MarketService extends APIService {
         }
       }
 
-      request.headers['Authorization'] = 'Bearer $accessToken';
+      request.fields['title'] = marketArticle.title ?? '';
+      request.fields['content'] = marketArticle.content ?? '';
+      request.fields['price'] = marketArticle.price.toString();
+      request.fields['productStatus'] = marketArticle.productStatus ?? '';
+      request.fields['marketArticleStatus'] =
+          marketArticle.marketArticleStatus ?? '';
 
       var response = await request.send();
 

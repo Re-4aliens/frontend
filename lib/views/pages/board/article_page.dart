@@ -145,7 +145,9 @@ class _ArticlePageState extends State<ArticlePage> {
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.only(right: 10),
                             child: Text(
+
                               '${widget.board.memberProfileDto?.name ?? ''}/$nationCode',
+
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,

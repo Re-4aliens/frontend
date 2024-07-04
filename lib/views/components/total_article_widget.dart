@@ -193,7 +193,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                       height: 90.h,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: widget.board.imageUrls.length,
+                          itemCount: widget.board.imageUrls?.length ?? 0,
+                  
                           itemBuilder: (context, index) {
                             return Row(
                               children: [
@@ -235,6 +236,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                       if (widget.board.category != "장터게시판") {
                         boardProvider.addLike(widget.board.id!, widget.index);
                       } else {
+
                         boardProvider.greatCounts[widget.index] =
                             await MarketService.marketBookmark(
                                 widget.board.id!, widget.index);
