@@ -67,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 TotalArticleWidget(
                   board: board,
-                  nationCode: board.member!.nationality.toString(),
+                  nationCode: board.memberProfileDto!.nationality.toString(),
                   screenArguments: widget.screenArguments,
                   index: index,
                 ),

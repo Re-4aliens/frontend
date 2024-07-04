@@ -1,76 +1,79 @@
 class Comment {
-  int? articleCommentId;
-  String? content;
-  CommentMember? member;
-  String? createdAt;
-  List<Comment>? childs;
+  final String status;
+  final int id;
+  final String content;
+  final String createdAt;
+  final MemberProfileDto memberProfileDto;
+  final List<Comment>? children;
 
-  Comment(
-      {this.articleCommentId,
-      this.content,
-      this.member,
-      this.childs,
-      this.createdAt});
+  Comment({
+    required this.status,
+    required this.id,
+    required this.content,
+    required this.createdAt,
+    required this.memberProfileDto,
+    this.children,
+  });
 
-  Comment.fromJson(Map<String, dynamic> json) {
-    List<Comment> childComments = [];
-    if (json['childs'] != null) {
-      var childJsonList = json['childs'] as List<dynamic>;
-      childComments = childJsonList
-          .map((childJson) => Comment.fromJson(childJson))
-          .toList();
-    }
-
-    articleCommentId = json['articleCommentId'];
-    content = json['content'];
-    createdAt = json['createdAt'];
-    member =
-        json['member'] != null ? CommentMember.fromJson(json['member']) : null;
-    childs = childComments;
+  factory Comment.fromJson(Map<String, dynamic> json) {
+    return Comment(
+      status: json['status'],
+      id: json['id'],
+      content: json['content'],
+      createdAt: json['createdAt'],
+      memberProfileDto: MemberProfileDto.fromJson(json['memberProfileDto']),
+      children: json['children'] != null
+          ? (json['children'] as List).map((i) => Comment.fromJson(i)).toList()
+          : null,
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['articleCommentId'] = articleCommentId;
-    data['content'] = content;
-    data['childs'] = childs;
-    data['createdAt'] = createdAt;
-    if (member != null) {
-      data['member'] = member!.toJson();
-    }
-    return data;
+    return {
+      'status': status,
+      'id': id,
+      'content': content,
+      'createdAt': createdAt,
+      'memberProfileDto': memberProfileDto.toJson(),
+      'children': children?.map((child) => child.toJson()).toList(),
+    };
+  }
+
+  @override
+  String toString() {
+    return 'Comment{status: $status, id: $id, content: $content, createdAt: $createdAt, memberProfileDto: $memberProfileDto, children: $children}';
   }
 }
 
-class CommentMember {
-  int? memberId;
-  String? email;
-  String? name;
-  String? profileImageUrl;
-  String? nationality;
+class MemberProfileDto {
+  final String name;
+  final String profileImageUrl;
+  final String nationality;
 
-  CommentMember(
-      {this.memberId,
-      this.email,
-      this.name,
-      this.profileImageUrl,
-      this.nationality});
+  MemberProfileDto({
+    required this.name,
+    required this.profileImageUrl,
+    required this.nationality,
+  });
 
-  CommentMember.fromJson(Map<String, dynamic> json) {
-    memberId = json['memberId'];
-    email = json['email'];
-    name = json['name'];
-    profileImageUrl = json['profileImageUrl'];
-    nationality = json['nationality'];
+  factory MemberProfileDto.fromJson(Map<String, dynamic> json) {
+    return MemberProfileDto(
+      name: json['name'],
+      profileImageUrl: json['profileImageUrl'],
+      nationality: json['nationality'],
+    );
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['memberId'] = memberId;
-    data['email'] = email;
-    data['name'] = name;
-    data['profileImageUrl'] = profileImageUrl;
-    data['nationality'] = nationality;
-    return data;
+    return {
+      'name': name,
+      'profileImageUrl': profileImageUrl,
+      'nationality': nationality,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'MemberProfileDto{name: $name, profileImageUrl: $profileImageUrl, nationality: $nationality}';
   }
 }

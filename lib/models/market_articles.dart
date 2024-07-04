@@ -2,7 +2,7 @@ class MarketBoard {
   int? articleId;
   String? title;
   String? marketArticleStatus;
-  int? price;
+  String? price;
   String? productStatus;
   String? content;
   int? marketArticleBookmarkCount;
