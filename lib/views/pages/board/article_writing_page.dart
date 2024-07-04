@@ -463,6 +463,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                     alignment: Alignment.topCenter,
                     padding: const EdgeInsets.all(20).r,
                     child: Button(
+                      // 작성 완료
                       onPressed: () {
                         print(boardCategory);
                         if (title != '' &&
@@ -498,11 +499,11 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             requestImages.add(_images[i].path.toString());
                           }
 
-                          // 변수 출력
-                          print('Board Category1: $boardCategory');
-                          print('Title1: $title');
-                          print('Content1: $content');
-                          print('Request Image1s: $requestImages');
+                          // // 변수 출력
+                          // print('Board Category1: $boardCategory');
+                          // print('Title1: $title');
+                          // print('Content1: $content');
+                          // print('Request Image1s: $requestImages');
 
                           Board newBoard = Board(
                             category: boardCategory,
@@ -511,8 +512,8 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             imageUrls: requestImages,
                           );
                           // Board 객체 출력
-                          print(
-                              'New Board: ${newBoard.category}, ${newBoard.title}, ${newBoard.content}, ${newBoard.imageUrls}');
+                          // print(
+                          //     'New Board: ${newBoard.category}, ${newBoard.title}, ${newBoard.content}, ${newBoard.imageUrls}');
                           showDialog(
                               context: context,
                               builder: (_) => FutureBuilder(

@@ -67,7 +67,9 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 TotalArticleWidget(
                   board: board,
+
                   nationCode: board.memberProfileDto!.nationality.toString(),
+
                   screenArguments: widget.screenArguments,
                   index: index,
                 ),
@@ -117,6 +119,7 @@ class _SearchPageState extends State<SearchPage> {
                 _keyword = value;
               });
               searchResults = await BoardService.searchTotal(value);
+              print(searchResults);
               setState(() {
                 print("검색성공");
                 searched = true;

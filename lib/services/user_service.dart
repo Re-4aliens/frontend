@@ -154,7 +154,7 @@ class UserService extends APIService {
 
   /*
 
-프로필 수정(테스트 실패)
+프로필 수정
 
  */
 
@@ -163,6 +163,7 @@ class UserService extends APIService {
     var url = '$domainUrl/members/profile-image';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers['Authorization'] = jwtToken;

@@ -22,8 +22,10 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
   @override
   void initState() {
     super.initState();
-    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getAllArticles();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+      boardProvider.getAllArticles();
+    });
 
     _scrollController.addListener(() {
       if (_scrollController.offset ==
@@ -31,6 +33,8 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
           !_scrollController.position.outOfRange) {
         print('추가');
         page++;
+        final boardProvider =
+            Provider.of<BoardProvider>(context, listen: false);
         boardProvider.getMoreAllArticles(page);
       }
     });
@@ -57,6 +61,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
               itemCount: boardProvider.articleList.length,
               itemBuilder: (context, index) {
                 var nationCode = '';
+
                 final memberNationality = boardProvider
                     .articleList[index].memberProfileDto?.nationality
                     .toString();
