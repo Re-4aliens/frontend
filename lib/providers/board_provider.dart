@@ -4,13 +4,10 @@ import 'package:aliens/services/board_service.dart';
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/services/comment_service.dart';
 
-// 게시물 관련 데이터를 관리하는 FLUTTER의 ChangeNotifier를 사용하는 상태 관리 클래스
-// 게시물 데이터 가져오기, 좋아요 추가하기, 게시물 목록 관리하는 메서드 포함
-
 class BoardProvider with ChangeNotifier {
   List<Board> articleList = [];
   bool loading = false;
-  List<int> likeCounts = [];
+  List<int> greatCounts = [];
 
   Future<void> getAllArticles() async {
     _setLoading(true);
@@ -89,11 +86,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> addLike(int articleId, int index) async {
     _setLoading(true);
     try {
-      likeCounts[index] = await BoardService.addLike(articleId);
+      greatCounts[index] = await BoardService.addLike(articleId);
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        likeCounts[index] = await BoardService.addLike(articleId);
+        greatCounts[index] = await BoardService.addLike(articleId);
       }
     }
     _setLoading(false);
@@ -184,15 +181,17 @@ class BoardProvider with ChangeNotifier {
   }
 
   Future<void> getLikeCounts() async {
-    likeCounts = articleList.map((board) => board.likeCount ?? 0).toList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      greatCounts = articleList.map((board) => board.greatCount ?? 0).toList();
+      notifyListeners();
+    });
   }
 
   void _setLoading(bool value) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (loading != value) {
-        loading = value;
-        notifyListeners();
-      }
+
+      loading = value;
+      notifyListeners();
     });
   }
 }

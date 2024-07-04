@@ -10,6 +10,7 @@ import 'package:aliens/providers/board_provider.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/info_article_page.dart';
 import 'board_dialog_widget.dart';
+import 'package:aliens/services/user_service.dart';
 
 class ArticleWidget extends StatefulWidget {
   const ArticleWidget(
@@ -30,12 +31,25 @@ class ArticleWidget extends StatefulWidget {
 
 class _ArticleWidgetState extends State<ArticleWidget> {
   String createdAt = '';
+  String? email;
 
   @override
   void initState() {
     super.initState();
-    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getLikeCounts();
+    initialize();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+      boardProvider.getLikeCounts();
+    });
+  }
+
+  void initialize() async {
+    final userEmail = await UserService.fetchUserEmail();
+
+    setState(() {
+      email = userEmail;
+    });
   }
 
   @override
@@ -62,7 +76,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
               alignment: Alignment.centerLeft,
               padding: const EdgeInsets.only(right: 10),
               child: Text(
-                '${widget.board.member?.name ?? 'Unknown'}/${widget.nationCode}',
+                '${widget.board.memberProfileDto?.name}/${widget.nationCode}',
                 overflow: TextOverflow.ellipsis,
                 style:
                     TextStyle(fontWeight: FontWeight.bold, fontSize: 16.spMin),
@@ -80,7 +94,6 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                   context: context,
                   builder: (builder) {
                     return BoardDialog(
-                      context: context,
                       board: widget.board,
                       memberDetails: widget.memberDetails,
                       boardCategory: "일반게시판",
@@ -109,13 +122,13 @@ class _ArticleWidgetState extends State<ArticleWidget> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 8).h,
-              child: Text('${widget.board.title}',
+              child: Text(widget.board.title,
                   style: TextStyle(
                       fontSize: 14.spMin,
                       color: const Color(0xff444444),
                       fontWeight: FontWeight.bold)),
             ),
-            if (widget.board.imageUrls?.isEmpty ?? true)
+            if (widget.board.imageUrls.isEmpty)
               const SizedBox()
             else
               SizedBox(
@@ -147,7 +160,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                 : Padding(
                     padding: EdgeInsets.only(top: 10.h, bottom: 15.0.h),
                     child: Text(
-                      '${widget.board.content}',
+                      widget.board.content,
                       style: TextStyle(
                           fontSize: 14.spMin, color: const Color(0xff616161)),
                     ),
@@ -157,8 +170,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
               children: [
                 InkWell(
                   onTap: () {
-                    boardProvider.addLike(
-                        widget.board.articleId!, widget.index);
+                    boardProvider.addLike(widget.board.id!, widget.index);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(4.0).r,
@@ -171,9 +183,9 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 4, right: 15).w,
-                  child: boardProvider.likeCounts[widget.index] == 0
+                  child: boardProvider.greatCounts[widget.index] == 0
                       ? const Text('')
-                      : Text('${boardProvider.likeCounts[widget.index]}'),
+                      : Text('${boardProvider.greatCounts[widget.index]}'),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0).r,
@@ -185,9 +197,9 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(4.0).r,
-                  child: widget.board.commentsCount == 0
+                  child: widget.board.commentCount == 0
                       ? const Text('')
-                      : Text('${widget.board.commentsCount}'),
+                      : Text('${widget.board.commentCount}'),
                 ),
               ],
             )

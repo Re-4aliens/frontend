@@ -61,8 +61,7 @@ class MarketBoardDialog extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (builder) => ReportDialog(
-                        memberId: marketBoard.member!.memberId!,
-                        context: context));
+                        id: marketBoard.member!.memberId!, context: context));
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,

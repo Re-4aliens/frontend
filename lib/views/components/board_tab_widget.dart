@@ -61,20 +61,23 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
               itemCount: boardProvider.articleList.length,
               itemBuilder: (context, index) {
                 var nationCode = '';
-                var member = boardProvider.articleList[index].member;
-                if (member != null) {
-                  var nationality = member.nationality?.toString() ?? '';
-                  for (Map<String, String> country in countries) {
-                    if (country['name'] == nationality) {
-                      nationCode = country['code']!;
-                      break;
-                    }
+
+                final memberNationality = boardProvider
+                    .articleList[index].memberProfileDto?.nationality
+                    .toString();
+                for (Map<String, String> country in countries) {
+                  if (country['name']!.toUpperCase() == memberNationality) {
+                    nationCode = country['code'] ?? '';
+                    break;
                   }
                 }
+
+                final board = boardProvider.articleList[index];
+
                 return Column(
                   children: [
                     TotalArticleWidget(
-                        board: boardProvider.articleList[index],
+                        board: board,
                         nationCode: nationCode,
                         screenArguments: widget.screenArguments,
                         index: index),
