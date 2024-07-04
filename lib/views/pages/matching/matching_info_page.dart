@@ -15,7 +15,14 @@ class MatchingInfoPage extends StatefulWidget {
 class _MatchingInfoPageState extends State<MatchingInfoPage> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    final args = ModalRoute.of(context)?.settings.arguments as ScreenArguments?;
+    if (args == null) {
+      // Handle the null case, possibly return an error widget or a default state
+      return Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: const Center(child: Text('No arguments provided')),
+      );
+    }
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
 
@@ -607,7 +614,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.15),
               alignment: Alignment.topCenter,
-              child: args.memberDetails!.profileImage == null
+              child: args.memberDetails!.profileImageURL == null
                   ? Container(
                       margin:
                           const EdgeInsetsDirectional.symmetric(vertical: 20),
@@ -625,8 +632,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
-                            image:
-                                NetworkImage(args.memberDetails!.profileImage!),
+                            image: NetworkImage(
+                                args.memberDetails!.profileImageURL!),
                             fit: BoxFit.cover,
                           )),
                     ),

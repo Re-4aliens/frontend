@@ -10,21 +10,40 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
 import 'package:aliens/services/board_service.dart';
+import 'package:aliens/services/user_service.dart'; // Import UserService
 import '../../models/board_model.dart';
 
-class BoardDialog extends StatelessWidget {
-  final BuildContext context;
+class BoardDialog extends StatefulWidget {
   final Board board;
   final MemberDetails memberDetails;
   final String boardCategory;
 
-  const BoardDialog(
-      {Key? key,
-      required this.context,
-      required this.board,
-      required this.memberDetails,
-      required this.boardCategory})
-      : super(key: key);
+  const BoardDialog({
+    Key? key,
+    required this.board,
+    required this.memberDetails,
+    required this.boardCategory,
+  }) : super(key: key);
+
+  @override
+  _BoardDialogState createState() => _BoardDialogState();
+}
+
+class _BoardDialogState extends State<BoardDialog> {
+  String email = '';
+
+  @override
+  void initState() {
+    super.initState();
+    initialize();
+  }
+
+  void initialize() async {
+    final userEmail = await UserService.fetchUserEmail();
+    setState(() {
+      email = userEmail;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +79,8 @@ class BoardDialog extends StatelessWidget {
                 Navigator.pop(context);
                 showDialog(
                     context: context,
-                    builder: (builder) => ReportDialog(
-                        memberId: board.member!.memberId!, context: context));
+                    builder: (builder) =>
+                        ReportDialog(id: widget.board.id!, context: context));
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,
@@ -78,14 +97,14 @@ class BoardDialog extends StatelessWidget {
             SizedBox(
               height: 25.h,
             ),
-            memberDetails.email == board.member!.email
+            widget.memberDetails.email == email
                 ? InkWell(
                     onTap: () {
                       showDialog(
                           context: context,
                           builder: (_) => FutureBuilder(
                               future:
-                                  BoardService.deleteArticle(board.articleId!),
+                                  BoardService.deleteArticle(widget.board.id!),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.hasData == false) {
@@ -100,24 +119,23 @@ class BoardDialog extends StatelessWidget {
                                       .addPostFrameCallback((_) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    switch (boardCategory) {
+                                    switch (widget.boardCategory) {
                                       case '전체게시판':
                                         boardProvider.getAllArticles();
                                         break;
                                       case '일반게시판':
                                         boardProvider
-                                            .getArticles(board.category!);
+                                            .getArticles(widget.board.category);
                                         break;
                                       case '나의 게시글':
                                         boardProvider
-                                            .getArticles(board.category!);
+                                            .getArticles(widget.board.category);
                                         break;
                                       case '좋아하는 게시글':
                                         boardProvider.getLikedList();
                                         break;
                                       default:
                                     }
-                                    //boardProvider.getArticles(board.category!);
                                   });
                                   return Container(
                                       child: const Image(
@@ -166,7 +184,7 @@ class BoardDialog extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (builder) => iOSReportDialog(
-                          memberId: board.member!.memberId!,
+                          memberId: widget.board.id!,
                         ));
               },
               child: Container(
@@ -181,12 +199,12 @@ class BoardDialog extends StatelessWidget {
                 ),
               ),
             ),
-            memberDetails.email == board.member!.email
+            widget.memberDetails.email == email
                 ? const Divider(
                     thickness: 1,
                   )
                 : const SizedBox(),
-            memberDetails.email == board.member!.email
+            widget.memberDetails.email == email
                 ? InkWell(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20.0),
@@ -197,7 +215,7 @@ class BoardDialog extends StatelessWidget {
                           context: context,
                           builder: (_) => FutureBuilder(
                               future:
-                                  BoardService.deleteArticle(board.articleId!),
+                                  BoardService.deleteArticle(widget.board.id!),
                               builder: (BuildContext context,
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.hasData == false) {
@@ -212,24 +230,23 @@ class BoardDialog extends StatelessWidget {
                                       .addPostFrameCallback((_) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    switch (boardCategory) {
+                                    switch (widget.boardCategory) {
                                       case '전체게시판':
                                         boardProvider.getAllArticles();
                                         break;
                                       case '일반게시판':
                                         boardProvider
-                                            .getArticles(board.category!);
+                                            .getArticles(widget.board.category);
                                         break;
                                       case '나의 게시글':
                                         boardProvider
-                                            .getArticles(board.category!);
+                                            .getArticles(widget.board.category);
                                         break;
                                       case '좋아하는 게시글':
                                         boardProvider.getLikedList();
                                         break;
                                       default:
                                     }
-                                    //boardProvider.getArticles(board.category!);
                                   });
                                   return Container(
                                       child: const Image(

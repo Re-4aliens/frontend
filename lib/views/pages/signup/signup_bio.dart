@@ -76,7 +76,7 @@ class _SignUpBioState extends State<SignUpBio> {
                 child: Text('next'.tr()),
                 onPressed: () {
                   if (_isButtonEnabled) {
-                    member.selfIntroduction = _bioController.text;
+                    member.aboutMe = _bioController.text;
                     print(member.toJson());
                     Navigator.pushNamed(context, '/email', arguments: member);
                   }

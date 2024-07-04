@@ -59,7 +59,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.7,
                   child: Text(
-                    "${widget.board.title}",
+                    widget.board.title,
                     style: TextStyle(
                         fontSize: 16.spMin, fontWeight: FontWeight.bold),
                     overflow: TextOverflow.visible,
@@ -87,7 +87,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                         ),
                       ),
                       Text(
-                        '${widget.board.member!.name}',
+                        '${widget.board.memberProfileDto?.name}',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 14.spMin),
                       ),
@@ -97,7 +97,8 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                             fontWeight: FontWeight.bold, fontSize: 14.spMin),
                       ),
                       Text(
-                        getNationCode(widget.board.member!.nationality),
+                        getNationCode(
+                            widget.board.memberProfileDto?.nationality),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 14.spMin),
                       )
@@ -109,14 +110,14 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                 ],
               ),
             ),
-            widget.board.imageUrls!.isEmpty
+            widget.board.imageUrls.isEmpty
                 ? const SizedBox()
                 : Container(
                     height: 100.h,
                     padding: const EdgeInsets.only(left: 20.0, right: 15).w,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: widget.board.imageUrls!.length,
+                        itemCount: widget.board.imageUrls.length,
                         itemBuilder: (context, index) {
                           return Row(
                             children: [
@@ -131,7 +132,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                                           },
                                           child: InteractiveViewer(
                                             child: Image.network(
-                                                widget.board.imageUrls![index]),
+                                                widget.board.imageUrls[index]),
                                           ),
                                         );
                                       });
@@ -145,7 +146,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
                                       borderRadius: BorderRadius.circular(10).r,
                                       image: DecorationImage(
                                           image: NetworkImage(
-                                              widget.board.imageUrls![index]),
+                                              widget.board.imageUrls[index]),
                                           fit: BoxFit.cover)),
                                 ),
                               ),
@@ -156,7 +157,7 @@ class _InfoArticlePageState extends State<InfoArticlePage> {
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Text(
-                "${widget.board.content}",
+                widget.board.content,
                 style: TextStyle(
                   fontSize: 16.spMin,
                 ),

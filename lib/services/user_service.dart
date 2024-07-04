@@ -3,10 +3,23 @@ import 'package:http/http.dart' as http;
 import 'api_service.dart';
 import 'package:aliens/models/signup_model.dart';
 import '../util/image_util.dart';
-import 'dart:io';
-import 'package:dio/dio.dart';
+import 'package:http_parser/http_parser.dart';
 
 class UserService extends APIService {
+  /* 
+
+    사용자 정보 저장
+
+  */
+  static Future<String> fetchUserEmail() async {
+    var userInfo = await APIService.storage.read(key: 'auth');
+    if (userInfo != null && userInfo.isNotEmpty) {
+      var decodedUserInfo = json.decode(userInfo);
+      return decodedUserInfo['email'];
+    }
+    return '';
+  }
+
   /*
 
   회원가입
@@ -15,7 +28,29 @@ class UserService extends APIService {
   static Future<bool> signUp(SignUpModel member) async {
     const url = '$domainUrl/members';
 
-    Map<String, dynamic> data = {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+
+    // 프로필 이미지 추가
+    if (member.profileImage != null && member.profileImage!.isNotEmpty) {
+      var file = await http.MultipartFile.fromPath(
+        'profileImage',
+        member.profileImage!,
+        contentType: MediaType('image', 'png'), // 프로필 이미지의 Content-Type 설정
+      );
+      request.files.add(file);
+    } else {
+      // 프로필 이미지가 없을 경우 빈 파일로 대체
+      var file = http.MultipartFile.fromString(
+        'profileImage',
+        '',
+        filename: 'empty.txt',
+        contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
+      );
+      request.files.add(file);
+    }
+
+    // JSON 데이터를 문자열로 변환
+    var jsonPayload = jsonEncode({
       'email': member.email,
       'password': member.password,
       'name': member.name,
@@ -24,21 +59,31 @@ class UserService extends APIService {
       'nationality': member.nationality,
       'birthday': member.birthday,
       'aboutMe': member.aboutMe ?? '',
-    };
+    });
 
-    String jsonBody = jsonEncode(data);
-
-    var response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonBody,
+    // JSON 데이터를 MultipartFile로 추가
+    var jsonPart = http.MultipartFile.fromString(
+      'request',
+      jsonPayload,
+      contentType: MediaType('application', 'json'),
     );
+    request.files.add(jsonPart);
+
+    // 요청 보내기
+    var response = await request.send();
+
+    // 출력: 모든 파일의 Content-Type 출력
+    for (var file in request.files) {
+      print('File: ${file.filename}, Content-Type: ${file.contentType}');
+    }
 
     if (response.statusCode == 200) {
+      print('Registration Success');
       return true;
     } else {
+      var responseBody = await response.stream.bytesToString();
+      print('Registration Failed');
+      print("응답 본문: $responseBody");
       return false;
     }
   }
@@ -55,24 +100,25 @@ class UserService extends APIService {
 
     var response = await http.get(
       Uri.parse(url),
-      headers: {'Authorization': jwtToken, 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': 'Bearer $jwtToken',
+        'Content-Type': 'application/json'
+      },
     );
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
+
       return responseBody['result'];
     } else {
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        // 엑세스 토큰 만료
         throw 'AT-C-002';
       } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
           'AT-C-007') {
-        // 로그아웃된 토큰
         throw 'AT-C-007';
       } else {
-        // 예외
+        throw Exception('요청 오류');
       }
-      throw Exception('요청 오류');
     }
   }
 
@@ -108,42 +154,49 @@ class UserService extends APIService {
 
   /*
 
-프로필 수정(테스트 실패)
+프로필 수정
 
  */
 
-  static Future<bool> updateProfile(File profileImageFile) async {
-    var url = '$domainUrl/member/profile-image';
+  static Future<bool> updateProfile(String profileImage) async {
+    print("프로필 수정 시도");
+    var url = '$domainUrl/members/profile-image';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    Dio dio = Dio();
-    dio.options.headers['Authorization'] = 'Bearer $jwtToken';
 
-    // MultipartFile로 변환
-    var profileImage = await ImageUtil.compressImageToMultipartFile(
-      'profileImage',
-      profileImageFile.path,
-    );
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.headers['Authorization'] = jwtToken;
 
-    // FormData 생성
-    var formData = FormData.fromMap({
-      'profileImage': profileImage,
-    });
+    if (profileImage.isNotEmpty) {
+      var file = await ImageUtil.compressImageToMultipartFile(
+        'newProfileImage',
+        profileImage, // 프로필 이미지의 Content-Type 설정
+      );
+      request.files.add(file);
+    } else {
+      // 프로필 이미지가 없을 경우 빈 파일로 대체
+      var file = http.MultipartFile.fromString(
+        'newProfileImage',
+        '',
+        filename: 'empty.txt',
+        contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
+      );
+      request.files.add(file);
+    }
 
-    try {
-      var response = await dio.put(url, data: formData);
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.data}');
+    var response = await request.send();
 
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {
-      print("프로필 이미지 업데이트 실패");
-      print(e);
+    // 출력: 모든 파일의 Content-Type 출력
+    for (var file in request.files) {
+      print('File: ${file.filename}, Content-Type: ${file.contentType}');
+    }
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      var responseBody = await response.stream.bytesToString();
+      print(responseBody);
       return false;
     }
   }

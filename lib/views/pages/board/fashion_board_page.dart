@@ -167,8 +167,12 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                         var nationality = member?.nationality?.toString() ?? '';
 
                         for (Map<String, String> country in countries) {
-                          if (country['name'] == nationality) {
-                            nationCode = country['code'] ?? '';
+
+                          if (country['name'] ==
+                              boardProvider.articleList[index].memberProfileDto
+                                  ?.nationality
+                                  .toString()) {
+                            nationCode = country['code']!;
                             break;
                           }
                         }
