@@ -37,7 +37,6 @@ class MarketBoardDialog extends StatelessWidget {
   }
 
   Widget androidDialog() {
-    print(UserService.isMarketAuthor(memberDetails, marketBoard));
     return Dialog(
       elevation: 0,
       backgroundColor: const Color(0xffffffff),
@@ -51,7 +50,10 @@ class MarketBoardDialog extends StatelessWidget {
           children: [
             Text(
               'chatting-dialog1'.tr(),
-              style: TextStyle(fontSize: 16.spMin, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 16.spMin,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             SizedBox(
               height: 25.h,
@@ -87,40 +89,42 @@ class MarketBoardDialog extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           showDialog(
-                              context: context,
-                              builder: (_) => FutureBuilder(
-                                  future: BoardService.deleteArticle(
-                                      marketBoard.id ?? 0),
-                                  builder: (BuildContext context,
-                                      AsyncSnapshot snapshot) {
-                                    if (snapshot.hasData == false) {
-                                      //받아오는 동안
-                                      return Container(
-                                          child: const Image(
-                                              image: AssetImage(
-                                                  "assets/illustration/loading_01.gif")));
-                                    } else {
-                                      //받아온 후
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                        Navigator.pop(context);
-                                        Navigator.pop(context);
-                                        Navigator.of(context)
-                                            .pushReplacement(MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              MarketBoardPage(
-                                            screenArguments: screenArguments,
-                                            memberDetails: memberDetails,
-                                            marketBoard: marketBoard,
-                                          ),
-                                        ));
-                                      });
-                                      return Container(
-                                          child: const Image(
-                                              image: AssetImage(
-                                                  "assets/illustration/loading_01.gif")));
-                                    }
-                                  }));
+                            context: context,
+                            builder: (_) => FutureBuilder(
+                              future: BoardService.deleteArticle(
+                                  marketBoard.id ?? 0),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot snapshot) {
+                                if (snapshot.hasData == false) {
+                                  //받아오는 동안
+                                  return Container(
+                                      child: const Image(
+                                          image: AssetImage(
+                                              "assets/illustration/loading_01.gif")));
+                                } else {
+                                  //받아온 후
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                    Navigator.of(context)
+                                        .pushReplacement(MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          MarketBoardPage(
+                                        screenArguments: screenArguments,
+                                        memberDetails: memberDetails,
+                                        marketBoard: marketBoard,
+                                      ),
+                                    ));
+                                  });
+                                  return Container(
+                                      child: const Image(
+                                          image: AssetImage(
+                                              "assets/illustration/loading_01.gif")));
+                                }
+                              },
+                            ),
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(13).r,
@@ -141,13 +145,14 @@ class MarketBoardDialog extends StatelessWidget {
                       InkWell(
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MarketBoardPostPage(
-                                  screenArguments: screenArguments,
-                                  marketBoard: marketBoard, // 수정 모드에서 데이터 전달
-                                ),
-                              ));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MarketBoardPostPage(
+                                screenArguments: screenArguments,
+                                marketBoard: marketBoard, // 수정 모드에서 데이터 전달
+                              ),
+                            ),
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(13).r,
@@ -171,7 +176,6 @@ class MarketBoardDialog extends StatelessWidget {
   }
 
   Widget iOSDialog() {
-    print(UserService.isMarketAuthor(memberDetails, marketBoard));
     return Dialog(
       elevation: 0,
       backgroundColor: const Color(0xffffffff),

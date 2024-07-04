@@ -27,7 +27,7 @@ class MarketBoardPostPage extends StatefulWidget {
 class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
-  bool _isEditMode = false; //수정여부
+  bool _isEditMode = false; //수정 여부
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
@@ -41,10 +41,8 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   ];
   String productQuality = '';
 
-  final _saleStatusList = ['sale'.tr(), 'sold-out'.tr()];
-  String? saleStatus = 'sale'.tr();
-
-  //List<Asset> images = [];
+  final List<String> _saleStatusList = ['sale'.tr(), 'sold-out'.tr()];
+  String? saleStatus;
 
   final picker = ImagePicker();
   File? _profileImage;
@@ -138,6 +136,8 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
       _images = widget.marketBoard!.imageUrls
           .map((imageUrl) => XFile(imageUrl))
           .toList();
+    } else {
+      saleStatus = _saleStatusList[0]; // 기본값 설정
     }
   }
 
@@ -232,14 +232,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                       color: const Color(0xff888888),
                                     ),
                                     DropdownButtonHideUnderline(
-                                      child: DropdownButton(
+                                      child: DropdownButton<String>(
                                         icon: const SizedBox.shrink(),
                                         style: TextStyle(
                                           color: const Color(0xff888888),
                                           fontSize: 14.spMin,
                                         ),
                                         items: _saleStatusList.map((value) {
-                                          return DropdownMenuItem(
+                                          return DropdownMenuItem<String>(
                                             value: value,
                                             child: Text(
                                               value,
@@ -611,16 +611,16 @@ String getProductStatusText(String? productQuality) {
 
 String getStatusText(String? saleStatus) {
   List<String> Status = [
-    'SELL',
-    'END',
+    'sale',
+    'sold-out',
   ];
 
   switch (saleStatus) {
-    case '판매중':
+    case 'sale':
       return Status[0];
-    case '판매완료':
+    case 'sold-out':
       return Status[1];
     default:
-      return '';
+      return Status[0]; // 기본값 설정
   }
 }
