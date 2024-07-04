@@ -36,6 +36,7 @@ class _ArticlePageState extends State<ArticlePage> {
   bool isNestedComments = false;
   String boardCategory = '';
   int parentsCommentId = -1;
+  String? nationCode;
 
   void sendComment() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -54,36 +55,42 @@ class _ArticlePageState extends State<ArticlePage> {
 
   @override
   void initState() {
+    super.initState();
     switch (widget.board.category) {
-      case '자유게시판':
+      case 'FREE':
         boardCategory = 'free-posting'.tr();
         break;
-      case '음식게시판':
+      case 'FOOD':
         boardCategory = 'food'.tr();
         break;
-      case '음악게시판':
+      case 'MUSIC':
         boardCategory = 'music'.tr();
         break;
-      case '패션게시판':
+      case 'FASHION':
         boardCategory = 'fashion'.tr();
         break;
-      case '게임게시판':
+      case 'GAME':
         boardCategory = 'game'.tr();
         break;
       default:
+        boardCategory =
+            'unknown'.tr(); // default case to handle unexpected categories
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final commentProvider =
           Provider.of<CommentProvider>(context, listen: false);
-      commentProvider.getComments(widget.board.articleId!);
+      commentProvider.getComments(widget.board.id ?? -1);
+      print(
+          'on Tap : ${commentProvider.commentListData?[0].id}, ${commentProvider.commentListData?[0].children}, ${commentProvider.commentListData?[0].content}, ${commentProvider.commentListData?[0].createdAt}');
     });
+    nationCode = getNationCode(widget.board.memberProfileDto?.nationality);
   }
 
   String getNationCode(nationality) {
     var nationCode = '';
     for (Map<String, String> country in countries) {
-      if (country['name'] == nationality) {
+      if (country['name']!.toUpperCase() == nationality) {
         nationCode = country['code']!;
         break;
       }
@@ -138,7 +145,7 @@ class _ArticlePageState extends State<ArticlePage> {
                             alignment: Alignment.centerLeft,
                             padding: const EdgeInsets.only(right: 10),
                             child: Text(
-                              '${widget.board.member!.name}/${getNationCode(widget.board.member!.nationality)}',
+                              '${widget.board.memberProfileDto?.name ?? ''}/$nationCode',
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
@@ -158,7 +165,6 @@ class _ArticlePageState extends State<ArticlePage> {
                                 context: context,
                                 builder: (builder) {
                                   return BoardDialog(
-                                    context: context,
                                     board: widget.board,
                                     memberDetails: widget.memberDetails,
                                     boardCategory: "",
@@ -188,20 +194,20 @@ class _ArticlePageState extends State<ArticlePage> {
                               top: 10,
                             ).h,
                             child: Text(
-                              '${widget.board.title}',
+                              widget.board.title,
                               style: TextStyle(
                                   fontSize: 14.spMin,
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xff444444)),
                             ),
                           ),
-                          widget.board.imageUrls!.isEmpty
+                          widget.board.imageUrls.isEmpty
                               ? const SizedBox()
                               : SizedBox(
                                   height: 100.h,
                                   child: ListView.builder(
                                       scrollDirection: Axis.horizontal,
-                                      itemCount: widget.board.imageUrls!.length,
+                                      itemCount: widget.board.imageUrls.length,
                                       itemBuilder: (context, index) {
                                         return Row(
                                           children: [
@@ -219,7 +225,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                             InteractiveViewer(
                                                           child: Image.network(
                                                               widget.board
-                                                                      .imageUrls![
+                                                                      .imageUrls[
                                                                   index]),
                                                         ),
                                                       );
@@ -240,7 +246,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                     image: DecorationImage(
                                                       image: NetworkImage(widget
                                                           .board
-                                                          .imageUrls![index]),
+                                                          .imageUrls[index]),
                                                       fit: BoxFit.cover,
                                                     )),
                                               ),
@@ -253,7 +259,7 @@ class _ArticlePageState extends State<ArticlePage> {
                             padding:
                                 const EdgeInsets.only(top: 10, bottom: 25.0).h,
                             child: Text(
-                              '${widget.board.content}',
+                              widget.board.content,
                               style: TextStyle(fontSize: 14.spMin),
                             ),
                           ),
@@ -264,7 +270,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                 onTap: () {
                                   if (widget.index != -1) {
                                     boardProvider.addLike(
-                                        widget.board.articleId!, widget.index);
+                                        widget.board.id!, widget.index);
                                   }
                                 },
                                 child: Padding(
@@ -281,21 +287,20 @@ class _ArticlePageState extends State<ArticlePage> {
                                       padding: const EdgeInsets.only(
                                               left: 4, right: 15)
                                           .r,
-                                      child: widget.board.likeCount == 0 ||
-                                              widget.board.likeCount == null
+                                      child: widget.board.greatCount == 0
                                           ? const Text('')
-                                          : Text('${widget.board.likeCount}'),
+                                          : Text('${widget.board.greatCount}'),
                                     )
                                   : Padding(
                                       padding: const EdgeInsets.only(
                                               left: 4, right: 15)
                                           .r,
                                       child: boardProvider
-                                                  .likeCounts[widget.index] ==
+                                                  .greatCounts[widget.index] ==
                                               0
                                           ? const Text('')
                                           : Text(
-                                              '${boardProvider.likeCounts[widget.index]}'),
+                                              '${boardProvider.greatCounts[widget.index]}'),
                                     ),
                               Padding(
                                 padding: const EdgeInsets.all(4.0).r,
@@ -308,9 +313,9 @@ class _ArticlePageState extends State<ArticlePage> {
                               ),
                               Padding(
                                   padding: const EdgeInsets.all(4.0).r,
-                                  child: widget.board.commentsCount == 0
+                                  child: widget.board.commentCount == 0
                                       ? const Text('')
-                                      : Text('${widget.board.commentsCount}')),
+                                      : Text('${widget.board.commentCount}')),
                             ],
                           )
                         ],
@@ -353,8 +358,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                           .r,
                                       color: parentsCommentId ==
                                               commentProvider
-                                                  .commentListData![index]
-                                                  .articleCommentId
+                                                  .commentListData![index].id
                                           ? const Color(0xffF5F7FF)
                                           : Colors.white,
                                       child: Column(
@@ -382,7 +386,10 @@ class _ArticlePageState extends State<ArticlePage> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    '${commentProvider.commentListData![index].member!.name}',
+                                                    commentProvider
+                                                        .commentListData![index]
+                                                        .memberProfileDto
+                                                        .name,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -397,11 +404,12 @@ class _ArticlePageState extends State<ArticlePage> {
                                                   ),
                                                   Text(
                                                     getNationCode(
-                                                        commentProvider
-                                                            .commentListData![
-                                                                index]
-                                                            .member!
-                                                            .nationality),
+                                                      commentProvider
+                                                          .commentListData![
+                                                              index]
+                                                          .memberProfileDto
+                                                          .name,
+                                                    ),
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold,
@@ -425,8 +433,8 @@ class _ArticlePageState extends State<ArticlePage> {
                                                   ),
                                                   InkWell(
                                                     onTap: () {
-                                                      print(commentProvider
-                                                          .commentListData!);
+                                                      print(
+                                                          'on Tap : ${commentProvider.commentListData![index].id}, ${commentProvider.commentListData![index].children}, ${commentProvider.commentListData![index].content}, ${commentProvider.commentListData![index].createdAt}');
                                                       showDialog(
                                                           context: context,
                                                           builder: (builder) {
@@ -434,12 +442,24 @@ class _ArticlePageState extends State<ArticlePage> {
                                                               context: context,
                                                               onpressed: () {
                                                                 setState(() {
-                                                                  isNestedComments =
-                                                                      true;
-                                                                  parentsCommentId = commentProvider
+                                                                  print(commentProvider
+                                                                          .commentListData![
+                                                                      index]);
+                                                                  print(
+                                                                      'index : $index');
+                                                                  print(commentProvider
                                                                       .commentListData![
                                                                           index]
-                                                                      .articleCommentId!;
+                                                                      .id);
+                                                                  isNestedComments =
+                                                                      true;
+                                                                  parentsCommentId =
+                                                                      commentProvider
+                                                                          .commentListData![
+                                                                              index]
+                                                                          .id;
+                                                                  print(
+                                                                      'parentsCommentId : ${commentProvider.commentListData![index].id}');
                                                                 });
                                                                 Navigator.pop(
                                                                     context);
@@ -450,11 +470,10 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                   commentProvider
                                                                           .commentListData![
                                                                       index],
-                                                              memberDetials: widget
+                                                              memberDetails: widget
                                                                   .memberDetails,
                                                               articleId: widget
-                                                                  .board
-                                                                  .articleId!,
+                                                                  .board.id!,
                                                             );
                                                           });
                                                     },
@@ -481,7 +500,9 @@ class _ArticlePageState extends State<ArticlePage> {
                                                 const EdgeInsets.only(top: 13)
                                                     .r,
                                             child: Text(
-                                              '${commentProvider.commentListData![index].content}',
+                                              commentProvider
+                                                  .commentListData![index]
+                                                  .content,
                                               style: TextStyle(
                                                   fontSize: 14.spMin,
                                                   color:
@@ -494,7 +515,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
                                     //대댓글
                                     commentProvider.commentListData![index]
-                                                .childs ==
+                                                .children ==
                                             null
                                         ? const SizedBox()
                                         : Column(
@@ -504,7 +525,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                       commentProvider
                                                           .commentListData![
                                                               index]
-                                                          .childs!
+                                                          .children!
                                                           .length;
                                                   j++)
                                                 Row(
@@ -584,7 +605,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                       right:
                                                                           10),
                                                                   child: Text(
-                                                                    '${commentProvider.commentListData![index].childs![j].member!.name}/${getNationCode(commentProvider.commentListData![index].childs![j].member!.nationality)}',
+                                                                    '${commentProvider.commentListData![index].children![j].memberProfileDto.name}/${getNationCode(commentProvider.commentListData![index].children![j].memberProfileDto.nationality)}',
                                                                     overflow:
                                                                         TextOverflow
                                                                             .ellipsis,
@@ -598,13 +619,12 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                 ),
                                                               ),
                                                               Text(
-                                                                DataUtils.getTime(
-                                                                    commentProvider
-                                                                        .commentListData![
-                                                                            index]
-                                                                        .childs![
-                                                                            j]
-                                                                        .createdAt),
+                                                                DataUtils.getTime(commentProvider
+                                                                    .commentListData![
+                                                                        index]
+                                                                    .children![
+                                                                        j]
+                                                                    .createdAt),
                                                                 style: TextStyle(
                                                                     fontSize: 12
                                                                         .spMin,
@@ -632,12 +652,12 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                               true,
                                                                           comment: commentProvider
                                                                               .commentListData![index]
-                                                                              .childs![j],
-                                                                          memberDetials:
+                                                                              .children![j],
+                                                                          memberDetails:
                                                                               widget.memberDetails,
                                                                           articleId: widget
                                                                               .board
-                                                                              .articleId!,
+                                                                              .id!,
                                                                         );
                                                                       });
                                                                 },
@@ -668,7 +688,11 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                         top: 5)
                                                                     .h,
                                                             child: Text(
-                                                              '${commentProvider.commentListData![index].childs![j].content}',
+                                                              commentProvider
+                                                                  .commentListData![
+                                                                      index]
+                                                                  .children![j]
+                                                                  .content,
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       14.spMin,
@@ -739,12 +763,13 @@ class _ArticlePageState extends State<ArticlePage> {
                         if (_newComment != '') {
                           if (isNestedComments) {
                             commentProvider.addNestedComment(_newComment,
-                                parentsCommentId, widget.board.articleId!);
+                                parentsCommentId, widget.board.id!);
                             parentsCommentId = -1;
                             isNestedComments = false;
                           } else {
+                            print('Board Id : ${widget.board.id}');
                             commentProvider.addComment(
-                                _newComment, widget.board.articleId!);
+                                _newComment, widget.board.id!);
                           }
                         }
                         updateUi();

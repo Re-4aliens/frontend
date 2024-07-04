@@ -21,6 +21,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
 
   @override
   void initState() {
+    super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
     boardProvider.getAllArticles();
 
@@ -56,18 +57,22 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
               itemCount: boardProvider.articleList.length,
               itemBuilder: (context, index) {
                 var nationCode = '';
+                final memberNationality = boardProvider
+                    .articleList[index].memberProfileDto?.nationality
+                    .toString();
                 for (Map<String, String> country in countries) {
-                  if (country['name'] ==
-                      boardProvider.articleList[index].member!.nationality
-                          .toString()) {
-                    nationCode = country['code']!;
+                  if (country['name']!.toUpperCase() == memberNationality) {
+                    nationCode = country['code'] ?? '';
                     break;
                   }
                 }
+
+                final board = boardProvider.articleList[index];
+
                 return Column(
                   children: [
                     TotalArticleWidget(
-                        board: boardProvider.articleList[index],
+                        board: board,
                         nationCode: nationCode,
                         screenArguments: widget.screenArguments,
                         index: index),

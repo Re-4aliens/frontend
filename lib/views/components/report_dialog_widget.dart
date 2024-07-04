@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:aliens/services/report_servcie.dart';
 
 class ReportDialog extends StatefulWidget {
-  final int memberId;
+  final int id;
   final BuildContext context;
 
-  const ReportDialog({Key? key, required this.memberId, required this.context})
+  const ReportDialog({Key? key, required this.id, required this.context})
       : super(key: key);
   @override
   State<StatefulWidget> createState() => _ReportDialogState();
@@ -135,8 +135,8 @@ class _ReportDialogState extends State<ReportDialog> {
                   break;
                 }
               }
-              if (await ReportService.reportPartner(reportCategory,
-                  _textEditingController.text, widget.memberId)) {
+              if (await ReportService.reportPartner(
+                  reportCategory, _textEditingController.text, widget.id)) {
                 Navigator.pop(context);
                 showDialog(
                     context: context,

@@ -486,7 +486,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           MarketBoard marketArticle = MarketBoard(
                             title: _titleController.text,
                             content: _contentController.text,
-                            price: int.parse(_priceController.text),
+                            price: _priceController.text,
                             productStatus: productStatus,
                             marketArticleStatus: marketArticleStatus,
                             imageUrls:
@@ -498,7 +498,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               MarketBoard updateData = MarketBoard(
                                 title: _titleController.text,
                                 content: _contentController.text,
-                                price: int.parse(_priceController.text),
+                                price: _priceController.text,
                                 productStatus: productStatus,
                                 marketArticleStatus: marketArticleStatus,
                                 imageUrls:

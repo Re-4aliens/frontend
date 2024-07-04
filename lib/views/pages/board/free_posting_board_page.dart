@@ -165,8 +165,8 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                         var nationCode = '';
                         for (Map<String, String> country in countries) {
                           if (country['name'] ==
-                              boardProvider
-                                  .articleList[index].member!.nationality
+                              boardProvider.articleList[index].memberProfileDto
+                                  ?.nationality
                                   .toString()) {
                             nationCode = country['code']!;
                             break;

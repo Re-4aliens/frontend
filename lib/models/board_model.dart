@@ -1,83 +1,58 @@
-class Board {
-  int? articleId;
-  String? category;
-  String? title;
-  String? content;
-  int? likeCount;
-  int? commentsCount;
-  List<String>? imageUrls;
-  Member? member;
-  String? createdAt;
+class MemberProfileDto {
+  final String name;
+  final String profileImageUrl;
+  final String nationality;
 
-  Board(
-      {this.articleId,
-      this.category,
-      this.title,
-      this.content,
-      this.likeCount,
-      this.commentsCount,
-      this.imageUrls,
-      this.member,
-      this.createdAt});
+  MemberProfileDto({
+    required this.name,
+    required this.profileImageUrl,
+    required this.nationality,
+  });
 
-  Board.fromJson(Map<String, dynamic> json) {
-    articleId = json['articleId'];
-    category = json['category'];
-    title = json['title'];
-    likeCount = json['likeCount'];
-    content = json['content'];
-    imageUrls = json['imageUrls'].cast<String>();
-    member = json['member'] != null ? Member.fromJson(json['member']) : null;
-    commentsCount = json['commentsCount'];
-    createdAt = json['createdAt'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['articleId'] = articleId;
-    data['category'] = category;
-    data['title'] = title;
-    data['content'] = content;
-    data['likeCount'] = likeCount;
-    data['commentsCount'] = commentsCount;
-    data['imageUrls'] = imageUrls;
-    if (member != null) {
-      data['member'] = member!.toJson();
-    }
-    data['createdAt'] = createdAt;
-    return data;
+  factory MemberProfileDto.fromJson(Map<String, dynamic> json) {
+    return MemberProfileDto(
+      name: json['name'] ?? '',
+      profileImageUrl: json['profileImageUrl'] ?? '',
+      nationality: json['nationality'] ?? '',
+    );
   }
 }
 
-class Member {
-  int? memberId;
-  String? email;
-  String? name;
-  String? nationality;
-  String? profileImageUrl;
+class Board {
+  final int? id;
+  final String category;
+  final String title;
+  final String content;
+  final int? greatCount;
+  final int? commentCount;
+  final List<String> imageUrls;
+  final String? createdAt;
+  final MemberProfileDto? memberProfileDto;
 
-  Member(
-      {this.memberId,
-      this.email,
-      this.name,
-      this.nationality,
-      this.profileImageUrl});
+  Board({
+    this.id,
+    required this.category,
+    required this.title,
+    required this.content,
+    this.greatCount,
+    this.commentCount,
+    required this.imageUrls,
+    this.createdAt,
+    this.memberProfileDto,
+  });
 
-  Member.fromJson(Map<String, dynamic> json) {
-    memberId = json['memberId'];
-    email = json['email'];
-    name = json['name'];
-    nationality = json['nationality'];
-    profileImageUrl = json['profileImageUrl'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['memberId'] = memberId;
-    data['email'] = email;
-    data['name'] = name;
-    data['nationality'] = nationality;
-    data['profileImageUrl'] = profileImageUrl;
-    return data;
+  factory Board.fromJson(Map<String, dynamic> json) {
+    return Board(
+      id: json['id'] ?? 0,
+      category: json['category'] ?? '',
+      title: json['title'] ?? '',
+      content: json['content'] ?? '',
+      greatCount: json['greatCount'] ?? 0,
+      commentCount: json['commentCount'] ?? 0,
+      imageUrls: List<String>.from(json['imageUrls'] ?? []),
+      createdAt: json['createdAt'] ?? '',
+      memberProfileDto:
+          MemberProfileDto.fromJson(json['memberProfileDto'] ?? {}),
+    );
   }
 }

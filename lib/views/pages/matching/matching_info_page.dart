@@ -15,7 +15,14 @@ class MatchingInfoPage extends StatefulWidget {
 class _MatchingInfoPageState extends State<MatchingInfoPage> {
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
+    final args = ModalRoute.of(context)?.settings.arguments as ScreenArguments?;
+    if (args == null) {
+      // Handle the null case, possibly return an error widget or a default state
+      return Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: const Center(child: Text('No arguments provided')),
+      );
+    }
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
 
