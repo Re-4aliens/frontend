@@ -27,26 +27,27 @@ class MarketBoardPostPage extends StatefulWidget {
 class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isButtonEnabled = false;
-  bool _isEditMode = false; //수정 여부
+  bool _isEditMode = false; // 수정 여부
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
 
   List<String> whatStatus = [
-    'Brand_New'.tr(),
-    'Almost_New'.tr(),
-    'Slight_Defect'.tr(),
-    'Used'.tr()
+    'BRAND_NEW',
+    'ALMOST_NEW',
+    'SLIGHT_DEFECT',
+    'USED',
   ];
   String productQuality = '';
 
-  final List<String> _saleStatusList = ['sale'.tr(), 'sold-out'.tr()];
+  final List<String> _saleStatusList = ['sale', 'sold-out'];
   String? saleStatus;
 
   final picker = ImagePicker();
   File? _profileImage;
   List<XFile> _images = [];
+  List<String> _imageUrls = [];
 
   Future getImages(int i) async {
     if (await Permissions.getPhotosPermission()) {
@@ -63,14 +64,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
 
       setState(() {
         if (resultList.isEmpty) {
-          //하나만 선택한 경우
+          // 하나만 선택한 경우
         } else if (resultList.length == 1) {
           if (_images.length <= i) {
             _images.add(resultList[0]);
           } else {
             _images[i] = resultList[0];
           }
-          //두 개 선택한 경우
+          // 두 개 선택한 경우
         } else if (resultList.length == 2) {
           if (_images.length <= i && i != 2) {
             _images.add(resultList[0]);
@@ -82,7 +83,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
             _images[i] = resultList[0];
             _images[i + 1] = resultList[1];
           } else {}
-          //세 개 선택한 경우
+          // 세 개 선택한 경우
         } else if (resultList.length == 3) {
           if (_images.isEmpty) {
             _images = resultList;
@@ -130,12 +131,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
       _titleController.text = widget.marketBoard!.title;
       _priceController.text = widget.marketBoard!.price.toString();
       _contentController.text = widget.marketBoard!.content;
-      productQuality = getProductStatusText(widget.marketBoard!.productQuality);
+      productQuality = widget.marketBoard!.productQuality;
       saleStatus = getStatusText(widget.marketBoard!.saleStatus);
 
-      _images = widget.marketBoard!.imageUrls
-          .map((imageUrl) => XFile(imageUrl))
-          .toList();
+      _imageUrls = widget.marketBoard!.imageUrls;
     } else {
       saleStatus = _saleStatusList[0]; // 기본값 설정
     }
@@ -278,7 +277,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                       ),
                                     ]))
                     ],
-                  ), //제목
+                  ), // 제목
                   Divider(thickness: 1.h, color: const Color(0xffEBEBEB)),
                   Row(
                     children: [
@@ -321,7 +320,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                         ),
                       ),
                     ],
-                  ), //가격
+                  ), // 가격
                   const Divider(thickness: 1, color: Color(0xffEBEBEB)),
                   Row(
                     children: [
@@ -384,61 +383,79 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                         ),
                       ),
                     ],
-                  ), //상품 상태
+                  ), // 상품 상태
                   SizedBox(height: MediaQuery.of(context).size.height * 0.014),
 
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        for (int i = 0; i < 3; i++)
-                          InkWell(
-                            onTap: () {
-                              getImages(i);
-                            },
-                            child: Container(
-                                margin: const EdgeInsets.only(right: 20).r,
-                                height: 130.h,
-                                width: 130.h,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xfff8f8f8),
-                                  borderRadius: BorderRadius.circular(10).r,
-                                  image: i < _images.length
-                                      ? DecorationImage(
-                                          image:
-                                              FileImage(File(_images[i].path)),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : null,
-                                ),
-                                alignment: Alignment.center,
-                                child: i < _images.length
-                                    ? const SizedBox()
-                                    : i == _images.length
-                                        ? Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Image.asset(
-                                                'assets/icon/ICON_photo_1.png',
-                                                width: 30.r,
-                                                height: 30.r,
-                                              ),
-                                              Text(
-                                                '${_images.length}/3',
-                                                style: const TextStyle(
-                                                    color: Color(0xffaeaeae)),
+                    child: _isEditMode
+                        ? Row(
+                            children: [
+                              for (int i = 0; i < _imageUrls.length; i++)
+                                Container(
+                                    margin: const EdgeInsets.only(right: 20).r,
+                                    height: 130.h,
+                                    width: 130.h,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xfff8f8f8),
+                                      borderRadius: BorderRadius.circular(10).r,
+                                    ),
+                                    child: Image.network(_imageUrls[i])),
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              for (int i = 0; i < 3; i++)
+                                InkWell(
+                                  onTap: () {
+                                    getImages(i);
+                                  },
+                                  child: Container(
+                                      margin:
+                                          const EdgeInsets.only(right: 20).r,
+                                      height: 130.h,
+                                      width: 130.h,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xfff8f8f8),
+                                        borderRadius:
+                                            BorderRadius.circular(10).r,
+                                        image: i < _images.length
+                                            ? DecorationImage(
+                                                image: FileImage(
+                                                    File(_images[i].path)),
+                                                fit: BoxFit.cover,
                                               )
-                                            ],
-                                          )
-                                        : SvgPicture.asset(
-                                            'assets/icon/ICON_photo_2.svg',
-                                            width: 25.r,
-                                            height: 25.r,
-                                          )),
+                                            : null,
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: i < _images.length
+                                          ? const SizedBox()
+                                          : i == _images.length
+                                              ? Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      'assets/icon/ICON_photo_1.png',
+                                                      width: 30.r,
+                                                      height: 30.r,
+                                                    ),
+                                                    Text(
+                                                      '${_images.length}/3',
+                                                      style: const TextStyle(
+                                                          color: Color(
+                                                              0xffaeaeae)),
+                                                    )
+                                                  ],
+                                                )
+                                              : SvgPicture.asset(
+                                                  'assets/icon/ICON_photo_2.svg',
+                                                  width: 25.r,
+                                                  height: 25.r,
+                                                )),
+                                ),
+                            ],
                           ),
-                      ],
-                    ),
                   ),
                   SizedBox(height: 45.h),
                   Container(
@@ -471,13 +488,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                       },
                       maxLines: 10,
                     ),
-                  ), //상품 내용
+                  ), // 상품 내용
                   SizedBox(height: 100.h),
                   Button(
                       onPressed: () async {
                         if (_formKey.currentState!.validate() &&
                             productQuality.isNotEmpty &&
-                            _images.isNotEmpty) {
+                            (_images.isNotEmpty || _imageUrls.isNotEmpty)) {
                           FocusScope.of(context).unfocus();
                           _formKey.currentState!.save();
 
@@ -485,11 +502,12 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                             title: _titleController.text,
                             content: _contentController.text,
                             price: _priceController.text,
-                            productQuality:
-                                getProductStatusText(productQuality),
+                            productQuality: productQuality,
                             saleStatus: getStatusText(saleStatus),
-                            imageUrls:
-                                _images.map((image) => image.path).toList(),
+                            imageUrls: [
+                              ..._images.map((image) => image.path),
+                              ..._imageUrls
+                            ],
                           );
 
                           try {
@@ -498,13 +516,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                 title: _titleController.text,
                                 content: _contentController.text,
                                 price: _priceController.text,
-                                productQuality:
-                                    getProductStatusText(productQuality),
+                                productQuality: productQuality,
                                 saleStatus: getStatusText(saleStatus),
-                                imageUrls:
-                                    _images.map((image) => image.path).toList(),
+                                imageUrls: [
+                                  ..._images.map((image) => image.path),
+                                  ..._imageUrls
+                                ],
                               );
-                              print(saleStatus);
 
                               bool success =
                                   await MarketService.updateMarketArticle(
@@ -583,29 +601,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
         _priceController.text.isNotEmpty &&
         _contentController.text.isNotEmpty &&
         productQuality.isNotEmpty &&
-        _images.isNotEmpty;
-  }
-}
-
-String getProductStatusText(String? productQuality) {
-  List<String> whatStatus = [
-    'BRAND_NEW',
-    'ALMOST_NEW',
-    'SLIGHT_DEFECT',
-    'USED',
-  ];
-
-  switch (productQuality) {
-    case '새 것':
-      return whatStatus[0];
-    case '거의 새 것':
-      return whatStatus[1];
-    case '약간의 하자':
-      return whatStatus[2];
-    case '사용감 있음':
-      return whatStatus[3];
-    default:
-      return '';
+        (_images.isNotEmpty || _imageUrls.isNotEmpty);
   }
 }
 
