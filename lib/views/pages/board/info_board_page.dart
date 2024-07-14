@@ -30,14 +30,14 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('정보게시판');
+    boardProvider.getArticles('info');
 
     _scrollController.addListener(() {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         page++;
-        boardProvider.getMoreArticles('정보게시판', page);
+        boardProvider.getMoreArticles('info', page);
       }
     });
   }
@@ -129,7 +129,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "정보게시판",
+                            category: "info",
                             nationCode: '',
                           )),
                 );
@@ -163,12 +163,18 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
                         var nationCode = '';
+                        var member = boardProvider.articleList[index].member;
+
+                        var nationality = member?.nationality?.toString() ?? '';
+
                         for (Map<String, String> country in countries) {
+
                           if (country['name'] ==
-                              boardProvider
-                                  .articleList[index].member!.nationality
+                              boardProvider.articleList[index].memberProfileDto
+                                  ?.nationality
                                   .toString()) {
                             nationCode = country['code']!;
+
                             break;
                           }
                         }

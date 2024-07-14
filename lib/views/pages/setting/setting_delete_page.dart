@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/models/member_details_model.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -10,6 +8,8 @@ import 'package:flutter_svg/svg.dart';
 
 import '../../components/appbar.dart';
 import '../../components/button.dart';
+
+import 'dart:convert';
 
 class SettingDeletePage extends StatefulWidget {
   const SettingDeletePage({super.key});
@@ -29,210 +29,204 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
     var memberDetails =
         ModalRoute.of(context)!.settings.arguments as MemberDetails;
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: CustomAppBar(
-          appBar: AppBar(),
-          backgroundColor: Colors.transparent,
-          infookay: false,
-          infocontent: '',
-          title: 'setting-memwithdrawal'.tr(),
+      backgroundColor: Colors.white,
+      appBar: CustomAppBar(
+        appBar: AppBar(),
+        backgroundColor: Colors.transparent,
+        infookay: false,
+        infocontent: '',
+        title: 'setting-memwithdrawal'.tr(),
+      ),
+      body: Container(
+        padding: EdgeInsets.only(
+          right: 24,
+          left: 24,
+          top: MediaQuery.of(context).size.height * 0.06,
+          bottom: MediaQuery.of(context).size.height * 0.06,
         ),
-        body: Container(
-          padding: EdgeInsets.only(
-              right: 24,
-              left: 24,
-              top: MediaQuery.of(context).size.height * 0.06,
-              bottom: MediaQuery.of(context).size.height * 0.06),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'setting-withdrawal'.tr(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'setting-withdrawal'.tr(),
+              style: TextStyle(
+                fontSize: isSmallScreen ? 22 : 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                'setting-putpas'.tr(),
                 style: TextStyle(
-                    fontSize: isSmallScreen ? 22 : 24,
-                    fontWeight: FontWeight.bold),
+                  fontSize: isSmallScreen ? 12 : 14,
+                  color: const Color(0xffb8b8b8),
+                ),
               ),
-              Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    'setting-putpas'.tr(),
-                    style: TextStyle(
-                      fontSize: isSmallScreen ? 12 : 14,
-                      color: const Color(0xffb8b8b8),
-                    ),
-                  )),
-              const SizedBox(
-                height: 20,
-              ),
-              _passwordCheck(memberDetails),
-              const Expanded(child: SizedBox()),
-              Button(
-                  //수정
-                  isEnabled: true,
-                  child: Text('setting-withdrawal'.tr()),
-                  onPressed: () async {
-                    var userInfo = await storage.read(key: 'auth');
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            _passwordCheck(memberDetails),
+            const Expanded(child: SizedBox()),
+            Button(
+              //수정
+              isEnabled: true,
+              child: Text('setting-withdrawal'.tr()),
+              onPressed: () async {
+                Map<String, String> allValues = await storage.readAll();
+                allValues.forEach((key, value) {
+                  print('$key: $value');
+                });
 
-                    if (passwordController.text ==
-                        json.decode(userInfo!)['password']) {
-                      /*
-                      showDialog(
-                          context: context, builder: (BuildContext context) =>
-                          CupertinoAlertDialog(
-                            title: Text('${'setting-real'.tr()}',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,),),
-                            content:Text(
-                                '${'setting-delete5'.tr()}'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.of(context).pop(),
-                                child: Text('${'cancel'.tr()}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    )),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  //탈퇴
-                                  if (await APIs.withdraw(
-                                      passwordController.text)){
-                                    await APIs.deleteInfo(memberDetails.memberId);
-                                    Navigator.pushNamed(context, '/setting/delete/done');
-                                  }
-                                },
-                                child: Text('${'setting-withdrawal'.tr()}',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                    )),
-                              ),
-                            ],
-                          ));
+                var userInfo = await storage.read(key: 'auth');
 
-                       */
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return Dialog(
-                              elevation: 0,
-                              backgroundColor: const Color(0xffffffff),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                              ),
-                              child: Container(
-                                padding: const EdgeInsets.all(30),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.all(10),
-                                      child: SvgPicture.asset(
-                                        'assets/character/withdraw.svg',
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.1,
-                                      ),
-                                    ),
-                                    Text(
-                                      'setting-real'.tr(),
-                                      style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(25.0),
-                                      child: Text(
-                                        'setting-delete5'.tr(),
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            color: Color(0xff888888)),
-                                      ),
-                                    ),
-                                    InkWell(
-                                      onTap: () async {
-                                        if (await AuthService.withdraw(
-                                            passwordController.text)) {
-                                          Navigator.pushNamed(
-                                              context, '/setting/delete/done');
-                                        }
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.all(13),
-                                        decoration: BoxDecoration(
-                                            color: const Color(0xff7898FF),
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          'setting-okay'.tr(),
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text(
-                                        'setting-cancel'.tr(),
-                                        style: const TextStyle(
-                                            color: Color(0xffc1c1c1)),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          });
+                if (userInfo != null && userInfo.isNotEmpty) {
+                  var decodedUserInfo = json.decode(userInfo);
+
+                  if (passwordController.text.isNotEmpty) {
+                    if (decodedUserInfo['password'] ==
+                        passwordController.text) {
+                      _showConfirmationDialog(context);
                     } else {
-                      showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                                title: Text(
-                                  'setting-fail'.tr(),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                content: Text(
-                                  'setting-failwhy'.tr(),
-                                  style: const TextStyle(
-                                    color: Color(0xff888888),
-                                  ),
-                                ),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () =>
-                                        Navigator.of(context).pop(),
-                                    child: Text('cancel'.tr(),
-                                        style: const TextStyle(
-                                          color: Color(0xff7898FF),
-                                        )),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: Text(
-                                      'again'.tr(),
-                                      style: const TextStyle(
-                                        color: Color(0xff7898FF),
-                                      ),
-                                    ),
-                                  ),
-                                ]);
-                          });
+                      _showErrorDialog(
+                          context, 'setting-fail'.tr(), 'setting-failwhy'.tr());
                     }
-                  })
-            ],
+                  } else {
+                    _showErrorDialog(
+                        context, 'setting-fail'.tr(), 'setting-failwhy'.tr());
+                  }
+                } else {
+                  _showErrorDialog(
+                      context, 'setting-fail'.tr(), 'setting-failwhy'.tr());
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Dialog(
+          elevation: 0,
+          backgroundColor: const Color(0xffffffff),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(5.0),
           ),
-        ));
+          child: Container(
+            padding: const EdgeInsets.all(30),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  child: SvgPicture.asset(
+                    'assets/character/withdraw.svg',
+                    height: MediaQuery.of(context).size.height * 0.1,
+                  ),
+                ),
+                Text(
+                  'setting-real'.tr(),
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Text(
+                    'setting-delete5'.tr(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xff888888),
+                    ),
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    if (await AuthService.withdraw(passwordController.text)) {
+                      Navigator.pushNamed(context, '/setting/delete/done');
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(13),
+                    decoration: BoxDecoration(
+                      color: const Color(0xff7898FF),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      'setting-okay'.tr(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    'setting-cancel'.tr(),
+                    style: const TextStyle(color: Color(0xffc1c1c1)),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog(BuildContext context, String title, String content) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            content,
+            style: const TextStyle(
+              color: Color(0xff888888),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('cancel'.tr(),
+                  style: const TextStyle(
+                    color: Color(0xff7898FF),
+                  )),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'again'.tr(),
+                style: const TextStyle(
+                  color: Color(0xff7898FF),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _passwordCheck(memberDetails) {
@@ -242,163 +236,6 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
         controller: passwordController,
         obscureText: true,
         obscuringCharacter: '*',
-        /*
-        onEditingComplete: (){
-          FocusScope.of(context).unfocus();
-          //auth에서 불러오기
-          if(passwordController.text == memberDetails.member.password) {
-            //패스워드 잘 입력시
-            showDialog(context: context, builder: (context){
-              return Dialog(
-                elevation: 0,
-                backgroundColor: Color(0xffffffff),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(30),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "어떤 서비스를 원하세요?",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Text(
-                          "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(13),
-                        decoration: BoxDecoration(
-                            color: Color(0xff7898FF),
-                            borderRadius: BorderRadius.circular(5)),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "신고하기",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(13),
-                        decoration: BoxDecoration(
-                            color: Color(0xff7898FF),
-                            borderRadius: BorderRadius.circular(5)),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "차단하기",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-            });
-          } else {
-
-            showDialog(context: context, builder: (context){
-              return Dialog(
-                elevation: 0,
-                backgroundColor: Color(0xffffffff),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                child: Container(
-                  padding: EdgeInsets.all(30),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "어떤 서비스를 원하세요?",
-                        style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(25.0),
-                        child: Text(
-                          "대화 상대방을 신고 또는 차단하고 싶다면 아래 버튼을 클릭해주세요.",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(13),
-                        decoration: BoxDecoration(
-                            color: Color(0xff7898FF),
-                            borderRadius: BorderRadius.circular(5)),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "신고하기",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(13),
-                        decoration: BoxDecoration(
-                            color: Color(0xff7898FF),
-                            borderRadius: BorderRadius.circular(5)),
-                        alignment: Alignment.center,
-                        child: Text(
-                          "차단하기",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              );
-            });
-            /*
-            showDialog(context: context, builder: (BuildContext context) => CupertinoAlertDialog(
-              title: Text('${'setting-fail'.tr()}',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
-              ),
-              content: Text('${'setting-failwhy'.tr()}'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text('${'cancel'.tr()}',
-                      style: TextStyle(
-                        color: Colors.black,
-                      )),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('${'again'.tr()}',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),),
-                ),
-              ],
-            ));
-          */
-          }
-
-        },
-
-         */
         textInputAction: TextInputAction.done,
       ),
     );

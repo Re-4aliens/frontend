@@ -153,8 +153,8 @@ class _MyArticlePageState extends State<MyArticlePage> {
                               var nationCode = '';
                               for (Map<String, String> country in countries) {
                                 if (country['name'] ==
-                                    boardProvider
-                                        .articleList[index].member!.nationality
+                                    boardProvider.articleList[index]
+                                        .memberProfileDto?.nationality
                                         .toString()) {
                                   nationCode = country['code']!;
                                   break;
@@ -183,8 +183,8 @@ class _MyArticlePageState extends State<MyArticlePage> {
                               var nationCode = '';
                               for (Map<String, String> country in countries) {
                                 if (country['name'] ==
-                                    boardProvider
-                                        .articleList[index].member!.nationality
+                                    boardProvider.articleList[index]
+                                        .memberProfileDto?.nationality
                                         .toString()) {
                                   nationCode = country['code']!;
                                   break;

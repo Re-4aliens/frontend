@@ -31,13 +31,13 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('패션게시판');
+    boardProvider.getArticles('fashion');
     _scrollController.addListener(() {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
         page++;
-        boardProvider.getMoreArticles('패션게시판', page);
+        boardProvider.getMoreArticles('fashion', page);
       }
     });
   }
@@ -128,7 +128,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "패션게시판",
+                            category: "fashion",
                             nationCode: '',
                           )),
                 );
@@ -162,10 +162,15 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
                         var nationCode = '';
+                        var member = boardProvider.articleList[index].member;
+
+                        var nationality = member?.nationality?.toString() ?? '';
+
                         for (Map<String, String> country in countries) {
+
                           if (country['name'] ==
-                              boardProvider
-                                  .articleList[index].member!.nationality
+                              boardProvider.articleList[index].memberProfileDto
+                                  ?.nationality
                                   .toString()) {
                             nationCode = country['code']!;
                             break;

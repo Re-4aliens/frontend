@@ -7,7 +7,7 @@ import 'package:aliens/services/comment_service.dart';
 class BoardProvider with ChangeNotifier {
   List<Board> articleList = [];
   bool loading = false;
-  List<int> likeCounts = [];
+  List<int> greatCounts = [];
 
   Future<void> getAllArticles() async {
     _setLoading(true);
@@ -26,6 +26,7 @@ class BoardProvider with ChangeNotifier {
   Future<void> getArticles(String boardCategory) async {
     _setLoading(true);
     try {
+      print("특정 카테고리 게시판 조회 시도");
       articleList = await BoardService.getArticles(boardCategory, 0);
     } catch (e) {
       if (e == "AT-C-002") {
@@ -66,12 +67,16 @@ class BoardProvider with ChangeNotifier {
   }
 
   Future<bool> addPost(Board board) async {
+    print('addPost');
     bool value = false;
     try {
       value = await BoardService.postArticle(board);
     } catch (e) {
+      print("addPost 중 postArticle 실패");
+      print('catch $e');
       if (e == "AT-C-002") {
-        await AuthService.getAccessToken();
+        bool isSuccess = await AuthService.getAccessToken();
+        print('토큰 재발급 성공 ? $isSuccess');
         value = await BoardService.postArticle(board);
       }
     }
@@ -80,13 +85,11 @@ class BoardProvider with ChangeNotifier {
 
   Future<void> addLike(int articleId, int index) async {
     try {
-      _setLoading(true);
-      likeCounts[index] = await BoardService.addLike(articleId);
-      _setLoading(false);
+      greatCounts[index] = await BoardService.addLike(articleId);
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        likeCounts[index] = await BoardService.addLike(articleId);
+        greatCounts[index] = await BoardService.addLike(articleId);
       }
       _setLoading(false);
     }
@@ -177,17 +180,16 @@ class BoardProvider with ChangeNotifier {
   }
 
   Future<void> getLikeCounts() async {
-    likeCounts = articleList.map((board) => board.likeCount ?? 0).toList();
-    // 상태 변경을 빌드 완료 후에 호출
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      greatCounts = articleList.map((board) => board.greatCount ?? 0).toList();
       notifyListeners();
     });
   }
 
   void _setLoading(bool value) {
-    loading = value;
-    // 상태 변경을 빌드 완료 후에 호출
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      loading = value;
+
       notifyListeners();
     });
   }

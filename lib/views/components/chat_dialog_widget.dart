@@ -57,7 +57,7 @@ class ChatDialog extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return ReportDialog(
-                          memberId: partner.memberId!, context: context);
+                          id: partner.memberId!, context: context);
                     });
               },
               child: Container(
