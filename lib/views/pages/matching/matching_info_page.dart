@@ -97,16 +97,18 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                         shape: BoxShape.circle,
                         color: Color(0xff7898FF)))), //파란 반원
             Positioned(
-                top: MediaQuery.of(context).size.height * 0.16,
-                left: 0,
-                right: 0,
-                child: Container(
-                    width: isSmallScreen ? 130 : 150,
-                    height: isSmallScreen ? 130 : 150,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ))), //프로필뒤에 하얀원
+              top: MediaQuery.of(context).size.height * 0.16,
+              left: 0,
+              right: 0,
+              child: Container(
+                width: isSmallScreen ? 130 : 150,
+                height: isSmallScreen ? 130 : 150,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+              ),
+            ), //프로필뒤에 하얀원
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
@@ -150,7 +152,6 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                     Expanded(flex: 6, child: Container()),
                                     Text(
                                       '${args.memberDetails?.name}',
-                                      //'${args.applicant['member']['name']}      '
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: isSmallScreen ? 34 : 36,
@@ -645,18 +646,28 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                       ),
                     )
                   : Container(
-                      height: 120,
-                      width: 120,
                       margin:
                           const EdgeInsetsDirectional.symmetric(vertical: 20),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(
-                                args.memberDetails!.profileImageURL!),
-                            fit: BoxFit.cover,
-                          )),
+                      child: SvgPicture.asset(
+                        'assets/icon/icon_profile.svg',
+                        height: isSmallScreen ? 100 : 120,
+                        color: const Color(0xffEBEBEB),
+                      ),
                     ),
+
+              //       Container(
+              //           height: 120,
+              //           width: 120,
+              //           margin:
+              //               const EdgeInsetsDirectional.symmetric(vertical: 20),
+              //           decoration: BoxDecoration(
+              //               shape: BoxShape.circle,
+              //               image: DecorationImage(
+              //                 image: NetworkImage(
+              //                     args.memberDetails!.profileImageURL!),
+              //                 fit: BoxFit.cover,
+              //               )),
+              //         ),
             ), //프로필
             Positioned(
               right: 0,
