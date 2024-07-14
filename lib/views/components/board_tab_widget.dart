@@ -68,6 +68,7 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
                 for (Map<String, String> country in countries) {
                   if (country['name']!.toUpperCase() == memberNationality) {
                     nationCode = country['code'] ?? '';
+
                     break;
                   }
                 }

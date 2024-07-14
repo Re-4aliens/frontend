@@ -99,6 +99,7 @@ class MatchingService extends APIService {
 
     try {
       status = await UserService.getApplicantStatus();
+
       memberDetails =
           MemberDetails.fromJson(await UserService.getMemberDetails());
 

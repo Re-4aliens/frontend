@@ -98,8 +98,9 @@ class _ChattingPageState extends State<ChattingPage> {
             unreadCount: 1,
             chatId: int.parse(message.data['chatId']));
         await SqlMessageRepository.create(newChat);
-        await SqlMessageRepository.getList(
-            widget.partner.roomId!, widget.memberDetails.memberId!);
+        await SqlMessageRepository.getList(widget.partner.roomId!, 0);
+        //  await SqlMessageRepository.getList(
+        //     widget.partner.roomId!, widget.memberDetails.memberId!);
         setState(() {});
 
         //단일 읽음 처리
@@ -174,7 +175,8 @@ class _ChattingPageState extends State<ChattingPage> {
       'chatType': 0,
       'chatContent': _newMessage,
       'roomId': widget.partner.roomId,
-      'senderId': widget.memberDetails.memberId,
+      // 'senderId': widget.memberDetails.memberId,
+      'senderId': 0,
       'senderName': widget.memberDetails.name,
       'receiverId': widget.partner.memberId,
       'sendTime': DateTime.now().toString(),
@@ -194,7 +196,8 @@ class _ChattingPageState extends State<ChattingPage> {
       'chatType': 1,
       'chatContent': vsGames[randomIndex]['question'],
       'roomId': widget.partner.roomId,
-      'senderId': widget.memberDetails.memberId,
+      // 'senderId': widget.memberDetails.memberId,
+      'senderId': 0,
       'senderName': widget.memberDetails.name,
       'receiverId': widget.partner.memberId,
       'sendTime': DateTime.now().toString(),
@@ -327,8 +330,9 @@ class _ChattingPageState extends State<ChattingPage> {
    */
   Future<List<MessageModel>> _loadChatList() async {
     //3. 업데이트된 리스트 불러오기
-    return await SqlMessageRepository.getList(
-        widget.partner.roomId!, widget.memberDetails.memberId!);
+    // return await SqlMessageRepository.getList(
+    //     widget.partner.roomId!, widget.memberDetails.memberId!);
+    return await SqlMessageRepository.getList(widget.partner.roomId!, 0);
   }
 /*
 
