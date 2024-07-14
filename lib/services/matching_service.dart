@@ -92,17 +92,16 @@ class MatchingService extends APIService {
 
   */
   static Future<ScreenArguments> getMatchingData(context) async {
-    late ScreenArguments screenArguments;
-
-    late MemberDetails memberDetails;
-    late String status;
-    late Applicant? applicant;
-    late List<Partner>? partners;
+    MemberDetails? memberDetails;
+    String? status;
+    Applicant? applicant;
+    List<Partner>? partners;
 
     try {
       status = await UserService.getApplicantStatus();
 
-      memberDetails = await UserService.getMemberDetails();
+      memberDetails =
+          MemberDetails.fromJson(await UserService.getMemberDetails());
 
       if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
         applicant = Applicant.fromJson(await getApplicantInfo());
@@ -115,12 +114,22 @@ class MatchingService extends APIService {
       } else {
         partners = null;
       }
-
-      screenArguments =
-          ScreenArguments(memberDetails, status, applicant, partners);
     } catch (e) {
       print('데이터를 가져오는 중 오류: $e');
+      // 필요한 경우, 예외 상황에서 기본값을 설정합니다.
+      memberDetails = null;
+      status = 'unknown';
+      applicant = null;
+      partners = [];
     }
+
+    // 모든 필드가 null이 아닌지 확인하고, 그렇지 않은 경우 기본값을 설정합니다.
+    memberDetails ??= MemberDetails(); // MemberDetails의 기본 생성자가 있는지 확인하세요.
+    status ??= 'unknown';
+    partners ??= [];
+
+    ScreenArguments screenArguments =
+        ScreenArguments(memberDetails, status, applicant, partners);
 
     return screenArguments;
   }

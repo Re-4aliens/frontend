@@ -30,7 +30,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    boardProvider.getArticles('자유게시판');
+    boardProvider.getArticles('free');
 
     _scrollController.addListener(() {
       if (_scrollController.offset ==
@@ -38,7 +38,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
           !_scrollController.position.outOfRange) {
         print('추가');
         page++;
-        boardProvider.getMoreArticles('자유게시판', page);
+        boardProvider.getMoreArticles('free', page);
       }
     });
   }
@@ -129,7 +129,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
-                            category: "자유게시판",
+                            category: "free",
                             nationCode: '',
                           )),
                 );
@@ -163,12 +163,18 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
                         var nationCode = '';
+                        var member = boardProvider.articleList[index].member;
+
+                        var nationality = member?.nationality?.toString() ?? '';
+
                         for (Map<String, String> country in countries) {
+
                           if (country['name'] ==
-                              boardProvider
-                                  .articleList[index].member!.nationality
+                              boardProvider.articleList[index].memberProfileDto
+                                  ?.nationality
                                   .toString()) {
                             nationCode = country['code']!;
+
                             break;
                           }
                         }

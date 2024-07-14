@@ -461,7 +461,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                       marketcommentProvider
                                                           .commentListData![
                                                               index]
-                                                          .articleCommentId
+                                                          .id
                                                   ? const Color(0xffF5F7FF)
                                                   : Colors.white,
                                               child: Column(
@@ -494,7 +494,11 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                             ),
                                                           ),
                                                           Text(
-                                                            '${marketcommentProvider.commentListData![index].member!.name}',
+                                                            marketcommentProvider
+                                                                .commentListData![
+                                                                    index]
+                                                                .memberProfileDto
+                                                                .name,
                                                             style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -512,12 +516,11 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                     14.spMin),
                                                           ),
                                                           Text(
-                                                            getNationCode(
-                                                                marketcommentProvider
-                                                                    .commentListData![
-                                                                        index]
-                                                                    .member!
-                                                                    .nationality),
+                                                            getNationCode(marketcommentProvider
+                                                                .commentListData![
+                                                                    index]
+                                                                .memberProfileDto
+                                                                .nationality),
                                                             style: TextStyle(
                                                                 fontWeight:
                                                                     FontWeight
@@ -563,7 +566,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                               true;
                                                                           parentsCommentId = marketcommentProvider
                                                                               .commentListData![index]
-                                                                              .articleCommentId!;
+                                                                              .id;
                                                                         });
                                                                         Navigator.pop(
                                                                             context);
@@ -601,7 +604,10 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                 top: 13)
                                                             .r,
                                                     child: Text(
-                                                      '${marketcommentProvider.commentListData![index].content}',
+                                                      marketcommentProvider
+                                                          .commentListData![
+                                                              index]
+                                                          .content,
                                                       style: TextStyle(
                                                           fontSize: 14.spMin,
                                                           color: const Color(
@@ -615,7 +621,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                             //대댓글
                                             marketcommentProvider
                                                         .commentListData![index]
-                                                        .childs ==
+                                                        .children ==
                                                     null
                                                 ? const SizedBox()
                                                 : Column(
@@ -625,7 +631,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                               marketcommentProvider
                                                                   .commentListData![
                                                                       index]
-                                                                  .childs!
+                                                                  .children!
                                                                   .length;
                                                           j++)
                                                         Row(
@@ -708,7 +714,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                               const EdgeInsets.only(right: 10),
                                                                           child:
                                                                               Text(
-                                                                            '${marketcommentProvider.commentListData![index].childs![j].member!.name}/${getNationCode(marketcommentProvider.commentListData![index].childs![j].member!.nationality)}',
+                                                                            '${marketcommentProvider.commentListData![index].children![j].memberProfileDto.name}/${getNationCode(marketcommentProvider.commentListData![index].children![j].memberProfileDto.nationality)}',
                                                                             overflow:
                                                                                 TextOverflow.ellipsis,
                                                                             style:
@@ -719,7 +725,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                       Text(
                                                                         DataUtils.getTime(marketcommentProvider
                                                                             .commentListData![index]
-                                                                            .childs![j]
+                                                                            .children![j]
                                                                             .createdAt),
                                                                         style: TextStyle(
                                                                             fontSize:
@@ -767,7 +773,12 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                         const EdgeInsets.only(top: 5)
                                                                             .h,
                                                                     child: Text(
-                                                                      '${marketcommentProvider.commentListData![index].childs![j].content}',
+                                                                      marketcommentProvider
+                                                                          .commentListData![
+                                                                              index]
+                                                                          .children![
+                                                                              j]
+                                                                          .content,
                                                                       style: TextStyle(
                                                                           fontSize: 14
                                                                               .spMin,
