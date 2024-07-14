@@ -100,9 +100,6 @@ class MarketService extends APIService {
       'productQuality': marketArticle.productQuality,
     });
 
-    print(marketArticle.saleStatus);
-    print(marketArticle.productQuality);
-
     // JSON 데이터를 MultipartFile로 추가
     var jsonPart = http.MultipartFile.fromString(
       'request',
@@ -111,9 +108,8 @@ class MarketService extends APIService {
     );
     request.files.add(jsonPart);
 
-    if (marketArticle.imageUrls != null &&
-        marketArticle.imageUrls!.isNotEmpty) {
-      for (String imagePath in marketArticle.imageUrls!) {
+    if (marketArticle.imageUrls.isNotEmpty) {
+      for (String imagePath in marketArticle.imageUrls) {
         if (imagePath.isNotEmpty) {
           var file = await ImageUtil.compressImageToMultipartFile(
             'marketBoardImages',
@@ -132,6 +128,10 @@ class MarketService extends APIService {
       request.files.add(file);
     }
 
+    for (var file in request.files) {
+      print('File: ${file.filename}, Content-Type: ${file.contentType}');
+    }
+
     try {
       var response = await request.send();
 
@@ -140,6 +140,8 @@ class MarketService extends APIService {
       } else {
         final responseBody = await response.stream.bytesToString();
         final responseJson = json.decode(responseBody);
+
+        print(responseJson);
 
         final errorCode = responseJson['code'];
         if (errorCode == 'AT-C-002') {

@@ -41,7 +41,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   ];
   String productQuality = '';
 
-  final List<String> _saleStatusList = ['sale', 'sold-out'];
+  final List<String> _saleStatusList = ['SELL', 'END'];
   String? saleStatus;
 
   final picker = ImagePicker();
@@ -132,7 +132,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
       _priceController.text = widget.marketBoard!.price.toString();
       _contentController.text = widget.marketBoard!.content;
       productQuality = widget.marketBoard!.productQuality;
-      saleStatus = getStatusText(widget.marketBoard!.saleStatus);
+      saleStatus = widget.marketBoard!.saleStatus;
 
       _imageUrls = widget.marketBoard!.imageUrls;
     } else {
@@ -145,163 +145,49 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        appBar: AppBar(
-          backgroundColor: Colors.white,
-          toolbarHeight: 56,
-          leadingWidth: 80.w,
-          leading: TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('cancel'.tr(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    color: const Color(0xff888888), fontSize: 16.spMin)),
-          ),
-          title: Text('write'.tr(),
+      resizeToAvoidBottomInset: true,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        toolbarHeight: 56,
+        leadingWidth: 80.w,
+        leading: TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('cancel'.tr(),
+              textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-                fontSize: 18.spMin,
-              )),
-          centerTitle: true,
+                  color: const Color(0xff888888), fontSize: 16.spMin)),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            width: double.infinity,
-            color: Colors.white,
-            padding: EdgeInsets.only(
-                right: 10.w, left: 10.w, top: 12.h, bottom: 50.h),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          style: TextStyle(
-                              fontSize: 20.spMin,
-                              color: const Color(0xff616161)),
-                          decoration: InputDecoration(
-                              counterText: '',
-                              hintText: 'market-posting-title'.tr(),
-                              hintStyle: TextStyle(
-                                  fontSize: 20.h,
-                                  color: const Color(0xff616161)),
-                              enabledBorder: const UnderlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.transparent),
-                              ),
-                              focusedBorder: const UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: Colors.transparent)),
-                              contentPadding:
-                                  EdgeInsets.only(right: 14.w, left: 14.w)),
-                          maxLength: 30,
-                          controller: _titleController,
-                          onChanged: (value) {
-                            setState(() {
-                              _isButtonEnabled = _isFormValid();
-                            });
-                          },
-                        ),
-                      ),
-                      Container(
-                          width: 95.w,
-                          height: 37.h,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            border: Border.all(color: const Color(0xFFEBEBEB)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: _isEditMode
-                              ? Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    SizedBox(
-                                      width: 5.w,
-                                    ),
-                                    SvgPicture.asset(
-                                      'assets/icon/icon_dropdown.svg',
-                                      width: 4.r,
-                                      height: 4.r,
-                                      color: const Color(0xff888888),
-                                    ),
-                                    DropdownButtonHideUnderline(
-                                      child: DropdownButton<String>(
-                                        icon: const SizedBox.shrink(),
-                                        style: TextStyle(
-                                          color: const Color(0xff888888),
-                                          fontSize: 14.spMin,
-                                        ),
-                                        items: _saleStatusList.map((value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value,
-                                            child: Text(
-                                              value,
-                                              style: TextStyle(
-                                                fontSize: 14.spMin,
-                                                color: const Color(0xff888888),
-                                              ),
-                                            ),
-                                          );
-                                        }).toList(),
-                                        value: saleStatus,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            saleStatus = value;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                      SvgPicture.asset(
-                                        'assets/icon/icon_dropdown.svg',
-                                        width: 4.r,
-                                        height: 4.r,
-                                        color: const Color(0xff888888),
-                                      ),
-                                      Text(
-                                        'sale'.tr(),
-                                        style: TextStyle(
-                                            color: const Color(0xff888888),
-                                            fontSize: 14.spMin),
-                                      ),
-                                    ]))
-                    ],
-                  ), // 제목
-                  Divider(thickness: 1.h, color: const Color(0xffEBEBEB)),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 14.w),
-                        child: SvgPicture.asset(
-                          'assets/icon/ICON_won.svg',
-                          width: 23.r,
-                          height: 23.r,
-                        ),
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          keyboardType: const TextInputType.numberWithOptions(),
-                          style: TextStyle(
-                            fontSize: 16.spMin,
-                            color: const Color(0xff888888),
-                          ),
-                          decoration: InputDecoration(
-                            hintText: 'market-posting-price'.tr(),
+        title: Text('write'.tr(),
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 18.spMin,
+            )),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          color: Colors.white,
+          padding:
+              EdgeInsets.only(right: 10.w, left: 10.w, top: 12.h, bottom: 50.h),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        style: TextStyle(
+                            fontSize: 20.spMin, color: const Color(0xff616161)),
+                        decoration: InputDecoration(
+                            counterText: '',
+                            hintText: 'market-posting-title'.tr(),
                             hintStyle: TextStyle(
-                              fontSize: 16.h,
-                              color: const Color(0xff888888),
-                            ),
+                                fontSize: 20.h, color: const Color(0xff616161)),
                             enabledBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.transparent),
                             ),
@@ -309,291 +195,410 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                 borderSide:
                                     BorderSide(color: Colors.transparent)),
                             contentPadding:
-                                EdgeInsets.only(right: 14.w, left: 14.w),
-                          ),
-                          controller: _priceController,
-                          onChanged: (value) {
-                            setState(() {
-                              _isButtonEnabled = _isFormValid();
-                            });
-                          },
-                        ),
+                                EdgeInsets.only(right: 14.w, left: 14.w)),
+                        maxLength: 30,
+                        controller: _titleController,
+                        onChanged: (value) {
+                          setState(() {
+                            _isButtonEnabled = _isFormValid();
+                          });
+                        },
                       ),
-                    ],
-                  ), // 가격
-                  const Divider(thickness: 1, color: Color(0xffEBEBEB)),
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 14),
-                        child: Text(
-                          'market-productQuality'.tr(),
-                          style: TextStyle(
-                            fontSize: 16.spMin,
+                    ),
+                    Container(
+                        width: 95.w,
+                        height: 37.h,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(color: const Color(0xFFEBEBEB)),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: _isEditMode
+                            ? Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  SizedBox(
+                                    width: 5.w,
+                                  ),
+                                  SvgPicture.asset(
+                                    'assets/icon/icon_dropdown.svg',
+                                    width: 4.r,
+                                    height: 4.r,
+                                    color: const Color(0xff888888),
+                                  ),
+                                  DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      icon: const SizedBox.shrink(),
+                                      style: TextStyle(
+                                        color: const Color(0xff888888),
+                                        fontSize: 14.spMin,
+                                      ),
+                                      items: _saleStatusList.map((value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(
+                                            value,
+                                            style: TextStyle(
+                                              fontSize: 14.spMin,
+                                              color: const Color(0xff888888),
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                      value: saleStatus,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          saleStatus = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                    SvgPicture.asset(
+                                      'assets/icon/icon_dropdown.svg',
+                                      width: 4.r,
+                                      height: 4.r,
+                                      color: const Color(0xff888888),
+                                    ),
+                                    Text(
+                                      'sale'.tr(),
+                                      style: TextStyle(
+                                          color: const Color(0xff888888),
+                                          fontSize: 14.spMin),
+                                    ),
+                                  ]))
+                  ],
+                ), // 제목
+                Divider(thickness: 1.h, color: const Color(0xffEBEBEB)),
+                Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 14.w),
+                      child: SvgPicture.asset(
+                        'assets/icon/ICON_won.svg',
+                        width: 23.r,
+                        height: 23.r,
+                      ),
+                    ),
+                    Expanded(
+                      child: TextFormField(
+                        keyboardType: const TextInputType.numberWithOptions(),
+                        style: TextStyle(
+                          fontSize: 16.spMin,
+                          color: const Color(0xff888888),
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'market-posting-price'.tr(),
+                          hintStyle: TextStyle(
+                            fontSize: 16.h,
                             color: const Color(0xff888888),
                           ),
-                        ),
-                      ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: whatStatus.map((condition) {
-                              final bool isSelected =
-                                  productQuality == condition;
-                              return Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                                child: ChoiceChip(
-                                  label: Text(
-                                    condition,
-                                    style: TextStyle(
-                                      fontSize: 12.spMin,
-                                      color: isSelected
-                                          ? Colors.white
-                                          : const Color(0xffC1C1C1),
-                                    ),
-                                  ),
-                                  selected: isSelected,
-                                  backgroundColor: isSelected
-                                      ? const Color(0xff7898FF)
-                                      : Colors.white,
-                                  selectedColor: const Color(0xff7898ff),
-                                  onSelected: (isSelected) {
-                                    setState(() {
-                                      productQuality =
-                                          isSelected ? condition : '';
-                                    });
-                                  },
-                                  labelPadding:
-                                      EdgeInsets.only(left: 12.w, right: 12.w),
-                                  // 선택 영역 패딩 조절
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color: isSelected
-                                          ? const Color(0xff7898FF)
-                                          : const Color(0xffC1C1C1),
-                                    ),
-                                    borderRadius: BorderRadius.circular(
-                                        20.0), // 선택 테두리 둥글기 조절
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ), // 상품 상태
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.014),
-
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: _isEditMode
-                        ? Row(
-                            children: [
-                              for (int i = 0; i < _imageUrls.length; i++)
-                                Container(
-                                    margin: const EdgeInsets.only(right: 20).r,
-                                    height: 130.h,
-                                    width: 130.h,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xfff8f8f8),
-                                      borderRadius: BorderRadius.circular(10).r,
-                                    ),
-                                    child: Image.network(_imageUrls[i])),
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              for (int i = 0; i < 3; i++)
-                                InkWell(
-                                  onTap: () {
-                                    getImages(i);
-                                  },
-                                  child: Container(
-                                      margin:
-                                          const EdgeInsets.only(right: 20).r,
-                                      height: 130.h,
-                                      width: 130.h,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xfff8f8f8),
-                                        borderRadius:
-                                            BorderRadius.circular(10).r,
-                                        image: i < _images.length
-                                            ? DecorationImage(
-                                                image: FileImage(
-                                                    File(_images[i].path)),
-                                                fit: BoxFit.cover,
-                                              )
-                                            : null,
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: i < _images.length
-                                          ? const SizedBox()
-                                          : i == _images.length
-                                              ? Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Image.asset(
-                                                      'assets/icon/ICON_photo_1.png',
-                                                      width: 30.r,
-                                                      height: 30.r,
-                                                    ),
-                                                    Text(
-                                                      '${_images.length}/3',
-                                                      style: const TextStyle(
-                                                          color: Color(
-                                                              0xffaeaeae)),
-                                                    )
-                                                  ],
-                                                )
-                                              : SvgPicture.asset(
-                                                  'assets/icon/ICON_photo_2.svg',
-                                                  width: 25.r,
-                                                  height: 25.r,
-                                                )),
-                                ),
-                            ],
-                          ),
-                  ),
-                  SizedBox(height: 45.h),
-                  Container(
-                    child: TextFormField(
-                      style: TextStyle(
-                          fontSize: 14.h, color: const Color(0xff888888)),
-                      decoration: InputDecoration(
-                          hintText:
-                              '${'market-posting-content'.tr()}\n${'posting-noti'.tr()}',
-                          hintStyle: TextStyle(
-                              fontSize: 14.spMin,
-                              color: const Color(0xffC0C0C0)),
                           enabledBorder: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.transparent),
-                            // 원하는 색상으로 설정
                           ),
-                          focusedErrorBorder: const UnderlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.transparent)),
-                          errorBorder: const UnderlineInputBorder(
+                          focusedBorder: const UnderlineInputBorder(
                               borderSide:
                                   BorderSide(color: Colors.transparent)),
                           contentPadding:
-                              EdgeInsets.only(right: 14.w, left: 14.w)),
-                      controller: _contentController,
-                      onChanged: (value) {
-                        setState(() {
-                          _isButtonEnabled = _isFormValid();
-                        });
-                      },
-                      maxLines: 10,
-                    ),
-                  ), // 상품 내용
-                  SizedBox(height: 100.h),
-                  Button(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate() &&
-                            productQuality.isNotEmpty &&
-                            (_images.isNotEmpty || _imageUrls.isNotEmpty)) {
-                          FocusScope.of(context).unfocus();
-                          _formKey.currentState!.save();
-
-                          MarketBoard marketArticle = MarketBoard(
-                            title: _titleController.text,
-                            content: _contentController.text,
-                            price: _priceController.text,
-                            productQuality: productQuality,
-                            saleStatus: getStatusText(saleStatus),
-                            imageUrls: [
-                              ..._images.map((image) => image.path),
-                              ..._imageUrls
-                            ],
-                          );
-
-                          try {
-                            if (_isEditMode) {
-                              MarketBoard updateData = MarketBoard(
-                                title: _titleController.text,
-                                content: _contentController.text,
-                                price: _priceController.text,
-                                productQuality: productQuality,
-                                saleStatus: getStatusText(saleStatus),
-                                imageUrls: [
-                                  ..._images.map((image) => image.path),
-                                  ..._imageUrls
-                                ],
-                              );
-
-                              bool success =
-                                  await MarketService.updateMarketArticle(
-                                      widget.marketBoard!.id ?? 0, updateData);
-                              print('1');
-                              print(updateData);
-                              Navigator.of(context).pop(); // 이전 페이지로 이동
-
-                              if (success) {
-                                print('게시물 수정 성공!!!');
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      MarketBoardPage(
-                                          screenArguments:
-                                              widget.screenArguments,
-                                          marketBoard: widget.marketBoard,
-                                          memberDetails: widget
-                                              .screenArguments.memberDetails!),
-                                ));
-                              } else {
-                                print('게시물 수정 실패...');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Fail'),
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                              }
-                            } else {
-                              // 생성 모드인 경우 게시물 생성
-                              bool success =
-                                  await MarketService.createMarketArticle(
-                                      marketArticle);
-                              //Navigator.of(context).pop(); // 이전 페이지로 이동
-
-                              if (success) {
-                                print('게시물 생성 성공!!!');
-                                Future.delayed(
-                                    const Duration(milliseconds: 100), () {
-                                  Navigator.of(context).pop(); // 이전 페이지로 이동
-                                });
-                              } else {
-                                print('게시물 생성 실패...');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Fail'),
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                              }
-                            }
-                          } catch (error) {
-                            print('Error: $error');
-                          }
-                        }
-                      },
-                      isEnabled: _isButtonEnabled,
-                      child: Text(
-                        'post3'.tr(),
-                        style: TextStyle(
-                          color: _isButtonEnabled
-                              ? Colors.white
-                              : const Color(0xff888888),
+                              EdgeInsets.only(right: 14.w, left: 14.w),
                         ),
-                      ))
-                ],
-              ),
+                        controller: _priceController,
+                        onChanged: (value) {
+                          setState(() {
+                            _isButtonEnabled = _isFormValid();
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ), // 가격
+                const Divider(thickness: 1, color: Color(0xffEBEBEB)),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      child: Text(
+                        'market-productQuality'.tr(),
+                        style: TextStyle(
+                          fontSize: 16.spMin,
+                          color: const Color(0xff888888),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: whatStatus.map((condition) {
+                            final bool isSelected = productQuality == condition;
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 4.w),
+                              child: ChoiceChip(
+                                label: Text(
+                                  condition,
+                                  style: TextStyle(
+                                    fontSize: 12.spMin,
+                                    color: isSelected
+                                        ? Colors.white
+                                        : const Color(0xffC1C1C1),
+                                  ),
+                                ),
+                                selected: isSelected,
+                                backgroundColor: isSelected
+                                    ? const Color(0xff7898FF)
+                                    : Colors.white,
+                                selectedColor: const Color(0xff7898ff),
+                                onSelected: (isSelected) {
+                                  setState(() {
+                                    productQuality =
+                                        isSelected ? condition : '';
+                                  });
+                                },
+                                labelPadding:
+                                    EdgeInsets.only(left: 12.w, right: 12.w),
+                                // 선택 영역 패딩 조절
+                                shape: RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: isSelected
+                                        ? const Color(0xff7898FF)
+                                        : const Color(0xffC1C1C1),
+                                  ),
+                                  borderRadius: BorderRadius.circular(
+                                      20.0), // 선택 테두리 둥글기 조절
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ), // 상품 상태
+                SizedBox(height: MediaQuery.of(context).size.height * 0.014),
+
+                Row(
+                  children: [
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: _isEditMode
+                          ? Row(
+                              children: [
+                                for (int i = 0; i < _imageUrls.length; i++)
+                                  Container(
+                                    margin: const EdgeInsets.only(
+                                      right: 20,
+                                    ).r,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10).r,
+                                      child: Image.network(
+                                        _imageUrls[i],
+                                        fit: BoxFit.cover,
+                                        height: 130.h,
+                                        width: 130.h,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                for (int i = 0; i < 3; i++)
+                                  InkWell(
+                                    onTap: () {
+                                      getImages(i);
+                                    },
+                                    child: Container(
+                                        margin: const EdgeInsets.only(
+                                          right: 20,
+                                        ).r,
+                                        height: 130.h,
+                                        width: 130.h,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xfff8f8f8),
+                                          borderRadius:
+                                              BorderRadius.circular(10).r,
+                                          image: i < _images.length
+                                              ? DecorationImage(
+                                                  image: FileImage(
+                                                    File(_images[i].path),
+                                                  ),
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : null,
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: i < _images.length
+                                            ? const SizedBox()
+                                            : i == _images.length
+                                                ? Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Image.asset(
+                                                        'assets/icon/ICON_photo_1.png',
+                                                        width: 30.r,
+                                                        height: 30.r,
+                                                      ),
+                                                      Text(
+                                                        '${_images.length}/3',
+                                                        style: const TextStyle(
+                                                            color: Color(
+                                                                0xffaeaeae)),
+                                                      )
+                                                    ],
+                                                  )
+                                                : SvgPicture.asset(
+                                                    'assets/icon/ICON_photo_2.svg',
+                                                    width: 25.r,
+                                                    height: 25.r,
+                                                  )),
+                                  ),
+                              ],
+                            ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 45.h),
+                Container(
+                  child: TextFormField(
+                    style: TextStyle(
+                        fontSize: 14.h, color: const Color(0xff888888)),
+                    decoration: InputDecoration(
+                        hintText:
+                            '${'market-posting-content'.tr()}\n${'posting-noti'.tr()}',
+                        hintStyle: TextStyle(
+                            fontSize: 14.spMin, color: const Color(0xffC0C0C0)),
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                          // 원하는 색상으로 설정
+                        ),
+                        focusedErrorBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                        errorBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(color: Colors.transparent)),
+                        contentPadding:
+                            EdgeInsets.only(right: 14.w, left: 14.w)),
+                    controller: _contentController,
+                    onChanged: (value) {
+                      setState(() {
+                        _isButtonEnabled = _isFormValid();
+                      });
+                    },
+                    maxLines: 10,
+                  ),
+                ), // 상품 내용
+                SizedBox(height: 100.h),
+                Button(
+                    onPressed: () async {
+                      if (_formKey.currentState!.validate() &&
+                          productQuality.isNotEmpty &&
+                          (_images.isNotEmpty || _imageUrls.isNotEmpty)) {
+                        FocusScope.of(context).unfocus();
+                        _formKey.currentState!.save();
+
+                        MarketBoard marketArticle = MarketBoard(
+                          title: _titleController.text,
+                          content: _contentController.text,
+                          price: _priceController.text,
+                          productQuality: productQuality,
+                          saleStatus: saleStatus!,
+                          imageUrls: [
+                            ..._images.map((image) => image.path),
+                            ..._imageUrls
+                          ],
+                        );
+
+                        try {
+                          if (_isEditMode) {
+                            MarketBoard updateData = MarketBoard(
+                              title: _titleController.text,
+                              content: _contentController.text,
+                              price: _priceController.text,
+                              productQuality: productQuality,
+                              saleStatus: saleStatus!,
+                              imageUrls: [
+                                ..._images.map((image) => image.path),
+                                ..._imageUrls
+                              ],
+                            );
+
+                            bool success =
+                                await MarketService.updateMarketArticle(
+                                    widget.marketBoard!.id ?? 0, updateData);
+                            print('1');
+                            print(updateData);
+                            Navigator.of(context).pop(); // 이전 페이지로 이동
+
+                            if (success) {
+                              print('게시물 수정 성공!!!');
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    MarketBoardPage(
+                                        screenArguments: widget.screenArguments,
+                                        marketBoard: widget.marketBoard,
+                                        memberDetails: widget
+                                            .screenArguments.memberDetails!),
+                              ));
+                            } else {
+                              print('게시물 수정 실패...');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Fail'),
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                          } else {
+                            // 생성 모드인 경우 게시물 생성
+                            bool success =
+                                await MarketService.createMarketArticle(
+                                    marketArticle);
+                            //Navigator.of(context).pop(); // 이전 페이지로 이동
+
+                            if (success) {
+                              print('게시물 생성 성공!!!');
+                              Future.delayed(const Duration(milliseconds: 100),
+                                  () {
+                                Navigator.of(context).pop(); // 이전 페이지로 이동
+                              });
+                            } else {
+                              print('게시물 생성 실패...');
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Fail'),
+                                  duration: Duration(seconds: 3),
+                                ),
+                              );
+                            }
+                          }
+                        } catch (error) {
+                          print('Error: $error');
+                        }
+                      }
+                    },
+                    isEnabled: _isButtonEnabled,
+                    child: Text(
+                      'post3'.tr(),
+                      style: TextStyle(
+                        color: _isButtonEnabled
+                            ? Colors.white
+                            : const Color(0xff888888),
+                      ),
+                    ))
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   bool _isFormValid() {
@@ -602,21 +607,5 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
         _contentController.text.isNotEmpty &&
         productQuality.isNotEmpty &&
         (_images.isNotEmpty || _imageUrls.isNotEmpty);
-  }
-}
-
-String getStatusText(String? saleStatus) {
-  List<String> Status = [
-    'sale',
-    'sold-out',
-  ];
-
-  switch (saleStatus) {
-    case 'sale':
-      return Status[0];
-    case 'sold-out':
-      return Status[1];
-    default:
-      return Status[0]; // 기본값 설정
   }
 }
