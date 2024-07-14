@@ -135,7 +135,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                 height: 90.h,
                 child: ListView.builder(
                     scrollDirection: Axis.horizontal,
-                    itemCount: widget.board.imageUrls?.length ?? 0,
+                    itemCount: widget.board.imageUrls.length,
                     itemBuilder: (context, index) {
                       return Row(
                         children: [
@@ -148,7 +148,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                                 borderRadius: BorderRadius.circular(10).r,
                                 image: DecorationImage(
                                     image: NetworkImage(
-                                        widget.board.imageUrls?[index] ?? ''),
+                                        widget.board.imageUrls[index]),
                                     fit: BoxFit.cover)),
                           ),
                         ],

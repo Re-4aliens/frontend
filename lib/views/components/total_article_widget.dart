@@ -1,5 +1,5 @@
 import 'package:aliens/services/market_service.dart';
-import 'package:aliens/models/market_articles.dart';
+import 'package:aliens/models/market_board_model.dart';
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/views/pages/board/info_article_page.dart';
@@ -193,8 +193,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                       height: 90.h,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: widget.board.imageUrls?.length ?? 0,
-                  
+                          itemCount: widget.board.imageUrls.length,
                           itemBuilder: (context, index) {
                             return Row(
                               children: [
@@ -236,7 +235,6 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                       if (widget.board.category != "장터게시판") {
                         boardProvider.addLike(widget.board.id!, widget.index);
                       } else {
-
                         boardProvider.greatCounts[widget.index] =
                             await MarketService.marketBookmark(
                                 widget.board.id!, widget.index);
@@ -277,6 +275,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
             ],
           ),
         ),
+
         onTap: () {
           if (widget.board.category == "정보게시판") {
             Navigator.push(
@@ -320,6 +319,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               },
             ).then((_) {
               // 데이터를 성공적으로 받은 경우 네비게이션 처리
+
               MarketService.getMarketArticle(widget.board.id!).then((data) {
                 Navigator.pushReplacement(
                   context,
@@ -327,8 +327,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                     builder: (context) => MarketDetailPage(
                       screenArguments: widget.screenArguments,
                       marketBoard: data,
-                      productStatus: getProductStatusText(data.productStatus),
-                      StatusText: getStatusText(data.marketArticleStatus),
+                      productQuality: getProductStatusText(data.productQuality),
+                      statusText: getStatusText(data.saleStatus),
                       index: -1,
                       backPage: '',
                     ),
@@ -355,7 +355,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
     );
   }
 
-  String getProductStatusText(String? productStatus) {
+  String getProductStatusText(String? productQuality) {
     List<String> whatStatus = [
       'Brand_New'.tr(),
       'Almost_New'.tr(),
@@ -363,7 +363,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
       'Used'.tr(),
     ];
 
-    switch (productStatus) {
+    switch (productQuality) {
       case '새 것':
         return whatStatus[0];
       case '거의 새 것':
@@ -377,13 +377,13 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
     }
   }
 
-  String getStatusText(String? marketArticleStatus) {
+  String getStatusText(String? saleStatus) {
     List<String> Status = [
       'sale'.tr(),
       'sold-out'.tr(),
     ];
 
-    switch (marketArticleStatus) {
+    switch (saleStatus) {
       case '판매 중':
         return Status[0];
       case '판매 완료':

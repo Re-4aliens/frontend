@@ -614,7 +614,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.15),
               alignment: Alignment.topCenter,
-              child: args.memberDetails!.profileImageURL == null
+              child: args.memberDetails!.profileImageUrl == ''
                   ? Container(
                       margin:
                           const EdgeInsetsDirectional.symmetric(vertical: 20),
@@ -633,7 +633,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                             image: NetworkImage(
-                                args.memberDetails!.profileImageURL!),
+                                args.memberDetails!.profileImageUrl),
                             fit: BoxFit.cover,
                           )),
                     ),

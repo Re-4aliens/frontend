@@ -97,7 +97,7 @@ class _BoardDialogState extends State<BoardDialog> {
             SizedBox(
               height: 25.h,
             ),
-            widget.memberDetails.email == email
+            'memberDetails.email' == board.member!.email
                 ? InkWell(
                     onTap: () {
                       showDialog(
@@ -199,12 +199,12 @@ class _BoardDialogState extends State<BoardDialog> {
                 ),
               ),
             ),
-            widget.memberDetails.email == email
+            'memberDetails.email' == board.member?.email
                 ? const Divider(
                     thickness: 1,
                   )
                 : const SizedBox(),
-            widget.memberDetails.email == email
+            'memberDetails.email' == board.member?.email
                 ? InkWell(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20.0),

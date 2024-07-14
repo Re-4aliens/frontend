@@ -25,7 +25,7 @@ class MessageBubble extends StatelessWidget {
     if (message.chatType == 1) {
       return _vsGameBubble();
     } else {
-      if (message.senderId == memberDetails.memberId) {
+      if (message.senderId == 'memberDetails.memberId') {
         return _myBubble();
       } else {
         return _partnerBubble();

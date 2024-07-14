@@ -4,6 +4,8 @@ import 'api_service.dart';
 import 'package:aliens/models/signup_model.dart';
 import '../util/image_util.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:aliens/models/market_board_model.dart';
+import 'package:aliens/models/member_details_model.dart';
 
 class UserService extends APIService {
   /* 
@@ -32,10 +34,9 @@ class UserService extends APIService {
 
     // 프로필 이미지 추가
     if (member.profileImage != null && member.profileImage!.isNotEmpty) {
-      var file = await http.MultipartFile.fromPath(
+      var file = await ImageUtil.compressImageToMultipartFile(
         'profileImage',
         member.profileImage!,
-        contentType: MediaType('image', 'png'), // 프로필 이미지의 Content-Type 설정
       );
       request.files.add(file);
     } else {
@@ -93,7 +94,7 @@ class UserService extends APIService {
     개인 정보 조회
 
   */
-  static Future<Map<String, dynamic>> getMemberDetails() async {
+  static Future<MemberDetails> getMemberDetails() async {
     var url = '$domainUrl/members';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
@@ -108,18 +109,33 @@ class UserService extends APIService {
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
-
-      return responseBody['result'];
+      return MemberDetails.fromJson(responseBody['result']);
     } else {
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      if (responseBody['code'] == 'AT-C-002') {
+        // 엑세스 토큰 만료
         throw 'AT-C-002';
-      } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-          'AT-C-007') {
+      } else if (responseBody['code'] == 'AT-C-007') {
+        // 로그아웃된 토큰
         throw 'AT-C-007';
       } else {
-        throw Exception('요청 오류');
+        // 예외
+        throw Exception('요청 오류: ${responseBody['message']}');
       }
     }
+  }
+
+  /*
+
+    작성자와 사용자 동일 여부 (장터게시판)
+
+  */
+  static bool isMarketAuthor(
+      MemberDetails memberDetails, MarketBoard marketBoard) {
+    return memberDetails.name == marketBoard.memberProfileDto?.name &&
+        memberDetails.profileImageUrl ==
+            marketBoard.memberProfileDto?.profileImageUrl &&
+        memberDetails.nationality == marketBoard.memberProfileDto?.nationality;
   }
 
   /*
@@ -163,7 +179,6 @@ class UserService extends APIService {
     var url = '$domainUrl/members/profile-image';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
-
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.headers['Authorization'] = jwtToken;
