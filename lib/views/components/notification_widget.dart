@@ -172,8 +172,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                               builder: (context) => MarketDetailPage(
                                     screenArguments: widget.screenArguments,
                                     marketBoard: data,
-                                    productQuality: data.productQuality,
-                                    statusText: data.saleStatus,
                                     index: -1,
                                     backPage: '',
                                   )),
