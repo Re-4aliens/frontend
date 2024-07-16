@@ -6,10 +6,10 @@ import 'package:sqflite/sqflite.dart';
 
 class SqlMessageRepository {
   static Future<void> create(MessageModel messageModel) async {
-    print('챗 생성 ${messageModel.unreadCount}  ${DateTime.now()}');
+    print('챗 생성 ${messageModel.isRead}  ${DateTime.now()}');
     var db = await SqlMessageDataBase().database;
 
-    final id = messageModel.chatId;
+    final id = messageModel.id;
     if ((await db.rawQuery('SELECT * FROM chat WHERE chatId = ?', [id]))
         .isEmpty) {
       // 중복이 없으면 데이터 삽입
@@ -21,15 +21,14 @@ class SqlMessageRepository {
   static Future<List<MessageModel>> getList(int roomId, int senderId) async {
     var db = await SqlMessageDataBase().database;
     var result = await db.query("chat", columns: [
-      MessageFields.chatId,
-      MessageFields.chatType,
-      MessageFields.chatContent,
+      MessageFields.id,
+      MessageFields.type,
+      MessageFields.content,
       MessageFields.roomId,
       MessageFields.senderId,
-      MessageFields.senderName,
       MessageFields.receiverId,
       MessageFields.sendTime,
-      MessageFields.unreadCount,
+      MessageFields.isRead,
     ]);
     List<MessageModel> list = [];
 
@@ -45,15 +44,14 @@ class SqlMessageRepository {
   static Future<String> getCreatedTime(int roomId) async {
     var db = await SqlMessageDataBase().database;
     var result = await db.query("chat", columns: [
-      MessageFields.chatId,
-      MessageFields.chatType,
-      MessageFields.chatContent,
+      MessageFields.id,
+      MessageFields.type,
+      MessageFields.content,
       MessageFields.roomId,
       MessageFields.senderId,
-      MessageFields.senderName,
       MessageFields.receiverId,
       MessageFields.sendTime,
-      MessageFields.unreadCount,
+      MessageFields.isRead,
     ]);
     return MessageModel.fromJson(result[0]).sendTime!;
   }

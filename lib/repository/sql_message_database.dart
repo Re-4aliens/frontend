@@ -30,16 +30,15 @@ class SqlMessageDataBase {
   void _createDB(Database db, int version) async {
     await db.execute('''
       CREATE TABLE $tableName(
-              ${MessageFields.chatId} INTEGER PRIMARY KEY,
-              ${MessageFields.chatType} INTEGER, 
-              ${MessageFields.chatContent} TEXT,
+              ${MessageFields.id} INTEGER PRIMARY KEY,
+              ${MessageFields.type} INTEGER, 
+              ${MessageFields.content} TEXT,
               ${MessageFields.roomId} INTEGER,
               ${MessageFields.senderId} INTEGER,
-              ${MessageFields.senderName} TEXT,
               ${MessageFields.receiverId} INTEGER, 
               ${MessageFields.sendTime} TEXT,
-              ${MessageFields.unreadCount} INTEGER,
-              UNIQUE (${MessageFields.chatId}) ON CONFLICT IGNORE
+              ${MessageFields.isRead} INTEGER,
+              UNIQUE (${MessageFields.id}) ON CONFLICT IGNORE
             )
     ''');
   }

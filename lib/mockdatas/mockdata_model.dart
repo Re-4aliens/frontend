@@ -229,15 +229,14 @@ SignUpModel signUpModel = SignUpModel(
 
 void saveMockData() async {
   var chat = MessageModel(
-    chatId: 2,
-    chatType: 0,
-    chatContent: "h",
+    id: 2,
+    type: 'NORMAL',
+    content: "h",
     roomId: 1,
     senderId: 955,
-    senderName: "Ryan",
     receiverId: 712,
     sendTime: "2023-07-17 13:56:33.583170",
-    unreadCount: 0,
+    isRead: false, // (0)
   );
   //await SqlMessageRepository.create(chat);
   //updateUi();

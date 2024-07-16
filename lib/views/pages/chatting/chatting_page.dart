@@ -88,15 +88,14 @@ class _ChattingPageState extends State<ChattingPage> {
             'Received 새로운 채팅에 대한 FCM with: ${message.data} at ${DateTime.now()}');
         //받은 fcm 저장하고 보여주기
         var newChat = MessageModel(
-            chatType: int.parse(message.data['chatType']),
-            chatContent: message.data['chatContent'],
+            type: message.data['type'],
+            content: message.data['chatContent'],
             roomId: int.parse(message.data['roomId']),
             senderId: int.parse(message.data['senderId']),
-            senderName: message.data['senderName'],
             receiverId: int.parse(message.data['receiverId']),
             sendTime: message.data['sendTime'],
-            unreadCount: 1,
-            chatId: int.parse(message.data['chatId']));
+            isRead: true, // 수정 필요 (1)
+            id: int.parse(message.data['chatId']));
         await SqlMessageRepository.create(newChat);
         await SqlMessageRepository.getList(widget.partner.roomId!, 0);
         //  await SqlMessageRepository.getList(
@@ -136,7 +135,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
     //1. 리스트 업데이트
     for (final message in unreadlist) {
-      print(message.chatContent);
+      print(message.content);
 
       await SqlMessageRepository.create(message);
     }
@@ -305,16 +304,15 @@ class _ChattingPageState extends State<ChattingPage> {
 
       print(json.decode(message)['chatId']);
       var chat = MessageModel(
-          chatId: json.decode(message)['chatId'],
+          id: json.decode(message)['id'],
           // TODO chat Type 수정
-          chatType: request['chatType'],
-          chatContent: request['chatContent'],
+          type: request['type'],
+          content: request['content'],
           roomId: request['roomId'],
           senderId: request['senderId'],
-          senderName: request['senderName'],
           receiverId: request['receiverId'],
           sendTime: request['sendTime'],
-          unreadCount: 1);
+          isRead: true);
       //저장됨
       await SqlMessageRepository.create(chat);
       setState(() {});
@@ -614,22 +612,19 @@ class _ChattingPageState extends State<ChattingPage> {
                                                   currentDate.toString()),
                                             MessageBubble(
                                                 message: MessageModel(
-                                                    chatId: datas[index].chatId,
-                                                    chatType:
-                                                        datas[index].chatType,
-                                                    chatContent: datas[index]
-                                                        .chatContent,
+                                                    id: datas[index].id,
+                                                    type: datas[index].type,
+                                                    content:
+                                                        datas[index].content,
                                                     roomId: datas[index].roomId,
                                                     senderId:
                                                         datas[index].senderId,
-                                                    senderName:
-                                                        datas[index].senderName,
                                                     receiverId:
                                                         datas[index].receiverId,
                                                     sendTime:
                                                         datas[index].sendTime,
-                                                    unreadCount: datas[index]
-                                                        .unreadCount),
+                                                    isRead:
+                                                        datas[index].isRead),
                                                 memberDetails:
                                                     widget.memberDetails,
                                                 showingTime:
