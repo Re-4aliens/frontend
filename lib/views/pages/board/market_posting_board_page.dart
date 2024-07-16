@@ -34,14 +34,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   final TextEditingController _contentController = TextEditingController();
 
   List<String> whatStatus = [
-    'BRAND_NEW',
-    'ALMOST_NEW',
-    'SLIGHT_DEFECT',
-    'USED',
+    'BRAND_NEW'.tr(),
+    'ALMOST_NEW'.tr(),
+    'SLIGHT_DEFECT'.tr(),
+    'USED'.tr(),
   ];
   String productQuality = '';
 
-  final List<String> _saleStatusList = ['SELL', 'END'];
+  final List<String> _saleStatusList = ['SELL'.tr(), 'END'.tr()];
   String? saleStatus;
 
   final picker = ImagePicker();
@@ -132,11 +132,11 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
       _priceController.text = widget.marketBoard!.price.toString();
       _contentController.text = widget.marketBoard!.content;
       productQuality = widget.marketBoard!.productQuality;
-      saleStatus = widget.marketBoard!.saleStatus;
+      saleStatus = widget.marketBoard!.saleStatus.tr();
 
       _imageUrls = widget.marketBoard!.imageUrls;
     } else {
-      saleStatus = _saleStatusList[0]; // 기본값 설정
+      saleStatus = _saleStatusList[0].tr(); // 기본값 설정
     }
   }
 
@@ -381,117 +381,113 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                 ), // 상품 상태
                 SizedBox(height: MediaQuery.of(context).size.height * 0.014),
 
-                Row(
-                  children: [
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: _isEditMode
-                          ? Row(
-                              children: [
-                                for (int i = 0; i < _imageUrls.length; i++)
-                                  Container(
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: _isEditMode
+                      ? ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width,
+                          ),
+                          child: Row(
+                            children: [
+                              for (int i = 0; i < _imageUrls.length; i++)
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                    right: 20,
+                                  ).r,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10).r,
+                                    child: Image.network(
+                                      _imageUrls[i],
+                                      fit: BoxFit.cover,
+                                      height: 130.h,
+                                      width: 130.h,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        )
+                      : Row(
+                          children: [
+                            for (int i = 0; i < 3; i++)
+                              InkWell(
+                                onTap: () {
+                                  getImages(i);
+                                },
+                                child: Container(
                                     margin: const EdgeInsets.only(
                                       right: 20,
                                     ).r,
-                                    child: ClipRRect(
+                                    height: 130.h,
+                                    width: 130.h,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xfff8f8f8),
                                       borderRadius: BorderRadius.circular(10).r,
-                                      child: Image.network(
-                                        _imageUrls[i],
-                                        fit: BoxFit.cover,
-                                        height: 130.h,
-                                        width: 130.h,
-                                      ),
+                                      image: i < _images.length
+                                          ? DecorationImage(
+                                              image: FileImage(
+                                                File(_images[i].path),
+                                              ),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : null,
                                     ),
-                                  ),
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                for (int i = 0; i < 3; i++)
-                                  InkWell(
-                                    onTap: () {
-                                      getImages(i);
-                                    },
-                                    child: Container(
-                                        margin: const EdgeInsets.only(
-                                          right: 20,
-                                        ).r,
-                                        height: 130.h,
-                                        width: 130.h,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xfff8f8f8),
-                                          borderRadius:
-                                              BorderRadius.circular(10).r,
-                                          image: i < _images.length
-                                              ? DecorationImage(
-                                                  image: FileImage(
-                                                    File(_images[i].path),
+                                    alignment: Alignment.center,
+                                    child: i < _images.length
+                                        ? const SizedBox()
+                                        : i == _images.length
+                                            ? Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/icon/ICON_photo_1.png',
+                                                    width: 30.r,
+                                                    height: 30.r,
                                                   ),
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : null,
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: i < _images.length
-                                            ? const SizedBox()
-                                            : i == _images.length
-                                                ? Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Image.asset(
-                                                        'assets/icon/ICON_photo_1.png',
-                                                        width: 30.r,
-                                                        height: 30.r,
-                                                      ),
-                                                      Text(
-                                                        '${_images.length}/3',
-                                                        style: const TextStyle(
-                                                            color: Color(
-                                                                0xffaeaeae)),
-                                                      )
-                                                    ],
+                                                  Text(
+                                                    '${_images.length}/3',
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Color(0xffaeaeae)),
                                                   )
-                                                : SvgPicture.asset(
-                                                    'assets/icon/ICON_photo_2.svg',
-                                                    width: 25.r,
-                                                    height: 25.r,
-                                                  )),
-                                  ),
-                              ],
-                            ),
-                    ),
-                  ],
+                                                ],
+                                              )
+                                            : SvgPicture.asset(
+                                                'assets/icon/ICON_photo_2.svg',
+                                                width: 25.r,
+                                                height: 25.r,
+                                              )),
+                              ),
+                          ],
+                        ),
                 ),
                 SizedBox(height: 45.h),
-                Container(
-                  child: TextFormField(
-                    style: TextStyle(
-                        fontSize: 14.h, color: const Color(0xff888888)),
-                    decoration: InputDecoration(
-                        hintText:
-                            '${'market-posting-content'.tr()}\n${'posting-noti'.tr()}',
-                        hintStyle: TextStyle(
-                            fontSize: 14.spMin, color: const Color(0xffC0C0C0)),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                          // 원하는 색상으로 설정
-                        ),
-                        focusedErrorBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)),
-                        errorBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)),
-                        contentPadding:
-                            EdgeInsets.only(right: 14.w, left: 14.w)),
-                    controller: _contentController,
-                    onChanged: (value) {
-                      setState(() {
-                        _isButtonEnabled = _isFormValid();
-                      });
-                    },
-                    maxLines: 10,
-                  ),
+                TextFormField(
+                  style:
+                      TextStyle(fontSize: 14.h, color: const Color(0xff888888)),
+                  decoration: InputDecoration(
+                      hintText:
+                          '${'market-posting-content'.tr()}\n${'posting-noti'.tr()}',
+                      hintStyle: TextStyle(
+                          fontSize: 14.spMin, color: const Color(0xffC0C0C0)),
+                      enabledBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        // 원하는 색상으로 설정
+                      ),
+                      focusedErrorBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
+                      errorBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
+                      contentPadding: EdgeInsets.only(right: 14.w, left: 14.w)),
+                  controller: _contentController,
+                  onChanged: (value) {
+                    setState(() {
+                      _isButtonEnabled = _isFormValid();
+                    });
+                  },
+                  maxLines: 10,
                 ), // 상품 내용
                 SizedBox(height: 100.h),
                 Button(

@@ -130,7 +130,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'post'.tr(),
+            'post1'.tr(),
             style: TextStyle(
               fontSize: 20.spMin,
               color: Colors.black,

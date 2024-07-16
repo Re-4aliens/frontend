@@ -301,12 +301,12 @@
 
   "general-board-post": "일반게시판 글쓰기",
   "market-board-post": "장터게시판 글쓰기",
-  "Brand_New": "미개봉",
-  "Almost_New": "거의 새 것",
-  "Slight_Defect": "약간의 하자",
-  "Used": "사용감 있음",
-  "sale": "판매중",
-  "sold-out": "판매완료",
+  "BRAND_NEW": "미개봉",
+  "ALMOST_NEW": "거의 새 것",
+  "SLIGHT_DEFECT": "약간의 하자",
+  "USED": "사용감 있음",
+  "SELL": "판매중",
+  "END": "판매완료",
 
   "search1": "글 제목, 내용 등 검색어 입력",
   "search2": "게시판의 글을 검색해보세요!",

@@ -62,16 +62,23 @@ class MatchingService extends APIService {
 
     var response = await http.get(
       Uri.parse(url),
-      headers: {'Authorization': jwtToken, 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json',
+      },
     );
+
+    print('getApplicantPartner');
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> matchingPartner = responseBody['result'];
+      print(matchingPartner);
       return matchingPartner
           .map((dynamic item) => Partner.fromJson(item))
           .toList();
     } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -99,16 +106,19 @@ class MatchingService extends APIService {
 
     try {
       status = await UserService.getApplicantStatus();
+      print(status);
 
       memberDetails = await UserService.getMemberDetails();
 
       if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
+        print(1);
         applicant = Applicant.fromJson(await getApplicantInfo());
       } else {
         applicant = null;
       }
 
       if (status == 'NotAppliedAndMatched' || status == 'AppliedAndMatched') {
+        print(2);
         partners = await getApplicantPartners();
       } else {
         partners = null;
