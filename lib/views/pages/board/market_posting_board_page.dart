@@ -544,7 +544,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                         screenArguments: widget.screenArguments,
                                         marketBoard: widget.marketBoard,
                                         memberDetails: widget
-                                            .screenArguments.memberDetails!),
+                                            .screenArguments.memberDetails),
                               ));
                             } else {
                               print('게시물 수정 실패...');

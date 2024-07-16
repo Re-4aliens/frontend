@@ -14,18 +14,17 @@ import 'package:aliens/providers/board_provider.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/market_detail_page.dart';
 import 'board_dialog_widget.dart';
+import 'package:aliens/models/countries.dart';
 
 class TotalArticleWidget extends StatefulWidget {
   const TotalArticleWidget(
       {super.key,
       required this.board,
-      required this.nationCode,
       required this.screenArguments,
       required this.index,
       this.marketBoard});
 
   final Board board;
-  final String nationCode;
   final ScreenArguments screenArguments;
   final MarketBoard? marketBoard;
   final int index;
@@ -74,6 +73,17 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
     }
   }
 
+  String getNationCode(nationality) {
+    var nationCode = '';
+    for (Map<String, String> country in countries) {
+      if (country['name'] == nationality) {
+        nationCode = country['code']!;
+        break;
+      }
+    }
+    return nationCode;
+  }
+
   @override
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
@@ -117,7 +127,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                               fontWeight: FontWeight.bold, fontSize: 16.spMin),
                         ),
                         Text(
-                          widget.nationCode,
+                          getNationCode(
+                              widget.board.memberProfileDto?.nationality),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16.spMin),
                         )

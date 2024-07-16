@@ -118,7 +118,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             screenArguments: widget.screenArguments,
                             marketBoard: widget.marketBoard,
                             memberDetails:
-                                widget.screenArguments.memberDetails!),
+                                widget.screenArguments.memberDetails),
                       ));
                     });
                   } else {

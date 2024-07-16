@@ -8,21 +8,19 @@ import 'package:provider/provider.dart';
 import 'package:aliens/services/board_service.dart';
 
 import '../../../models/board_model.dart';
-import '../../../models/countries.dart';
 
 import 'package:aliens/providers/board_provider.dart';
 import '../../components/total_article_widget.dart';
 
 class SearchPage extends StatefulWidget {
-  const SearchPage(
-      {super.key,
-      required this.screenArguments,
-      required this.category,
-      required this.nationCode});
+  const SearchPage({
+    super.key,
+    required this.screenArguments,
+    required this.category,
+  });
 
   final ScreenArguments screenArguments;
   final String category;
-  final String nationCode;
 
   @override
   State<StatefulWidget> createState() => _SearchPageState();
@@ -44,17 +42,6 @@ class _SearchPageState extends State<SearchPage> {
     FocusScope.of(context).unfocus();
   }
 
-  String getNationCode(nationality) {
-    var nationCode = '';
-    for (Map<String, String> country in countries) {
-      if (country['name'] == nationality) {
-        nationCode = country['code']!;
-        break;
-      }
-    }
-    return nationCode;
-  }
-
   Widget _ResultsWidget() {
     if (searchResults.isEmpty) {
       return Center(child: Container());
@@ -67,9 +54,6 @@ class _SearchPageState extends State<SearchPage> {
               children: [
                 TotalArticleWidget(
                   board: board,
-
-                  nationCode: board.memberProfileDto!.nationality.toString(),
-
                   screenArguments: widget.screenArguments,
                   index: index,
                 ),

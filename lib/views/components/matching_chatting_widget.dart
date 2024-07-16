@@ -196,7 +196,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                 builder: (context) => ChattingPage(
                       applicant: widget.screenArguments.applicant,
                       partner: chatRoom.partner!,
-                      memberDetails: widget.screenArguments.memberDetails!,
+                      memberDetails: widget.screenArguments.memberDetails,
                     )),
           ).then((value) async {
             _updateList();

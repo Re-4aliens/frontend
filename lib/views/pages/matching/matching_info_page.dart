@@ -27,7 +27,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
     final bool isSmallScreen = screenWidth <= 700;
 
     TextEditingController bioEditingController = TextEditingController();
-    String initialbio = '${args.memberDetails?.selfIntroduction}';
+    String initialbio = '${args.memberDetails.selfIntroduction}';
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     @override
@@ -142,7 +142,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '${args.memberDetails?.selfIntroduction}',
+                                          '${args.memberDetails.selfIntroduction}',
                                           style: TextStyle(
                                               color: const Color(0xff888888),
                                               fontSize:
@@ -614,7 +614,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
               padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.15),
               alignment: Alignment.topCenter,
-              child: args.memberDetails!.profileImageUrl == ''
+              child: args.memberDetails.profileImageUrl == ''
                   ? Container(
                       margin:
                           const EdgeInsetsDirectional.symmetric(vertical: 20),
@@ -633,7 +633,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                             image: NetworkImage(
-                                args.memberDetails!.profileImageUrl),
+                                args.memberDetails.profileImageUrl),
                             fit: BoxFit.cover,
                           )),
                     ),

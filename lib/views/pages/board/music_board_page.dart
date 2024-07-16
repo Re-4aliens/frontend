@@ -130,7 +130,6 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
                             category: "music",
-                            nationCode: '',
                           )),
                 );
               },
@@ -180,7 +179,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                                 board: boardProvider.articleList[index],
                                 nationCode: nationCode,
                                 memberDetails:
-                                    widget.screenArguments.memberDetails!,
+                                    widget.screenArguments.memberDetails,
                                 index: index),
                             const Divider(
                               thickness: 2,
