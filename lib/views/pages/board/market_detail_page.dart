@@ -21,14 +21,10 @@ class MarketDetailPage extends StatefulWidget {
       {super.key,
       required this.screenArguments,
       required this.marketBoard,
-      required this.productQuality,
-      required this.statusText,
       required this.index,
       required this.backPage});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
-  final String productQuality;
-  final String statusText;
   final int index;
   final String backPage;
 
@@ -83,13 +79,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   @override
   Widget build(BuildContext context) {
     List<String> whatStatus = [
-      'Brand_New'.tr(),
-      'Almost_New'.tr(),
-      'Slight_Defect'.tr(),
-      'Used'.tr()
+      'BRAND_NEW'.tr(),
+      'ALMOST_NEW'.tr(),
+      'SLIGHT_DEFECT'.tr(),
+      'USED'.tr()
     ];
     String productQuality = widget.marketBoard.productQuality;
-    String statusText = widget.marketBoard.productQuality;
+    String statusText = widget.marketBoard.saleStatus;
+
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context);
     final bookmarkProvider = Provider.of<BookmarksProvider>(context);
 
@@ -883,36 +880,36 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
 
 String getProductstatusText(String? productQuality) {
   List<String> whatStatus = [
-    'Brand_New'.tr(),
-    'Almost_New'.tr(),
-    'Slight_Defect'.tr(),
-    'Used'.tr(),
+    'BRAND_NEW'.tr(),
+    'ALMOST_NEW'.tr(),
+    'SLIGHT_DEFECT'.tr(),
+    'USED'.tr(),
   ];
 
   switch (productQuality) {
-    case '새 것':
+    case 'BRAND_NEW':
       return whatStatus[0];
-    case '거의 새 것':
+    case 'ALMOST_NEW':
       return whatStatus[1];
-    case '약간의 하자':
+    case 'SLIGHT_DEFECT':
       return whatStatus[2];
-    case '사용감 있음':
+    case 'USED':
       return whatStatus[3];
     default:
       return '';
   }
 }
 
-String getstatusText(String? productQuality) {
+String getstatusText(String? saleStatus) {
   List<String> Status = [
-    'sale'.tr(),
-    'sold-out'.tr(),
+    'SELL'.tr(),
+    'END'.tr(),
   ];
 
-  switch (productQuality) {
-    case '판매 중':
+  switch (saleStatus) {
+    case 'SELL':
       return Status[0];
-    case '판매 완료':
+    case 'END':
       return Status[1];
     default:
       return '';

@@ -283,6 +283,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                     getProductStatusText(marketBoard.productQuality);
                 String statusText = getStatusText(marketBoard.saleStatus);
 
+                print(productQualityText);
                 print(statusText);
 
                 return InkWell(
@@ -293,9 +294,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         builder: (context) => MarketDetailPage(
                           screenArguments: widget.screenArguments,
                           marketBoard: marketBoard,
-                          productQuality:
-                              getProductStatusText(marketBoard.productQuality),
-                          statusText: getStatusText(marketBoard.saleStatus),
                           index: index,
                           backPage: 'marketboard',
                         ),
