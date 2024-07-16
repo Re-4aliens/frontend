@@ -80,7 +80,7 @@ class _SettingWidgetState extends State<SettingWidget> {
     // 프로필 이미지 URL 디버깅 로그 추가
 
     final profileImageUrl =
-        widget.screenArguments.memberDetails?.profileImageUrl;
+        widget.screenArguments.memberDetails.profileImageUrl;
     return Container(
       color: const Color(0xffF5F7FF),
       child: Column(
@@ -147,18 +147,18 @@ class _SettingWidgetState extends State<SettingWidget> {
                             height: 90.r,
                             width: 90.r,
                             decoration: BoxDecoration(
-                              color: profileImageUrl != ''
+                              color: profileImageUrl == ''
                                   ? Colors.white
                                   : Colors.transparent,
                               shape: BoxShape.circle,
                               image: profileImageUrl != ''
                                   ? DecorationImage(
-                                      image: NetworkImage(profileImageUrl!),
+                                      image: NetworkImage(profileImageUrl),
                                       fit: BoxFit.cover,
                                     )
                                   : null,
                             ),
-                            child: profileImageUrl != ''
+                            child: profileImageUrl == ''
                                 ? SvgPicture.asset(
                                     'assets/icon/icon_profile.svg',
                                     color: Colors.white,

@@ -202,7 +202,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                           MaterialPageRoute(
                               builder: (context) => ArticlePage(
                                     memberDetails:
-                                        widget.screenArguments.memberDetails!,
+                                        widget.screenArguments.memberDetails,
                                     board: data,
                                     index: -1,
                                   )),

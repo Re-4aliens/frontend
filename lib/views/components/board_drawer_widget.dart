@@ -485,8 +485,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                       builder: (context) => MarketBoardPage(
                           screenArguments: widget.screenArguments,
                           marketBoard: widget.marketBoard,
-                          memberDetails:
-                              widget.screenArguments.memberDetails!)),
+                          memberDetails: widget.screenArguments.memberDetails)),
                 );
               } else {
                 Navigator.pop(context);
@@ -496,8 +495,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                       builder: (context) => MarketBoardPage(
                           screenArguments: widget.screenArguments,
                           marketBoard: widget.marketBoard,
-                          memberDetails:
-                              widget.screenArguments.memberDetails!)),
+                          memberDetails: widget.screenArguments.memberDetails)),
                 );
               }
             },

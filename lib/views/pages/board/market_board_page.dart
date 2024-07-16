@@ -193,7 +193,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         builder: (context) => SearchPage(
                               screenArguments: widget.screenArguments,
                               category: "장터게시판",
-                              nationCode: '',
                             )),
                   );
                 },
