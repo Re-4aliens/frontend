@@ -72,9 +72,11 @@ class _ArticlePageState extends State<ArticlePage> {
       case 'GAME':
         boardCategory = 'game'.tr();
         break;
+      case 'MARKET':
+        boardCategory = 'market'.tr();
+        break;
       default:
-        boardCategory =
-            'unknown'.tr(); // default case to handle unexpected categories
+        boardCategory = 'unknown';
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -82,8 +84,6 @@ class _ArticlePageState extends State<ArticlePage> {
           Provider.of<CommentProvider>(context, listen: false);
 
       commentProvider.getComments(widget.board.id ?? -1);
-      print(
-          'on Tap : ${commentProvider.commentListData?[0].id}, ${commentProvider.commentListData?[0].children}, ${commentProvider.commentListData?[0].content}, ${commentProvider.commentListData?[0].createdAt}');
     });
     nationCode = getNationCode(widget.board.memberProfileDto?.nationality);
   }
@@ -91,7 +91,7 @@ class _ArticlePageState extends State<ArticlePage> {
   String getNationCode(nationality) {
     var nationCode = '';
     for (Map<String, String> country in countries) {
-      if (country['name']!.toUpperCase() == nationality) {
+      if (country['name']! == nationality) {
         nationCode = country['code']!;
         break;
       }
@@ -168,7 +168,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                   return BoardDialog(
                                     board: widget.board,
                                     memberDetails: widget.memberDetails,
-                                    boardCategory: "",
+                                    boardCategory: boardCategory,
                                   );
                                 });
                           },
@@ -409,7 +409,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                                           .commentListData![
                                                               index]
                                                           .memberProfileDto
-                                                          .name,
+                                                          .nationality,
                                                     ),
                                                     style: TextStyle(
                                                         fontWeight:

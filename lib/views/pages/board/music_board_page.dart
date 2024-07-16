@@ -130,7 +130,6 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
                             category: "music",
-                            nationCode: '',
                           )),
                 );
               },
@@ -163,12 +162,8 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
                         var nationCode = '';
-                        var member = boardProvider.articleList[index].member;
-
-                        var nationality = member?.nationality?.toString() ?? '';
 
                         for (Map<String, String> country in countries) {
-
                           if (country['name'] ==
                               boardProvider.articleList[index].memberProfileDto
                                   ?.nationality
@@ -184,7 +179,7 @@ class _MusicBoardPageState extends State<MusicBoardPage> {
                                 board: boardProvider.articleList[index],
                                 nationCode: nationCode,
                                 memberDetails:
-                                    widget.screenArguments.memberDetails!,
+                                    widget.screenArguments.memberDetails,
                                 index: index),
                             const Divider(
                               thickness: 2,

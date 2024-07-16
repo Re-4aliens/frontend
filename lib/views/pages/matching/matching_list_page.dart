@@ -136,7 +136,7 @@ class _MatchingListPageState extends State<MatchingListPage> {
                                       partner: widget.screenArguments
                                           .partners![selectedIndex],
                                       memberDetails:
-                                          widget.screenArguments.memberDetails!,
+                                          widget.screenArguments.memberDetails,
                                     )),
                           );
                         }

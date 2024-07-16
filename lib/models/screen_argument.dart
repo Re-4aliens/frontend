@@ -4,7 +4,7 @@ import 'member_details_model.dart';
 import 'applicant_model.dart';
 
 class ScreenArguments {
-  MemberDetails? memberDetails;
+  MemberDetails memberDetails;
   String? status;
   Applicant? applicant;
   List<Partner>? partners;

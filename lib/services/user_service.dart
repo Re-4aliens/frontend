@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:aliens/models/comment_model.dart';
 import 'package:http/http.dart' as http;
 import 'api_service.dart';
 import 'package:aliens/models/signup_model.dart';
@@ -6,6 +7,7 @@ import '../util/image_util.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:aliens/models/market_board_model.dart';
 import 'package:aliens/models/member_details_model.dart';
+import 'package:aliens/models/board_model.dart';
 
 class UserService extends APIService {
   /* 
@@ -74,9 +76,7 @@ class UserService extends APIService {
     var response = await request.send();
 
     // 출력: 모든 파일의 Content-Type 출력
-    for (var file in request.files) {
-      print('File: ${file.filename}, Content-Type: ${file.contentType}');
-    }
+    for (var file in request.files) {}
 
     if (response.statusCode == 200) {
       print('Registration Success');
@@ -102,8 +102,8 @@ class UserService extends APIService {
     var response = await http.get(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json',
       },
     );
 
@@ -112,6 +112,7 @@ class UserService extends APIService {
       return MemberDetails.fromJson(responseBody['result']);
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
       if (responseBody['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -136,6 +137,30 @@ class UserService extends APIService {
         memberDetails.profileImageUrl ==
             marketBoard.memberProfileDto?.profileImageUrl &&
         memberDetails.nationality == marketBoard.memberProfileDto?.nationality;
+  }
+
+  /*
+
+    작성자와 사용자 동일 여부 (일반게시판)
+
+  */
+  static bool isBoardtAuthor(MemberDetails memberDetails, Board board) {
+    return memberDetails.name == board.memberProfileDto?.name &&
+        memberDetails.profileImageUrl ==
+            board.memberProfileDto?.profileImageUrl &&
+        memberDetails.nationality == board.memberProfileDto?.nationality;
+  }
+
+  /*
+
+    작성자와 사용자 동일 여부 (댓글)
+
+  */
+  static bool isCommentAuthor(MemberDetails memberDetails, Comment comment) {
+    return memberDetails.name == comment.memberProfileDto.name &&
+        memberDetails.profileImageUrl ==
+            comment.memberProfileDto.profileImageUrl &&
+        memberDetails.nationality == comment.memberProfileDto.nationality;
   }
 
   /*

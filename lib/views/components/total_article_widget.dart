@@ -14,18 +14,17 @@ import 'package:aliens/providers/board_provider.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/market_detail_page.dart';
 import 'board_dialog_widget.dart';
+import 'package:aliens/models/countries.dart';
 
 class TotalArticleWidget extends StatefulWidget {
   const TotalArticleWidget(
       {super.key,
       required this.board,
-      required this.nationCode,
       required this.screenArguments,
       required this.index,
       this.marketBoard});
 
   final Board board;
-  final String nationCode;
   final ScreenArguments screenArguments;
   final MarketBoard? marketBoard;
   final int index;
@@ -74,10 +73,22 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
     }
   }
 
+  String getNationCode(nationality) {
+    var nationCode = '';
+    for (Map<String, String> country in countries) {
+      if (country['name'] == nationality) {
+        nationCode = country['code']!;
+        break;
+      }
+    }
+    return nationCode;
+  }
+
   @override
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
     final bookmarkProvider = Provider.of<BookmarksProvider>(context);
+
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: ListTile(
@@ -116,7 +127,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                               fontWeight: FontWeight.bold, fontSize: 16.spMin),
                         ),
                         Text(
-                          widget.nationCode,
+                          getNationCode(
+                              widget.board.memberProfileDto?.nationality),
                           style: TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16.spMin),
                         )
@@ -146,8 +158,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                         builder: (builder) {
                           return BoardDialog(
                             board: widget.board,
-                            memberDetails:
-                                widget.screenArguments.memberDetails!,
+                            memberDetails: widget.screenArguments.memberDetails,
                             boardCategory: "전체게시판",
                           );
                         });
@@ -327,8 +338,6 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                     builder: (context) => MarketDetailPage(
                       screenArguments: widget.screenArguments,
                       marketBoard: data,
-                      productQuality: getProductStatusText(data.productQuality),
-                      statusText: getStatusText(data.saleStatus),
                       index: -1,
                       backPage: '',
                     ),
@@ -337,14 +346,12 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               });
             });
           } else {
-            print("total_article_widget -> article_page");
-            print(widget.board.id);
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ArticlePage(
                   board: widget.board,
-                  memberDetails: widget.screenArguments.memberDetails!,
+                  memberDetails: widget.screenArguments.memberDetails,
                   index: widget.index,
                 ),
               ),

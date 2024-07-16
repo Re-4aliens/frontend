@@ -164,7 +164,6 @@ class _MyArticlePageState extends State<MyArticlePage> {
                                 children: [
                                   TotalArticleWidget(
                                     board: boardProvider.articleList[index],
-                                    nationCode: nationCode,
                                     screenArguments: widget.screenArguments,
                                     index: index,
                                   ),
