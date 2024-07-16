@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:math';
 
-import 'package:aliens/models/matching_applicant_model.dart';
 import 'package:aliens/repository/sql_message_repository.dart';
 import 'package:aliens/views/components/chat_dialog_widget.dart';
 import 'package:async/async.dart';
-import 'package:aliens/services/auth_service.dart';
+import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:aliens/views/components/profile_dialog_widget.dart';
@@ -15,7 +13,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:web_socket_channel/io.dart';
 import 'package:aliens/services/chat_service.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
@@ -26,11 +23,11 @@ List<MessageModel> _list = [];
 class ChattingPage extends StatefulWidget {
   const ChattingPage(
       {super.key,
-      required this.matchingApplicant,
+      required this.applicant,
       required this.partner,
       required this.memberDetails});
 
-  final MatchingApplicant? matchingApplicant;
+  final Applicant? applicant;
   final Partner partner;
   final MemberDetails memberDetails;
 
@@ -52,10 +49,8 @@ class _ChattingPageState extends State<ChattingPage> {
   bool bottomFlag = false;
   var isChecked = false;
   late AsyncMemoizer _memoizer;
+  late final _messageStreamSubscription;
   List<Map> requestBuffer = [];
-  var sendChannel;
-  var readChannel;
-  var bulkReadChannel;
 
   Future<List<MessageModel>>? myFuture;
   FlutterLocalNotificationsPlugin? _flutterLocalNotificationsPlugin;
@@ -66,7 +61,8 @@ class _ChattingPageState extends State<ChattingPage> {
   @override
   void initState() {
     super.initState();
-    connectWebSocket();
+    ChatService.connectWebSocket(
+        widget.partner, widget.memberDetails, updateUi, setState);
 
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -88,22 +84,20 @@ class _ChattingPageState extends State<ChattingPage> {
             'Received 새로운 채팅에 대한 FCM with: ${message.data} at ${DateTime.now()}');
         //받은 fcm 저장하고 보여주기
         var newChat = MessageModel(
-            chatType: int.parse(message.data['chatType']),
-            chatContent: message.data['chatContent'],
+            type: message.data['type'],
+            content: message.data['chatContent'],
             roomId: int.parse(message.data['roomId']),
             senderId: int.parse(message.data['senderId']),
-            senderName: message.data['senderName'],
             receiverId: int.parse(message.data['receiverId']),
             sendTime: message.data['sendTime'],
-            unreadCount: 1,
-            chatId: int.parse(message.data['chatId']));
+            isRead: true, // 수정 필요 (1)
+            id: int.parse(message.data['chatId']));
         await SqlMessageRepository.create(newChat);
         await SqlMessageRepository.getList(widget.partner.roomId!, 0);
-        //  await SqlMessageRepository.getList(
         setState(() {});
 
         //단일 읽음 처리
-        sendReadRequest(message);
+        ChatService.sendReadRequest(message);
       }
       //상대방이 읽었다는 것에 대한 fcm인 경우
       else if (message.data['chatId'] != null &&
@@ -131,11 +125,11 @@ class _ChattingPageState extends State<ChattingPage> {
 
   _unreadListFuc() async {
     List<MessageModel> unreadlist =
-        await ChatService.getMessages(widget.partner.chatRoomId, context);
+        await ChatService.getMessages(widget.partner.roomId, context);
 
     //1. 리스트 업데이트
     for (final message in unreadlist) {
-      print(message.chatContent);
+      print(message.content);
 
       await SqlMessageRepository.create(message);
     }
@@ -146,12 +140,19 @@ class _ChattingPageState extends State<ChattingPage> {
     //createdDate = await SqlMessageRepository.getCreatedTime(widget.partner.roomId!);
   }
 
+  /*
+  채팅 내역 화면에 보여주기
+   */
+  Future<List<MessageModel>> _loadChatList() async {
+    return await SqlMessageRepository.getList(widget.partner.roomId!, 0);
+  }
+
   @override
   void dispose() {
     super.dispose();
-    sendChannel.sink.close();
-    readChannel.sink.close();
-    bulkReadChannel.sink.close();
+    ChatService.sendChannel.sink.close();
+    ChatService.readChannel.sink.close();
+    ChatService.bulkReadChannel.sink.close();
 
     _scrollController.dispose();
 
@@ -168,20 +169,15 @@ class _ChattingPageState extends State<ChattingPage> {
   void sendMessage() async {
     Map<String, dynamic> request = {
       'requestId': DataUtils.makeUUID(),
-      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
-      //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
-      //'fcmToken': "dNRrfFS3lkpGjrmR8h_02c:APA91bGFN8mw7ncHT3xG6k3P__ylVyyP6jbeNSRnAsDp-QCBoXAGCtGV9SboimtCPOBvibSxsCm2BUy8twurtB_eiynrHQetthqRnbtjoAulKrHxAX2k64k3tseYbUbk9AKaQmg7_E_F",
       'chatType': 0,
       'chatContent': _newMessage,
       'roomId': widget.partner.roomId,
-      // 'senderId': widget.memberDetails.memberId,
       'senderId': 0,
       'senderName': widget.memberDetails.name,
-      'receiverId': widget.partner.partnerMemberId,
+      'receiverId': widget.partner.memberId,
       'sendTime': DateTime.now().toString(),
     };
-    await sendChannel.sink.add(json.encode(request));
-    requestBuffer.add(request);
+    ChatService.sendMessage(request);
     updateUi();
   }
 
@@ -195,184 +191,13 @@ class _ChattingPageState extends State<ChattingPage> {
       'chatType': 1,
       'chatContent': vsGames[randomIndex]['question'],
       'roomId': widget.partner.roomId,
-      // 'senderId': widget.memberDetails.memberId,
       'senderId': 0,
       'senderName': widget.memberDetails.name,
-      'receiverId': widget.partner.partnerMemberId,
+      'receiverId': widget.partner.memberId,
       'sendTime': DateTime.now().toString(),
     };
-    await sendChannel.sink.add(json.encode(request));
-    requestBuffer.add(request);
+    ChatService.sendVSMessage(request);
     updateUi();
-  }
-
-  void sendReadRequest(RemoteMessage message) async {
-    print('단일 읽음처리');
-    Map<String, dynamic> request = {
-      'requestId': DataUtils.makeUUID(),
-      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
-      //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
-      //'fcmToken': "es5mW8PaTlOVqSk0HQhfjg:APA91bHsLBa767QE2AtQ0G6d0XKjClMskrWkojRLl1705UhHC4gOhszoR6oaJ8LqLWrhdR6OW1UEfUFFUls6lPAhxC9IsPJ-b253mfN5B4lhGap79mqW2JWo8vzHEJFBYWG2CeP9MkJC",
-      'chatId': message.data['chatId'],
-      'roomId': message.data['roomId'],
-    };
-    await readChannel.sink.add(json.encode(request));
-    setState(() {});
-  }
-
-  void sendBulkReadRequest() async {
-    Map<String, dynamic> request = {
-      'requestId': DataUtils.makeUUID(),
-      //'fcmToken': "es5mW8PaTlOVqSk0HQhfjg:APA91bHsLBa767QE2AtQ0G6d0XKjClMskrWkojRLl1705UhHC4gOhszoR6oaJ8LqLWrhdR6OW1UEfUFFUls6lPAhxC9IsPJ-b253mfN5B4lhGap79mqW2JWo8vzHEJFBYWG2CeP9MkJC",
-      //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
-      //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
-      'partnerId': widget.partner.partnerMemberId,
-      'roomId': widget.partner.chatRoomId,
-    };
-    await bulkReadChannel.sink.add(json.encode(request));
-  }
-
-  void connectWebSocket() async {
-    String chatToken = '';
-    try {
-      chatToken = await ChatService.getChatToken();
-    } catch (e) {
-      print(e);
-      if (e == "AT-C-002") {
-        await AuthService.getAccessToken();
-        chatToken = await ChatService.getChatToken();
-      }
-    }
-
-    final wsUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/message/send');
-    final wsReadUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/message/read');
-    final wsAllReadUrl = Uri.parse('ws://3.34.2.246:8081/ws/chat/room/read');
-    var header = {'Authorization': chatToken};
-    sendChannel = IOWebSocketChannel.connect(wsUrl, headers: header);
-    readChannel = IOWebSocketChannel.connect(wsReadUrl, headers: header);
-    bulkReadChannel = IOWebSocketChannel.connect(wsAllReadUrl, headers: header);
-
-    sendBulkReadRequest();
-
-    sendChannel.stream.listen((message) async {
-      messageSendResponseHandler(message);
-    }, onError: (error) {
-      print('Error: $error');
-    }, onDone: () {
-      print('WebSocket connection closed');
-    });
-
-    readChannel.stream.listen((message) async {
-      readResponseHandler(message);
-    }, onError: (error) {
-      print('Error: $error');
-    }, onDone: () {
-      print('WebSocket connection closed');
-    });
-
-    bulkReadChannel.stream.listen((message) async {
-      bulkReadResponseHandler(message);
-    }, onError: (error) {
-      print('Error: $error');
-    }, onDone: () {
-      print('WebSocket connection closed');
-    });
-  }
-
-  void readResponseHandler(message) {
-    print('Received response: $message');
-    if (json.decode(message)['status'] == 'success') {
-      setState(() {});
-    }
-  }
-
-  void bulkReadResponseHandler(message) async {
-    print('bulk read channel Received response: $message');
-    if (json.decode(message)['status'] == 'success') {
-      //await SqlMessageRepository.bulkUpdate(widget.partner);
-      setState(() {});
-    }
-  }
-
-  void messageSendResponseHandler(message) async {
-    print('웹소켓 전송 Received response: $message');
-    if (json.decode(message)['status'] == 'success') {
-      var requestId = json.decode(message)['requestId'];
-      // requestBuffer에서 해당 requestId를 가진 request를 반환
-      var request = requestBuffer
-          .firstWhere((element) => element['requestId'] == requestId);
-
-      print(json.decode(message)['chatId']);
-      var chat = MessageModel(
-          chatId: json.decode(message)['chatId'],
-          // TODO chat Type 수정
-          chatType: request['chatType'],
-          chatContent: request['chatContent'],
-          roomId: request['roomId'],
-          senderId: request['senderId'],
-          senderName: request['senderName'],
-          receiverId: request['receiverId'],
-          sendTime: request['sendTime'],
-          unreadCount: 1);
-      //저장됨
-      await SqlMessageRepository.create(chat);
-      setState(() {});
-
-      requestBuffer.remove(request);
-    }
-  }
-
-  /*
-
-  채팅 내역 화면에 보여주기
-
-   */
-  Future<List<MessageModel>> _loadChatList() async {
-    //3. 업데이트된 리스트 불러오기
-    // return await SqlMessageRepository.getList(
-    //     widget.partner.roomId!, widget.memberDetails.memberId!);
-    return await SqlMessageRepository.getList(widget.partner.roomId!, 0);
-  }
-/*
-
-  Future<void> _showNotification(String content) async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails('your channel id', 'your channel name',
-        channelDescription: 'your channel description',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker');
-
-    const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    await _flutterLocalNotificationsPlugin!.show(
-      0,
-      '메시지가 도착했습니다.',
-      content,
-      platformChannelSpecifics,
-      payload: content,
-    );
-  }
-
- */
-
-  void onSelectNotification(String? payload) async {
-    debugPrint("$payload");
-    showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              title: const Text('Notification Payload'),
-              content: Text('Payload: $payload'),
-            ));
-  }
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  StreamSubscription<RemoteMessage>? _messageStreamSubscription;
-
-  getToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    print(token);
   }
 
   void updateUi() async {
@@ -417,7 +242,7 @@ class _ChattingPageState extends State<ChattingPage> {
               title: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  widget.partner.profileImageUrl == ''
+                  widget.partner.profileImage == null
                       ? Padding(
                           padding: const EdgeInsets.only(right: 10.0),
                           child: IconButton(
@@ -458,14 +283,14 @@ class _ChattingPageState extends State<ChattingPage> {
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                        widget.partner.profileImageUrl))),
+                                        widget.partner.profileImage!))),
                           ),
                         ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.partner.name,
+                        '${widget.partner.name}',
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
@@ -473,7 +298,7 @@ class _ChattingPageState extends State<ChattingPage> {
                         ),
                       ),
                       Text(
-                        widget.partner.nationality,
+                        '${widget.partner.nationality}',
                         style: const TextStyle(
                           color: Color(0xff626262),
                           fontSize: 12,
@@ -502,7 +327,7 @@ class _ChattingPageState extends State<ChattingPage> {
                 )
               ],
             ),
-            body: widget.partner.roomStatus == 'OPEN'
+            body: widget.partner.roomState == 'OPEN'
                 ? Column(children: [
                     Expanded(
                         child: Container(
@@ -613,22 +438,19 @@ class _ChattingPageState extends State<ChattingPage> {
                                                   currentDate.toString()),
                                             MessageBubble(
                                                 message: MessageModel(
-                                                    chatId: datas[index].chatId,
-                                                    chatType:
-                                                        datas[index].chatType,
-                                                    chatContent: datas[index]
-                                                        .chatContent,
+                                                    id: datas[index].id,
+                                                    type: datas[index].type,
+                                                    content:
+                                                        datas[index].content,
                                                     roomId: datas[index].roomId,
                                                     senderId:
                                                         datas[index].senderId,
-                                                    senderName:
-                                                        datas[index].senderName,
                                                     receiverId:
                                                         datas[index].receiverId,
                                                     sendTime:
                                                         datas[index].sendTime,
-                                                    unreadCount: datas[index]
-                                                        .unreadCount),
+                                                    isRead:
+                                                        datas[index].isRead),
                                                 memberDetails:
                                                     widget.memberDetails,
                                                 showingTime:
