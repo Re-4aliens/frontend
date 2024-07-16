@@ -78,6 +78,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
     final bookmarkProvider = Provider.of<BookmarksProvider>(context);
+
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
       child: ListTile(
@@ -146,8 +147,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                         builder: (builder) {
                           return BoardDialog(
                             board: widget.board,
-                            memberDetails:
-                                widget.screenArguments.memberDetails!,
+                            memberDetails: widget.screenArguments.memberDetails,
                             boardCategory: "전체게시판",
                           );
                         });
@@ -337,14 +337,12 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               });
             });
           } else {
-            print("total_article_widget -> article_page");
-            print(widget.board.id);
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => ArticlePage(
                   board: widget.board,
-                  memberDetails: widget.screenArguments.memberDetails!,
+                  memberDetails: widget.screenArguments.memberDetails,
                   index: widget.index,
                 ),
               ),

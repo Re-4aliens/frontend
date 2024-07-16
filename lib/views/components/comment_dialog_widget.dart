@@ -1,4 +1,5 @@
 import 'package:aliens/models/member_details_model.dart';
+import 'package:aliens/services/user_service.dart';
 import 'package:aliens/views/components/report_dialog_widget.dart';
 import 'package:aliens/views/components/report_ios_dialog_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -68,8 +69,6 @@ class CommentDialog extends StatelessWidget {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
             final userEmail = snapshot.data;
-            print(userEmail);
-            print(userEmail == memberDetails.email);
             return iOSDialog(userEmail);
           }
         },
@@ -113,12 +112,12 @@ class CommentDialog extends StatelessWidget {
                       ),
                     ),
                   ),
-            'memberDetials.email' == comment.member!.email
+            UserService.isCommentAuthor(memberDetails, comment)
                 ? SizedBox(
                     height: 10.h,
                   )
                 : const SizedBox(),
-            'memberDetials.email' == comment.member!.email
+            UserService.isCommentAuthor(memberDetails, comment)
                 ? InkWell(
                     onTap: () {
                       showDialog(
@@ -221,7 +220,7 @@ class CommentDialog extends StatelessWidget {
                     ),
                   ),
                 ),
-          'memberDetials.email' == comment.member!.email
+          UserService.isCommentAuthor(memberDetails, comment)
               ? InkWell(
                   onTap: () {
                     showDialog(
