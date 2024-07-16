@@ -172,8 +172,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                               builder: (context) => MarketDetailPage(
                                     screenArguments: widget.screenArguments,
                                     marketBoard: data,
-                                    productQuality: data.productQuality,
-                                    statusText: data.saleStatus,
                                     index: -1,
                                     backPage: '',
                                   )),
@@ -202,7 +200,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                           MaterialPageRoute(
                               builder: (context) => ArticlePage(
                                     memberDetails:
-                                        widget.screenArguments.memberDetails!,
+                                        widget.screenArguments.memberDetails,
                                     board: data,
                                     index: -1,
                                   )),

@@ -48,6 +48,17 @@ class _GameBoardPageState extends State<GameBoardPage> {
     _scrollController.dispose();
   }
 
+  String getNationCode(nationality) {
+    var nationCode = '';
+    for (Map<String, String> country in countries) {
+      if (country['name']! == nationality) {
+        nationCode = country['code']!;
+        break;
+      }
+    }
+    return nationCode;
+  }
+
   @override
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
@@ -129,7 +140,6 @@ class _GameBoardPageState extends State<GameBoardPage> {
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
                             category: "game",
-                            nationCode: '',
                           )),
                 );
               },
@@ -164,30 +174,16 @@ class _GameBoardPageState extends State<GameBoardPage> {
                               controller: _scrollController,
                               itemCount: boardProvider.articleList.length,
                               itemBuilder: (context, index) {
-                                var nationCode = '';
-                                var member =
-                                    boardProvider.articleList[index].member;
+                                var nationCode = getNationCode(widget
+                                    .screenArguments.memberDetails.nationality);
 
-                                var nationality =
-                                    member?.nationality?.toString();
-                                for (Map<String, String> country in countries) {
-
-                                  if (country['name'] ==
-                                      (boardProvider.articleList[index]
-                                              .memberProfileDto!.nationality)
-                                          .toString()) {
-                                    nationCode = country['code']!;
-
-                                    break;
-                                  }
-                                }
                                 return Column(
                                   children: [
                                     ArticleWidget(
                                         board: boardProvider.articleList[index],
                                         nationCode: nationCode,
                                         memberDetails: widget
-                                            .screenArguments.memberDetails!,
+                                            .screenArguments.memberDetails,
                                         index: index),
                                     const Divider(
                                       thickness: 2,

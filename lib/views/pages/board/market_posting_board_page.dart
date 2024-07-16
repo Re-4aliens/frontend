@@ -34,14 +34,14 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
   final TextEditingController _contentController = TextEditingController();
 
   List<String> whatStatus = [
-    'BRAND_NEW',
-    'ALMOST_NEW',
-    'SLIGHT_DEFECT',
-    'USED',
+    'BRAND_NEW'.tr(),
+    'ALMOST_NEW'.tr(),
+    'SLIGHT_DEFECT'.tr(),
+    'USED'.tr(),
   ];
   String productQuality = '';
 
-  final List<String> _saleStatusList = ['SELL', 'END'];
+  final List<String> _saleStatusList = ['SELL'.tr(), 'END'.tr()];
   String? saleStatus;
 
   final picker = ImagePicker();
@@ -121,6 +121,32 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     }
   }
 
+  String getSaleStatusText(saleStatus) {
+    switch (saleStatus) {
+      case '판매중':
+        return 'SELL';
+      case '판매완료':
+        return 'END';
+      default:
+        return '';
+    }
+  }
+
+  String getproductQualityText(productQuality) {
+    switch (productQuality) {
+      case '미개봉':
+        return 'BRAND_NEW';
+      case '거의 새 것':
+        return 'ALMOST_NEW';
+      case '약간의 하자':
+        return 'SLIGHT_DEFECT';
+      case '사용감 있음':
+        return 'USED';
+      default:
+        return '';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -131,12 +157,11 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
       _titleController.text = widget.marketBoard!.title;
       _priceController.text = widget.marketBoard!.price.toString();
       _contentController.text = widget.marketBoard!.content;
-      productQuality = widget.marketBoard!.productQuality;
-      saleStatus = widget.marketBoard!.saleStatus;
-
+      productQuality = widget.marketBoard!.productQuality.tr();
+      saleStatus = widget.marketBoard!.saleStatus.tr();
       _imageUrls = widget.marketBoard!.imageUrls;
     } else {
-      saleStatus = _saleStatusList[0]; // 기본값 설정
+      saleStatus = _saleStatusList[0].tr(); // 기본값 설정
     }
   }
 
@@ -267,7 +292,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                       color: const Color(0xff888888),
                                     ),
                                     Text(
-                                      'sale'.tr(),
+                                      'SELL'.tr(),
                                       style: TextStyle(
                                           color: const Color(0xff888888),
                                           fontSize: 14.spMin),
@@ -307,113 +332,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                     BorderSide(color: Colors.transparent)),
                             contentPadding:
                                 EdgeInsets.only(right: 14.w, left: 14.w)),
-                        controller: _contentController,
-                        onChanged: (value) {
-                          setState(() {
-                            _isButtonEnabled = _isFormValid();
-                          });
-                        },
-                        maxLines: 10,
-                      ),
-                    ), //상품 내용
-                    SizedBox(height: 100.h),
-                    Button(
-                      onPressed: () async {
-                        if (_formKey.currentState!.validate() &&
-                            productStatus.isNotEmpty &&
-                            _images.isNotEmpty) {
-                          FocusScope.of(context).unfocus();
-                          _formKey.currentState!.save();
-
-                          MarketBoard marketArticle = MarketBoard(
-                            title: _titleController.text,
-                            content: _contentController.text,
-                            price: _priceController.text,
-                            productStatus: productStatus,
-                            marketArticleStatus: marketArticleStatus,
-                            imageUrls:
-                                _images.map((image) => image.path).toList(),
-                          );
-
-                          try {
-                            if (_isEditMode) {
-                              MarketBoard updateData = MarketBoard(
-                                title: _titleController.text,
-                                content: _contentController.text,
-                                price: _priceController.text,
-                                productStatus: productStatus,
-                                marketArticleStatus: marketArticleStatus,
-                                imageUrls:
-                                    _images.map((image) => image.path).toList(),
-                              );
-                              print(marketArticleStatus);
-
-                              bool success =
-                                  await MarketService.updateMarketArticle(
-                                      widget.marketBoard!.articleId ?? 0,
-                                      updateData);
-                              print('1');
-                              print(updateData);
-                              Navigator.of(context).pop(); // 이전 페이지로 이동
-
-                              if (success) {
-                                print('게시물 수정 성공!!!');
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      MarketBoardPage(
-                                          screenArguments:
-                                              widget.screenArguments,
-                                          marketBoard: widget.marketBoard,
-                                          memberDetails: widget
-                                              .screenArguments.memberDetails!),
-                                ));
-                              } else {
-                                print('게시물 수정 실패...');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Fail'),
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                              }
-                            } else {
-                              // 생성 모드인 경우 게시물 생성
-                              bool success =
-                                  await MarketService.createMarketArticle(
-                                      marketArticle);
-                              //Navigator.of(context).pop(); // 이전 페이지로 이동
-
-                              if (success) {
-                                print('게시물 생성 성공!!!');
-                                Future.delayed(
-                                    const Duration(milliseconds: 100), () {
-                                  Navigator.of(context).pop(); // 이전 페이지로 이동
-                                });
-                              } else {
-                                print('게시물 생성 실패...');
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Fail'),
-                                    duration: Duration(seconds: 3),
-                                  ),
-                                );
-                              }
-                            }
-                          } catch (error) {
-                            print('Error: $error');
-                          }
-                        }
-                      },
-                      isEnabled: _isButtonEnabled,
-                      child: Text(
-                        'post3'.tr(),
-                        style: TextStyle(
-                          color: _isButtonEnabled
-                              ? Colors.white
-                              : const Color(0xff888888),
-                        ),
-                        controller: _priceController,
+                        controller: _priceController, // 여기에 controller 추가
                         onChanged: (value) {
                           setState(() {
                             _isButtonEnabled = _isFormValid();
@@ -487,117 +406,113 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                 ), // 상품 상태
                 SizedBox(height: MediaQuery.of(context).size.height * 0.014),
 
-                Row(
-                  children: [
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: _isEditMode
-                          ? Row(
-                              children: [
-                                for (int i = 0; i < _imageUrls.length; i++)
-                                  Container(
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: _isEditMode
+                      ? ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width,
+                          ),
+                          child: Row(
+                            children: [
+                              for (int i = 0; i < _imageUrls.length; i++)
+                                Container(
+                                  margin: const EdgeInsets.only(
+                                    right: 20,
+                                  ).r,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10).r,
+                                    child: Image.network(
+                                      _imageUrls[i],
+                                      fit: BoxFit.cover,
+                                      height: 130.h,
+                                      width: 130.h,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        )
+                      : Row(
+                          children: [
+                            for (int i = 0; i < 3; i++)
+                              InkWell(
+                                onTap: () {
+                                  getImages(i);
+                                },
+                                child: Container(
                                     margin: const EdgeInsets.only(
                                       right: 20,
                                     ).r,
-                                    child: ClipRRect(
+                                    height: 130.h,
+                                    width: 130.h,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xfff8f8f8),
                                       borderRadius: BorderRadius.circular(10).r,
-                                      child: Image.network(
-                                        _imageUrls[i],
-                                        fit: BoxFit.cover,
-                                        height: 130.h,
-                                        width: 130.h,
-                                      ),
+                                      image: i < _images.length
+                                          ? DecorationImage(
+                                              image: FileImage(
+                                                File(_images[i].path),
+                                              ),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : null,
                                     ),
-                                  ),
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                for (int i = 0; i < 3; i++)
-                                  InkWell(
-                                    onTap: () {
-                                      getImages(i);
-                                    },
-                                    child: Container(
-                                        margin: const EdgeInsets.only(
-                                          right: 20,
-                                        ).r,
-                                        height: 130.h,
-                                        width: 130.h,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xfff8f8f8),
-                                          borderRadius:
-                                              BorderRadius.circular(10).r,
-                                          image: i < _images.length
-                                              ? DecorationImage(
-                                                  image: FileImage(
-                                                    File(_images[i].path),
+                                    alignment: Alignment.center,
+                                    child: i < _images.length
+                                        ? const SizedBox()
+                                        : i == _images.length
+                                            ? Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Image.asset(
+                                                    'assets/icon/ICON_photo_1.png',
+                                                    width: 30.r,
+                                                    height: 30.r,
                                                   ),
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : null,
-                                        ),
-                                        alignment: Alignment.center,
-                                        child: i < _images.length
-                                            ? const SizedBox()
-                                            : i == _images.length
-                                                ? Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Image.asset(
-                                                        'assets/icon/ICON_photo_1.png',
-                                                        width: 30.r,
-                                                        height: 30.r,
-                                                      ),
-                                                      Text(
-                                                        '${_images.length}/3',
-                                                        style: const TextStyle(
-                                                            color: Color(
-                                                                0xffaeaeae)),
-                                                      )
-                                                    ],
+                                                  Text(
+                                                    '${_images.length}/3',
+                                                    style: const TextStyle(
+                                                        color:
+                                                            Color(0xffaeaeae)),
                                                   )
-                                                : SvgPicture.asset(
-                                                    'assets/icon/ICON_photo_2.svg',
-                                                    width: 25.r,
-                                                    height: 25.r,
-                                                  )),
-                                  ),
-                              ],
-                            ),
-                    ),
-                  ],
+                                                ],
+                                              )
+                                            : SvgPicture.asset(
+                                                'assets/icon/ICON_photo_2.svg',
+                                                width: 25.r,
+                                                height: 25.r,
+                                              )),
+                              ),
+                          ],
+                        ),
                 ),
                 SizedBox(height: 45.h),
-                Container(
-                  child: TextFormField(
-                    style: TextStyle(
-                        fontSize: 14.h, color: const Color(0xff888888)),
-                    decoration: InputDecoration(
-                        hintText:
-                            '${'market-posting-content'.tr()}\n${'posting-noti'.tr()}',
-                        hintStyle: TextStyle(
-                            fontSize: 14.spMin, color: const Color(0xffC0C0C0)),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(color: Colors.transparent),
-                          // 원하는 색상으로 설정
-                        ),
-                        focusedErrorBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)),
-                        errorBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.transparent)),
-                        contentPadding:
-                            EdgeInsets.only(right: 14.w, left: 14.w)),
-                    controller: _contentController,
-                    onChanged: (value) {
-                      setState(() {
-                        _isButtonEnabled = _isFormValid();
-                      });
-                    },
-                    maxLines: 10,
-                  ),
+                TextFormField(
+                  style:
+                      TextStyle(fontSize: 14.h, color: const Color(0xff888888)),
+                  decoration: InputDecoration(
+                      hintText:
+                          '${'market-posting-content'.tr()}\n${'posting-noti'.tr()}',
+                      hintStyle: TextStyle(
+                          fontSize: 14.spMin, color: const Color(0xffC0C0C0)),
+                      enabledBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.transparent),
+                        // 원하는 색상으로 설정
+                      ),
+                      focusedErrorBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
+                      errorBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent)),
+                      contentPadding: EdgeInsets.only(right: 14.w, left: 14.w)),
+                  controller: _contentController,
+                  onChanged: (value) {
+                    setState(() {
+                      _isButtonEnabled = _isFormValid();
+                    });
+                  },
+                  maxLines: 10,
                 ), // 상품 내용
                 SizedBox(height: 100.h),
                 Button(
@@ -612,8 +527,8 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           title: _titleController.text,
                           content: _contentController.text,
                           price: _priceController.text,
-                          productQuality: productQuality,
-                          saleStatus: saleStatus!,
+                          productQuality: getproductQualityText(productQuality),
+                          saleStatus: getSaleStatusText(saleStatus),
                           imageUrls: [
                             ..._images.map((image) => image.path),
                             ..._imageUrls
@@ -626,8 +541,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               title: _titleController.text,
                               content: _contentController.text,
                               price: _priceController.text,
-                              productQuality: productQuality,
-                              saleStatus: saleStatus!,
+                              productQuality:
+                                  getproductQualityText(productQuality),
+                              saleStatus: getSaleStatusText(saleStatus),
                               imageUrls: [
                                 ..._images.map((image) => image.path),
                                 ..._imageUrls
@@ -650,7 +566,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                         screenArguments: widget.screenArguments,
                                         marketBoard: widget.marketBoard,
                                         memberDetails: widget
-                                            .screenArguments.memberDetails!),
+                                            .screenArguments.memberDetails),
                               ));
                             } else {
                               print('게시물 수정 실패...');

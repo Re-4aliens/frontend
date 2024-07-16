@@ -182,7 +182,7 @@ class BoardService extends APIService {
     
   */
   static Future<bool> postArticle(Board newBoard) async {
-    String category = getCategoryValue(newBoard.category!);
+    String category = getCategoryValue(newBoard.category);
     print(category);
     const url = '$domainUrl/boards/normal';
 
@@ -211,8 +211,8 @@ class BoardService extends APIService {
     );
     request.files.add(jsonPart);
 
-    if (newBoard.imageUrls != null && newBoard.imageUrls!.isNotEmpty) {
-      for (String imagePath in newBoard.imageUrls!) {
+    if (newBoard.imageUrls.isNotEmpty) {
+      for (String imagePath in newBoard.imageUrls) {
         if (imagePath.isNotEmpty) {
           var file = await ImageUtil.compressImageToMultipartFile(
             'boardImages',

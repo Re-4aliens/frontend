@@ -143,8 +143,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                         builder: (builder) {
                           return BoardDialog(
                             board: widget.board,
-                            memberDetails:
-                                widget.screenArguments.memberDetails!,
+                            memberDetails: widget.screenArguments.memberDetails,
                             boardCategory: "좋아하는 게시글",
                           );
                         });
@@ -225,8 +224,6 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                                 builder: (context) => MarketDetailPage(
                                       screenArguments: widget.screenArguments,
                                       marketBoard: data,
-                                      productQuality: data.productQuality,
-                                      statusText: data.saleStatus,
                                       index: -1,
                                       backPage: '',
                                     )),
@@ -244,7 +241,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
               MaterialPageRoute(
                   builder: (context) => ArticlePage(
                         board: widget.board,
-                        memberDetails: widget.screenArguments.memberDetails!,
+                        memberDetails: widget.screenArguments.memberDetails,
                         index: widget.index,
                       )),
             );

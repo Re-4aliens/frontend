@@ -65,7 +65,7 @@ class MarketBoardDialog extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (builder) => ReportDialog(
-                        memberId: marketBoard.id ?? -1, context: context));
+                        id: marketBoard.id ?? -1, context: context));
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,
@@ -176,6 +176,7 @@ class MarketBoardDialog extends StatelessWidget {
   }
 
   Widget iOSDialog() {
+    print(UserService.isMarketAuthor(memberDetails, marketBoard));
     return Dialog(
       elevation: 0,
       backgroundColor: const Color(0xffffffff),
