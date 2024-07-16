@@ -60,18 +60,25 @@ class MatchingService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
+    print(jwtToken);
+
     var response = await http.get(
       Uri.parse(url),
-      headers: {'Authorization': jwtToken, 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': jwtToken,
+      },
     );
 
     if (response.statusCode == 200) {
+      print(response.statusCode);
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> matchingPartner = responseBody['result'];
+      print(matchingPartner);
       return matchingPartner
           .map((dynamic item) => Partner.fromJson(item))
           .toList();
     } else {
+      print(response.statusCode);
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
