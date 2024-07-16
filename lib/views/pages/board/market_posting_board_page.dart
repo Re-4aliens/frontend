@@ -121,6 +121,32 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     }
   }
 
+  String getSaleStatusText(saleStatus) {
+    switch (saleStatus) {
+      case '판매중':
+        return 'SELL';
+      case '판매완료':
+        return 'END';
+      default:
+        return '';
+    }
+  }
+
+  String getproductQualityText(productQuality) {
+    switch (productQuality) {
+      case '미개봉':
+        return 'BRAND_NEW';
+      case '거의 새 것':
+        return 'ALMOST_NEW';
+      case '약간의 하자':
+        return 'SLIGHT_DEFECT';
+      case '사용감 있음':
+        return 'USED';
+      default:
+        return '';
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -131,9 +157,8 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
       _titleController.text = widget.marketBoard!.title;
       _priceController.text = widget.marketBoard!.price.toString();
       _contentController.text = widget.marketBoard!.content;
-      productQuality = widget.marketBoard!.productQuality;
+      productQuality = widget.marketBoard!.productQuality.tr();
       saleStatus = widget.marketBoard!.saleStatus.tr();
-
       _imageUrls = widget.marketBoard!.imageUrls;
     } else {
       saleStatus = _saleStatusList[0].tr(); // 기본값 설정
@@ -267,7 +292,7 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                       color: const Color(0xff888888),
                                     ),
                                     Text(
-                                      'sale'.tr(),
+                                      'SELL'.tr(),
                                       style: TextStyle(
                                           color: const Color(0xff888888),
                                           fontSize: 14.spMin),
@@ -502,8 +527,8 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           title: _titleController.text,
                           content: _contentController.text,
                           price: _priceController.text,
-                          productQuality: productQuality,
-                          saleStatus: saleStatus!,
+                          productQuality: getproductQualityText(productQuality),
+                          saleStatus: getSaleStatusText(saleStatus),
                           imageUrls: [
                             ..._images.map((image) => image.path),
                             ..._imageUrls
@@ -516,8 +541,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               title: _titleController.text,
                               content: _contentController.text,
                               price: _priceController.text,
-                              productQuality: productQuality,
-                              saleStatus: saleStatus!,
+                              productQuality:
+                                  getproductQualityText(productQuality),
+                              saleStatus: getSaleStatusText(saleStatus),
                               imageUrls: [
                                 ..._images.map((image) => image.path),
                                 ..._imageUrls

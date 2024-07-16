@@ -40,7 +40,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   bool loading = false;
   MemberDetails? memberDetails;
 
-  //String createdAt = '';
   int page = 0;
 
   @override
@@ -123,7 +122,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     }
   }
 
-  @override
   Future<void> fetchMarketArticles() async {
     try {
       var fetchedData =
@@ -279,12 +277,10 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
             itemBuilder: (BuildContext context, int index) {
               if (index < marketBoardList.length) {
                 MarketBoard marketBoard = marketBoardList[index];
+
                 String productQualityText =
                     getProductStatusText(marketBoard.productQuality);
                 String statusText = getStatusText(marketBoard.saleStatus);
-
-                print(productQualityText);
-                print(statusText);
 
                 return InkWell(
                   onTap: () {
@@ -482,10 +478,10 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
 
   String getProductStatusText(String? productQuality) {
     List<String> whatStatus = [
-      'Brand_New'.tr(),
-      'Almost_New'.tr(),
-      'Slight_Defect'.tr(),
-      'Used'.tr(),
+      'BRAND_NEW'.tr(),
+      'ALMOST_NEW'.tr(),
+      'SLIGHT_DEFECT'.tr(),
+      'USED'.tr(),
     ];
 
     switch (productQuality) {
@@ -503,16 +499,16 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   }
 
   String getStatusText(String? saleStatus) {
-    List<String> Status = [
-      'sale'.tr(),
-      'sold-out'.tr(),
+    List<String> status = [
+      'SELL'.tr(),
+      'END'.tr(),
     ];
 
     switch (saleStatus) {
-      case '판매 중':
-        return Status[0];
-      case '판매 완료':
-        return Status[1];
+      case 'SELL':
+        return status[0];
+      case 'END':
+        return status[1];
       default:
         return '';
     }

@@ -100,6 +100,9 @@ class MarketService extends APIService {
       'productQuality': marketArticle.productQuality,
     });
 
+    print(marketArticle.saleStatus);
+    print(marketArticle.productQuality);
+
     // JSON 데이터를 MultipartFile로 추가
     var jsonPart = http.MultipartFile.fromString(
       'request',
@@ -256,14 +259,12 @@ class MarketService extends APIService {
     var url =
         '$domainUrl/api/v2/market-articles/$articleId/bookmarks?page=$index&size=10&sort=createdAt,desc';
 
-    var jwtToken = await APIService.storage.read(key: 'token');
-
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
     var response = await http.post(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
+        'Authorization': jwtToken,
         'Content-Type': 'application/json',
       },
     );

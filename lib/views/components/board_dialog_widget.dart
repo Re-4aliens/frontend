@@ -30,19 +30,9 @@ class BoardDialog extends StatefulWidget {
 }
 
 class _BoardDialogState extends State<BoardDialog> {
-  String email = '';
-
   @override
   void initState() {
     super.initState();
-    initialize();
-  }
-
-  void initialize() async {
-    final userEmail = await UserService.fetchUserEmail();
-    setState(() {
-      email = userEmail;
-    });
   }
 
   @override

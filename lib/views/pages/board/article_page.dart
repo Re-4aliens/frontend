@@ -72,9 +72,11 @@ class _ArticlePageState extends State<ArticlePage> {
       case 'GAME':
         boardCategory = 'game'.tr();
         break;
+      case 'MARKET':
+        boardCategory = 'market'.tr();
+        break;
       default:
-        boardCategory =
-            'unknown'.tr(); // default case to handle unexpected categories
+        boardCategory = 'unknown';
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -166,7 +168,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                   return BoardDialog(
                                     board: widget.board,
                                     memberDetails: widget.memberDetails,
-                                    boardCategory: "",
+                                    boardCategory: boardCategory,
                                   );
                                 });
                           },
