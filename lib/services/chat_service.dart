@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:aliens/models/chat_room_model.dart';
 import 'package:http/http.dart' as http;
 import 'api_service.dart';
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/services/auth_service.dart';
-import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:web_socket_channel/io.dart';
@@ -18,11 +18,11 @@ class ChatService extends APIService {
 
   static List<Map> requestBuffer = [];
 
-  static Future<String> getChatToken() async {
-    // Your implementation to get chat token
-    return 'chatToken';
-  }
+  /*
+    
+    웹소켓 연결 요청
 
+  */
   static Future<void> connectWebSocket(Partner partner,
       MemberDetails memberDetails, Function updateUi, Function setState) async {
     String chatToken = '';
@@ -72,6 +72,11 @@ class ChatService extends APIService {
     });
   }
 
+  /*
+
+    메시지 전송 요청
+
+  */
   static void sendMessage(Map<String, dynamic> request) async {
     sendChannel.sink.add(json.encode(request));
     requestBuffer.add(request);
@@ -142,45 +147,19 @@ class ChatService extends APIService {
 
   /*
 
-  메세지 받아오기
+    메세지 조회
 
    */
   static Future<List<MessageModel>> getMessages(roomId, context) async {
-    var url = 'http://3.34.2.246:8081/api/v1/chat/$roomId'; //mocksever
+    var url = '$domainUrl/chat/room/$roomId/messages';
 
     //토큰 읽어오기
-    var jwtToken = await APIService.storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-    String chatToken = '';
-    try {
-      chatToken = await getChatToken();
-    } catch (e) {
-      if (e == "AT-C-002") {
-        try {
-          await AuthService.getAccessToken();
-        } catch (e) {
-          if (e == "AT-C-005") {
-            //토큰 및 정보 삭제
-            await APIService.storage.delete(key: 'auth');
-            await APIService.storage.delete(key: 'token');
-
-            //스택 비우고 화면 이동
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-          }
-        }
-        chatToken = await getChatToken();
-      }
-    }
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
     var response = await http.get(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-        'ChattingToken': chatToken
+        'Authorization': jwtToken,
       },
     );
 
@@ -194,93 +173,69 @@ class ChatService extends APIService {
     }
   }
 
-  // /*
+  /*
 
-  //   채팅 토큰 받아오기
+    채팅 토큰 받아오기
 
-  //  */
-  // static Future<String> getChatToken() async {
-  //   var url = 'http://3.34.2.246:8080/api/v1/chat/token';
-  //   //토큰 읽어오기
-  //   var jwtToken = await APIService.storage.read(key: 'token');
-
-  //   //accessToken만 보내기
-  //   jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-  //   var response = await http.get(
-  //     Uri.parse(url),
-  //     headers: {
-  //       'Authorization': 'Bearer $jwtToken',
-  //       'Content-Type': 'application/json'
-  //     },
-  //   );
-
-  //   //success
-  //   if (response.statusCode == 200) {
-  //     return json.decode(utf8.decode(response.bodyBytes))['data'];
-
-  //     //fail
-  //   } else {
-  //     if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-  //       // 액세스 토큰 만료
-  //       throw 'AT-C-002';
-  //     } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-  //         'AT-C-007') {
-  //       // 로그아웃된 토큰
-  //       throw 'AT-C-007';
-  //     } else {}
-
-  //     throw Exception('요청 오류');
-  //   }
-  // }
-
-  /* 
-
-    채팅 정보 받아오기
-
-  */
-  static Future<Map<String, dynamic>> getChatSummary(context) async {
-    var url = 'http://3.34.2.246:8081/api/v1/chat/summary';
+   */
+  static Future<String> getChatToken() async {
+    var url = 'http://3.34.2.246:8080/api/v1/chat/token';
     //토큰 읽어오기
     var jwtToken = await APIService.storage.read(key: 'token');
+
     //accessToken만 보내기
     jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-    String chatToken = '';
-    try {
-      chatToken = await getChatToken();
-    } catch (e) {
-      if (e == "AT-C-002") {
-        print(e);
-        try {
-          await AuthService.getAccessToken();
-        } catch (e) {
-          if (e == "AT-C-005") {
-            //토큰 및 정보 삭제
-            await APIService.storage.delete(key: 'auth');
-            await APIService.storage.delete(key: 'token');
-
-            //스택 비우고 화면 이동
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-          }
-        }
-        chatToken = await getChatToken();
-      }
-    }
 
     var response = await http.get(
       Uri.parse(url),
       headers: {
         'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-        'ChattingToken': chatToken
+        'Content-Type': 'application/json'
       },
     );
 
     //success
     if (response.statusCode == 200) {
-      return json.decode(utf8.decode(response.bodyBytes));
+      return json.decode(utf8.decode(response.bodyBytes))['data'];
+
+      //fail
+    } else {
+      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
+        // 액세스 토큰 만료
+        throw 'AT-C-002';
+      } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
+          'AT-C-007') {
+        // 로그아웃된 토큰
+        throw 'AT-C-007';
+      } else {}
+
+      throw Exception('요청 오류');
+    }
+  }
+
+  /* 
+
+    채팅방 요약 정보 조회
+
+  */
+  static Future<ChatData> getChatSummary() async {
+    var url = '$domainUrl/chat/summaries';
+
+    //토큰 읽어오기
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': jwtToken,
+      },
+    );
+
+    //success
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+      return ChatData.fromJson(responseBody['result']);
 
       //fail
     } else {

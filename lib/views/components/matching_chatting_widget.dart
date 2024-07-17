@@ -28,6 +28,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
 
   @override
   void initState() {
+    super.initState();
     //채팅 정보 받아오기
     futureChatRoomList = _getChatRoomList();
     _messageStreamSubscription =
