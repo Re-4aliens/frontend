@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:aliens/models/chatroom_model.dart';
+import 'package:aliens/models/chat_room_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';

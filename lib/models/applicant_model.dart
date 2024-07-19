@@ -1,5 +1,3 @@
-//
-
 class Applicant {
   Member? member;
   PreferLanguages? preferLanguages;

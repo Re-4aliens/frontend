@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:math';
-
+import 'package:aliens/services/chat_service.dart';
 import 'package:aliens/repository/sql_message_repository.dart';
 import 'package:aliens/views/components/chat_dialog_widget.dart';
 import 'package:async/async.dart';
-import 'package:aliens/models/applicant_model.dart';
-import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:aliens/views/components/profile_dialog_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -13,29 +11,29 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:aliens/services/chat_service.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
 import '../../../models/vs_game.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 
 List<MessageModel> _list = [];
 
 class ChattingPage extends StatefulWidget {
-  const ChattingPage(
-      {super.key,
-      required this.applicant,
-      required this.partner,
-      required this.memberDetails});
+  const ChattingPage({
+    super.key,
+    required this.partner,
+  });
 
-  final Applicant? applicant;
   final Partner partner;
-  final MemberDetails memberDetails;
 
   @override
   State<ChattingPage> createState() => _ChattingPageState();
 }
 
-class _ChattingPageState extends State<ChattingPage> {
+class _ChattingPageState extends State<ChattingPage>
+    with WidgetsBindingObserver {
   final _controller = TextEditingController();
 
   final ScrollController _scrollController = ScrollController();
@@ -58,21 +56,29 @@ class _ChattingPageState extends State<ChattingPage> {
   StreamSubscription<dynamic>? responseSubscription;
   StreamSubscription<dynamic>? readResponseSubscription;
 
-  @override
-  void initState() {
-    super.initState();
-    ChatService.connectWebSocket(
-        widget.partner, widget.memberDetails, updateUi, setState);
+  late ChatService chatService;
 
+  // 알림 설정
+  void _initializeNotifications() {
     var initializationSettingsAndroid =
         const AndroidInitializationSettings('@mipmap/ic_launcher');
-    //var initializationSettingsIOS = IOSInitializationSettings();
-
-    var initializationSettings =
-        InitializationSettings(android: initializationSettingsAndroid);
+    var initializationSettingsIOS = const DarwinInitializationSettings();
+    var initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
 
     _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     _flutterLocalNotificationsPlugin!.initialize(initializationSettings);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    chatService = ChatService();
+    WidgetsBinding.instance.addObserver(this);
+    ChatService.connectWebSocket();
+    _initializeNotifications();
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
@@ -119,7 +125,6 @@ class _ChattingPageState extends State<ChattingPage> {
     });
 
     _unreadListFuc();
-    _getCreatedDate();
     _memoizer = AsyncMemoizer();
   }
 
@@ -136,24 +141,30 @@ class _ChattingPageState extends State<ChattingPage> {
     setState(() {});
   }
 
-  void _getCreatedDate() async {
-    //createdDate = await SqlMessageRepository.getCreatedTime(widget.partner.roomId!);
-  }
-
   /*
-  채팅 내역 화면에 보여주기
-   */
+ 
+    채팅 내역 화면에 보여주기
+  
+  */
   Future<List<MessageModel>> _loadChatList() async {
     return await SqlMessageRepository.getList(widget.partner.roomId!, 0);
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // 앱이 포그라운드로 전환될 때
+      ChatService.connectWebSocket();
+    } else if (state == AppLifecycleState.paused) {
+      // 앱이 백그라운드로 전환될 때
+      ChatService.disconnectWebSocket();
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
-    ChatService.sendChannel.sink.close();
-    ChatService.readChannel.sink.close();
-    ChatService.bulkReadChannel.sink.close();
-
     _scrollController.dispose();
 
     responseSubscription?.cancel();
