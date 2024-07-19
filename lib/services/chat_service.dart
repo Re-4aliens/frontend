@@ -92,6 +92,19 @@ class ChatService extends APIService {
   }
 
   /*
+    
+    웹소켓 연결 해제
+
+  */
+  static void disconnectWebSocket() {
+    if (isConnected) {
+      stompClient.deactivate();
+      isConnected = false;
+      print('WebSocket disconnected.');
+    }
+  }
+
+  /*
 
     메시지 전송 요청
 
