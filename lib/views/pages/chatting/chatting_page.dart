@@ -42,28 +42,7 @@ class _ChattingPageState extends State<ChattingPage>
     }
   }
 
-  final _controller = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-
-  var _newMessage = '';
-  bool isLoading = true;
-  bool isKeypadUp = false;
-  var itemLength = 0;
-  bool isSended = false;
-  late String createdDate;
-  bool isNewChat = true;
-  bool bottomFlag = false;
-  var isChecked = false;
-  late final _messageStreamSubscription;
-  List<Map> requestBuffer = [];
-
-  Future<List<MessageModel>>? myFuture;
   FlutterLocalNotificationsPlugin? _flutterLocalNotificationsPlugin;
-
-  StreamSubscription<dynamic>? responseSubscription;
-  StreamSubscription<dynamic>? readResponseSubscription;
-
-  late ChatService chatService;
 
   // 알림 설정
   void _initializeNotifications() {
@@ -79,13 +58,33 @@ class _ChattingPageState extends State<ChattingPage>
     _flutterLocalNotificationsPlugin!.initialize(initializationSettings);
   }
 
+  final _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+
+  var _newMessage = '';
+  bool isLoading = true;
+  bool isKeypadUp = false;
+  var itemLength = 0;
+  bool isSended = false;
+  late String createdDate;
+  bool isNewChat = true;
+  bool bottomFlag = false;
+  var isChecked = false;
+  List<Map> requestBuffer = [];
+
+  StreamSubscription<dynamic>? responseSubscription;
+  StreamSubscription<dynamic>? readResponseSubscription;
+
+  late ChatService chatService;
+
+  late final _messageStreamSubscription;
   @override
   void initState() {
     super.initState();
     chatService = ChatService();
     WidgetsBinding.instance.addObserver(this);
     ChatService.connectWebSocket();
-    _initializeNotifications();
+    _initializeNotifications(); // 알림 설정 왜 있지?
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
