@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:aliens/services/chat_service.dart';
 import 'package:aliens/repository/sql_message_repository.dart';
 import 'package:aliens/views/components/chat_dialog_widget.dart';
-import 'package:async/async.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:aliens/views/components/profile_dialog_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -14,9 +13,6 @@ import 'package:flutter_svg/svg.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
 import '../../../models/vs_game.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-
 
 List<MessageModel> _list = [];
 
@@ -34,9 +30,21 @@ class ChattingPage extends StatefulWidget {
 
 class _ChattingPageState extends State<ChattingPage>
     with WidgetsBindingObserver {
-  final _controller = TextEditingController();
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      // background -> foreground
+      ChatService.connectWebSocket();
+    } else if (state == AppLifecycleState.paused) {
+      // foreground -> background
+      ChatService.disconnectWebSocket();
+    }
+  }
 
+  final _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+
   var _newMessage = '';
   bool isLoading = true;
   bool isKeypadUp = false;
@@ -46,7 +54,6 @@ class _ChattingPageState extends State<ChattingPage>
   bool isNewChat = true;
   bool bottomFlag = false;
   var isChecked = false;
-  late AsyncMemoizer _memoizer;
   late final _messageStreamSubscription;
   List<Map> requestBuffer = [];
 
@@ -125,7 +132,6 @@ class _ChattingPageState extends State<ChattingPage>
     });
 
     _unreadListFuc();
-    _memoizer = AsyncMemoizer();
   }
 
   _unreadListFuc() async {
@@ -148,18 +154,6 @@ class _ChattingPageState extends State<ChattingPage>
   */
   Future<List<MessageModel>> _loadChatList() async {
     return await SqlMessageRepository.getList(widget.partner.roomId!, 0);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      // 앱이 포그라운드로 전환될 때
-      ChatService.connectWebSocket();
-    } else if (state == AppLifecycleState.paused) {
-      // 앱이 백그라운드로 전환될 때
-      ChatService.disconnectWebSocket();
-    }
   }
 
   @override
