@@ -1,4 +1,3 @@
-import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/models/vs_game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,24 +7,22 @@ import '../../models/message_model.dart';
 
 class MessageBubble extends StatelessWidget {
   final MessageModel message;
-  final MemberDetails memberDetails;
   final bool showingTime;
   final bool showingPic;
 
   const MessageBubble({
     Key? key,
     required this.message,
-    required this.memberDetails,
     required this.showingTime,
     required this.showingPic,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (message.type == 1) {
+    if (message.type == 'BALANCE_GAME') {
       return _vsGameBubble();
     } else {
-      if (message.senderId == 'memberDetails.memberId') {
+      if (message.senderId == 0) {
         return _myBubble();
       } else {
         return _partnerBubble();

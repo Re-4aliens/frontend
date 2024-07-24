@@ -131,12 +131,8 @@ class _MatchingListPageState extends State<MatchingListPage> {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ChattingPage(
-                                      applicant:
-                                          widget.screenArguments.applicant,
                                       partner: widget.screenArguments
                                           .partners![selectedIndex],
-                                      memberDetails:
-                                          widget.screenArguments.memberDetails,
                                     )),
                           );
                         }

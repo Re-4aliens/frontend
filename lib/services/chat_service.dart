@@ -7,12 +7,11 @@ import 'package:aliens/models/message_model.dart';
 import 'dart:async';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
+import 'package:aliens/repository/sql_message_repository.dart';
 
 class ChatService extends APIService {
   static late StompClient stompClient;
   static bool isConnected = false;
-
-  // static List<Map> requestBuffer = [];
 
   static final StreamController<MessageModel> _messageController =
       StreamController<MessageModel>.broadcast();
@@ -21,6 +20,18 @@ class ChatService extends APIService {
   static final StreamController<int> _readReceiptController =
       StreamController<int>.broadcast();
   static Stream<int> get readReceiptStream => _readReceiptController.stream;
+
+  static Set<int> subscribedChannels = {};
+
+  /*
+    
+    구독 목록 불러오기
+
+  */
+  static Future<void> loadSubscriptions() async {
+    List<int> subscriptions = await SqlMessageRepository.getSubscriptions();
+    subscribedChannels.addAll(subscriptions);
+  }
 
   /*
     
@@ -51,6 +62,7 @@ class ChatService extends APIService {
 
   static void onStompConnect(StompFrame frame) {
     print('STOMP 연결 성공');
+    loadSubscriptions();
     isConnected = true;
   }
 
@@ -60,7 +72,7 @@ class ChatService extends APIService {
 
   */
   static Future<void> subscribeWebSocket(int roomId) async {
-    if (isConnected) {
+    if (isConnected && !subscribedChannels.contains(roomId)) {
       stompClient.subscribe(
         destination: '/room/$roomId',
         callback: (StompFrame frame) {
@@ -88,6 +100,8 @@ class ChatService extends APIService {
           }
         },
       );
+      subscribedChannels.add(roomId);
+      await SqlMessageRepository.addSubscription(roomId);
     }
   }
 
@@ -155,10 +169,10 @@ class ChatService extends APIService {
 
   /*
 
-    메세지 조회
+    메시지 조회
 
    */
-  static Future<List<MessageModel>> getMessages(roomId, context) async {
+  static Future<List<MessageModel>> getMessages(roomId) async {
     var url = '$domainUrl/chat/room/$roomId/messages';
 
     //토큰 읽어오기
