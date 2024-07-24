@@ -59,8 +59,8 @@ class SqlMessageRepository {
   static Future<void> update(Partner partner, int chatId) async {
     var db = await SqlMessageDataBase().database;
 
-    final roomId = partner.roomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
-    final receiverId = partner.memberId; // 리시버 (어떤 리시버의 데이터를 업데이트할지 선택)
+    final roomId = partner.roomId;
+    final receiverId = partner.memberId;
     final chatId0 = chatId;
 
     await db.rawUpdate('''
@@ -73,14 +73,41 @@ class SqlMessageRepository {
   static Future<void> bulkUpdate(Partner partner) async {
     var db = await SqlMessageDataBase().database;
 
-    //모두 읽음으로 바꾸되,
-    final roomId = partner.roomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
-    //final _receiverId = partner.memberId; // 리시버 (어떤 리시버의 데이터를 업데이트할지 선택)
+    final roomId = partner.roomId;
 
     await db.rawUpdate('''
       UPDATE chat 
       SET unreadCount = 0 
       WHERE roomId = ?
     ''', [roomId]);
+  }
+
+  static Future<void> addSubscription(int chatRoomId) async {
+    // 수정된 부분
+    var db = await SqlMessageDataBase().database;
+    await db.insert(
+      'subscriptions',
+      {'chatRoomId': chatRoomId},
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
+  }
+
+  static Future<List<int>> getSubscriptions() async {
+    // 수정된 부분
+    var db = await SqlMessageDataBase().database;
+    final List<Map<String, dynamic>> maps = await db.query('subscriptions');
+    return List.generate(maps.length, (i) {
+      return maps[i]['chatRoomId'] as int;
+    });
+  }
+
+  static Future<void> deleteSubscription(int chatRoomId) async {
+    // 수정된 부분
+    var db = await SqlMessageDataBase().database;
+    await db.delete(
+      'subscriptions',
+      where: 'chatRoomId = ?',
+      whereArgs: [chatRoomId],
+    );
   }
 }

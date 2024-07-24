@@ -44,16 +44,12 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
   }
 
   Future<List<ChatRoom>> _getChatRoomList() async {
-    List<ChatRoom> chatRoomList = List<ChatRoom>.generate(
-        widget.screenArguments.partners!.length,
-        (index) => ChatRoom(partner: widget.screenArguments.partners![index]));
-    Map<String, dynamic> chatSummary;
-
+    List<ChatData> chatData;
     try {
-      chatSummary = await ChatService.getChatSummary(context);
+      chatData = await ChatService.getChatSummary();
     } catch (e) {
       await AuthService.getAccessToken();
-      chatSummary = await ChatService.getChatSummary(context);
+      chatSummary = await ChatService.getChatSummary();
     }
 
     for (int i = 0; i < chatRoomList.length; i++) {
