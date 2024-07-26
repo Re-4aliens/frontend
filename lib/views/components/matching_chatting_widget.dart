@@ -25,10 +25,9 @@ class MatchingChattingWidget extends StatefulWidget {
 
 class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
   StreamSubscription<RemoteMessage>? _messageStreamSubscription;
-  Future<ChatData>? futureChatData;
+  Future<List<Map<String, dynamic>>>? futureCombinedList;
   late List<ChatRoom> _chatRoomList;
   late List<ChatMessageSummary> _chatMessageSummaries;
-  bool flag = true;
   late Map<int, Partner> _partnerMap;
 
   @override
@@ -41,7 +40,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
     };
 
     //채팅 정보 받아오기
-    futureChatData = _getChatData();
+    futureCombinedList = _getCombinedChatData();
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print('채팅리스트에서 Received FCM with: ${message.data} at ${DateTime.now()}');
@@ -55,7 +54,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
     super.dispose();
   }
 
-  Future<ChatData> _getChatData() async {
+  Future<List<Map<String, dynamic>>> _getCombinedChatData() async {
     ChatData chatData;
     try {
       chatData = await ChatService.getChatSummary();
@@ -74,85 +73,97 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
       };
     });
 
-    for (int i = 0; i < chatRoomList.length; i++) {
-      if (chatRoomList[i].partner!.roomState == 'CLOSE') {
-        chatRoomList[i].lastChatContent = 'chatting1'.tr();
-        chatRoomList[i].lastChatTime = '기록 없음';
-        chatRoomList[i].numberOfUnreadChat = 0;
+    // 채팅방 목록 업데이트 및 정렬
+    for (var item in combinedList) {
+      var chatRoom = item['chatRoom'] as ChatRoom;
+      var chatMessageSummary = item['chatMessageSummary'] as ChatMessageSummary;
+
+      if (chatRoom.status == 'CLOSE') {
+        chatMessageSummary.lastMessageContent = 'chatting1'.tr();
+        chatMessageSummary.lastChatTime = '기록 없음';
+        chatMessageSummary.numberOfUnreadMessages = 0;
       } else {
-        for (int j = 0; j < chatRoomList.length; j++) {
-          if (chatRoomList[i].partner!.roomId ==
-              chatSummary['chatSummaries'][j]['roomId']) {
-            chatRoomList[i].lastChatContent =
-                chatSummary['chatSummaries'][j]['lastChatContent'];
-            chatRoomList[i].lastChatTime =
-                chatSummary['chatSummaries'][j]['lastChatTime'];
-            chatRoomList[i].numberOfUnreadChat =
-                chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
+        for (var summary in _chatMessageSummaries) {
+          if (chatRoom.id == summary.roomId) {
+            chatMessageSummary.lastMessageContent = summary.lastMessageContent;
+            chatMessageSummary.lastChatTime = summary.lastChatTime;
+            chatMessageSummary.numberOfUnreadMessages =
+                summary.numberOfUnreadMessages;
             break;
           }
         }
       }
     }
-    chatRoomList.sort((a, b) {
-      if (a.lastChatTime == null && b.lastChatTime == null) {
-        return 0;
-      } else if (a.lastChatTime == '기록 없음') {
-        return 1; // a의 lastChatTime이 null이면 b가 더 앞으로 감
-      } else if (b.lastChatTime == '기록 없음') {
-        return -1; // b의 lastChatTime이 null이면 a가 더 앞으로 감
+
+    // combinedList를 정렬
+    combinedList.sort((a, b) {
+      var chatMessageSummaryA = a['chatMessageSummary'] as ChatMessageSummary;
+      var chatMessageSummaryB = b['chatMessageSummary'] as ChatMessageSummary;
+      if (chatMessageSummaryA.lastChatTime == '기록 없음') {
+        return 1;
+      } else if (chatMessageSummaryB.lastChatTime == '기록 없음') {
+        return -1;
       } else {
-        return b.lastChatTime!.compareTo(a.lastChatTime!); // 일반적인 비교
+        return chatMessageSummaryB.lastChatTime
+            .compareTo(chatMessageSummaryA.lastChatTime);
       }
     });
-    return chatRoomList;
+
+    return combinedList;
   }
 
   _updateList() async {
-    late Map<String, dynamic> chatSummary;
+    late ChatData chatData;
     try {
-      chatSummary = await ChatService.getChatSummary(context);
+      chatData = await ChatService.getChatSummary();
     } catch (e) {
-      if (e == "AT-C-002") {
-        await AuthService.getAccessToken();
-        chatSummary = await ChatService.getChatSummary(context);
-      }
+      await AuthService.getAccessToken();
+      chatData = await ChatService.getChatSummary();
     }
 
     setState(() {
-      for (int i = 0; i < _chatRoomList.length; i++) {
-        if (_chatRoomList[i].partner!.roomState == 'CLOSE') {
-          _chatRoomList[i].lastChatContent = 'chatting1'.tr();
-          _chatRoomList[i].lastChatTime = '기록 없음';
-          _chatRoomList[i].numberOfUnreadChat = 0;
+      for (var item in chatData.chatMessageSummaries) {
+        var roomId = item.roomId;
+        var chatRoom = _chatRoomList.firstWhere((room) => room.id == roomId);
+        var chatMessageSummary = _chatMessageSummaries
+            .firstWhere((summary) => summary.roomId == roomId);
+
+        if (chatRoom.status == 'CLOSE') {
+          chatMessageSummary.lastMessageContent = 'chatting1'.tr();
+          chatMessageSummary.lastChatTime = '기록 없음';
+          chatMessageSummary.numberOfUnreadMessages = 0;
         } else {
-          for (int j = 0; j < _chatRoomList.length; j++) {
-            if (_chatRoomList[i].partner!.roomId ==
-                chatSummary['chatSummaries'][j]['roomId']) {
-              _chatRoomList[i].lastChatContent =
-                  chatSummary['chatSummaries'][j]['lastChatContent'];
-              _chatRoomList[i].lastChatTime =
-                  chatSummary['chatSummaries'][j]['lastChatTime'];
-              _chatRoomList[i].numberOfUnreadChat =
-                  chatSummary['chatSummaries'][j]['numberOfUnreadChat'];
-              break;
-            }
-          }
+          chatMessageSummary.lastMessageContent = item.lastChatTime;
+          chatMessageSummary.lastChatTime = item.lastChatTime;
+          chatMessageSummary.numberOfUnreadMessages =
+              item.numberOfUnreadMessages;
         }
       }
-      _chatRoomList.sort((a, b) {
-        if (a.lastChatTime == null && b.lastChatTime == null) {
-          return 0;
-        } else if (a.lastChatTime == '기록 없음') {
-          return 1; // a의 lastChatTime이 null이면 b가 더 앞으로 감
-        } else if (b.lastChatTime == '기록 없음') {
-          return -1; // b의 lastChatTime이 null이면 a가 더 앞으로 감
+
+      // combinedList를 정렬
+      var combinedList = List.generate(_chatRoomList.length, (index) {
+        return {
+          'chatRoom': _chatRoomList[index],
+          'chatMessageSummary': _chatMessageSummaries[index]
+        };
+      });
+
+      combinedList.sort((a, b) {
+        var chatMessageSummaryA = a['chatMessageSummary'] as ChatMessageSummary;
+        var chatMessageSummaryB = b['chatMessageSummary'] as ChatMessageSummary;
+        if (chatMessageSummaryA.lastChatTime == '기록 없음') {
+          return 1;
+        } else if (chatMessageSummaryB.lastChatTime == '기록 없음') {
+          return -1;
         } else {
-          return b.lastChatTime!.compareTo(a.lastChatTime!); // 일반적인 비교
+          return chatMessageSummaryB.lastChatTime
+              .compareTo(chatMessageSummaryA.lastChatTime);
         }
       });
+
+      _chatRoomList =
+          combinedList.map((item) => item['chatRoom'] as ChatRoom).toList();
     });
-    //return chatRoomList;
   }
 
   @override
@@ -161,8 +172,8 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
       decoration: const BoxDecoration(
         color: Color(0xffF5F7FF),
       ),
-      child: FutureBuilder<List<ChatRoom>>(
-          future: futureChatRoomList,
+      child: FutureBuilder<List<Map<String, dynamic>>>(
+          future: futureCombinedList,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Container(
@@ -178,19 +189,16 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                 ),
               );
             } else {
+              var combinedList = snapshot.data!;
               return ListView.builder(
-                  itemCount: snapshot.data!.length,
+                  itemCount: combinedList.length,
                   itemBuilder: (context, index) {
-                    _chatRoomList = snapshot.data!;
+                    var chatRoom = combinedList[index]['chatRoom'] as ChatRoom;
+                    var chatMessageSummary = combinedList[index]
+                        ['chatMessageSummary'] as ChatMessageSummary;
                     return Column(
                       children: [
-/*
-                        if(index==0) TextButton(onPressed: (){
-                          SqlMessageDataBase.instance.deleteDB();
-                        }, child: Text('dB 삭제')),
-
- */
-                        chatList(context, index, _chatRoomList[index]),
+                        chatList(context, index, chatRoom, chatMessageSummary),
                       ],
                     );
                   });
@@ -199,7 +207,8 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
     );
   }
 
-  Widget chatList(context, index, ChatRoom chatRoom) {
+  Widget chatList(context, index, ChatRoom chatRoom,
+      ChatMessageSummary chatMessageSummary) {
     return Padding(
       padding: const EdgeInsets.only(right: 25, left: 25, top: 30),
       child: MaterialButton(
@@ -213,9 +222,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
             context,
             MaterialPageRoute(
                 builder: (context) => ChattingPage(
-                      applicant: widget.screenArguments.applicant,
-                      partner: chatRoom.partner!,
-                      memberDetails: widget.screenArguments.memberDetails,
+                      partner: _partnerMap[chatRoom.id]!,
                     )),
           ).then((value) async {
             _updateList();
@@ -265,18 +272,17 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${chatRoom.partner!.name}',
+                        '${_partnerMap[chatRoom.id]}',
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        (chatRoom.lastChatTime == '기록 없음' ||
-                                chatRoom.lastChatTime == null)
+                        (chatMessageSummary.lastChatTime == '기록 없음')
                             ? ''
-                            : DateFormat('hh:mm aaa').format(
-                                DateTime.parse('${chatRoom.lastChatTime}')),
+                            : DateFormat('hh:mm aaa').format(DateTime.parse(
+                                chatMessageSummary.lastChatTime)),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Color(0xff888888),
@@ -293,7 +299,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                         child: SizedBox(
                           width: 200,
                           child: Text(
-                            '${chatRoom.lastChatContent}',
+                            chatMessageSummary.lastMessageContent,
                             style: const TextStyle(
                               fontSize: 16,
                               color: Color(0xffA4A4A4),
@@ -302,8 +308,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                           ),
                         ),
                       ),
-                      chatRoom.numberOfUnreadChat == 0 ||
-                              chatRoom.numberOfUnreadChat == null
+                      chatMessageSummary.numberOfUnreadMessages == 0
                           ? const SizedBox(
                               height: 24,
                               width: 24,
@@ -317,7 +322,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                               ),
                               alignment: Alignment.center,
                               child: Text(
-                                '${chatRoom.numberOfUnreadChat}',
+                                '${chatMessageSummary.numberOfUnreadMessages}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.white,
