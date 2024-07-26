@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:aliens/models/chat_room_model.dart';
 import 'package:aliens/models/screen_argument.dart';
+import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -12,25 +13,35 @@ import 'package:aliens/services/chat_service.dart';
 import 'package:aliens/services/auth_service.dart';
 
 class MatchingChattingWidget extends StatefulWidget {
-  const MatchingChattingWidget({super.key, required this.screenArguments});
+  const MatchingChattingWidget({
+    super.key,
+    required this.screenArguments,
+  });
 
   final ScreenArguments screenArguments;
-
   @override
   State<StatefulWidget> createState() => _MatchingChattingWidgetState();
 }
 
 class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
   StreamSubscription<RemoteMessage>? _messageStreamSubscription;
-  Future<List<ChatRoom>>? futureChatRoomList;
+  Future<ChatData>? futureChatData;
   late List<ChatRoom> _chatRoomList;
+  late List<ChatMessageSummary> _chatMessageSummaries;
   bool flag = true;
+  late Map<int, Partner> _partnerMap;
 
   @override
   void initState() {
     super.initState();
+
+    _partnerMap = {
+      for (var partner in widget.screenArguments.partners!)
+        partner.roomId!: partner
+    };
+
     //채팅 정보 받아오기
-    futureChatRoomList = _getChatRoomList();
+    futureChatData = _getChatData();
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       print('채팅리스트에서 Received FCM with: ${message.data} at ${DateTime.now()}');
@@ -41,16 +52,27 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
   @override
   void dispose() {
     _messageStreamSubscription?.cancel();
+    super.dispose();
   }
 
-  Future<List<ChatRoom>> _getChatRoomList() async {
-    List<ChatData> chatData;
+  Future<ChatData> _getChatData() async {
+    ChatData chatData;
     try {
       chatData = await ChatService.getChatSummary();
     } catch (e) {
       await AuthService.getAccessToken();
-      chatSummary = await ChatService.getChatSummary();
+      chatData = await ChatService.getChatSummary();
     }
+
+    _chatRoomList = chatData.chatRooms;
+    _chatMessageSummaries = chatData.chatMessageSummaries;
+
+    var combinedList = List.generate(_chatRoomList.length, (index) {
+      return {
+        'chatRoom': _chatRoomList[index],
+        'chatMessageSummary': _chatMessageSummaries[index]
+      };
+    });
 
     for (int i = 0; i < chatRoomList.length; i++) {
       if (chatRoomList[i].partner!.roomState == 'CLOSE') {
