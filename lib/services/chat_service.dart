@@ -191,6 +191,7 @@ class ChatService extends APIService {
       return body.map((dynamic item) => MessageModel.fromJson(item)).toList();
       //fail
     } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }
