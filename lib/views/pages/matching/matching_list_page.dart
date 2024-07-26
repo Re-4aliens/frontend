@@ -406,15 +406,18 @@ class _MatchingListState extends State<MatchingList> {
                                                       : Container(
                                                           width: 100,
                                                           height: 100,
-                                                          decoration: BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              color:
-                                                                  Colors.white,
-                                                              image: DecorationImage(
-                                                                  image: NetworkImage(widget
-                                                                      .partner
-                                                                      .profileImageUrl))),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: Colors.white,
+                                                            image:
+                                                                DecorationImage(
+                                                              image: NetworkImage(
+                                                                  widget.partner
+                                                                      .profileImageUrl),
+                                                            ), // tester image 오류로 인한 임시 주석처리
+                                                          ),
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(5),
@@ -463,11 +466,13 @@ class _MatchingListState extends State<MatchingList> {
                                 width: 50,
                                 height: 50,
                                 decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: Colors.white,
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            widget.partner.profileImageUrl))),
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        widget.partner.profileImageUrl),
+                                  ),
+                                ),
                                 padding: const EdgeInsets.all(5),
                               ),
                       ),
