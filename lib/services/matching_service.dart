@@ -69,6 +69,8 @@ class MatchingService extends APIService {
       },
     );
 
+    print('getApplicantPartner');
+
     if (response.statusCode == 200) {
       print(response.statusCode);
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -78,7 +80,6 @@ class MatchingService extends APIService {
           .map((dynamic item) => Partner.fromJson(item))
           .toList();
     } else {
-      print(response.statusCode);
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -99,15 +100,16 @@ class MatchingService extends APIService {
 
   */
   static Future<ScreenArguments> getMatchingData(context) async {
-    MemberDetails? memberDetails;
+    MemberDetails memberDetails;
     String? status;
     MatchingApplicant? applicant;
     List<Partner>? partners;
 
     try {
       status = await UserService.getApplicantStatus();
-      memberDetails =
-          MemberDetails.fromJson(await UserService.getMemberDetails());
+      print(status);
+
+      memberDetails = await UserService.getMemberDetails();
 
       print('$status, $memberDetails');
 
@@ -118,6 +120,7 @@ class MatchingService extends APIService {
       }
 
       if (status == 'NotAppliedAndMatched' || status == 'AppliedAndMatched') {
+        print(2);
         partners = await getApplicantPartners();
       } else {
         partners = null;
@@ -125,12 +128,19 @@ class MatchingService extends APIService {
     } catch (e) {
       print('데이터를 가져오는 중 오류: $e');
       // 필요한 경우, 예외 상황에서 기본값을 설정합니다.
-      memberDetails = null;
+      memberDetails = MemberDetails(
+        name: 'name',
+        mbti: 'mbti',
+        gender: 'gender',
+        nationality: 'nationality',
+        birthday: 'birthday',
+        selfIntroduction: 'selfIntroduction',
+        profileImageUrl: 'profileImageUrl',
+      );
       status = 'unknown';
       applicant = null;
       partners = [];
     }
-
     // 모든 필드가 null이 아닌지 확인하고, 그렇지 않은 경우 기본값을 설정합니다.
     memberDetails ??= MemberDetails(); // MemberDetails의 기본 생성자가 있는지 확인하세요.
     partners ??= [];

@@ -1,5 +1,5 @@
 import 'package:aliens/services/market_service.dart';
-import 'package:aliens/models/market_articles.dart';
+import 'package:aliens/models/market_board_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../../models/countries.dart';
 import 'package:flutter/services.dart';
-
 import '../../../models/message_model.dart';
 import 'package:aliens/providers/bookmarks_provider.dart';
 import 'package:aliens/providers/market_comment_provider.dart';
@@ -22,15 +21,10 @@ class MarketDetailPage extends StatefulWidget {
       {super.key,
       required this.screenArguments,
       required this.marketBoard,
-      required this.productStatus,
-      required this.StatusText,
       required this.index,
       required this.backPage});
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
-  //final MemberDetails memberDetails;
-  final String productStatus;
-  final String StatusText;
   final int index;
   final String backPage;
 
@@ -76,27 +70,23 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     super.initState();
     final marketcommentProvider =
         Provider.of<MarketCommentProvider>(context, listen: false);
-    marketcommentProvider.getMarketComments(widget.marketBoard.articleId!);
+    marketcommentProvider.getMarketComments(widget.marketBoard.id ?? -1);
     if (widget.index == -1) {
-      bookmark = widget.marketBoard.marketArticleBookmarkCount!;
+      bookmark = widget.marketBoard.greatCount!;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    print('${widget.marketBoard}');
-    //print('Data from marketBoard: ${widget.marketBoard.createdAt}');
-    /*print('comment:${widget.marketBoard.commentsCount}');
-    print('marketArticleBookmarkCount:${widget.marketBoard.marketArticleBookmarkCount}');*/
-
     List<String> whatStatus = [
-      'Brand_New'.tr(),
-      'Almost_New'.tr(),
-      'Slight_Defect'.tr(),
-      'Used'.tr()
+      'BRAND_NEW'.tr(),
+      'ALMOST_NEW'.tr(),
+      'SLIGHT_DEFECT'.tr(),
+      'USED'.tr()
     ];
-    String productStatus = '${widget.marketBoard.productStatus}';
-    String StatusText = '${widget.marketBoard.marketArticleStatus}';
+    String productQuality = widget.marketBoard.productQuality;
+    String statusText = widget.marketBoard.saleStatus;
+
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context);
     final bookmarkProvider = Provider.of<BookmarksProvider>(context);
 
@@ -125,7 +115,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             screenArguments: widget.screenArguments,
                             marketBoard: widget.marketBoard,
                             memberDetails:
-                                widget.screenArguments.memberDetails!),
+                                widget.screenArguments.memberDetails),
                       ));
                     });
                   } else {
@@ -178,7 +168,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             children: [
                               Expanded(
                                 child: Text(
-                                  '${widget.marketBoard.title}',
+                                  widget.marketBoard.title,
                                   style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20.spMin,
@@ -198,7 +188,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      getStatusText(StatusText),
+                                      getstatusText(statusText),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: const Color(0xff888888),
@@ -248,7 +238,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           Row(
                             children: [
                               Text(
-                                'market-productStatus'.tr(),
+                                'market-productQuality'.tr(),
                                 style: TextStyle(
                                   fontSize: 16.spMin,
                                   color: const Color(0xff888888),
@@ -260,7 +250,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   child: Row(
                                     children: whatStatus.map((condition) {
                                       final bool isSelected =
-                                          getProductStatusText(productStatus) ==
+                                          getProductstatusText(
+                                                  productQuality) ==
                                               condition;
                                       return Padding(
                                         padding: EdgeInsets.symmetric(
@@ -283,7 +274,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                               const Color(0xff7898ff),
                                           onSelected: (isSelected) {
                                             setState(() {
-                                              productStatus =
+                                              productQuality =
                                                   isSelected ? condition : '';
                                             });
                                           },
@@ -314,7 +305,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                             scrollDirection: Axis.horizontal,
                             child: Row(
                               children:
-                                  widget.marketBoard.imageUrls!.map((imageUrl) {
+                                  widget.marketBoard.imageUrls.map((imageUrl) {
                                 return Container(
                                   margin: const EdgeInsets.only(right: 20).r,
                                   width: 197.spMin,
@@ -336,7 +327,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                               height:
                                   MediaQuery.of(context).size.height * 0.02),
                           Text(
-                            '${widget.marketBoard.content}', //내용
+                            widget.marketBoard.content, //내용
                             textAlign: TextAlign.start,
                             style: TextStyle(fontSize: 16.spMin),
                           ), //내용 넣는 곳
@@ -363,11 +354,11 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                       if (widget.index == -1) {
                                         bookmark =
                                             await MarketService.marketBookmark(
-                                                widget.marketBoard.articleId!,
+                                                widget.marketBoard.id!,
                                                 widget.index);
                                       } else {
                                         bookmarkProvider.addBookmarks(
-                                            widget.marketBoard.articleId!,
+                                            widget.marketBoard.id!,
                                             widget.index);
                                       }
                                       setState(() {});
@@ -397,8 +388,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                           padding: const EdgeInsets.only(
                                                   left: 4, right: 15)
                                               .r,
-                                          child: bookmarkProvider
-                                                          .marketArticleBookmarkCount![
+                                          child: bookmarkProvider.greatCount![
                                                       widget.index] ==
                                                   0
                                               ? Text('0',
@@ -407,7 +397,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                       color: const Color(
                                                           0xffc1c1c1)))
                                               : Text(
-                                                  '${bookmarkProvider.marketArticleBookmarkCount![widget.index]}',
+                                                  '${bookmarkProvider.greatCount![widget.index]}',
                                                   style: TextStyle(
                                                       fontSize: 16.spMin,
                                                       color: const Color(
@@ -425,7 +415,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   Padding(
                                     padding: const EdgeInsets.all(4.0).r,
                                     child: Text(
-                                      '${widget.marketBoard.commentsCount}',
+                                      '${widget.marketBoard.commentCount}',
                                       style: TextStyle(
                                           fontSize: 16.spMin,
                                           color: const Color(0xffc1c1c1)),
@@ -860,14 +850,13 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                   marketcommentProvider.addNestedMarketComment(
                                       _newComment,
                                       parentsCommentId,
-                                      widget.marketBoard.articleId!);
+                                      widget.marketBoard.id!);
                                   //여기 페이지 재로드하는거나 marketcommentprovider 재로드를 넣어야할거같아
                                   parentsCommentId = -1;
                                   isNestedComments = false;
                                 } else {
                                   marketcommentProvider.addMarketComment(
-                                      _newComment,
-                                      widget.marketBoard.articleId!);
+                                      _newComment, widget.marketBoard.id!);
                                 }
                                 updateUi();
                               }
@@ -889,38 +878,38 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   }
 }
 
-String getProductStatusText(String? productStatus) {
+String getProductstatusText(String? productQuality) {
   List<String> whatStatus = [
-    'Brand_New'.tr(),
-    'Almost_New'.tr(),
-    'Slight_Defect'.tr(),
-    'Used'.tr(),
+    'BRAND_NEW'.tr(),
+    'ALMOST_NEW'.tr(),
+    'SLIGHT_DEFECT'.tr(),
+    'USED'.tr(),
   ];
 
-  switch (productStatus) {
-    case '새 것':
+  switch (productQuality) {
+    case 'BRAND_NEW':
       return whatStatus[0];
-    case '거의 새 것':
+    case 'ALMOST_NEW':
       return whatStatus[1];
-    case '약간의 하자':
+    case 'SLIGHT_DEFECT':
       return whatStatus[2];
-    case '사용감 있음':
+    case 'USED':
       return whatStatus[3];
     default:
       return '';
   }
 }
 
-String getStatusText(String? marketArticleStatus) {
+String getstatusText(String? saleStatus) {
   List<String> Status = [
-    'sale'.tr(),
-    'sold-out'.tr(),
+    'SELL'.tr(),
+    'END'.tr(),
   ];
 
-  switch (marketArticleStatus) {
-    case '판매 중':
+  switch (saleStatus) {
+    case 'SELL':
       return Status[0];
-    case '판매 완료':
+    case 'END':
       return Status[1];
     default:
       return '';

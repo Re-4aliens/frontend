@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../models/board_model.dart';
-import '../../models/market_articles.dart';
+import '../../models/market_board_model.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/market_detail_page.dart';
 import 'board_dialog_widget.dart';
@@ -143,8 +143,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                         builder: (builder) {
                           return BoardDialog(
                             board: widget.board,
-                            memberDetails:
-                                widget.screenArguments.memberDetails!,
+                            memberDetails: widget.screenArguments.memberDetails,
                             boardCategory: "좋아하는 게시글",
                           );
                         });
@@ -225,10 +224,6 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                                 builder: (context) => MarketDetailPage(
                                       screenArguments: widget.screenArguments,
                                       marketBoard: data,
-                                      productStatus: getProductStatusText(
-                                          data.productStatus),
-                                      StatusText: getStatusText(
-                                          data.marketArticleStatus),
                                       index: -1,
                                       backPage: '',
                                     )),
@@ -246,7 +241,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
               MaterialPageRoute(
                   builder: (context) => ArticlePage(
                         board: widget.board,
-                        memberDetails: widget.screenArguments.memberDetails!,
+                        memberDetails: widget.screenArguments.memberDetails,
                         index: widget.index,
                       )),
             );

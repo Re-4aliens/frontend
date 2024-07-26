@@ -49,6 +49,17 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
     _scrollController.dispose();
   }
 
+  String getNationCode(nationality) {
+    var nationCode = '';
+    for (Map<String, String> country in countries) {
+      if (country['name']! == nationality) {
+        nationCode = country['code']!;
+        break;
+      }
+    }
+    return nationCode;
+  }
+
   @override
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
@@ -130,7 +141,6 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                       builder: (context) => SearchPage(
                             screenArguments: widget.screenArguments,
                             category: "free",
-                            nationCode: '',
                           )),
                 );
               },
@@ -162,25 +172,15 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                       controller: _scrollController,
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
-                        var nationCode = '';
-
-                        for (Map<String, String> country in countries) {
-                          if (country['name'] ==
-                              boardProvider.articleList[index].memberProfileDto
-                                  ?.nationality
-                                  .toString()) {
-                            nationCode = country['code']!;
-
-                            break;
-                          }
-                        }
+                        var nationCode = getNationCode(
+                            widget.screenArguments.memberDetails.nationality);
                         return Column(
                           children: [
                             ArticleWidget(
                                 board: boardProvider.articleList[index],
                                 nationCode: nationCode,
                                 memberDetails:
-                                    widget.screenArguments.memberDetails!,
+                                    widget.screenArguments.memberDetails,
                                 index: index),
                             const Divider(
                               thickness: 2,

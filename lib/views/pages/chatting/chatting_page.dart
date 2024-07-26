@@ -98,8 +98,8 @@ class _ChattingPageState extends State<ChattingPage> {
             unreadCount: 1,
             chatId: int.parse(message.data['chatId']));
         await SqlMessageRepository.create(newChat);
-        await SqlMessageRepository.getList(
-            widget.partner.chatRoomId, widget.memberDetails.memberId!);
+        await SqlMessageRepository.getList(widget.partner.roomId!, 0);
+        //  await SqlMessageRepository.getList(
         setState(() {});
 
         //단일 읽음 처리
@@ -173,8 +173,9 @@ class _ChattingPageState extends State<ChattingPage> {
       //'fcmToken': "dNRrfFS3lkpGjrmR8h_02c:APA91bGFN8mw7ncHT3xG6k3P__ylVyyP6jbeNSRnAsDp-QCBoXAGCtGV9SboimtCPOBvibSxsCm2BUy8twurtB_eiynrHQetthqRnbtjoAulKrHxAX2k64k3tseYbUbk9AKaQmg7_E_F",
       'chatType': 0,
       'chatContent': _newMessage,
-      'roomId': widget.partner.chatRoomId,
-      'senderId': widget.memberDetails.memberId,
+      'roomId': widget.partner.roomId,
+      // 'senderId': widget.memberDetails.memberId,
+      'senderId': 0,
       'senderName': widget.memberDetails.name,
       'receiverId': widget.partner.partnerMemberId,
       'sendTime': DateTime.now().toString(),
@@ -193,8 +194,9 @@ class _ChattingPageState extends State<ChattingPage> {
       'requestId': DataUtils.makeUUID(),
       'chatType': 1,
       'chatContent': vsGames[randomIndex]['question'],
-      'roomId': widget.partner.chatRoomId,
-      'senderId': widget.memberDetails.memberId,
+      'roomId': widget.partner.roomId,
+      // 'senderId': widget.memberDetails.memberId,
+      'senderId': 0,
       'senderName': widget.memberDetails.name,
       'receiverId': widget.partner.partnerMemberId,
       'sendTime': DateTime.now().toString(),
@@ -327,8 +329,9 @@ class _ChattingPageState extends State<ChattingPage> {
    */
   Future<List<MessageModel>> _loadChatList() async {
     //3. 업데이트된 리스트 불러오기
-    return await SqlMessageRepository.getList(
-        widget.partner.chatRoomId, widget.memberDetails.memberId!);
+    // return await SqlMessageRepository.getList(
+    //     widget.partner.roomId!, widget.memberDetails.memberId!);
+    return await SqlMessageRepository.getList(widget.partner.roomId!, 0);
   }
 /*
 

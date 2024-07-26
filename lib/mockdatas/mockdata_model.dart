@@ -79,14 +79,13 @@ var partners = const [
 
 ScreenArguments mockScreenArgument_1 = ScreenArguments(
     MemberDetails(
-      memberId: 955,
       mbti: 'ENFP',
       name: 'Daisy',
       nationality: 'South Korea',
-      email: 'gorus132@naver.com',
       gender: 'FEMALE',
       birthday: '2001-02-01',
-      profileImageURL: '',
+      profileImageUrl: '',
+      selfIntroduction: '안녕하세요',
     ),
     "AppliedAndMatched",
     MatchingApplicant(
@@ -156,14 +155,13 @@ ScreenArguments mockScreenArgument_1 = ScreenArguments(
 
 ScreenArguments mockScreenArgument_2 = ScreenArguments(
     MemberDetails(
-      memberId: 1017,
       mbti: 'ENFP',
       name: 'Daisy',
       nationality: 'South Korea',
-      email: 'gorus132@naver.com',
       gender: 'FEMALE',
       birthday: '2001-02-01',
-      profileImageURL: '',
+      profileImageUrl: '',
+      selfIntroduction: '안녕요',
     ),
     "MATCHED",
     MatchingApplicant(

@@ -10,11 +10,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import '../../../models/market_articles.dart';
+import '../../../models/market_board_model.dart';
 import '../../../models/message_model.dart';
 import 'package:aliens/providers/bookmarks_provider.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/market_dialog_widget.dart';
+import 'package:aliens/services/user_service.dart';
 
 class MarketBoardPage extends StatefulWidget {
   const MarketBoardPage(
@@ -37,13 +38,14 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
   List<MarketBoard> marketBoardList = [];
   ScrollController _scrollController = ScrollController();
   bool loading = false;
+  MemberDetails? memberDetails;
 
-  //String createdAt = '';
   int page = 0;
 
   @override
   void initState() {
     super.initState();
+    fetchMemberDetails();
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -61,6 +63,18 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     bookmarkProvider.getbookmarksCounts(page);
     //0번째 페이지 게시글 리스트도 받아옵니다.
     fetchMarketArticles();
+  }
+
+  Future<void> fetchMemberDetails() async {
+    try {
+      final details = await UserService.getMemberDetails();
+      setState(() {
+        memberDetails = details;
+      });
+    } catch (error) {
+      // 에러 처리
+      print('Error fetching member details: $error');
+    }
   }
 
   @override
@@ -108,7 +122,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     }
   }
 
-  @override
   Future<void> fetchMarketArticles() async {
     try {
       var fetchedData =
@@ -178,7 +191,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         builder: (context) => SearchPage(
                               screenArguments: widget.screenArguments,
                               category: "장터게시판",
-                              nationCode: '',
                             )),
                   );
                 },
@@ -265,10 +277,10 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
             itemBuilder: (BuildContext context, int index) {
               if (index < marketBoardList.length) {
                 MarketBoard marketBoard = marketBoardList[index];
-                String productStatusText =
-                    getProductStatusText(marketBoard.productStatus);
-                String StatusText =
-                    getStatusText(marketBoard.marketArticleStatus);
+
+                String productQualityText =
+                    getProductStatusText(marketBoard.productQuality);
+                String statusText = getStatusText(marketBoard.saleStatus);
 
                 return InkWell(
                   onTap: () {
@@ -278,10 +290,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         builder: (context) => MarketDetailPage(
                           screenArguments: widget.screenArguments,
                           marketBoard: marketBoard,
-                          productStatus:
-                              getProductStatusText(marketBoard.productStatus),
-                          StatusText:
-                              getStatusText(marketBoard.marketArticleStatus),
                           index: index,
                           backPage: 'marketboard',
                         ),
@@ -301,12 +309,12 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                           decoration: BoxDecoration(
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(10)),
-                            image: marketBoard.imageUrls!.isEmpty
+                            image: marketBoard.imageUrls.isEmpty
                                 ? null
                                 : DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                        marketBoard.imageUrls?.first ?? ""),
+                                        marketBoard.imageUrls.first),
                                   ),
                           ),
                           child: Column(
@@ -326,7 +334,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                   color: Color(0xff7898FF),
                                 ),
                                 child: Text(
-                                  '[$productStatusText]',
+                                  '[$productQualityText]',
                                   style: TextStyle(
                                       fontSize: 10.spMin, color: Colors.white),
                                   textAlign: TextAlign.center,
@@ -348,10 +356,9 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    '[$StatusText]',
+                                    '[$statusText]',
                                     style: TextStyle(
-                                      color: marketBoard.marketArticleStatus ==
-                                              '판매 중'
+                                      color: marketBoard.saleStatus == 'SELL'
                                           ? const Color(0xff616161)
                                           : const Color(0xffFF375B),
                                       fontSize: 16.spMin,
@@ -397,12 +404,12 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                               ),
                               SizedBox(height: 20.h),
                               Text(
-                                marketBoard.title ?? "",
+                                marketBoard.title,
                                 style: TextStyle(fontSize: 16.spMin),
                               ),
                               SizedBox(height: 5.h),
                               Text(
-                                '${marketBoard.price.toString() ?? ""}원',
+                                '${marketBoard.price.toString()}원',
                                 style: TextStyle(
                                     fontSize: 16.spMin,
                                     fontWeight: FontWeight.w700),
@@ -417,7 +424,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                     color: const Color(0xffc1c1c1),
                                   ),
                                   Text(
-                                    '${marketBoard.marketArticleBookmarkCount ?? 0}',
+                                    '${marketBoard.greatCount ?? 0}',
                                     style: TextStyle(
                                       fontSize: 14.spMin,
                                       color: const Color(0xffc1c1c1),
@@ -430,7 +437,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                                     color: const Color(0xffc1c1c1),
                                   ),
                                   Text(
-                                    ' ${marketBoard.commentsCount ?? 0}',
+                                    ' ${marketBoard.commentCount ?? 0}',
                                     style: TextStyle(
                                       fontSize: 14.spMin,
                                       color: const Color(0xffc1c1c1),
@@ -469,39 +476,39 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
           );
   }
 
-  String getProductStatusText(String? productStatus) {
+  String getProductStatusText(String? productQuality) {
     List<String> whatStatus = [
-      'Brand_New'.tr(),
-      'Almost_New'.tr(),
-      'Slight_Defect'.tr(),
-      'Used'.tr(),
+      'BRAND_NEW'.tr(),
+      'ALMOST_NEW'.tr(),
+      'SLIGHT_DEFECT'.tr(),
+      'USED'.tr(),
     ];
 
-    switch (productStatus) {
-      case '새 것':
+    switch (productQuality) {
+      case 'BRAND_NEW':
         return whatStatus[0];
-      case '거의 새 것':
+      case 'ALMOST_NEW':
         return whatStatus[1];
-      case '약간의 하자':
+      case 'SLIGHT_DEFECT':
         return whatStatus[2];
-      case '사용감 있음':
+      case 'USED':
         return whatStatus[3];
       default:
         return '';
     }
   }
 
-  String getStatusText(String? marketArticleStatus) {
-    List<String> Status = [
-      'sale'.tr(),
-      'sold-out'.tr(),
+  String getStatusText(String? saleStatus) {
+    List<String> status = [
+      'SELL'.tr(),
+      'END'.tr(),
     ];
 
-    switch (marketArticleStatus) {
-      case '판매 중':
-        return Status[0];
-      case '판매 완료':
-        return Status[1];
+    switch (saleStatus) {
+      case 'SELL':
+        return status[0];
+      case 'END':
+        return status[1];
       default:
         return '';
     }

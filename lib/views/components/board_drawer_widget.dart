@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../../models/market_articles.dart';
+import '../../models/market_board_model.dart';
 import '../pages/board/market_posting_board_page.dart';
 
 class BoardDrawerWidget extends StatefulWidget {
@@ -485,8 +485,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                       builder: (context) => MarketBoardPage(
                           screenArguments: widget.screenArguments,
                           marketBoard: widget.marketBoard,
-                          memberDetails:
-                              widget.screenArguments.memberDetails!)),
+                          memberDetails: widget.screenArguments.memberDetails)),
                 );
               } else {
                 Navigator.pop(context);
@@ -496,8 +495,7 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
                       builder: (context) => MarketBoardPage(
                           screenArguments: widget.screenArguments,
                           marketBoard: widget.marketBoard,
-                          memberDetails:
-                              widget.screenArguments.memberDetails!)),
+                          memberDetails: widget.screenArguments.memberDetails)),
                 );
               }
             },

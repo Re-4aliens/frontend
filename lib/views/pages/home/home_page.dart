@@ -352,7 +352,6 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => SearchPage(
                                   screenArguments: args,
                                   category: "all",
-                                  nationCode: '',
                                 )),
                       );
                     },

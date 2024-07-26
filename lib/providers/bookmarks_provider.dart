@@ -1,4 +1,4 @@
-import 'package:aliens/models/market_articles.dart';
+import 'package:aliens/models/market_board_model.dart';
 import 'package:flutter/widgets.dart';
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/services/market_service.dart';
@@ -7,21 +7,22 @@ class BookmarksProvider with ChangeNotifier {
   List<MarketBoard>? articleList;
   bool loading = false;
   List<MarketBoard>? bookmarksList;
-  List<int>? marketArticleBookmarkCount;
+  List<int>? greatCount;
 
   addBookmarks(int articleId, int index) async {
     loading = true;
     try {
       //좋아요 요청
-      marketArticleBookmarkCount![index] =
-          await MarketService.marketBookmark(articleId, index);
+      greatCount![index] = await MarketService.marketBookmark(articleId, index);
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
         //좋아요 요청
-        marketArticleBookmarkCount![index] =
+        greatCount![index] =
             await MarketService.marketBookmark(articleId, index);
-      } else {}
+      } else {
+        // 다른 예외 처리
+      }
     }
     loading = false;
     notifyListeners();
@@ -29,11 +30,10 @@ class BookmarksProvider with ChangeNotifier {
   }
 
   getbookmarksCounts(int page) async {
-    //final index = 0; // 원하는 페이지 번호 또는 index를 설정
     articleList = await MarketService.getMarketArticles(page);
-    marketArticleBookmarkCount = articleList!
-        .map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0)
-        .toList();
+    greatCount =
+        articleList?.map((marketboard) => marketboard.greatCount ?? 0).toList();
+    notifyListeners();
   }
 
   getMoreBookmarksCounts(int page) async {
@@ -44,14 +44,15 @@ class BookmarksProvider with ChangeNotifier {
     // 받아온 게시글 리스트가 null이거나 비어있지 않은 경우에만 처리합니다.
     if (newArticles.isNotEmpty) {
       // 기존 게시글 리스트에 새로운 게시글을 추가합니다.
-      articleList!.addAll(newArticles);
+      articleList?.addAll(newArticles);
 
       // 북마크 카운트를 업데이트합니다.
-      marketArticleBookmarkCount!.addAll(newArticles
-          .map((marketboard) => marketboard.marketArticleBookmarkCount ?? 0)
+      greatCount?.addAll(newArticles
+          .map((marketboard) => marketboard.greatCount ?? 0)
           .toList());
 
-      print('북마크 개수: ${marketArticleBookmarkCount?.length}');
+      print('북마크 개수: ${greatCount?.length}');
+      notifyListeners();
     }
   }
 }

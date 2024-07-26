@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../models/board_model.dart';
-import '../../models/market_articles.dart';
+import '../../models/market_board_model.dart';
 import 'package:aliens/providers/noti_board_provider.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/info_article_page.dart';
@@ -172,10 +172,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                               builder: (context) => MarketDetailPage(
                                     screenArguments: widget.screenArguments,
                                     marketBoard: data,
-                                    productStatus: getProductStatusText(
-                                        data.productStatus),
-                                    StatusText:
-                                        getStatusText(data.marketArticleStatus),
                                     index: -1,
                                     backPage: '',
                                   )),
@@ -204,7 +200,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                           MaterialPageRoute(
                               builder: (context) => ArticlePage(
                                     memberDetails:
-                                        widget.screenArguments.memberDetails!,
+                                        widget.screenArguments.memberDetails,
                                     board: data,
                                     index: -1,
                                   )),

@@ -197,7 +197,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                       matchingApplicant:
                           widget.screenArguments.matchingApplicant,
                       partner: chatRoom.partner!,
-                      memberDetails: widget.screenArguments.memberDetails!,
+                      memberDetails: widget.screenArguments.memberDetails,
                     )),
           ).then((value) async {
             _updateList();

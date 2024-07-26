@@ -124,8 +124,8 @@ class HomeWidget extends StatelessWidget {
                                                 const Locale.fromSubtags(
                                                     languageCode: "ko",
                                                     countryCode: "KR")
-                                            ? 'assets/character/${screenArguments.memberDetails!.mbti}_ko.PNG'
-                                            : 'assets/character/${screenArguments.memberDetails!.mbti}_en.PNG'),
+                                            ? 'assets/character/${screenArguments.memberDetails.mbti}_ko.PNG'
+                                            : 'assets/character/${screenArguments.memberDetails.mbti}_en.PNG'),
                                       ),
                                     );
                                   });

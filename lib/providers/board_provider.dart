@@ -84,7 +84,6 @@ class BoardProvider with ChangeNotifier {
   }
 
   Future<void> addLike(int articleId, int index) async {
-    _setLoading(true);
     try {
       greatCounts[index] = await BoardService.addLike(articleId);
     } catch (e) {
@@ -92,8 +91,8 @@ class BoardProvider with ChangeNotifier {
         await AuthService.getAccessToken();
         greatCounts[index] = await BoardService.addLike(articleId);
       }
+      _setLoading(false);
     }
-    _setLoading(false);
   }
 
   Future<void> getLikedList() async {
@@ -189,8 +188,8 @@ class BoardProvider with ChangeNotifier {
 
   void _setLoading(bool value) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
       loading = value;
+
       notifyListeners();
     });
   }

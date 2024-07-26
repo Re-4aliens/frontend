@@ -30,19 +30,9 @@ class BoardDialog extends StatefulWidget {
 }
 
 class _BoardDialogState extends State<BoardDialog> {
-  String email = '';
-
   @override
   void initState() {
     super.initState();
-    initialize();
-  }
-
-  void initialize() async {
-    final userEmail = await UserService.fetchUserEmail();
-    setState(() {
-      email = userEmail;
-    });
   }
 
   @override
@@ -97,7 +87,7 @@ class _BoardDialogState extends State<BoardDialog> {
             SizedBox(
               height: 25.h,
             ),
-            widget.memberDetails.email == email
+            UserService.isBoardtAuthor(widget.memberDetails, widget.board)
                 ? InkWell(
                     onTap: () {
                       showDialog(
@@ -199,12 +189,12 @@ class _BoardDialogState extends State<BoardDialog> {
                 ),
               ),
             ),
-            widget.memberDetails.email == email
+            UserService.isBoardtAuthor(widget.memberDetails, widget.board)
                 ? const Divider(
                     thickness: 1,
                   )
                 : const SizedBox(),
-            widget.memberDetails.email == email
+            UserService.isBoardtAuthor(widget.memberDetails, widget.board)
                 ? InkWell(
                     borderRadius: const BorderRadius.only(
                       bottomLeft: Radius.circular(20.0),

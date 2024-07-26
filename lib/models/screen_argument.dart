@@ -4,7 +4,7 @@ import 'package:aliens/models/partner_model.dart';
 import 'member_details_model.dart';
 
 class ScreenArguments {
-  MemberDetails? memberDetails;
+  MemberDetails memberDetails;
   String? status;
   MatchingApplicant? matchingApplicant;
   List<Partner>? partners;

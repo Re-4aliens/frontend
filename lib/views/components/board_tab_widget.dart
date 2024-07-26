@@ -2,8 +2,6 @@ import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/views/components/total_article_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../models/countries.dart';
 import 'package:aliens/providers/board_provider.dart';
 
 class TotalBoardWidget extends StatefulWidget {
@@ -60,25 +58,12 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
               controller: _scrollController,
               itemCount: boardProvider.articleList.length,
               itemBuilder: (context, index) {
-                var nationCode = '';
-
-                final memberNationality = boardProvider
-                    .articleList[index].memberProfileDto?.nationality
-                    .toString();
-                for (Map<String, String> country in countries) {
-                  if (country['name']!.toUpperCase() == memberNationality) {
-                    nationCode = country['code'] ?? '';
-                    break;
-                  }
-                }
-
                 final board = boardProvider.articleList[index];
 
                 return Column(
                   children: [
                     TotalArticleWidget(
                         board: board,
-                        nationCode: nationCode,
                         screenArguments: widget.screenArguments,
                         index: index),
                     const Divider(
