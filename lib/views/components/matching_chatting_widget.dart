@@ -56,13 +56,13 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
     }
 
     for (int i = 0; i < chatRoomList.length; i++) {
-      if (chatRoomList[i].partner!.roomState == 'CLOSE') {
+      if (chatRoomList[i].partner!.roomStatus == 'CLOSE') {
         chatRoomList[i].lastChatContent = 'chatting1'.tr();
         chatRoomList[i].lastChatTime = '기록 없음';
         chatRoomList[i].numberOfUnreadChat = 0;
       } else {
         for (int j = 0; j < chatRoomList.length; j++) {
-          if (chatRoomList[i].partner!.roomId ==
+          if (chatRoomList[i].partner!.chatRoomId ==
               chatSummary['chatSummaries'][j]['roomId']) {
             chatRoomList[i].lastChatContent =
                 chatSummary['chatSummaries'][j]['lastChatContent'];
@@ -102,13 +102,13 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
 
     setState(() {
       for (int i = 0; i < _chatRoomList.length; i++) {
-        if (_chatRoomList[i].partner!.roomState == 'CLOSE') {
+        if (_chatRoomList[i].partner!.roomStatus == 'CLOSE') {
           _chatRoomList[i].lastChatContent = 'chatting1'.tr();
           _chatRoomList[i].lastChatTime = '기록 없음';
           _chatRoomList[i].numberOfUnreadChat = 0;
         } else {
           for (int j = 0; j < _chatRoomList.length; j++) {
-            if (_chatRoomList[i].partner!.roomId ==
+            if (_chatRoomList[i].partner!.chatRoomId ==
                 chatSummary['chatSummaries'][j]['roomId']) {
               _chatRoomList[i].lastChatContent =
                   chatSummary['chatSummaries'][j]['lastChatContent'];
@@ -194,7 +194,8 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
             context,
             MaterialPageRoute(
                 builder: (context) => ChattingPage(
-                      applicant: widget.screenArguments.applicant,
+                      matchingApplicant:
+                          widget.screenArguments.matchingApplicant,
                       partner: chatRoom.partner!,
                       memberDetails: widget.screenArguments.memberDetails,
                     )),
@@ -215,7 +216,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            widget.screenArguments.partners![index].profileImage == null
+            widget.screenArguments.partners![index].profileImageUrl == ''
                 ? Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: SvgPicture.asset(
@@ -233,7 +234,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                         image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(widget.screenArguments
-                                .partners![index].profileImage!))),
+                                .partners![index].profileImageUrl))),
                   ),
             Expanded(
                 child: Container(
@@ -246,7 +247,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${chatRoom.partner!.name}',
+                        chatRoom.partner!.name,
                         style: const TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,

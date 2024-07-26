@@ -172,6 +172,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
                       controller: _scrollController,
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
+               nationCode = country['code']!;
                         var nationCode = getNationCode(
                             widget.screenArguments.memberDetails.nationality);
 

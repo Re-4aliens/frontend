@@ -61,8 +61,8 @@ class SqlMessageRepository {
   static Future<void> update(Partner partner, int chatId) async {
     var db = await SqlMessageDataBase().database;
 
-    final roomId = partner.roomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
-    final receiverId = partner.memberId; // 리시버 (어떤 리시버의 데이터를 업데이트할지 선택)
+    final roomId = partner.chatRoomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
+    final receiverId = partner.partnerMemberId; // 리시버 (어떤 리시버의 데이터를 업데이트할지 선택)
     final chatId0 = chatId;
 
     await db.rawUpdate('''
@@ -76,7 +76,7 @@ class SqlMessageRepository {
     var db = await SqlMessageDataBase().database;
 
     //모두 읽음으로 바꾸되,
-    final roomId = partner.roomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
+    final roomId = partner.chatRoomId; // 룸 아이디 (어떤 룸의 데이터를 업데이트할지 선택)
     //final _receiverId = partner.memberId; // 리시버 (어떤 리시버의 데이터를 업데이트할지 선택)
 
     await db.rawUpdate('''

@@ -42,19 +42,19 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
 
   @override
   void initState() {
+    super.initState();
     _selectedLanguage = widget.isKorean ? '한국어' : 'English';
 
     if (widget.screenArguments!.status == 'AppliedAndNotMatched' ||
         widget.screenArguments!.status == 'AppliedAndMatched') {
       _firstPreferLanguage = _nationlist.firstWhere((element) =>
           element['value'] ==
-          widget.screenArguments!.applicant!.preferLanguages!
-              .firstPreferLanguage!)['language'];
-
+          widget.screenArguments?.matchingApplicant!
+              .firstPreferLanguage)['language'];
       _secondPreferLanguage = _nationlist.firstWhere((element) =>
           element['value'] ==
-          widget.screenArguments!.applicant!.preferLanguages!
-              .secondPreferLanguage!)['language'];
+          widget.screenArguments?.matchingApplicant!
+              .secondPreferLanguage)['language'];
     } else {
       _firstPreferLanguage = '한국어';
       _secondPreferLanguage = 'English';

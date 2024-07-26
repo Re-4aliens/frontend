@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:aliens/models/matching_applicant_model.dart';
 import 'package:http/http.dart' as http;
 import 'api_service.dart';
 import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/models/member_details_model.dart';
-import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/services/user_service.dart';
 
 class MatchingService extends APIService {
@@ -60,17 +60,19 @@ class MatchingService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
+    print(jwtToken);
+
     var response = await http.get(
       Uri.parse(url),
       headers: {
         'Authorization': jwtToken,
-        'Content-Type': 'application/json',
       },
     );
 
     print('getApplicantPartner');
 
     if (response.statusCode == 200) {
+      print(response.statusCode);
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> matchingPartner = responseBody['result'];
       print(matchingPartner);
@@ -78,7 +80,6 @@ class MatchingService extends APIService {
           .map((dynamic item) => Partner.fromJson(item))
           .toList();
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -101,7 +102,7 @@ class MatchingService extends APIService {
   static Future<ScreenArguments> getMatchingData(context) async {
     MemberDetails memberDetails;
     String? status;
-    Applicant? applicant;
+    MatchingApplicant? applicant;
     List<Partner>? partners;
 
     try {
@@ -110,9 +111,10 @@ class MatchingService extends APIService {
 
       memberDetails = await UserService.getMemberDetails();
 
+      print('$status, $memberDetails');
+
       if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
-        print(1);
-        applicant = Applicant.fromJson(await getApplicantInfo());
+        applicant = MatchingApplicant.fromJson(await getApplicantInfo());
       } else {
         applicant = null;
       }
@@ -139,6 +141,8 @@ class MatchingService extends APIService {
       applicant = null;
       partners = [];
     }
+    // 모든 필드가 null이 아닌지 확인하고, 그렇지 않은 경우 기본값을 설정합니다.
+    memberDetails ??= MemberDetails(); // MemberDetails의 기본 생성자가 있는지 확인하세요.
     partners ??= [];
 
     ScreenArguments screenArguments =

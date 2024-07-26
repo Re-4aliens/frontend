@@ -1,14 +1,14 @@
+import 'package:aliens/models/matching_applicant_model.dart';
 import 'package:aliens/models/partner_model.dart';
 
 import 'member_details_model.dart';
-import 'applicant_model.dart';
 
 class ScreenArguments {
   MemberDetails memberDetails;
   String? status;
-  Applicant? applicant;
+  MatchingApplicant? matchingApplicant;
   List<Partner>? partners;
 
   ScreenArguments(
-      this.memberDetails, this.status, this.applicant, this.partners);
+      this.memberDetails, this.status, this.matchingApplicant, this.partners);
 }

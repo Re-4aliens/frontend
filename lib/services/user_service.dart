@@ -291,11 +291,13 @@ class UserService extends APIService {
       );
 
       if (response.statusCode == 200) {
+        print(json.decode(utf8.decode(response.bodyBytes)));
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         var matchingStatus = responseBody['result'];
 
         return matchingStatus; // 매칭상태 반환
       } else {
+        print(json.decode(utf8.decode(response.bodyBytes)));
         if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
             'AT-C-002') {
           // 엑세스 토큰 만료

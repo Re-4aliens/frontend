@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:aliens/models/matching_applicant_model.dart';
 import 'package:aliens/repository/sql_message_repository.dart';
 import 'package:aliens/views/components/chat_dialog_widget.dart';
 import 'package:async/async.dart';
 import 'package:aliens/services/auth_service.dart';
-import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/views/components/message_bubble_widget.dart';
 import 'package:aliens/views/components/profile_dialog_widget.dart';
@@ -26,11 +26,11 @@ List<MessageModel> _list = [];
 class ChattingPage extends StatefulWidget {
   const ChattingPage(
       {super.key,
-      required this.applicant,
+      required this.matchingApplicant,
       required this.partner,
       required this.memberDetails});
 
-  final Applicant? applicant;
+  final MatchingApplicant? matchingApplicant;
   final Partner partner;
   final MemberDetails memberDetails;
 
@@ -100,7 +100,6 @@ class _ChattingPageState extends State<ChattingPage> {
         await SqlMessageRepository.create(newChat);
         await SqlMessageRepository.getList(widget.partner.roomId!, 0);
         //  await SqlMessageRepository.getList(
-        //     widget.partner.roomId!, widget.memberDetails.memberId!);
         setState(() {});
 
         //단일 읽음 처리
@@ -132,7 +131,7 @@ class _ChattingPageState extends State<ChattingPage> {
 
   _unreadListFuc() async {
     List<MessageModel> unreadlist =
-        await ChatService.getMessages(widget.partner.roomId, context);
+        await ChatService.getMessages(widget.partner.chatRoomId, context);
 
     //1. 리스트 업데이트
     for (final message in unreadlist) {
@@ -178,7 +177,7 @@ class _ChattingPageState extends State<ChattingPage> {
       // 'senderId': widget.memberDetails.memberId,
       'senderId': 0,
       'senderName': widget.memberDetails.name,
-      'receiverId': widget.partner.memberId,
+      'receiverId': widget.partner.partnerMemberId,
       'sendTime': DateTime.now().toString(),
     };
     await sendChannel.sink.add(json.encode(request));
@@ -199,7 +198,7 @@ class _ChattingPageState extends State<ChattingPage> {
       // 'senderId': widget.memberDetails.memberId,
       'senderId': 0,
       'senderName': widget.memberDetails.name,
-      'receiverId': widget.partner.memberId,
+      'receiverId': widget.partner.partnerMemberId,
       'sendTime': DateTime.now().toString(),
     };
     await sendChannel.sink.add(json.encode(request));
@@ -227,8 +226,8 @@ class _ChattingPageState extends State<ChattingPage> {
       //'fcmToken': "es5mW8PaTlOVqSk0HQhfjg:APA91bHsLBa767QE2AtQ0G6d0XKjClMskrWkojRLl1705UhHC4gOhszoR6oaJ8LqLWrhdR6OW1UEfUFFUls6lPAhxC9IsPJ-b253mfN5B4lhGap79mqW2JWo8vzHEJFBYWG2CeP9MkJC",
       //'fcmToken': "dGMgDEHjQ02mFoAse9E9M2:APA91bE993Xpeg5v29-mzNgEhJ5usLzw3OOGnMXMawT5WYNu1I9MVyYzKuTqgXAZpSfc0xQcEPQTxtzP1OgsVc2c8Q0TNbxV-N-uBlDkh2AoEu-6UqFYo78UXVOWMBnZ47RbZ-rxlL79",
       //'fcmToken': "fxfKtVLpSSS9Wpsffoj64l:APA91bG2iCjrWsm8VV9XH4UD4bOPq7Ox1dEU7vwXc1gKMZ2JV2suNuGo9Wxggye7EYrAMfpHRE7i5j3mWTBD2Ig3MgyOQa4rin5QzZMVRwtIhRwHNIsLOjpiYD69G9ZT03-oJqv0eHVQ",
-      'partnerId': widget.partner.memberId,
-      'roomId': widget.partner.roomId,
+      'partnerId': widget.partner.partnerMemberId,
+      'roomId': widget.partner.chatRoomId,
     };
     await bulkReadChannel.sink.add(json.encode(request));
   }
@@ -418,7 +417,7 @@ class _ChattingPageState extends State<ChattingPage> {
               title: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  widget.partner.profileImage == null
+                  widget.partner.profileImageUrl == ''
                       ? Padding(
                           padding: const EdgeInsets.only(right: 10.0),
                           child: IconButton(
@@ -459,14 +458,14 @@ class _ChattingPageState extends State<ChattingPage> {
                                 image: DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(
-                                        widget.partner.profileImage!))),
+                                        widget.partner.profileImageUrl))),
                           ),
                         ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.partner.name}',
+                        widget.partner.name,
                         style: const TextStyle(
                           color: Colors.black,
                           fontSize: 20,
@@ -474,7 +473,7 @@ class _ChattingPageState extends State<ChattingPage> {
                         ),
                       ),
                       Text(
-                        '${widget.partner.nationality}',
+                        widget.partner.nationality,
                         style: const TextStyle(
                           color: Color(0xff626262),
                           fontSize: 12,
@@ -503,7 +502,7 @@ class _ChattingPageState extends State<ChattingPage> {
                 )
               ],
             ),
-            body: widget.partner.roomState == 'OPEN'
+            body: widget.partner.roomStatus == 'OPEN'
                 ? Column(children: [
                     Expanded(
                         child: Container(
