@@ -124,7 +124,6 @@ class MatchingService extends APIService {
         partners = null;
       }
     } catch (e) {
-      print('데이터를 가져오는 중 오류: $e');
       // 필요한 경우, 예외 상황에서 기본값을 설정합니다.
       memberDetails = MemberDetails(
         name: 'name',
