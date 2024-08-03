@@ -44,15 +44,27 @@ class ChatService extends APIService {
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
     stompClient = StompClient(
-      config: StompConfig(
+      config: StompConfig.SockJS(
         url: url,
         onConnect: onStompConnect,
+        beforeConnect: () async {
+          print('연결 대기 중...');
+          await Future.delayed(const Duration(milliseconds: 200));
+          print('연결 중...');
+        },
         onWebSocketError: (dynamic error) => print('WebSocket Error: $error'),
         onStompError: (StompFrame frame) => print('STOMP Error: ${frame.body}'),
         onDisconnect: (frame) => print('Disconnected: ${frame.body}'),
         onWebSocketDone: () => print('WebSocket Closed'),
         stompConnectHeaders: {
           'Authorization': jwtToken,
+          'Connection': 'Upgrade',
+          'Upgrade': 'websocket',
+        },
+        webSocketConnectHeaders: {
+          'Authorization': jwtToken,
+          'Connection': 'Upgrade',
+          'Upgrade': 'websocket',
         },
       ),
     );
@@ -187,8 +199,12 @@ class ChatService extends APIService {
 
     //success
     if (response.statusCode == 200) {
-      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
-      return body.map((dynamic item) => MessageModel.fromJson(item)).toList();
+      Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
+      List<dynamic> items = body['result'];
+      print(items);
+      print("메시지 조회 성공");
+      return items.map((dynamic item) => MessageModel.fromJson(item)).toList();
+
       //fail
     } else {
       print(json.decode(utf8.decode(response.bodyBytes)));
