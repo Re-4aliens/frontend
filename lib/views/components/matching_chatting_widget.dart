@@ -36,7 +36,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
 
     _partnerMap = {
       for (var partner in widget.screenArguments.partners!)
-        partner.roomId!: partner
+        partner.roomId ?? -1: partner
     };
 
     //채팅 정보 받아오기
@@ -66,7 +66,14 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
     _chatRoomList = chatData.chatRooms;
     _chatMessageSummaries = chatData.chatMessageSummaries;
 
-    var combinedList = List.generate(_chatRoomList.length, (index) {
+    int minLength = 0;
+    if (_chatRoomList.isNotEmpty && _chatMessageSummaries.isNotEmpty) {
+      minLength = _chatRoomList.length < _chatMessageSummaries.length
+          ? _chatRoomList.length
+          : _chatMessageSummaries.length;
+    }
+
+    var combinedList = List.generate(minLength, (index) {
       return {
         'chatRoom': _chatRoomList[index],
         'chatMessageSummary': _chatMessageSummaries[index]

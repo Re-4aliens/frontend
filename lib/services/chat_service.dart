@@ -22,6 +22,7 @@ class ChatService extends APIService {
   static Stream<int> get readReceiptStream => _readReceiptController.stream;
 
   static Set<int> subscribedChannels = {};
+  static late int roomIdToSubscribe;
 
   /*
     
@@ -38,8 +39,9 @@ class ChatService extends APIService {
     웹소켓 연결 요청
 
   */
-  static Future<void> connectWebSocket() async {
+  static Future<void> connectWebSocket(int roomId) async {
     var url = '$domainUrl/ws';
+    roomIdToSubscribe = roomId;
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -76,6 +78,7 @@ class ChatService extends APIService {
     print('STOMP 연결 성공');
     loadSubscriptions();
     isConnected = true;
+    subscribeWebSocket(roomIdToSubscribe);
   }
 
   /*
@@ -84,7 +87,14 @@ class ChatService extends APIService {
 
   */
   static Future<void> subscribeWebSocket(int roomId) async {
+    print('구독 수행 여부 : ${isConnected && !subscribedChannels.contains(roomId)}');
+
     if (isConnected && !subscribedChannels.contains(roomId)) {
+      await SqlMessageRepository.addSubscription(roomId);
+      print('룸 구독');
+      loadSubscriptions();
+      print(subscribedChannels);
+
       stompClient.subscribe(
         destination: '/room/$roomId',
         callback: (StompFrame frame) {
@@ -112,8 +122,6 @@ class ChatService extends APIService {
           }
         },
       );
-      subscribedChannels.add(roomId);
-      await SqlMessageRepository.addSubscription(roomId);
     }
   }
 

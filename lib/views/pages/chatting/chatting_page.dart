@@ -45,9 +45,7 @@ class _ChattingPageState extends State<ChattingPage>
 
   // 웹소켓 초기화
   void initializeWebSocket() {
-    ChatService.connectWebSocket().then((_) {
-      ChatService.subscribeWebSocket(widget.partner.roomId!);
-    });
+    ChatService.connectWebSocket(widget.partner.roomId!);
 
     // 메시지 수신
     messageSubscription =
