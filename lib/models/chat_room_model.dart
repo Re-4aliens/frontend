@@ -6,8 +6,8 @@ class ChatRoom {
 
   factory ChatRoom.fromJson(Map<String, dynamic> json) {
     return ChatRoom(
-      id: json['id'],
-      status: json['status'],
+      id: json['id'] ?? 0,
+      status: json['status'] ?? '',
     );
   }
 
@@ -34,10 +34,13 @@ class ChatMessageSummary {
 
   factory ChatMessageSummary.fromJson(Map<String, dynamic> json) {
     return ChatMessageSummary(
-      roomId: json['roomId'],
-      lastMessageContent: json['lastMessageContent'],
-      numberOfUnreadMessages: json['numberOfUnreadMessages'],
-      lastChatTime: json['lastChatTime'],
+      roomId: json['roomId'] ?? 0, // Default to 0 if null
+      lastMessageContent:
+          json['lastMessageContent'] ?? '', // Default to empty string if null
+      numberOfUnreadMessages:
+          json['numberOfUnreadMessages'] ?? 0, // Default to 0 if null
+      lastChatTime:
+          json['lastChatTime'] ?? '', // Default to empty string if null
     );
   }
 
@@ -61,8 +64,8 @@ class ChatData {
   });
 
   factory ChatData.fromJson(Map<String, dynamic> json) {
-    var chatRoomsJson = json['chatRooms'] as List;
-    var chatMessageSummariesJson = json['chatMessageSummaries'] as List;
+    var chatRoomsJson = json['chatRooms'] as List? ?? [];
+    var chatMessageSummariesJson = json['chatMessageSummaries'] as List? ?? [];
 
     List<ChatRoom> chatRoomsList =
         chatRoomsJson.map((room) => ChatRoom.fromJson(room)).toList();
