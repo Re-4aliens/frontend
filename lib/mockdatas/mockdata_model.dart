@@ -229,7 +229,7 @@ SignUpModel signUpModel = SignUpModel(
 
 void saveMockData() async {
   var chat = MessageModel(
-    id: 2,
+    id: '2',
     type: 'NORMAL',
     content: "h",
     roomId: 1,

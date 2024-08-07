@@ -46,6 +46,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
       print('채팅리스트에서 Received FCM with: ${message.data} at ${DateTime.now()}');
       _updateList();
     });
+    print(futureCombinedList);
   }
 
   @override
@@ -79,6 +80,8 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
         'chatMessageSummary': _chatMessageSummaries[index]
       };
     });
+
+    print(combinedList);
 
     // 채팅방 목록 업데이트 및 정렬
     for (var item in combinedList) {
@@ -188,6 +191,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                   child: const Image(
                       image: AssetImage("assets/illustration/loading_01.gif")));
             } else if (snapshot.data == null) {
+              print("data null");
               return const Center(
                 child: Text(
                   '',
@@ -197,6 +201,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
               );
             } else {
               var combinedList = snapshot.data!;
+              print("빌드 : $combinedList");
               return ListView.builder(
                   itemCount: combinedList.length,
                   itemBuilder: (context, index) {
