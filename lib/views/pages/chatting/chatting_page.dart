@@ -26,140 +26,23 @@ class ChattingPage extends StatefulWidget {
 
 class _ChattingPageState extends State<ChattingPage>
     with WidgetsBindingObserver {
-  Queue<MessageModel> messageDeque =
-      DoubleLinkedQueue(); // 메시지를 시간순대로 정렬하여 화면에 출력할 deque
+  Queue<MessageModel> messageDeque = DoubleLinkedQueue();
   StreamSubscription<MessageModel>? messageSubscription;
   StreamSubscription<int>? readReceiptSubscription;
   final ScrollController _scrollController = ScrollController();
   bool isLoading = false;
   bool isFetchingMore = false;
 
-  late ChatService chatService;
-
   final TextEditingController _controller = TextEditingController();
   bool isChecked = false;
   String _newMessage = '';
 
-  Set<String> unreadMessagesByOthers = {}; // 다른 사용자(상대방)가 읽은 않은 메시지 ID
-  Map<String, MessageModel> messageMap = {}; // UUID를 키로 사용하는 Map (순서 x)
-
-  // 웹소켓 초기화
-  void initializeWebSocket() {
-    ChatService.connectWebSocket(widget.partner.roomId!);
-
-    // 메시지 수신
-    messageSubscription =
-        ChatService.messageStream.listen((MessageModel message) {
-      setState(() {
-        String messageId = DataUtils.makeUUID();
-        messageDeque.addLast(message);
-        messageMap[messageId] = message;
-        _sendReadReceipt(message);
-        if (!message.isRead!) {
-          if (message.senderId != widget.partner.memberId) {
-            unreadMessagesByOthers.add(messageId);
-          }
-        }
-      });
-    });
-
-    // 읽음 처리 수신
-    readReceiptSubscription =
-        ChatService.readReceiptStream.listen((int readBy) {
-      setState(() {
-        List<String> readMessages = unreadMessagesByOthers
-            .where((messageId) => messageMap[messageId]?.senderId == readBy)
-            .toList();
-
-        for (var messageId in readMessages) {
-          messageMap[messageId]?.isRead = true;
-        }
-
-        unreadMessagesByOthers.removeAll(readMessages);
-      });
-    });
-  }
-
-  Future<void> _fetchInitialMessages() async {
-    setState(() {
-      isLoading = true;
-    });
-    List<MessageModel> initialMessages =
-        await ChatService.getMessages(widget.partner.roomId);
-    initialMessages.sort((a, b) => a.sendTime!.compareTo(b.sendTime!));
-    setState(() {
-      for (var message in initialMessages) {
-        String messageId = DataUtils.makeUUID(); // UUID 생성
-        messageDeque.addLast(message);
-        messageMap[messageId] = message;
-        if (message.receiverId == widget.partner.memberId &&
-            message.isRead == false) {
-          unreadMessagesByOthers.add(messageId);
-        }
-      }
-      isLoading = false;
-    });
-    _sendBulkReadReceipt(initialMessages);
-  }
-
-  Future<void> _fetchMoreMessages() async {
-    if (messageDeque.isEmpty || isFetchingMore) return;
-
-    setState(() {
-      isFetchingMore = true;
-    });
-
-    List<MessageModel> moreMessages = await ChatService.getMessages(
-      widget.partner.roomId,
-    );
-
-    moreMessages.sort((a, b) => a.sendTime!.compareTo(b.sendTime!));
-    setState(() {
-      for (var message in moreMessages.reversed) {
-        String messageId = DataUtils.makeUUID(); // UUID 생성
-        messageDeque.addFirst(message);
-        messageMap[messageId] = message;
-        if (message.receiverId == widget.partner.memberId &&
-            message.isRead == false) {
-          unreadMessagesByOthers.add(messageId);
-        }
-      }
-      isFetchingMore = false;
-    });
-  }
-
-  void _sendReadReceipt(MessageModel message) {
-    if (message.receiverId == widget.partner.memberId && !message.isRead!) {
-      ChatService.sendReadRequest(message.roomId!, message.senderId!);
-      setState(() {
-        message.isRead = true;
-      });
-    }
-  }
-
-  void _sendBulkReadReceipt(List<MessageModel> messages) {
-    for (var message in messages) {
-      _sendReadReceipt(message);
-    }
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      _fetchInitialMessages();
-      initializeWebSocket();
-    } else if (state == AppLifecycleState.paused) {
-      ChatService.disconnectWebSocket();
-      messageSubscription?.cancel();
-      readReceiptSubscription?.cancel();
-    }
-  }
+  Set<String> unreadMessagesByOthers = {};
+  Map<String, MessageModel> messageMap = {};
 
   @override
   void initState() {
     super.initState();
-    chatService = ChatService();
     WidgetsBinding.instance.addObserver(this);
 
     _fetchInitialMessages();
@@ -182,11 +65,127 @@ class _ChattingPageState extends State<ChattingPage>
     super.dispose();
   }
 
+  void initializeWebSocket() {
+    ChatService.connectWebSocket(widget.partner.roomId! + 98);
+
+    messageSubscription =
+        ChatService.messageStream.listen((MessageModel message) {
+      if (mounted) {
+        setState(() {
+          messageDeque.addLast(message);
+          _sendReadReceipt(message);
+          if (!message.isRead!) {
+            if (message.senderId != widget.partner.memberId) {
+              unreadMessagesByOthers.add(message.id!);
+            }
+          }
+        });
+      }
+    });
+
+    readReceiptSubscription =
+        ChatService.readReceiptStream.listen((int readBy) {
+      if (mounted) {
+        setState(() {
+          List<String> readMessages = unreadMessagesByOthers
+              .where((messageId) => messageMap[messageId]?.senderId == readBy)
+              .toList();
+
+          for (var messageId in readMessages) {
+            messageMap[messageId]?.isRead = true;
+          }
+
+          unreadMessagesByOthers.removeAll(readMessages);
+        });
+      }
+    });
+  }
+
+  Future<void> _fetchInitialMessages() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      List<MessageModel> initialMessages =
+          await ChatService.getMessages(widget.partner.roomId! + 98);
+
+      initialMessages.sort((a, b) => a.sendTime!.compareTo(b.sendTime!));
+
+      setState(() {
+        for (var message in initialMessages) {
+          messageDeque.addLast(message);
+          if (message.receiverId == widget.partner.memberId &&
+              message.isRead == false) {
+            unreadMessagesByOthers.add(message.id!);
+          }
+        }
+        isLoading = false;
+      });
+
+      _sendBulkReadReceipt(initialMessages);
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      // 오류 발생 시 에러 처리 로직 추가
+      print('메시지 로드 중 오류 발생: $e');
+    }
+  }
+
+  Future<void> _fetchMoreMessages() async {
+    if (messageDeque.isEmpty || isFetchingMore) return;
+
+    setState(() {
+      isFetchingMore = true;
+    });
+
+    try {
+      List<MessageModel> moreMessages = await ChatService.getMessages(
+        widget.partner.roomId! + 98,
+      );
+
+      moreMessages.sort((a, b) => a.sendTime!.compareTo(b.sendTime!));
+
+      setState(() {
+        for (var message in moreMessages.reversed) {
+          messageDeque.addFirst(message);
+          if (message.receiverId == widget.partner.memberId &&
+              message.isRead == false) {
+            unreadMessagesByOthers.add(message.id!);
+          }
+        }
+        isFetchingMore = false;
+      });
+    } catch (e) {
+      setState(() {
+        isFetchingMore = false;
+      });
+      // 오류 발생 시 에러 처리 로직 추가
+      print('추가 메시지 로드 중 오류 발생: $e');
+    }
+  }
+
+  void _sendReadReceipt(MessageModel message) {
+    if (message.receiverId == widget.partner.memberId && !message.isRead!) {
+      ChatService.sendReadRequest(message.roomId! + 98, message.senderId!);
+      setState(() {
+        message.isRead = true;
+      });
+    }
+  }
+
+  void _sendBulkReadReceipt(List<MessageModel> messages) {
+    for (var message in messages) {
+      _sendReadReceipt(message);
+    }
+  }
+
   void sendMessage() async {
     Map<String, dynamic> request = {
       'type': 'NORMAL',
       'content': _newMessage,
-      'roomId': widget.partner.roomId,
+      'roomId': widget.partner.roomId! + 98,
       'senderId': 0,
       'receiverId': widget.partner.memberId,
     };
@@ -194,29 +193,33 @@ class _ChattingPageState extends State<ChattingPage>
     MessageModel message = MessageModel.fromJson(request);
 
     ChatService.sendMessage(message);
+    setState(() {
+      messageDeque.addLast(message); // 메시지를 전송한 후 즉시 화면에 반영
+    });
     updateUi();
   }
 
   void sendVSMessage() async {
-    // 랜덤 인덱스 생성
     Random random = Random();
     int randomIndex = random.nextInt(vsGames.length);
 
     Map<String, dynamic> request = {
       'type': 'BALANCE_GAME',
       'content': vsGames[randomIndex]['question'],
-      'roomId': widget.partner.roomId,
+      'roomId': widget.partner.roomId! + 98,
       'senderId': 0,
       'receiverId': widget.partner.memberId,
     };
 
     MessageModel message = MessageModel.fromJson(request);
     ChatService.sendMessage(message);
+    setState(() {
+      messageDeque.addLast(message); // 메시지를 전송한 후 즉시 화면에 반영
+    });
     updateUi();
   }
 
   void updateUi() {
-    // 텍스트 폼 비우기
     setState(() {
       _controller.clear();
       _newMessage = '';
@@ -224,16 +227,11 @@ class _ChattingPageState extends State<ChattingPage>
   }
 
   bool _showingTime(index, datas, nextDiff) {
-    //마지막 채팅인 경우 true
     if (index == datas.length - 1) {
       return true;
-    }
-    //다음 말풍선이 본인이 아니면 true
-    else if (datas[index + 1].senderId != datas[index].senderId) {
+    } else if (datas[index + 1].senderId != datas[index].senderId) {
       return true;
-    }
-    //다음 말풍선 시간이랑 차이가 있으면 true
-    else if (nextDiff) {
+    } else if (nextDiff) {
       return true;
     } else {
       return false;
@@ -379,91 +377,105 @@ class _ChattingPageState extends State<ChattingPage>
                       child: Container(
                         padding: const EdgeInsets.only(top: 15),
                         color: const Color(0xffF5F7FF),
-                        child: StreamBuilder<List<MessageModel>>(
-                          stream: ChatService.messageStream.map((message) {
-                            messageDeque.add(message);
-                            return messageDeque.toList();
-                          }),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasError) {
-                              return Center(
-                                child: Text('${snapshot.error}'),
-                              );
-                            }
-                            if (snapshot.hasData) {
-                              var datas = snapshot.data!;
-                              WidgetsBinding.instance
-                                  .addPostFrameCallback((timeStamp) {
-                                _scrollController.animateTo(
-                                    _scrollController.position.maxScrollExtent,
-                                    duration: const Duration(milliseconds: 10),
-                                    curve: Curves.easeIn);
-                              });
+                        child: isLoading
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : StreamBuilder<List<MessageModel>>(
+                                stream: Stream.periodic(
+                                        const Duration(milliseconds: 100),
+                                        (_) => messageDeque.toList())
+                                    .asBroadcastStream(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) {
+                                    return Center(
+                                      child: Text('${snapshot.error}'),
+                                    );
+                                  }
+                                  if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
+                                    return const Center(
+                                        child: Text('저장된 메시지 없음'));
+                                  }
+                                  var datas = snapshot.data!;
+                                  WidgetsBinding.instance
+                                      .addPostFrameCallback((timeStamp) {
+                                    _scrollController.animateTo(
+                                        _scrollController
+                                            .position.maxScrollExtent,
+                                        duration:
+                                            const Duration(milliseconds: 10),
+                                        curve: Curves.easeIn);
+                                  });
 
-                              return ListView.builder(
-                                controller: _scrollController,
-                                itemCount: datas.length,
-                                itemBuilder: (context, index) {
-                                  final currentDate =
-                                      DateTime.parse(datas[index].sendTime!);
-                                  String? nextTime = index == datas.length - 1
-                                      ? null
-                                      : DateFormat('yyyy-MM-dd HH:mm:ss')
-                                          .format(DateTime.parse(
-                                              datas[index + 1].sendTime!));
-                                  String? currentTime =
-                                      DateFormat('yyyy-MM-dd HH:mm:ss').format(
-                                          DateTime.parse(
-                                              datas[index].sendTime!));
-                                  bool nextDiff = nextTime == null
-                                      ? false
-                                      : DateTime.parse(nextTime)
-                                              .difference(
-                                                  DateTime.parse(currentTime))
-                                              .inMinutes >
-                                          1;
+                                  return ListView.builder(
+                                    controller: _scrollController,
+                                    itemCount: datas.length,
+                                    itemBuilder: (context, index) {
+                                      final currentDate = DateTime.parse(
+                                          datas[index].sendTime!);
+                                      String? nextTime = index ==
+                                              datas.length - 1
+                                          ? null
+                                          : DateFormat('yyyy-MM-dd HH:mm:ss')
+                                              .format(DateTime.parse(
+                                                  datas[index + 1].sendTime!));
+                                      String? currentTime =
+                                          DateFormat('yyyy-MM-dd HH:mm:ss')
+                                              .format(DateTime.parse(
+                                                  datas[index].sendTime!));
+                                      bool nextDiff = nextTime == null
+                                          ? false
+                                          : DateTime.parse(nextTime)
+                                                  .difference(DateTime.parse(
+                                                      currentTime))
+                                                  .inMinutes >
+                                              1;
 
-                                  return Column(
-                                    children: [
-                                      if (index == 0 ||
-                                          currentDate.year !=
-                                              DateTime.parse(datas[index - 1]
-                                                      .sendTime!)
-                                                  .year ||
-                                          currentDate.month !=
-                                              DateTime.parse(datas[index - 1]
-                                                      .sendTime!)
-                                                  .month ||
-                                          currentDate.day !=
-                                              DateTime.parse(datas[index - 1]
-                                                      .sendTime!)
-                                                  .day)
-                                        _timeBubble(
-                                            index, currentDate.toString()),
-                                      MessageBubble(
-                                          message: MessageModel(
-                                              id: datas[index].id,
-                                              type: datas[index].type,
-                                              content: datas[index].content,
-                                              roomId: datas[index].roomId,
-                                              senderId: datas[index].senderId,
-                                              receiverId:
-                                                  datas[index].receiverId,
-                                              sendTime: datas[index].sendTime,
-                                              isRead: datas[index].isRead),
-                                          showingTime: _showingTime(
-                                              index, datas, nextDiff),
-                                          showingPic: _showingPic(
-                                              index, datas, nextDiff))
-                                    ],
+                                      return Column(
+                                        children: [
+                                          if (index == 0 ||
+                                              currentDate.year !=
+                                                  DateTime.parse(
+                                                          datas[index - 1]
+                                                              .sendTime!)
+                                                      .year ||
+                                              currentDate.month !=
+                                                  DateTime.parse(
+                                                          datas[index - 1]
+                                                              .sendTime!)
+                                                      .month ||
+                                              currentDate.day !=
+                                                  DateTime.parse(
+                                                          datas[index - 1]
+                                                              .sendTime!)
+                                                      .day)
+                                            _timeBubble(
+                                                index, currentDate.toString()),
+                                          MessageBubble(
+                                              message: MessageModel(
+                                                  id: datas[index].id,
+                                                  type: datas[index].type,
+                                                  content: datas[index].content,
+                                                  roomId:
+                                                      datas[index].roomId! + 98,
+                                                  senderId:
+                                                      datas[index].senderId,
+                                                  receiverId:
+                                                      datas[index].receiverId,
+                                                  sendTime:
+                                                      datas[index].sendTime,
+                                                  isRead: datas[index].isRead),
+                                              showingTime: _showingTime(
+                                                  index, datas, nextDiff),
+                                              showingPic: _showingPic(
+                                                  index, datas, nextDiff))
+                                        ],
+                                      );
+                                    },
                                   );
                                 },
-                              );
-                            } else {
-                              return const Center(child: Text('저장된 메세지 없음'));
-                            }
-                          },
-                        ),
+                              ),
                       ),
                     ),
                     Column(

@@ -7,7 +7,6 @@ import 'package:aliens/models/message_model.dart';
 import 'dart:async';
 import 'package:stomp_dart_client/stomp.dart';
 import 'package:stomp_dart_client/stomp_frame.dart';
-import 'package:aliens/repository/sql_message_repository.dart';
 
 class ChatService extends APIService {
   static late StompClient stompClient;
@@ -21,18 +20,7 @@ class ChatService extends APIService {
       StreamController<int>.broadcast();
   static Stream<int> get readReceiptStream => _readReceiptController.stream;
 
-  static Set<int> subscribedChannels = {};
   static late int roomIdToSubscribe;
-
-  /*
-    
-    구독 목록 불러오기
-
-  */
-  static Future<void> loadSubscriptions() async {
-    List<int> subscriptions = await SqlMessageRepository.getSubscriptions();
-    subscribedChannels.addAll(subscriptions);
-  }
 
   /*
     
@@ -60,13 +48,9 @@ class ChatService extends APIService {
         onWebSocketDone: () => print('WebSocket Closed'),
         stompConnectHeaders: {
           'Authorization': jwtToken,
-          'Connection': 'Upgrade',
-          'Upgrade': 'websocket',
         },
         webSocketConnectHeaders: {
           'Authorization': jwtToken,
-          'Connection': 'Upgrade',
-          'Upgrade': 'websocket',
         },
       ),
     );
@@ -76,7 +60,6 @@ class ChatService extends APIService {
 
   static void onStompConnect(StompFrame frame) {
     print('STOMP 연결 성공');
-    loadSubscriptions();
     isConnected = true;
     subscribeWebSocket(roomIdToSubscribe);
   }
@@ -87,13 +70,9 @@ class ChatService extends APIService {
 
   */
   static Future<void> subscribeWebSocket(int roomId) async {
-    print('구독 수행 여부 : ${isConnected && !subscribedChannels.contains(roomId)}');
-
-    if (isConnected && !subscribedChannels.contains(roomId)) {
-      await SqlMessageRepository.addSubscription(roomId);
-      print('룸 구독');
-      loadSubscriptions();
-      print(subscribedChannels);
+    if (isConnected) {
+      print("$roomId 구독");
+      print("경로 : /room/$roomId");
 
       stompClient.subscribe(
         destination: '/room/$roomId',
@@ -105,17 +84,19 @@ class ChatService extends APIService {
             if (messageJson.containsKey('readBy')) {
               /*
   
-              구독 후 읽음 처리 메시지 수신
+                구독 후 읽음 처리 메시지 수신
   
-            */
+              */
+              print("읽음처리 수신");
               int readBy = messageJson['readBy'];
               _readReceiptController.add(readBy);
             } else {
               /*
   
-              구독 후 메시지 수신
+                구독 후 메시지 수신
   
-            */
+              */
+              print("메시지 수신");
               MessageModel message = MessageModel.fromJson(messageJson);
               _messageController.add(message);
             }

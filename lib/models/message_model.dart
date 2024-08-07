@@ -13,7 +13,7 @@ class MessageFields {
 }
 
 class MessageModel {
-  int? id;
+  String? id;
   String? type;
   String? content;
   int? roomId;
