@@ -59,8 +59,8 @@ class SqlMessageRepository {
   static Future<void> update(Partner partner, int chatId) async {
     var db = await SqlMessageDataBase().database;
 
-    final roomId = partner.roomId;
-    final receiverId = partner.memberId;
+    final roomId = partner.chatRoomId;
+    final receiverId = partner.partnerMemberId;
     final chatId0 = chatId;
 
     await db.rawUpdate('''
@@ -73,7 +73,7 @@ class SqlMessageRepository {
   static Future<void> bulkUpdate(Partner partner) async {
     var db = await SqlMessageDataBase().database;
 
-    final roomId = partner.roomId;
+    final roomId = partner.chatRoomId;
 
     await db.rawUpdate('''
       UPDATE chat 

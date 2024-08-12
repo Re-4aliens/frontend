@@ -36,7 +36,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
 
     _partnerMap = {
       for (var partner in widget.screenArguments.partners!)
-        partner.roomId ?? -1: partner
+        partner.chatRoomId ?? -1: partner
     };
 
     //채팅 정보 받아오기
@@ -46,7 +46,22 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
       print('채팅리스트에서 Received FCM with: ${message.data} at ${DateTime.now()}');
       _updateList();
     });
-    print(futureCombinedList);
+
+    _printFutureList();
+  }
+
+  Future<void> _printFutureList() async {
+    List<Map<String, dynamic>> dataList = await futureCombinedList!;
+    for (var data in dataList) {
+      ChatRoom chatRoom = data['chatRoom'];
+      ChatMessageSummary chatMessageSummary = data['chatMessageSummary'];
+
+      print('ChatRoom: { id: ${chatRoom.id}, status: ${chatRoom.status} }');
+      print('ChatMessageSummary: { roomId: ${chatMessageSummary.roomId}, '
+          'lastMessageContent: ${chatMessageSummary.lastMessageContent}, '
+          'numberOfUnreadMessages: ${chatMessageSummary.numberOfUnreadMessages}, '
+          'lastChatTime: ${chatMessageSummary.lastChatTime} }');
+    }
   }
 
   @override
@@ -80,8 +95,6 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
         'chatMessageSummary': _chatMessageSummaries[index]
       };
     });
-
-    print(combinedList);
 
     // 채팅방 목록 업데이트 및 정렬
     for (var item in combinedList) {
@@ -201,7 +214,6 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
               );
             } else {
               var combinedList = snapshot.data!;
-              print("빌드 : $combinedList");
               return ListView.builder(
                   itemCount: combinedList.length,
                   itemBuilder: (context, index) {
@@ -253,7 +265,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            widget.screenArguments.partners![index].profileImage == null
+            widget.screenArguments.partners![index].profileImageUrl == null
                 ? Padding(
                     padding: const EdgeInsets.only(right: 15),
                     child: SvgPicture.asset(
@@ -271,7 +283,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                         image: DecorationImage(
                             fit: BoxFit.cover,
                             image: NetworkImage(widget.screenArguments
-                                .partners![index].profileImage!))),
+                                .partners![index].profileImageUrl!))),
                   ),
             Expanded(
                 child: Container(

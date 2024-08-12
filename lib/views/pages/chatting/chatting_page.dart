@@ -66,7 +66,7 @@ class _ChattingPageState extends State<ChattingPage>
   }
 
   void initializeWebSocket() {
-    ChatService.connectWebSocket(widget.partner.roomId! + 98);
+    ChatService.connectWebSocket(widget.partner.chatRoomId!);
 
     messageSubscription =
         ChatService.messageStream.listen((MessageModel message) {
@@ -75,7 +75,7 @@ class _ChattingPageState extends State<ChattingPage>
           messageDeque.addLast(message);
           _sendReadReceipt(message);
           if (!message.isRead!) {
-            if (message.senderId != widget.partner.memberId) {
+            if (message.senderId != widget.partner.partnerMemberId) {
               unreadMessagesByOthers.add(message.id!);
             }
           }
@@ -108,14 +108,14 @@ class _ChattingPageState extends State<ChattingPage>
 
     try {
       List<MessageModel> initialMessages =
-          await ChatService.getMessages(widget.partner.roomId! + 98);
+          await ChatService.getMessages(widget.partner.partnerMemberId!);
 
       initialMessages.sort((a, b) => a.sendTime!.compareTo(b.sendTime!));
 
       setState(() {
         for (var message in initialMessages) {
           messageDeque.addLast(message);
-          if (message.receiverId == widget.partner.memberId &&
+          if (message.receiverId == widget.partner.partnerMemberId &&
               message.isRead == false) {
             unreadMessagesByOthers.add(message.id!);
           }
@@ -142,7 +142,7 @@ class _ChattingPageState extends State<ChattingPage>
 
     try {
       List<MessageModel> moreMessages = await ChatService.getMessages(
-        widget.partner.roomId! + 98,
+        widget.partner.chatRoomId!,
       );
 
       moreMessages.sort((a, b) => a.sendTime!.compareTo(b.sendTime!));
@@ -150,7 +150,7 @@ class _ChattingPageState extends State<ChattingPage>
       setState(() {
         for (var message in moreMessages.reversed) {
           messageDeque.addFirst(message);
-          if (message.receiverId == widget.partner.memberId &&
+          if (message.receiverId == widget.partner.partnerMemberId &&
               message.isRead == false) {
             unreadMessagesByOthers.add(message.id!);
           }
@@ -167,8 +167,9 @@ class _ChattingPageState extends State<ChattingPage>
   }
 
   void _sendReadReceipt(MessageModel message) {
-    if (message.receiverId == widget.partner.memberId && !message.isRead!) {
-      ChatService.sendReadRequest(message.roomId! + 98, message.senderId!);
+    if (message.receiverId == widget.partner.partnerMemberId &&
+        !message.isRead!) {
+      ChatService.sendReadRequest(message.roomId!, message.senderId!);
       setState(() {
         message.isRead = true;
       });
@@ -185,9 +186,9 @@ class _ChattingPageState extends State<ChattingPage>
     Map<String, dynamic> request = {
       'type': 'NORMAL',
       'content': _newMessage,
-      'roomId': widget.partner.roomId! + 98,
+      'roomId': widget.partner.chatRoomId!,
       'senderId': 0,
-      'receiverId': widget.partner.memberId,
+      'receiverId': widget.partner.partnerMemberId,
     };
 
     MessageModel message = MessageModel.fromJson(request);
@@ -206,9 +207,9 @@ class _ChattingPageState extends State<ChattingPage>
     Map<String, dynamic> request = {
       'type': 'BALANCE_GAME',
       'content': vsGames[randomIndex]['question'],
-      'roomId': widget.partner.roomId! + 98,
+      'roomId': widget.partner.chatRoomId!,
       'senderId': 0,
-      'receiverId': widget.partner.memberId,
+      'receiverId': widget.partner.partnerMemberId,
     };
 
     MessageModel message = MessageModel.fromJson(request);
@@ -287,7 +288,7 @@ class _ChattingPageState extends State<ChattingPage>
             title: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                widget.partner.profileImage == null
+                widget.partner.profileImageUrl == null
                     ? Padding(
                         padding: const EdgeInsets.only(right: 10.0),
                         child: IconButton(
@@ -328,7 +329,7 @@ class _ChattingPageState extends State<ChattingPage>
                               image: DecorationImage(
                                   fit: BoxFit.cover,
                                   image: NetworkImage(
-                                      widget.partner.profileImage!))),
+                                      widget.partner.profileImageUrl!))),
                         ),
                       ),
                 Column(
@@ -370,7 +371,7 @@ class _ChattingPageState extends State<ChattingPage>
               )
             ],
           ),
-          body: widget.partner.roomState == 'OPEN'
+          body: widget.partner.roomStatus == 'OPEN'
               ? Column(
                   children: [
                     Expanded(
@@ -412,18 +413,29 @@ class _ChattingPageState extends State<ChattingPage>
                                     controller: _scrollController,
                                     itemCount: datas.length,
                                     itemBuilder: (context, index) {
-                                      final currentDate = DateTime.parse(
-                                          datas[index].sendTime!);
+                                      DateTime? currentDate;
+                                      try {
+                                        currentDate = DateTime.parse(
+                                            datas[index].sendTime!);
+                                      } catch (e) {
+                                        // 파싱 오류 발생 시 기본값 설정 또는 null 처리
+                                        print('Error parsing currentDate: $e');
+                                        currentDate =
+                                            DateTime.now(); // 기본값으로 현재 시간 사용
+                                      }
+
                                       String? nextTime = index ==
                                               datas.length - 1
                                           ? null
                                           : DateFormat('yyyy-MM-dd HH:mm:ss')
                                               .format(DateTime.parse(
-                                                  datas[index + 1].sendTime!));
+                                                  datas[index + 1].sendTime ??
+                                                      'Unknown'));
                                       String? currentTime =
                                           DateFormat('yyyy-MM-dd HH:mm:ss')
                                               .format(DateTime.parse(
-                                                  datas[index].sendTime!));
+                                                  datas[index].sendTime ??
+                                                      'Unknown'));
                                       bool nextDiff = nextTime == null
                                           ? false
                                           : DateTime.parse(nextTime)
@@ -457,8 +469,7 @@ class _ChattingPageState extends State<ChattingPage>
                                                   id: datas[index].id,
                                                   type: datas[index].type,
                                                   content: datas[index].content,
-                                                  roomId:
-                                                      datas[index].roomId! + 98,
+                                                  roomId: datas[index].roomId!,
                                                   senderId:
                                                       datas[index].senderId,
                                                   receiverId:
