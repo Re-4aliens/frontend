@@ -1,54 +1,57 @@
 class Partner {
-  String? roomState;
-  int? roomId;
-  int? memberId;
+  String? roomStatus; // roomState -> roomStatus로 수정
+  int? chatRoomId; // roomId -> chatRoomId로 수정
+  int? partnerMemberId; // memberId -> partnerMemberId로 수정
   String? name;
   String? mbti;
   String? gender;
   String? nationality;
-  String? profileImage;
-  String? selfIntroduction;
-
+  String? profileImageUrl; // profileImage -> profileImageUrl로 수정
+  String? aboutMe; // selfIntroduction -> aboutMe로 수정
   String? firstPreferLanguage;
   String? secondPreferLanguage;
 
-  Partner(
-      {this.roomState,
-      this.roomId,
-      this.memberId,
-      this.name,
-      this.mbti,
-      this.gender,
-      this.nationality,
-      this.profileImage,
-      this.selfIntroduction,
-      this.firstPreferLanguage,
-      this.secondPreferLanguage});
+  Partner({
+    this.roomStatus,
+    this.chatRoomId,
+    this.partnerMemberId,
+    this.name,
+    this.mbti,
+    this.gender,
+    this.nationality,
+    this.profileImageUrl,
+    this.aboutMe,
+    this.firstPreferLanguage,
+    this.secondPreferLanguage,
+  });
 
+  // JSON 데이터를 객체로 변환하는 생성자
   Partner.fromJson(Map<String, dynamic> json) {
-    roomState = json['roomState'];
-    roomId = json['roomId'];
-    memberId = json['memberId'];
+    roomStatus = json['roomStatus'];
+    chatRoomId = json['chatRoomId'];
+    partnerMemberId = json['partnerMemberId'];
     name = json['name'];
     mbti = json['mbti'];
     gender = json['gender'];
     nationality = json['nationality'];
-    profileImage = json['profileImage'];
-    selfIntroduction = json['selfIntroduction'];
+    profileImageUrl = json['profileImageUrl'];
+    aboutMe = json['aboutMe'];
     firstPreferLanguage = json['firstPreferLanguage'];
     secondPreferLanguage = json['secondPreferLanguage'];
   }
 
+  // 객체를 JSON으로 변환하는 메서드
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['roomState'] = roomState;
-    data['roomId'] = roomId;
+    data['roomStatus'] = roomStatus;
+    data['chatRoomId'] = chatRoomId;
+    data['partnerMemberId'] = partnerMemberId;
     data['name'] = name;
     data['mbti'] = mbti;
     data['gender'] = gender;
     data['nationality'] = nationality;
-    data['profileImage'] = profileImage;
-    data['selfIntroduction'] = selfIntroduction;
+    data['profileImageUrl'] = profileImageUrl;
+    data['aboutMe'] = aboutMe;
     data['firstPreferLanguage'] = firstPreferLanguage;
     data['secondPreferLanguage'] = secondPreferLanguage;
     return data;

@@ -97,6 +97,15 @@ class ChatService extends APIService {
   
               */
               print("메시지 수신");
+
+              if (messageJson.containsKey('sendTime') &&
+                  messageJson['sendTime'] is int) {
+                int sendTimeInt = messageJson['sendTime'];
+                DateTime sendTimeDateTime =
+                    DateTime.fromMillisecondsSinceEpoch(sendTimeInt);
+                messageJson['sendTime'] = sendTimeDateTime.toIso8601String();
+              }
+
               MessageModel message = MessageModel.fromJson(messageJson);
               _messageController.add(message);
             }

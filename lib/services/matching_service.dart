@@ -73,7 +73,7 @@ class MatchingService extends APIService {
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> matchingPartner = responseBody['result'];
-      print(matchingPartner);
+      print('matchingPartner $matchingPartner');
       return matchingPartner
           .map((dynamic item) => Partner.fromJson(item))
           .toList();
