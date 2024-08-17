@@ -11,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import '../../../models/message_model.dart';
 import '../../../models/partner_model.dart';
 import '../../../models/vs_game.dart';
+import 'package:flutter/scheduler.dart';
 
 class ChattingPage extends StatefulWidget {
   const ChattingPage({
@@ -34,6 +35,7 @@ class _ChattingPageState extends State<ChattingPage>
   final ScrollController _scrollController = ScrollController();
   bool isLoading = false;
   bool isFetchingMore = false;
+  bool _initialScrollCompleted = false; // 초기 스크롤 플래그 추가
 
   final TextEditingController _controller = TextEditingController();
   bool isChecked = false;
@@ -52,8 +54,9 @@ class _ChattingPageState extends State<ChattingPage>
     initializeWebSocket();
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == 0 && !isFetchingMore) {
-        print("fetching more");
+      if (_scrollController.position.pixels ==
+              _scrollController.position.minScrollExtent &&
+          !isFetchingMore) {
         _fetchMoreMessages();
       }
     });
@@ -78,11 +81,9 @@ class _ChattingPageState extends State<ChattingPage>
         ChatService.sendReadRequest(
             widget.partner.chatRoomId!, widget.memberId);
         setState(() {
-          messageDeque.addLast(message);
+          messageDeque.addLast(message); // 메시지를 순서대로 추가
           if (!message.isRead!) {
-            // isRead == false
             if (message.senderId == widget.memberId) {
-              // 메시지를 보낸 사람은 나, 상대방이 그 메시지를 읽지 않음
               unreadMessagesByOthers.add(message.id!);
             }
           }
@@ -95,22 +96,16 @@ class _ChattingPageState extends State<ChattingPage>
       if (mounted) {
         setState(() {
           if (readBy == widget.memberId) {
-            print("내가 읽음");
-            // readBy가 memberId인 경우, unreadMessagesByMe에서 처리
             List<String> readMessagesByMe = unreadMessagesByMe
                 .where((messageId) =>
                     messageMap[messageId]?.receiverId == widget.memberId)
                 .toList();
 
             for (var messageId in readMessagesByMe) {
-              setState(() {
-                messageMap[messageId]?.isRead = true;
-              });
+              messageMap[messageId]?.isRead = true;
             }
             unreadMessagesByMe.removeAll(readMessagesByMe);
           } else if (readBy == widget.partner.partnerMemberId) {
-            print("상대방이 읽음");
-            // readBy가 partner.partnerMemberId인 경우, unreadMessagesByOthers에서 처리
             List<String> readMessagesByOthers = unreadMessagesByOthers
                 .where((messageId) =>
                     messageMap[messageId]?.senderId ==
@@ -118,9 +113,7 @@ class _ChattingPageState extends State<ChattingPage>
                 .toList();
 
             for (var messageId in readMessagesByOthers) {
-              setState(() {
-                messageMap[messageId]?.isRead = true;
-              });
+              messageMap[messageId]?.isRead = true;
             }
             unreadMessagesByOthers.removeAll(readMessagesByOthers);
           }
@@ -142,7 +135,7 @@ class _ChattingPageState extends State<ChattingPage>
 
       setState(() {
         for (var message in initialMessages) {
-          messageDeque.addLast(message);
+          messageDeque.addLast(message); // 메시지를 순서대로 추가
           if (message.senderId == widget.memberId && message.isRead == false) {
             unreadMessagesByOthers.add(message.id!);
           }
@@ -153,15 +146,20 @@ class _ChattingPageState extends State<ChattingPage>
         }
         isLoading = false;
       });
-      print(unreadMessagesByMe);
-
-      // _sendBulkReadReceipt(initialMessages);
     } catch (e) {
       setState(() {
         isLoading = false;
       });
-      // 오류 발생 시 에러 처리 로직 추가
       print('메시지 로드 중 오류 발생: $e');
+    }
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients && !_initialScrollCompleted) {
+      _initialScrollCompleted = true; // 스크롤 완료 상태로 설정
+      _scrollController.jumpTo(
+        _scrollController.position.maxScrollExtent,
+      );
     }
   }
 
@@ -181,7 +179,7 @@ class _ChattingPageState extends State<ChattingPage>
 
       setState(() {
         for (var message in moreMessages.reversed) {
-          messageDeque.addFirst(message);
+          messageDeque.addFirst(message); // 이전 메시지를 앞에 추가
           if (message.senderId == widget.memberId && message.isRead == false) {
             unreadMessagesByOthers.add(message.id!);
           }
@@ -192,7 +190,6 @@ class _ChattingPageState extends State<ChattingPage>
       setState(() {
         isFetchingMore = false;
       });
-      // 오류 발생 시 에러 처리 로직 추가
       print('추가 메시지 로드 중 오류 발생: $e');
     }
   }
@@ -210,6 +207,15 @@ class _ChattingPageState extends State<ChattingPage>
 
     ChatService.sendMessage(message);
     updateUi();
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   void sendVSMessage() async {
@@ -227,9 +233,18 @@ class _ChattingPageState extends State<ChattingPage>
     MessageModel message = MessageModel.fromJson(request);
     ChatService.sendMessage(message);
     setState(() {
-      messageDeque.addLast(message); // 메시지를 전송한 후 즉시 화면에 반영
+      messageDeque.addLast(message); // 메시지를 전송한 후 바로 추가
     });
     updateUi();
+    Future.delayed(const Duration(milliseconds: 100), () {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
   }
 
   void updateUi() {
@@ -336,15 +351,6 @@ class _ChattingPageState extends State<ChattingPage>
                           height: 35,
                           width: 35,
                           margin: const EdgeInsets.only(right: 10.0),
-                          // tester 용
-                          // decoration: BoxDecoration(
-                          //   shape: BoxShape.circle,
-                          //   image: DecorationImage(
-                          //     fit: BoxFit.cover,
-                          //     image:
-                          //         NetworkImage(widget.partner.profileImageUrl!),
-                          //   ),
-                          // ),
                         ),
                       ),
                 Column(
@@ -411,17 +417,15 @@ class _ChattingPageState extends State<ChattingPage>
                                   if (!snapshot.hasData ||
                                       snapshot.data!.isEmpty) {
                                     return const Center(
-                                        child: Text('저장된 메시지 없음'));
+                                      child: Text('저장된 메시지 없음'),
+                                    );
                                   }
                                   var datas = snapshot.data!;
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((timeStamp) {
-                                    _scrollController.animateTo(
-                                        _scrollController
-                                            .position.maxScrollExtent,
-                                        duration:
-                                            const Duration(milliseconds: 10),
-                                        curve: Curves.easeIn);
+
+                                  // 스크롤 초기 하단 이동 처리
+                                  SchedulerBinding.instance
+                                      .addPostFrameCallback((_) {
+                                    _scrollToBottom();
                                   });
 
                                   return ListView.builder(
@@ -436,7 +440,6 @@ class _ChattingPageState extends State<ChattingPage>
                                                     datas[index].sendTime!)
                                                 : DateTime.now();
                                       } catch (e) {
-                                        print('Error parsing currentDate: $e');
                                         currentDate = DateTime.now();
                                       }
 
@@ -450,7 +453,6 @@ class _ChattingPageState extends State<ChattingPage>
                                                   datas[index + 1].sendTime!)
                                               : DateTime.now();
                                         } catch (e) {
-                                          print('Error parsing nextDate: $e');
                                           nextDate = DateTime.now();
                                         }
                                       } else {
