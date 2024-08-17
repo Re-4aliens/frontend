@@ -16,9 +16,11 @@ class ChattingPage extends StatefulWidget {
   const ChattingPage({
     super.key,
     required this.partner,
+    required this.memberId,
   });
 
   final Partner partner;
+  final int memberId;
 
   @override
   State<ChattingPage> createState() => _ChattingPageState();
@@ -37,7 +39,8 @@ class _ChattingPageState extends State<ChattingPage>
   bool isChecked = false;
   String _newMessage = '';
 
-  Set<String> unreadMessagesByOthers = {};
+  Set<String> unreadMessagesByMe = {}; // 내가 읽지 않은 상대방의 메시지
+  Set<String> unreadMessagesByOthers = {}; // 다른 사람이 아직 읽지 않은 메시지 저장
   Map<String, MessageModel> messageMap = {};
 
   @override
@@ -50,6 +53,7 @@ class _ChattingPageState extends State<ChattingPage>
 
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == 0 && !isFetchingMore) {
+        print("fetching more");
         _fetchMoreMessages();
       }
     });
@@ -66,16 +70,19 @@ class _ChattingPageState extends State<ChattingPage>
   }
 
   void initializeWebSocket() {
-    ChatService.connectWebSocket(widget.partner.chatRoomId!);
+    ChatService.connectWebSocket(widget.partner.chatRoomId!, widget.memberId);
 
     messageSubscription =
         ChatService.messageStream.listen((MessageModel message) {
       if (mounted) {
+        ChatService.sendReadRequest(
+            widget.partner.chatRoomId!, widget.memberId);
         setState(() {
           messageDeque.addLast(message);
-          _sendReadReceipt(message);
           if (!message.isRead!) {
-            if (message.senderId != widget.partner.partnerMemberId) {
+            // isRead == false
+            if (message.senderId == widget.memberId) {
+              // 메시지를 보낸 사람은 나, 상대방이 그 메시지를 읽지 않음
               unreadMessagesByOthers.add(message.id!);
             }
           }
@@ -87,15 +94,36 @@ class _ChattingPageState extends State<ChattingPage>
         ChatService.readReceiptStream.listen((int readBy) {
       if (mounted) {
         setState(() {
-          List<String> readMessages = unreadMessagesByOthers
-              .where((messageId) => messageMap[messageId]?.senderId == readBy)
-              .toList();
+          if (readBy == widget.memberId) {
+            print("내가 읽음");
+            // readBy가 memberId인 경우, unreadMessagesByMe에서 처리
+            List<String> readMessagesByMe = unreadMessagesByMe
+                .where((messageId) =>
+                    messageMap[messageId]?.receiverId == widget.memberId)
+                .toList();
 
-          for (var messageId in readMessages) {
-            messageMap[messageId]?.isRead = true;
+            for (var messageId in readMessagesByMe) {
+              setState(() {
+                messageMap[messageId]?.isRead = true;
+              });
+            }
+            unreadMessagesByMe.removeAll(readMessagesByMe);
+          } else if (readBy == widget.partner.partnerMemberId) {
+            print("상대방이 읽음");
+            // readBy가 partner.partnerMemberId인 경우, unreadMessagesByOthers에서 처리
+            List<String> readMessagesByOthers = unreadMessagesByOthers
+                .where((messageId) =>
+                    messageMap[messageId]?.senderId ==
+                    widget.partner.partnerMemberId)
+                .toList();
+
+            for (var messageId in readMessagesByOthers) {
+              setState(() {
+                messageMap[messageId]?.isRead = true;
+              });
+            }
+            unreadMessagesByOthers.removeAll(readMessagesByOthers);
           }
-
-          unreadMessagesByOthers.removeAll(readMessages);
         });
       }
     });
@@ -108,22 +136,26 @@ class _ChattingPageState extends State<ChattingPage>
 
     try {
       List<MessageModel> initialMessages =
-          await ChatService.getMessages(widget.partner.partnerMemberId!);
+          await ChatService.getMessages(widget.partner.chatRoomId!);
 
       initialMessages.sort((a, b) => a.sendTime!.compareTo(b.sendTime!));
 
       setState(() {
         for (var message in initialMessages) {
           messageDeque.addLast(message);
-          if (message.receiverId == widget.partner.partnerMemberId &&
-              message.isRead == false) {
+          if (message.senderId == widget.memberId && message.isRead == false) {
             unreadMessagesByOthers.add(message.id!);
+          }
+          if (message.receiverId == widget.memberId &&
+              message.isRead == false) {
+            unreadMessagesByMe.add(message.id!);
           }
         }
         isLoading = false;
       });
+      print(unreadMessagesByMe);
 
-      _sendBulkReadReceipt(initialMessages);
+      // _sendBulkReadReceipt(initialMessages);
     } catch (e) {
       setState(() {
         isLoading = false;
@@ -150,8 +182,7 @@ class _ChattingPageState extends State<ChattingPage>
       setState(() {
         for (var message in moreMessages.reversed) {
           messageDeque.addFirst(message);
-          if (message.receiverId == widget.partner.partnerMemberId &&
-              message.isRead == false) {
+          if (message.senderId == widget.memberId && message.isRead == false) {
             unreadMessagesByOthers.add(message.id!);
           }
         }
@@ -166,37 +197,18 @@ class _ChattingPageState extends State<ChattingPage>
     }
   }
 
-  void _sendReadReceipt(MessageModel message) {
-    if (message.receiverId == widget.partner.partnerMemberId &&
-        !message.isRead!) {
-      ChatService.sendReadRequest(message.roomId!, message.senderId!);
-      setState(() {
-        message.isRead = true;
-      });
-    }
-  }
-
-  void _sendBulkReadReceipt(List<MessageModel> messages) {
-    for (var message in messages) {
-      _sendReadReceipt(message);
-    }
-  }
-
   void sendMessage() async {
     Map<String, dynamic> request = {
       'type': 'NORMAL',
       'content': _newMessage,
       'roomId': widget.partner.chatRoomId!,
-      'senderId': 0,
+      'senderId': widget.memberId,
       'receiverId': widget.partner.partnerMemberId,
     };
 
     MessageModel message = MessageModel.fromJson(request);
 
     ChatService.sendMessage(message);
-    setState(() {
-      messageDeque.addLast(message); // 메시지를 전송한 후 즉시 화면에 반영
-    });
     updateUi();
   }
 
@@ -208,7 +220,7 @@ class _ChattingPageState extends State<ChattingPage>
       'type': 'BALANCE_GAME',
       'content': vsGames[randomIndex]['question'],
       'roomId': widget.partner.chatRoomId!,
-      'senderId': 0,
+      'senderId': widget.memberId,
       'receiverId': widget.partner.partnerMemberId,
     };
 
@@ -324,12 +336,15 @@ class _ChattingPageState extends State<ChattingPage>
                           height: 35,
                           width: 35,
                           margin: const EdgeInsets.only(right: 10.0),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: NetworkImage(
-                                      widget.partner.profileImageUrl!))),
+                          // tester 용
+                          // decoration: BoxDecoration(
+                          //   shape: BoxShape.circle,
+                          //   image: DecorationImage(
+                          //     fit: BoxFit.cover,
+                          //     image:
+                          //         NetworkImage(widget.partner.profileImageUrl!),
+                          //   ),
+                          // ),
                         ),
                       ),
                 Column(
@@ -371,7 +386,7 @@ class _ChattingPageState extends State<ChattingPage>
               )
             ],
           ),
-          body: widget.partner.roomStatus == 'OPEN'
+          body: widget.partner.roomStatus != 'CLOSE'
               ? Column(
                   children: [
                     Expanded(
@@ -413,34 +428,39 @@ class _ChattingPageState extends State<ChattingPage>
                                     controller: _scrollController,
                                     itemCount: datas.length,
                                     itemBuilder: (context, index) {
-                                      DateTime? currentDate;
+                                      DateTime currentDate;
                                       try {
-                                        currentDate = DateTime.parse(
-                                            datas[index].sendTime!);
-                                      } catch (e) {
-                                        // 파싱 오류 발생 시 기본값 설정 또는 null 처리
-                                        print('Error parsing currentDate: $e');
                                         currentDate =
-                                            DateTime.now(); // 기본값으로 현재 시간 사용
+                                            datas[index].sendTime != null
+                                                ? DateTime.parse(
+                                                    datas[index].sendTime!)
+                                                : DateTime.now();
+                                      } catch (e) {
+                                        print('Error parsing currentDate: $e');
+                                        currentDate = DateTime.now();
                                       }
 
-                                      String? nextTime = index ==
-                                              datas.length - 1
-                                          ? null
-                                          : DateFormat('yyyy-MM-dd HH:mm:ss')
-                                              .format(DateTime.parse(
-                                                  datas[index + 1].sendTime ??
-                                                      'Unknown'));
-                                      String? currentTime =
-                                          DateFormat('yyyy-MM-dd HH:mm:ss')
-                                              .format(DateTime.parse(
-                                                  datas[index].sendTime ??
-                                                      'Unknown'));
-                                      bool nextDiff = nextTime == null
+                                      DateTime? nextDate;
+                                      if (index < datas.length - 1) {
+                                        try {
+                                          nextDate = datas[index + 1]
+                                                      .sendTime !=
+                                                  null
+                                              ? DateTime.parse(
+                                                  datas[index + 1].sendTime!)
+                                              : DateTime.now();
+                                        } catch (e) {
+                                          print('Error parsing nextDate: $e');
+                                          nextDate = DateTime.now();
+                                        }
+                                      } else {
+                                        nextDate = null;
+                                      }
+
+                                      bool nextDiff = nextDate == null
                                           ? false
-                                          : DateTime.parse(nextTime)
-                                                  .difference(DateTime.parse(
-                                                      currentTime))
+                                          : nextDate
+                                                  .difference(currentDate)
                                                   .inMinutes >
                                               1;
 
@@ -448,39 +468,46 @@ class _ChattingPageState extends State<ChattingPage>
                                         children: [
                                           if (index == 0 ||
                                               currentDate.year !=
-                                                  DateTime.parse(
-                                                          datas[index - 1]
-                                                              .sendTime!)
+                                                  (datas[index - 1].sendTime != null
+                                                          ? DateTime.parse(
+                                                              datas[index - 1]
+                                                                  .sendTime!)
+                                                          : DateTime.now())
                                                       .year ||
                                               currentDate.month !=
-                                                  DateTime.parse(
-                                                          datas[index - 1]
-                                                              .sendTime!)
+                                                  (datas[index - 1].sendTime != null
+                                                          ? DateTime.parse(
+                                                              datas[index - 1]
+                                                                  .sendTime!)
+                                                          : DateTime.now())
                                                       .month ||
                                               currentDate.day !=
-                                                  DateTime.parse(
-                                                          datas[index - 1]
-                                                              .sendTime!)
+                                                  (datas[index - 1].sendTime !=
+                                                              null
+                                                          ? DateTime.parse(
+                                                              datas[index - 1]
+                                                                  .sendTime!)
+                                                          : DateTime.now())
                                                       .day)
                                             _timeBubble(
                                                 index, currentDate.toString()),
                                           MessageBubble(
-                                              message: MessageModel(
-                                                  id: datas[index].id,
-                                                  type: datas[index].type,
-                                                  content: datas[index].content,
-                                                  roomId: datas[index].roomId!,
-                                                  senderId:
-                                                      datas[index].senderId,
-                                                  receiverId:
-                                                      datas[index].receiverId,
-                                                  sendTime:
-                                                      datas[index].sendTime,
-                                                  isRead: datas[index].isRead),
-                                              showingTime: _showingTime(
-                                                  index, datas, nextDiff),
-                                              showingPic: _showingPic(
-                                                  index, datas, nextDiff))
+                                            message: MessageModel(
+                                                id: datas[index].id,
+                                                type: datas[index].type,
+                                                content: datas[index].content,
+                                                roomId: datas[index].roomId!,
+                                                senderId: datas[index].senderId,
+                                                receiverId:
+                                                    datas[index].receiverId,
+                                                sendTime: datas[index].sendTime,
+                                                isRead: datas[index].isRead),
+                                            showingTime: _showingTime(
+                                                index, datas, nextDiff),
+                                            showingPic: _showingPic(
+                                                index, datas, nextDiff),
+                                            memberId: widget.memberId,
+                                          )
                                         ],
                                       );
                                     },

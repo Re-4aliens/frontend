@@ -9,12 +9,14 @@ class MessageBubble extends StatelessWidget {
   final MessageModel message;
   final bool showingTime;
   final bool showingPic;
+  final int memberId;
 
   const MessageBubble({
     Key? key,
     required this.message,
     required this.showingTime,
     required this.showingPic,
+    required this.memberId,
   }) : super(key: key);
 
   @override
@@ -22,7 +24,7 @@ class MessageBubble extends StatelessWidget {
     if (message.type == 'BALANCE_GAME') {
       return _vsGameBubble();
     } else {
-      if (message.senderId == 0) {
+      if (message.senderId == memberId) {
         return _myBubble();
       } else {
         return _partnerBubble();
@@ -106,7 +108,7 @@ class MessageBubble extends StatelessWidget {
               child: Text(
                 showingTime
                     ? DateFormat('hh:mm aaa')
-                        .format(DateTime.parse('${message.sendTime}'))
+                        .format(DateTime.parse(message.sendTime!))
                     : '',
                 style: const TextStyle(
                   fontSize: 12,
@@ -143,7 +145,7 @@ class MessageBubble extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(top: 2, right: 18),
-          child: message.isRead == 0
+          child: message.isRead == true
               ? const Text('읽음',
                   style: TextStyle(fontSize: 12, color: Color(0xffC1C1C1)))
               : const Text(

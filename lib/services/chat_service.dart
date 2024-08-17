@@ -21,15 +21,17 @@ class ChatService extends APIService {
   static Stream<int> get readReceiptStream => _readReceiptController.stream;
 
   static late int roomIdToSubscribe;
+  static late int memberId;
 
   /*
     
     웹소켓 연결 요청
 
   */
-  static Future<void> connectWebSocket(int roomId) async {
+  static Future<void> connectWebSocket(int roomId, int id) async {
     var url = '$domainUrl/ws';
     roomIdToSubscribe = roomId;
+    memberId = id;
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -61,7 +63,7 @@ class ChatService extends APIService {
   static void onStompConnect(StompFrame frame) {
     print('STOMP 연결 성공');
     isConnected = true;
-    subscribeWebSocket(roomIdToSubscribe);
+    subscribeWebSocket(roomIdToSubscribe, memberId);
   }
 
   /*
@@ -69,17 +71,12 @@ class ChatService extends APIService {
     웹소켓 구독 요청
 
   */
-  static Future<void> subscribeWebSocket(int roomId) async {
+  static Future<void> subscribeWebSocket(int roomId, int memberId) async {
     if (isConnected) {
-      print("$roomId 구독");
-      print("경로 : /room/$roomId");
-
       stompClient.subscribe(
         destination: '/room/$roomId',
         callback: (StompFrame frame) {
           if (frame.body != null) {
-            print('Received message from room $roomId: ${frame.body}');
-
             Map<String, dynamic> messageJson = json.decode(frame.body!);
             if (messageJson.containsKey('readBy')) {
               /*
@@ -106,12 +103,15 @@ class ChatService extends APIService {
                 messageJson['sendTime'] = sendTimeDateTime.toIso8601String();
               }
 
+              print(messageJson);
+
               MessageModel message = MessageModel.fromJson(messageJson);
               _messageController.add(message);
             }
           }
         },
       );
+      ChatService.sendReadRequest(roomId, memberId);
     }
   }
 
@@ -160,6 +160,7 @@ class ChatService extends APIService {
 
   */
   static void sendReadRequest(int roomId, int memberId) async {
+    print("읽음 처리 요청");
     if (isConnected) {
       Map<String, dynamic> readRequest = {
         'roomId': roomId,
@@ -173,7 +174,7 @@ class ChatService extends APIService {
       );
       print('Read receipt sent: $readRequest');
     } else {
-      print('WebSocket is not connected.');
+      print('읽음 처리 요청 WebSocket is not connected.');
     }
   }
 
@@ -184,6 +185,8 @@ class ChatService extends APIService {
    */
   static Future<List<MessageModel>> getMessages(roomId) async {
     var url = '$domainUrl/chat/room/$roomId/messages';
+
+    print("메시지 조회 $roomId");
 
     //토큰 읽어오기
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';

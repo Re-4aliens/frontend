@@ -119,6 +119,7 @@ class MatchingService extends APIService {
 
       if (status == 'NotAppliedAndMatched' || status == 'AppliedAndMatched') {
         print(2);
+        applicant = Applicant.fromJson(await getApplicantInfo());
         partners = await getApplicantPartners();
       } else {
         partners = null;
@@ -138,7 +139,6 @@ class MatchingService extends APIService {
       applicant = null;
       partners = [];
     }
-    partners ??= [];
 
     ScreenArguments screenArguments =
         ScreenArguments(memberDetails, status, applicant, partners);
