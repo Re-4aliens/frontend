@@ -23,24 +23,21 @@ class ChatMessageSummary {
   int roomId;
   String lastMessageContent;
   int numberOfUnreadMessages;
-  String lastChatTime;
+  String lastMessageTime;
 
   ChatMessageSummary({
     required this.roomId,
     required this.lastMessageContent,
     required this.numberOfUnreadMessages,
-    required this.lastChatTime,
+    required this.lastMessageTime,
   });
 
   factory ChatMessageSummary.fromJson(Map<String, dynamic> json) {
     return ChatMessageSummary(
-      roomId: json['roomId'] ?? 0, // Default to 0 if null
-      lastMessageContent:
-          json['lastMessageContent'] ?? '', // Default to empty string if null
-      numberOfUnreadMessages:
-          json['numberOfUnreadMessages'] ?? 0, // Default to 0 if null
-      lastChatTime:
-          json['lastChatTime'] ?? '', // Default to empty string if null
+      roomId: json['roomId'] ?? 0,
+      lastMessageContent: json['lastMessageContent'] ?? '',
+      numberOfUnreadMessages: json['numberOfUnreadMessages'] ?? 0,
+      lastMessageTime: json['lastMessageTime'] ?? '',
     );
   }
 
@@ -49,7 +46,7 @@ class ChatMessageSummary {
       'roomId': roomId,
       'lastMessageContent': lastMessageContent,
       'numberOfUnreadMessages': numberOfUnreadMessages,
-      'lastChatTime': lastChatTime,
+      'lastMessageTime': lastMessageTime,
     };
   }
 }

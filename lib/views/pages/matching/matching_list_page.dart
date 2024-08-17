@@ -42,6 +42,17 @@ class _MatchingListPageState extends State<MatchingListPage> {
   int selectedIndex = -1;
 
   @override
+  void initState() {
+    super.initState();
+    print(widget.screenArguments.partners);
+    for (var partner in widget.screenArguments.partners!) {
+      setState(() {
+        partner.profileImageUrl = null;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
@@ -130,10 +141,14 @@ class _MatchingListPageState extends State<MatchingListPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChattingPage(
-                                      partner: widget.screenArguments
-                                          .partners![selectedIndex],
-                                    )),
+                              builder: (context) => ChattingPage(
+                                partner: widget
+                                    .screenArguments.partners![selectedIndex],
+                                memberId: widget
+                                        .screenArguments.applicant!.memberId ??
+                                    0,
+                              ),
+                            ),
                           );
                         }
                       },
@@ -186,18 +201,22 @@ class MatchingList extends StatefulWidget {
 class _MatchingListState extends State<MatchingList> {
   bool isSelected = false;
 
+  String? getNationCode(String countryName) {
+    for (var country in countries) {
+      if (country['name']!.toLowerCase() == countryName.toLowerCase()) {
+        return country['code']!.toLowerCase();
+      }
+    }
+    return null; // 해당하는 국가가 없을 경우 null 반환
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
 
-    var flagSrc = '';
-    for (Map<String, String> country in countries) {
-      if (country['name'] == widget.partner.nationality.toString()) {
-        flagSrc = country['code']!;
-        break;
-      }
-    }
+    var flagSrc = getNationCode(widget.partner.nationality!);
+    print(flagSrc);
 
     return widget.partner.mbti != null
         ? Container(
@@ -354,7 +373,7 @@ class _MatchingListState extends State<MatchingList> {
                                                                   CountryFlag(
                                                                 country: Country
                                                                     .fromCode(
-                                                                        flagSrc),
+                                                                        flagSrc!),
                                                               ),
                                                             ),
                                                           ),
@@ -402,15 +421,18 @@ class _MatchingListState extends State<MatchingList> {
                                                       : Container(
                                                           width: 100,
                                                           height: 100,
-                                                          decoration: BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              color:
-                                                                  Colors.white,
-                                                              image: DecorationImage(
-                                                                  image: NetworkImage(widget
-                                                                      .partner
-                                                                      .profileImageUrl!))),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            color: Colors.white,
+                                                            image:
+                                                                DecorationImage(
+                                                              image: NetworkImage(
+                                                                  widget.partner
+                                                                      .profileImageUrl!),
+                                                            ),
+                                                          ),
                                                           padding:
                                                               const EdgeInsets
                                                                   .all(5),
@@ -536,7 +558,7 @@ class _MatchingListState extends State<MatchingList> {
                           )
                         ]),
                         child: CountryFlag(
-                          country: Country.fromCode(flagSrc),
+                          country: Country.fromCode(flagSrc!),
                           height: 30,
                         ),
                       )

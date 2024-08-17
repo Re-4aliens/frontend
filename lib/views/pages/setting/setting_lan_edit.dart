@@ -48,13 +48,11 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
         widget.screenArguments!.status == 'AppliedAndMatched') {
       _firstPreferLanguage = _nationlist.firstWhere((element) =>
           element['value'] ==
-          widget.screenArguments!.applicant!.preferLanguages!
-              .firstPreferLanguage!)['language'];
+          widget.screenArguments!.applicant!.firstPreferLanguage!)['language'];
 
       _secondPreferLanguage = _nationlist.firstWhere((element) =>
           element['value'] ==
-          widget.screenArguments!.applicant!.preferLanguages!
-              .secondPreferLanguage!)['language'];
+          widget.screenArguments!.applicant!.secondPreferLanguage!)['language'];
     } else {
       _firstPreferLanguage = '한국어';
       _secondPreferLanguage = 'English';
