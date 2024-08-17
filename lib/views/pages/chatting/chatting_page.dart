@@ -232,9 +232,6 @@ class _ChattingPageState extends State<ChattingPage>
 
     MessageModel message = MessageModel.fromJson(request);
     ChatService.sendMessage(message);
-    setState(() {
-      messageDeque.addLast(message); // 메시지를 전송한 후 바로 추가
-    });
     updateUi();
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
