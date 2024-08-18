@@ -7,6 +7,40 @@ import '../models/notification_article_model.dart';
 class NotificationService extends APIService {
   /*
 
+      fcm 토큰 등록
+
+  */
+  static Future<void> registerFCMToken() async {
+    const url = '$domainUrl/notifications/fcm';
+    String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+    print(fcmToken);
+
+    try {
+      var response = await http.post(Uri.parse(url),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': jwtToken,
+          },
+          body: jsonEncode({
+            'fcmToken': fcmToken,
+          }));
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        final result = responseBody['result'];
+        print(result);
+      } else {
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        print(responseBody);
+      }
+    } catch (e) {
+      print("fcm 토큰 등록 실패 :$e");
+    }
+  }
+
+  /*
+
   알림 리스트 > 알림 조회
 
   */

@@ -150,7 +150,7 @@ class _iOSReportDialogState extends State<iOSReportDialog> {
                 children: [
                   Expanded(
                     child: InkWell(
-                      child: Center(child: Text('cance'.tr())),
+                      child: Center(child: Text('cancel'.tr())),
                       onTap: () {
                         Navigator.of(context).pop();
                       },

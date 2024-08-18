@@ -1,8 +1,8 @@
 import 'package:aliens/services/auth_service.dart';
+import 'package:aliens/services/notification_service.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:aliens/views/components/button_big.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -167,8 +167,6 @@ class _LoginState extends State<Login> {
                                 _pwFormKey.currentState!.validate()) {
                               auth.email = _emailController.text;
                               auth.password = _passwordController.text;
-                              final fcmToken =
-                                  await FirebaseMessaging.instance.getToken();
                               var loginSuccess = await AuthService.logIn(auth);
 
                               if (loginSuccess) {
@@ -362,13 +360,11 @@ class _LoginState extends State<Login> {
                                     _pwFormKey.currentState!.validate()) {
                                   auth.email = _emailController.text;
                                   auth.password = _passwordController.text;
-                                  final fcmToken = await FirebaseMessaging
-                                      .instance
-                                      .getToken();
                                   var loginSuccess =
                                       await AuthService.logIn(auth);
 
                                   if (loginSuccess) {
+                                    NotificationService.registerFCMToken();
                                     Navigator.of(context)
                                         .pushNamedAndRemoveUntil('/loading',
                                             (Route<dynamic> route) => false);
