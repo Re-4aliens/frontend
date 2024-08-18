@@ -7,9 +7,14 @@ import 'package:aliens/services/report_servcie.dart';
 class ReportDialog extends StatefulWidget {
   final int id;
   final BuildContext context;
+  final int? chatRoomId;
 
-  const ReportDialog({Key? key, required this.id, required this.context})
-      : super(key: key);
+  const ReportDialog({
+    Key? key,
+    required this.id,
+    required this.context,
+    this.chatRoomId,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() => _ReportDialogState();
 }
@@ -136,7 +141,11 @@ class _ReportDialogState extends State<ReportDialog> {
                 }
               }
               if (await ReportService.reportPartner(
-                  reportCategory, _textEditingController.text, widget.id)) {
+                widget.id,
+                widget.chatRoomId!,
+                reportCategory,
+                _textEditingController.text,
+              )) {
                 Navigator.pop(context);
                 showDialog(
                     context: context,
