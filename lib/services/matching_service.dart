@@ -68,17 +68,13 @@ class MatchingService extends APIService {
       },
     );
 
-    print('getApplicantPartner');
-
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> matchingPartner = responseBody['result'];
-      print('matchingPartner $matchingPartner');
       return matchingPartner
           .map((dynamic item) => Partner.fromJson(item))
           .toList();
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -111,14 +107,12 @@ class MatchingService extends APIService {
       memberDetails = await UserService.getMemberDetails();
 
       if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
-        print(1);
         applicant = Applicant.fromJson(await getApplicantInfo());
       } else {
         applicant = null;
       }
 
       if (status == 'NotAppliedAndMatched' || status == 'AppliedAndMatched') {
-        print(2);
         applicant = Applicant.fromJson(await getApplicantInfo());
         partners = await getApplicantPartners();
       } else {
