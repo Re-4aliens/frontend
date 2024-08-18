@@ -9,27 +9,27 @@ class ReportService extends APIService {
 
    */
   static Future<bool> reportPartner(
-      String reportCategory, String reportContent, int memberId) async {
-    var url = 'http://3.34.2.246:8080/api/v1/report/$memberId'; //mocksever
+      int partnerId, int chatRoomId, String category, String content) async {
+    var url = '$domainUrl/chat/report';
 
     //토큰 읽어오기
-    var jwtToken = await APIService.storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
     var response = await http.post(Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $jwtToken',
+          'Authorization': jwtToken,
           'Content-Type': 'application/json'
         },
         body: jsonEncode({
-          "reportCategory": reportCategory,
-          "reportContent": reportContent,
+          "partnerId": partnerId,
+          "chatRoomId": chatRoomId,
+          "category": category,
+          "content": content,
         }));
 
     //success
     if (response.statusCode == 200) {
+      print("신고성공");
       return true;
       //fail
     } else {

@@ -80,7 +80,7 @@ class ChatService extends APIService {
             Map<String, dynamic> messageJson = json.decode(frame.body!);
             if (messageJson.containsKey('readBy')) {
               /*
-  
+
                 구독 후 읽음 처리 메시지 수신
   
               */
@@ -234,6 +234,8 @@ class ChatService extends APIService {
     //success
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print("채팅 요약 정보");
+      print(responseBody);
 
       return ChatData.fromJson(responseBody['result']);
 
