@@ -44,7 +44,6 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
     setState(() {
       notificationStatus = status;
     });
-    print(notificationStatus);
   }
 
   Future<void> getNotification() async {

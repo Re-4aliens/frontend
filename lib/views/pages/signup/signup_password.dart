@@ -125,7 +125,6 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                       if (EasyLocalization.of(context)!.locale ==
                           const Locale.fromSubtags(
                               languageCode: "ko", countryCode: "KR")) {
-                        print('이용약관');
                         _launchUrl(koUrl[0]);
                       }
                       //영어로 설정되어 있다면
@@ -157,7 +156,6 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                     if (EasyLocalization.of(context)!.locale ==
                         const Locale.fromSubtags(
                             languageCode: "ko", countryCode: "KR")) {
-                      print('이용약관');
                       _launchUrl(koUrl[1]);
                     }
                     //영어로 설정되어 있다면
@@ -186,16 +184,13 @@ class _SignUpPasswordState extends State<SignUpPassword> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     member.password = _PasswordController.text;
-                    print(member.toJson()); // member 객체 전체 출력
 
                     //------ 회원가입 api 요청
                     //authProvider.signUp(member, context);
                     if (await UserService.signUp(member)) {
                       Navigator.pushNamed(context, '/welcome',
                           arguments: member);
-                    } else {
-                      print('회원가입실패');
-                    }
+                    } else {}
                   }
                   //회원가입 성공하면 로그인 요청
                 })

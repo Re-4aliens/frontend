@@ -232,7 +232,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
     );
 
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       dynamic body = json.decode(utf8.decode(response.bodyBytes))['data'];
       if (boardCategory == "장터게시판") {
         return MarketBoard.fromJson(body);

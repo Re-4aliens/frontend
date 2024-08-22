@@ -22,7 +22,6 @@ class CommentProvider with ChangeNotifier {
   }
 
   addComment(String content, int articleId) async {
-    print('board id : $articleId');
     try {
       await CommentService.postComment(content, articleId);
     } catch (e) {

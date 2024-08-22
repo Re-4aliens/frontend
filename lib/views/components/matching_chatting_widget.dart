@@ -42,21 +42,8 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
     futureChatMessageSummaries = _getChatMessageSummaries();
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('채팅리스트에서 Received FCM with: ${message.data} at ${DateTime.now()}');
       _updateList();
     });
-
-    _printFutureList();
-  }
-
-  Future<void> _printFutureList() async {
-    List<ChatMessageSummary> summaries = await futureChatMessageSummaries!;
-    for (var summary in summaries) {
-      print('ChatMessageSummary: { roomId: ${summary.roomId}, '
-          'lastMessageContent: ${summary.lastMessageContent}, '
-          'numberOfUnreadMessages: ${summary.numberOfUnreadMessages}, '
-          'lastMessageTime: ${summary.lastMessageTime} }');
-    }
   }
 
   @override
@@ -157,7 +144,6 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                   child: const Image(
                       image: AssetImage("assets/illustration/loading_01.gif")));
             } else if (snapshot.data == null) {
-              print("data null");
               return const Center(
                 child: Text(
                   '',
@@ -206,9 +192,6 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
             _updateList();
             _messageStreamSubscription = FirebaseMessaging.onMessage
                 .listen((RemoteMessage message) async {
-              print(
-                '채팅리스트에서 Received FCM with: ${message.data} at ${DateTime.now()}',
-              );
               _updateList();
             });
           });
@@ -233,14 +216,13 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                     height: 50,
                     width: 50,
                     margin: const EdgeInsets.only(right: 15),
-                    // tester 전용
-                    // decoration: BoxDecoration(
-                    //   shape: BoxShape.circle,
-                    //   image: DecorationImage(
-                    //     fit: BoxFit.cover,
-                    //     image: NetworkImage(partner!.profileImageUrl!),
-                    //   ),
-                    // ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(partner.profileImageUrl!),
+                      ),
+                    ),
                   ),
             Expanded(
               child: Container(

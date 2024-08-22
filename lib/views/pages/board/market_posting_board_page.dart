@@ -553,12 +553,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                             bool success =
                                 await MarketService.updateMarketArticle(
                                     widget.marketBoard!.id ?? 0, updateData);
-                            print('1');
-                            print(updateData);
                             Navigator.of(context).pop(); // 이전 페이지로 이동
 
                             if (success) {
-                              print('게시물 수정 성공!!!');
                               Navigator.of(context)
                                   .pushReplacement(MaterialPageRoute(
                                 builder: (BuildContext context) =>
@@ -569,7 +566,6 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                                             .screenArguments.memberDetails),
                               ));
                             } else {
-                              print('게시물 수정 실패...');
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Fail'),
@@ -585,13 +581,11 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                             //Navigator.of(context).pop(); // 이전 페이지로 이동
 
                             if (success) {
-                              print('게시물 생성 성공!!!');
                               Future.delayed(const Duration(milliseconds: 100),
                                   () {
                                 Navigator.of(context).pop(); // 이전 페이지로 이동
                               });
                             } else {
-                              print('게시물 생성 실패...');
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   content: Text('Fail'),
@@ -600,8 +594,8 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               );
                             }
                           }
-                        } catch (error) {
-                          print('Error: $error');
+                        } catch (e) {
+                          throw Exception(e);
                         }
                       }
                     },

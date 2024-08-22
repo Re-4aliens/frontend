@@ -75,8 +75,6 @@ class BoardService extends APIService {
         return Board.fromJson(articleData);
       }).toList();
 
-      print('전체 게시판 검색 결과 : $articles');
-
       return articles;
     } else {
       throw Exception('요청 오류');
@@ -226,21 +224,12 @@ class BoardService extends APIService {
 
     try {
       var response = await request.send();
-
-      print(response.statusCode);
-
       if (response.statusCode == 200) {
-        print(await response.stream.bytesToString());
-        print("게시글 등록 성공");
         return true;
       } else {
-        print(await response.stream.bytesToString());
-        print("게시글 등록 실패");
         return false;
       }
     } catch (e) {
-      print("통신 실패요");
-      print(e);
       return false;
     }
   }

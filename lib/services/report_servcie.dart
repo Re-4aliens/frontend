@@ -29,7 +29,6 @@ class ReportService extends APIService {
 
     //success
     if (response.statusCode == 200) {
-      print("신고성공");
       return true;
       //fail
     } else {

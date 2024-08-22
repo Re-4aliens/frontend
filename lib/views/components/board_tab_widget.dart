@@ -29,7 +29,6 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
-        print('추가');
         page++;
         final boardProvider =
             Provider.of<BoardProvider>(context, listen: false);

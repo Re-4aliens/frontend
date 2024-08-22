@@ -244,7 +244,6 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
                                   }).toList(),
                                   value: _secondPreferLanguage,
                                   onChanged: (value) {
-                                    print(value);
                                     setState(() {
                                       _secondPreferLanguage = value.toString();
                                     });

@@ -232,7 +232,6 @@ class _SignUpMbtiState extends State<SignUpMbti> {
                 onPressed: () {
                   if (selectedStack != -1) {
                     member.mbti = mbtiList[selectedStack]['mbti'];
-                    print(member.toJson());
                     Navigator.pushNamed(context, '/profile', arguments: member);
                   }
                 })

@@ -35,13 +35,11 @@ class _NoticeWidgetState extends State<NoticeWidget> {
       final dataList = response; // 변환된 리스트 데이터
 
       setState(() {
-        print('1');
         noticearticles =
             dataList.map((article) => NoticeArticle.fromJson(article)).toList();
-        print('2');
       });
-    } catch (error) {
-      print('Error fetching article data: $error');
+    } catch (e) {
+      throw Exception(e);
     }
   }
 

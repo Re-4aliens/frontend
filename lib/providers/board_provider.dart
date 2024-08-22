@@ -26,7 +26,6 @@ class BoardProvider with ChangeNotifier {
   Future<void> getArticles(String boardCategory) async {
     _setLoading(true);
     try {
-      print("특정 카테고리 게시판 조회 시도");
       articleList = await BoardService.getArticles(boardCategory, 0);
     } catch (e) {
       if (e == "AT-C-002") {
@@ -67,16 +66,12 @@ class BoardProvider with ChangeNotifier {
   }
 
   Future<bool> addPost(Board board) async {
-    print('addPost');
     bool value = false;
     try {
       value = await BoardService.postArticle(board);
     } catch (e) {
-      print("addPost 중 postArticle 실패");
-      print('catch $e');
       if (e == "AT-C-002") {
         bool isSuccess = await AuthService.getAccessToken();
-        print('토큰 재발급 성공 ? $isSuccess');
         value = await BoardService.postArticle(board);
       }
     }

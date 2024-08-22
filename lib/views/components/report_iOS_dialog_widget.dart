@@ -111,7 +111,6 @@ class _iOSReportDialogState extends State<iOSReportDialog> {
                         onChanged: (String? value) {
                           setState(() {
                             _reportReason = value;
-                            print('$_reportReason');
                           });
                         },
                       ),

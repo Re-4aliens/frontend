@@ -44,7 +44,6 @@ class _MatchingListPageState extends State<MatchingListPage> {
   @override
   void initState() {
     super.initState();
-    print(widget.screenArguments.partners);
     for (var partner in widget.screenArguments.partners!) {
       setState(() {
         partner.profileImageUrl = null;
@@ -216,8 +215,6 @@ class _MatchingListState extends State<MatchingList> {
     final bool isSmallScreen = screenWidth <= 700;
 
     var flagSrc = getNationCode(widget.partner.nationality!);
-    print(flagSrc);
-
     return widget.partner.mbti != null
         ? Container(
             margin: EdgeInsets.symmetric(vertical: isSmallScreen ? 10 : 15),
@@ -280,7 +277,6 @@ class _MatchingListState extends State<MatchingList> {
                     children: [
                       InkWell(
                         onTap: () {
-                          print(widget.partner.profileImageUrl);
                           /*
                       Navigator.pushNamed(context, '/info/your',
                           arguments: widget.partner);

@@ -181,7 +181,6 @@ class _SignUpProfileState extends State<SignUpProfile> {
                 onPressed: () {
                   if (_isButtonEnabled) {
                     member.profileImage = _profileImage!.path.toString();
-                    print(member.toJson());
                     Navigator.pushNamed(context, '/bio', arguments: member);
                   }
                 }),
@@ -190,7 +189,6 @@ class _SignUpProfileState extends State<SignUpProfile> {
                 onPressed: () {
                   Navigator.pushNamed(context, '/bio', arguments: member);
                   member.profileImage = '';
-                  print(member.toJson());
                 },
                 child: Text(
                   'refuse'.tr(),

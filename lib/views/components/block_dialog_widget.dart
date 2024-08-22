@@ -99,7 +99,7 @@ class _BlockDialogState extends State<BlockDialog> {
                 children: [
                   Expanded(
                     child: InkWell(
-                      child: Center(child: Text('cancle'.tr())),
+                      child: Center(child: Text('cancel'.tr())),
                       onTap: () {
                         Navigator.of(context).pop();
                       },

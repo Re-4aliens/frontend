@@ -28,13 +28,11 @@ class NotificationService extends APIService {
       if (response.statusCode == 200) {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final result = responseBody['result'];
-        print(result);
       } else {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
-        print(responseBody);
       }
     } catch (e) {
-      print("fcm 토큰 등록 실패 :$e");
+      throw Exception(e);
     }
   }
 
@@ -125,20 +123,9 @@ class NotificationService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
-      print("알림 상태 조회 : $result");
       return result;
       //fail
     } else {
-      print(response.statusCode);
-      print('FCM 알림 상태 조회 : ${response.body}');
-      // if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-      //   // 액세스 토큰 만료
-      //   throw 'AT-C-002';
-      // } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-      //     'AT-C-007') {
-      //   // 로그아웃된 토큰
-      //   throw 'AT-C-007';
-      // } else {}
       return false;
     }
   }
@@ -166,7 +153,6 @@ class NotificationService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
-      print(result);
       //fail
     } else {
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {

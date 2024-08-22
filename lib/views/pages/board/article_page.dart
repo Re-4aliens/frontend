@@ -434,8 +434,6 @@ class _ArticlePageState extends State<ArticlePage> {
                                                   ),
                                                   InkWell(
                                                     onTap: () {
-                                                      print(
-                                                          'on Tap : ${commentProvider.commentListData![index].id}, ${commentProvider.commentListData![index].children}, ${commentProvider.commentListData![index].content}, ${commentProvider.commentListData![index].createdAt}');
                                                       showDialog(
                                                           context: context,
                                                           builder: (builder) {
@@ -443,15 +441,6 @@ class _ArticlePageState extends State<ArticlePage> {
                                                               context: context,
                                                               onpressed: () {
                                                                 setState(() {
-                                                                  print(commentProvider
-                                                                          .commentListData![
-                                                                      index]);
-                                                                  print(
-                                                                      'index : $index');
-                                                                  print(commentProvider
-                                                                      .commentListData![
-                                                                          index]
-                                                                      .id);
                                                                   isNestedComments =
                                                                       true;
                                                                   parentsCommentId =
@@ -459,8 +448,6 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                           .commentListData![
                                                                               index]
                                                                           .id;
-                                                                  print(
-                                                                      'parentsCommentId : ${commentProvider.commentListData![index].id}');
                                                                 });
                                                                 Navigator.pop(
                                                                     context);
@@ -760,7 +747,6 @@ class _ArticlePageState extends State<ArticlePage> {
                     )),
                     IconButton(
                       onPressed: () {
-                        print('$parentsCommentId');
                         if (_newComment != '') {
                           if (isNestedComments) {
                             commentProvider.addNestedComment(_newComment,
@@ -768,7 +754,6 @@ class _ArticlePageState extends State<ArticlePage> {
                             parentsCommentId = -1;
                             isNestedComments = false;
                           } else {
-                            print('Board Id : ${widget.board.id}');
                             commentProvider.addComment(
                                 _newComment, widget.board.id!);
                           }
