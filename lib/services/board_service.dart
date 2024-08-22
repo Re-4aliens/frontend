@@ -10,17 +10,17 @@ class BoardService extends APIService {
   static String getCategoryValue(String category) {
     switch (category) {
       case "자유게시판":
-        return 'free';
+        return 'FREE';
       case "게임게시판":
-        return 'game';
+        return 'GAME';
       case "패션게시판":
-        return 'fashion';
+        return 'FASHION';
       case "음식게시판":
-        return 'food';
+        return 'FOOD';
       case "음악게시판":
-        return 'music';
+        return 'MUSIC';
       case "정보게시판":
-        return 'info';
+        return 'INFO';
     }
     return '';
   }
@@ -176,14 +176,7 @@ class BoardService extends APIService {
     }
   }
 
-  /* 
-  
-    게시물 등록 
-    
-  */
   static Future<bool> postArticle(Board newBoard) async {
-    String category = getCategoryValue(newBoard.category);
-    print(category);
     const url = '$domainUrl/boards/normal';
 
     var jwtToken = await APIService.storage.read(key: 'token');
@@ -201,7 +194,7 @@ class BoardService extends APIService {
     var jsonPayload = jsonEncode({
       'title': newBoard.title,
       'content': newBoard.content,
-      'boardCategory': category,
+      'boardCategory': getCategoryValue(newBoard.category),
     });
 
     var jsonPart = http.MultipartFile.fromString(
@@ -229,10 +222,6 @@ class BoardService extends APIService {
         contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
       );
       request.files.add(file);
-    }
-
-    for (var file in request.files) {
-      print('File: ${file.filename}, Content-Type: ${file.contentType}');
     }
 
     try {
