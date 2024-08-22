@@ -75,16 +75,10 @@ class UserService extends APIService {
     // 요청 보내기
     var response = await request.send();
 
-    // 출력: 모든 파일의 Content-Type 출력
-    for (var file in request.files) {}
-
     if (response.statusCode == 200) {
-      print('Registration Success');
       return true;
     } else {
       var responseBody = await response.stream.bytesToString();
-      print('Registration Failed');
-      print("응답 본문: $responseBody");
       return false;
     }
   }
@@ -112,7 +106,6 @@ class UserService extends APIService {
       return MemberDetails.fromJson(responseBody['result']);
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print(responseBody);
       if (responseBody['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -200,7 +193,6 @@ class UserService extends APIService {
  */
 
   static Future<bool> updateProfile(String profileImage) async {
-    print("프로필 수정 시도");
     var url = '$domainUrl/members/profile-image';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
@@ -227,16 +219,10 @@ class UserService extends APIService {
 
     var response = await request.send();
 
-    // 출력: 모든 파일의 Content-Type 출력
-    for (var file in request.files) {
-      print('File: ${file.filename}, Content-Type: ${file.contentType}');
-    }
-
     if (response.statusCode == 200) {
       return true;
     } else {
       var responseBody = await response.stream.bytesToString();
-      print(responseBody);
       return false;
     }
   }
@@ -295,7 +281,6 @@ class UserService extends APIService {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         var matchingStatus = responseBody['result'];
 
-        print("매칭 상태 정보 $matchingStatus");
         return matchingStatus; // 매칭상태 반환
       } else {
         print(json.decode(utf8.decode(response.bodyBytes)));

@@ -100,11 +100,8 @@ class _SignUpEmailState extends State<SignUpEmail> {
                         ),
                         onPressed: () async {
                           if (_isButtonEnabled) {
-                            // Get the email entered by the user
                             String enteredEmail = _EmailController.text;
-                            print(
-                                'Entered Email: $enteredEmail'); // Print the entered email
-                            //await EmailService.checkEmail(_EmailController.text)
+
                             if (await EmailService.checkExistence(
                                 _EmailController.text)) {
                               showDialog(
@@ -248,7 +245,6 @@ class _SignUpEmailState extends State<SignUpEmail> {
                   onPressed: _isVerified
                       ? () async {
                           member.email = _EmailController.text;
-                          print("인증 ${member.toJson()}");
 
                           showDialog(
                               context: context,
@@ -271,7 +267,6 @@ class _SignUpEmailState extends State<SignUpEmail> {
                                             context, '/verify',
                                             arguments: member);
                                       });
-                                      print("받음 ${member.toJson()}");
                                       return Container(
                                           child: const Image(
                                               image: AssetImage(
@@ -290,13 +285,11 @@ class _SignUpEmailState extends State<SignUpEmail> {
 
   void _CheckValidate(String value) {
     if (value.isEmpty) {
-      print('이메일 주소를 입력해주세요');
     } else {
       String pattern =
           r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
       RegExp regExp = RegExp(pattern);
       if (!regExp.hasMatch(value)) {
-        print('잘못된 이메일 형식입니다');
         setState(() {
           _isButtonEnabled = false;
         });

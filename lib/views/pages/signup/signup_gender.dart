@@ -107,7 +107,6 @@ class _SignUpGenderState extends State<SignUpGender> {
                     } else {
                       member.gender = 'MALE';
                     }
-                    print(member.toJson());
                     Navigator.pushNamed(context, '/nationality',
                         arguments: member);
                   }
@@ -155,7 +154,6 @@ class _SignUpGenderState extends State<SignUpGender> {
               useMagnifier: true,
               itemExtent: 30,
               onSelectedItemChanged: (int selectedItem) {
-                print(selectedItem);
                 setState(() {
                   tempPickedGender = _GenderList[selectedItem];
                 });

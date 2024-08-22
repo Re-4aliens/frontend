@@ -32,9 +32,6 @@ class _StartPageState extends State<StartPage> {
       if (isValid) {
         Navigator.pushNamedAndRemoveUntil(
             context, '/loading', (route) => false);
-      } else {
-        // 로그인 필요
-        print('로그인 필요');
       }
     }
   }

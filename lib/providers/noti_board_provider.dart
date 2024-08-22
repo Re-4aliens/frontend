@@ -42,7 +42,6 @@ class NotiBoardProvider with ChangeNotifier {
         }
       } else {}
     }
-    print(isReadList[index]);
     getNotiArticles();
     notifyListeners();
   }

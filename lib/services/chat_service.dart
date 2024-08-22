@@ -40,14 +40,8 @@ class ChatService extends APIService {
         url: url,
         onConnect: onStompConnect,
         beforeConnect: () async {
-          print('연결 대기 중...');
           await Future.delayed(const Duration(milliseconds: 200));
-          print('연결 중...');
         },
-        onWebSocketError: (dynamic error) => print('WebSocket Error: $error'),
-        onStompError: (StompFrame frame) => print('STOMP Error: ${frame.body}'),
-        onDisconnect: (frame) => print('Disconnected: ${frame.body}'),
-        onWebSocketDone: () => print('WebSocket Closed'),
         stompConnectHeaders: {
           'Authorization': jwtToken,
         },
@@ -61,7 +55,6 @@ class ChatService extends APIService {
   }
 
   static void onStompConnect(StompFrame frame) {
-    print('STOMP 연결 성공');
     isConnected = true;
     subscribeWebSocket(roomIdToSubscribe, memberId);
   }
@@ -84,7 +77,6 @@ class ChatService extends APIService {
                 구독 후 읽음 처리 메시지 수신
   
               */
-              print("읽음처리 수신");
               int readBy = messageJson['readBy'];
               _readReceiptController.add(readBy);
             } else {
@@ -93,7 +85,6 @@ class ChatService extends APIService {
                 구독 후 메시지 수신
   
               */
-              print("메시지 수신");
 
               if (messageJson.containsKey('sendTime') &&
                   messageJson['sendTime'] is int) {
@@ -102,8 +93,6 @@ class ChatService extends APIService {
                     DateTime.fromMillisecondsSinceEpoch(sendTimeInt);
                 messageJson['sendTime'] = sendTimeDateTime.toIso8601String();
               }
-
-              print(messageJson);
 
               MessageModel message = MessageModel.fromJson(messageJson);
               _messageController.add(message);
@@ -124,7 +113,6 @@ class ChatService extends APIService {
     if (isConnected) {
       stompClient.deactivate();
       isConnected = false;
-      print('WebSocket disconnected.');
     }
   }
 
@@ -148,9 +136,6 @@ class ChatService extends APIService {
         body: json.encode(request),
         headers: {'content-type': 'application/json'},
       );
-      print('Message sent: $request');
-    } else {
-      print('WebSocket is not connected.');
     }
   }
 
@@ -160,7 +145,6 @@ class ChatService extends APIService {
 
   */
   static void sendReadRequest(int roomId, int memberId) async {
-    print("읽음 처리 요청");
     if (isConnected) {
       Map<String, dynamic> readRequest = {
         'roomId': roomId,
@@ -172,9 +156,6 @@ class ChatService extends APIService {
         body: json.encode(readRequest),
         headers: {'content-type': 'application/json'},
       );
-      print('Read receipt sent: $readRequest');
-    } else {
-      print('읽음 처리 요청 WebSocket is not connected.');
     }
   }
 
@@ -185,8 +166,6 @@ class ChatService extends APIService {
    */
   static Future<List<MessageModel>> getMessages(roomId) async {
     var url = '$domainUrl/chat/room/$roomId/messages';
-
-    print("메시지 조회 $roomId");
 
     //토큰 읽어오기
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
@@ -202,13 +181,10 @@ class ChatService extends APIService {
     if (response.statusCode == 200) {
       Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> items = body['result'];
-      print(items);
-      print("메시지 조회 성공");
       return items.map((dynamic item) => MessageModel.fromJson(item)).toList();
 
       //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       throw Exception('요청 오류');
     }
   }
@@ -234,8 +210,6 @@ class ChatService extends APIService {
     //success
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print("채팅 요약 정보");
-      print(responseBody);
 
       return ChatData.fromJson(responseBody['result']);
 

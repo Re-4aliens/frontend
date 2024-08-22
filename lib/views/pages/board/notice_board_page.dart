@@ -33,15 +33,14 @@ class _NoticeBoardPageState extends State<NoticeBoardPage> {
     try {
       final response = await BoardService.boardNotice();
       final dataList = response;
-      print(dataList);
 
       setState(() {
         // API 데이터를 공지사항 목록으로 변환하여 업데이트
         noticearticles =
             dataList.map((article) => NoticeArticle.fromJson(article)).toList();
       });
-    } catch (error) {
-      print('Error fetching notice data: $error');
+    } catch (e) {
+      throw Exception(e);
     }
   }
 

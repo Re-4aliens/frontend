@@ -350,7 +350,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 children: [
                                   InkWell(
                                     onTap: () async {
-                                      //print('부크마크: ${bookmarkProvider.marketArticleBookmarkCount?[widget.index]}');
                                       if (widget.index == -1) {
                                         bookmark =
                                             await MarketService.marketBookmark(
@@ -545,8 +544,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                           ),
                                                           InkWell(
                                                             onTap: () {
-                                                              print(marketcommentProvider
-                                                                  .commentListData!);
                                                               showDialog(
                                                                   context:
                                                                       context,
@@ -844,7 +841,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           )),
                           IconButton(
                             onPressed: () {
-                              print('$parentsCommentId');
                               if (_newComment != '') {
                                 if (isNestedComments) {
                                   marketcommentProvider.addNestedMarketComment(

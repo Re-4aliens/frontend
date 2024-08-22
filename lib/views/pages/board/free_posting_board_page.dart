@@ -36,7 +36,6 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
       if (_scrollController.offset ==
               _scrollController.position.maxScrollExtent &&
           !_scrollController.position.outOfRange) {
-        print('추가');
         page++;
         boardProvider.getMoreArticles('free', page);
       }

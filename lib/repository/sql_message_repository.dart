@@ -6,7 +6,6 @@ import 'package:sqflite/sqflite.dart';
 
 class SqlMessageRepository {
   static Future<void> create(MessageModel messageModel) async {
-    print('챗 생성 ${messageModel.isRead}  ${DateTime.now()}');
     var db = await SqlMessageDataBase().database;
 
     final id = messageModel.id;

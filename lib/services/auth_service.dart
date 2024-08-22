@@ -79,8 +79,6 @@ class AuthService extends APIService {
       await APIService.storage.delete(key: 'jwtToken');
       await APIService.storage.delete(key: 'refreshToken');
       await APIService.storage.delete(key: 'notifications');
-      print('로그아웃, 정보 지움');
-
       // 스택 비우고 화면 이동
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
@@ -103,10 +101,6 @@ class AuthService extends APIService {
     // 토큰 읽어오기
     var accessToken = await APIService.storage.read(key: 'token') ?? '';
     var refreshToken = await APIService.storage.read(key: 'token') ?? '';
-
-    print('getAccessToken');
-    print('accessToken $accessToken');
-    print('refreshToken $refreshToken');
 
     var response = await http.post(
       Uri.parse(url),

@@ -194,7 +194,6 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
           ),
         ),
         onTap: () {
-          print(widget.board.category);
           if (widget.board.category == "정보게시판") {
             Navigator.push(
               context,

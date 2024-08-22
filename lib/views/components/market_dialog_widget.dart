@@ -176,7 +176,6 @@ class MarketBoardDialog extends StatelessWidget {
   }
 
   Widget iOSDialog() {
-    print(UserService.isMarketAuthor(memberDetails, marketBoard));
     return Dialog(
       elevation: 0,
       backgroundColor: const Color(0xffffffff),

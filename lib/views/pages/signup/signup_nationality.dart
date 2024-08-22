@@ -115,7 +115,6 @@ class _SignUpNationalityState extends State<SignUpNationality> {
                   onPressed: () {
                     if (_isButtonEnabled) {
                       member.nationality = _selectedNationality;
-                      print(member.toJson());
                       Navigator.pushNamed(context, '/mbti', arguments: member);
                     }
                   })

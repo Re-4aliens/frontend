@@ -76,7 +76,6 @@ class MatchingService extends APIService {
           .toList();
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print('파트너 정보 $responseBody');
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -104,7 +103,6 @@ class MatchingService extends APIService {
 
     try {
       status = await UserService.getApplicantStatus();
-      print(status);
 
       memberDetails = await UserService.getMemberDetails();
 
@@ -135,8 +133,6 @@ class MatchingService extends APIService {
       applicant = null;
       partners = [];
     }
-
-    print(partners);
 
     ScreenArguments screenArguments =
         ScreenArguments(memberDetails, status, applicant, partners);

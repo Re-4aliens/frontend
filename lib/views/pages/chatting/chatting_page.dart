@@ -73,7 +73,8 @@ class _ChattingPageState extends State<ChattingPage>
   }
 
   void initializeWebSocket() {
-    ChatService.connectWebSocket(widget.partner.chatRoomId!, widget.memberId);
+    ChatService.connectWebSocket(
+        widget.partner.chatRoomId ?? 0, widget.memberId);
 
     messageSubscription =
         ChatService.messageStream.listen((MessageModel message) {
@@ -150,7 +151,6 @@ class _ChattingPageState extends State<ChattingPage>
       setState(() {
         isLoading = false;
       });
-      print('메시지 로드 중 오류 발생: $e');
     }
   }
 
@@ -190,7 +190,6 @@ class _ChattingPageState extends State<ChattingPage>
       setState(() {
         isFetchingMore = false;
       });
-      print('추가 메시지 로드 중 오류 발생: $e');
     }
   }
 

@@ -103,9 +103,7 @@ class _SearchPageState extends State<SearchPage> {
                 _keyword = value;
               });
               searchResults = await BoardService.searchTotal(value);
-              print(searchResults);
               setState(() {
-                print("검색성공");
                 searched = true;
               });
             },

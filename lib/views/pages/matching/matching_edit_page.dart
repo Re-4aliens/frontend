@@ -161,7 +161,6 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
                                       }).toList(),
                                       value: _firstPreferLanguage,
                                       onChanged: (value) {
-                                        print(value);
                                         setState(() {
                                           _firstPreferLanguage =
                                               value!.toString();
