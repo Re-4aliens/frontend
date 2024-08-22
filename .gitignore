@@ -42,4 +42,5 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-/google-services.json
+/google-services.jsonassets/data/friendship-aefec-3f3a32a70a87.json
+assets/data/friendship-aefec-3f3a32a70a87.json
