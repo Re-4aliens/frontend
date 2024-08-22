@@ -294,6 +294,7 @@ class UserService extends APIService {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         var matchingStatus = responseBody['result'];
 
+        print("매칭 상태 정보 $matchingStatus");
         return matchingStatus; // 매칭상태 반환
       } else {
         if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
