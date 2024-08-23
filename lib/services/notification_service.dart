@@ -123,11 +123,9 @@ class NotificationService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
-      print(result);
       return result;
       //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
   }

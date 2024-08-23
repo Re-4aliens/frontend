@@ -40,7 +40,6 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
 
   Future<void> getNotificationStatus() async {
     final status = await NotificationService.getNotificationStatus();
-
     setState(() {
       notificationStatus = status;
     });
@@ -142,7 +141,6 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                     'communityNotification': value
                                   }),
                                 );
-                                print("value $value");
                                 NotificationService.setNotification(value);
                                 setState(() {
                                   notificationStatus = value;

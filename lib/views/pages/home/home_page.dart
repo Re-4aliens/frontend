@@ -40,6 +40,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    super.initState();
     //알림 설정
     _setNotification();
 
