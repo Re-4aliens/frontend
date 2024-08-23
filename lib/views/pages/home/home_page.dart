@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:aliens/services/notification_service.dart';
 import 'package:aliens/views/components/board_tab_widget.dart';
 import 'package:aliens/views/components/home_widget.dart';
 import 'package:aliens/views/components/setting_widget.dart';
@@ -128,6 +129,7 @@ class _HomePageState extends State<HomePage> {
 
     //허용하면
     if (await Permissions.getNotificationPermission()) {
+      NotificationService.setNotification(true);
       //저장된 설정 정보가 없다면
       if (notification != null) {
       } else {
@@ -152,6 +154,7 @@ class _HomePageState extends State<HomePage> {
         );
       }
     } else {
+      NotificationService.setNotification(false);
       //저장된 설정 정보가 없다면
       if (notification != null) {
       } else {

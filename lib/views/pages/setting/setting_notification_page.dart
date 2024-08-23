@@ -142,7 +142,8 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                     'communityNotification': value
                                   }),
                                 );
-                                NotificationService.setChatNotification(value);
+                                print("value $value");
+                                NotificationService.setNotification(value);
                                 setState(() {
                                   notificationStatus = value;
                                 });
@@ -186,7 +187,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                     'communityNotification': value
                                   }),
                                 );
-                                NotificationService.setChatNotification(value);
+                                NotificationService.setNotification(value);
                                 setState(() {
                                   notificationStatus = value;
                                 });
@@ -225,7 +226,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                     'communityNotification': value
                                   }),
                                 );
-                                NotificationService.setChatNotification(value);
+                                NotificationService.setNotification(value);
                                 setState(() {
                                   notificationStatus = value;
                                 });
@@ -264,7 +265,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                     'communityNotification': value
                                   }),
                                 );
-                                NotificationService.setChatNotification(value);
+                                NotificationService.setNotification(value);
                                 setState(() {
                                   notificationStatus = value;
                                 });
@@ -305,7 +306,7 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                     'communityNotification': value
                                   }),
                                 );
-                                NotificationService.setChatNotification(value);
+                                NotificationService.setNotification(value);
                                 setState(() {
                                   notificationStatus = value;
                                 });

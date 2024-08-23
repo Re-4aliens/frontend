@@ -123,9 +123,11 @@ class NotificationService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
+      print(result);
       return result;
       //fail
     } else {
+      print(json.decode(utf8.decode(response.bodyBytes)));
       return false;
     }
   }
@@ -135,17 +137,16 @@ class NotificationService extends APIService {
     fcm 알림 상태 변경
 
    */
-  static Future<void> setChatNotification(bool decision) async {
+  static Future<void> setNotification(bool decision) async {
     final url = '$domainUrl/notifications/fcm?decision=$decision';
-
     //토큰 읽어오기
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    var response = await http.post(
+    var response = await http.patch(
       Uri.parse(url),
       headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
         'Authorization': jwtToken,
-        'Content-Type': 'application/json',
       },
     );
 
