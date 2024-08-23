@@ -142,21 +142,21 @@ class _SettingWidgetState extends State<SettingWidget> {
                       alignment: Alignment.center,
                       child: Stack(
                         children: [
-                          SizedBox(
+                          Container(
                             height: 90.r,
                             width: 90.r,
-                            // decoration: BoxDecoration(
-                            //   color: profileImageUrl == ''
-                            //       ? Colors.white
-                            //       : Colors.transparent,
-                            //   shape: BoxShape.circle,
-                            //   image: profileImageUrl != ''
-                            //       ? DecorationImage(
-                            //           image: NetworkImage(profileImageUrl),
-                            //           fit: BoxFit.cover,
-                            //         )
-                            //       : null,
-                            // ),
+                            decoration: BoxDecoration(
+                              color: profileImageUrl == ''
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              shape: BoxShape.circle,
+                              image: profileImageUrl != ''
+                                  ? DecorationImage(
+                                      image: NetworkImage(profileImageUrl),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : null,
+                            ),
                             child: profileImageUrl == ''
                                 ? SvgPicture.asset(
                                     'assets/icon/icon_profile.svg',
