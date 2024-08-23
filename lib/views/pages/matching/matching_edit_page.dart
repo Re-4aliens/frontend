@@ -39,12 +39,12 @@ class _MatchingEditPageState extends State<MatchingEditPage> {
   void initState() {
     _firstPreferLanguage = _nationlist.firstWhere((element) =>
         element['value'] ==
-        widget.screenArguments.matchingApplicant!
-            .firstPreferLanguage)['language'];
+        widget.screenArguments.applicant!.preferLanguages!
+            .firstPreferLanguage!)['language'];
     _secondPreferLanguage = _nationlist.firstWhere((element) =>
         element['value'] ==
-        widget.screenArguments.matchingApplicant!
-            .secondPreferLanguage)['language'];
+        widget.screenArguments.applicant!.preferLanguages!
+            .secondPreferLanguage!)['language'];
   }
 
   @override

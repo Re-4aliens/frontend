@@ -13,26 +13,6 @@ class MatchingInfoPage extends StatefulWidget {
 }
 
 class _MatchingInfoPageState extends State<MatchingInfoPage> {
-  int age = 0;
-
-  int calculateInternationalAge(String? birthDateString) {
-    if (birthDateString != null) {
-      // 문자열을 DateTime 객체로 변환
-      DateTime birthDate = DateTime.parse(birthDateString);
-      DateTime today = DateTime.now();
-
-      int age = today.year - birthDate.year;
-
-      if (today.month < birthDate.month ||
-          (today.month == birthDate.month && today.day < birthDate.day)) {
-        age--;
-      }
-
-      return age;
-    }
-    return 0;
-  }
-
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)?.settings.arguments as ScreenArguments?;
@@ -47,14 +27,14 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
     final bool isSmallScreen = screenWidth <= 700;
 
     TextEditingController bioEditingController = TextEditingController();
-    String initialbio = '${args.memberDetails.selfIntroduction}';
+    String initialbio = args.memberDetails.selfIntroduction;
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-    bioEditingController.text = initialbio;
-
-    setState(() {
-      age = calculateInternationalAge(args.memberDetails?.birthday);
-    });
+    @override
+    void initState() {
+      super.initState();
+      bioEditingController.text = initialbio;
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -97,18 +77,16 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                         shape: BoxShape.circle,
                         color: Color(0xff7898FF)))), //파란 반원
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.16,
-              left: 0,
-              right: 0,
-              child: Container(
-                width: isSmallScreen ? 130 : 150,
-                height: isSmallScreen ? 130 : 150,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
-              ),
-            ), //프로필뒤에 하얀원
+                top: MediaQuery.of(context).size.height * 0.16,
+                left: 0,
+                right: 0,
+                child: Container(
+                    width: isSmallScreen ? 130 : 150,
+                    height: isSmallScreen ? 130 : 150,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ))), //프로필뒤에 하얀원
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
@@ -151,7 +129,8 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                   children: [
                                     Expanded(flex: 6, child: Container()),
                                     Text(
-                                      '${args.memberDetails?.name}',
+                                      '${args.applicant?.member?.name}',
+                                      //'${args.applicant['member']['name']}      '
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: isSmallScreen ? 34 : 36,
@@ -163,7 +142,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          '${args.memberDetails.selfIntroduction}',
+                                          args.memberDetails.selfIntroduction,
                                           style: TextStyle(
                                               color: const Color(0xff888888),
                                               fontSize:
@@ -335,7 +314,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                               SizedBox(
                                                 width: 120,
                                                 child: Text(
-                                                  '${args.memberDetails?.nationality}',
+                                                  '${args.applicant?.member?.nationality}',
                                                   style: TextStyle(
                                                     fontSize:
                                                         isSmallScreen ? 18 : 20,
@@ -362,7 +341,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                age.toString(),
+                                                ' ${args.applicant?.member?.age}',
                                                 style: TextStyle(
                                                   fontSize:
                                                       isSmallScreen ? 18 : 20,
@@ -386,7 +365,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                                 ),
                                               ),
                                               Text(
-                                                '${args.memberDetails?.mbti}',
+                                                '${args.applicant?.member?.mbti}',
                                                 style: TextStyle(
                                                   fontSize:
                                                       isSmallScreen ? 18 : 20,
@@ -486,7 +465,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                               height: 2,
                                             ),
                                             Text(
-                                              '${args.matchingApplicant?.firstPreferLanguage}',
+                                              '${args.applicant?.preferLanguages?.firstPreferLanguage}',
                                               style: TextStyle(
                                                 fontSize:
                                                     isSmallScreen ? 18 : 20,
@@ -562,7 +541,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                               height: 2,
                                             ),
                                             Text(
-                                              '${args.matchingApplicant?.secondPreferLanguage}',
+                                              '${args.applicant?.preferLanguages?.secondPreferLanguage}',
                                               style: TextStyle(
                                                 fontSize:
                                                     isSmallScreen ? 18 : 20,
@@ -646,35 +625,18 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                       ),
                     )
                   : Container(
+                      height: 120,
+                      width: 120,
                       margin:
                           const EdgeInsetsDirectional.symmetric(vertical: 20),
-                      child: SvgPicture.asset(
-                        'assets/icon/icon_profile.svg',
-                        height: isSmallScreen ? 100 : 120,
-                        color: const Color(0xffEBEBEB),
-                      ),
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           image: DecorationImage(
                             image: NetworkImage(
                                 args.memberDetails.profileImageUrl),
                             fit: BoxFit.cover,
-                          ),),
+                          )),
                     ),
-
-              //       Container(
-              //           height: 120,
-              //           width: 120,
-              //           margin:
-              //               const EdgeInsetsDirectional.symmetric(vertical: 20),
-              //           decoration: BoxDecoration(
-              //               shape: BoxShape.circle,
-              //               image: DecorationImage(
-              //                 image: NetworkImage(
-              //                     args.memberDetails!.profileImageURL!),
-              //                 fit: BoxFit.cover,
-              //               )),
-              //         ),
             ), //프로필
             Positioned(
               right: 0,
@@ -689,7 +651,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Icon(
-                    args.memberDetails?.gender == 'FEMALE'
+                    args.applicant?.member?.gender == 'FEMALE'
                         ? Icons.female
                         : Icons.male,
                     color: const Color(0xff7898ff),

@@ -57,7 +57,7 @@ class ChatDialog extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return ReportDialog(
-                          id: partner.partnerMemberId, context: context);
+                          id: partner.memberId!, context: context);
                     });
               },
               child: Container(
@@ -122,7 +122,7 @@ class ChatDialog extends StatelessWidget {
                 showDialog(
                     context: context,
                     builder: (builder) => iOSReportDialog(
-                          memberId: partner.partnerMemberId,
+                          memberId: partner.memberId!,
                         ));
               },
               child: Container(
