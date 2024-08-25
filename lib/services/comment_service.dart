@@ -27,7 +27,6 @@ class CommentService extends APIService {
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> body = responseBody['result'];
-      print(body);
       return body.map((dynamic item) => Comment.fromJson(item)).toList();
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -53,11 +52,6 @@ class CommentService extends APIService {
     var url = '$domainUrl/comments/parent';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
-
-    print('jwtToken : $jwtToken');
-    print('boardId : $boardId');
-    print('content : $content');
-
     var response = await http.post(
       Uri.parse(url),
       headers: {
@@ -70,14 +64,10 @@ class CommentService extends APIService {
       }),
     );
 
-    print("부모 댓글 등록 시도");
-
     if (response.statusCode == 200) {
-      print("부모 댓글 등록 성공");
       return true;
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print(responseBody);
       if (responseBody['code'] == 'AT-C-002') {
         // 액세스 토큰 만료
         throw 'AT-C-002';
@@ -97,14 +87,10 @@ class CommentService extends APIService {
   */
   static Future<bool> postNestedComment(
       int boardId, String content, int commentId) async {
-    print("자식 댓글 생성 시도");
     var url = '$domainUrl/comments/child';
 
-    print('boardId : $boardId, content : $content, commentId : $commentId');
     //토큰 읽어오기
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
-
-    print(jwtToken);
 
     var response = await http.post(Uri.parse(url),
         headers: {
@@ -117,14 +103,11 @@ class CommentService extends APIService {
           'parentCommentId': commentId,
         }));
 
-    print(response.statusCode);
-
     //success
     if (response.statusCode == 200) {
       return true;
       //fail
     } else {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 액세스 토큰 만료
         throw 'AT-C-002';

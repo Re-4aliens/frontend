@@ -84,7 +84,7 @@ class _SignUpNameState extends State<SignUpName> {
                 onPressed: () {
                   if (_isButtonEnabled) {
                     member.name = _nameController.text;
-                    print(member.toJson());
+
                     Navigator.pushNamed(context, '/birthday',
                         arguments: member);
                   }

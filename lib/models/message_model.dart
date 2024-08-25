@@ -2,62 +2,57 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:uuid/uuid.dart';
 
 class MessageFields {
-  static const String chatId = 'chatId';
-  static const String chatType = 'chatType';
-  static const String chatContent = 'chatContent';
+  static const String id = 'id';
+  static const String type = 'type';
+  static const String content = 'content';
   static const String roomId = 'roomId';
   static const String senderId = 'senderId';
-  static const String senderName = 'senderName';
   static const String receiverId = 'receiverId';
   static const String sendTime = 'sendTime';
-  static const String unreadCount = 'unreadCount';
+  static const String isRead = 'isRead';
 }
 
 class MessageModel {
-  int? chatId;
-  int? chatType;
-  String? chatContent;
+  String? id;
+  String? type;
+  String? content;
   int? roomId;
   int? senderId;
-  String? senderName;
   int? receiverId;
   String? sendTime;
-  int? unreadCount;
+  bool? isRead;
 
   MessageModel(
-      {this.chatId,
-      this.chatType,
-      this.chatContent,
+      {this.id,
+      this.type,
+      this.content,
       this.roomId,
       this.senderId,
-      this.senderName,
       this.receiverId,
       this.sendTime,
-      this.unreadCount});
+      this.isRead});
 
   MessageModel.fromJson(Map<String, dynamic> json) {
-    chatId = json['chatId'];
-    chatType = json['chatType'];
-    chatContent = json['chatContent'];
+    id = json['id'];
+    type = json['type'];
+    content = json['content'];
     roomId = json['roomId'];
     senderId = json['senderId'];
-    senderName = json['senderName'];
     receiverId = json['receiverId'];
     sendTime = json['sendTime'];
-    unreadCount = json['unreadCount'];
+    isRead = json['isRead'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['chatId'] = chatId;
-    data['chatType'] = chatType;
-    data['chatContent'] = chatContent;
+    data['id'] = id;
+    data['type'] = type;
+    data['content'] = content;
     data['roomId'] = roomId;
     data['senderId'] = senderId;
-    data['senderName'] = senderName;
     data['receiverId'] = receiverId;
     data['sendTime'] = sendTime;
-    data['unreadCount'] = unreadCount;
+    data['isRead'] = isRead;
     return data;
   }
 }

@@ -4,7 +4,6 @@ import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/views/components/setting_list_widget.dart';
 import 'package:aliens/views/components/setting_profile_widget.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -44,7 +43,7 @@ class _SettingWidgetState extends State<SettingWidget> {
         });
       }
     } catch (e) {
-      print('Error picking image: $e');
+      throw Exception(e);
     }
   }
 
@@ -71,7 +70,7 @@ class _SettingWidgetState extends State<SettingWidget> {
         widget.screenArguments.memberDetails = memberDetails!;
       });
     } catch (e) {
-      print('Error initializing member details: $e');
+      throw Exception(e);
     }
   }
 
@@ -348,7 +347,6 @@ class _SettingWidgetState extends State<SettingWidget> {
                   // http 로그아웃 요청
                   // authProvider.logout(context);
 
-                  final fcmToken = await FirebaseMessaging.instance.getToken();
                   await AuthService.logOut(context);
                 },
                 child: Container(

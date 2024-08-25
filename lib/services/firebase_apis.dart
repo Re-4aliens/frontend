@@ -59,12 +59,7 @@ class FirebaseAPIs {
         sound: true,
       );
       String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-      print("APNs Token: $apnsToken");
     }
-
-    await FirebaseMessaging.instance.getToken().then((value) {
-      print("Device Token: $value");
-    });
   }
 
   @pragma('vm:entry-point')
@@ -102,23 +97,19 @@ class FirebaseAPIs {
     );
 
     var notification = await _storage.read(key: 'notifications');
-    print('알림 도착 ${message.data}');
 
     //상대방의 일괄 읽음 알림 (상대방이 채팅창 들어왔을 때의 알림)
     //상대방이 채팅 읽었을 때의 알림
     if (message.data['type'] == 'bulkRead' && message.data['type'] == 'read') {
-      print('일괄읽음 도착 ${message.data}');
     }
     //일괄적으로 보내는 notice
     else if (message.data['type'] == 'notice') {
-      print('notice 도착 ${message.data}');
       //매칭 알림이 켜져있는 경우에만 보냄
       if (json.decode(notification!)['matchingNotification'] == true) {
         _showNotification(message, platformDetails);
         SqlMessageDataBase.instance.deleteDB();
       }
     } else if (message.data['type'] == 'chat') {
-      print('채팅 도착 ${message.data}');
       if (json.decode(notification!)['chatNotification'] == true) {
         _showNotification(message, platformDetails);
       }

@@ -93,7 +93,6 @@ class _SignUpBirthdayState extends State<SignUpBirthday> {
                 onPressed: () {
                   if (_isButtonEnabled) {
                     member.birthday = _BirthdayController.text;
-                    print(member.toJson());
                     Navigator.pushNamed(context, '/gender', arguments: member);
                   }
                 })

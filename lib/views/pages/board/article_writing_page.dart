@@ -465,7 +465,6 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                     child: Button(
                       // 작성 완료
                       onPressed: () {
-                        print(boardCategory);
                         if (title != '' &&
                             content != '' &&
                             boardCategory != 'post4'.tr()) {
@@ -499,21 +498,13 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                             requestImages.add(_images[i].path.toString());
                           }
 
-                          // // 변수 출력
-                          // print('Board Category1: $boardCategory');
-                          // print('Title1: $title');
-                          // print('Content1: $content');
-                          // print('Request Image1s: $requestImages');
-
                           Board newBoard = Board(
                             category: boardCategory,
                             title: title,
                             content: content,
                             imageUrls: requestImages,
                           );
-                          // Board 객체 출력
-                          // print(
-                          //     'New Board: ${newBoard.category}, ${newBoard.title}, ${newBoard.content}, ${newBoard.imageUrls}');
+
                           showDialog(
                               context: context,
                               builder: (_) => FutureBuilder(

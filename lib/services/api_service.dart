@@ -1,6 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 const String domainUrl = 'https://friendship-aliens.com';
+const String websocketUrl = 'ws://friendship-aliens.com';
 
 class APIService {
   static String? token;

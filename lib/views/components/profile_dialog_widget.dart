@@ -56,7 +56,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                       ],
                     ),
                     Text(
-                      widget.partner.name,
+                      '${widget.partner.name}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 36,
@@ -65,7 +65,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                     Padding(
                       padding: const EdgeInsets.all(15),
                       child: Text(
-                        widget.partner.aboutMe,
+                        '${widget.partner.aboutMe}',
                         style: const TextStyle(
                           color: Color(0xff888888),
                           fontSize: 16,
@@ -137,7 +137,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       image: NetworkImage(
-                                          widget.partner.profileImageUrl))),
+                                          widget.partner.profileImageUrl!))),
                               padding: const EdgeInsets.all(5),
                             )),
                   Align(

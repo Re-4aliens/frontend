@@ -63,13 +63,10 @@ final supportedLocales = [const Locale('en', 'US'), const Locale('ko', 'KR')];
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('백그라운드 도착1');
 }
 
 @pragma('vm:entry-point')
-void backgroundHandler(NotificationResponse details) {
-  print('백그라운드 도착2');
-}
+void backgroundHandler(NotificationResponse details) {}
 
 Future<void> initializeNotification() async {
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -89,9 +86,7 @@ Future<void> initializeNotification() async {
         requestAlertPermission: true,
       ),
     ),
-    onDidReceiveNotificationResponse: (details) {
-      print(details);
-    },
+    onDidReceiveNotificationResponse: (details) {},
     onDidReceiveBackgroundNotificationResponse: backgroundHandler,
   );
 
@@ -102,9 +97,7 @@ Future<void> initializeNotification() async {
   );
 
   RemoteMessage? message = await FirebaseMessaging.instance.getInitialMessage();
-  if (message != null) {
-    print(message);
-  }
+  if (message != null) {}
 }
 
 void main() async {

@@ -38,7 +38,6 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
     super.initState();
     //_loadInitialMBTI();  // 서버에서 MBTI 정보 호출
 
-    print(widget.screenArguments!.memberDetails.mbti);
     _selectedMBTI = widget.screenArguments!.memberDetails.mbti;
   }
 
@@ -97,7 +96,6 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
                         }).toList(),
                         value: _selectedMBTI,
                         onChanged: (value) {
-                          print(value);
                           setState(() {
                             _selectedMBTI = value!;
                           });

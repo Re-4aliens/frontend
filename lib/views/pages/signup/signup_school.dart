@@ -72,7 +72,6 @@ class _SignUpSchoolState extends State<SignUpSchool> {
                 child: const Text('다음'),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    print(member.toJson());
                     Navigator.pushNamed(context, '/email', arguments: member);
                   }
                 })

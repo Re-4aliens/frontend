@@ -42,6 +42,16 @@ class _MatchingListPageState extends State<MatchingListPage> {
   int selectedIndex = -1;
 
   @override
+  void initState() {
+    super.initState();
+    for (var partner in widget.screenArguments.partners!) {
+      setState(() {
+        partner.profileImageUrl = null;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
@@ -130,14 +140,14 @@ class _MatchingListPageState extends State<MatchingListPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ChattingPage(
-                                      matchingApplicant: widget
-                                          .screenArguments.matchingApplicant,
-                                      partner: widget.screenArguments
-                                          .partners![selectedIndex],
-                                      memberDetails:
-                                          widget.screenArguments.memberDetails,
-                                    )),
+                              builder: (context) => ChattingPage(
+                                partner: widget
+                                    .screenArguments.partners![selectedIndex],
+                                memberId: widget
+                                        .screenArguments.applicant!.memberId ??
+                                    0,
+                              ),
+                            ),
                           );
                         }
                       },
@@ -190,19 +200,21 @@ class MatchingList extends StatefulWidget {
 class _MatchingListState extends State<MatchingList> {
   bool isSelected = false;
 
+  String? getNationCode(String countryName) {
+    for (var country in countries) {
+      if (country['name']!.toLowerCase() == countryName.toLowerCase()) {
+        return country['code']!.toLowerCase();
+      }
+    }
+    return null; // 해당하는 국가가 없을 경우 null 반환
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
 
-    var flagSrc = '';
-    for (Map<String, String> country in countries) {
-      if (country['name'] == widget.partner.nationality.toString()) {
-        flagSrc = country['code']!;
-        break;
-      }
-    }
-
+    var flagSrc = getNationCode(widget.partner.nationality!);
     return widget.partner.mbti != null
         ? Container(
             margin: EdgeInsets.symmetric(vertical: isSmallScreen ? 10 : 15),
@@ -265,7 +277,6 @@ class _MatchingListState extends State<MatchingList> {
                     children: [
                       InkWell(
                         onTap: () {
-                          print(widget.partner.profileImageUrl);
                           /*
                       Navigator.pushNamed(context, '/info/your',
                           arguments: widget.partner);
@@ -298,7 +309,7 @@ class _MatchingListState extends State<MatchingList> {
                                                     height: 50,
                                                   ),
                                                   Text(
-                                                    widget.partner.name,
+                                                    '${widget.partner.name}',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -312,7 +323,7 @@ class _MatchingListState extends State<MatchingList> {
                                                         const EdgeInsets.all(
                                                             15),
                                                     child: Text(
-                                                      widget.partner.aboutMe,
+                                                      '${widget.partner.aboutMe}',
                                                       style: const TextStyle(
                                                         color:
                                                             Color(0xff888888),
@@ -358,7 +369,7 @@ class _MatchingListState extends State<MatchingList> {
                                                                   CountryFlag(
                                                                 country: Country
                                                                     .fromCode(
-                                                                        flagSrc),
+                                                                        flagSrc!),
                                                               ),
                                                             ),
                                                           ),
@@ -415,8 +426,8 @@ class _MatchingListState extends State<MatchingList> {
                                                                 DecorationImage(
                                                               image: NetworkImage(
                                                                   widget.partner
-                                                                      .profileImageUrl),
-                                                            ), // tester image 오류로 인한 임시 주석처리
+                                                                      .profileImageUrl!),
+                                                            ),
                                                           ),
                                                           padding:
                                                               const EdgeInsets
@@ -456,7 +467,7 @@ class _MatchingListState extends State<MatchingList> {
                                     ),
                                   ));
                         },
-                        child: widget.partner.profileImageUrl == ''
+                        child: widget.partner.profileImageUrl == null
                             ? SvgPicture.asset(
                                 'assets/icon/icon_profile.svg',
                                 width: 50,
@@ -466,13 +477,11 @@ class _MatchingListState extends State<MatchingList> {
                                 width: 50,
                                 height: 50,
                                 decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                  image: DecorationImage(
-                                    image: NetworkImage(
-                                        widget.partner.profileImageUrl),
-                                  ),
-                                ),
+                                    shape: BoxShape.circle,
+                                    color: Colors.white,
+                                    image: DecorationImage(
+                                        image: NetworkImage(
+                                            widget.partner.profileImageUrl!))),
                                 padding: const EdgeInsets.all(5),
                               ),
                       ),
@@ -489,7 +498,7 @@ class _MatchingListState extends State<MatchingList> {
                             Row(
                               children: [
                                 Text(
-                                  widget.partner.name,
+                                  '${widget.partner.name}',
                                   style: TextStyle(
                                     fontSize: isSmallScreen ? 16 : 20,
                                     fontWeight: FontWeight.bold,
@@ -525,7 +534,7 @@ class _MatchingListState extends State<MatchingList> {
                               ],
                             ),
                             Text(
-                              widget.partner.mbti,
+                              '${widget.partner.mbti}',
                               style: TextStyle(
                                 fontSize: isSmallScreen ? 14 : 16,
                                 color: widget.isClicked
@@ -545,7 +554,7 @@ class _MatchingListState extends State<MatchingList> {
                           )
                         ]),
                         child: CountryFlag(
-                          country: Country.fromCode(flagSrc),
+                          country: Country.fromCode(flagSrc!),
                           height: 30,
                         ),
                       )

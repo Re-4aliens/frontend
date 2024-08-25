@@ -75,9 +75,7 @@ class _SettingDeletePageState extends State<SettingDeletePage> {
               child: Text('setting-withdrawal'.tr()),
               onPressed: () async {
                 Map<String, String> allValues = await storage.readAll();
-                allValues.forEach((key, value) {
-                  print('$key: $value');
-                });
+                allValues.forEach((key, value) {});
 
                 var userInfo = await storage.read(key: 'auth');
 

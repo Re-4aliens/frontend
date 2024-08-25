@@ -8,8 +8,10 @@ class iOSReportDialog extends StatefulWidget {
   const iOSReportDialog({
     super.key,
     required this.memberId,
+    this.chatRoomId,
   });
   final int memberId;
+  final int? chatRoomId;
 
   @override
   State<iOSReportDialog> createState() => _iOSReportDialogState();
@@ -109,7 +111,6 @@ class _iOSReportDialogState extends State<iOSReportDialog> {
                         onChanged: (String? value) {
                           setState(() {
                             _reportReason = value;
-                            print('$_reportReason');
                           });
                         },
                       ),
@@ -148,7 +149,7 @@ class _iOSReportDialogState extends State<iOSReportDialog> {
                 children: [
                   Expanded(
                     child: InkWell(
-                      child: Center(child: Text('cancle'.tr())),
+                      child: Center(child: Text('cancel'.tr())),
                       onTap: () {
                         Navigator.of(context).pop();
                       },
@@ -168,8 +169,12 @@ class _iOSReportDialogState extends State<iOSReportDialog> {
                             break;
                           }
                         }
-                        if (await ReportService.reportPartner(reportCategory,
-                            _textEditingController.text, widget.memberId)) {
+                        if (await ReportService.reportPartner(
+                          widget.memberId,
+                          widget.chatRoomId ?? -1,
+                          reportCategory,
+                          _textEditingController.text,
+                        )) {
                           Navigator.pop(context);
                           showDialog(
                               context: context,

@@ -71,9 +71,8 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       setState(() {
         memberDetails = details;
       });
-    } catch (error) {
-      // 에러 처리
-      print('Error fetching member details: $error');
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -93,8 +92,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
       });
 
       try {
-        print("page is $page");
-
         // +1 된 페이지 게시글 리스트를 받아온다.
         var fetchedData = await MarketService.getMarketArticles(page);
 
@@ -126,13 +123,11 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
     try {
       var fetchedData =
           await MarketService.getMarketArticles(0); // API 호출 함수 호출
-      print(fetchedData);
       setState(() {
         marketBoardList = fetchedData; // 불러온 데이터를 리스트에 할당
       });
-    } catch (error) {
-      // 에러 처리
-      print("API 호출 중 오류 발생: $error");
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -295,7 +290,6 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                         ),
                       ),
                     );
-                    print(widget.marketBoard.toString());
                   },
                   child: Container(
                     padding: EdgeInsets.only(

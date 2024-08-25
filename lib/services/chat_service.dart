@@ -1,152 +1,217 @@
 import 'dart:convert';
+import 'package:aliens/models/chat_room_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:stomp_dart_client/stomp_config.dart';
 import 'api_service.dart';
 import 'package:aliens/models/message_model.dart';
-import 'package:aliens/services/auth_service.dart';
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:stomp_dart_client/stomp.dart';
+import 'package:stomp_dart_client/stomp_frame.dart';
 
 class ChatService extends APIService {
+  static late StompClient stompClient;
+  static bool isConnected = false;
+
+  static final StreamController<MessageModel> _messageController =
+      StreamController<MessageModel>.broadcast();
+  static Stream<MessageModel> get messageStream => _messageController.stream;
+
+  static final StreamController<int> _readReceiptController =
+      StreamController<int>.broadcast();
+  static Stream<int> get readReceiptStream => _readReceiptController.stream;
+
+  static late int roomIdToSubscribe;
+  static late int memberId;
+
   /*
+    
+    웹소켓 연결 요청
 
-  메세지 받아오기
+  */
+  static Future<void> connectWebSocket(int roomId, int id) async {
+    var url = '$domainUrl/ws';
+    roomIdToSubscribe = roomId;
+    memberId = id;
 
-   */
-  static Future<List<MessageModel>> getMessages(roomId, context) async {
-    var url = 'http://3.34.2.246:8081/api/v1/chat/$roomId'; //mocksever
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    //토큰 읽어오기
-    var jwtToken = await APIService.storage.read(key: 'token');
-
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-    String chatToken = '';
-    try {
-      chatToken = await getChatToken();
-    } catch (e) {
-      if (e == "AT-C-002") {
-        try {
-          await AuthService.getAccessToken();
-        } catch (e) {
-          if (e == "AT-C-005") {
-            //토큰 및 정보 삭제
-            await APIService.storage.delete(key: 'auth');
-            await APIService.storage.delete(key: 'token');
-
-            //스택 비우고 화면 이동
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-          }
-        }
-        chatToken = await getChatToken();
-      }
-    }
-
-    var response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-        'ChattingToken': chatToken
-      },
+    stompClient = StompClient(
+      config: StompConfig.SockJS(
+        url: url,
+        onConnect: onStompConnect,
+        beforeConnect: () async {
+          await Future.delayed(const Duration(milliseconds: 200));
+        },
+        stompConnectHeaders: {
+          'Authorization': jwtToken,
+        },
+        webSocketConnectHeaders: {
+          'Authorization': jwtToken,
+        },
+      ),
     );
 
-    //success
-    if (response.statusCode == 200) {
-      List<dynamic> body = json.decode(utf8.decode(response.bodyBytes));
-      return body.map((dynamic item) => MessageModel.fromJson(item)).toList();
-      //fail
-    } else {
-      throw Exception('요청 오류');
+    stompClient.activate();
+  }
+
+  static void onStompConnect(StompFrame frame) {
+    isConnected = true;
+    subscribeWebSocket(roomIdToSubscribe, memberId);
+  }
+
+  /*
+    
+    웹소켓 구독 요청
+
+  */
+  static Future<void> subscribeWebSocket(int roomId, int memberId) async {
+    if (isConnected) {
+      stompClient.subscribe(
+        destination: '/room/$roomId',
+        callback: (StompFrame frame) {
+          if (frame.body != null) {
+            Map<String, dynamic> messageJson = json.decode(frame.body!);
+            if (messageJson.containsKey('readBy')) {
+              /*
+
+                구독 후 읽음 처리 메시지 수신
+  
+              */
+              int readBy = messageJson['readBy'];
+              _readReceiptController.add(readBy);
+            } else {
+              /*
+  
+                구독 후 메시지 수신
+  
+              */
+
+              if (messageJson.containsKey('sendTime') &&
+                  messageJson['sendTime'] is int) {
+                int sendTimeInt = messageJson['sendTime'];
+                DateTime sendTimeDateTime =
+                    DateTime.fromMillisecondsSinceEpoch(sendTimeInt);
+                messageJson['sendTime'] = sendTimeDateTime.toIso8601String();
+              }
+
+              MessageModel message = MessageModel.fromJson(messageJson);
+              _messageController.add(message);
+            }
+          }
+        },
+      );
+      ChatService.sendReadRequest(roomId, memberId);
     }
   }
 
   /*
-  
-    채팅 토큰 받아오기
+    
+    웹소켓 연결 해제
+
+  */
+  static void disconnectWebSocket() {
+    if (isConnected) {
+      stompClient.deactivate();
+      isConnected = false;
+    }
+  }
+
+  /*
+
+    메시지 전송 요청
+
+  */
+  static void sendMessage(MessageModel message) {
+    if (isConnected) {
+      Map<String, dynamic> request = {
+        'type': message.type,
+        'content': message.content,
+        'roomId': message.roomId,
+        'senderId': message.senderId,
+        'receiverId': message.receiverId,
+      };
+
+      stompClient.send(
+        destination: '/chat/send',
+        body: json.encode(request),
+        headers: {'content-type': 'application/json'},
+      );
+    }
+  }
+
+  /*
+   
+    읽음 처리 요청
+
+  */
+  static void sendReadRequest(int roomId, int memberId) async {
+    if (isConnected) {
+      Map<String, dynamic> readRequest = {
+        'roomId': roomId,
+        'memberId': memberId,
+      };
+
+      stompClient.send(
+        destination: '/chat/read',
+        body: json.encode(readRequest),
+        headers: {'content-type': 'application/json'},
+      );
+    }
+  }
+
+  /*
+
+    메시지 조회
 
    */
-  static Future<String> getChatToken() async {
-    var url = 'http://3.34.2.246:8080/api/v1/chat/token';
-    //토큰 읽어오기
-    var jwtToken = await APIService.storage.read(key: 'token');
+  static Future<List<MessageModel>> getMessages(roomId) async {
+    var url = '$domainUrl/chat/room/$roomId/messages';
 
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    //토큰 읽어오기
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
     var response = await http.get(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json'
+        'Authorization': jwtToken,
       },
     );
 
     //success
     if (response.statusCode == 200) {
-      return json.decode(utf8.decode(response.bodyBytes))['data'];
+      Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
+      List<dynamic> items = body['result'];
+      return items.map((dynamic item) => MessageModel.fromJson(item)).toList();
 
       //fail
     } else {
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        // 액세스 토큰 만료
-        throw 'AT-C-002';
-      } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-          'AT-C-007') {
-        // 로그아웃된 토큰
-        throw 'AT-C-007';
-      } else {}
-
       throw Exception('요청 오류');
     }
   }
 
   /* 
 
-    채팅 정보 받아오기
+    채팅방 요약 정보 조회
 
   */
-  static Future<Map<String, dynamic>> getChatSummary(context) async {
-    var url = 'http://3.34.2.246:8081/api/v1/chat/summary';
+  static Future<ChatData> getChatSummary() async {
+    var url = '$domainUrl/chat/summaries';
+
     //토큰 읽어오기
-    var jwtToken = await APIService.storage.read(key: 'token');
-    //accessToken만 보내기
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
-
-    String chatToken = '';
-    try {
-      chatToken = await getChatToken();
-    } catch (e) {
-      if (e == "AT-C-002") {
-        print(e);
-        try {
-          await AuthService.getAccessToken();
-        } catch (e) {
-          if (e == "AT-C-005") {
-            //토큰 및 정보 삭제
-            await APIService.storage.delete(key: 'auth');
-            await APIService.storage.delete(key: 'token');
-
-            //스택 비우고 화면 이동
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-          }
-        }
-        chatToken = await getChatToken();
-      }
-    }
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
     var response = await http.get(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
-        'Content-Type': 'application/json',
-        'ChattingToken': chatToken
+        'Authorization': jwtToken,
       },
     );
 
     //success
     if (response.statusCode == 200) {
-      return json.decode(utf8.decode(response.bodyBytes));
+      final responseBody = json.decode(utf8.decode(response.bodyBytes));
+
+      return ChatData.fromJson(responseBody['result']);
 
       //fail
     } else {

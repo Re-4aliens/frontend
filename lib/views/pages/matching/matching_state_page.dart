@@ -93,9 +93,7 @@ class _MatchingStatePageState extends State<MatchingStatePage> {
                         tween: Tween(
                             begin: Duration(seconds: diff.inSeconds),
                             end: Duration.zero),
-                        onEnd: () {
-                          print('Timer ended');
-                        },
+                        onEnd: () {},
                         builder: (BuildContext context, Duration value,
                             Widget? child) {
                           final days = value.inDays.toString().padLeft(2, '0');

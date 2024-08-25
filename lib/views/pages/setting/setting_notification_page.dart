@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:aliens/services/notification_service.dart';
 import 'package:aliens/views/components/appbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,22 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
   late bool communityNotification;
   late bool inAppNotification;
 
+  late bool notificationStatus;
+
   static const storage = FlutterSecureStorage();
 
   @override
-  void initState() {}
+  void initState() {
+    super.initState();
+    getNotificationStatus();
+  }
+
+  Future<void> getNotificationStatus() async {
+    final status = await NotificationService.getNotificationStatus();
+    setState(() {
+      notificationStatus = status;
+    });
+  }
 
   Future<void> getNotification() async {
     //토큰 읽어오기
@@ -44,11 +57,6 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
     communityNotification =
         json.decode(notification)['communityNotification'] == true;
     inAppNotification = json.decode(inApp!)['inAppNotification'] == true;
-
-    print(allNotification);
-    print(matchingNotification);
-    print(chatNotification);
-    print(communityNotification);
   }
 
   @override
@@ -113,6 +121,8 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                               ),
                             ],
                           ),
+
+                          // 전체 알림 설정
                           CupertinoSwitch(
                             value: allNotification,
                             activeColor: const Color(0xff7898FF),
@@ -131,7 +141,10 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                                     'communityNotification': value
                                   }),
                                 );
-                                setState(() {});
+                                NotificationService.setNotification(value);
+                                setState(() {
+                                  notificationStatus = value;
+                                });
                               }
                             },
                           ),
@@ -162,25 +175,20 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                               if (await Permissions
                                   .getNotificationPermission()) {
                                 await storage.delete(key: 'notifications');
-                                if (value == true &&
-                                    chatNotification == true &&
-                                    communityNotification == true) {
-                                  allNotification = true;
-                                } else {
-                                  allNotification = false;
-                                }
 
                                 await storage.write(
                                   key: 'notifications',
                                   value: jsonEncode({
-                                    'allNotification': allNotification,
+                                    'allNotification': value,
                                     'matchingNotification': value,
-                                    'chatNotification': chatNotification,
-                                    'communityNotification':
-                                        communityNotification,
+                                    'chatNotification': value,
+                                    'communityNotification': value
                                   }),
                                 );
-                                setState(() {});
+                                NotificationService.setNotification(value);
+                                setState(() {
+                                  notificationStatus = value;
+                                });
                               }
                             },
                           ),
@@ -206,25 +214,20 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                               if (await Permissions
                                   .getNotificationPermission()) {
                                 await storage.delete(key: 'notifications');
-                                if (matchingNotification == true &&
-                                    value == true &&
-                                    communityNotification == true) {
-                                  allNotification = true;
-                                } else {
-                                  allNotification = false;
-                                }
+
                                 await storage.write(
                                   key: 'notifications',
                                   value: jsonEncode({
-                                    'allNotification': allNotification,
-                                    'matchingNotification':
-                                        matchingNotification,
+                                    'allNotification': value,
+                                    'matchingNotification': value,
                                     'chatNotification': value,
-                                    'communityNotification':
-                                        communityNotification,
+                                    'communityNotification': value
                                   }),
                                 );
-                                setState(() {});
+                                NotificationService.setNotification(value);
+                                setState(() {
+                                  notificationStatus = value;
+                                });
                               }
                             },
                           ),
@@ -250,24 +253,20 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                               if (await Permissions
                                   .getNotificationPermission()) {
                                 await storage.delete(key: 'notifications');
-                                if (matchingNotification == true &&
-                                    value == true &&
-                                    chatNotification == true) {
-                                  allNotification = true;
-                                } else {
-                                  allNotification = false;
-                                }
+
                                 await storage.write(
                                   key: 'notifications',
                                   value: jsonEncode({
-                                    'allNotification': allNotification,
-                                    'matchingNotification':
-                                        matchingNotification,
-                                    'chatNotification': chatNotification,
-                                    'communityNotification': value,
+                                    'allNotification': value,
+                                    'matchingNotification': value,
+                                    'chatNotification': value,
+                                    'communityNotification': value
                                   }),
                                 );
-                                setState(() {});
+                                NotificationService.setNotification(value);
+                                setState(() {
+                                  notificationStatus = value;
+                                });
                               }
                             },
                           ),
@@ -288,24 +287,30 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             ),
                           ),
                           CupertinoSwitch(
-                              value: inAppNotification,
-                              activeColor: const Color(0xff7898FF),
-                              trackColor: const Color(0xffC1C1C1),
-                              onChanged: (value) async {
-                                if (await Permissions
-                                    .getNotificationPermission()) {
-                                  await storage.delete(
-                                      key: 'inAppNotification');
+                            value: inAppNotification,
+                            activeColor: const Color(0xff7898FF),
+                            trackColor: const Color(0xffC1C1C1),
+                            onChanged: (value) async {
+                              if (await Permissions
+                                  .getNotificationPermission()) {
+                                await storage.delete(key: 'notifications');
 
-                                  await storage.write(
-                                    key: 'inAppNotification',
-                                    value: jsonEncode({
-                                      'inAppNotification': value,
-                                    }),
-                                  );
-                                  setState(() {});
-                                }
-                              }),
+                                await storage.write(
+                                  key: 'notifications',
+                                  value: jsonEncode({
+                                    'allNotification': value,
+                                    'matchingNotification': value,
+                                    'chatNotification': value,
+                                    'communityNotification': value
+                                  }),
+                                );
+                                NotificationService.setNotification(value);
+                                setState(() {
+                                  notificationStatus = value;
+                                });
+                              }
+                            },
+                          ),
                         ],
                       ),
                     ),

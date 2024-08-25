@@ -100,9 +100,6 @@ class MarketService extends APIService {
       'productQuality': marketArticle.productQuality,
     });
 
-    print(marketArticle.saleStatus);
-    print(marketArticle.productQuality);
-
     // JSON 데이터를 MultipartFile로 추가
     var jsonPart = http.MultipartFile.fromString(
       'request',
@@ -131,10 +128,6 @@ class MarketService extends APIService {
       request.files.add(file);
     }
 
-    for (var file in request.files) {
-      print('File: ${file.filename}, Content-Type: ${file.contentType}');
-    }
-
     try {
       var response = await request.send();
 
@@ -143,8 +136,6 @@ class MarketService extends APIService {
       } else {
         final responseBody = await response.stream.bytesToString();
         final responseJson = json.decode(responseBody);
-
-        print(responseJson);
 
         final errorCode = responseJson['code'];
         if (errorCode == 'AT-C-002') {
@@ -156,7 +147,6 @@ class MarketService extends APIService {
         }
       }
     } catch (e) {
-      print('Error: $e');
       rethrow;
     }
   }
@@ -193,7 +183,6 @@ class MarketService extends APIService {
     );
 
     if (response.statusCode == 200) {
-      print(json.decode(utf8.decode(response.bodyBytes)));
       return true;
     } else {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -327,7 +316,6 @@ class MarketService extends APIService {
         }
       }
     } catch (error) {
-      print('Error fetching market search results: $error');
       return [];
     }
   }

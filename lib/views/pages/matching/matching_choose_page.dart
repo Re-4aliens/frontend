@@ -170,7 +170,6 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                           setState(() {
                             //첫 번째가 선택이 안됐으면
                             if (selectedIndex[0] == -1) {
-                              print('첫 번째 선택');
                               //본인을 넣는다.
                               selectedIndex[0] = (2 * i);
                               //첫 번째가 선택이 됐는데
@@ -178,13 +177,11 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                 selectedIndex[1] == -1) {
                               //본인이면
                               if (selectedIndex[0] == (2 * i)) {
-                                print('첫 번째 취소');
                                 //값을 없앤다.
                                 selectedIndex[0] = -1;
                               }
                               //본인이 아니면
                               else {
-                                print('두 번째 선택');
                                 //두 번째에 값을 넣는다.
                                 selectedIndex[1] = (2 * i);
                               }
@@ -192,16 +189,13 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                             } else if (selectedIndex[1] != -1) {
                               //본인이면
                               if (selectedIndex[1] == (2 * i)) {
-                                print('두 번째 취소');
                                 //값을 없앤다.
                                 selectedIndex[1] = -1;
                               } //본인이 아닌데 1번 값이라면
                               else if (selectedIndex[0] == (2 * i)) {
                                 //변화 x
-                                print('첫번째꺼 이미선택됨');
                               } //본인이 아니면
                               else {
-                                print('두 번째 선택');
                                 //두 번째에 값을 넣는다.
                                 selectedIndex[1] == (2 * i);
                               }
@@ -222,7 +216,6 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                           setState(() {
                             //첫 번째가 선택이 안됐으면
                             if (selectedIndex[0] == -1) {
-                              print('첫 번째 선택');
                               //본인을 넣는다.
                               selectedIndex[0] = (2 * i + 1);
                               //첫 번째가 선택이 됐는데
@@ -230,13 +223,11 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                                 selectedIndex[1] == -1) {
                               //본인이면
                               if (selectedIndex[0] == (2 * i + 1)) {
-                                print('첫 번째 취소');
                                 //값을 없앤다.
                                 selectedIndex[0] = -1;
                               }
                               //본인이 아니면
                               else {
-                                print('두 번째 선택');
                                 //두 번째에 값을 넣는다.
                                 selectedIndex[1] = (2 * i + 1);
                               }
@@ -244,16 +235,13 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                             } else if (selectedIndex[1] != -1) {
                               //본인이면
                               if (selectedIndex[1] == (2 * i + 1)) {
-                                print('두 번째 취소');
                                 //값을 없앤다.
                                 selectedIndex[1] = -1;
                               } //본인이 아닌데 1번 값이라면
                               else if (selectedIndex[0] == (2 * i + 1)) {
                                 //변화 x
-                                print('첫번째꺼 이미선택됨');
                               } //본인이 아니면
                               else {
-                                print('두 번째 선택');
                                 //두 번째에 값을 넣는다.
                                 selectedIndex[1] = (2 * i + 1);
                               }
@@ -292,7 +280,6 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                             //토큰 및 정보 삭제
                             await storage.delete(key: 'auth');
                             await storage.delete(key: 'token');
-                            print('로그아웃, 정보 지움');
 
                             //스택 비우고 화면 이동
                             Navigator.of(context).pushNamedAndRemoveUntil(
@@ -319,9 +306,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                       //페이지 이동
                       Navigator.pushNamed(context, '/apply/done',
                           arguments: args);
-                    } else {
-                      print('요청 실패');
-                    }
+                    } else {}
                   } else {
                     //fail
                   }

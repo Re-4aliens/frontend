@@ -1,63 +1,59 @@
 class Partner {
-  final String roomStatus;
-  final int chatRoomId;
-  final int partnerMemberId;
-  final String name;
-  final String mbti;
-  final String gender;
-  final String nationality;
-  final String profileImageUrl;
-  final String aboutMe;
-  final String firstPreferLanguage;
-  final String secondPreferLanguage;
-  final String relation;
+  String? roomStatus; // roomState -> roomStatus로 수정
+  int? chatRoomId; // roomId -> chatRoomId로 수정
+  int? partnerMemberId; // memberId -> partnerMemberId로 수정
+  String? name;
+  String? mbti;
+  String? gender;
+  String? nationality;
+  String? profileImageUrl; // profileImage -> profileImageUrl로 수정
+  String? aboutMe; // selfIntroduction -> aboutMe로 수정
+  String? firstPreferLanguage;
+  String? secondPreferLanguage;
 
   Partner({
-    required this.roomStatus,
-    required this.chatRoomId,
-    required this.partnerMemberId,
-    required this.name,
-    required this.mbti,
-    required this.gender,
-    required this.nationality,
-    required this.profileImageUrl,
-    required this.aboutMe,
-    required this.firstPreferLanguage,
-    required this.secondPreferLanguage,
-    required this.relation,
+    this.roomStatus,
+    this.chatRoomId,
+    this.partnerMemberId,
+    this.name,
+    this.mbti,
+    this.gender,
+    this.nationality,
+    this.profileImageUrl,
+    this.aboutMe,
+    this.firstPreferLanguage,
+    this.secondPreferLanguage,
   });
 
-  factory Partner.fromJson(Map<String, dynamic> json) {
-    return Partner(
-      roomStatus: json['roomStatus'],
-      chatRoomId: json['chatRoomId'],
-      partnerMemberId: json['partnerMemberId'],
-      name: json['name'],
-      mbti: json['mbti'],
-      gender: json['gender'],
-      nationality: json['nationality'],
-      profileImageUrl: json['profileImageUrl'],
-      aboutMe: json['aboutMe'],
-      firstPreferLanguage: json['firstPreferLanguage'],
-      secondPreferLanguage: json['secondPreferLanguage'],
-      relation: json['relation'],
-    );
+  // JSON 데이터를 객체로 변환하는 생성자
+  Partner.fromJson(Map<String, dynamic> json) {
+    roomStatus = json['roomStatus'];
+    chatRoomId = json['chatRoomId'];
+    partnerMemberId = json['partnerMemberId'];
+    name = json['name'];
+    mbti = json['mbti'];
+    gender = json['gender'];
+    nationality = json['nationality'];
+    profileImageUrl = json['profileImageUrl'];
+    aboutMe = json['aboutMe'];
+    firstPreferLanguage = json['firstPreferLanguage'];
+    secondPreferLanguage = json['secondPreferLanguage'];
   }
 
+  // 객체를 JSON으로 변환하는 메서드
   Map<String, dynamic> toJson() {
-    return {
-      'roomStatus': roomStatus,
-      'chatRoomId': chatRoomId,
-      'partnerMemberId': partnerMemberId,
-      'name': name,
-      'mbti': mbti,
-      'gender': gender,
-      'nationality': nationality,
-      'profileImageUrl': profileImageUrl,
-      'aboutMe': aboutMe,
-      'firstPreferLanguage': firstPreferLanguage,
-      'secondPreferLanguage': secondPreferLanguage,
-      'relation': relation,
-    };
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['roomStatus'] = roomStatus;
+    data['chatRoomId'] = chatRoomId;
+    data['partnerMemberId'] = partnerMemberId;
+    data['name'] = name;
+    data['mbti'] = mbti;
+    data['gender'] = gender;
+    data['nationality'] = nationality;
+    data['profileImageUrl'] = profileImageUrl;
+    data['aboutMe'] = aboutMe;
+    data['firstPreferLanguage'] = firstPreferLanguage;
+    data['secondPreferLanguage'] = secondPreferLanguage;
+    return data;
   }
 }

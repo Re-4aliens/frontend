@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:aliens/services/notification_service.dart';
 import 'package:aliens/views/components/board_tab_widget.dart';
 import 'package:aliens/views/components/home_widget.dart';
 import 'package:aliens/views/components/setting_widget.dart';
@@ -39,18 +40,16 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    super.initState();
     //알림 설정
     _setNotification();
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('앱 내부 알림 도착${message.data}');
-
       var inAppNotification = await storage.read(key: 'inAppNotification');
 
       if (message.data['type'] == 'ARTICLE_LIKE') {
-        print(json.decode(inAppNotification!)['inAppNotification']);
-        if (json.decode(inAppNotification)['inAppNotification'] == true) {
+        if (json.decode(inAppNotification!)['inAppNotification'] == true) {
           showOverlayNotification((context) {
             return Card(
               margin: const EdgeInsets.symmetric(horizontal: 4),
@@ -131,7 +130,7 @@ class _HomePageState extends State<HomePage> {
 
     //허용하면
     if (await Permissions.getNotificationPermission()) {
-      print('알림 허용 상태');
+      NotificationService.setNotification(true);
       //저장된 설정 정보가 없다면
       if (notification != null) {
       } else {
@@ -156,7 +155,7 @@ class _HomePageState extends State<HomePage> {
         );
       }
     } else {
-      print('알림 불허 상태');
+      NotificationService.setNotification(false);
       //저장된 설정 정보가 없다면
       if (notification != null) {
       } else {
