@@ -103,6 +103,7 @@ class UserService extends APIService {
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
       return MemberDetails.fromJson(responseBody['result']);
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
