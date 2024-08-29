@@ -58,7 +58,7 @@ class _ArticlePageState extends State<ArticlePage> {
     super.initState();
     switch (widget.board.category) {
       case 'FREE':
-        boardCategory = 'free'.tr();
+        boardCategory = 'free-posting'.tr();
         break;
       case 'FOOD':
         boardCategory = 'food'.tr();
