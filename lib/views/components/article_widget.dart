@@ -124,33 +124,42 @@ class _ArticleWidgetState extends State<ArticleWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5).h,
-                  child: Text(
-                    widget.board.title,
-                    style: TextStyle(
-                        fontSize: 14.spMin,
-                        color: const Color(0xff444444),
-                        fontWeight: FontWeight.bold),
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                  ),
-                ),
-                widget.board.category == "정보게시판"
-                    ? const SizedBox()
-                    : Padding(
-                        padding:
-                            const EdgeInsets.only(top: 5.0, bottom: 10.0).h,
-                        child: Text(
-                          widget.board.content,
-                          style: TextStyle(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5).h,
+                      child: Text(
+                        widget.board.title,
+                        style: TextStyle(
                             fontSize: 14.spMin,
-                            color: const Color(0xff616161),
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.fade,
-                        ),
+                            color: const Color(0xff444444),
+                            fontWeight: FontWeight.bold),
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
                       ),
+                    ),
+                    widget.board.category == "정보게시판"
+                        ? const SizedBox()
+                        : Padding(
+                            padding:
+                                const EdgeInsets.only(top: 5.0, bottom: 10.0).h,
+                            child: Text(
+                              widget.board.content,
+                              style: TextStyle(
+                                fontSize: 14.spMin,
+                                color: const Color(0xff616161),
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.fade,
+                            ),
+                          ),
+                  ],
+                ),
                 widget.board.imageUrls.isEmpty
                     ? const SizedBox()
                     : SizedBox(
