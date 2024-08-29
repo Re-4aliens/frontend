@@ -29,9 +29,12 @@ class MatchingService extends APIService {
       if (response.statusCode == 200) {
         var responseData = json.decode(utf8.decode(response.bodyBytes));
         var result = responseData['result'];
+        print(responseData);
 
         return result;
       } else {
+        var responseData = json.decode(utf8.decode(response.bodyBytes));
+        print(responseData);
         // 실패 시 오류 처리
         if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
             'AT-C-002') {
@@ -71,11 +74,13 @@ class MatchingService extends APIService {
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> matchingPartner = responseBody['result'];
+      print(responseBody);
       return matchingPartner
           .map((dynamic item) => Partner.fromJson(item))
           .toList();
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -101,6 +106,8 @@ class MatchingService extends APIService {
     Applicant? applicant;
     List<Partner>? partners;
 
+    print("매칭 데이터");
+
     try {
       status = await UserService.getApplicantStatus();
 
@@ -119,6 +126,7 @@ class MatchingService extends APIService {
         partners = null;
       }
     } catch (e) {
+      print('error $e');
       // 필요한 경우, 예외 상황에서 기본값을 설정합니다.
       memberDetails = MemberDetails(
         name: 'name',

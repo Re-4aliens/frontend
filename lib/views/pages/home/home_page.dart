@@ -365,74 +365,74 @@ class _HomePageState extends State<HomePage> {
               ]
             : null,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        selectedItemColor: const Color(0xFF7898FF),
-        unselectedItemColor: const Color(0xFFD9D9D9),
-        onTap: (int index) {
-          setState(() {
-            selectedIndex = index;
-            isDrawerStart = false;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SvgPicture.asset(
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            IconButton(
+              icon: SvgPicture.asset(
                 'assets/icon/icon_home.svg',
-                width: 25.r,
-                height: 25.r,
+                width: 23.r,
+                height: 23.r,
                 color: selectedIndex == 0
                     ? const Color(0xFF7898FF)
                     : const Color(0xFFD9D9D9),
               ),
+              onPressed: () {
+                setState(() {
+                  selectedIndex = 0;
+                });
+              },
             ),
-            label: 'homepage-home'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SvgPicture.asset(
+            IconButton(
+              icon: SvgPicture.asset(
                 'assets/icon/icon_chatting.svg',
-                width: 25.r,
-                height: 25.r,
+                width: 23.r,
+                height: 23.r,
                 color: selectedIndex == 1
                     ? const Color(0xFF7898FF)
                     : const Color(0xFFD9D9D9),
               ),
+              onPressed: () {
+                setState(() {
+                  selectedIndex = 1;
+                });
+              },
             ),
-            label: 'homepage-chatting1'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(8),
-              child: SvgPicture.asset(
+            IconButton(
+              icon: SvgPicture.asset(
                 'assets/icon/ICON_board.svg',
-                width: 25.r,
-                height: 25.r,
+                width: 23.r,
+                height: 23.r,
                 color: selectedIndex == 2
                     ? const Color(0xFF7898FF)
                     : const Color(0xFFD9D9D9),
               ),
+              onPressed: () {
+                setState(() {
+                  selectedIndex = 2;
+                });
+              },
             ),
-            label: "board".tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SvgPicture.asset(
+            IconButton(
+              icon: SvgPicture.asset(
                 'assets/icon/icon_setting.svg',
-                width: 25.r,
-                height: 25.r,
+                width: 23.r,
+                height: 23.r,
                 color: selectedIndex == 3
                     ? const Color(0xFF7898FF)
                     : const Color(0xFFD9D9D9),
               ),
+              onPressed: () {
+                setState(() {
+                  selectedIndex = 3;
+                });
+              },
             ),
-            label: 'homepage-setting'.tr(),
-          )
-        ],
+          ],
+        ),
       ),
       body: pageWidget.elementAt(selectedIndex),
     );
