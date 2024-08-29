@@ -87,7 +87,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
   @override
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
-    final bookmarkProvider = Provider.of<BookmarksProvider>(context);
+    // final bookmarkProvider = Provider.of<BookmarksProvider>(context);
 
     return Padding(
       padding: EdgeInsets.only(top: 10.h),
@@ -188,56 +188,68 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10).h,
-                child: Text(
-                  widget.board.title,
-                  style: TextStyle(
-                      fontSize: 14.spMin,
-                      color: const Color(0xff444444),
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              widget.board.imageUrls.isEmpty
-                  ? const SizedBox()
-                  : SizedBox(
-                      height: 90.h,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: widget.board.imageUrls.length,
-                          itemBuilder: (context, index) {
-                            return Row(
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.only(right: 10).w,
-                                  height: 80.h,
-                                  width: 80.h,
-                                  decoration: BoxDecoration(
-                                      color: const Color(0xfff8f8f8),
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                        image: NetworkImage(
-                                            widget.board.imageUrls[index]),
-                                        fit: BoxFit.cover,
-                                      )),
-                                  padding: const EdgeInsets.all(25.0).r,
-                                ),
-                              ],
-                            );
-                          }),
-                    ),
-              widget.board.category == "정보게시판"
-                  ? SizedBox(
-                      height: 10.h,
-                    )
-                  : Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 15.0).h,
-                      child: Text(
-                        widget.board.content,
-                        style: TextStyle(
-                            fontSize: 14.spMin, color: const Color(0xff616161)),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 5.h,
                       ),
-                    ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5).h,
+                        child: Text(
+                          widget.board.title,
+                          style: TextStyle(
+                              fontSize: 14.spMin,
+                              color: const Color(0xff444444),
+                              fontWeight: FontWeight.bold),
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                        ),
+                      ),
+                      widget.board.category == "정보게시판"
+                          ? SizedBox(
+                              height: 5.h,
+                            )
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 5, bottom: 10.0).h,
+                              child: Text(
+                                widget.board.content,
+                                style: TextStyle(
+                                    fontSize: 14.spMin,
+                                    color: const Color(0xff616161)),
+                                maxLines: 2,
+                                overflow: TextOverflow.fade,
+                              ),
+                            ),
+                    ],
+                  ),
+                  widget.board.imageUrls.isEmpty
+                      ? const SizedBox()
+                      : SizedBox(
+                          height: 80.h,
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 10).w,
+                            height: 70.h,
+                            width: 70.h,
+                            decoration: BoxDecoration(
+                              color: const Color(0xfff8f8f8),
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: NetworkImage(widget.board.imageUrls[0]),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(25.0).r,
+                          ),
+                        ),
+                ],
+              ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -256,8 +268,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                       padding: const EdgeInsets.all(4.0).r,
                       child: SvgPicture.asset(
                         'assets/icon/ICON_good.svg',
-                        width: 30.r,
-                        height: 30.r,
+                        width: 25.r,
+                        height: 25.r,
                       ),
                     ),
                   ),
@@ -271,8 +283,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                     padding: const EdgeInsets.all(4.0).r,
                     child: SvgPicture.asset(
                       'assets/icon/icon_comment.svg',
-                      width: 30.r,
-                      height: 30.r,
+                      width: 25.r,
+                      height: 25.r,
                     ),
                   ),
                   Padding(

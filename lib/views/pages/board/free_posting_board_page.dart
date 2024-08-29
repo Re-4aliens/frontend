@@ -50,6 +50,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
 
   String getNationCode(nationality) {
     var nationCode = '';
+    print(nationality);
     for (Map<String, String> country in countries) {
       if (country['name']! == nationality) {
         nationCode = country['code']!;
@@ -171,6 +172,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                       controller: _scrollController,
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
+                        print(widget.screenArguments.memberDetails.nationality);
                         var nationCode = getNationCode(
                             widget.screenArguments.memberDetails.nationality);
                         return Column(

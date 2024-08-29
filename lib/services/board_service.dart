@@ -45,6 +45,7 @@ class BoardService extends APIService {
       final result = responseBody['result'];
 
       List<dynamic> body = result;
+      print(body);
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
 
