@@ -207,7 +207,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                                 children: [
                                                   ListTile(
                                                     title: Text(
-                                                      "자유게시판",
+                                                      "free-posting".tr(),
                                                       style: TextStyle(
                                                           color: const Color(
                                                               0xff888888),
