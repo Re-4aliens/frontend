@@ -37,7 +37,6 @@ class _SettingMBTIEditPageState extends State<SettingMBTIEditPage> {
   void initState() {
     super.initState();
     //_loadInitialMBTI();  // 서버에서 MBTI 정보 호출
-
     _selectedMBTI = widget.screenArguments!.memberDetails.mbti;
   }
 

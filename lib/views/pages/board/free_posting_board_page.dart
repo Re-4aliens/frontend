@@ -172,9 +172,8 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                       controller: _scrollController,
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
-                        print(widget.screenArguments.memberDetails.nationality);
-                        var nationCode = getNationCode(
-                            widget.screenArguments.memberDetails.nationality);
+                        var nationCode = getNationCode(boardProvider
+                            .articleList[index].memberProfileDto!.nationality);
                         return Column(
                           children: [
                             ArticleWidget(

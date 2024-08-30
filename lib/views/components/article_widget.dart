@@ -63,11 +63,11 @@ class _ArticleWidgetState extends State<ArticleWidget> {
         children: [
           Padding(
             padding: const EdgeInsets.only(
-                    top: 15.0, bottom: 15, left: 10, right: 15)
+                    top: 13.0, bottom: 10.0, left: 10, right: 15)
                 .r,
             child: SvgPicture.asset(
               'assets/icon/icon_profile.svg',
-              width: 34.r,
+              width: 30.r,
               color: const Color(0xff7898ff),
             ),
           ),
@@ -188,35 +188,36 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                   onTap: () {
                     boardProvider.addLike(widget.board.id!, widget.index);
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0).r,
-                    child: SvgPicture.asset(
-                      'assets/icon/ICON_good.svg',
-                      width: 25.r,
-                      height: 25.r,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 4, right: 15).w,
-                  child: boardProvider.greatCounts[widget.index] == 0
-                      ? const Text('')
-                      : Text('${boardProvider.greatCounts[widget.index]}'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0).r,
                   child: SvgPicture.asset(
-                    'assets/icon/icon_comment.svg',
+                    'assets/icon/ICON_good.svg',
                     width: 25.r,
                     height: 25.r,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0).r,
-                  child: widget.board.commentCount == 0
-                      ? const Text('')
-                      : Text('${widget.board.commentCount}'),
+                SizedBox(
+                  width: 6.0.r,
                 ),
+                boardProvider.greatCounts[widget.index] == 0
+                    ? SizedBox(
+                        width: 5.0.r,
+                      )
+                    : Text('${boardProvider.greatCounts[widget.index]}'),
+                SizedBox(
+                  width: 6.0.r,
+                ),
+                SvgPicture.asset(
+                  'assets/icon/icon_comment.svg',
+                  width: 25.r,
+                  height: 25.r,
+                ),
+                SizedBox(
+                  width: 6.0.r,
+                ),
+                widget.board.commentCount == 0
+                    ? SizedBox(
+                        width: 5.0.r,
+                      )
+                    : Text('${widget.board.commentCount}'),
               ],
             )
           ],

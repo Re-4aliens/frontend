@@ -171,8 +171,8 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
                       controller: _scrollController,
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
-                        var nationCode = getNationCode(
-                            widget.screenArguments.memberDetails.nationality);
+                        var nationCode = getNationCode(boardProvider
+                            .articleList[index].memberProfileDto!.nationality);
 
                         return Column(
                           children: [

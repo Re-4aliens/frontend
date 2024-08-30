@@ -103,7 +103,7 @@ class UserService extends APIService {
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print(responseBody['result']);
+      print('멤버 디테일 데이터 : ${responseBody['result']}');
       return MemberDetails.fromJson(responseBody['result']);
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -165,12 +165,13 @@ class UserService extends APIService {
    */
   static Future<bool> updateMBTI(String newMBTI) async {
     var url = '$domainUrl/members/mbti';
+    print(newMBTI);
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    var requestBody = jsonEncode({
-      'newMBTI': newMBTI,
-    });
+    // var requestBody = jsonEncode({
+    //   'newMBTI': newMBTI,
+    // });
 
     var response = await http.patch(
       Uri.parse(url),
@@ -178,7 +179,7 @@ class UserService extends APIService {
         'Authorization': jwtToken,
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: requestBody,
+      body: newMBTI,
     );
 
     if (response.statusCode == 200) {
@@ -239,17 +240,13 @@ class UserService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    var requestBody = jsonEncode({
-      'newAboutMe': newAboutMe,
-    });
-
     var response = await http.patch(
       Uri.parse(url),
       headers: {
         'Authorization': jwtToken,
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: requestBody,
+      body: newAboutMe,
     );
 
     if (response.statusCode == 200) {

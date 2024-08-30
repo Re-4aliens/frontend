@@ -171,8 +171,8 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                       controller: _scrollController,
                       itemCount: boardProvider.articleList.length,
                       itemBuilder: (context, index) {
-                        var nationCode =
-                            getNationCode(widget.screenArguments.memberDetails);
+                        var nationCode = getNationCode(boardProvider
+                            .articleList[index].memberProfileDto!.nationality);
                         return Column(
                           children: [
                             ArticleWidget(

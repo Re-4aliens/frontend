@@ -48,6 +48,7 @@ class BoardService extends APIService {
       print(body);
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
+      boards = List.from(boards.reversed);
 
       return boards;
     } else {
@@ -75,6 +76,7 @@ class BoardService extends APIService {
       List<Board> articles = articlesData.map((articleData) {
         return Board.fromJson(articleData);
       }).toList();
+      articles = List.from(articles.reversed);
 
       return articles;
     } else {
@@ -140,6 +142,7 @@ class BoardService extends APIService {
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
+      boards = List.from(boards.reversed);
       return boards;
     } else {
       throw Exception('요청 오류');
@@ -169,6 +172,7 @@ class BoardService extends APIService {
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
+      boards = List.from(boards.reversed);
       return boards;
     } else {
       throw Exception('요청 오류');
@@ -218,7 +222,7 @@ class BoardService extends APIService {
         'marketBoardImages',
         '',
         filename: 'empty.txt',
-        contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
+        contentType: MediaType('text', 'plain'),
       );
       request.files.add(file);
     }
@@ -319,6 +323,7 @@ class BoardService extends APIService {
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
+      boards = List.from(boards.reversed);
       return boards;
     } else {
       throw Exception('요청 오류');
@@ -327,7 +332,7 @@ class BoardService extends APIService {
 
   /*
   
-    공지사항 전체조회 (테스트 실패)
+    공지사항 전체조회 
   
   */
   static Future<List<dynamic>> boardNotice() async {

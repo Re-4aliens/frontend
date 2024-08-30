@@ -139,6 +139,7 @@ class NotificationService extends APIService {
     final url = '$domainUrl/notifications/fcm?decision=$decision';
     //토큰 읽어오기
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+    print(jwtToken);
 
     var response = await http.patch(
       Uri.parse(url),
@@ -152,16 +153,11 @@ class NotificationService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
+      print(result);
       //fail
     } else {
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        // 액세스 토큰 만료
-        throw 'AT-C-002';
-      } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-          'AT-C-007') {
-        // 로그아웃된 토큰
-        throw 'AT-C-007';
-      } else {}
+      print(utf8.decode(response.bodyBytes));
+      print("실패");
     }
   }
 }

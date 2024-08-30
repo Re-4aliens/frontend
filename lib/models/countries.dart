@@ -118,6 +118,7 @@ List<Map<String, String>> countries = [
   {'name': 'Kenya', 'code': 'KE'},
   {'name': 'Kiribati', 'code': 'KI'},
   {'name': 'Korea', 'code': 'KR'},
+  {'name': 'KOREA', 'code': 'KR'},
   {'name': 'North Korea', 'code': 'KP'},
   {'name': 'Kuwait', 'code': 'KW'},
   {'name': 'Kyrgyzstan', 'code': 'KG'},

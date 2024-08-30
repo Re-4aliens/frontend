@@ -75,8 +75,12 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
 
   String getNationCode(nationality) {
     var nationCode = '';
+    print(nationality);
     for (Map<String, String> country in countries) {
-      if (country['name']!.toUpperCase() == nationality) {
+      if (country['name']! == 'KOREA') {
+        print('KR');
+      }
+      if (country['name']! == nationality) {
         nationCode = country['code']!;
         break;
       }
@@ -101,11 +105,11 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(
-                          top: 10.0, bottom: 10, left: 10, right: 15)
+                          top: 13.0, bottom: 10, left: 10, right: 15)
                       .r,
                   child: SvgPicture.asset(
                     'assets/icon/icon_profile.svg',
-                    width: 35.r,
+                    width: 30.r,
                     color: const Color(0xff7898ff),
                   ),
                 ),
