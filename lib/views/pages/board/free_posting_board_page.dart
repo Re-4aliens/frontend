@@ -50,7 +50,6 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
 
   String getNationCode(nationality) {
     var nationCode = '';
-    print(nationality);
     for (Map<String, String> country in countries) {
       if (country['name']! == nationality) {
         nationCode = country['code']!;

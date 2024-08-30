@@ -75,11 +75,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
 
   String getNationCode(nationality) {
     var nationCode = '';
-    print(nationality);
     for (Map<String, String> country in countries) {
-      if (country['name']! == 'KOREA') {
-        print('KR');
-      }
       if (country['name']! == nationality) {
         nationCode = country['code']!;
         break;

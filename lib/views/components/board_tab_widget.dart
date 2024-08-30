@@ -13,7 +13,8 @@ class TotalBoardWidget extends StatefulWidget {
   State<StatefulWidget> createState() => _TotalBoardWidgetState();
 }
 
-class _TotalBoardWidgetState extends State<TotalBoardWidget> {
+class _TotalBoardWidgetState extends State<TotalBoardWidget>
+    with AutomaticKeepAliveClientMixin<TotalBoardWidget> {
   final ScrollController _scrollController = ScrollController();
   int page = 0;
 
@@ -39,24 +40,32 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
 
   @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // AutomaticKeepAliveClientMixin의 기능을 호출
     final boardProvider = Provider.of<BoardProvider>(context);
     return Container(
       decoration: const BoxDecoration(color: Colors.white),
-      child: boardProvider.loading
-          ? Container(
-              alignment: Alignment.center,
-              child: const Image(
-                  image: AssetImage("assets/illustration/loading_01.gif")))
+      child: boardProvider.loading && page == 0
+          ? const Center(
+              child: Image(
+                  image: AssetImage("assets/illustration/loading_01.gif")),
+            )
           : ListView.builder(
               controller: _scrollController,
-              itemCount: boardProvider.articleList.length,
+              itemCount: boardProvider.articleList.length +
+                  (boardProvider.loading ? 1 : 0),
               itemBuilder: (context, index) {
+                if (index == boardProvider.articleList.length) {
+                  // 스크롤 끝에서 로딩 중일 때 보여줄 로딩 표시
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
                 final board = boardProvider.articleList[index];
 
                 return Column(
@@ -71,7 +80,11 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget> {
                     )
                   ],
                 );
-              }),
+              },
+            ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
