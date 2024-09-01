@@ -39,6 +39,7 @@ class AuthService extends APIService {
 
         return true;
       } else {
+        print(utf8.decode(response.bodyBytes));
         return false;
       }
     } catch (e) {

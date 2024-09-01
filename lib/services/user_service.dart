@@ -106,18 +106,9 @@ class UserService extends APIService {
       print('멤버 디테일 데이터 : ${responseBody['result']}');
       return MemberDetails.fromJson(responseBody['result']);
     } else {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      var responseBody = utf8.decode(response.bodyBytes);
       print(responseBody);
-      if (responseBody['code'] == 'AT-C-002') {
-        // 엑세스 토큰 만료
-        throw 'AT-C-002';
-      } else if (responseBody['code'] == 'AT-C-007') {
-        // 로그아웃된 토큰
-        throw 'AT-C-007';
-      } else {
-        // 예외
-        throw Exception('요청 오류: ${responseBody['message']}');
-      }
+      throw Exception('요청 오류');
     }
   }
 

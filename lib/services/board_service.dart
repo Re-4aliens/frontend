@@ -232,9 +232,16 @@ class BoardService extends APIService {
       if (response.statusCode == 200) {
         return true;
       } else {
+        var responseData = await response.stream.toBytes();
+        // UTF-8로 디코딩하여 문자열로 변환
+        var responseBody = utf8.decode(responseData);
+
+        print(responseBody); // 내용 출력
+
         return false;
       }
     } catch (e) {
+      print(e);
       return false;
     }
   }

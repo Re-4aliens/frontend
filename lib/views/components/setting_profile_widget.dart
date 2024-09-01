@@ -93,7 +93,7 @@ Widget buildProfileList(context, index, screenArgument) {
           alignment: Alignment.centerRight,
           child: index < 2
               ? Text(
-                  '${memberInfo.elementAt(index)}',
+                  '${memberInfo.elementAt(index)}'.toUpperCase(),
                   style: TextStyle(
                       fontSize: 18.h,
                       color: const Color(0xff7898FF),

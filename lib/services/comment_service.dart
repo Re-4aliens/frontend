@@ -27,6 +27,7 @@ class CommentService extends APIService {
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> body = responseBody['result'];
+      print("댓글 $body");
       return body.map((dynamic item) => Comment.fromJson(item)).toList();
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
@@ -65,18 +66,12 @@ class CommentService extends APIService {
     );
 
     if (response.statusCode == 200) {
+      print("댓글 등록 성공");
       return true;
     } else {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      if (responseBody['code'] == 'AT-C-002') {
-        // 액세스 토큰 만료
-        throw 'AT-C-002';
-      } else if (responseBody['code'] == 'AT-C-007') {
-        // 로그아웃된 토큰
-        throw 'AT-C-007';
-      } else {
-        return false;
-      }
+      var responseBody = utf8.decode(response.bodyBytes);
+      print("댓글 등록 실패 $responseBody");
+      return false;
     }
   }
 
@@ -88,6 +83,9 @@ class CommentService extends APIService {
   static Future<bool> postNestedComment(
       int boardId, String content, int commentId) async {
     var url = '$domainUrl/comments/child';
+
+    print(boardId);
+    print(commentId);
 
     //토큰 읽어오기
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
@@ -127,6 +125,7 @@ class CommentService extends APIService {
    */
   static Future<bool> deleteComment(int commentId) async {
     var url = '$domainUrl/comments?id=$commentId';
+    print(commentId);
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -139,8 +138,10 @@ class CommentService extends APIService {
     );
 
     if (response.statusCode == 200) {
+      print('댓글 삭제 성공 ${utf8.decode(response.bodyBytes)}');
       return true;
     } else {
+      print('댓글 삭제 실패 ${utf8.decode(response.bodyBytes)}');
       return false;
     }
   }
