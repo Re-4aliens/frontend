@@ -108,21 +108,14 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
             children: [
               IconButton(
                 onPressed: () {
-                  if (widget.backPage == 'marketboard') {
-                    setState(() {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) => MarketBoardPage(
-                            screenArguments: widget.screenArguments,
-                            marketBoard: widget.marketBoard,
-                            memberDetails:
-                                widget.screenArguments.memberDetails),
-                      ));
-                    });
-                  } else {
-                    setState(() {
-                      Navigator.of(context).pop();
-                    });
-                  }
+                  setState(() {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (BuildContext context) => MarketBoardPage(
+                          screenArguments: widget.screenArguments,
+                          marketBoard: widget.marketBoard,
+                          memberDetails: widget.screenArguments.memberDetails),
+                    ));
+                  });
                 },
                 icon: SvgPicture.asset(
                   'assets/icon/icon_back.svg',
