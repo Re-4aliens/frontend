@@ -48,6 +48,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
     boardProvider.getLikeCounts();
     bookmarkProvider.getbookmarksCounts(0);
 
+    print(widget.board.category);
+
     switch (widget.board.category) {
       case 'FREE':
         boardCategory = 'free-posting'.tr();
@@ -91,57 +93,26 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
 
     return GestureDetector(
       onTap: () {
-        if (widget.board.category == "정보게시판") {
+        if (widget.board.category == "INFO") {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => InfoArticlePage(board: widget.board),
             ),
           );
-        } else if (widget.board.category == "장터게시판") {
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (BuildContext context) {
-              return FutureBuilder(
-                future: MarketService.getMarketArticle(widget.board.id!),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  } else if (snapshot.hasError) {
-                    return AlertDialog(
-                      title: const Text('Error'),
-                      content: const Text('Failed to load market article.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    );
-                  } else {
-                    MarketBoard data = snapshot.data;
-                    return Container();
-                  }
-                },
-              );
-            },
-          ).then((_) {
-            MarketService.getMarketArticle(widget.board.id!).then((data) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MarketDetailPage(
-                    screenArguments: widget.screenArguments,
-                    marketBoard: data,
-                    index: -1,
-                    backPage: '',
-                  ),
+        } else if (widget.board.category == "MARKET") {
+          MarketService.getMarketArticle(widget.board.id!).then((data) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MarketDetailPage(
+                  screenArguments: widget.screenArguments,
+                  marketBoard: data,
+                  index: -1,
+                  backPage: '',
                 ),
-              ).then((value) => boardProvider.getAllArticles());
-            });
+              ),
+            ).then((value) => boardProvider.getAllArticles());
           });
         } else {
           Navigator.push(
