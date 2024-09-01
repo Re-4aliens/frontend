@@ -135,11 +135,24 @@ class _ArticlePageState extends State<ArticlePage> {
                           padding: const EdgeInsets.only(
                                   top: 15.0, bottom: 15, left: 10, right: 15)
                               .r,
-                          child: SvgPicture.asset(
-                            'assets/icon/icon_profile.svg',
-                            width: 34.r,
-                            color: const Color(0xff7898ff),
-                          ),
+                          child: widget.board.memberProfileDto == null
+                              ? SvgPicture.asset(
+                                  'assets/icon/icon_profile.svg',
+                                  width: 34.r,
+                                  color: const Color(0xff7898ff),
+                                )
+                              : Container(
+                                  height: 34.r,
+                                  width: 34.r,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: NetworkImage(widget.board
+                                          .memberProfileDto!.profileImageUrl),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
                         ),
                         Flexible(
                           child: Container(
@@ -379,12 +392,33 @@ class _ArticlePageState extends State<ArticlePage> {
                                                         const EdgeInsets.only(
                                                                 right: 10.0)
                                                             .r,
-                                                    child: SvgPicture.asset(
-                                                      'assets/icon/icon_profile.svg',
-                                                      width: 25.r,
-                                                      color: const Color(
-                                                          0xffc1c1c1),
-                                                    ),
+                                                    child: widget.board
+                                                                .memberProfileDto ==
+                                                            null
+                                                        ? SvgPicture.asset(
+                                                            'assets/icon/icon_profile.svg',
+                                                            width: 25.r,
+                                                            color: const Color(
+                                                                0xff7898ff),
+                                                          )
+                                                        : Container(
+                                                            height: 25.r,
+                                                            width: 25.r,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              shape: BoxShape
+                                                                  .circle,
+                                                              image:
+                                                                  DecorationImage(
+                                                                image: NetworkImage(widget
+                                                                    .board
+                                                                    .memberProfileDto!
+                                                                    .profileImageUrl),
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
+                                                            ),
+                                                          ),
                                                   ),
                                                   Text(
                                                     commentProvider
@@ -573,14 +607,36 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                         right:
                                                                             10.0)
                                                                     .w,
-                                                                child:
-                                                                    SvgPicture
+                                                                child: widget
+                                                                            .board
+                                                                            .memberProfileDto ==
+                                                                        null
+                                                                    ? SvgPicture
                                                                         .asset(
-                                                                  'assets/icon/icon_profile.svg',
-                                                                  width: 25.r,
-                                                                  color: const Color(
-                                                                      0xffc1c1c1),
-                                                                ),
+                                                                        'assets/icon/icon_profile.svg',
+                                                                        width:
+                                                                            25.r,
+                                                                        color: const Color(
+                                                                            0xff7898ff),
+                                                                      )
+                                                                    : Container(
+                                                                        height:
+                                                                            25.r,
+                                                                        width:
+                                                                            25.r,
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          shape:
+                                                                              BoxShape.circle,
+                                                                          image:
+                                                                              DecorationImage(
+                                                                            image:
+                                                                                NetworkImage(widget.board.memberProfileDto!.profileImageUrl),
+                                                                            fit:
+                                                                                BoxFit.cover,
+                                                                          ),
+                                                                        ),
+                                                                      ),
                                                               ),
                                                               Flexible(
                                                                 child:

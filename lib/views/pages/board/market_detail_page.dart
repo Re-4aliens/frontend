@@ -481,13 +481,36 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                         right:
                                                                             10.0)
                                                                     .r,
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/icon/icon_profile.svg',
-                                                              width: 25.r,
-                                                              color: const Color(
-                                                                  0xffc1c1c1),
-                                                            ),
+                                                            child: widget
+                                                                        .marketBoard
+                                                                        .memberProfileDto ==
+                                                                    null
+                                                                ? SvgPicture
+                                                                    .asset(
+                                                                    'assets/icon/icon_profile.svg',
+                                                                    width: 25.r,
+                                                                    color: const Color(
+                                                                        0xffc1c1c1),
+                                                                  )
+                                                                : Container(
+                                                                    height:
+                                                                        25.r,
+                                                                    width: 25.r,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      image:
+                                                                          DecorationImage(
+                                                                        image: NetworkImage(widget
+                                                                            .marketBoard
+                                                                            .memberProfileDto!
+                                                                            .profileImageUrl),
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                           ),
                                                           Text(
                                                             marketcommentProvider
@@ -690,14 +713,24 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                       Padding(
                                                                         padding:
                                                                             const EdgeInsets.only(right: 10.0).w,
-                                                                        child: SvgPicture
-                                                                            .asset(
-                                                                          'assets/icon/icon_profile.svg',
-                                                                          width:
-                                                                              25.r,
-                                                                          color:
-                                                                              const Color(0xffc1c1c1),
-                                                                        ),
+                                                                        child: widget.marketBoard.memberProfileDto ==
+                                                                                null
+                                                                            ? SvgPicture.asset(
+                                                                                'assets/icon/icon_profile.svg',
+                                                                                width: 25.r,
+                                                                                color: const Color(0xffc1c1c1),
+                                                                              )
+                                                                            : Container(
+                                                                                height: 25.r,
+                                                                                width: 25.r,
+                                                                                decoration: BoxDecoration(
+                                                                                  shape: BoxShape.circle,
+                                                                                  image: DecorationImage(
+                                                                                    image: NetworkImage(widget.marketBoard.memberProfileDto!.profileImageUrl),
+                                                                                    fit: BoxFit.cover,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
                                                                       ),
                                                                       Flexible(
                                                                         child:
