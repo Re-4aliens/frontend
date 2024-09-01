@@ -56,174 +56,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
   Widget build(BuildContext context) {
     final boardProvider = Provider.of<BoardProvider>(context);
 
-    return ListTile(
-      //제목
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-                    top: 13.0, bottom: 10.0, left: 10, right: 15)
-                .r,
-            child: SvgPicture.asset(
-              'assets/icon/icon_profile.svg',
-              width: 30.r,
-              color: const Color(0xff7898ff),
-            ),
-          ),
-          Flexible(
-            child: Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(right: 10),
-              child: Text(
-                '${widget.board.memberProfileDto?.name}/${widget.nationCode}',
-                overflow: TextOverflow.ellipsis,
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16.spMin),
-              ),
-            ),
-          ),
-          Text(
-            DataUtils.getTime(widget.board.createdAt),
-            style:
-                TextStyle(fontSize: 16.spMin, color: const Color(0xffc1c1c1)),
-          ),
-          InkWell(
-            onTap: () {
-              showDialog(
-                  context: context,
-                  builder: (builder) {
-                    return BoardDialog(
-                      board: widget.board,
-                      memberDetails: widget.memberDetails,
-                      boardCategory: "일반게시판",
-                    );
-                  });
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0).w,
-              child: SvgPicture.asset(
-                'assets/icon/ICON_more.svg',
-                width: 25.r,
-                height: 25.r,
-                color: const Color(0xffc1c1c1),
-              ),
-            ),
-          )
-        ],
-      ),
-
-      //내용
-      subtitle: Container(
-        padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 5.h,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5).h,
-                      child: Text(
-                        widget.board.title,
-                        style: TextStyle(
-                            fontSize: 14.spMin,
-                            color: const Color(0xff444444),
-                            fontWeight: FontWeight.bold),
-                        maxLines: 1,
-                        overflow: TextOverflow.fade,
-                      ),
-                    ),
-                    widget.board.category == "정보게시판"
-                        ? const SizedBox()
-                        : Padding(
-                            padding:
-                                const EdgeInsets.only(top: 5.0, bottom: 10.0).h,
-                            child: Text(
-                              widget.board.content,
-                              style: TextStyle(
-                                fontSize: 14.spMin,
-                                color: const Color(0xff616161),
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.fade,
-                            ),
-                          ),
-                  ],
-                ),
-                widget.board.imageUrls.isEmpty
-                    ? const SizedBox()
-                    : SizedBox(
-                        height: 80.h,
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 10).w,
-                          height: 70.h,
-                          width: 70.h,
-                          decoration: BoxDecoration(
-                            color: const Color(0xfff8f8f8),
-                            borderRadius: BorderRadius.circular(10),
-                            image: DecorationImage(
-                              image: NetworkImage(widget.board.imageUrls[0]),
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          padding: const EdgeInsets.all(25.0).r,
-                        ),
-                      ),
-              ],
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: () {
-                    boardProvider.addLike(widget.board.id!, widget.index);
-                  },
-                  child: SvgPicture.asset(
-                    'assets/icon/ICON_good.svg',
-                    width: 25.r,
-                    height: 25.r,
-                  ),
-                ),
-                SizedBox(
-                  width: 6.0.r,
-                ),
-                boardProvider.greatCounts[widget.index] == 0
-                    ? SizedBox(
-                        width: 5.0.r,
-                      )
-                    : Text('${boardProvider.greatCounts[widget.index]}'),
-                SizedBox(
-                  width: 6.0.r,
-                ),
-                SvgPicture.asset(
-                  'assets/icon/icon_comment.svg',
-                  width: 25.r,
-                  height: 25.r,
-                ),
-                SizedBox(
-                  width: 6.0.r,
-                ),
-                widget.board.commentCount == 0
-                    ? SizedBox(
-                        width: 5.0.r,
-                      )
-                    : Text('${widget.board.commentCount}'),
-              ],
-            )
-          ],
-        ),
-      ),
-
+    return GestureDetector(
       onTap: () {
         widget.board.category == "정보게시판"
             ? Navigator.push(
@@ -241,6 +74,193 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                         )),
               );
       },
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 20.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15).r,
+                      child: widget.board.memberProfileDto == null
+                          ? SvgPicture.asset(
+                              'assets/icon/icon_profile.svg',
+                              width: 30.r,
+                              color: const Color(0xff7898ff),
+                            )
+                          : Container(
+                              height: 30.r,
+                              width: 30.r,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(widget
+                                      .board.memberProfileDto!.profileImageUrl),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              '${widget.board.memberProfileDto?.name}/${widget.nationCode}',
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16.spMin),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      DataUtils.getTime(widget.board.createdAt),
+                      style: TextStyle(
+                          fontSize: 16.spMin, color: const Color(0xffc1c1c1)),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (builder) {
+                              return BoardDialog(
+                                board: widget.board,
+                                memberDetails: widget.memberDetails,
+                                boardCategory: "일반게시판",
+                              );
+                            });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0).w,
+                        child: SvgPicture.asset(
+                          'assets/icon/ICON_more.svg',
+                          width: 25.r,
+                          height: 25.r,
+                          color: const Color(0xffc1c1c1),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 5.h), // 간격 조정
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5).h,
+                        child: Text(
+                          widget.board.title,
+                          style: TextStyle(
+                              fontSize: 14.spMin,
+                              color: const Color(0xff444444),
+                              fontWeight: FontWeight.bold),
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                        ),
+                      ),
+                      widget.board.category == "정보게시판"
+                          ? SizedBox(height: 5.h)
+                          : Padding(
+                              padding:
+                                  const EdgeInsets.only(top: 5, bottom: 10).h,
+                              child: Text(
+                                widget.board.content,
+                                style: TextStyle(
+                                    fontSize: 14.spMin,
+                                    color: const Color(0xff616161)),
+                                maxLines: 2,
+                                overflow: TextOverflow.fade,
+                              ),
+                            ),
+                    ],
+                  ),
+                ),
+                widget.board.imageUrls.isEmpty
+                    ? const SizedBox()
+                    : Container(
+                        margin: const EdgeInsets.only(left: 10).w,
+                        height: 70.h,
+                        width: 70.h,
+                        decoration: BoxDecoration(
+                          color: const Color(0xfff8f8f8),
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(widget.board.imageUrls[0]),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+              ],
+            ),
+            SizedBox(height: 5.h), // 간격 조정
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    boardProvider.addLike(widget.board.id!, widget.index);
+                  },
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(top: 4.0, right: 4.0, left: 4.0)
+                            .r,
+                    child: SvgPicture.asset(
+                      'assets/icon/ICON_good.svg',
+                      width: 25.r,
+                      height: 25.r,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 15).w,
+                  child: boardProvider.greatCounts[widget.index] == 0
+                      ? const Text('')
+                      : Text('${boardProvider.greatCounts[widget.index]}'),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 4.0, right: 4.0, left: 4.0).r,
+                  child: SvgPicture.asset(
+                    'assets/icon/icon_comment.svg',
+                    width: 25.r,
+                    height: 25.r,
+                  ),
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 4.0, right: 4.0, left: 4.0).r,
+                  child: widget.board.commentCount == 0
+                      ? const Text('')
+                      : Text('${widget.board.commentCount}'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

@@ -45,43 +45,46 @@ class _TotalBoardWidgetState extends State<TotalBoardWidget>
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
-    super.build(context); // AutomaticKeepAliveClientMixin의 기능을 호출
     final boardProvider = Provider.of<BoardProvider>(context);
-    return Container(
-      decoration: const BoxDecoration(color: Colors.white),
-      child: boardProvider.loading && page == 0
-          ? const Center(
-              child: Image(
-                  image: AssetImage("assets/illustration/loading_01.gif")),
-            )
-          : ListView.builder(
-              controller: _scrollController,
-              itemCount: boardProvider.articleList.length +
-                  (boardProvider.loading ? 1 : 0),
-              itemBuilder: (context, index) {
-                if (index == boardProvider.articleList.length) {
-                  // 스크롤 끝에서 로딩 중일 때 보여줄 로딩 표시
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                final board = boardProvider.articleList[index];
 
-                return Column(
-                  children: [
-                    TotalArticleWidget(
-                        board: board,
-                        screenArguments: widget.screenArguments,
-                        index: index),
-                    const Divider(
-                      thickness: 2,
-                      color: Color(0xffE5EBFF),
-                    )
-                  ],
+    return CustomScrollView(
+      controller: _scrollController,
+      slivers: [
+        const SliverToBoxAdapter(
+          child: SizedBox(height: 10),
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              if (index == boardProvider.articleList.length) {
+                return const Center(
+                  child: CircularProgressIndicator(),
                 );
-              },
-            ),
+              }
+
+              final board = boardProvider.articleList[index];
+
+              return Column(
+                children: [
+                  TotalArticleWidget(
+                    board: board,
+                    screenArguments: widget.screenArguments,
+                    index: index,
+                  ),
+                  const Divider(
+                    thickness: 2,
+                    color: Color(0xffE5EBFF),
+                  ),
+                ],
+              );
+            },
+            childCount: boardProvider.articleList.length +
+                (boardProvider.loading ? 1 : 0),
+          ),
+        ),
+      ],
     );
   }
 

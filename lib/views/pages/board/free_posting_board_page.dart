@@ -159,35 +159,34 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
               isTotalBoard: false,
               onpressd: () {},
             )
-          : Container(
-              color: Colors.white,
-              child: boardProvider.loading
-                  ? Container(
-                      alignment: Alignment.center,
-                      child: const Image(
-                          image:
-                              AssetImage("assets/illustration/loading_01.gif")))
-                  : ListView.builder(
-                      controller: _scrollController,
-                      itemCount: boardProvider.articleList.length,
-                      itemBuilder: (context, index) {
-                        var nationCode = getNationCode(boardProvider
-                            .articleList[index].memberProfileDto!.nationality);
-                        return Column(
-                          children: [
-                            ArticleWidget(
-                                board: boardProvider.articleList[index],
-                                nationCode: nationCode,
-                                memberDetails:
-                                    widget.screenArguments.memberDetails,
-                                index: index),
-                            const Divider(
-                              thickness: 2,
-                              color: Color(0xffE5EBFF),
-                            )
-                          ],
-                        );
-                      }),
+          : Column(
+              children: [
+                SizedBox(height: 10.h), // 위에 공간 추가
+                Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: boardProvider.articleList.length,
+                    itemBuilder: (context, index) {
+                      var nationCode = getNationCode(boardProvider
+                          .articleList[index].memberProfileDto!.nationality);
+                      return Column(
+                        children: [
+                          ArticleWidget(
+                              board: boardProvider.articleList[index],
+                              nationCode: nationCode,
+                              memberDetails:
+                                  widget.screenArguments.memberDetails,
+                              index: index),
+                          const Divider(
+                            thickness: 2,
+                            color: Color(0xffE5EBFF),
+                          )
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
       floatingActionButton: isDrawerStart
           ? null
