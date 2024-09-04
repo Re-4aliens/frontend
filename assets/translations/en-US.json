@@ -318,6 +318,7 @@
   "liked noti":" liked your post",
   "reply":" replied to your comment",
   "comment":" commented on your post",
-  "posting-noti": "Inappropriate or offensive content may result in sanctions."
+  "posting-noti": "Inappropriate or offensive content may result in sanctions.",
 
+  "upload-failed": "Upload Failed"
 }

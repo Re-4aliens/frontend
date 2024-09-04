@@ -529,8 +529,8 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                               image: AssetImage(
                                                   "assets/illustration/loading_01.gif")));
                                     } else {
-                                      return const CupertinoAlertDialog(
-                                        title: Text('업로드 실패'),
+                                      return CupertinoAlertDialog(
+                                        title: Text('upload-failed'.tr()),
                                       );
                                     }
                                   }));

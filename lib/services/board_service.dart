@@ -7,24 +7,6 @@ import 'dart:async';
 import 'package:http_parser/http_parser.dart';
 
 class BoardService extends APIService {
-  static String getCategoryValue(String category) {
-    switch (category) {
-      case "자유게시판":
-        return 'FREE';
-      case "게임게시판":
-        return 'GAME';
-      case "패션게시판":
-        return 'FASHION';
-      case "음식게시판":
-        return 'FOOD';
-      case "음악게시판":
-        return 'MUSIC';
-      case "정보게시판":
-        return 'INFO';
-    }
-    return '';
-  }
-
   /* 
   
     전체 게시판 글 전부 조회 
@@ -196,7 +178,7 @@ class BoardService extends APIService {
     var jsonPayload = jsonEncode({
       'title': newBoard.title,
       'content': newBoard.content,
-      'boardCategory': getCategoryValue(newBoard.category),
+      'boardCategory': newBoard.category,
     });
 
     var jsonPart = http.MultipartFile.fromString(
