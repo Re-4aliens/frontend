@@ -43,6 +43,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     //알림 설정
     _setNotification();
+    NotificationService.registerFCMToken();
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {

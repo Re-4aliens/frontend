@@ -5,7 +5,6 @@ import 'package:aliens/models/notification_article_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -41,6 +40,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   @override
   void initState() {
     super.initState();
+    print(widget.article);
   }
 
   @override
@@ -53,34 +53,14 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         children: [
           Row(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                        top: 15.0, bottom: 15, left: 10, right: 15)
-                    .r,
-                child: SvgPicture.asset(
-                  'assets/icon/icon_profile.svg',
-                  width: 34.r,
-                  color: const Color(0xff7898ff),
-                ),
-              ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.only(right: 10),
-                    child: Text(
-                      '${widget.article.name}/${widget.nationCode}',
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 16.spMin),
-                    ),
-                  ),
-                  Container(
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.only(right: 10),
                       child: Text(
-                        '[${widget.article.articleCategory}]',
+                        '[${widget.article.category}]',
                         style: TextStyle(
                             fontSize: 12.spMin, color: const Color(0xff888888)),
                       ))
@@ -109,9 +89,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 child: Padding(
               padding: EdgeInsets.only(top: 0.h),
               child: Text(
-                widget.article.noticeType == "ARTICLE_LIKE"
-                    ? '${widget.article.name}님이 좋아요를 눌렀습니다. '
-                    : '${widget.article.comment}',
+                widget.article.content ?? 'Unknown',
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(fontSize: 16.spMin, color: Colors.black),
               ),
@@ -136,8 +114,8 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         showDialog(
             context: context,
             builder: (_) => FutureBuilder(
-                future: getPageDetails(
-                    widget.article.articleUrl, widget.article.articleCategory),
+                future:
+                    getPageDetails(widget.article.id, widget.article.category),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     //받아오는 동안
@@ -161,11 +139,11 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                     WidgetsBinding.instance.addPostFrameCallback((_) {
                       Navigator.pop(context);
                       //장터게시판 연결
-                      if (widget.article.articleCategory == "장터게시판") {
+                      if (widget.article.category == "MARKET") {
                         MarketBoard data = snapshot.data;
                         //읽음 처리 요청
                         boardProvider.putReadValue(
-                            widget.index, widget.article.personalNoticeId!);
+                            widget.index, widget.article.id!);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -178,11 +156,11 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                         );
                       }
                       //정보 게시판 연결
-                      else if (widget.article.articleCategory == "정보게시판") {
+                      else if (widget.article.category == "INFO") {
                         Board data = snapshot.data;
                         //읽음 처리 요청
                         boardProvider.putReadValue(
-                            widget.index, widget.article.personalNoticeId!);
+                            widget.index, widget.article.id!);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -194,7 +172,7 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                         Board data = snapshot.data;
                         //읽음 처리 요청
                         boardProvider.putReadValue(
-                            widget.index, widget.article.personalNoticeId!);
+                            widget.index, widget.article.id!);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -220,20 +198,19 @@ class _NotificationWidgetState extends State<NotificationWidget> {
 
   dynamic getPageDetails(url, boardCategory) async {
     //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token');
-    jwtToken = json.decode(jwtToken!)['data']['accessToken'];
+    var jwtToken = await storage.read(key: 'token') ?? '';
 
     final response = await http.get(
       Uri.parse(url),
       headers: {
-        'Authorization': 'Bearer $jwtToken',
+        'Authorization': jwtToken,
         'Content-Type': 'application/json',
       },
     );
 
     if (response.statusCode == 200) {
       dynamic body = json.decode(utf8.decode(response.bodyBytes))['data'];
-      if (boardCategory == "장터게시판") {
+      if (boardCategory == "MARKET") {
         return MarketBoard.fromJson(body);
       } else {
         return Board.fromJson(body);

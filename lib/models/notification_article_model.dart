@@ -1,51 +1,40 @@
 class NotificationArticle {
-  int? personalNoticeId;
+  int? id;
+  String? content;
+  int? boardId;
   String? noticeType;
-  String? articleCategory;
-  String? comment;
-  String? profileImage;
-  String? name;
-  String? nationality;
+  String? category;
   String? createdAt;
-  String? articleUrl;
   bool? isRead;
 
-  NotificationArticle(
-      {this.personalNoticeId,
-      this.noticeType,
-      this.articleCategory,
-      this.comment,
-      this.profileImage,
-      this.name,
-      this.nationality,
-      this.createdAt,
-      this.articleUrl,
-      this.isRead});
+  NotificationArticle({
+    this.id,
+    this.content,
+    this.boardId,
+    this.noticeType,
+    this.category,
+    this.createdAt,
+    this.isRead,
+  });
 
   NotificationArticle.fromJson(Map<String, dynamic> json) {
-    personalNoticeId = json['personalNoticeId'];
+    id = json['id'];
+    content = json['content'];
+    boardId = json['boardId'];
     noticeType = json['noticeType'];
-    articleCategory = json['articleCategory'];
-    comment = json['comment'];
-    profileImage = json['profileImage'];
-    name = json['name'];
-    nationality = json['nationality'];
+    category = json['category'];
     createdAt = json['createdAt'];
-    articleUrl = json['articleUrl'];
     isRead = json['isRead'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['personalNoticeId'] = personalNoticeId;
+    data['id'] = id;
+    data['content'] = content;
+    data['boardId'] = boardId;
     data['noticeType'] = noticeType;
-    data['articleCategory'] = articleCategory;
-    data['comment'] = comment;
-    data['profileImage'] = profileImage;
-    data['name'] = name;
-    data['nationality'] = nationality;
+    data['category'] = category;
     data['createdAt'] = createdAt;
-    data['articleUrl'] = articleUrl;
     data['isRead'] = isRead;
     return data;
   }

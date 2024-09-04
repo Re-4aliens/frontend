@@ -26,15 +26,17 @@ class MatchingService extends APIService {
         },
       );
 
+      print(response.statusCode);
+
       if (response.statusCode == 200) {
+        print("신청 정보 응답 : ${utf8.decode(response.bodyBytes)}");
         var responseData = json.decode(utf8.decode(response.bodyBytes));
         var result = responseData['result'];
-        print(responseData);
+        print("신청정보 $result");
 
         return result;
       } else {
         var responseData = json.decode(utf8.decode(response.bodyBytes));
-        print(responseData);
         // 실패 시 오류 처리
         if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
             'AT-C-002') {
@@ -49,7 +51,7 @@ class MatchingService extends APIService {
         }
       }
     } catch (error) {
-      rethrow;
+      throw Exception(error);
     }
   }
 
@@ -79,8 +81,7 @@ class MatchingService extends APIService {
           .map((dynamic item) => Partner.fromJson(item))
           .toList();
     } else {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print(responseBody);
+      print("상대방 조회 실패 ");
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -106,12 +107,12 @@ class MatchingService extends APIService {
     Applicant? applicant;
     List<Partner>? partners;
 
-    print("매칭 데이터");
-
     try {
       status = await UserService.getApplicantStatus();
+      print("매칭 데이터 $status");
 
       memberDetails = await UserService.getMemberDetails();
+      print("매칭 데이터 ${memberDetails.name}");
 
       if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
         applicant = Applicant.fromJson(await getApplicantInfo());
@@ -120,7 +121,9 @@ class MatchingService extends APIService {
       }
 
       if (status == 'NotAppliedAndMatched' || status == 'AppliedAndMatched') {
+        print("신청 정보 받아오기");
         applicant = Applicant.fromJson(await getApplicantInfo());
+        print("파트너 정보 받압오기");
         partners = await getApplicantPartners();
       } else {
         partners = null;

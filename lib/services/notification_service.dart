@@ -56,6 +56,7 @@ class NotificationService extends APIService {
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
 
       List<dynamic> body = responseBody['result'];
       List<NotificationArticle> notifications = body
@@ -63,6 +64,7 @@ class NotificationService extends APIService {
           .toList();
       return notifications;
     } else {
+      print(utf8.decode(response.bodyBytes));
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       if (responseBody['code'] == 'AT-C-002') {
         // 액세스 토큰 만료

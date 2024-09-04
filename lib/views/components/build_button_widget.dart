@@ -27,7 +27,6 @@ class _BuildButtonState extends State<BuildButton> {
 
   @override
   Widget build(BuildContext context) {
-    print("매칭 상태 ${widget.screenArguments.status}");
     return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(30),

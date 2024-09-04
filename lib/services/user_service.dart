@@ -103,11 +103,8 @@ class UserService extends APIService {
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print('멤버 디테일 데이터 : ${responseBody['result']}');
       return MemberDetails.fromJson(responseBody['result']);
     } else {
-      var responseBody = utf8.decode(response.bodyBytes);
-      print(responseBody);
       throw Exception('요청 오류');
     }
   }
@@ -156,13 +153,8 @@ class UserService extends APIService {
    */
   static Future<bool> updateMBTI(String newMBTI) async {
     var url = '$domainUrl/members/mbti';
-    print(newMBTI);
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
-
-    // var requestBody = jsonEncode({
-    //   'newMBTI': newMBTI,
-    // });
 
     var response = await http.patch(
       Uri.parse(url),
@@ -267,25 +259,13 @@ class UserService extends APIService {
       );
 
       if (response.statusCode == 200) {
-        print(json.decode(utf8.decode(response.bodyBytes)));
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         var matchingStatus = responseBody['result'];
+        print("매칭 상태 : $matchingStatus");
 
         return matchingStatus; // 매칭상태 반환
       } else {
-        print(json.decode(utf8.decode(response.bodyBytes)));
-        if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-002') {
-          // 엑세스 토큰 만료
-          throw 'AT-C-002';
-        } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-007') {
-          // 로그아웃된 토큰
-          throw 'AT-C-007';
-        } else {
-          // 정보 없음
-          return "NotAppliedAndNotMatched";
-        }
+        return "NotAppliedAndNotMatched";
       }
     } else {
       // jwtToken이 null인 경우
