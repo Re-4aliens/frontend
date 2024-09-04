@@ -305,12 +305,12 @@
 
   "general-board-post" : "General Board New Post",
   "market-board-post": "Market Board New Post",
-  "Brand_New": "BRAND_NEW",
-  "Almost_New": "ALMOST_NEW",
-  "Slight_Defect": "SLIGHT_DEFECT",
-  "Used": "USED",
-  "sale": "SELL",
-  "sold-out":"END",
+  "BRAND_NEW": "BRAND NEW",
+  "ALMOST_NEW": "ALMOST NEW",
+  "SLIGHT_DEFECT": "SLIGHT DEFECT",
+  "USED": "USED",
+  "SELL": "SELL",
+  "END": "END",
 
 
   "search1": "Type Keyword",

@@ -121,31 +121,13 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
     }
   }
 
-  String getSaleStatusText(saleStatus) {
-    switch (saleStatus) {
-      case '판매중':
-        return 'SELL';
-      case '판매완료':
-        return 'END';
-      default:
-        return '';
-    }
-  }
-
-  String getproductQualityText(productQuality) {
-    switch (productQuality) {
-      case '미개봉':
-        return 'BRAND_NEW';
-      case '거의 새 것':
-        return 'ALMOST_NEW';
-      case '약간의 하자':
-        return 'SLIGHT_DEFECT';
-      case '사용감 있음':
-        return 'USED';
-      default:
-        return '';
-    }
-  }
+  Map<String, String> saleStatusText = {"SELL".tr(): "SELL", "END".tr(): "END"};
+  Map<String, String> productQualityText = {
+    "BRAND_NEW".tr(): "BRAND_NEW",
+    "ALMOST_NEW".tr(): "ALMOST_NEW",
+    "SLIGHT_DEFECT".tr(): "SLIGHT_DEFECT",
+    "USED".tr(): "USED"
+  };
 
   @override
   void initState() {
@@ -527,8 +509,9 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                           title: _titleController.text,
                           content: _contentController.text,
                           price: _priceController.text,
-                          productQuality: getproductQualityText(productQuality),
-                          saleStatus: getSaleStatusText(saleStatus),
+                          productQuality:
+                              productQualityText[productQuality] ?? 'Unknown',
+                          saleStatus: saleStatusText[saleStatus] ?? 'Unknown',
                           imageUrls: [
                             ..._images.map((image) => image.path),
                             ..._imageUrls
@@ -542,8 +525,10 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                               content: _contentController.text,
                               price: _priceController.text,
                               productQuality:
-                                  getproductQualityText(productQuality),
-                              saleStatus: getSaleStatusText(saleStatus),
+                                  productQualityText[productQuality] ??
+                                      'Unknown',
+                              saleStatus:
+                                  saleStatusText[saleStatus] ?? 'Unknown',
                               imageUrls: [
                                 ..._images.map((image) => image.path),
                                 ..._imageUrls
