@@ -146,9 +146,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                             height: 90.r,
                             width: 90.r,
                             decoration: BoxDecoration(
-                              color: profileImageUrl == ''
-                                  ? Colors.white
-                                  : Colors.transparent,
+                              color: Colors.white,
                               shape: BoxShape.circle,
                               image: profileImageUrl != ''
                                   ? DecorationImage(

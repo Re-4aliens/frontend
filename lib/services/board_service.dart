@@ -137,7 +137,7 @@ class BoardService extends APIService {
   */
   static Future<List<Board>> getArticles(String boardCategory, int page) async {
     final url =
-        '$domainUrl/boards/category?category=$boardCategory&page=0&size=10';
+        '$domainUrl/boards/category?category=$boardCategory&page=$page&size=10';
 
     final response = await http.get(
       Uri.parse(url),

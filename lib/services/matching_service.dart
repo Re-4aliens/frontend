@@ -205,14 +205,6 @@ class MatchingService extends APIService {
     if (response.statusCode == 200) {
       return true;
     } else {
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        // 액세스 토큰 만료
-        throw 'AT-C-002';
-      } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-          'AT-C-007') {
-        // 로그아웃된 토큰
-        throw 'AT-C-007';
-      } else {}
       return false;
     }
   }

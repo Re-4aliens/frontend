@@ -14,7 +14,6 @@ import 'package:aliens/providers/bookmarks_provider.dart';
 import 'package:aliens/providers/market_comment_provider.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/marketcomment_dialog.dart';
-import 'market_board_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
@@ -101,46 +100,12 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: const Color(0xff7898ff),
-          toolbarHeight: 56,
-          leadingWidth: 100,
-          leading: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (BuildContext context) => MarketBoardPage(
-                          screenArguments: widget.screenArguments,
-                          marketBoard: widget.marketBoard,
-                          memberDetails: widget.screenArguments.memberDetails),
-                    ));
-                  });
-                },
-                icon: SvgPicture.asset(
-                  'assets/icon/icon_back.svg',
-                  color: Colors.white,
-                  width: 18.w,
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    isDrawerStart = !isDrawerStart;
-                  });
-                },
-                icon: const Icon(Icons.format_list_bulleted_outlined),
-                color: Colors.white,
-              ),
-            ],
+          title: Text(
+            'market'.tr(),
+            style: TextStyle(fontSize: 18.spMin),
           ),
-          title: Text('market'.tr(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.spMin,
-              )),
-          centerTitle: true,
+          backgroundColor: const Color(0xff7898ff),
+          elevation: 0,
         ),
         body: isDrawerStart
             ? BoardDrawerWidget(

@@ -102,14 +102,14 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
           );
         } else if (widget.board.category == "MARKET") {
           MarketService.getMarketArticle(widget.board.id!).then((data) {
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => MarketDetailPage(
                   screenArguments: widget.screenArguments,
                   marketBoard: data,
                   index: -1,
-                  backPage: '',
+                  backPage: 'total',
                 ),
               ),
             ).then((value) => boardProvider.getAllArticles());

@@ -35,11 +35,12 @@ class ChatService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    stompClient = StompClient(
+    StompClient stompClient = StompClient(
       config: StompConfig.SockJS(
         url: url,
         onConnect: onStompConnect,
         beforeConnect: () async {
+          // 연결하기 전에 200밀리초 대기
           await Future.delayed(const Duration(milliseconds: 200));
         },
         stompConnectHeaders: {
@@ -47,6 +48,34 @@ class ChatService extends APIService {
         },
         webSocketConnectHeaders: {
           'Authorization': jwtToken,
+        },
+        onStompError: (StompFrame frame) {
+          // Stomp 프로토콜 오류 시 호출
+          print('Stomp Error: ${frame.body}');
+        },
+        onWebSocketError: (dynamic error) {
+          // WebSocket 연결 오류 시 호출
+          print('WebSocket Error: $error');
+        },
+        onDisconnect: (frame) {
+          // 연결 해제 시 호출
+          print('Disconnected: ${frame.body}');
+        },
+        onDebugMessage: (message) {
+          // 디버그 메시지 출력
+          print('Debug: $message');
+        },
+        onUnhandledFrame: (StompFrame frame) {
+          // 예상치 못한 프레임 수신 시 호출
+          print('Unhandled Frame: ${frame.body}');
+        },
+        onUnhandledMessage: (StompFrame frame) {
+          // 예상치 못한 메시지 수신 시 호출
+          print('Unhandled Message: ${frame.body}');
+        },
+        onUnhandledReceipt: (StompFrame frame) {
+          // 예상치 못한 Receipt 수신 시 호출
+          print('Unhandled Receipt: ${frame.body}');
         },
       ),
     );
@@ -56,6 +85,7 @@ class ChatService extends APIService {
 
   static void onStompConnect(StompFrame frame) {
     isConnected = true;
+    print("웹 소켓 연결");
     subscribeWebSocket(roomIdToSubscribe, memberId);
   }
 
@@ -65,12 +95,14 @@ class ChatService extends APIService {
 
   */
   static Future<void> subscribeWebSocket(int roomId, int memberId) async {
+    print("$roomId 방 구독");
     if (isConnected) {
       stompClient.subscribe(
         destination: '/room/$roomId',
         callback: (StompFrame frame) {
           if (frame.body != null) {
             Map<String, dynamic> messageJson = json.decode(frame.body!);
+            print(messageJson);
             if (messageJson.containsKey('readBy')) {
               /*
 
@@ -110,6 +142,7 @@ class ChatService extends APIService {
 
   */
   static void disconnectWebSocket() {
+    print("웹소켓 연결 해제");
     if (isConnected) {
       stompClient.deactivate();
       isConnected = false;
@@ -210,7 +243,7 @@ class ChatService extends APIService {
     //success
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
-
+      print(responseBody);
       return ChatData.fromJson(responseBody['result']);
 
       //fail

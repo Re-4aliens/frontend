@@ -41,7 +41,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
   @override
   void initState() {
     super.initState();
-    print(widget.article);
   }
 
   @override
