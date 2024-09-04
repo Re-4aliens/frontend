@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/models/notification_article_model.dart';
 import 'package:aliens/models/screen_argument.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -60,9 +61,9 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                       alignment: Alignment.centerLeft,
                       padding: const EdgeInsets.only(right: 10),
                       child: Text(
-                        '[${widget.article.category}]',
+                        '[${getCategoryValue(widget.article.category ?? 'Unknown')}]',
                         style: TextStyle(
-                            fontSize: 12.spMin, color: const Color(0xff888888)),
+                            fontSize: 14.spMin, color: const Color(0xff888888)),
                       ))
                 ],
               ),
@@ -72,41 +73,48 @@ class _NotificationWidgetState extends State<NotificationWidget> {
             child: Text(
               DataUtils.getTime(widget.article.createdAt),
               style:
-                  TextStyle(fontSize: 16.spMin, color: const Color(0xffc1c1c1)),
+                  TextStyle(fontSize: 14.spMin, color: const Color(0xffc1c1c1)),
             ),
           ),
         ],
       ),
 
       //내용
-      subtitle: Container(
-        padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-                child: Padding(
-              padding: EdgeInsets.only(top: 0.h),
-              child: Text(
-                widget.article.content ?? 'Unknown',
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 16.spMin, color: Colors.black),
-              ),
-            )),
-            Container(
-              padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
-              width: 19.0,
-              height: 19.0,
-              decoration: boardProvider.isReadList[widget.index] == true
-                  ? const BoxDecoration()
-                  : const BoxDecoration(
-                      color: Color(0xFFFFE68D),
-                      shape: BoxShape.circle,
-                    ),
-            )
-          ],
-        ),
+      subtitle: Column(
+        children: [
+          SizedBox(
+            height: 10.r,
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Flexible(
+                    child: Padding(
+                  padding: EdgeInsets.only(top: 0.h),
+                  child: Text(
+                    widget.article.content ?? 'Unknown',
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 16.spMin, color: Colors.black),
+                  ),
+                )),
+                Container(
+                  padding: EdgeInsets.only(left: 10.w, bottom: 10.h),
+                  width: 19.0,
+                  height: 19.0,
+                  decoration: boardProvider.isReadList[widget.index] == true
+                      ? const BoxDecoration()
+                      : const BoxDecoration(
+                          color: Color(0xFFFFE68D),
+                          shape: BoxShape.circle,
+                        ),
+                )
+              ],
+            ),
+          ),
+        ],
       ),
 
       onTap: () {
@@ -219,5 +227,23 @@ class _NotificationWidgetState extends State<NotificationWidget> {
     } else {
       return false;
     }
+  }
+
+  String getCategoryValue(String category) {
+    switch (category) {
+      case "FREE":
+        return 'free-posting'.tr();
+      case "GAME":
+        return 'game'.tr();
+      case "FASHION":
+        return 'fashion'.tr();
+      case "FOOD":
+        return 'food'.tr();
+      case "MUSIC":
+        return 'music'.tr();
+      case "INFO":
+        return 'info'.tr();
+    }
+    return '';
   }
 }
