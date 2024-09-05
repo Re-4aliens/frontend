@@ -739,10 +739,20 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                     .h,
                                                             child: Text(
                                                               commentProvider
-                                                                  .commentListData![
-                                                                      index]
-                                                                  .children![j]
-                                                                  .content,
+                                                                          .commentListData![
+                                                                              index]
+                                                                          .children![
+                                                                              j]
+                                                                          .status ==
+                                                                      "ACTIVE"
+                                                                  ? commentProvider
+                                                                      .commentListData![
+                                                                          index]
+                                                                      .children![
+                                                                          j]
+                                                                      .content
+                                                                  : "deleted-comment"
+                                                                      .tr(),
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       14.spMin,

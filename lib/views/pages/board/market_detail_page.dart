@@ -530,6 +530,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                       context,
                                                                   builder:
                                                                       (builder) {
+                                                                    // 댓글 이상하게 달림
                                                                     return MarketCommentDialog(
                                                                       context:
                                                                           context,
