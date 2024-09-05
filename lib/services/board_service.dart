@@ -328,12 +328,12 @@ class BoardService extends APIService {
 
     try {
       // 토큰 읽어오기
-      var jwtToken = await APIService.storage.read(key: 'token');
+      var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
       final response = await http.get(
         Uri.parse(url),
         headers: {
-          'Authorization': 'Bearer $jwtToken',
+          'Authorization': jwtToken,
           'Content-Type': 'application/json',
         },
       );

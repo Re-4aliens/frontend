@@ -81,12 +81,13 @@ class BoardProvider with ChangeNotifier {
   Future<void> addLike(int articleId, int index) async {
     try {
       greatCounts[index] = await BoardService.addLike(articleId);
+      notifyListeners(); // 좋아요 추가 후 UI 업데이트
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
         greatCounts[index] = await BoardService.addLike(articleId);
+        notifyListeners(); // 좋아요 추가 후 UI 업데이트
       }
-      _setLoading(false);
     }
   }
 
@@ -184,7 +185,6 @@ class BoardProvider with ChangeNotifier {
   void _setLoading(bool value) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loading = value;
-
       notifyListeners();
     });
   }

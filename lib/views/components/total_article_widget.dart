@@ -36,7 +36,6 @@ class TotalArticleWidget extends StatefulWidget {
 class _TotalArticleWidgetState extends State<TotalArticleWidget> {
   String createdAt = '';
   String boardCategory = '';
-  List<Board> articles = [];
 
   @override
   void initState() {
@@ -47,8 +46,6 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
 
     boardProvider.getLikeCounts();
     bookmarkProvider.getbookmarksCounts(0);
-
-    print(widget.board.category);
 
     switch (widget.board.category) {
       case 'FREE':
@@ -214,7 +211,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                                 board: widget.board,
                                 memberDetails:
                                     widget.screenArguments.memberDetails,
-                                boardCategory: "전체게시판",
+                                boardCategory: "total-board".tr(),
                               );
                             });
                       },
@@ -254,7 +251,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                           overflow: TextOverflow.fade,
                         ),
                       ),
-                      widget.board.category == "정보게시판"
+                      widget.board.category == "INFO"
                           ? SizedBox(
                               height: 5.h,
                             )
@@ -296,14 +293,13 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               children: [
                 InkWell(
                   onTap: () async {
-                    if (widget.board.category != "장터게시판") {
+                    if (widget.board.category != "MARKET") {
                       boardProvider.addLike(widget.board.id!, widget.index);
                     } else {
                       boardProvider.greatCounts[widget.index] =
                           await MarketService.marketBookmark(
                               widget.board.id!, widget.index);
                     }
-                    setState(() {});
                   },
                   child: Padding(
                     padding:

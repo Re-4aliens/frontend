@@ -580,9 +580,16 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                             .r,
                                                     child: Text(
                                                       marketcommentProvider
-                                                          .commentListData![
-                                                              index]
-                                                          .content,
+                                                                  .commentListData![
+                                                                      index]
+                                                                  .status ==
+                                                              'ACTIVE'
+                                                          ? marketcommentProvider
+                                                              .commentListData![
+                                                                  index]
+                                                              .content
+                                                          : "deleted-comment"
+                                                              .tr(),
                                                       style: TextStyle(
                                                           fontSize: 14.spMin,
                                                           color: const Color(
