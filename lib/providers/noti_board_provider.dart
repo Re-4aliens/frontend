@@ -30,7 +30,9 @@ class NotiBoardProvider with ChangeNotifier {
   }
 
   putReadValue(int index, int personalNoticeId) async {
+    print("Put Read Value");
     try {
+      print("try에는 들어가나..??");
       if (await NotificationService.readNotification(personalNoticeId)) {
         isReadList[index] = false;
       }
@@ -40,7 +42,7 @@ class NotiBoardProvider with ChangeNotifier {
         if (await NotificationService.readNotification(personalNoticeId)) {
           isReadList[index] = false;
         }
-      } else {}
+      }
     }
     getNotiArticles();
     notifyListeners();

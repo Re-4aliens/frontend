@@ -55,6 +55,7 @@ class _ArticlePageState extends State<ArticlePage> {
 
   @override
   void initState() {
+    print(widget.board.createdAt);
     super.initState();
     switch (widget.board.category) {
       case 'FREE':
@@ -363,416 +364,410 @@ class _ArticlePageState extends State<ArticlePage> {
                             for (int index = 0;
                                 index < commentProvider.commentListData!.length;
                                 index++)
-                              Container(
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                              vertical: 15, horizontal: 30)
-                                          .r,
-                                      color: parentsCommentId ==
-                                              commentProvider
-                                                  .commentListData![index].id
-                                          ? const Color(0xffF5F7FF)
-                                          : Colors.white,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                                right: 10.0)
-                                                            .r,
-                                                    child: widget.board
-                                                                .memberProfileDto ==
-                                                            null
-                                                        ? SvgPicture.asset(
-                                                            'assets/icon/icon_profile.svg',
-                                                            width: 25.r,
-                                                            color: const Color(
-                                                                0xff7898ff),
-                                                          )
-                                                        : Container(
-                                                            height: 25.r,
-                                                            width: 25.r,
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              shape: BoxShape
-                                                                  .circle,
-                                                              image:
-                                                                  DecorationImage(
-                                                                image: NetworkImage(widget
-                                                                    .board
-                                                                    .memberProfileDto!
-                                                                    .profileImageUrl),
-                                                                fit: BoxFit
-                                                                    .cover,
-                                                              ),
+                              Column(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                            vertical: 15, horizontal: 30)
+                                        .r,
+                                    color: parentsCommentId ==
+                                            commentProvider
+                                                .commentListData![index].id
+                                        ? const Color(0xffF5F7FF)
+                                        : Colors.white,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                              right: 10.0)
+                                                          .r,
+                                                  child: widget.board
+                                                              .memberProfileDto ==
+                                                          null
+                                                      ? SvgPicture.asset(
+                                                          'assets/icon/icon_profile.svg',
+                                                          width: 25.r,
+                                                          color: const Color(
+                                                              0xff7898ff),
+                                                        )
+                                                      : Container(
+                                                          height: 25.r,
+                                                          width: 25.r,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            image:
+                                                                DecorationImage(
+                                                              image: NetworkImage(widget
+                                                                  .board
+                                                                  .memberProfileDto!
+                                                                  .profileImageUrl),
+                                                              fit: BoxFit.cover,
                                                             ),
                                                           ),
-                                                  ),
-                                                  Text(
+                                                        ),
+                                                ),
+                                                Text(
+                                                  commentProvider
+                                                      .commentListData![index]
+                                                      .memberProfileDto
+                                                      .name,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14.spMin),
+                                                ),
+                                                Text(
+                                                  '/',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14.spMin),
+                                                ),
+                                                Text(
+                                                  getNationCode(
                                                     commentProvider
                                                         .commentListData![index]
                                                         .memberProfileDto
-                                                        .name,
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14.spMin),
+                                                        .nationality,
                                                   ),
-                                                  Text(
-                                                    '/',
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14.spMin),
-                                                  ),
-                                                  Text(
-                                                    getNationCode(
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 14.spMin),
+                                                )
+                                              ],
+                                            ),
+                                            Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  DataUtils.getTime(
                                                       commentProvider
                                                           .commentListData![
                                                               index]
-                                                          .memberProfileDto
-                                                          .nationality,
+                                                          .createdAt),
+                                                  style: TextStyle(
+                                                      fontSize: 12.spMin,
+                                                      color: const Color(
+                                                          0xffc1c1c1)),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    showDialog(
+                                                        context: context,
+                                                        builder: (builder) {
+                                                          return CommentDialog(
+                                                            context: context,
+                                                            onpressed: () {
+                                                              setState(() {
+                                                                isNestedComments =
+                                                                    true;
+                                                                parentsCommentId =
+                                                                    commentProvider
+                                                                        .commentListData![
+                                                                            index]
+                                                                        .id;
+                                                              });
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            isNestedComment:
+                                                                false,
+                                                            comment: commentProvider
+                                                                    .commentListData![
+                                                                index],
+                                                            memberDetails: widget
+                                                                .memberDetails,
+                                                            articleId: widget
+                                                                .board.id!,
+                                                          );
+                                                        });
+                                                  },
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                                left: 8.0)
+                                                            .r,
+                                                    child: SvgPicture.asset(
+                                                      'assets/icon/ICON_more.svg',
+                                                      width: 25.r,
+                                                      height: 25.r,
+                                                      color: const Color(
+                                                          0xffc1c1c1),
                                                     ),
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14.spMin),
-                                                  )
-                                                ],
-                                              ),
-                                              Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Text(
-                                                    DataUtils.getTime(
-                                                        commentProvider
-                                                            .commentListData![
-                                                                index]
-                                                            .createdAt),
-                                                    style: TextStyle(
-                                                        fontSize: 12.spMin,
-                                                        color: const Color(
-                                                            0xffc1c1c1)),
                                                   ),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      showDialog(
-                                                          context: context,
-                                                          builder: (builder) {
-                                                            return CommentDialog(
-                                                              context: context,
-                                                              onpressed: () {
-                                                                setState(() {
-                                                                  isNestedComments =
-                                                                      true;
-                                                                  parentsCommentId =
-                                                                      commentProvider
-                                                                          .commentListData![
-                                                                              index]
-                                                                          .id;
-                                                                });
-                                                                Navigator.pop(
-                                                                    context);
-                                                              },
-                                                              isNestedComment:
-                                                                  false,
-                                                              comment:
-                                                                  commentProvider
-                                                                          .commentListData![
-                                                                      index],
-                                                              memberDetails: widget
-                                                                  .memberDetails,
-                                                              articleId: widget
-                                                                  .board.id!,
-                                                            );
-                                                          });
-                                                    },
-                                                    child: Padding(
+                                                )
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 13).r,
+                                          child: Text(
+                                            commentProvider
+                                                        .commentListData![index]
+                                                        .status ==
+                                                    "ACTIVE"
+                                                ? commentProvider
+                                                    .commentListData![index]
+                                                    .content
+                                                : "deleted-comment".tr(),
+                                            style: TextStyle(
+                                                fontSize: 14.spMin,
+                                                color: const Color(0xff616161)),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  //대댓글
+                                  commentProvider.commentListData![index]
+                                              .children ==
+                                          null
+                                      ? const SizedBox()
+                                      : Column(
+                                          children: [
+                                            for (int j = 0;
+                                                j <
+                                                    commentProvider
+                                                        .commentListData![index]
+                                                        .children!
+                                                        .length;
+                                                j++)
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Expanded(
+                                                    child: Container(
                                                       padding:
-                                                          const EdgeInsets.only(
-                                                                  left: 8.0)
+                                                          const EdgeInsets.all(
+                                                                  10)
                                                               .r,
+                                                      alignment:
+                                                          Alignment.centerRight,
                                                       child: SvgPicture.asset(
-                                                        'assets/icon/ICON_more.svg',
-                                                        width: 25.r,
-                                                        height: 25.r,
+                                                        'assets/icon/ICON_reply.svg',
+                                                        width: 15.r,
+                                                        height: 15.r,
                                                         color: const Color(
                                                             0xffc1c1c1),
                                                       ),
                                                     ),
-                                                  )
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(top: 13)
-                                                    .r,
-                                            child: Text(
-                                              commentProvider
-                                                          .commentListData![
-                                                              index]
-                                                          .status ==
-                                                      "ACTIVE"
-                                                  ? commentProvider
-                                                      .commentListData![index]
-                                                      .content
-                                                  : "deleted-comment".tr(),
-                                              style: TextStyle(
-                                                  fontSize: 14.spMin,
-                                                  color:
-                                                      const Color(0xff616161)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-
-                                    //대댓글
-                                    commentProvider.commentListData![index]
-                                                .children ==
-                                            null
-                                        ? const SizedBox()
-                                        : Column(
-                                            children: [
-                                              for (int j = 0;
-                                                  j <
-                                                      commentProvider
-                                                          .commentListData![
-                                                              index]
-                                                          .children!
-                                                          .length;
-                                                  j++)
-                                                Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Container(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                    .all(10)
-                                                                .r,
-                                                        alignment: Alignment
-                                                            .centerRight,
-                                                        child: SvgPicture.asset(
-                                                          'assets/icon/ICON_reply.svg',
-                                                          width: 15.r,
-                                                          height: 15.r,
-                                                          color: const Color(
-                                                              0xffc1c1c1),
-                                                        ),
-                                                      ),
+                                                  ),
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      color: const Color(
+                                                          0xffF4F4F4),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                                  10)
+                                                              .r,
                                                     ),
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        color: const Color(
-                                                            0xffF4F4F4),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                    .circular(
-                                                                        10)
-                                                                .r,
-                                                      ),
-                                                      width: 300.w,
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              vertical: 15.h,
-                                                              horizontal: 20.w),
-                                                      margin: EdgeInsets.only(
-                                                          top: 15.h,
-                                                          bottom: 0.h,
-                                                          right: 30.w,
-                                                          left: 0),
-                                                      child: Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                            .only(
-                                                                        right:
-                                                                            10.0)
-                                                                    .w,
-                                                                child: widget
-                                                                            .board
-                                                                            .memberProfileDto ==
-                                                                        null
-                                                                    ? SvgPicture
-                                                                        .asset(
-                                                                        'assets/icon/icon_profile.svg',
-                                                                        width:
-                                                                            25.r,
-                                                                        color: const Color(
-                                                                            0xff7898ff),
-                                                                      )
-                                                                    : Container(
-                                                                        height:
-                                                                            25.r,
-                                                                        width:
-                                                                            25.r,
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          shape:
-                                                                              BoxShape.circle,
-                                                                          image:
-                                                                              DecorationImage(
-                                                                            image:
-                                                                                NetworkImage(widget.board.memberProfileDto!.profileImageUrl),
-                                                                            fit:
-                                                                                BoxFit.cover,
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                              ),
-                                                              Flexible(
-                                                                child:
-                                                                    Container(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .centerLeft,
-                                                                  padding: const EdgeInsets
+                                                    width: 300.w,
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 15.h,
+                                                            horizontal: 20.w),
+                                                    margin: EdgeInsets.only(
+                                                        top: 15.h,
+                                                        bottom: 0.h,
+                                                        right: 30.w,
+                                                        left: 0),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets
                                                                           .only(
                                                                       right:
-                                                                          10),
-                                                                  child: Text(
-                                                                    '${commentProvider.commentListData![index].children![j].memberProfileDto.name}/${getNationCode(commentProvider.commentListData![index].children![j].memberProfileDto.nationality)}',
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    style: TextStyle(
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .bold,
-                                                                        fontSize:
-                                                                            14.spMin),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                DataUtils.getTime(commentProvider
-                                                                    .commentListData![
-                                                                        index]
-                                                                    .children![
-                                                                        j]
-                                                                    .createdAt),
-                                                                style: TextStyle(
-                                                                    fontSize: 12
-                                                                        .spMin,
-                                                                    color: const Color(
-                                                                        0xffc1c1c1)),
-                                                              ),
-                                                              InkWell(
-                                                                onTap: () {
-                                                                  showDialog(
-                                                                      context:
-                                                                          context,
-                                                                      builder:
-                                                                          (builder) {
-                                                                        return CommentDialog(
-                                                                          context:
-                                                                              context,
-                                                                          onpressed:
-                                                                              () {
-                                                                            setState(() {
-                                                                              isNestedComments = true;
-                                                                            });
-                                                                            Navigator.pop(context);
-                                                                          },
-                                                                          isNestedComment:
-                                                                              true,
-                                                                          comment: commentProvider
-                                                                              .commentListData![index]
-                                                                              .children![j],
-                                                                          memberDetails:
-                                                                              widget.memberDetails,
-                                                                          articleId: widget
+                                                                          10.0)
+                                                                  .w,
+                                                              child: widget
+                                                                          .board
+                                                                          .memberProfileDto ==
+                                                                      null
+                                                                  ? SvgPicture
+                                                                      .asset(
+                                                                      'assets/icon/icon_profile.svg',
+                                                                      width:
+                                                                          25.r,
+                                                                      color: const Color(
+                                                                          0xff7898ff),
+                                                                    )
+                                                                  : Container(
+                                                                      height:
+                                                                          25.r,
+                                                                      width:
+                                                                          25.r,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        image:
+                                                                            DecorationImage(
+                                                                          image: NetworkImage(widget
                                                                               .board
-                                                                              .id!,
-                                                                        );
-                                                                      });
-                                                                },
-                                                                child: Padding(
-                                                                  padding: const EdgeInsets
-                                                                              .only(
-                                                                          left:
-                                                                              8.0)
-                                                                      .w,
-                                                                  child:
-                                                                      SvgPicture
-                                                                          .asset(
-                                                                    'assets/icon/ICON_more.svg',
-                                                                    width: 22.r,
-                                                                    height:
-                                                                        22.r,
-                                                                    color: const Color(
-                                                                        0xffc1c1c1),
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            ],
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
+                                                                              .memberProfileDto!
+                                                                              .profileImageUrl),
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                            ),
+                                                            Flexible(
+                                                              child: Container(
+                                                                alignment: Alignment
+                                                                    .centerLeft,
+                                                                padding:
+                                                                    const EdgeInsets
                                                                             .only(
-                                                                        top: 5)
-                                                                    .h,
-                                                            child: Text(
-                                                              commentProvider
-                                                                          .commentListData![
-                                                                              index]
-                                                                          .children![
-                                                                              j]
-                                                                          .status ==
-                                                                      "ACTIVE"
-                                                                  ? commentProvider
+                                                                        right:
+                                                                            10),
+                                                                child: Text(
+                                                                  '${commentProvider.commentListData![index].children![j].memberProfileDto.name}/${getNationCode(commentProvider.commentListData![index].children![j].memberProfileDto.nationality)}',
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize:
+                                                                          14.spMin),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Text(
+                                                              DataUtils.getTime(
+                                                                  commentProvider
                                                                       .commentListData![
                                                                           index]
                                                                       .children![
                                                                           j]
-                                                                      .content
-                                                                  : "deleted-comment"
-                                                                      .tr(),
+                                                                      .createdAt),
                                                               style: TextStyle(
                                                                   fontSize:
-                                                                      14.spMin,
+                                                                      12.spMin,
                                                                   color: const Color(
-                                                                      0xff616161)),
+                                                                      0xffc1c1c1)),
                                                             ),
+                                                            InkWell(
+                                                              onTap: () {
+                                                                showDialog(
+                                                                    context:
+                                                                        context,
+                                                                    builder:
+                                                                        (builder) {
+                                                                      return CommentDialog(
+                                                                        context:
+                                                                            context,
+                                                                        onpressed:
+                                                                            () {
+                                                                          setState(
+                                                                              () {
+                                                                            isNestedComments =
+                                                                                true;
+                                                                          });
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        },
+                                                                        isNestedComment:
+                                                                            true,
+                                                                        comment: commentProvider
+                                                                            .commentListData![index]
+                                                                            .children![j],
+                                                                        memberDetails:
+                                                                            widget.memberDetails,
+                                                                        articleId: widget
+                                                                            .board
+                                                                            .id!,
+                                                                      );
+                                                                    });
+                                                              },
+                                                              child: Padding(
+                                                                padding: const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            8.0)
+                                                                    .w,
+                                                                child:
+                                                                    SvgPicture
+                                                                        .asset(
+                                                                  'assets/icon/ICON_more.svg',
+                                                                  width: 22.r,
+                                                                  height: 22.r,
+                                                                  color: const Color(
+                                                                      0xffc1c1c1),
+                                                                ),
+                                                              ),
+                                                            )
+                                                          ],
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                          .only(
+                                                                      top: 5)
+                                                                  .h,
+                                                          child: Text(
+                                                            commentProvider
+                                                                        .commentListData![
+                                                                            index]
+                                                                        .children![
+                                                                            j]
+                                                                        .status ==
+                                                                    "ACTIVE"
+                                                                ? commentProvider
+                                                                    .commentListData![
+                                                                        index]
+                                                                    .children![
+                                                                        j]
+                                                                    .content
+                                                                : "deleted-comment"
+                                                                    .tr(),
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    14.spMin,
+                                                                color: const Color(
+                                                                    0xff616161)),
                                                           ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ],
-                                                ),
-                                            ],
-                                          ),
-                                    const Divider(
-                                      thickness: 1.5,
-                                      color: Color(0xfff8f8f8),
-                                    )
-                                  ],
-                                ),
+                                                  ),
+                                                ],
+                                              ),
+                                          ],
+                                        ),
+                                  const Divider(
+                                    thickness: 1.5,
+                                    color: Color(0xfff8f8f8),
+                                  )
+                                ],
                               )
                           ],
                         )

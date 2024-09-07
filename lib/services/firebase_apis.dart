@@ -59,14 +59,11 @@ class FirebaseAPIs {
         sound: true,
       );
       String? apnsToken = await FirebaseMessaging.instance.getAPNSToken();
-      print('APNs Token: $apnsToken'); // APNs 토큰 출력
     }
   }
 
   static void initializeFirebaseListeners() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Message received while in foreground: ${message.messageId}');
-      print('Message Data: ${message.data}');
       if (message.notification != null) {
         print('Message Notification: ${message.notification}');
       }
@@ -81,8 +78,6 @@ class FirebaseAPIs {
 
   @pragma('vm:entry-point')
   static Future<void> FCMBackgroundHandler(RemoteMessage message) async {
-    print('Handling a background message: ${message.messageId}');
-    print('Message Data: ${message.data}');
     if (message.notification != null) {
       print('Message Notification: ${message.notification}');
     }

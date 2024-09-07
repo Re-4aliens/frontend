@@ -59,11 +59,9 @@ class MarketService extends APIService {
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       dynamic result = responseBody['result'];
-      print("마켓 상세 $result");
       return MarketBoard.fromJson(result);
     } else {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      print(responseBody);
       if (responseBody['code'] == 'AT-C-002') {
         throw 'AT-C-002';
       } else if (responseBody['code'] == 'AT-C-007') {

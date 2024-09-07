@@ -262,10 +262,7 @@ class BoardService extends APIService {
   
   */
   static Future<Board> getArticleDetail(int boardId) async {
-    print(boardId);
-    final url = '$domainUrl/normal?boardId=$boardId';
-
-    print(url);
+    final url = '$domainUrl/boards/normal?boardId=$boardId';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -283,8 +280,9 @@ class BoardService extends APIService {
 
     if (response.statusCode == 200) {
       var responseData = json.decode(utf8.decode(response.bodyBytes));
-      print(responseData);
-      return Board.fromJson(responseData);
+      print("상세 게시글");
+      print(responseData['result']);
+      return Board.fromJson(responseData['result']);
     } else {
       throw Exception(utf8.decode(response.bodyBytes));
     }

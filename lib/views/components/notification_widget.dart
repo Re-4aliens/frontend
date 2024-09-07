@@ -34,7 +34,6 @@ class NotificationWidget extends StatefulWidget {
 }
 
 class _NotificationWidgetState extends State<NotificationWidget> {
-  String createdAt = '';
   static const storage = FlutterSecureStorage();
 
   @override
@@ -117,90 +116,95 @@ class _NotificationWidgetState extends State<NotificationWidget> {
 
       onTap: () {
         //상세 페이지로 연결
+        print("상세 페이지 연결");
         showDialog(
-            context: context,
-            builder: (_) => FutureBuilder(
-                future: widget.article.category == "MARKET"
-                    ? MarketService.getMarketArticle(
-                        widget.article.boardId ?? -1)
-                    : BoardService.getArticleDetail(
-                        widget.article.boardId ?? -1),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    //받아오는 동안
-                    return Container(
-                        child: const Image(
-                            image: AssetImage(
-                                "assets/illustration/loading_01.gif")));
+          context: context,
+          builder: (_) => FutureBuilder(
+            future: widget.article.category == "MARKET"
+                ? MarketService.getMarketArticle(widget.article.boardId ?? -1)
+                : BoardService.getArticleDetail(widget.article.boardId ?? -1),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                //받아오는 동안
+                return const Image(
+                  image: AssetImage("assets/illustration/loading_01.gif"),
+                );
+              }
+              //받아오지 못할 때(오류)
+              else if (snapshot.data == false) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Navigator.pop(context);
+                });
+                return const Image(
+                  image: AssetImage("assets/illustration/loading_01.gif"),
+                );
+              }
+              //받아온 후
+              else {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Navigator.pop(context);
+                  //장터게시판 연결
+                  if (widget.article.category == "MARKET") {
+                    MarketBoard data = snapshot.data;
+                    //읽음 처리 요청
+                    boardProvider.putReadValue(
+                        widget.index, widget.article.id!);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MarketDetailPage(
+                          screenArguments: widget.screenArguments,
+                          marketBoard: data,
+                          index: -1,
+                          backPage: '',
+                        ),
+                      ),
+                    );
                   }
-                  //받아오지 못할 때(오류)
-                  else if (snapshot.data == false) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Navigator.pop(context);
-                    });
-                    return Container(
-                        child: const Image(
-                            image: AssetImage(
-                                "assets/illustration/loading_01.gif")));
-                  }
-                  //받아온 후
-                  else {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      Navigator.pop(context);
-                      //장터게시판 연결
-                      if (widget.article.category == "MARKET") {
-                        MarketBoard data = snapshot.data;
-                        //읽음 처리 요청
-                        boardProvider.putReadValue(
-                            widget.index, widget.article.id!);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MarketDetailPage(
-                                    screenArguments: widget.screenArguments,
-                                    marketBoard: data,
-                                    index: -1,
-                                    backPage: '',
-                                  )),
-                        );
-                      }
-                      //정보 게시판 연결
-                      else if (widget.article.category == "INFO") {
-                        Board data = snapshot.data;
-                        //읽음 처리 요청
-                        boardProvider.putReadValue(
-                            widget.index, widget.article.id!);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => InfoArticlePage(
-                                    board: data,
-                                  )),
-                        );
-                      } else {
-                        Board data = snapshot.data;
-                        //읽음 처리 요청
-                        boardProvider.putReadValue(
-                            widget.index, widget.article.id!);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ArticlePage(
-                                    memberDetails:
-                                        widget.screenArguments.memberDetails,
-                                    board: data,
-                                    index: -1,
-                                  )),
-                        );
-                      }
-                    });
+                  //정보 게시판 연결
+                  else if (widget.article.category == "INFO") {
+                    Board data = snapshot.data;
+                    //읽음 처리 요청
+                    boardProvider.putReadValue(
+                        widget.index, widget.article.id!);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => InfoArticlePage(
+                          board: data,
+                        ),
+                      ),
+                    );
+                  } else {
+                    print("일반 게시글 상세 받아오기 완료");
+                    print(snapshot.data);
+                    Board data = snapshot.data;
+                    //읽음 처리 요청
+                    boardProvider.putReadValue(
+                        widget.index, widget.article.id!);
 
-                    return Container(
-                        child: const Image(
-                            image: AssetImage(
-                                "assets/illustration/loading_01.gif")));
+                    print("알림 읽음 처리 요청");
+                    print("시간 $data");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ArticlePage(
+                          memberDetails: widget.screenArguments.memberDetails,
+                          board: data,
+                          index: -1,
+                        ),
+                      ),
+                    );
                   }
-                }));
+                });
+
+                return const Image(
+                  image: AssetImage("assets/illustration/loading_01.gif"),
+                );
+              }
+            },
+          ),
+        );
       },
     );
   }

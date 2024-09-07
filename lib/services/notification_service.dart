@@ -85,6 +85,7 @@ class NotificationService extends APIService {
    */
   static Future<bool> readNotification(int personalNoticeId) async {
     var url = '$domainUrl/notifications?id=$personalNoticeId';
+    print(personalNoticeId);
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -96,9 +97,13 @@ class NotificationService extends APIService {
       },
     );
 
+    print("읽음 처리 실패 ${utf8.decode(response.bodyBytes)}");
+
     if (response.statusCode == 200) {
+      print("읽음 처리 성공");
       return true;
     } else {
+      print("읽음 처리 실패 ${utf8.decode(response.bodyBytes)}");
       return false;
     }
   }
