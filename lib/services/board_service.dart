@@ -12,8 +12,8 @@ class BoardService extends APIService {
     전체 게시판 글 전부 조회 
     
   */
-  static Future<List<Board>> getTotalArticles(int page) async {
-    final url = '$domainUrl/boards?page=$page&size=10';
+  static Future<List<Board>> getTotalArticles(int page, int size) async {
+    final url = '$domainUrl/boards?page=$page&size=$size';
 
     final response = await http.get(
       Uri.parse(url),
@@ -288,7 +288,7 @@ class BoardService extends APIService {
     좋아요 등록 
   
   */
-  static Future<int> addLike(int articleId) async {
+  static Future<bool> addLike(int articleId) async {
     final url = '$domainUrl/great?board-id=$articleId';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
@@ -307,9 +307,10 @@ class BoardService extends APIService {
 
     if (response.statusCode == 200) {
       var responseData = json.decode(utf8.decode(response.bodyBytes));
-      return responseData['data']['likeCount'];
+      print(responseData);
+      return true;
     } else {
-      return -1;
+      return false;
     }
   }
 

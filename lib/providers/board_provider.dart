@@ -12,11 +12,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getAllArticles() async {
     _setLoading(true);
     try {
-      articleList = await BoardService.getTotalArticles(0);
+      articleList = await BoardService.getTotalArticles(0, 10);
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        articleList = await BoardService.getTotalArticles(0);
+        articleList = await BoardService.getTotalArticles(0, 10);
       }
     }
     await getLikeCounts();
@@ -54,11 +54,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getMoreAllArticles(int page) async {
     _setLoading(true);
     try {
-      articleList.addAll(await BoardService.getTotalArticles(page));
+      articleList.addAll(await BoardService.getTotalArticles(page, 10));
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        articleList.addAll(await BoardService.getTotalArticles(page));
+        articleList.addAll(await BoardService.getTotalArticles(page, 10));
       }
     }
     await getLikeCounts();
@@ -81,13 +81,15 @@ class BoardProvider with ChangeNotifier {
 
   Future<void> addLike(int articleId, int index) async {
     try {
-      greatCounts[index] = await BoardService.addLike(articleId);
-      notifyListeners(); // 좋아요 추가 후 UI 업데이트
+      if (await BoardService.addLike(articleId)) {
+        reload();
+      }
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        greatCounts[index] = await BoardService.addLike(articleId);
-        notifyListeners(); // 좋아요 추가 후 UI 업데이트
+        if (await BoardService.addLike(articleId)) {
+          reload();
+        }
       }
     }
   }
@@ -181,6 +183,21 @@ class BoardProvider with ChangeNotifier {
       greatCounts = articleList.map((board) => board.greatCount ?? 0).toList();
       notifyListeners();
     });
+  }
+
+  Future<void> reload() async {
+    _setLoading(true);
+    try {
+      articleList = await BoardService.getTotalArticles(0, articleList.length);
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await AuthService.getAccessToken();
+        articleList =
+            await BoardService.getTotalArticles(0, articleList.length);
+      }
+    }
+    await getLikeCounts();
+    _setLoading(false);
   }
 
   void _setLoading(bool value) {
