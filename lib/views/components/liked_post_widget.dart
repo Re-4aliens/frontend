@@ -158,7 +158,6 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                               board: widget.board,
                               memberDetails:
                                   widget.screenArguments.memberDetails,
-                              boardCategory: "좋아하는 게시글",
                             );
                           });
                     },

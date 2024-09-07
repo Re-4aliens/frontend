@@ -141,7 +141,6 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                               return BoardDialog(
                                 board: widget.board,
                                 memberDetails: widget.memberDetails,
-                                boardCategory: "일반게시판",
                               );
                             });
                       },

@@ -193,7 +193,6 @@ class _ArticlePageState extends State<ArticlePage> {
                                   return BoardDialog(
                                     board: widget.board,
                                     memberDetails: widget.memberDetails,
-                                    boardCategory: boardCategory,
                                   );
                                 });
                           },

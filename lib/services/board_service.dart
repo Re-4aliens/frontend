@@ -153,7 +153,6 @@ class BoardService extends APIService {
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
-      boards = List.from(boards.reversed);
       return boards;
     } else {
       throw Exception('요청 오류');

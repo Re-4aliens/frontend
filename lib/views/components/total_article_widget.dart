@@ -211,7 +211,6 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                                 board: widget.board,
                                 memberDetails:
                                     widget.screenArguments.memberDetails,
-                                boardCategory: "total-board".tr(),
                               );
                             });
                       },

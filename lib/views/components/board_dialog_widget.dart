@@ -16,13 +16,11 @@ import '../../models/board_model.dart';
 class BoardDialog extends StatefulWidget {
   final Board board;
   final MemberDetails memberDetails;
-  final String boardCategory;
 
   const BoardDialog({
     Key? key,
     required this.board,
     required this.memberDetails,
-    required this.boardCategory,
   }) : super(key: key);
 
   @override
@@ -99,38 +97,20 @@ class _BoardDialogState extends State<BoardDialog> {
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.hasData == false) {
                                   //받아오는 동안
-                                  return Container(
-                                      child: const Image(
-                                          image: AssetImage(
-                                              "assets/illustration/loading_01.gif")));
+                                  return const Image(
+                                      image: AssetImage(
+                                          "assets/illustration/loading_01.gif"));
                                 } else {
                                   //받아온 후
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    switch (widget.boardCategory) {
-                                      case '전체게시판':
-                                        boardProvider.getAllArticles();
-                                        break;
-                                      case '일반게시판':
-                                        boardProvider
-                                            .getArticles(widget.board.category);
-                                        break;
-                                      case '나의 게시글':
-                                        boardProvider
-                                            .getArticles(widget.board.category);
-                                        break;
-                                      case '좋아하는 게시글':
-                                        boardProvider.getLikedList();
-                                        break;
-                                      default:
-                                    }
+                                    boardProvider.reload();
                                   });
-                                  return Container(
-                                      child: const Image(
-                                          image: AssetImage(
-                                              "assets/illustration/loading_01.gif")));
+                                  return const Image(
+                                      image: AssetImage(
+                                          "assets/illustration/loading_01.gif"));
                                 }
                               }));
                     },
@@ -210,38 +190,20 @@ class _BoardDialogState extends State<BoardDialog> {
                                   AsyncSnapshot snapshot) {
                                 if (snapshot.hasData == false) {
                                   //받아오는 동안
-                                  return Container(
-                                      child: const Image(
-                                          image: AssetImage(
-                                              "assets/illustration/loading_01.gif")));
+                                  return const Image(
+                                      image: AssetImage(
+                                          "assets/illustration/loading_01.gif"));
                                 } else {
                                   //받아온 후
                                   WidgetsBinding.instance
                                       .addPostFrameCallback((_) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    switch (widget.boardCategory) {
-                                      case '전체게시판':
-                                        boardProvider.getAllArticles();
-                                        break;
-                                      case '일반게시판':
-                                        boardProvider
-                                            .getArticles(widget.board.category);
-                                        break;
-                                      case '나의 게시글':
-                                        boardProvider
-                                            .getArticles(widget.board.category);
-                                        break;
-                                      case '좋아하는 게시글':
-                                        boardProvider.getLikedList();
-                                        break;
-                                      default:
-                                    }
+                                    boardProvider.reload();
                                   });
-                                  return Container(
-                                      child: const Image(
-                                          image: AssetImage(
-                                              "assets/illustration/loading_01.gif")));
+                                  return const Image(
+                                      image: AssetImage(
+                                          "assets/illustration/loading_01.gif"));
                                 }
                               }));
                     },
