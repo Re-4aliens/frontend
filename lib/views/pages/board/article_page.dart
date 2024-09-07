@@ -32,6 +32,7 @@ class ArticlePage extends StatefulWidget {
 
 class _ArticlePageState extends State<ArticlePage> {
   final _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
   var _newComment = '';
   bool isNestedComments = false;
   String boardCategory = '';
@@ -53,9 +54,18 @@ class _ArticlePageState extends State<ArticlePage> {
     FocusScope.of(context).unfocus();
   }
 
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 100,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
   @override
   void initState() {
-    print(widget.board.createdAt);
     super.initState();
     switch (widget.board.category) {
       case 'FREE':
@@ -125,6 +135,7 @@ class _ArticlePageState extends State<ArticlePage> {
         body: Column(children: [
           Expanded(
             child: SingleChildScrollView(
+              controller: _scrollController,
               child: Column(
                 children: [
                   ListTile(
@@ -338,20 +349,8 @@ class _ArticlePageState extends State<ArticlePage> {
                     ),
                   ),
                   Divider(color: const Color(0xffF5F7FF), thickness: 2.h),
-                  /*
-                  Container(
-                    height: 50.h,
-                    margin: EdgeInsets.symmetric(horizontal: 30, vertical: 10).r,
-                    decoration: BoxDecoration(
-                        color: Color(0xffe7e7e7),
-                        borderRadius: BorderRadius.circular(10).r),
-                    alignment: Alignment.center,
-                    child: Text('광고'),
-                  ),
 
-                   */
-
-                  //댓글 위젯
+                  // 댓글 위젯
                   commentProvider.loading ||
                           commentProvider.commentListData == null
                       ? Container(
@@ -535,7 +534,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                     ),
                                   ),
 
-                                  //대댓글
+                                  // 대댓글
                                   commentProvider.commentListData![index]
                                               .children ==
                                           null
@@ -813,6 +812,7 @@ class _ArticlePageState extends State<ArticlePage> {
                       },
                     )),
                     IconButton(
+                      // 댓글 대댓글
                       onPressed: () {
                         if (_newComment != '') {
                           if (isNestedComments) {
@@ -823,6 +823,8 @@ class _ArticlePageState extends State<ArticlePage> {
                           } else {
                             commentProvider.addComment(
                                 _newComment, widget.board.id!);
+
+                            _scrollToBottom();
                           }
                         }
                         updateUi();

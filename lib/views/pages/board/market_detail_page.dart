@@ -44,6 +44,18 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     updateUi();
   }
 
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 100, // 추가된 댓글이 보이도록 패딩 추가
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
   void updateUi() async {
     setState(() {
       //텍스트폼 비우기
@@ -116,6 +128,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
             : Column(children: [
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     child: Container(
                       padding:
                           EdgeInsets.only(right: 24.w, left: 24.w, top: 12.h),
@@ -406,11 +419,10 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                         child: Column(
                                           children: [
                                             Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                          vertical: 15,
-                                                          horizontal: 30)
-                                                      .r,
+                                              padding: EdgeInsets.symmetric(
+                                                      vertical: 15.r,
+                                                      horizontal: 10.r)
+                                                  .r,
                                               color: parentsCommentId ==
                                                       marketcommentProvider
                                                           .commentListData![
@@ -840,6 +852,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           )),
                           IconButton(
                             onPressed: () {
+                              // 댓글 대댓글
                               if (_newComment != '') {
                                 if (isNestedComments) {
                                   marketcommentProvider.addNestedMarketComment(
@@ -852,6 +865,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 } else {
                                   marketcommentProvider.addMarketComment(
                                       _newComment, widget.marketBoard.id!);
+
+                                  _scrollToBottom();
                                 }
                                 updateUi();
                               }
