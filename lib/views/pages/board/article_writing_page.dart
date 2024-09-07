@@ -38,7 +38,6 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
 
   bool isEnabled = false;
 
-  File? _profileImage;
   final picker = ImagePicker();
   List<XFile> _images = [];
 
@@ -94,9 +93,30 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
             _images[1] = resultList[1];
             _images[2] = resultList[2];
           } else {}
-        } else {}
+        } else if (resultList.length > 3) {
+          _showAlert(context, 'image-warning'.tr());
+        }
       });
     }
+  }
+
+  void _showAlert(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

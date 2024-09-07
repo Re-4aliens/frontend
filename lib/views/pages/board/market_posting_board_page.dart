@@ -108,17 +108,30 @@ class _MarketBoardPostPageState extends State<MarketBoardPostPage> {
                   );
                 });
           }
-        } else {
-          showDialog(
-              context: context,
-              builder: (builder) {
-                return const AlertDialog(
-                  title: Text('이미지 세 개 넘어감'),
-                );
-              });
+        } else if (resultList.length > 3) {
+          _showAlert(context, 'image-warning'.tr());
         }
       });
     }
+  }
+
+  void _showAlert(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Map<String, String> saleStatusText = {"SELL".tr(): "SELL", "END".tr(): "END"};

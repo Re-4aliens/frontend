@@ -538,34 +538,39 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                           InkWell(
                                                             onTap: () {
                                                               showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (builder) {
-                                                                    // 댓글 이상하게 달림
-                                                                    return MarketCommentDialog(
-                                                                      context:
-                                                                          context,
-                                                                      onpressed:
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (builder) {
+                                                                  // 댓글 이상하게 달림
+                                                                  return MarketCommentDialog(
+                                                                    articleId: widget
+                                                                            .marketBoard
+                                                                            .id ??
+                                                                        -1,
+                                                                    context:
+                                                                        context,
+                                                                    onpressed:
+                                                                        () {
+                                                                      setState(
                                                                           () {
-                                                                        setState(
-                                                                            () {
-                                                                          isNestedComments =
-                                                                              true;
-                                                                          parentsCommentId = marketcommentProvider
-                                                                              .commentListData![index]
-                                                                              .id;
-                                                                        });
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      isNestedComment:
-                                                                          false,
-                                                                      marketcomment:
-                                                                          marketcommentProvider
-                                                                              .commentListData![index],
-                                                                    );
-                                                                  });
+                                                                        isNestedComments =
+                                                                            true;
+                                                                        parentsCommentId = marketcommentProvider
+                                                                            .commentListData![index]
+                                                                            .id;
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    isNestedComment:
+                                                                        false,
+                                                                    marketcomment:
+                                                                        marketcommentProvider
+                                                                            .commentListData![index],
+                                                                  );
+                                                                },
+                                                              );
                                                             },
                                                             child: Padding(
                                                               padding: const EdgeInsets
@@ -744,6 +749,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                               context: context,
                                                                               builder: (builder) {
                                                                                 return MarketCommentDialog(
+                                                                                    articleId: widget.marketBoard.id ?? -1,
                                                                                     context: context,
                                                                                     onpressed: () {
                                                                                       setState(() {

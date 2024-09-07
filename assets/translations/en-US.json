@@ -321,5 +321,7 @@
   "comment":" commented on your post",
   "posting-noti": "Inappropriate or offensive content may result in sanctions.",
 
-  "upload-failed": "Upload Failed"
+  "upload-failed": "Upload Failed",
+
+  "image-warning" : "You can only select up to 3 images."
 }
