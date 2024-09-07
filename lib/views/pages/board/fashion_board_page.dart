@@ -197,7 +197,7 @@ class _FashionBoardPageState extends State<FashionBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => ArticleWritingPage(
                             screenArguments: widget.screenArguments,
-                            category: "패션게시판",
+                            category: "FASHION",
                           )),
                 ).then((value) {
                   setState(() {});

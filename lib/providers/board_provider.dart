@@ -67,6 +67,7 @@ class BoardProvider with ChangeNotifier {
 
   Future<bool> addPost(Board board) async {
     bool value = false;
+    print(board.category);
     try {
       value = await BoardService.postArticle(board);
     } catch (e) {

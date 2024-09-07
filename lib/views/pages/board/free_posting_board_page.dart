@@ -197,7 +197,7 @@ class _FreePostingBoardPageState extends State<FreePostingBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => ArticleWritingPage(
                             screenArguments: widget.screenArguments,
-                            category: "자유게시판",
+                            category: "FREE",
                           )),
                 ).then((value) {
                   setState(() {});

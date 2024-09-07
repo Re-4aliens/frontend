@@ -175,6 +175,8 @@ class BoardService extends APIService {
 
     request.headers['Authorization'] = jwtToken;
 
+    print(newBoard.category);
+
     var jsonPayload = jsonEncode({
       'title': newBoard.title,
       'content': newBoard.content,
@@ -203,7 +205,7 @@ class BoardService extends APIService {
         'marketBoardImages',
         '',
         filename: 'empty.txt',
-        contentType: MediaType('text', 'plain'),
+        contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
       );
       request.files.add(file);
     }
@@ -213,16 +215,9 @@ class BoardService extends APIService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        var responseData = await response.stream.toBytes();
-        // UTF-8로 디코딩하여 문자열로 변환
-        var responseBody = utf8.decode(responseData);
-
-        print(responseBody); // 내용 출력
-
         return false;
       }
     } catch (e) {
-      print(e);
       return false;
     }
   }

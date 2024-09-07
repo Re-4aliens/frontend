@@ -197,7 +197,7 @@ class _GameBoardPageState extends State<GameBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => ArticleWritingPage(
                             screenArguments: widget.screenArguments,
-                            category: "게임게시판",
+                            category: "GAME",
                           )),
                 ).then((value) {
                   setState(() {});

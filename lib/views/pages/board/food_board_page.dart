@@ -198,7 +198,7 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => ArticleWritingPage(
                             screenArguments: widget.screenArguments,
-                            category: "음식게시판",
+                            category: "FOOD",
                           )),
                 ).then((value) {
                   setState(() {});

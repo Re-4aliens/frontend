@@ -199,7 +199,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => ArticleWritingPage(
                             screenArguments: widget.screenArguments,
-                            category: "정보게시판",
+                            category: "INFO",
                           )),
                 ).then((value) {
                   setState(() {});
