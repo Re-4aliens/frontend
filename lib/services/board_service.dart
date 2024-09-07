@@ -25,11 +25,11 @@ class BoardService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
+      print(result);
 
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
-      boards = List.from(boards.reversed);
 
       return boards;
     } else {
@@ -253,6 +253,40 @@ class BoardService extends APIService {
       return true;
     } else {
       return false;
+    }
+  }
+
+  /* 
+  
+    게시물 상세 조회
+  
+  */
+  static Future<Board> getArticleDetail(int boardId) async {
+    print(boardId);
+    final url = '$domainUrl/normal?boardId=$boardId';
+
+    print(url);
+
+    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+
+    if (jwtToken.isEmpty) {
+      throw Exception('JWT 토큰이 없습니다.');
+    }
+
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var responseData = json.decode(utf8.decode(response.bodyBytes));
+      print(responseData);
+      return Board.fromJson(responseData);
+    } else {
+      throw Exception(utf8.decode(response.bodyBytes));
     }
   }
 

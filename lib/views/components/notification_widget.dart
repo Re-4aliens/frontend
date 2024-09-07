@@ -1,13 +1,12 @@
-import 'dart:convert';
-
 import 'package:aliens/models/message_model.dart';
 import 'package:aliens/models/notification_article_model.dart';
 import 'package:aliens/models/screen_argument.dart';
+import 'package:aliens/services/board_service.dart';
+import 'package:aliens/services/market_service.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../models/board_model.dart';
@@ -121,8 +120,11 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         showDialog(
             context: context,
             builder: (_) => FutureBuilder(
-                future:
-                    getPageDetails(widget.article.id, widget.article.category),
+                future: widget.article.category == "MARKET"
+                    ? MarketService.getMarketArticle(
+                        widget.article.boardId ?? -1)
+                    : BoardService.getArticleDetail(
+                        widget.article.boardId ?? -1),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     //받아오는 동안
@@ -201,31 +203,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                 }));
       },
     );
-  }
-
-  dynamic getPageDetails(url, boardCategory) async {
-    //토큰 읽어오기
-    var jwtToken = await storage.read(key: 'token') ?? '';
-
-    final response = await http.get(
-      Uri.parse(url),
-      headers: {
-        'Authorization': jwtToken,
-        'Content-Type': 'application/json',
-      },
-    );
-
-    if (response.statusCode == 200) {
-      dynamic body = json.decode(utf8.decode(response.bodyBytes))['data'];
-      if (boardCategory == "MARKET") {
-        return MarketBoard.fromJson(body);
-      } else {
-        return Board.fromJson(body);
-      }
-      //fail
-    } else {
-      return false;
-    }
   }
 
   String getCategoryValue(String category) {
