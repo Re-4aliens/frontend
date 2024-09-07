@@ -336,12 +336,16 @@ class BoardService extends APIService {
 
     final response = await http.get(
       Uri.parse(url),
-      headers: {'Authorization': jwtToken, 'Content-Type': 'application/json'},
+      headers: {
+        'Authorization': jwtToken,
+        'Content-Type': 'application/json',
+      },
     );
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
+      print('좋아요 한 게시글 $result');
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
