@@ -1,10 +1,21 @@
 import 'dart:convert';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 import 'package:aliens/models/board_model.dart';
 import 'package:aliens/services/api_service.dart';
 import 'package:aliens/util/image_util.dart';
 import 'dart:async';
 import 'package:http_parser/http_parser.dart';
+import 'package:overlay_support/overlay_support.dart';
+
+import 'package:flutter/material.dart';
+
+void showAlert(String message) {
+  showSimpleNotification(
+    Text(message),
+    background: Colors.white,
+  );
+}
 
 class BoardService extends APIService {
   /* 
@@ -42,6 +53,7 @@ class BoardService extends APIService {
     전체 게시판 검색 
     
   */
+
   static Future<List<Board>> searchTotal(String keyword) async {
     final response = await http.get(
       Uri.parse(
@@ -174,8 +186,6 @@ class BoardService extends APIService {
 
     request.headers['Authorization'] = jwtToken;
 
-    print(newBoard.category);
-
     var jsonPayload = jsonEncode({
       'title': newBoard.title,
       'content': newBoard.content,
@@ -204,16 +214,20 @@ class BoardService extends APIService {
         'marketBoardImages',
         '',
         filename: 'empty.txt',
-        contentType: MediaType('text', 'plain'), // 빈 파일의 Content-Type 설정
+        contentType: MediaType('text', 'plain'),
       );
       request.files.add(file);
     }
 
     try {
       var response = await request.send();
+      var responseBody = await response.stream.bytesToString();
       if (response.statusCode == 200) {
         return true;
       } else {
+        if (responseBody.contains("B5")) {
+          showAlert("post-time-error".tr());
+        }
         return false;
       }
     } catch (e) {

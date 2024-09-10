@@ -318,5 +318,7 @@
 
   "upload-failed": "업로드 실패",
 
-  "image-warning" : "업로드 가능한 사진의 수는 최대 3장입니다."
+  "image-warning" : "업로드 가능한 사진의 수는 최대 3장입니다.",
+
+  "post-time-error": "게시글을 작성한 지 5분이 지나지 않았습니다."
 }
