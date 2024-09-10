@@ -343,10 +343,20 @@ class _ChattingPageState extends State<ChattingPage>
                                     ),
                                   ));
                         },
-                        child: Container(
-                          height: 35,
-                          width: 35,
-                          margin: const EdgeInsets.only(right: 10.0),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: Container(
+                            height: 35,
+                            width: 35,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    widget.partner.profileImageUrl!),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                 Column(

@@ -1,13 +1,13 @@
 class Partner {
-  String? roomStatus; // roomState -> roomStatus로 수정
-  int? chatRoomId; // roomId -> chatRoomId로 수정
-  int? partnerMemberId; // memberId -> partnerMemberId로 수정
+  String? roomStatus;
+  int? chatRoomId;
+  int? partnerMemberId;
   String? name;
   String? mbti;
   String? gender;
   String? nationality;
-  String? profileImageUrl; // profileImage -> profileImageUrl로 수정
-  String? aboutMe; // selfIntroduction -> aboutMe로 수정
+  String? profileImageUrl;
+  String? aboutMe;
   String? firstPreferLanguage;
   String? secondPreferLanguage;
 

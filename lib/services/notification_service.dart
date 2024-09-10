@@ -14,6 +14,7 @@ class NotificationService extends APIService {
     const url = '$domainUrl/notifications/fcm';
     String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+    print('fcmToken:$fcmToken');
 
     try {
       var response = await http.post(Uri.parse(url),

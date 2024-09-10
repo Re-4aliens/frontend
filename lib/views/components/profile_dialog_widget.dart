@@ -134,6 +134,7 @@ class _ProfileDialogState extends State<ProfileDialog> {
                               width: 100,
                               height: 100,
                               decoration: BoxDecoration(
+                                  color: Colors.white,
                                   shape: BoxShape.circle,
                                   image: DecorationImage(
                                       image: NetworkImage(
