@@ -1,4 +1,3 @@
-# Uncomment this line to define a global platform for your project
 platform :ios, '11.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
@@ -32,6 +31,11 @@ target 'Runner' do
   use_modular_headers!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # Firebase 및 알림 관련 의존성 추가
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'  # Firebase Cloud Messaging
+
 end
 
 post_install do |installer|

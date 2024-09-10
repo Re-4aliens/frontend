@@ -35,12 +35,12 @@ class ChatService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    StompClient stompClient = StompClient(
+    // 여기에 로컬 변수로 선언된 stompClient를 static 변수로 수정합니다.
+    stompClient = StompClient(
       config: StompConfig.SockJS(
         url: url,
         onConnect: onStompConnect,
         beforeConnect: () async {
-          // 연결하기 전에 200밀리초 대기
           await Future.delayed(const Duration(milliseconds: 200));
         },
         stompConnectHeaders: {
@@ -50,31 +50,24 @@ class ChatService extends APIService {
           'Authorization': jwtToken,
         },
         onStompError: (StompFrame frame) {
-          // Stomp 프로토콜 오류 시 호출
           print('Stomp Error: ${frame.body}');
         },
         onWebSocketError: (dynamic error) {
-          // WebSocket 연결 오류 시 호출
           print('WebSocket Error: $error');
         },
         onDisconnect: (frame) {
-          // 연결 해제 시 호출
           print('Disconnected: ${frame.body}');
         },
         onDebugMessage: (message) {
-          // 디버그 메시지 출력
           print('Debug: $message');
         },
         onUnhandledFrame: (StompFrame frame) {
-          // 예상치 못한 프레임 수신 시 호출
           print('Unhandled Frame: ${frame.body}');
         },
         onUnhandledMessage: (StompFrame frame) {
-          // 예상치 못한 메시지 수신 시 호출
           print('Unhandled Message: ${frame.body}');
         },
         onUnhandledReceipt: (StompFrame frame) {
-          // 예상치 못한 Receipt 수신 시 호출
           print('Unhandled Receipt: ${frame.body}');
         },
       ),

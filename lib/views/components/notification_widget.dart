@@ -223,6 +223,8 @@ class _NotificationWidgetState extends State<NotificationWidget> {
         return 'music'.tr();
       case "INFO":
         return 'info'.tr();
+      case "MARKET":
+        return 'market'.tr();
     }
     return '';
   }

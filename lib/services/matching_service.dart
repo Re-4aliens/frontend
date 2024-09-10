@@ -203,8 +203,10 @@ class MatchingService extends APIService {
         }));
 
     if (response.statusCode == 200) {
+      print("매칭신청 완료");
       return true;
     } else {
+      print("매칭신청 실패 : ${utf8.decode(response.bodyBytes)}");
       return false;
     }
   }
