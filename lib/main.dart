@@ -34,7 +34,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:overlay_support/overlay_support.dart';
-
 import 'config/firebase_options.dart';
 import './views/pages/matching/matching_apply_page.dart';
 import './views/pages/matching/matching_state_page.dart';

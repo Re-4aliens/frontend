@@ -29,6 +29,7 @@ class NotificationService extends APIService {
       if (response.statusCode == 200) {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final result = responseBody['result'];
+        print("fcm 토큰 등록 성공");
       } else {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
       }

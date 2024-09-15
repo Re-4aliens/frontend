@@ -44,81 +44,72 @@ class _HomePageState extends State<HomePage> {
     //알림 설정
     _setNotification();
     NotificationService.registerFCMToken();
+    // _messageStreamSubscription =
+    //     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    //   print("알림 왔다 : $message");
+    //   var inAppNotification = await storage.read(key: 'inAppNotification');
+
+    //   if (json.decode(inAppNotification!)['inAppNotification'] == true) {
+    //     showOverlayNotification((context) {
+    //       return Card(
+    //         margin: const EdgeInsets.symmetric(horizontal: 4),
+    //         child: SafeArea(
+    //           child: Container(
+    //             padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
+    //             child: ListTile(
+    //               leading: Image.asset(
+    //                 'assets/character/friendship.png',
+    //                 width: 50,
+    //                 height: 50,
+    //                 fit: BoxFit.cover,
+    //               ),
+    //               title: Text(message.notification?.title ?? 'Unknown'),
+    //               subtitle: Text(message.notification?.body ?? 'No content'),
+    //               trailing: IconButton(
+    //                   icon: const Icon(Icons.close),
+    //                   onPressed: () {
+    //                     OverlaySupportEntry.of(context)?.dismiss();
+    //                   }),
+    //             ),
+    //           ),
+    //         ),
+    //       );
+    //     }, duration: const Duration(milliseconds: 4000));
+    //   }
+    // });
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print("띠링띠링 : $message");
+      print(message.data['title']);
+      print(message.data['body']);
       var inAppNotification = await storage.read(key: 'inAppNotification');
 
-      if (message.data['type'] == 'ARTICLE_LIKE') {
-        if (json.decode(inAppNotification!)['inAppNotification'] == true) {
-          showOverlayNotification((context) {
-            return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              child: SafeArea(
-                child: Container(
-                  padding:
-                      const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
-                  child: ListTile(
-                    title: const Text('Friendship'),
-                    subtitle:
-                        Text('${message.data['name']}${'liked noti'.tr()}'),
-                    trailing: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          OverlaySupportEntry.of(context)?.dismiss();
-                        }),
+      if (json.decode(inAppNotification!)['inAppNotification'] == true) {
+        showOverlayNotification((context) {
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            child: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
+                child: ListTile(
+                  leading: Image.asset(
+                    'assets/character/friendship.png',
+                    width: 50,
+                    height: 50,
                   ),
+                  title: Text(message.data['title']),
+                  subtitle: Text('${message.data['body']}'),
+                  trailing: IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        OverlaySupportEntry.of(context)?.dismiss();
+                      }),
                 ),
               ),
-            );
-          }, duration: const Duration(milliseconds: 4000));
-        }
-      } else if (message.data['type'] == 'ARTICLE_COMMENT_REPLY') {
-        if (json.decode(inAppNotification!)['inAppNotification'] == true) {
-          showOverlayNotification((context) {
-            return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              child: SafeArea(
-                child: Container(
-                  padding:
-                      const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
-                  child: ListTile(
-                    title: const Text('Friendship'),
-                    subtitle: Text('${message.data['name']}${'reply'.tr()}'),
-                    trailing: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          OverlaySupportEntry.of(context)?.dismiss();
-                        }),
-                  ),
-                ),
-              ),
-            );
-          }, duration: const Duration(milliseconds: 4000));
-        }
-      } else if (message.data['type'] == 'ARTICLE_COMMENT') {
-        if (json.decode(inAppNotification!)['inAppNotification'] == true) {
-          showOverlayNotification((context) {
-            return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              child: SafeArea(
-                child: Container(
-                  padding:
-                      const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
-                  child: ListTile(
-                    title: const Text('Friendship'),
-                    subtitle: Text('${message.data['name']}${'comment'.tr()}'),
-                    trailing: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          OverlaySupportEntry.of(context)?.dismiss();
-                        }),
-                  ),
-                ),
-              ),
-            );
-          }, duration: const Duration(milliseconds: 4000));
-        }
+            ),
+          );
+        }, duration: const Duration(milliseconds: 4000));
       }
     });
   }

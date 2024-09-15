@@ -114,10 +114,12 @@ class ChatService extends APIService {
               if (messageJson.containsKey('sendTime') &&
                   messageJson['sendTime'] is int) {
                 int sendTimeInt = messageJson['sendTime'];
+                print(sendTimeInt);
                 DateTime sendTimeDateTime =
                     DateTime.fromMillisecondsSinceEpoch(sendTimeInt);
                 messageJson['sendTime'] = sendTimeDateTime.toIso8601String();
               }
+              print(messageJson);
 
               MessageModel message = MessageModel.fromJson(messageJson);
               _messageController.add(message);
@@ -207,6 +209,7 @@ class ChatService extends APIService {
     if (response.statusCode == 200) {
       Map<String, dynamic> body = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> items = body['result'];
+      print(items);
       return items.map((dynamic item) => MessageModel.fromJson(item)).toList();
 
       //fail
