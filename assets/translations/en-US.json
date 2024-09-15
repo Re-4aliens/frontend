@@ -325,5 +325,6 @@
 
   "image-warning" : "You can only select up to 3 images.",
 
-  "post-time-error": "The post was created less than 5 minutes ago."
+  "post-time-error": "The post was created less than 5 minutes ago.",
+  "blocked-chatting-user": "The user is unable to chat due to being blocked or reported."
 }

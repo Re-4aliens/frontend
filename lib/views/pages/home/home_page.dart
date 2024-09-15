@@ -10,14 +10,13 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
-
+import 'package:aliens/views/components/chatting_widget.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:aliens/util/permissions.dart';
 import 'package:aliens/views/components/board_drawer_widget.dart';
-import 'package:aliens/views/components/chatting_widget.dart';
 import 'package:aliens/views/components/matching_chatting_widget.dart';
 import 'package:aliens/views/pages/board/notification_page.dart';
 import 'package:aliens/views/pages/board/search_page.dart';
@@ -199,6 +198,9 @@ class _HomePageState extends State<HomePage> {
               screenArguments: args,
             )
           : chattingWidget(context, args.partners),
+      // MatchingChattingWidget(
+      //   screenArguments: args,
+      // ),
       isDrawerStart
           ? BoardDrawerWidget(
               screenArguments: args,
