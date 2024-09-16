@@ -27,8 +27,10 @@ class _SplashPageState extends State<SplashPage> {
 
     //5초 후에 넘어가기
     Timer(const Duration(milliseconds: 5000), () {
-      Navigator.of(context)
-          .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      if (mounted) {
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+      }
     });
   }
 

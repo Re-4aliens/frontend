@@ -24,6 +24,7 @@ class AuthService extends APIService {
           }));
 
       if (response.statusCode == 200) {
+        print("로그인 성공");
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         APIService.token = responseBody['result']['accessToken'];
         APIService.refreshToken = responseBody['result']['refreshToken'];
@@ -36,6 +37,8 @@ class AuthService extends APIService {
             key: 'auth',
             value:
                 jsonEncode({'email': auth.email, 'password': auth.password}));
+        await APIService.storage.write(key: 'email', value: auth.email);
+        await APIService.storage.write(key: 'password', value: auth.password);
 
         return true;
       } else {

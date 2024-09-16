@@ -36,19 +36,9 @@ class MatchingService extends APIService {
 
         return result;
       } else {
-        var responseData = json.decode(utf8.decode(response.bodyBytes));
-        // 실패 시 오류 처리
-        if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-002') {
-          // 엑세스 토큰 만료
-          throw 'AT-C-002';
-        } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-007') {
-          // 로그아웃된 토큰
-          throw 'AT-C-007';
-        } else {
-          throw Exception('요청 오류');
-        }
+        var responseData = utf8.decode(response.bodyBytes);
+        print("신청 정보 오류 : $responseData");
+        throw "신청 정보 오류";
       }
     } catch (error) {
       throw Exception(error);
