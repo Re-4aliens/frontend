@@ -108,7 +108,7 @@ class MessageBubble extends StatelessWidget {
               child: Text(
                 showingTime
                     ? DateFormat('hh:mm aaa')
-                        .format(DateTime.parse(message.sendTime!))
+                        .format(DateTime.parse(message.sendTime!).toLocal())
                     : '',
                 style: const TextStyle(
                   fontSize: 12,

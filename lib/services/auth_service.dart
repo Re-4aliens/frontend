@@ -33,10 +33,7 @@ class AuthService extends APIService {
         await APIService.storage.write(key: 'token', value: APIService.token!);
         await APIService.storage
             .write(key: 'refreshToken', value: APIService.refreshToken!);
-        await APIService.storage.write(
-            key: 'auth',
-            value:
-                jsonEncode({'email': auth.email, 'password': auth.password}));
+
         await APIService.storage.write(key: 'email', value: auth.email);
         await APIService.storage.write(key: 'password', value: auth.password);
 
@@ -83,6 +80,8 @@ class AuthService extends APIService {
       await APIService.storage.delete(key: 'jwtToken');
       await APIService.storage.delete(key: 'refreshToken');
       await APIService.storage.delete(key: 'notifications');
+      await APIService.storage.delete(key: 'email');
+      await APIService.storage.delete(key: 'password');
       // 스택 비우고 화면 이동
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);

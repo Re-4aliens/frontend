@@ -174,6 +174,8 @@ class BoardService extends APIService {
   static Future<bool> postArticle(Board newBoard) async {
     const url = '$domainUrl/boards/normal';
 
+    print("카테고리 : ${newBoard.category}");
+
     var jwtToken = await APIService.storage.read(key: 'token');
     if (jwtToken == null) {
       throw Exception('JWT token is null');
@@ -225,6 +227,7 @@ class BoardService extends APIService {
       if (response.statusCode == 200) {
         return true;
       } else {
+        print(await response.stream.bytesToString());
         if (responseBody.contains("B5")) {
           showAlert("post-time-error".tr());
         }

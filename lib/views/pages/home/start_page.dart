@@ -30,9 +30,6 @@ class _StartPageState extends State<StartPage> {
     String? email = await APIService.storage.read(key: 'email');
     String? password = await APIService.storage.read(key: 'password');
 
-    print(email);
-    print(password);
-
     if (email != null && password != null) {
       auth.email = email;
       auth.password = password;
@@ -40,7 +37,6 @@ class _StartPageState extends State<StartPage> {
 
       if (loginSuccess) {
         if (mounted) {
-          print("자동로그인성공");
           Navigator.of(context).pushNamedAndRemoveUntil(
               '/loading', (Route<dynamic> route) => false);
         }

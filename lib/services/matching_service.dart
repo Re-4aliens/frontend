@@ -104,16 +104,15 @@ class MatchingService extends APIService {
       memberDetails = await UserService.getMemberDetails();
       print("매칭 데이터 ${memberDetails.name}");
 
-      if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
+      if (status == 'AppliedAndNotMatched') {
         applicant = Applicant.fromJson(await getApplicantInfo());
+        await APIService.storage
+            .write(key: 'memberId', value: applicant.memberId.toString());
       } else {
         applicant = null;
       }
 
       if (status == 'NotAppliedAndMatched' || status == 'AppliedAndMatched') {
-        print("신청 정보 받아오기");
-        applicant = Applicant.fromJson(await getApplicantInfo());
-        print("파트너 정보 받압오기");
         partners = await getApplicantPartners();
       } else {
         partners = null;

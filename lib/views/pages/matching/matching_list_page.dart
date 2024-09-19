@@ -5,7 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'dart:math' as math;
-
+import 'package:aliens/services/api_service.dart';
 import '../../../models/screen_argument.dart';
 import '../chatting/chatting_page.dart';
 
@@ -40,6 +40,7 @@ class MatchingListPage extends StatefulWidget {
 
 class _MatchingListPageState extends State<MatchingListPage> {
   int selectedIndex = -1;
+  int memberId = 0;
 
   @override
   void initState() {
@@ -48,6 +49,18 @@ class _MatchingListPageState extends State<MatchingListPage> {
       setState(() {
         partner.profileImageUrl = null;
       });
+    }
+
+    _asyncMethod();
+  }
+
+  _asyncMethod() async {
+    String? memberIdString = await APIService.storage.read(key: 'memberId');
+
+    // memberIdString이 null이 아니면 int로 변환, 아니면 기본값 0 사용
+    if (memberIdString != null) {
+      memberId = int.parse(memberIdString);
+      print('memberId: $memberId');
     }
   }
 
@@ -143,9 +156,7 @@ class _MatchingListPageState extends State<MatchingListPage> {
                               builder: (context) => ChattingPage(
                                 partner: widget
                                     .screenArguments.partners![selectedIndex],
-                                memberId: widget
-                                        .screenArguments.applicant!.memberId ??
-                                    0,
+                                memberId: memberId,
                               ),
                             ),
                           );

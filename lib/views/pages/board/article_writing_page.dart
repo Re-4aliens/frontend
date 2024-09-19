@@ -43,7 +43,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
   Map<String, String> categoryValue = {
     "free-posting".tr(): "FREE",
     "game".tr(): "GAME",
-    "fasjion".tr(): "FASION",
+    "fashion".tr(): "FASHION",
     "food".tr(): "FOOD",
     "music".tr(): "MUSIC",
     "info".tr(): "INFO",
@@ -273,6 +273,7 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                                     setState(() {
                                                       boardCategory =
                                                           "fashion".tr();
+                                                      print(boardCategory);
                                                     });
                                                     Navigator.pop(context);
                                                   },
@@ -491,8 +492,11 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                           content != '' &&
                           boardCategory != 'post4'.tr()) {
                         FocusScope.of(context).unfocus();
+                        print('새로운글 $boardCategory');
                         boardCategory =
                             categoryValue[boardCategory] ?? 'Unknown';
+
+                        print('새로운글 $boardCategory');
 
                         // 여기
                         List<String> requestImages = [];

@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:aliens/services/api_service.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
@@ -29,6 +29,7 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
   late List<ChatRoom> _chatRooms;
   late Map<int, Partner> _partnerMap;
   final Set<int> _closedRoomId = {};
+  int memberId = 0;
 
   @override
   void initState() {
@@ -45,12 +46,25 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       _updateList();
     });
+
+    _asyncMethod();
+    print('memberId : $memberId');
   }
 
   @override
   void dispose() {
     _messageStreamSubscription?.cancel();
     super.dispose();
+  }
+
+  _asyncMethod() async {
+    String? memberIdString = await APIService.storage.read(key: 'memberId');
+
+    // memberIdString이 null이 아니면 int로 변환, 아니면 기본값 0 사용
+    if (memberIdString != null) {
+      memberId = int.parse(memberIdString);
+      print('memberId: $memberId');
+    }
   }
 
   Future<List<ChatMessageSummary>> _getChatMessageSummaries() async {
@@ -193,10 +207,8 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => ChattingPage(
-                  partner: partner,
-                  memberId: widget.screenArguments.applicant!.memberId ?? 0,
-                ),
+                builder: (context) =>
+                    ChattingPage(partner: partner, memberId: memberId),
               ),
             ).then((value) async {
               _updateList();
@@ -256,7 +268,8 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                           (chatMessageSummary.lastMessageTime == '기록 없음')
                               ? ''
                               : DateFormat('hh:mm aaa').format(DateTime.parse(
-                                  chatMessageSummary.lastMessageTime)),
+                                      chatMessageSummary.lastMessageTime)
+                                  .toLocal()),
                           style: const TextStyle(
                             fontSize: 12,
                             color: Color(0xff888888),
