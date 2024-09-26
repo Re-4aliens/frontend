@@ -260,8 +260,16 @@ class UserService extends APIService {
 
       if (response.statusCode == 200) {
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        var matchingStatus = responseBody['result'];
-        print("매칭 상태 : $matchingStatus");
+        print(responseBody);
+        var matchingStatus = responseBody['result']['status'];
+
+        await APIService.storage.write(
+            key: 'memberId',
+            value: responseBody['result']['memberId'].toString());
+        print(responseBody['result']['memberId'].toString());
+
+        String? memberIdString = await APIService.storage.read(key: 'memberId');
+        print("저장확인 $memberIdString");
 
         return matchingStatus; // 매칭상태 반환
       } else {

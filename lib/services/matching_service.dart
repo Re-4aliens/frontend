@@ -106,8 +106,6 @@ class MatchingService extends APIService {
 
       if (status == 'AppliedAndNotMatched') {
         applicant = Applicant.fromJson(await getApplicantInfo());
-        await APIService.storage
-            .write(key: 'memberId', value: applicant.memberId.toString());
       } else {
         applicant = null;
       }

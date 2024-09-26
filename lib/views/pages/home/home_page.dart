@@ -14,7 +14,6 @@ import 'package:aliens/views/components/chatting_widget.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:aliens/util/permissions.dart';
 import 'package:aliens/views/components/board_drawer_widget.dart';
 import 'package:aliens/views/components/matching_chatting_widget.dart';
@@ -43,6 +42,7 @@ class _HomePageState extends State<HomePage> {
     //알림 설정
     _setNotification();
     NotificationService.registerFCMToken();
+
     // _messageStreamSubscription =
     //     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
     //   print("알림 왔다 : $message");

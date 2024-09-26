@@ -56,12 +56,9 @@ class _MatchingListPageState extends State<MatchingListPage> {
 
   _asyncMethod() async {
     String? memberIdString = await APIService.storage.read(key: 'memberId');
-
-    // memberIdString이 null이 아니면 int로 변환, 아니면 기본값 0 사용
-    if (memberIdString != null) {
-      memberId = int.parse(memberIdString);
-      print('memberId: $memberId');
-    }
+    setState(() {
+      memberId = int.parse(memberIdString ?? "0");
+    });
   }
 
   @override
