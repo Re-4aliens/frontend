@@ -65,14 +65,14 @@ class BoardProvider with ChangeNotifier {
     _setLoading(false);
   }
 
-  Future<bool> addPost(Board board) async {
+  Future<bool> addPost(BuildContext context, Board board) async {
     bool value = false;
     try {
-      value = await BoardService.postArticle(board);
+      value = await BoardService.postArticle(context, board);
     } catch (e) {
       if (e == "AT-C-002") {
         bool isSuccess = await AuthService.getAccessToken();
-        value = await BoardService.postArticle(board);
+        value = await BoardService.postArticle(context, board);
       }
     }
     return value;

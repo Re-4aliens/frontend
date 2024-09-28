@@ -515,7 +515,8 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                         showDialog(
                             context: context,
                             builder: (_) => FutureBuilder(
-                                future: boardProvider.addPost(newBoard),
+                                future:
+                                    boardProvider.addPost(context, newBoard),
                                 builder: (BuildContext context,
                                     AsyncSnapshot snapshot) {
                                   if (snapshot.hasData == false) {

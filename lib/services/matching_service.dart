@@ -6,6 +6,22 @@ import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/services/user_service.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+
+Future<void> showAlert(BuildContext context, String message) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text("alert".tr()),
+        content: Text(message),
+      );
+    },
+  );
+}
 
 class MatchingService extends APIService {
   /*
@@ -173,7 +189,7 @@ class MatchingService extends APIService {
   매칭 신청
 
    */
-  static Future<bool> applicantMatching(
+  static Future<bool> applicantMatching(BuildContext context,
       String firstPreferLanguage, String secondPreferLanguage) async {
     var url = '$domainUrl/matchings/applications';
 
@@ -190,10 +206,16 @@ class MatchingService extends APIService {
         }));
 
     if (response.statusCode == 200) {
-      print("매칭신청 완료");
       return true;
     } else {
-      print("매칭신청 실패 : ${utf8.decode(response.bodyBytes)}");
+      try {
+        final responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+        if (responseBody['code'].contains("MA2")) {
+          await showAlert(context, "no-matching-time".tr());
+        }
+      } catch (e) {
+        throw Exception(e);
+      }
       return false;
     }
   }

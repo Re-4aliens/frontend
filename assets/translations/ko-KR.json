@@ -321,5 +321,7 @@
   "image-warning" : "업로드 가능한 사진의 수는 최대 3장입니다.",
 
   "post-time-error": "게시글을 작성한 지 5분이 지나지 않았습니다.",
-  "blocked-chatting-user": "해당 사용자는 차단 혹은 신고로 인해 채팅이 불가합니다."
+  "blocked-chatting-user": "해당 사용자는 차단 혹은 신고로 인해 채팅이 불가합니다.",
+  "alert": "알림",
+  "no-matching-time":"매칭 가능 시간이 아닙니다."
 }

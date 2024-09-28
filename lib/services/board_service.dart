@@ -6,14 +6,18 @@ import 'package:aliens/services/api_service.dart';
 import 'package:aliens/util/image_util.dart';
 import 'dart:async';
 import 'package:http_parser/http_parser.dart';
-import 'package:overlay_support/overlay_support.dart';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
-void showAlert(String message) {
-  showSimpleNotification(
-    Text(message),
-    background: Colors.white,
+Future<void> showAlert(BuildContext context, String message) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text("alert".tr()),
+        content: Text(message),
+      );
+    },
   );
 }
 
@@ -171,7 +175,7 @@ class BoardService extends APIService {
     }
   }
 
-  static Future<bool> postArticle(Board newBoard) async {
+  static Future<bool> postArticle(BuildContext context, Board newBoard) async {
     const url = '$domainUrl/boards/normal';
 
     print("카테고리 : ${newBoard.category}");
@@ -227,9 +231,8 @@ class BoardService extends APIService {
       if (response.statusCode == 200) {
         return true;
       } else {
-        print(await response.stream.bytesToString());
         if (responseBody.contains("B5")) {
-          showAlert("post-time-error".tr());
+          await showAlert(context, "post-time-error".tr());
         }
         return false;
       }
