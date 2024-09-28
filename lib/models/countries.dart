@@ -207,7 +207,6 @@ List<Map<String, String>> countries = [
   {'name': 'Somalia', 'code': 'SO'},
   {'name': 'South Africa', 'code': 'ZA'},
   {'name': 'South Georgia and the South Sandwich Islands', 'code': 'GS'},
-  {'name': 'South Korea', 'code': 'KR'},
   {'name': 'South Sudan', 'code': 'SS'},
   {'name': 'Spain', 'code': 'ES'},
   {'name': 'Sri Lanka', 'code': 'LK'},

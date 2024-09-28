@@ -105,17 +105,7 @@ class UserService extends APIService {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       return MemberDetails.fromJson(responseBody['result']);
     } else {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
-      if (responseBody['code'] == 'AT-C-002') {
-        // 엑세스 토큰 만료
-        throw 'AT-C-002';
-      } else if (responseBody['code'] == 'AT-C-007') {
-        // 로그아웃된 토큰
-        throw 'AT-C-007';
-      } else {
-        // 예외
-        throw Exception('요청 오류: ${responseBody['message']}');
-      }
+      throw Exception('요청 오류');
     }
   }
 
@@ -166,17 +156,13 @@ class UserService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    var requestBody = jsonEncode({
-      'newMBTI': newMBTI,
-    });
-
     var response = await http.patch(
       Uri.parse(url),
       headers: {
         'Authorization': jwtToken,
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: requestBody,
+      body: newMBTI,
     );
 
     if (response.statusCode == 200) {
@@ -237,17 +223,13 @@ class UserService extends APIService {
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
-    var requestBody = jsonEncode({
-      'newAboutMe': newAboutMe,
-    });
-
     var response = await http.patch(
       Uri.parse(url),
       headers: {
         'Authorization': jwtToken,
         'Content-Type': 'application/json;charset=UTF-8',
       },
-      body: requestBody,
+      body: newAboutMe,
     );
 
     if (response.statusCode == 200) {
@@ -277,25 +259,21 @@ class UserService extends APIService {
       );
 
       if (response.statusCode == 200) {
-        print(json.decode(utf8.decode(response.bodyBytes)));
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
-        var matchingStatus = responseBody['result'];
+        print(responseBody);
+        var matchingStatus = responseBody['result']['status'];
+
+        await APIService.storage.write(
+            key: 'memberId',
+            value: responseBody['result']['memberId'].toString());
+        print(responseBody['result']['memberId'].toString());
+
+        String? memberIdString = await APIService.storage.read(key: 'memberId');
+        print("저장확인 $memberIdString");
 
         return matchingStatus; // 매칭상태 반환
       } else {
-        print(json.decode(utf8.decode(response.bodyBytes)));
-        if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-002') {
-          // 엑세스 토큰 만료
-          throw 'AT-C-002';
-        } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-007') {
-          // 로그아웃된 토큰
-          throw 'AT-C-007';
-        } else {
-          // 정보 없음
-          return "NotAppliedAndNotMatched";
-        }
+        return "NotAppliedAndNotMatched";
       }
     } else {
       // jwtToken이 null인 경우

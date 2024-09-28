@@ -20,7 +20,6 @@ class _LoginState extends State<Login> {
   final GlobalKey<FormState> _pwFormKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
   //storage에 작성할 모델
   final Auth auth = Auth();
 
@@ -30,8 +29,6 @@ class _LoginState extends State<Login> {
     final bool isSmallScreen = screenWidth <= 600;
     final double fontSize = isSmallScreen ? 16.0 : 20.0;
     final double heightSize = isSmallScreen ? 70 : 90;
-
-    String constraintsText = "";
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -163,6 +160,7 @@ class _LoginState extends State<Login> {
                             style: TextStyle(fontSize: fontSize),
                           ),
                           onPressed: () async {
+                            print("onPressed");
                             if (_emailFormKey.currentState!.validate() &&
                                 _pwFormKey.currentState!.validate()) {
                               auth.email = _emailController.text;

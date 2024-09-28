@@ -32,15 +32,15 @@ class NotiBoardProvider with ChangeNotifier {
   putReadValue(int index, int personalNoticeId) async {
     try {
       if (await NotificationService.readNotification(personalNoticeId)) {
-        isReadList[index] = false;
+        isReadList[index] = true;
       }
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
         if (await NotificationService.readNotification(personalNoticeId)) {
-          isReadList[index] = false;
+          isReadList[index] = true;
         }
-      } else {}
+      }
     }
     getNotiArticles();
     notifyListeners();

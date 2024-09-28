@@ -48,7 +48,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
     _scrollController.dispose();
   }
 
-  String getNationCode(nationality) {
+  String getNationCode(String nationality) {
     var nationCode = '';
     for (Map<String, String> country in countries) {
       if (country['name']! == nationality) {
@@ -160,36 +160,35 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
               isTotalBoard: false,
               onpressd: () {},
             )
-          : Container(
-              decoration: const BoxDecoration(color: Colors.white),
-              child: boardProvider.loading
-                  ? Container(
-                      alignment: Alignment.center,
-                      child: const Image(
-                          image:
-                              AssetImage("assets/illustration/loading_01.gif")))
-                  : ListView.builder(
-                      controller: _scrollController,
-                      itemCount: boardProvider.articleList.length,
-                      itemBuilder: (context, index) {
-                        var nationCode = getNationCode(
-                            widget.screenArguments.memberDetails.nationality);
+          : Column(
+              children: [
+                SizedBox(height: 10.h), // ListView.builder 위에 공간 추가
+                Expanded(
+                  child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: boardProvider.articleList.length,
+                    itemBuilder: (context, index) {
+                      var nationCode = getNationCode(boardProvider
+                          .articleList[index].memberProfileDto!.nationality);
 
-                        return Column(
-                          children: [
-                            ArticleWidget(
-                                board: boardProvider.articleList[index],
-                                nationCode: nationCode,
-                                memberDetails:
-                                    widget.screenArguments.memberDetails,
-                                index: index),
-                            const Divider(
-                              thickness: 2,
-                              color: Color(0xffE5EBFF),
-                            )
-                          ],
-                        );
-                      }),
+                      return Column(
+                        children: [
+                          ArticleWidget(
+                              board: boardProvider.articleList[index],
+                              nationCode: nationCode,
+                              memberDetails:
+                                  widget.screenArguments.memberDetails,
+                              index: index),
+                          const Divider(
+                            thickness: 2,
+                            color: Color(0xffE5EBFF),
+                          )
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
       floatingActionButton: isDrawerStart
           ? null
@@ -200,7 +199,7 @@ class _InfoBoardPageState extends State<InfoBoardPage> {
                   MaterialPageRoute(
                       builder: (context) => ArticleWritingPage(
                             screenArguments: widget.screenArguments,
-                            category: "정보게시판",
+                            category: "INFO",
                           )),
                 ).then((value) {
                   setState(() {});

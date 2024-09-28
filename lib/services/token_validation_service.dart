@@ -1,14 +1,15 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:aliens/services/auth_service.dart';
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:aliens/services/api_service.dart';
 // 토큰 유효성 검사
 
 class TokenValidationService {
   static const storage = FlutterSecureStorage();
 
   Future<bool> checkTokenValidity() async {
-    var accessToken = await storage.read(key: 'token');
-    var refreshToken = await storage.read(key: 'refreshToken');
+    var accessToken = await APIService.storage.read(key: 'token');
+    var refreshToken = await APIService.storage.read(key: 'refreshToken');
 
     if (accessToken == null || refreshToken == null) {
       return false;

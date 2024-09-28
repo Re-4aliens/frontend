@@ -14,6 +14,7 @@ class NotificationService extends APIService {
     const url = '$domainUrl/notifications/fcm';
     String fcmToken = await FirebaseMessaging.instance.getToken() ?? '';
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+    print('fcmToken:$fcmToken');
 
     try {
       var response = await http.post(Uri.parse(url),
@@ -28,6 +29,7 @@ class NotificationService extends APIService {
       if (response.statusCode == 200) {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
         final result = responseBody['result'];
+        print("fcm 토큰 등록 성공");
       } else {
         final responseBody = json.decode(utf8.decode(response.bodyBytes));
       }
@@ -56,6 +58,7 @@ class NotificationService extends APIService {
 
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print(responseBody);
 
       List<dynamic> body = responseBody['result'];
       List<NotificationArticle> notifications = body
@@ -63,6 +66,7 @@ class NotificationService extends APIService {
           .toList();
       return notifications;
     } else {
+      print(utf8.decode(response.bodyBytes));
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       if (responseBody['code'] == 'AT-C-002') {
         // 액세스 토큰 만료
@@ -83,6 +87,7 @@ class NotificationService extends APIService {
    */
   static Future<bool> readNotification(int personalNoticeId) async {
     var url = '$domainUrl/notifications?id=$personalNoticeId';
+    print(personalNoticeId);
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -94,9 +99,13 @@ class NotificationService extends APIService {
       },
     );
 
+    print("읽음 처리 실패 ${utf8.decode(response.bodyBytes)}");
+
     if (response.statusCode == 200) {
+      print("읽음 처리 성공");
       return true;
     } else {
+      print("읽음 처리 실패 ${utf8.decode(response.bodyBytes)}");
       return false;
     }
   }
@@ -139,6 +148,7 @@ class NotificationService extends APIService {
     final url = '$domainUrl/notifications/fcm?decision=$decision';
     //토큰 읽어오기
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
+    print(jwtToken);
 
     var response = await http.patch(
       Uri.parse(url),
@@ -152,16 +162,11 @@ class NotificationService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
+      print(result);
       //fail
     } else {
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        // 액세스 토큰 만료
-        throw 'AT-C-002';
-      } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-          'AT-C-007') {
-        // 로그아웃된 토큰
-        throw 'AT-C-007';
-      } else {}
+      print(utf8.decode(response.bodyBytes));
+      print("실패");
     }
   }
 }

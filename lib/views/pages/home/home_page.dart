@@ -10,14 +10,12 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
-
+import 'package:aliens/views/components/chatting_widget.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:aliens/util/permissions.dart';
 import 'package:aliens/views/components/board_drawer_widget.dart';
-import 'package:aliens/views/components/chatting_widget.dart';
 import 'package:aliens/views/components/matching_chatting_widget.dart';
 import 'package:aliens/views/pages/board/notification_page.dart';
 import 'package:aliens/views/pages/board/search_page.dart';
@@ -43,81 +41,74 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     //알림 설정
     _setNotification();
+    NotificationService.registerFCMToken();
+
+    // _messageStreamSubscription =
+    //     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    //   print("알림 왔다 : $message");
+    //   var inAppNotification = await storage.read(key: 'inAppNotification');
+
+    //   if (json.decode(inAppNotification!)['inAppNotification'] == true) {
+    //     showOverlayNotification((context) {
+    //       return Card(
+    //         margin: const EdgeInsets.symmetric(horizontal: 4),
+    //         child: SafeArea(
+    //           child: Container(
+    //             padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
+    //             child: ListTile(
+    //               leading: Image.asset(
+    //                 'assets/character/friendship.png',
+    //                 width: 50,
+    //                 height: 50,
+    //                 fit: BoxFit.cover,
+    //               ),
+    //               title: Text(message.notification?.title ?? 'Unknown'),
+    //               subtitle: Text(message.notification?.body ?? 'No content'),
+    //               trailing: IconButton(
+    //                   icon: const Icon(Icons.close),
+    //                   onPressed: () {
+    //                     OverlaySupportEntry.of(context)?.dismiss();
+    //                   }),
+    //             ),
+    //           ),
+    //         ),
+    //       );
+    //     }, duration: const Duration(milliseconds: 4000));
+    //   }
+    // });
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print("띠링띠링 : $message");
+      print(message.data['title']);
+      print(message.data['body']);
       var inAppNotification = await storage.read(key: 'inAppNotification');
 
-      if (message.data['type'] == 'ARTICLE_LIKE') {
-        if (json.decode(inAppNotification!)['inAppNotification'] == true) {
-          showOverlayNotification((context) {
-            return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              child: SafeArea(
-                child: Container(
-                  padding:
-                      const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
-                  child: ListTile(
-                    title: const Text('Friendship'),
-                    subtitle:
-                        Text('${message.data['name']}${'liked noti'.tr()}'),
-                    trailing: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          OverlaySupportEntry.of(context)?.dismiss();
-                        }),
+      if (json.decode(inAppNotification!)['inAppNotification'] == true) {
+        showOverlayNotification((context) {
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            child: SafeArea(
+              child: Container(
+                padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
+                child: ListTile(
+                  leading: Image.asset(
+                    'assets/character/friendship.png',
+                    width: 50,
+                    height: 50,
                   ),
+                  title: Text(message.data['title']),
+                  subtitle: Text('${message.data['body']}'),
+                  trailing: IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        OverlaySupportEntry.of(context)?.dismiss();
+                      }),
                 ),
               ),
-            );
-          }, duration: const Duration(milliseconds: 4000));
-        }
-      } else if (message.data['type'] == 'ARTICLE_COMMENT_REPLY') {
-        if (json.decode(inAppNotification!)['inAppNotification'] == true) {
-          showOverlayNotification((context) {
-            return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              child: SafeArea(
-                child: Container(
-                  padding:
-                      const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
-                  child: ListTile(
-                    title: const Text('Friendship'),
-                    subtitle: Text('${message.data['name']}${'reply'.tr()}'),
-                    trailing: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          OverlaySupportEntry.of(context)?.dismiss();
-                        }),
-                  ),
-                ),
-              ),
-            );
-          }, duration: const Duration(milliseconds: 4000));
-        }
-      } else if (message.data['type'] == 'ARTICLE_COMMENT') {
-        if (json.decode(inAppNotification!)['inAppNotification'] == true) {
-          showOverlayNotification((context) {
-            return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 4),
-              child: SafeArea(
-                child: Container(
-                  padding:
-                      const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
-                  child: ListTile(
-                    title: const Text('Friendship'),
-                    subtitle: Text('${message.data['name']}${'comment'.tr()}'),
-                    trailing: IconButton(
-                        icon: const Icon(Icons.close),
-                        onPressed: () {
-                          OverlaySupportEntry.of(context)?.dismiss();
-                        }),
-                  ),
-                ),
-              ),
-            );
-          }, duration: const Duration(milliseconds: 4000));
-        }
+            ),
+          );
+        }, duration: const Duration(milliseconds: 4000));
       }
     });
   }
@@ -207,6 +198,9 @@ class _HomePageState extends State<HomePage> {
               screenArguments: args,
             )
           : chattingWidget(context, args.partners),
+      // MatchingChattingWidget(
+      //   screenArguments: args,
+      // ),
       isDrawerStart
           ? BoardDrawerWidget(
               screenArguments: args,
@@ -365,74 +359,74 @@ class _HomePageState extends State<HomePage> {
               ]
             : null,
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: selectedIndex,
-        selectedItemColor: const Color(0xFF7898FF),
-        unselectedItemColor: const Color(0xFFD9D9D9),
-        onTap: (int index) {
-          setState(() {
-            selectedIndex = index;
-            isDrawerStart = false;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SvgPicture.asset(
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 8.0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
+            IconButton(
+              icon: SvgPicture.asset(
                 'assets/icon/icon_home.svg',
-                width: 25.r,
-                height: 25.r,
+                width: 23.r,
+                height: 23.r,
                 color: selectedIndex == 0
                     ? const Color(0xFF7898FF)
                     : const Color(0xFFD9D9D9),
               ),
+              onPressed: () {
+                setState(() {
+                  selectedIndex = 0;
+                });
+              },
             ),
-            label: 'homepage-home'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SvgPicture.asset(
+            IconButton(
+              icon: SvgPicture.asset(
                 'assets/icon/icon_chatting.svg',
-                width: 25.r,
-                height: 25.r,
+                width: 23.r,
+                height: 23.r,
                 color: selectedIndex == 1
                     ? const Color(0xFF7898FF)
                     : const Color(0xFFD9D9D9),
               ),
+              onPressed: () {
+                setState(() {
+                  selectedIndex = 1;
+                });
+              },
             ),
-            label: 'homepage-chatting1'.tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(8),
-              child: SvgPicture.asset(
+            IconButton(
+              icon: SvgPicture.asset(
                 'assets/icon/ICON_board.svg',
-                width: 25.r,
-                height: 25.r,
+                width: 23.r,
+                height: 23.r,
                 color: selectedIndex == 2
                     ? const Color(0xFF7898FF)
                     : const Color(0xFFD9D9D9),
               ),
+              onPressed: () {
+                setState(() {
+                  selectedIndex = 2;
+                });
+              },
             ),
-            label: "board".tr(),
-          ),
-          BottomNavigationBarItem(
-            icon: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: SvgPicture.asset(
+            IconButton(
+              icon: SvgPicture.asset(
                 'assets/icon/icon_setting.svg',
-                width: 25.r,
-                height: 25.r,
+                width: 23.r,
+                height: 23.r,
                 color: selectedIndex == 3
                     ? const Color(0xFF7898FF)
                     : const Color(0xFFD9D9D9),
               ),
+              onPressed: () {
+                setState(() {
+                  selectedIndex = 3;
+                });
+              },
             ),
-            label: 'homepage-setting'.tr(),
-          )
-        ],
+          ],
+        ),
       ),
       body: pageWidget.elementAt(selectedIndex),
     );

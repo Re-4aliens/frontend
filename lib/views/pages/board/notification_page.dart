@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
-import '../../../models/countries.dart';
 import '../../components/notification_widget.dart';
 
 class NotificationBoardWidget extends StatefulWidget {
@@ -75,14 +74,6 @@ class _NotificationBoardWidgetState extends State<NotificationBoardWidget> {
                 itemCount: boardProvider.notiArticleList.length,
                 itemBuilder: (context, index) {
                   var nationCode = '';
-                  for (Map<String, String> country in countries) {
-                    if (country['name'] ==
-                        boardProvider.notiArticleList[index].nationality
-                            .toString()) {
-                      nationCode = country['code']!;
-                      break;
-                    }
-                  }
                   return Column(
                     children: [
                       NotificationWidget(

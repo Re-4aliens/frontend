@@ -1,9 +1,11 @@
+import 'package:aliens/models/auth_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
-
+import 'package:aliens/services/api_service.dart';
 import 'package:aliens/services/token_validation_service.dart';
 import 'package:aliens/views/components/button_big.dart';
+import 'package:aliens/services/auth_service.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -16,18 +18,35 @@ class _StartPageState extends State<StartPage> {
   final TokenValidationService _authService = TokenValidationService();
   String selectedValue = 'English';
 
+  Auth auth = Auth();
+
   @override
   void initState() {
     super.initState();
-    // 비동기로 flutter secure storage 정보를 불러오는 작업
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 토큰 유효성 검사
-      _checkTokenAndNavigate();
-    });
+    _asyncMethod();
+  }
+
+  _asyncMethod() async {
+    String? email = await APIService.storage.read(key: 'email');
+    String? password = await APIService.storage.read(key: 'password');
+
+    if (email != null && password != null) {
+      auth.email = email;
+      auth.password = password;
+      var loginSuccess = await AuthService.logIn(auth);
+
+      if (loginSuccess) {
+        if (mounted) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              '/loading', (Route<dynamic> route) => false);
+        }
+      }
+    }
   }
 
   Future<void> _checkTokenAndNavigate() async {
     bool isValid = await _authService.checkTokenValidity();
+    print("토큰 유효성 검사 : $isValid");
     if (mounted) {
       if (isValid) {
         Navigator.pushNamedAndRemoveUntil(

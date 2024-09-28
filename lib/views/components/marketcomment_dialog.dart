@@ -11,6 +11,7 @@ import '../../models/comment_model.dart';
 import 'package:aliens/providers/market_comment_provider.dart';
 
 class MarketCommentDialog extends StatelessWidget {
+  final int articleId;
   final BuildContext context;
   final VoidCallback onpressed;
   final bool isNestedComment;
@@ -18,6 +19,7 @@ class MarketCommentDialog extends StatelessWidget {
 
   const MarketCommentDialog(
       {Key? key,
+      required this.articleId,
       required this.context,
       required this.onpressed,
       required this.isNestedComment,
@@ -73,9 +75,14 @@ class MarketCommentDialog extends StatelessWidget {
               height: 10.h,
             ),
             InkWell(
-              onTap: () {
-                //TODO 로딩 만들기
-                marketcommentProvider.deleteMarketComment(marketcomment.id);
+              onTap: () async {
+                // 댓글 삭제
+                await marketcommentProvider
+                    .deleteMarketComment(marketcomment.id);
+
+                await marketcommentProvider.getMarketComments(articleId);
+
+                Navigator.pop(context); // 다이얼로그 닫기
               },
               child: Container(
                 padding: const EdgeInsets.all(13).r,
@@ -150,9 +157,14 @@ class MarketCommentDialog extends StatelessWidget {
                   ),
                 ),
           InkWell(
-            onTap: () {
-              //TODO 로딩 만들기
-              marketcommentProvider.deleteMarketComment(marketcomment.id);
+            onTap: () async {
+              // 댓글 삭제
+              await marketcommentProvider.deleteMarketComment(marketcomment.id);
+
+              // 댓글 삭제 후 목록 새로고침
+              await marketcommentProvider.getMarketComments(articleId);
+
+              Navigator.pop(context); // 다이얼로그 닫기
             },
             child: Container(
               height: 80,

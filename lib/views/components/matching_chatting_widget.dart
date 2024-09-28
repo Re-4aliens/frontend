@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:aliens/services/api_service.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/models/partner_model.dart';
 import 'package:aliens/views/pages/chatting/chatting_page.dart';
@@ -7,7 +7,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import 'package:aliens/services/chat_service.dart';
 import 'package:aliens/services/auth_service.dart';
 import 'package:aliens/models/chat_room_model.dart';
@@ -27,7 +26,10 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
   StreamSubscription<RemoteMessage>? _messageStreamSubscription;
   Future<List<ChatMessageSummary>>? futureChatMessageSummaries;
   late List<ChatMessageSummary> _chatMessageSummaries;
+  late List<ChatRoom> _chatRooms;
   late Map<int, Partner> _partnerMap;
+  final Set<int> _closedRoomId = {};
+  int memberId = 0;
 
   @override
   void initState() {
@@ -44,12 +46,21 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       _updateList();
     });
+
+    _asyncMethod();
   }
 
   @override
   void dispose() {
     _messageStreamSubscription?.cancel();
     super.dispose();
+  }
+
+  _asyncMethod() async {
+    String? memberIdString = await APIService.storage.read(key: 'memberId');
+    setState(() {
+      memberId = int.parse(memberIdString ?? "0");
+    });
   }
 
   Future<List<ChatMessageSummary>> _getChatMessageSummaries() async {
@@ -62,6 +73,16 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
     }
 
     _chatMessageSummaries = chatData.chatMessageSummaries;
+    _chatRooms = chatData.chatRooms;
+
+    // _chatMessageSummaries = chatDataMock.chatMessageSummaries;
+    // _chatRooms = chatDataMock.chatRooms;
+
+    for (var room in _chatRooms) {
+      if (room.status == "CLOSED") {
+        _closedRoomId.add(room.id);
+      }
+    }
 
     // 채팅 요약 목록 업데이트 및 정렬
     for (var summary in _chatMessageSummaries) {
@@ -71,8 +92,6 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
         summary.numberOfUnreadMessages = 0;
       }
     }
-
-    //_chatMessageSummaries = chatDataMock.chatMessageSummaries;
 
     // 목록을 정렬
     _chatMessageSummaries.sort((a, b) {
@@ -180,21 +199,21 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
         onPressed: () {
           _messageStreamSubscription?.cancel();
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ChattingPage(
-                partner: partner,
-                memberId: widget.screenArguments.applicant!.memberId ?? 0,
+          if (!_closedRoomId.contains(chatMessageSummary.roomId)) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    ChattingPage(partner: partner, memberId: memberId),
               ),
-            ),
-          ).then((value) async {
-            _updateList();
-            _messageStreamSubscription = FirebaseMessaging.onMessage
-                .listen((RemoteMessage message) async {
+            ).then((value) async {
               _updateList();
+              _messageStreamSubscription = FirebaseMessaging.onMessage
+                  .listen((RemoteMessage message) async {
+                _updateList();
+              });
             });
-          });
+          }
         },
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15),
@@ -245,7 +264,8 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                           (chatMessageSummary.lastMessageTime == '기록 없음')
                               ? ''
                               : DateFormat('hh:mm aaa').format(DateTime.parse(
-                                  chatMessageSummary.lastMessageTime)),
+                                      chatMessageSummary.lastMessageTime)
+                                  .toLocal()),
                           style: const TextStyle(
                             fontSize: 12,
                             color: Color(0xff888888),
@@ -262,7 +282,9 @@ class _MatchingChattingWidgetState extends State<MatchingChattingWidget> {
                           child: SizedBox(
                             width: 200,
                             child: Text(
-                              chatMessageSummary.lastMessageContent,
+                              _closedRoomId.contains(chatMessageSummary.roomId)
+                                  ? "blocked-chatting-user".tr()
+                                  : chatMessageSummary.lastMessageContent,
                               style: const TextStyle(
                                 fontSize: 16,
                                 color: Color(0xffA4A4A4),

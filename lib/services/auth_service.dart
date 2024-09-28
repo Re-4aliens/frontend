@@ -24,6 +24,7 @@ class AuthService extends APIService {
           }));
 
       if (response.statusCode == 200) {
+        print("로그인 성공");
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         APIService.token = responseBody['result']['accessToken'];
         APIService.refreshToken = responseBody['result']['refreshToken'];
@@ -32,13 +33,13 @@ class AuthService extends APIService {
         await APIService.storage.write(key: 'token', value: APIService.token!);
         await APIService.storage
             .write(key: 'refreshToken', value: APIService.refreshToken!);
-        await APIService.storage.write(
-            key: 'auth',
-            value:
-                jsonEncode({'email': auth.email, 'password': auth.password}));
+
+        await APIService.storage.write(key: 'email', value: auth.email);
+        await APIService.storage.write(key: 'password', value: auth.password);
 
         return true;
       } else {
+        print(utf8.decode(response.bodyBytes));
         return false;
       }
     } catch (e) {
@@ -79,6 +80,8 @@ class AuthService extends APIService {
       await APIService.storage.delete(key: 'jwtToken');
       await APIService.storage.delete(key: 'refreshToken');
       await APIService.storage.delete(key: 'notifications');
+      await APIService.storage.delete(key: 'email');
+      await APIService.storage.delete(key: 'password');
       // 스택 비우고 화면 이동
       Navigator.of(context)
           .pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);

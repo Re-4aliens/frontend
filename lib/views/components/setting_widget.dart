@@ -10,6 +10,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:aliens/services/user_service.dart';
 import '../../models/screen_argument.dart';
+import 'package:aliens/services/api_service.dart';
 
 class SettingWidget extends StatefulWidget {
   const SettingWidget({
@@ -55,7 +56,7 @@ class _SettingWidgetState extends State<SettingWidget> {
 
   void initialize() async {
     await fetchMemberDetails();
-    final userEmail = await UserService.fetchUserEmail();
+    final userEmail = await APIService.storage.read(key: 'email');
 
     setState(() {
       email = userEmail;
@@ -146,9 +147,7 @@ class _SettingWidgetState extends State<SettingWidget> {
                             height: 90.r,
                             width: 90.r,
                             decoration: BoxDecoration(
-                              color: profileImageUrl == ''
-                                  ? Colors.white
-                                  : Colors.transparent,
+                              color: Colors.white,
                               shape: BoxShape.circle,
                               image: profileImageUrl != ''
                                   ? DecorationImage(

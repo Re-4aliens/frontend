@@ -269,6 +269,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                     late bool success;
                     try {
                       success = await MatchingService.applicantMatching(
+                          context,
                           nationlist[selectedIndex[0]]['value'],
                           nationlist[selectedIndex[1]]['value']);
                     } catch (e) {
@@ -289,6 +290,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                             await AuthService.logOut(context);
                           } else {
                             success = await MatchingService.applicantMatching(
+                                context,
                                 nationlist[selectedIndex[0]]['value'],
                                 nationlist[selectedIndex[1]]['value']);
                           }
@@ -298,6 +300,7 @@ class _MatchingChoosePageState extends State<MatchingChoosePage> {
                         await AuthService.logOut(context);
                       } else {
                         success = await MatchingService.applicantMatching(
+                            context,
                             nationlist[selectedIndex[0]]['value'],
                             nationlist[selectedIndex[1]]['value']);
                       }

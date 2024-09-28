@@ -38,6 +38,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
         body: const Center(child: Text('No arguments provided')),
       );
     }
+    print(args.memberDetails.profileImageUrl);
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
 
@@ -559,7 +560,7 @@ class _MatchingInfoPageState extends State<MatchingInfoPage> {
                                               height: 2,
                                             ),
                                             Text(
-                                              '${args.applicant?..secondPreferLanguage}',
+                                              '${args.applicant?.secondPreferLanguage}',
                                               style: TextStyle(
                                                 fontSize:
                                                     isSmallScreen ? 18 : 20,

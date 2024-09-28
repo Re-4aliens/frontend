@@ -2,22 +2,22 @@ import 'package:aliens/models/chat_room_model.dart';
 
 ChatRoom chatRoom1 = ChatRoom(
   id: 143,
-  status: "WAITING",
+  status: "OPEND",
 );
 
 ChatRoom chatRoom2 = ChatRoom(
   id: 144,
-  status: "WAITING",
+  status: "OPEND",
 );
 
 ChatRoom chatRoom3 = ChatRoom(
   id: 136,
-  status: "WAITING",
+  status: "CLOSED",
 );
 
 ChatRoom chatRoom4 = ChatRoom(
   id: 139,
-  status: "WAITING",
+  status: "OPNED",
 );
 
 ChatMessageSummary chatMessageSummary1 = ChatMessageSummary(

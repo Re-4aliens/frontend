@@ -44,11 +44,11 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>NSCameraUsageDescription</string>
+	<string>앱이 사진을 찍기 위해 카메라에 접근할 필요가 있습니다.</string>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>Used to capture audio for image picker plugin</string>
+	<string>이미지 선택 플러그인을 위해 오디오를 녹음하는 데 사용됩니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>NSPhotoLibraryUsageDescription</string>
+	<string>앱이 사진을 저장하고 업로드하기 위해 사진 라이브러리에 접근할 필요가 있습니다.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

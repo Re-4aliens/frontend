@@ -14,7 +14,6 @@ import 'package:aliens/providers/bookmarks_provider.dart';
 import 'package:aliens/providers/market_comment_provider.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/marketcomment_dialog.dart';
-import 'market_board_page.dart';
 
 class MarketDetailPage extends StatefulWidget {
   const MarketDetailPage(
@@ -43,6 +42,18 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
 
   void sendComment() async {
     updateUi();
+  }
+
+  final ScrollController _scrollController = ScrollController();
+
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent + 100, // 추가된 댓글이 보이도록 패딩 추가
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
   }
 
   void updateUi() async {
@@ -101,53 +112,12 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: const Color(0xff7898ff),
-          toolbarHeight: 56,
-          leadingWidth: 100,
-          leading: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  if (widget.backPage == 'marketboard') {
-                    setState(() {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (BuildContext context) => MarketBoardPage(
-                            screenArguments: widget.screenArguments,
-                            marketBoard: widget.marketBoard,
-                            memberDetails:
-                                widget.screenArguments.memberDetails),
-                      ));
-                    });
-                  } else {
-                    setState(() {
-                      Navigator.of(context).pop();
-                    });
-                  }
-                },
-                icon: SvgPicture.asset(
-                  'assets/icon/icon_back.svg',
-                  color: Colors.white,
-                  width: 18.w,
-                  height: MediaQuery.of(context).size.height * 0.02,
-                ),
-              ),
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    isDrawerStart = !isDrawerStart;
-                  });
-                },
-                icon: const Icon(Icons.format_list_bulleted_outlined),
-                color: Colors.white,
-              ),
-            ],
+          title: Text(
+            'market'.tr(),
+            style: TextStyle(fontSize: 18.spMin),
           ),
-          title: Text('market'.tr(),
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.spMin,
-              )),
-          centerTitle: true,
+          backgroundColor: const Color(0xff7898ff),
+          elevation: 0,
         ),
         body: isDrawerStart
             ? BoardDrawerWidget(
@@ -158,6 +128,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
             : Column(children: [
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: _scrollController,
                     child: Container(
                       padding:
                           EdgeInsets.only(right: 24.w, left: 24.w, top: 12.h),
@@ -448,11 +419,10 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                         child: Column(
                                           children: [
                                             Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                          vertical: 15,
-                                                          horizontal: 30)
-                                                      .r,
+                                              padding: EdgeInsets.symmetric(
+                                                      vertical: 15.r,
+                                                      horizontal: 10.r)
+                                                  .r,
                                               color: parentsCommentId ==
                                                       marketcommentProvider
                                                           .commentListData![
@@ -481,13 +451,36 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                         right:
                                                                             10.0)
                                                                     .r,
-                                                            child: SvgPicture
-                                                                .asset(
-                                                              'assets/icon/icon_profile.svg',
-                                                              width: 25.r,
-                                                              color: const Color(
-                                                                  0xffc1c1c1),
-                                                            ),
+                                                            child: widget
+                                                                        .marketBoard
+                                                                        .memberProfileDto ==
+                                                                    null
+                                                                ? SvgPicture
+                                                                    .asset(
+                                                                    'assets/icon/icon_profile.svg',
+                                                                    width: 25.r,
+                                                                    color: const Color(
+                                                                        0xffc1c1c1),
+                                                                  )
+                                                                : Container(
+                                                                    height:
+                                                                        25.r,
+                                                                    width: 25.r,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      shape: BoxShape
+                                                                          .circle,
+                                                                      image:
+                                                                          DecorationImage(
+                                                                        image: NetworkImage(widget
+                                                                            .marketBoard
+                                                                            .memberProfileDto!
+                                                                            .profileImageUrl),
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ),
+                                                                    ),
+                                                                  ),
                                                           ),
                                                           Text(
                                                             marketcommentProvider
@@ -545,33 +538,39 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                           InkWell(
                                                             onTap: () {
                                                               showDialog(
-                                                                  context:
-                                                                      context,
-                                                                  builder:
-                                                                      (builder) {
-                                                                    return MarketCommentDialog(
-                                                                      context:
-                                                                          context,
-                                                                      onpressed:
+                                                                context:
+                                                                    context,
+                                                                builder:
+                                                                    (builder) {
+                                                                  // 댓글 이상하게 달림
+                                                                  return MarketCommentDialog(
+                                                                    articleId: widget
+                                                                            .marketBoard
+                                                                            .id ??
+                                                                        -1,
+                                                                    context:
+                                                                        context,
+                                                                    onpressed:
+                                                                        () {
+                                                                      setState(
                                                                           () {
-                                                                        setState(
-                                                                            () {
-                                                                          isNestedComments =
-                                                                              true;
-                                                                          parentsCommentId = marketcommentProvider
-                                                                              .commentListData![index]
-                                                                              .id;
-                                                                        });
-                                                                        Navigator.pop(
-                                                                            context);
-                                                                      },
-                                                                      isNestedComment:
-                                                                          false,
-                                                                      marketcomment:
-                                                                          marketcommentProvider
-                                                                              .commentListData![index],
-                                                                    );
-                                                                  });
+                                                                        isNestedComments =
+                                                                            true;
+                                                                        parentsCommentId = marketcommentProvider
+                                                                            .commentListData![index]
+                                                                            .id;
+                                                                      });
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    isNestedComment:
+                                                                        false,
+                                                                    marketcomment:
+                                                                        marketcommentProvider
+                                                                            .commentListData![index],
+                                                                  );
+                                                                },
+                                                              );
                                                             },
                                                             child: Padding(
                                                               padding: const EdgeInsets
@@ -599,9 +598,16 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                             .r,
                                                     child: Text(
                                                       marketcommentProvider
-                                                          .commentListData![
-                                                              index]
-                                                          .content,
+                                                                  .commentListData![
+                                                                      index]
+                                                                  .status ==
+                                                              'ACTIVE'
+                                                          ? marketcommentProvider
+                                                              .commentListData![
+                                                                  index]
+                                                              .content
+                                                          : "deleted-comment"
+                                                              .tr(),
                                                       style: TextStyle(
                                                           fontSize: 14.spMin,
                                                           color: const Color(
@@ -690,14 +696,24 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                       Padding(
                                                                         padding:
                                                                             const EdgeInsets.only(right: 10.0).w,
-                                                                        child: SvgPicture
-                                                                            .asset(
-                                                                          'assets/icon/icon_profile.svg',
-                                                                          width:
-                                                                              25.r,
-                                                                          color:
-                                                                              const Color(0xffc1c1c1),
-                                                                        ),
+                                                                        child: widget.marketBoard.memberProfileDto ==
+                                                                                null
+                                                                            ? SvgPicture.asset(
+                                                                                'assets/icon/icon_profile.svg',
+                                                                                width: 25.r,
+                                                                                color: const Color(0xffc1c1c1),
+                                                                              )
+                                                                            : Container(
+                                                                                height: 25.r,
+                                                                                width: 25.r,
+                                                                                decoration: BoxDecoration(
+                                                                                  shape: BoxShape.circle,
+                                                                                  image: DecorationImage(
+                                                                                    image: NetworkImage(widget.marketBoard.memberProfileDto!.profileImageUrl),
+                                                                                    fit: BoxFit.cover,
+                                                                                  ),
+                                                                                ),
+                                                                              ),
                                                                       ),
                                                                       Flexible(
                                                                         child:
@@ -733,6 +749,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                               context: context,
                                                                               builder: (builder) {
                                                                                 return MarketCommentDialog(
+                                                                                    articleId: widget.marketBoard.id ?? -1,
                                                                                     context: context,
                                                                                     onpressed: () {
                                                                                       setState(() {
@@ -841,6 +858,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                           )),
                           IconButton(
                             onPressed: () {
+                              // 댓글 대댓글
                               if (_newComment != '') {
                                 if (isNestedComments) {
                                   marketcommentProvider.addNestedMarketComment(
@@ -853,6 +871,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 } else {
                                   marketcommentProvider.addMarketComment(
                                       _newComment, widget.marketBoard.id!);
+
+                                  _scrollToBottom();
                                 }
                                 updateUi();
                               }

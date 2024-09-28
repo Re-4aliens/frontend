@@ -12,11 +12,11 @@ class BoardProvider with ChangeNotifier {
   Future<void> getAllArticles() async {
     _setLoading(true);
     try {
-      articleList = await BoardService.getTotalArticles(0);
+      articleList = await BoardService.getTotalArticles(0, 10);
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        articleList = await BoardService.getTotalArticles(0);
+        articleList = await BoardService.getTotalArticles(0, 10);
       }
     }
     await getLikeCounts();
@@ -54,25 +54,25 @@ class BoardProvider with ChangeNotifier {
   Future<void> getMoreAllArticles(int page) async {
     _setLoading(true);
     try {
-      articleList.addAll(await BoardService.getTotalArticles(page));
+      articleList.addAll(await BoardService.getTotalArticles(page, 10));
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        articleList.addAll(await BoardService.getTotalArticles(page));
+        articleList.addAll(await BoardService.getTotalArticles(page, 10));
       }
     }
     await getLikeCounts();
     _setLoading(false);
   }
 
-  Future<bool> addPost(Board board) async {
+  Future<bool> addPost(BuildContext context, Board board) async {
     bool value = false;
     try {
-      value = await BoardService.postArticle(board);
+      value = await BoardService.postArticle(context, board);
     } catch (e) {
       if (e == "AT-C-002") {
         bool isSuccess = await AuthService.getAccessToken();
-        value = await BoardService.postArticle(board);
+        value = await BoardService.postArticle(context, board);
       }
     }
     return value;
@@ -80,13 +80,16 @@ class BoardProvider with ChangeNotifier {
 
   Future<void> addLike(int articleId, int index) async {
     try {
-      greatCounts[index] = await BoardService.addLike(articleId);
+      if (await BoardService.addLike(articleId)) {
+        reload();
+      }
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
-        greatCounts[index] = await BoardService.addLike(articleId);
+        if (await BoardService.addLike(articleId)) {
+          reload();
+        }
       }
-      _setLoading(false);
     }
   }
 
@@ -181,10 +184,24 @@ class BoardProvider with ChangeNotifier {
     });
   }
 
+  Future<void> reload() async {
+    _setLoading(true);
+    try {
+      articleList = await BoardService.getTotalArticles(0, articleList.length);
+    } catch (e) {
+      if (e == "AT-C-002") {
+        await AuthService.getAccessToken();
+        articleList =
+            await BoardService.getTotalArticles(0, articleList.length);
+      }
+    }
+    await getLikeCounts();
+    _setLoading(false);
+  }
+
   void _setLoading(bool value) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loading = value;
-
       notifyListeners();
     });
   }

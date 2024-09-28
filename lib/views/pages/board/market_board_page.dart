@@ -185,7 +185,7 @@ class _MarketBoardPageState extends State<MarketBoardPage> {
                     MaterialPageRoute(
                         builder: (context) => SearchPage(
                               screenArguments: widget.screenArguments,
-                              category: "장터게시판",
+                              category: "MARKET",
                             )),
                   );
                 },

@@ -78,11 +78,9 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
           future: getNotification(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: Container(
-                    child: const Image(
-                        image:
-                            AssetImage("assets/illustration/loading_01.gif"))),
+              return const Center(
+                child: Image(
+                    image: AssetImage("assets/illustration/loading_01.gif")),
               );
             } else {
               return Container(
@@ -293,21 +291,15 @@ class _SettingNotificationPageState extends State<SettingNotificationPage> {
                             onChanged: (value) async {
                               if (await Permissions
                                   .getNotificationPermission()) {
-                                await storage.delete(key: 'notifications');
+                                await storage.delete(key: 'inAppNotification');
 
                                 await storage.write(
-                                  key: 'notifications',
+                                  key: 'inAppNotification',
                                   value: jsonEncode({
-                                    'allNotification': value,
-                                    'matchingNotification': value,
-                                    'chatNotification': value,
-                                    'communityNotification': value
+                                    'inAppNotification': value,
                                   }),
                                 );
-                                NotificationService.setNotification(value);
-                                setState(() {
-                                  notificationStatus = value;
-                                });
+                                setState(() {});
                               }
                             },
                           ),

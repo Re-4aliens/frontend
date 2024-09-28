@@ -289,6 +289,7 @@
   "comment1": "Please enter a comment.",
   "comment2": "Please enter a reply to a comment.",
   "comment3": "Reply",
+  "deleted-comment": "This comment has been deleted.",
 
   "post1": "Create a post",
   "notice": "Notice",
@@ -305,12 +306,12 @@
 
   "general-board-post" : "General Board New Post",
   "market-board-post": "Market Board New Post",
-  "Brand_New": "BRAND_NEW",
-  "Almost_New": "ALMOST_NEW",
-  "Slight_Defect": "SLIGHT_DEFECT",
-  "Used": "USED",
-  "sale": "SELL",
-  "sold-out":"END",
+  "BRAND_NEW": "BRAND NEW",
+  "ALMOST_NEW": "ALMOST NEW",
+  "SLIGHT_DEFECT": "SLIGHT DEFECT",
+  "USED": "USED",
+  "SELL": "SELL",
+  "END": "END",
 
 
   "search1": "Type Keyword",
@@ -318,6 +319,14 @@
   "liked noti":" liked your post",
   "reply":" replied to your comment",
   "comment":" commented on your post",
-  "posting-noti": "Inappropriate or offensive content may result in sanctions."
+  "posting-noti": "Inappropriate or offensive content may result in sanctions.",
 
+  "upload-failed": "Upload Failed",
+
+  "image-warning" : "You can only select up to 3 images.",
+
+  "post-time-error": "The post was created less than 5 minutes ago.",
+  "blocked-chatting-user": "The user is unable to chat due to being blocked or reported.",
+  "alert": "Alert",
+  "no-matching-time":"Matching requests are not open at this time."
 }

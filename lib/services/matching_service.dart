@@ -6,6 +6,22 @@ import 'package:aliens/models/screen_argument.dart';
 import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/models/applicant_model.dart';
 import 'package:aliens/services/user_service.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'dart:async';
+import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+
+Future<void> showAlert(BuildContext context, String message) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return CupertinoAlertDialog(
+        title: Text("alert".tr()),
+        content: Text(message),
+      );
+    },
+  );
+}
 
 class MatchingService extends APIService {
   /*
@@ -26,27 +42,22 @@ class MatchingService extends APIService {
         },
       );
 
+      print(response.statusCode);
+
       if (response.statusCode == 200) {
+        print("신청 정보 응답 : ${utf8.decode(response.bodyBytes)}");
         var responseData = json.decode(utf8.decode(response.bodyBytes));
         var result = responseData['result'];
+        print("신청정보 $result");
 
         return result;
       } else {
-        // 실패 시 오류 처리
-        if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-002') {
-          // 엑세스 토큰 만료
-          throw 'AT-C-002';
-        } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-            'AT-C-007') {
-          // 로그아웃된 토큰
-          throw 'AT-C-007';
-        } else {
-          throw Exception('요청 오류');
-        }
+        var responseData = utf8.decode(response.bodyBytes);
+        print("신청 정보 오류 : $responseData");
+        throw "신청 정보 오류";
       }
     } catch (error) {
-      rethrow;
+      throw Exception(error);
     }
   }
 
@@ -71,11 +82,12 @@ class MatchingService extends APIService {
     if (response.statusCode == 200) {
       var responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> matchingPartner = responseBody['result'];
+      print(responseBody);
       return matchingPartner
           .map((dynamic item) => Partner.fromJson(item))
           .toList();
     } else {
-      var responseBody = json.decode(utf8.decode(response.bodyBytes));
+      print("상대방 조회 실패 ");
       if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
         // 엑세스 토큰 만료
         throw 'AT-C-002';
@@ -103,22 +115,24 @@ class MatchingService extends APIService {
 
     try {
       status = await UserService.getApplicantStatus();
+      print("매칭 데이터 $status");
 
       memberDetails = await UserService.getMemberDetails();
+      print("매칭 데이터 ${memberDetails.name}");
 
-      if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
+      if (status == 'AppliedAndNotMatched') {
         applicant = Applicant.fromJson(await getApplicantInfo());
       } else {
         applicant = null;
       }
 
       if (status == 'NotAppliedAndMatched' || status == 'AppliedAndMatched') {
-        applicant = Applicant.fromJson(await getApplicantInfo());
         partners = await getApplicantPartners();
       } else {
         partners = null;
       }
     } catch (e) {
+      print('error $e');
       // 필요한 경우, 예외 상황에서 기본값을 설정합니다.
       memberDetails = MemberDetails(
         name: 'name',
@@ -175,7 +189,7 @@ class MatchingService extends APIService {
   매칭 신청
 
    */
-  static Future<bool> applicantMatching(
+  static Future<bool> applicantMatching(BuildContext context,
       String firstPreferLanguage, String secondPreferLanguage) async {
     var url = '$domainUrl/matchings/applications';
 
@@ -194,14 +208,14 @@ class MatchingService extends APIService {
     if (response.statusCode == 200) {
       return true;
     } else {
-      if (json.decode(utf8.decode(response.bodyBytes))['code'] == 'AT-C-002') {
-        // 액세스 토큰 만료
-        throw 'AT-C-002';
-      } else if (json.decode(utf8.decode(response.bodyBytes))['code'] ==
-          'AT-C-007') {
-        // 로그아웃된 토큰
-        throw 'AT-C-007';
-      } else {}
+      try {
+        final responseBody = jsonDecode(utf8.decode(response.bodyBytes));
+        if (responseBody['code'].contains("MA2")) {
+          await showAlert(context, "no-matching-time".tr());
+        }
+      } catch (e) {
+        throw Exception(e);
+      }
       return false;
     }
   }
