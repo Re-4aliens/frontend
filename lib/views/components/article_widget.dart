@@ -58,7 +58,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
 
     return GestureDetector(
       onTap: () {
-        widget.board.category == "정보게시판"
+        widget.board.category == "INFO"
             ? Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -67,11 +67,13 @@ class _ArticleWidgetState extends State<ArticleWidget> {
             : Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => ArticlePage(
-                          board: widget.board,
-                          memberDetails: widget.memberDetails,
-                          index: widget.index,
-                        )),
+                  builder: (context) => ArticlePage(
+                    board: widget.board,
+                    memberDetails: widget.memberDetails,
+                    index: widget.index,
+                    isTotal: false,
+                  ),
+                ),
               );
       },
       child: Container(
@@ -141,6 +143,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                               return BoardDialog(
                                 board: widget.board,
                                 memberDetails: widget.memberDetails,
+                                isTotal: false,
                               );
                             });
                       },
@@ -180,7 +183,7 @@ class _ArticleWidgetState extends State<ArticleWidget> {
                           overflow: TextOverflow.fade,
                         ),
                       ),
-                      widget.board.category == "정보게시판"
+                      widget.board.category == "INFO"
                           ? SizedBox(height: 5.h)
                           : Padding(
                               padding:
@@ -220,7 +223,8 @@ class _ArticleWidgetState extends State<ArticleWidget> {
               children: [
                 InkWell(
                   onTap: () {
-                    boardProvider.addLike(widget.board.id!, widget.index);
+                    boardProvider.addLike(widget.board.id!, widget.index, false,
+                        widget.board.category);
                   },
                   child: Padding(
                     padding:

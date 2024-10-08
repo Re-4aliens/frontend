@@ -130,7 +130,6 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
   @override
   void initState() {
     super.initState();
-    print(widget.category);
     switch (widget.category) {
       case 'FREE':
         boardCategory = 'free-posting'.tr();
@@ -273,7 +272,6 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                                                     setState(() {
                                                       boardCategory =
                                                           "fashion".tr();
-                                                      print(boardCategory);
                                                     });
                                                     Navigator.pop(context);
                                                   },
@@ -492,11 +490,9 @@ class _ArticleWritingPageState extends State<ArticleWritingPage> {
                           content != '' &&
                           boardCategory != 'post4'.tr()) {
                         FocusScope.of(context).unfocus();
-                        print('새로운글 $boardCategory');
                         boardCategory =
                             categoryValue[boardCategory] ?? 'Unknown';
 
-                        print('새로운글 $boardCategory');
 
                         // 여기
                         List<String> requestImages = [];

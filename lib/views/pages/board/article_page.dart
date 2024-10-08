@@ -16,15 +16,18 @@ import '../../components/board_dialog_widget.dart';
 import '../../components/comment_dialog_widget.dart';
 
 class ArticlePage extends StatefulWidget {
-  const ArticlePage(
-      {super.key,
-      required this.board,
-      required this.memberDetails,
-      required this.index});
+  const ArticlePage({
+    super.key,
+    required this.board,
+    required this.memberDetails,
+    required this.index,
+    required this.isTotal,
+  });
 
   final Board board;
   final MemberDetails memberDetails;
   final int index;
+  final bool isTotal;
 
   @override
   State<StatefulWidget> createState() => _ArticlePageState();
@@ -193,6 +196,7 @@ class _ArticlePageState extends State<ArticlePage> {
                                   return BoardDialog(
                                     board: widget.board,
                                     memberDetails: widget.memberDetails,
+                                    isTotal: widget.isTotal,
                                   );
                                 });
                           },
@@ -209,14 +213,14 @@ class _ArticlePageState extends State<ArticlePage> {
 
                     //내용
                     subtitle: Container(
-                      padding: EdgeInsets.only(left: 15.w, bottom: 15.h),
+                      padding: EdgeInsets.only(left: 15.w, bottom: 5.h),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                              top: 10,
+                              top: 5,
                             ).h,
                             child: Text(
                               widget.board.title,
@@ -295,7 +299,10 @@ class _ArticlePageState extends State<ArticlePage> {
                                 onTap: () {
                                   if (widget.index != -1) {
                                     boardProvider.addLike(
-                                        widget.board.id!, widget.index);
+                                        widget.board.id!,
+                                        widget.index,
+                                        widget.isTotal,
+                                        widget.board.category);
                                   }
                                 },
                                 child: Padding(

@@ -142,7 +142,7 @@ class CommentService extends APIService {
     
   */
   static Future<List<Board>> getCommentArticles(int page) async {
-    final url = '$domainUrl/my-boards?page=$page&size=10';
+    final url = '$domainUrl/comments/my-boards?page=$page&size=10';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -153,7 +153,6 @@ class CommentService extends APIService {
         'Content-Type': 'application/json;charset=UTF-8',
       },
     );
-
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       List<dynamic> result = responseBody['result'];

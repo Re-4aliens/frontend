@@ -79,9 +79,7 @@ class _HomePageState extends State<HomePage> {
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print("띠링띠링 : $message");
-      print(message.data['title']);
-      print(message.data['body']);
+
       var inAppNotification = await storage.read(key: 'inAppNotification');
 
       if (json.decode(inAppNotification!)['inAppNotification'] == true) {

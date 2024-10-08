@@ -24,7 +24,6 @@ class AuthService extends APIService {
           }));
 
       if (response.statusCode == 200) {
-        print("로그인 성공");
         var responseBody = json.decode(utf8.decode(response.bodyBytes));
         APIService.token = responseBody['result']['accessToken'];
         APIService.refreshToken = responseBody['result']['refreshToken'];
@@ -39,7 +38,6 @@ class AuthService extends APIService {
 
         return true;
       } else {
-        print(utf8.decode(response.bodyBytes));
         return false;
       }
     } catch (e) {

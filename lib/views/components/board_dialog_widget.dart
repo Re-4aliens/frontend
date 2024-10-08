@@ -16,11 +16,13 @@ import '../../models/board_model.dart';
 class BoardDialog extends StatefulWidget {
   final Board board;
   final MemberDetails memberDetails;
+  final bool isTotal;
 
   const BoardDialog({
     Key? key,
     required this.board,
     required this.memberDetails,
+    required this.isTotal,
   }) : super(key: key);
 
   @override
@@ -106,7 +108,12 @@ class _BoardDialogState extends State<BoardDialog> {
                                       .addPostFrameCallback((_) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    boardProvider.reload();
+                                    if (widget.isTotal) {
+                                      boardProvider.reload();
+                                    } else {
+                                      boardProvider.reloadCategory(
+                                          widget.board.category);
+                                    }
                                   });
                                   return const Image(
                                       image: AssetImage(
@@ -199,7 +206,12 @@ class _BoardDialogState extends State<BoardDialog> {
                                       .addPostFrameCallback((_) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
-                                    boardProvider.reload();
+                                    if (widget.isTotal) {
+                                      boardProvider.reload();
+                                    } else {
+                                      boardProvider.reloadCategory(
+                                          widget.board.category);
+                                    }
                                   });
                                   return const Image(
                                       image: AssetImage(

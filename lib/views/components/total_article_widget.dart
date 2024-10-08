@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../../models/board_model.dart';
-import 'package:aliens/providers/bookmarks_provider.dart';
 import 'package:aliens/providers/board_provider.dart';
 import '../pages/board/article_page.dart';
 import '../pages/board/market_detail_page.dart';
@@ -17,12 +16,13 @@ import 'board_dialog_widget.dart';
 import 'package:aliens/models/countries.dart';
 
 class TotalArticleWidget extends StatefulWidget {
-  const TotalArticleWidget(
-      {super.key,
-      required this.board,
-      required this.screenArguments,
-      required this.index,
-      this.marketBoard});
+  const TotalArticleWidget({
+    super.key,
+    required this.board,
+    required this.screenArguments,
+    required this.index,
+    this.marketBoard,
+  });
 
   final Board board;
   final ScreenArguments screenArguments;
@@ -41,11 +41,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
   void initState() {
     super.initState();
     final boardProvider = Provider.of<BoardProvider>(context, listen: false);
-    final bookmarkProvider =
-        Provider.of<BookmarksProvider>(context, listen: false);
-
     boardProvider.getLikeCounts();
-    bookmarkProvider.getbookmarksCounts(0);
 
     switch (widget.board.category) {
       case 'FREE':
@@ -105,7 +101,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                 builder: (context) => MarketDetailPage(
                   screenArguments: widget.screenArguments,
                   marketBoard: data,
-                  index: -1,
+                  index: widget.index,
                   backPage: 'total',
                 ),
               ),
@@ -119,6 +115,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                 board: widget.board,
                 memberDetails: widget.screenArguments.memberDetails,
                 index: widget.index,
+                isTotal: true,
               ),
             ),
           );
@@ -211,6 +208,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                                 board: widget.board,
                                 memberDetails:
                                     widget.screenArguments.memberDetails,
+                                isTotal: true,
                               );
                             });
                       },
@@ -228,7 +226,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                 ),
               ],
             ),
-            SizedBox(height: 5.h), // 간격 조정
+            SizedBox(height: 5.h),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -260,8 +258,9 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                               child: Text(
                                 widget.board.content,
                                 style: TextStyle(
-                                    fontSize: 14.spMin,
-                                    color: const Color(0xff616161)),
+                                  fontSize: 14.spMin,
+                                  color: const Color(0xff616161),
+                                ),
                                 maxLines: 2,
                                 overflow: TextOverflow.fade,
                               ),
@@ -292,13 +291,8 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
               children: [
                 InkWell(
                   onTap: () async {
-                    if (widget.board.category != "MARKET") {
-                      boardProvider.addLike(widget.board.id!, widget.index);
-                    } else {
-                      boardProvider.greatCounts[widget.index] =
-                          await MarketService.marketBookmark(
-                              widget.board.id!, widget.index);
-                    }
+                    boardProvider.addLike(
+                        widget.board.id!, widget.index, true, null);
                   },
                   child: Padding(
                     padding:
@@ -313,9 +307,9 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 4, right: 15).w,
-                  child: boardProvider.greatCounts[widget.index] == 0
-                      ? const Text('')
-                      : Text('${boardProvider.greatCounts[widget.index]}'),
+                  child: boardProvider.greatCounts.length > widget.index
+                      ? Text('${boardProvider.greatCounts[widget.index]}')
+                      : const Text(''),
                 ),
                 Padding(
                   padding:

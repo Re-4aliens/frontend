@@ -46,7 +46,6 @@ class _StartPageState extends State<StartPage> {
 
   Future<void> _checkTokenAndNavigate() async {
     bool isValid = await _authService.checkTokenValidity();
-    print("토큰 유효성 검사 : $isValid");
     if (mounted) {
       if (isValid) {
         Navigator.pushNamedAndRemoveUntil(

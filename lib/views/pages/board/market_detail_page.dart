@@ -1,4 +1,3 @@
-import 'package:aliens/services/market_service.dart';
 import 'package:aliens/models/market_board_model.dart';
 import 'package:aliens/models/screen_argument.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -10,18 +9,19 @@ import 'package:provider/provider.dart';
 import '../../../models/countries.dart';
 import 'package:flutter/services.dart';
 import '../../../models/message_model.dart';
-import 'package:aliens/providers/bookmarks_provider.dart';
+import 'package:aliens/providers/market_provider.dart';
 import 'package:aliens/providers/market_comment_provider.dart';
 import '../../components/board_drawer_widget.dart';
 import '../../components/marketcomment_dialog.dart';
 
 class MarketDetailPage extends StatefulWidget {
-  const MarketDetailPage(
-      {super.key,
-      required this.screenArguments,
-      required this.marketBoard,
-      required this.index,
-      required this.backPage});
+  const MarketDetailPage({
+    super.key,
+    required this.screenArguments,
+    required this.marketBoard,
+    required this.index,
+    required this.backPage,
+  });
   final ScreenArguments screenArguments;
   final MarketBoard marketBoard;
   final int index;
@@ -49,7 +49,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent + 100, // 추가된 댓글이 보이도록 패딩 추가
+        _scrollController.position.maxScrollExtent + 100,
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeOut,
       );
@@ -58,7 +58,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
 
   void updateUi() async {
     setState(() {
-      //텍스트폼 비우기
       _controller.clear();
       _newComment = '';
     });
@@ -82,9 +81,12 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     final marketcommentProvider =
         Provider.of<MarketCommentProvider>(context, listen: false);
     marketcommentProvider.getMarketComments(widget.marketBoard.id ?? -1);
-    if (widget.index == -1) {
-      bookmark = widget.marketBoard.greatCount!;
-    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final marketProvider =
+          Provider.of<MarketProvider>(context, listen: false);
+      marketProvider.getLikeCounts();
+    });
   }
 
   @override
@@ -99,7 +101,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
     String statusText = widget.marketBoard.saleStatus;
 
     final marketcommentProvider = Provider.of<MarketCommentProvider>(context);
-    final bookmarkProvider = Provider.of<BookmarksProvider>(context);
+    final marketProvider = Provider.of<MarketProvider>(context);
 
     return GestureDetector(
       onTap: () {
@@ -321,16 +323,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                 children: [
                                   InkWell(
                                     onTap: () async {
-                                      if (widget.index == -1) {
-                                        bookmark =
-                                            await MarketService.marketBookmark(
-                                                widget.marketBoard.id!,
-                                                widget.index);
-                                      } else {
-                                        bookmarkProvider.addBookmarks(
-                                            widget.marketBoard.id!,
-                                            widget.index);
-                                      }
+                                      marketProvider.addLike(
+                                          widget.marketBoard.id!, widget.index);
                                       setState(() {});
                                     },
                                     child: Padding(
@@ -358,7 +352,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                           padding: const EdgeInsets.only(
                                                   left: 4, right: 15)
                                               .r,
-                                          child: bookmarkProvider.greatCount![
+                                          child: marketProvider.greatCounts[
                                                       widget.index] ==
                                                   0
                                               ? Text('0',
@@ -367,7 +361,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                       color: const Color(
                                                           0xffc1c1c1)))
                                               : Text(
-                                                  '${bookmarkProvider.greatCount![widget.index]}',
+                                                  '${marketProvider.greatCounts[widget.index]}',
                                                   style: TextStyle(
                                                       fontSize: 16.spMin,
                                                       color: const Color(

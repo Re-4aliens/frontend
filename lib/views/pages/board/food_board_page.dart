@@ -118,8 +118,9 @@ class _FoodBoardPageState extends State<FoodBoardPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => NotificationBoardWidget(
-                          screenArguments: widget.screenArguments)),
+                    builder: (context) => NotificationBoardWidget(
+                        screenArguments: widget.screenArguments),
+                  ),
                 );
               },
               child: SvgPicture.asset(

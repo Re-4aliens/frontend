@@ -30,7 +30,6 @@ class Permissions {
     if (status[Permission.notification]!.isGranted) {
       return Future.value(true);
     } else if (status[Permission.notification]!.isPermanentlyDenied) {
-      openAppSettings();
       return Future.value(false);
     } else {
       return Future.value(false);

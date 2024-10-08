@@ -160,7 +160,6 @@ class _LoginState extends State<Login> {
                             style: TextStyle(fontSize: fontSize),
                           ),
                           onPressed: () async {
-                            print("onPressed");
                             if (_emailFormKey.currentState!.validate() &&
                                 _pwFormKey.currentState!.validate()) {
                               auth.email = _emailController.text;

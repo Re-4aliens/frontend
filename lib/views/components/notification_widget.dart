@@ -116,7 +116,6 @@ class _NotificationWidgetState extends State<NotificationWidget> {
 
       onTap: () {
         //상세 페이지로 연결
-        print("상세 페이지 연결");
         showDialog(
           context: context,
           builder: (_) => FutureBuilder(
@@ -176,22 +175,19 @@ class _NotificationWidgetState extends State<NotificationWidget> {
                       ),
                     );
                   } else {
-                    print("일반 게시글 상세 받아오기 완료");
-                    print(snapshot.data);
                     Board data = snapshot.data;
                     //읽음 처리 요청
                     boardProvider.putReadValue(
                         widget.index, widget.article.id!);
 
-                    print("알림 읽음 처리 요청");
-                    print("시간 $data");
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => ArticlePage(
                           memberDetails: widget.screenArguments.memberDetails,
                           board: data,
-                          index: -1,
+                          index: widget.index,
+                          isTotal: true,
                         ),
                       ),
                     );

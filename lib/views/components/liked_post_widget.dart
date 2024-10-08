@@ -158,6 +158,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                               board: widget.board,
                               memberDetails:
                                   widget.screenArguments.memberDetails,
+                              isTotal: true,
                             );
                           });
                     },
@@ -251,6 +252,7 @@ class _LikedArticleWidgetWidgetState extends State<LikedArticleWidget> {
                             board: widget.board,
                             memberDetails: widget.screenArguments.memberDetails,
                             index: widget.index,
+                            isTotal: true,
                           )),
                 );
               }

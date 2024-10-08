@@ -25,6 +25,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
   bool isDrawerStart = false;
   final ScrollController _scrollController = ScrollController();
   int page = 0;
+  bool isLoadingMore = false; // 중복 요청 방지
 
   @override
   void initState() {
@@ -36,29 +37,46 @@ class _MyArticlePageState extends State<MyArticlePage> {
     } else if (widget.category == 'my_posts-child'.tr()) {
       boardProvider.getMyArticles();
     } else if (widget.category == 'my-comments'.tr()) {
-      boardProvider.getMyCommentArticles();
-    } else {}
+      loadMyCommentArticles();
+    }
 
-    _scrollController.addListener(() {
-      if (_scrollController.offset ==
+    _scrollController.addListener(() async {
+      if (_scrollController.position.pixels >=
               _scrollController.position.maxScrollExtent &&
-          !_scrollController.position.outOfRange) {
+          !isLoadingMore) {
+        setState(() {
+          isLoadingMore = true;
+        });
         page++;
         if (widget.category == 'liked'.tr()) {
-          boardProvider.getLikedList();
+          await boardProvider.getMoreLikedList(page);
         } else if (widget.category == 'my_posts-child'.tr()) {
-          boardProvider.getMyArticles();
+          await boardProvider.getMoreMyArticles(page);
         } else if (widget.category == 'my-comments'.tr()) {
-          boardProvider.getMoreMyCommentArticles(page);
-        } else {}
+          await boardProvider.getMoreMyCommentArticles(page);
+        }
+
+        // 데이터 로드 후 isLoadingMore 상태 해제
+        setState(() {
+          isLoadingMore = false;
+        });
       }
+    });
+  }
+
+  void loadMyCommentArticles() async {
+    final boardProvider = Provider.of<BoardProvider>(context, listen: false);
+    int tmp = await boardProvider.getMyCommentArticles();
+
+    setState(() {
+      page = tmp;
     });
   }
 
   @override
   void dispose() {
-    super.dispose();
     _scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -136,7 +154,7 @@ class _MyArticlePageState extends State<MyArticlePage> {
             )
           : Container(
               decoration: const BoxDecoration(color: Colors.white),
-              child: boardProvider.loading
+              child: boardProvider.loading && page == 0
                   ? Container(
                       alignment: Alignment.center,
                       child: const Image(
@@ -165,6 +183,11 @@ class _MyArticlePageState extends State<MyArticlePage> {
                             );
                           },
                         )),
+                        if (isLoadingMore)
+                          const Padding(
+                            padding: EdgeInsets.all(10),
+                            child: CircularProgressIndicator(),
+                          ),
                       ],
                     ),
             ),

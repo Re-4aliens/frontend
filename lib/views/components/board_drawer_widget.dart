@@ -9,7 +9,6 @@ import 'package:aliens/views/pages/board/info_board_page.dart';
 import 'package:aliens/views/pages/board/market_board_page.dart';
 import 'package:aliens/views/pages/board/music_board_page.dart';
 import 'package:aliens/views/pages/board/my_article_page.dart';
-import 'package:aliens/views/pages/board/notice_board_page.dart';
 import 'package:aliens/views/pages/board/notification_page.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -48,49 +47,6 @@ class _BoardDrawerWidgetState extends State<BoardDrawerWidget> {
       ),
       child: ListView(
         children: [
-          InkWell(
-            onTap: () async {
-              if (widget.isTotalBoard) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NoticeBoardPage(
-                          screenArguments: widget.screenArguments)),
-                );
-              } else {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => NoticeBoardPage(
-                          screenArguments: widget.screenArguments)),
-                );
-              }
-            },
-            child: Container(
-              color: Colors.white,
-              width: double.infinity,
-              height: 60,
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Text(
-                    'notice'.tr(),
-                    style:
-                        const TextStyle(color: Color(0xff888888), fontSize: 16),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const Divider(
-            height: 0,
-            thickness: 1,
-          ),
           ExpansionTile(
             backgroundColor: Colors.white,
             tilePadding: const EdgeInsets.only(right: 10, left: 10),

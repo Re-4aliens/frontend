@@ -1,5 +1,6 @@
 import 'package:aliens/models/member_details_model.dart';
 import 'package:aliens/models/screen_argument.dart';
+import 'package:aliens/providers/board_provider.dart';
 import 'package:aliens/services/user_service.dart';
 import 'package:aliens/views/components/report_dialog_widget.dart';
 import 'package:aliens/views/components/report_ios_dialog_widget.dart';
@@ -8,8 +9,8 @@ import 'dart:io' show Platform;
 import 'package:aliens/models/market_board_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:aliens/services/board_service.dart';
+import 'package:provider/provider.dart';
 import '../pages/board/market_board_page.dart';
 import '../pages/board/market_posting_board_page.dart';
 
@@ -37,6 +38,7 @@ class MarketBoardDialog extends StatelessWidget {
   }
 
   Widget androidDialog() {
+    final boardProvider = Provider.of<BoardProvider>(context);
     return Dialog(
       elevation: 0,
       backgroundColor: const Color(0xffffffff),
@@ -107,6 +109,7 @@ class MarketBoardDialog extends StatelessWidget {
                                       .addPostFrameCallback((_) {
                                     Navigator.pop(context);
                                     Navigator.pop(context);
+                                    boardProvider.reloadCategory("MARKET");
                                     Navigator.of(context)
                                         .pushReplacement(MaterialPageRoute(
                                       builder: (BuildContext context) =>
@@ -176,6 +179,7 @@ class MarketBoardDialog extends StatelessWidget {
   }
 
   Widget iOSDialog() {
+    final boardProvider = Provider.of<BoardProvider>(context);
     return Dialog(
       elevation: 0,
       backgroundColor: const Color(0xffffffff),
@@ -241,6 +245,7 @@ class MarketBoardDialog extends StatelessWidget {
                                     .addPostFrameCallback((_) {
                                   Navigator.pop(context);
                                   Navigator.pop(context);
+                                  boardProvider.reloadCategory("MARKET");
                                 });
                                 return Container(
                                   alignment: Alignment.center,

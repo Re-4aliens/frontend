@@ -40,7 +40,6 @@ class BoardService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
-      print(result);
 
       List<dynamic> body = result;
       List<Board> boards =
@@ -58,10 +57,10 @@ class BoardService extends APIService {
     
   */
 
-  static Future<List<Board>> searchTotal(String keyword) async {
+  static Future<List<Board>> searchTotal(String keyword, int page) async {
     final response = await http.get(
       Uri.parse(
-          '$domainUrl/boards/search?search-keyword=$keyword&page=0&size=10'),
+          '$domainUrl/boards/search?search-keyword=$keyword&page=$page&size=10'),
       headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       },
@@ -81,46 +80,13 @@ class BoardService extends APIService {
     }
   }
 
-  // /*
-
-  //   특정 카테고리 게시판 검색
-
-  // */
-  // static Future<List<Board>> searchCategory(
-  //     String category, String keyword) async {
-  //   final url =
-  //       '$domainUrl/boards/category/search?search-keyword=$keyword&category=$category&page=0&size=10';
-  //   final response = await http.get(
-  //     Uri.parse(url),
-  //     headers: {
-  //       'Content-Type': 'application/json;charset=UTF-8',
-  //     },
-  //   );
-
-  //   print(url);
-
-  //   if (response.statusCode == 200) {
-  //     final responseBody = json.decode(utf8.decode(response.bodyBytes));
-  //     print(responseBody);
-  //     final List<dynamic> articlesData = responseBody['result'];
-  //     List<Board> articles = articlesData.map((articleData) {
-  //       return Board.fromJson(articleData);
-  //     }).toList();
-  //     print("특정 게시판 검색 결과 : $articles");
-  //     return articles;
-  //   } else {
-  //     print(json.decode(utf8.decode(response.bodyBytes)));
-  //     throw Exception('요청 오류');
-  //   }
-  // }
-
   /* 
   
     나의 게시글 조회 
   
   */
   static Future<List<Board>> getMyArticles(int page) async {
-    const url = '$domainUrl/boards/writes?=0&size=10';
+    final url = '$domainUrl/boards/writes?page=$page&size=10';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -151,9 +117,10 @@ class BoardService extends APIService {
     특정 게시판 게시물 조회 
     
   */
-  static Future<List<Board>> getArticles(String boardCategory, int page) async {
+  static Future<List<Board>> getArticles(
+      String boardCategory, int page, int size) async {
     final url =
-        '$domainUrl/boards/category?category=$boardCategory&page=$page&size=10';
+        '$domainUrl/boards/category?category=${boardCategory.toLowerCase()}&page=$page&size=$size';
 
     final response = await http.get(
       Uri.parse(url),
@@ -175,10 +142,13 @@ class BoardService extends APIService {
     }
   }
 
+  /* 
+  
+    게시글 등록
+    
+  */
   static Future<bool> postArticle(BuildContext context, Board newBoard) async {
     const url = '$domainUrl/boards/normal';
-
-    print("카테고리 : ${newBoard.category}");
 
     var jwtToken = await APIService.storage.read(key: 'token');
     if (jwtToken == null) {
@@ -294,8 +264,6 @@ class BoardService extends APIService {
 
     if (response.statusCode == 200) {
       var responseData = json.decode(utf8.decode(response.bodyBytes));
-      print("상세 게시글");
-      print(responseData['result']);
       return Board.fromJson(responseData['result']);
     } else {
       throw Exception(utf8.decode(response.bodyBytes));
@@ -325,8 +293,6 @@ class BoardService extends APIService {
     );
 
     if (response.statusCode == 200) {
-      var responseData = json.decode(utf8.decode(response.bodyBytes));
-      print(responseData);
       return true;
     } else {
       return false;
@@ -339,7 +305,7 @@ class BoardService extends APIService {
     
   */
   static Future<List<Board>> getLikedPost(int page) async {
-    const url = '$domainUrl/great/my-board?page=0&size=10';
+    final url = '$domainUrl/great/my-board?page=$page&size=10';
 
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
@@ -358,7 +324,6 @@ class BoardService extends APIService {
     if (response.statusCode == 200) {
       final responseBody = json.decode(utf8.decode(response.bodyBytes));
       final result = responseBody['result'];
-      print('좋아요 한 게시글 $result');
       List<dynamic> body = result;
       List<Board> boards =
           body.map((dynamic item) => Board.fromJson(item)).toList();
@@ -366,40 +331,6 @@ class BoardService extends APIService {
       return boards;
     } else {
       throw Exception('요청 오류');
-    }
-  }
-
-  /*
-  
-    공지사항 전체조회 
-  
-  */
-  static Future<List<dynamic>> boardNotice() async {
-    const url = '$domainUrl/boards/announcements?page=0&size=10';
-
-    try {
-      // 토큰 읽어오기
-      var jwtToken = await APIService.storage.read(key: 'token') ?? '';
-
-      final response = await http.get(
-        Uri.parse(url),
-        headers: {
-          'Authorization': jwtToken,
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        print("불러오기 성공");
-        final responseData = json.decode(utf8.decode(response.bodyBytes));
-        final data = responseData['data'];
-        if (data != null && data is List) {
-          return data;
-        }
-      }
-      return [];
-    } catch (error) {
-      return [];
     }
   }
 }

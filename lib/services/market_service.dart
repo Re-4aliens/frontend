@@ -11,8 +11,8 @@ class MarketService extends APIService {
     상품판매글 모두 조회 > 장터 게시판 조회
 
   */
-  static Future<List<MarketBoard>> getMarketArticles(int page) async {
-    final url = '$domainUrl/boards/market?page=$page&size=10';
+  static Future<List<MarketBoard>> getMarketArticles(int page, int size) async {
+    final url = '$domainUrl/boards/market?page=$page&size=$size';
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
 
     final response = await http.get(
@@ -236,41 +236,6 @@ class MarketService extends APIService {
       }
     } catch (error) {
       throw Exception('상품 판매글 삭제 오류: $error');
-    }
-  }
-
-  /* 
-
-    특정 판매글 찜 등록
-
-  */
-  static Future<int> marketBookmark(int articleId, int index) async {
-    var url =
-        '$domainUrl/api/v2/market-articles/$articleId/bookmarks?page=$index&size=10&sort=createdAt,desc';
-
-    var jwtToken = await APIService.storage.read(key: 'token') ?? '';
-
-    var response = await http.post(
-      Uri.parse(url),
-      headers: {
-        'Authorization': jwtToken,
-        'Content-Type': 'application/json',
-      },
-    );
-
-    var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
-    if (response.statusCode == 200) {
-      return jsonResponse['data']['marketArticleBookmarkCount'];
-    } else {
-      var errorCode = jsonResponse['code'];
-
-      if (errorCode == 'AT-C-002') {
-        throw 'AT-C-002';
-      } else if (errorCode == 'AT-C-007') {
-        throw 'AT-C-007';
-      } else {
-        throw '기타 에러: $errorCode';
-      }
     }
   }
 
