@@ -45,12 +45,6 @@ class _MatchingListPageState extends State<MatchingListPage> {
   @override
   void initState() {
     super.initState();
-    for (var partner in widget.screenArguments.partners!) {
-      setState(() {
-        partner.profileImageUrl = null;
-      });
-    }
-
     _asyncMethod();
   }
 
@@ -221,6 +215,8 @@ class _MatchingListState extends State<MatchingList> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 700;
+    print(widget.partner.profileImageUrl);
+    print(widget.partner.name);
 
     var flagSrc = getNationCode(widget.partner.nationality!);
     return widget.partner.mbti != null
@@ -402,7 +398,7 @@ class _MatchingListState extends State<MatchingList> {
                                                       Alignment.topCenter,
                                                   child: widget.partner
                                                               .profileImageUrl ==
-                                                          ""
+                                                          null
                                                       ? Container(
                                                           width: 100,
                                                           height: 100,
@@ -434,7 +430,8 @@ class _MatchingListState extends State<MatchingList> {
                                                                 DecorationImage(
                                                               image: NetworkImage(
                                                                   widget.partner
-                                                                      .profileImageUrl!),
+                                                                          .profileImageUrl ??
+                                                                      ""),
                                                             ),
                                                           ),
                                                           padding:
@@ -523,8 +520,8 @@ class _MatchingListState extends State<MatchingList> {
                                   width: 18,
                                   decoration: BoxDecoration(
                                     color: widget.partner.gender == 'MALE'
-                                        ? const Color(0xffFFB5B5)
-                                        : const Color(0xffFFF3C7),
+                                        ? const Color(0xff7898ff)
+                                        : const Color(0xffFFB5B5),
                                     borderRadius: BorderRadius.circular(9),
                                   ),
                                   child: widget.partner.gender == 'MALE'

@@ -150,7 +150,7 @@ class _SettingLanEditPageState extends State<SettingLanEditPage> {
 
             //신청이 안된 상태일때는 빈공간
             widget.screenArguments!.status == 'NotAppliedAndNotMatched' ||
-                    widget.screenArguments!.status != 'AppliedAndNotMatched'
+                    widget.screenArguments!.status == 'NotAppliedAndMatched'
                 ? SizedBox(
                     child: Container(),
                   )

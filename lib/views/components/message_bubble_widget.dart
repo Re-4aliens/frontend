@@ -10,6 +10,7 @@ class MessageBubble extends StatelessWidget {
   final bool showingTime;
   final bool showingPic;
   final int memberId;
+  final String partnerProfileImageUrl;
 
   const MessageBubble({
     Key? key,
@@ -17,6 +18,7 @@ class MessageBubble extends StatelessWidget {
     required this.showingTime,
     required this.showingPic,
     required this.memberId,
+    required this.partnerProfileImageUrl,
   }) : super(key: key);
 
   @override
@@ -38,11 +40,23 @@ class MessageBubble extends StatelessWidget {
         showingPic
             ? Padding(
                 padding: const EdgeInsets.only(left: 20),
-                child: SvgPicture.asset(
-                  'assets/icon/icon_profile.svg',
-                  height: 35,
-                  color: const Color(0xff7898ff),
-                ),
+                child: partnerProfileImageUrl == ""
+                    ? SvgPicture.asset(
+                        'assets/icon/icon_profile.svg',
+                        height: 35,
+                        color: const Color(0xff7898ff),
+                      )
+                    : Container(
+                        height: 35,
+                        width: 35,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(partnerProfileImageUrl),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
               )
             : const SizedBox(
                 width: 55,

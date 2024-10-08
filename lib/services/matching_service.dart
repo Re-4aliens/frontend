@@ -42,7 +42,6 @@ class MatchingService extends APIService {
         },
       );
 
-
       if (response.statusCode == 200) {
         var responseData = json.decode(utf8.decode(response.bodyBytes));
         var result = responseData['result'];
@@ -111,7 +110,7 @@ class MatchingService extends APIService {
 
       memberDetails = await UserService.getMemberDetails();
 
-      if (status == 'AppliedAndNotMatched') {
+      if (status == 'AppliedAndNotMatched' || status == 'AppliedAndMatched') {
         applicant = Applicant.fromJson(await getApplicantInfo());
       } else {
         applicant = null;

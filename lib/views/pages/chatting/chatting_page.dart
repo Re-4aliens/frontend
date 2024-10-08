@@ -515,6 +515,7 @@ class _ChattingPageState extends State<ChattingPage>
                                             showingPic: _showingPic(
                                                 index, datas, nextDiff),
                                             memberId: widget.memberId,
+                                            partnerProfileImageUrl: widget.partner.profileImageUrl ?? "",
                                           )
                                         ],
                                       );
