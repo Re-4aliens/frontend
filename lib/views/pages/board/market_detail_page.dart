@@ -352,8 +352,8 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                           padding: const EdgeInsets.only(
                                                   left: 4, right: 15)
                                               .r,
-                                          child: marketProvider.greatCounts[
-                                                      widget.index] ==
+                                          child: widget
+                                                      .marketBoard.greatCount ==
                                                   0
                                               ? Text('0',
                                                   style: TextStyle(
@@ -361,7 +361,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                       color: const Color(
                                                           0xffc1c1c1)))
                                               : Text(
-                                                  '${marketProvider.greatCounts[widget.index]}',
+                                                  '${widget.marketBoard.greatCount}',
                                                   style: TextStyle(
                                                       fontSize: 16.spMin,
                                                       color: const Color(
@@ -445,9 +445,11 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                         right:
                                                                             10.0)
                                                                     .r,
-                                                            child: widget
-                                                                        .marketBoard
-                                                                        .memberProfileDto ==
+                                                            child: marketcommentProvider
+                                                                        .commentListData![
+                                                                            index]
+                                                                        .memberProfileDto
+                                                                        .profileImageUrl ==
                                                                     null
                                                                 ? SvgPicture
                                                                     .asset(
@@ -466,10 +468,13 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                           .circle,
                                                                       image:
                                                                           DecorationImage(
-                                                                        image: NetworkImage(widget
-                                                                            .marketBoard
-                                                                            .memberProfileDto!
-                                                                            .profileImageUrl),
+                                                                        image:
+                                                                            NetworkImage(
+                                                                          marketcommentProvider
+                                                                              .commentListData![index]
+                                                                              .memberProfileDto
+                                                                              .profileImageUrl,
+                                                                        ),
                                                                         fit: BoxFit
                                                                             .cover,
                                                                       ),
@@ -536,7 +541,6 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                     context,
                                                                 builder:
                                                                     (builder) {
-                                                                  // 댓글 이상하게 달림
                                                                   return MarketCommentDialog(
                                                                     articleId: widget
                                                                             .marketBoard
@@ -690,7 +694,7 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                       Padding(
                                                                         padding:
                                                                             const EdgeInsets.only(right: 10.0).w,
-                                                                        child: widget.marketBoard.memberProfileDto ==
+                                                                        child: marketcommentProvider.commentListData![index].children![j].memberProfileDto.profileImageUrl ==
                                                                                 null
                                                                             ? SvgPicture.asset(
                                                                                 'assets/icon/icon_profile.svg',
@@ -703,7 +707,9 @@ class _MarketDetailPageState extends State<MarketDetailPage> {
                                                                                 decoration: BoxDecoration(
                                                                                   shape: BoxShape.circle,
                                                                                   image: DecorationImage(
-                                                                                    image: NetworkImage(widget.marketBoard.memberProfileDto!.profileImageUrl),
+                                                                                    image: NetworkImage(
+                                                                                      marketcommentProvider.commentListData![index].children![j].memberProfileDto.profileImageUrl,
+                                                                                    ),
                                                                                     fit: BoxFit.cover,
                                                                                   ),
                                                                                 ),

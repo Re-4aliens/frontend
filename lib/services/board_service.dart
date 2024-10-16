@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:aliens/models/market_board_model.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 import 'package:aliens/models/board_model.dart';
@@ -240,6 +241,7 @@ class BoardService extends APIService {
       return false;
     }
   }
+
 
   /* 
   
