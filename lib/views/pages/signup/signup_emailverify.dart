@@ -75,12 +75,13 @@ class _SignUpVerifyState extends State<SignUpVerify> {
                   isEnabled: true,
                   child: Text('done'.tr()),
                   onPressed: () async {
-                    String status = await EmailService.getAuthenticationStatus(
+                    bool status = await EmailService.getAuthenticationStatus(
                         member.email);
-                    if (status == 'signup-email17'.tr()) {
+                    print(status);
+                    if (status) {
                       Navigator.pushNamed(context, '/password',
                           arguments: member);
-                    } else if (status == 'EMAIL_SENT_NOT_AUTHENTICATED') {
+                    } else {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {

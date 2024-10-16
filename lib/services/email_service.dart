@@ -55,21 +55,22 @@ class EmailService extends APIService {
   이메일 인증 상태 요청
 
    */
-  static Future<String> getAuthenticationStatus(String email) async {
+  static Future<bool> getAuthenticationStatus(String email) async {
     var url = '$domainUrl/emails?email=$email';
 
     var response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
+      print(utf8.decode(response.bodyBytes));
       var responseData = json.decode(utf8.decode(response.bodyBytes));
 
       var code = responseData['code'];
       var result = responseData['result'];
 
       if (code == 'E003') {
-        return result;
+        return true;
       } else {
-        throw Exception('Invalid response format');
+        return false;
       }
     } else {
       throw Exception('Failed to get authentication status');

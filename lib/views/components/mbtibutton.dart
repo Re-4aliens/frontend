@@ -26,11 +26,13 @@ class MbtiButton extends StatelessWidget {
     final double screenWidth = MediaQuery.of(context).size.height;
     final bool isSmallScreen = screenWidth <= 800;
 
+    print(isSmallScreen);
+
     return Container(
       margin: const EdgeInsets.only(left: 15, right: 15, top: 5, bottom: 5),
       // width: MediaQuery.of(context).size.width * 0.4,
-      width: isSmallScreen ? 130 : 150,
-      height: isSmallScreen ? 200 : 230,
+      width: isSmallScreen ? 130 : 145,
+      height: isSmallScreen ? 200 : 225,
       //width: isSmallScreen?MediaQuery.of(context).size.width * 0.37: MediaQuery.of(context).size.width * 0.42,
       //height: isSmallScreen? (MediaQuery.of(context).size.width * 0.37)*4.5/3:(MediaQuery.of(context).size.width * 0.42)*4.5/3,
       decoration: BoxDecoration(
