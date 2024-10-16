@@ -245,7 +245,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                               color: const Color(0xff444444),
                               fontWeight: FontWeight.bold),
                           maxLines: 1,
-                          overflow: TextOverflow.fade,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       widget.board.category == "INFO"
@@ -262,7 +262,7 @@ class _TotalArticleWidgetState extends State<TotalArticleWidget> {
                                   color: const Color(0xff616161),
                                 ),
                                 maxLines: 2,
-                                overflow: TextOverflow.fade,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                     ],

@@ -397,32 +397,23 @@ class _ArticlePageState extends State<ArticlePage> {
                                                       const EdgeInsets.only(
                                                               right: 10.0)
                                                           .r,
-                                                  child: widget.board
-                                                              .memberProfileDto ==
-                                                          null
-                                                      ? SvgPicture.asset(
-                                                          'assets/icon/icon_profile.svg',
-                                                          width: 25.r,
-                                                          color: const Color(
-                                                              0xff7898ff),
-                                                        )
-                                                      : Container(
-                                                          height: 25.r,
-                                                          width: 25.r,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            shape:
-                                                                BoxShape.circle,
-                                                            image:
-                                                                DecorationImage(
-                                                              image: NetworkImage(widget
-                                                                  .board
-                                                                  .memberProfileDto!
-                                                                  .profileImageUrl),
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
+                                                  child: Container(
+                                                    height: 25.r,
+                                                    width: 25.r,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                        image: NetworkImage(
+                                                          commentProvider
+                                                              .commentListData![
+                                                                  index]
+                                                              .memberProfileDto
+                                                              .profileImageUrl,
                                                         ),
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
                                                 Text(
                                                   commentProvider
@@ -633,10 +624,10 @@ class _ArticlePageState extends State<ArticlePage> {
                                                                             .circle,
                                                                         image:
                                                                             DecorationImage(
-                                                                          image: NetworkImage(widget
-                                                                              .board
-                                                                              .memberProfileDto!
-                                                                              .profileImageUrl),
+                                                                          image:
+                                                                              NetworkImage(
+                                                                            commentProvider.commentListData![index].children![j].memberProfileDto.profileImageUrl,
+                                                                          ),
                                                                           fit: BoxFit
                                                                               .cover,
                                                                         ),

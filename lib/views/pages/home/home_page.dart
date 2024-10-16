@@ -79,7 +79,6 @@ class _HomePageState extends State<HomePage> {
 
     _messageStreamSubscription =
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-
       var inAppNotification = await storage.read(key: 'inAppNotification');
 
       if (json.decode(inAppNotification!)['inAppNotification'] == true) {
@@ -226,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                 selectedIndex == 2 ? FontWeight.normal : FontWeight.bold,
           ),
         ),
-        toolbarHeight: selectedIndex == 1 ? 90 : 56,
+        toolbarHeight: 56,
         elevation: selectedIndex == 1 ? 7 : 0,
         shadowColor: Colors.black26,
         backgroundColor: selectedIndex == 1
@@ -260,7 +259,6 @@ class _HomePageState extends State<HomePage> {
             else if (selectedIndex == 1)
               Container(
                 alignment: Alignment.center,
-                height: 90,
                 child: Text(
                   'chat1'.tr(),
                   style: const TextStyle(

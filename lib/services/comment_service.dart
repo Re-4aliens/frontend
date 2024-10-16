@@ -51,6 +51,8 @@ class CommentService extends APIService {
   static Future<bool> postComment(String content, int boardId) async {
     var url = '$domainUrl/comments/parent';
 
+    print(boardId);
+
     var jwtToken = await APIService.storage.read(key: 'token') ?? '';
     var response = await http.post(
       Uri.parse(url),
@@ -65,8 +67,10 @@ class CommentService extends APIService {
     );
 
     if (response.statusCode == 200) {
+      print(utf8.decode(response.bodyBytes));
       return true;
     } else {
+      print(utf8.decode(response.bodyBytes));
       return false;
     }
   }

@@ -267,7 +267,6 @@ class UserService extends APIService {
             value: responseBody['result']['memberId'].toString());
 
         String? memberIdString = await APIService.storage.read(key: 'memberId');
-        print(memberIdString);
 
         return matchingStatus; // 매칭상태 반환
       } else {

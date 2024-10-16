@@ -209,7 +209,7 @@ class _ChattingPageState extends State<ChattingPage>
     Future.delayed(const Duration(milliseconds: 100), () {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
+          _scrollController.position.maxScrollExtent + 100,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
@@ -296,7 +296,7 @@ class _ChattingPageState extends State<ChattingPage>
           appBar: AppBar(
             elevation: 7,
             shadowColor: Colors.black26,
-            toolbarHeight: 90,
+            toolbarHeight: 70,
             backgroundColor: Colors.white,
             leading: IconButton(
               onPressed: () {
@@ -346,8 +346,8 @@ class _ChattingPageState extends State<ChattingPage>
                         child: Padding(
                           padding: const EdgeInsets.only(right: 10.0),
                           child: Container(
-                            height: 35,
-                            width: 35,
+                            height: 38,
+                            width: 38,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               image: DecorationImage(
@@ -515,7 +515,9 @@ class _ChattingPageState extends State<ChattingPage>
                                             showingPic: _showingPic(
                                                 index, datas, nextDiff),
                                             memberId: widget.memberId,
-                                            partnerProfileImageUrl: widget.partner.profileImageUrl ?? "",
+                                            partnerProfileImageUrl: widget
+                                                    .partner.profileImageUrl ??
+                                                "",
                                           )
                                         ],
                                       );
@@ -531,9 +533,11 @@ class _ChattingPageState extends State<ChattingPage>
                           decoration: const BoxDecoration(
                             color: Colors.white,
                           ),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20,
-                            horizontal: 10,
+                          padding: const EdgeInsets.only(
+                            bottom: 20,
+                            top: 10,
+                            right: 10,
+                            left: 10,
                           ),
                           child: Row(
                             children: [
@@ -552,46 +556,54 @@ class _ChattingPageState extends State<ChattingPage>
                               ),
                               Expanded(
                                 child: Container(
-                                    decoration: BoxDecoration(
-                                        color: const Color(0xffFAFAFA),
-                                        borderRadius: BorderRadius.circular(30),
-                                        border: Border.all(
-                                          color: const Color(0xffC9C9C9),
-                                          width: 1,
-                                        )),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20),
-                                    child: Row(
-                                      children: [
-                                        Expanded(
-                                            child: TextField(
-                                          decoration: const InputDecoration(
-                                            border: InputBorder.none,
-                                          ),
-                                          onTap: () {
-                                            setState(() {
-                                              isChecked = false;
-                                            });
-                                          },
-                                          controller: _controller,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _newMessage = value;
-                                            });
-                                          },
-                                        )),
-                                        IconButton(
-                                          onPressed: _newMessage.trim().isEmpty
-                                              ? null
-                                              : sendMessage,
-                                          icon: SvgPicture.asset(
-                                            'assets/icon/ICON_send.svg',
-                                            height: 22,
-                                            color: const Color(0xff7898ff),
-                                          ),
+                                  height: 48,
+                                  decoration: BoxDecoration(
+                                      color: const Color(0xffFAFAFA),
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                        color: const Color(0xffC9C9C9),
+                                        width: 1,
+                                      )),
+                                  padding: const EdgeInsets.only(
+                                    left: 20,
+                                    right: 10,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                          child: TextField(
+                                        expands: true,
+                                        minLines: null,
+                                        maxLines: null,
+                                        style: const TextStyle(fontSize: 14),
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
                                         ),
-                                      ],
-                                    )),
+                                        onTap: () {
+                                          setState(() {
+                                            isChecked = false;
+                                          });
+                                        },
+                                        controller: _controller,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            _newMessage = value;
+                                          });
+                                        },
+                                      )),
+                                      IconButton(
+                                        onPressed: _newMessage.trim().isEmpty
+                                            ? null
+                                            : sendMessage,
+                                        icon: SvgPicture.asset(
+                                          'assets/icon/ICON_send.svg',
+                                          height: 22,
+                                          color: const Color(0xff7898ff),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
                               const SizedBox(
                                 width: 10,

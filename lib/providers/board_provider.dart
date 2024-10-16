@@ -146,7 +146,6 @@ class BoardProvider with ChangeNotifier {
     _setLoading(true);
     try {
       articleList.addAll(await BoardService.getMyArticles(page));
-      print("초기 : ${articleList.length}");
     } catch (e) {
       if (e == "AT-C-002") {
         await AuthService.getAccessToken();
