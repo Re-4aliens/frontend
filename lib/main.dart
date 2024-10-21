@@ -1,4 +1,4 @@
-import 'package:aliens/providers/market_provider.dart';
+import 'package:aliens/providers/bookmarks_provider.dart';
 import 'package:aliens/providers/comment_provider.dart';
 import 'package:aliens/providers/market_comment_provider.dart';
 import 'package:aliens/providers/noti_board_provider.dart';
@@ -53,6 +53,7 @@ import './views/pages/setting/setting_find_pw_page.dart';
 import 'package:aliens/views/pages/home/splash_page.dart';
 import './views/pages/signup/signup_name.dart';
 import 'package:aliens/services/firebase_apis.dart';
+import 'package:aliens/providers/noti_ischat_provider.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -99,7 +100,7 @@ Future<void> initializeNotification() async {
   if (message != null) {}
 }
 
-void main() async {
+void main() async { 
   WidgetsFlutterBinding.ensureInitialized();
   SqlMessageDataBase();
 
@@ -122,8 +123,9 @@ void main() async {
       ChangeNotifierProvider(create: (_) => BoardProvider()),
       ChangeNotifierProvider(create: (_) => CommentProvider()),
       ChangeNotifierProvider(create: (_) => MarketCommentProvider()),
-      ChangeNotifierProvider(create: (_) => MarketProvider()),
-      ChangeNotifierProvider(create: (_) => NotiBoardProvider())
+      ChangeNotifierProvider(create: (_) => BookmarksProvider()),
+      ChangeNotifierProvider(create: (_) => NotiBoardProvider()),
+      ChangeNotifierProvider(create: (_) => NotiIschatProvider()),
     ],
     child: EasyLocalization(
         path: 'assets/translations',

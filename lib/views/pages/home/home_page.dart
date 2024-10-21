@@ -19,6 +19,8 @@ import 'package:aliens/views/components/board_drawer_widget.dart';
 import 'package:aliens/views/components/matching_chatting_widget.dart';
 import 'package:aliens/views/pages/board/notification_page.dart';
 import 'package:aliens/views/pages/board/search_page.dart';
+import 'package:aliens/providers/noti_ischat_provider.dart'; 
+import 'package:provider/provider.dart';
 
 int selectedIndex = 0;
 bool isDrawerStart = false;
@@ -43,71 +45,50 @@ class _HomePageState extends State<HomePage> {
     _setNotification();
     NotificationService.registerFCMToken();
 
-    // _messageStreamSubscription =
-    //     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-    //   print("알림 왔다 : $message");
-    //   var inAppNotification = await storage.read(key: 'inAppNotification');
+_messageStreamSubscription = FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+    final notificationProvider =
+    Provider.of<NotiIschatProvider>(context, listen: false);
 
-    //   if (json.decode(inAppNotification!)['inAppNotification'] == true) {
-    //     showOverlayNotification((context) {
-    //       return Card(
-    //         margin: const EdgeInsets.symmetric(horizontal: 4),
-    //         child: SafeArea(
-    //           child: Container(
-    //             padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
-    //             child: ListTile(
-    //               leading: Image.asset(
-    //                 'assets/character/friendship.png',
-    //                 width: 50,
-    //                 height: 50,
-    //                 fit: BoxFit.cover,
-    //               ),
-    //               title: Text(message.notification?.title ?? 'Unknown'),
-    //               subtitle: Text(message.notification?.body ?? 'No content'),
-    //               trailing: IconButton(
-    //                   icon: const Icon(Icons.close),
-    //                   onPressed: () {
-    //                     OverlaySupportEntry.of(context)?.dismiss();
-    //                   }),
-    //             ),
-    //           ),
-    //         ),
-    //       );
-    //     }, duration: const Duration(milliseconds: 4000));
-    //   }
-    // });
+      // 채팅방 내부에 있으면 알림을 무시함
+      if (notificationProvider.isInChatRoom) {
+        print("채팅방에 있음. 알림 무시");
+        return;
+      }
 
-    _messageStreamSubscription =
-        FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      var inAppNotification = await storage.read(key: 'inAppNotification');
+  print("띠링");
+  var inAppNotification = await storage.read(key: 'inAppNotification');
+  final String title = message.notification?.title ?? message.data['title'];
+  final String body = message.notification?.body ?? message.data['body'];
 
-      if (json.decode(inAppNotification!)['inAppNotification'] == true) {
-        showOverlayNotification((context) {
-          return Card(
-            margin: const EdgeInsets.symmetric(horizontal: 4),
-            child: SafeArea(
-              child: Container(
-                padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
-                child: ListTile(
-                  leading: Image.asset(
-                    'assets/character/friendship.png',
-                    width: 50,
-                    height: 50,
-                  ),
-                  title: Text(message.data['title']),
-                  subtitle: Text('${message.data['body']}'),
-                  trailing: IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () {
-                        OverlaySupportEntry.of(context)?.dismiss();
-                      }),
-                ),
+  print('inAppNotification: $inAppNotification');
+  if (json.decode(inAppNotification!)['inAppNotification'] == true) {
+    showOverlayNotification((context) {
+      return Card(
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        child: SafeArea(
+          child: Container(
+            padding: const EdgeInsets.only(top: 15, bottom: 15, left: 15).r,
+            child: ListTile(
+              leading: Image.asset(
+                'assets/character/friendship.png',
+                width: 50,
+                height: 50,
+              ),
+              title: Text(title),
+              subtitle: Text(body),
+              trailing: IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () {
+                  OverlaySupportEntry.of(context)?.dismiss();
+                },
               ),
             ),
-          );
-        }, duration: const Duration(milliseconds: 4000));
-      }
-    });
+          ),
+        ),
+      );
+    }, duration: const Duration(milliseconds: 4000));
+  }
+});
   }
 
   _setNotification() async {
@@ -225,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                 selectedIndex == 2 ? FontWeight.normal : FontWeight.bold,
           ),
         ),
-        toolbarHeight: 56,
+        toolbarHeight: selectedIndex == 1 ? 90 : 56,
         elevation: selectedIndex == 1 ? 7 : 0,
         shadowColor: Colors.black26,
         backgroundColor: selectedIndex == 1
@@ -259,6 +240,7 @@ class _HomePageState extends State<HomePage> {
             else if (selectedIndex == 1)
               Container(
                 alignment: Alignment.center,
+                height: 90,
                 child: Text(
                   'chat1'.tr(),
                   style: const TextStyle(

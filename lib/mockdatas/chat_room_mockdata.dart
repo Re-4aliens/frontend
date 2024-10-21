@@ -38,3 +38,9 @@ ChatData chatDataMock = ChatData(
   chatRooms: [chatRoom1, chatRoom2, chatRoom3, chatRoom4],
   chatMessageSummaries: [chatMessageSummary1, chatMessageSummary2],
 );
+
+
+
+
+
+
